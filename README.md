@@ -30,7 +30,7 @@ It comes with adjustable square crop and filters.
 Those features are available just with a few lines of code!
 
 ## Improvements
-YPImagePicker is built from the great Fusuma library.
+YPImagePicker was built from the great Fusuma library.
 
 Here are the improvements we added :
 - Improve Overall Code Quality
@@ -50,11 +50,11 @@ You can also use CocoaPods or Carthage.
 
 #### Using [CocoaPods](http://cocoapods.org/)
 
-Add `pod 'Fusuma'` to your `Podfile` and run `pod install`. Also add `use_frameworks!` to the `Podfile`.
+Add `pod 'YPImagePicker'` to your `Podfile` and run `pod install`. Also add `use_frameworks!` to the `Podfile`.
 
 ```
 use_frameworks!
-pod 'Fusuma'
+pod 'YPImagePicker'
 ```
 
 #### Using [Carthage](https://github.com/Carthage/Carthage)
@@ -66,7 +66,7 @@ github "Yummypets/YPImagePicker"
 ```
 
 ## Usage
-Import Fusuma ```import Fusuma``` then use the following codes in some function except for viewDidLoad and give FusumaDelegate to the view controller.  
+Import Fusuma ```import YPImagePicker``` then use the following codes in some function except for viewDidLoad and give FusumaDelegate to the view controller.  
 
 ```swift
 let picker = YPImagePicker()
@@ -85,10 +85,12 @@ present(picker, animated: true, completion: nil)
 ```
 
 
-## Original Author
-ytakzk  
-[http://ytakzk.me](http://ytakzk.me)
+## Original Project & Author
+
+This project has been first inspired by [Fusuma](https://github.com/ytakzk/Fusuma)
+Considering the big code and design changes, this moved form a fork to a standalone separate repo, also for discoverability purposes.
+Original Fusuma author is [ytakz](http://ytakzk.me)
 
 ## License
-Fusuma is released under the MIT license.  
+YPImagePicker is released under the MIT license.  
 See LICENSE for details.
