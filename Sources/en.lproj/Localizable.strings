@@ -1,0 +1,15 @@
+/* 
+  Localizable.strings
+  Fusuma
+
+  Created by Sacha Durand Saint Omer on 02/11/16.
+  Copyright © 2016 ytakzk. All rights reserved.
+*/
+
+"YPFusumaLibrary" = "Library";
+"YPFusumaPhoto" = "Photo";
+"YPFusumaVideo" = "Video";
+"YPFusumaNext" = "Next";
+"YPFusumaFilter" = "Filter";
+"YPFusumaVideoTooLongTitle" = "Video duration";
+"YPFusumaVideoTooLongDetail" = "Pick a video less than 60 seconds long.";
