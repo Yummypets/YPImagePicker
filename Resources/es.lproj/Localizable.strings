@@ -1,0 +1,15 @@
+/* 
+  Localizable.strings
+  YPImagePicker
+
+  Created by Sacha Durand Saint Omer on 02/11/16.
+  Copyright © 2016 Yummypets. All rights reserved.
+*/
+
+"YPImagePickerLibrary" = "Biblioteca";
+"YPImagePickerPhoto" = "Foto";
+"YPImagePickerVideo" = "Vídeo";
+"YPImagePickerNext" = "Siguiente";
+"YPImagePickerFilter" = "Filtro";
+"YPImagePickerVideoTooLongTitle" = "Demasiado largo";
+"YPImagePickerVideoTooLongDetail" = "Elige un vídeo que dure menos de un minuto.";

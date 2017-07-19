@@ -7,61 +7,61 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		52412A971CA6114A0073C4BE /* Fusuma.h in Headers */ = {isa = PBXBuildFile; fileRef = 52412A961CA6114A0073C4BE /* Fusuma.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		99255A511DC1E69A00D9FC72 /* FSBottomPager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99255A501DC1E69A00D9FC72 /* FSBottomPager.swift */; };
-		99255A531DC1EB0D00D9FC72 /* FSVideoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99255A521DC1EB0D00D9FC72 /* FSVideoVC.swift */; };
-		996272611DBF9CCA0046E701 /* FSCameraVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 996272601DBF9CCA0046E701 /* FSCameraVC.swift */; };
-		996272661DBFA2480046E701 /* FusumaVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 996272651DBFA2480046E701 /* FusumaVC.swift */; };
-		996D03EE1DC206B00004E357 /* FSAlbumVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 996D03ED1DC206B00004E357 /* FSAlbumVC.swift */; };
-		997269871DBE617500AEB44F /* FSConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997269861DBE617500AEB44F /* FSConfiguration.swift */; };
-		9980A1871DD474C700E50A81 /* PhotoSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9980A1861DD474C700E50A81 /* PhotoSaver.swift */; };
-		9992CFE21DCA133400D47E4B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9992CFE41DCA133400D47E4B /* Localizable.strings */; };
-		99A7BA841DC2623900CED1D9 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A7BA7F1DC2623900CED1D9 /* Filter.swift */; };
-		99A7BA851DC2623900CED1D9 /* FilterCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A7BA801DC2623900CED1D9 /* FilterCollectionViewCell.swift */; };
-		99A7BA861DC2623900CED1D9 /* FilterPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A7BA811DC2623900CED1D9 /* FilterPreview.swift */; };
-		99A7BA871DC2623900CED1D9 /* FiltersVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A7BA821DC2623900CED1D9 /* FiltersVC.swift */; };
-		99A7BA881DC2623900CED1D9 /* FiltersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A7BA831DC2623900CED1D9 /* FiltersView.swift */; };
-		99DCD39B1DCA2EE000E3BBC3 /* YPImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 990630341DCA2A710040AFE9 /* YPImagePicker.swift */; };
-		99DCD39D1DCA38FD00E3BBC3 /* FSHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99DCD39C1DCA38FD00E3BBC3 /* FSHelpers.swift */; };
-		99EB07651DDB14F900A6DDF8 /* ImageCropViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EB07641DDB14F900A6DDF8 /* ImageCropViewContainer.swift */; };
-		99EB07671DDB41CC00A6DDF8 /* FSGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99EB07661DDB41CC00A6DDF8 /* FSGridView.swift */; };
-		EDDC0B541D0511F2009135DB /* FSAlbumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDDC0B4C1D0511F2009135DB /* FSAlbumView.swift */; };
-		EDDC0B551D0511F2009135DB /* FSAlbumView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EDDC0B4D1D0511F2009135DB /* FSAlbumView.xib */; };
-		EDDC0B561D0511F2009135DB /* FSAlbumViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDDC0B4E1D0511F2009135DB /* FSAlbumViewCell.swift */; };
-		EDDC0B581D0511F2009135DB /* FSCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDDC0B501D0511F2009135DB /* FSCameraView.swift */; };
-		EDDC0B5B1D0511F2009135DB /* FSImageCropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDDC0B531D0511F2009135DB /* FSImageCropView.swift */; };
-		EDDC0B5D1D051245009135DB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EDDC0B5C1D051245009135DB /* Assets.xcassets */; };
+		99C6D6B91F1FB5C100711DB2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 99C6D6981F1FB5C100711DB2 /* Assets.xcassets */; };
+		99C6D6BA1F1FB5C100711DB2 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 99C6D6991F1FB5C100711DB2 /* Localizable.strings */; };
+		99C6D6BB1F1FB5C100711DB2 /* FSAlbumVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D69F1F1FB5C100711DB2 /* FSAlbumVC.swift */; };
+		99C6D6BC1F1FB5C100711DB2 /* FSAlbumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6A01F1FB5C100711DB2 /* FSAlbumView.swift */; };
+		99C6D6BD1F1FB5C100711DB2 /* FSAlbumView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 99C6D6A11F1FB5C100711DB2 /* FSAlbumView.xib */; };
+		99C6D6BE1F1FB5C100711DB2 /* FSAlbumViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6A21F1FB5C100711DB2 /* FSAlbumViewCell.swift */; };
+		99C6D6BF1F1FB5C100711DB2 /* FSGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6A31F1FB5C100711DB2 /* FSGridView.swift */; };
+		99C6D6C01F1FB5C100711DB2 /* FSImageCropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6A41F1FB5C100711DB2 /* FSImageCropView.swift */; };
+		99C6D6C11F1FB5C100711DB2 /* ImageCropViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6A51F1FB5C100711DB2 /* ImageCropViewContainer.swift */; };
+		99C6D6C21F1FB5C100711DB2 /* FSCameraVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6A71F1FB5C100711DB2 /* FSCameraVC.swift */; };
+		99C6D6C31F1FB5C100711DB2 /* FSCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6A81F1FB5C100711DB2 /* FSCameraView.swift */; };
+		99C6D6C41F1FB5C100711DB2 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6AA1F1FB5C100711DB2 /* Filter.swift */; };
+		99C6D6C51F1FB5C100711DB2 /* FilterCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6AB1F1FB5C100711DB2 /* FilterCollectionViewCell.swift */; };
+		99C6D6C61F1FB5C100711DB2 /* FilterPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6AC1F1FB5C100711DB2 /* FilterPreview.swift */; };
+		99C6D6C71F1FB5C100711DB2 /* FiltersVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6AD1F1FB5C100711DB2 /* FiltersVC.swift */; };
+		99C6D6C81F1FB5C100711DB2 /* FiltersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6AE1F1FB5C100711DB2 /* FiltersView.swift */; };
+		99C6D6C91F1FB5C100711DB2 /* FSBottomPager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6AF1F1FB5C100711DB2 /* FSBottomPager.swift */; };
+		99C6D6CA1F1FB5C100711DB2 /* FSConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6B01F1FB5C100711DB2 /* FSConfiguration.swift */; };
+		99C6D6CB1F1FB5C100711DB2 /* FSHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6B11F1FB5C100711DB2 /* FSHelpers.swift */; };
+		99C6D6CC1F1FB5C100711DB2 /* YPImagePickerHeader.h in Headers */ = {isa = PBXBuildFile; fileRef = 99C6D6B21F1FB5C100711DB2 /* YPImagePickerHeader.h */; };
+		99C6D6CE1F1FB5C100711DB2 /* PhotoSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6B41F1FB5C100711DB2 /* PhotoSaver.swift */; };
+		99C6D6CF1F1FB5C100711DB2 /* PickerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6B51F1FB5C100711DB2 /* PickerVC.swift */; };
+		99C6D6D01F1FB5C100711DB2 /* FSVideoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6B71F1FB5C100711DB2 /* FSVideoVC.swift */; };
+		99C6D6D11F1FB5C100711DB2 /* YPImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6B81F1FB5C100711DB2 /* YPImagePicker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		52412A931CA6114A0073C4BE /* YPImagePicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = YPImagePicker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		52412A961CA6114A0073C4BE /* Fusuma.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Fusuma.h; sourceTree = "<group>"; };
-		52412A981CA6114A0073C4BE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		990630341DCA2A710040AFE9 /* YPImagePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPImagePicker.swift; sourceTree = "<group>"; };
-		99255A501DC1E69A00D9FC72 /* FSBottomPager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSBottomPager.swift; sourceTree = "<group>"; };
-		99255A521DC1EB0D00D9FC72 /* FSVideoVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSVideoVC.swift; sourceTree = "<group>"; };
-		996272601DBF9CCA0046E701 /* FSCameraVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSCameraVC.swift; sourceTree = "<group>"; };
-		996272651DBFA2480046E701 /* FusumaVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FusumaVC.swift; sourceTree = "<group>"; };
-		996D03ED1DC206B00004E357 /* FSAlbumVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSAlbumVC.swift; sourceTree = "<group>"; };
-		997269861DBE617500AEB44F /* FSConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSConfiguration.swift; sourceTree = "<group>"; };
-		9980A1861DD474C700E50A81 /* PhotoSaver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoSaver.swift; sourceTree = "<group>"; };
-		9992CFE31DCA133400D47E4B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		9992CFE51DCA14D300D47E4B /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
-		9992CFE61DCA14DC00D47E4B /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
-		99A7BA7F1DC2623900CED1D9 /* Filter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
-		99A7BA801DC2623900CED1D9 /* FilterCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterCollectionViewCell.swift; sourceTree = "<group>"; };
-		99A7BA811DC2623900CED1D9 /* FilterPreview.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterPreview.swift; sourceTree = "<group>"; };
-		99A7BA821DC2623900CED1D9 /* FiltersVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FiltersVC.swift; sourceTree = "<group>"; };
-		99A7BA831DC2623900CED1D9 /* FiltersView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FiltersView.swift; sourceTree = "<group>"; };
-		99DCD39C1DCA38FD00E3BBC3 /* FSHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSHelpers.swift; sourceTree = "<group>"; };
-		99EB07641DDB14F900A6DDF8 /* ImageCropViewContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCropViewContainer.swift; sourceTree = "<group>"; };
-		99EB07661DDB41CC00A6DDF8 /* FSGridView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSGridView.swift; sourceTree = "<group>"; };
-		EDDC0B4C1D0511F2009135DB /* FSAlbumView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSAlbumView.swift; sourceTree = "<group>"; };
-		EDDC0B4D1D0511F2009135DB /* FSAlbumView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSAlbumView.xib; sourceTree = "<group>"; };
-		EDDC0B4E1D0511F2009135DB /* FSAlbumViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSAlbumViewCell.swift; sourceTree = "<group>"; };
-		EDDC0B501D0511F2009135DB /* FSCameraView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSCameraView.swift; sourceTree = "<group>"; };
-		EDDC0B531D0511F2009135DB /* FSImageCropView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSImageCropView.swift; sourceTree = "<group>"; };
-		EDDC0B5C1D051245009135DB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		99C6D6981F1FB5C100711DB2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		99C6D69A1F1FB5C100711DB2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		99C6D69B1F1FB5C100711DB2 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		99C6D69C1F1FB5C100711DB2 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		99C6D69F1F1FB5C100711DB2 /* FSAlbumVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSAlbumVC.swift; sourceTree = "<group>"; };
+		99C6D6A01F1FB5C100711DB2 /* FSAlbumView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSAlbumView.swift; sourceTree = "<group>"; };
+		99C6D6A11F1FB5C100711DB2 /* FSAlbumView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSAlbumView.xib; sourceTree = "<group>"; };
+		99C6D6A21F1FB5C100711DB2 /* FSAlbumViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSAlbumViewCell.swift; sourceTree = "<group>"; };
+		99C6D6A31F1FB5C100711DB2 /* FSGridView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSGridView.swift; sourceTree = "<group>"; };
+		99C6D6A41F1FB5C100711DB2 /* FSImageCropView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSImageCropView.swift; sourceTree = "<group>"; };
+		99C6D6A51F1FB5C100711DB2 /* ImageCropViewContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCropViewContainer.swift; sourceTree = "<group>"; };
+		99C6D6A71F1FB5C100711DB2 /* FSCameraVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSCameraVC.swift; sourceTree = "<group>"; };
+		99C6D6A81F1FB5C100711DB2 /* FSCameraView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSCameraView.swift; sourceTree = "<group>"; };
+		99C6D6AA1F1FB5C100711DB2 /* Filter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
+		99C6D6AB1F1FB5C100711DB2 /* FilterCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterCollectionViewCell.swift; sourceTree = "<group>"; };
+		99C6D6AC1F1FB5C100711DB2 /* FilterPreview.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterPreview.swift; sourceTree = "<group>"; };
+		99C6D6AD1F1FB5C100711DB2 /* FiltersVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FiltersVC.swift; sourceTree = "<group>"; };
+		99C6D6AE1F1FB5C100711DB2 /* FiltersView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FiltersView.swift; sourceTree = "<group>"; };
+		99C6D6AF1F1FB5C100711DB2 /* FSBottomPager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSBottomPager.swift; sourceTree = "<group>"; };
+		99C6D6B01F1FB5C100711DB2 /* FSConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSConfiguration.swift; sourceTree = "<group>"; };
+		99C6D6B11F1FB5C100711DB2 /* FSHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSHelpers.swift; sourceTree = "<group>"; };
+		99C6D6B21F1FB5C100711DB2 /* YPImagePickerHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YPImagePickerHeader.h; sourceTree = "<group>"; };
+		99C6D6B31F1FB5C100711DB2 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		99C6D6B41F1FB5C100711DB2 /* PhotoSaver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoSaver.swift; sourceTree = "<group>"; };
+		99C6D6B51F1FB5C100711DB2 /* PickerVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickerVC.swift; sourceTree = "<group>"; };
+		99C6D6B71F1FB5C100711DB2 /* FSVideoVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSVideoVC.swift; sourceTree = "<group>"; };
+		99C6D6B81F1FB5C100711DB2 /* YPImagePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPImagePicker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,8 +78,8 @@
 		52412A891CA6114A0073C4BE = {
 			isa = PBXGroup;
 			children = (
-				52412A9E1CA6114F0073C4BE /* Sources */,
-				52412A951CA6114A0073C4BE /* Fusuma */,
+				99C6D69D1F1FB5C100711DB2 /* Source */,
+				99C6D6971F1FB5C100711DB2 /* Resources */,
 				52412A941CA6114A0073C4BE /* Products */,
 			);
 			indentWidth = 4;
@@ -94,75 +94,75 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		52412A951CA6114A0073C4BE /* Fusuma */ = {
+		99C6D6971F1FB5C100711DB2 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				52412A961CA6114A0073C4BE /* Fusuma.h */,
-				52412A981CA6114A0073C4BE /* Info.plist */,
+				99C6D6981F1FB5C100711DB2 /* Assets.xcassets */,
+				99C6D6991F1FB5C100711DB2 /* Localizable.strings */,
 			);
-			path = Fusuma;
+			path = Resources;
 			sourceTree = "<group>";
 		};
-		52412A9E1CA6114F0073C4BE /* Sources */ = {
+		99C6D69D1F1FB5C100711DB2 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				EDDC0B5C1D051245009135DB /* Assets.xcassets */,
-				9992CFE41DCA133400D47E4B /* Localizable.strings */,
-				990630341DCA2A710040AFE9 /* YPImagePicker.swift */,
-				9980A1861DD474C700E50A81 /* PhotoSaver.swift */,
-				997269861DBE617500AEB44F /* FSConfiguration.swift */,
-				99DCD39C1DCA38FD00E3BBC3 /* FSHelpers.swift */,
-				996272651DBFA2480046E701 /* FusumaVC.swift */,
-				99255A501DC1E69A00D9FC72 /* FSBottomPager.swift */,
-				996272631DBFA03E0046E701 /* Album */,
-				996272621DBFA0300046E701 /* Camera */,
-				996272641DBFA0520046E701 /* Video */,
-				99A7BA7E1DC2623900CED1D9 /* Filters */,
+				99C6D6B31F1FB5C100711DB2 /* Info.plist */,
+				99C6D6B21F1FB5C100711DB2 /* YPImagePickerHeader.h */,
+				99C6D6B81F1FB5C100711DB2 /* YPImagePicker.swift */,
+				99C6D6B51F1FB5C100711DB2 /* PickerVC.swift */,
+				99C6D6AF1F1FB5C100711DB2 /* FSBottomPager.swift */,
+				99C6D6B01F1FB5C100711DB2 /* FSConfiguration.swift */,
+				99C6D6B11F1FB5C100711DB2 /* FSHelpers.swift */,
+				99C6D6B41F1FB5C100711DB2 /* PhotoSaver.swift */,
+				99C6D69E1F1FB5C100711DB2 /* Album */,
+				99C6D6A61F1FB5C100711DB2 /* Camera */,
+				99C6D6A91F1FB5C100711DB2 /* Filters */,
+				99C6D6B61F1FB5C100711DB2 /* Video */,
 			);
-			path = Sources;
+			path = Source;
 			sourceTree = "<group>";
 		};
-		996272621DBFA0300046E701 /* Camera */ = {
+		99C6D69E1F1FB5C100711DB2 /* Album */ = {
 			isa = PBXGroup;
 			children = (
-				996272601DBF9CCA0046E701 /* FSCameraVC.swift */,
-				EDDC0B501D0511F2009135DB /* FSCameraView.swift */,
+				99C6D69F1F1FB5C100711DB2 /* FSAlbumVC.swift */,
+				99C6D6A01F1FB5C100711DB2 /* FSAlbumView.swift */,
+				99C6D6A11F1FB5C100711DB2 /* FSAlbumView.xib */,
+				99C6D6A21F1FB5C100711DB2 /* FSAlbumViewCell.swift */,
+				99C6D6A31F1FB5C100711DB2 /* FSGridView.swift */,
+				99C6D6A41F1FB5C100711DB2 /* FSImageCropView.swift */,
+				99C6D6A51F1FB5C100711DB2 /* ImageCropViewContainer.swift */,
 			);
-			name = Camera;
+			path = Album;
 			sourceTree = "<group>";
 		};
-		996272631DBFA03E0046E701 /* Album */ = {
+		99C6D6A61F1FB5C100711DB2 /* Camera */ = {
 			isa = PBXGroup;
 			children = (
-				EDDC0B531D0511F2009135DB /* FSImageCropView.swift */,
-				996D03ED1DC206B00004E357 /* FSAlbumVC.swift */,
-				EDDC0B4C1D0511F2009135DB /* FSAlbumView.swift */,
-				EDDC0B4D1D0511F2009135DB /* FSAlbumView.xib */,
-				99EB07661DDB41CC00A6DDF8 /* FSGridView.swift */,
-				EDDC0B4E1D0511F2009135DB /* FSAlbumViewCell.swift */,
-				99EB07641DDB14F900A6DDF8 /* ImageCropViewContainer.swift */,
+				99C6D6A71F1FB5C100711DB2 /* FSCameraVC.swift */,
+				99C6D6A81F1FB5C100711DB2 /* FSCameraView.swift */,
 			);
-			name = Album;
+			path = Camera;
 			sourceTree = "<group>";
 		};
-		996272641DBFA0520046E701 /* Video */ = {
+		99C6D6A91F1FB5C100711DB2 /* Filters */ = {
 			isa = PBXGroup;
 			children = (
-				99255A521DC1EB0D00D9FC72 /* FSVideoVC.swift */,
-			);
-			name = Video;
-			sourceTree = "<group>";
-		};
-		99A7BA7E1DC2623900CED1D9 /* Filters */ = {
-			isa = PBXGroup;
-			children = (
-				99A7BA7F1DC2623900CED1D9 /* Filter.swift */,
-				99A7BA801DC2623900CED1D9 /* FilterCollectionViewCell.swift */,
-				99A7BA811DC2623900CED1D9 /* FilterPreview.swift */,
-				99A7BA821DC2623900CED1D9 /* FiltersVC.swift */,
-				99A7BA831DC2623900CED1D9 /* FiltersView.swift */,
+				99C6D6AA1F1FB5C100711DB2 /* Filter.swift */,
+				99C6D6AB1F1FB5C100711DB2 /* FilterCollectionViewCell.swift */,
+				99C6D6AC1F1FB5C100711DB2 /* FilterPreview.swift */,
+				99C6D6AD1F1FB5C100711DB2 /* FiltersVC.swift */,
+				99C6D6AE1F1FB5C100711DB2 /* FiltersView.swift */,
 			);
 			path = Filters;
+			sourceTree = "<group>";
+		};
+		99C6D6B61F1FB5C100711DB2 /* Video */ = {
+			isa = PBXGroup;
+			children = (
+				99C6D6B71F1FB5C100711DB2 /* FSVideoVC.swift */,
+			);
+			path = Video;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -172,7 +172,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				52412A971CA6114A0073C4BE /* Fusuma.h in Headers */,
+				99C6D6CC1F1FB5C100711DB2 /* YPImagePickerHeader.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -237,9 +237,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EDDC0B551D0511F2009135DB /* FSAlbumView.xib in Resources */,
-				9992CFE21DCA133400D47E4B /* Localizable.strings in Resources */,
-				EDDC0B5D1D051245009135DB /* Assets.xcassets in Resources */,
+				99C6D6B91F1FB5C100711DB2 /* Assets.xcassets in Resources */,
+				99C6D6BD1F1FB5C100711DB2 /* FSAlbumView.xib in Resources */,
+				99C6D6BA1F1FB5C100711DB2 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -267,38 +267,38 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				99DCD39B1DCA2EE000E3BBC3 /* YPImagePicker.swift in Sources */,
-				99A7BA881DC2623900CED1D9 /* FiltersView.swift in Sources */,
-				99A7BA861DC2623900CED1D9 /* FilterPreview.swift in Sources */,
-				99A7BA841DC2623900CED1D9 /* Filter.swift in Sources */,
-				99A7BA871DC2623900CED1D9 /* FiltersVC.swift in Sources */,
-				99255A511DC1E69A00D9FC72 /* FSBottomPager.swift in Sources */,
-				997269871DBE617500AEB44F /* FSConfiguration.swift in Sources */,
-				99EB07651DDB14F900A6DDF8 /* ImageCropViewContainer.swift in Sources */,
-				99DCD39D1DCA38FD00E3BBC3 /* FSHelpers.swift in Sources */,
-				99EB07671DDB41CC00A6DDF8 /* FSGridView.swift in Sources */,
-				99255A531DC1EB0D00D9FC72 /* FSVideoVC.swift in Sources */,
-				996272611DBF9CCA0046E701 /* FSCameraVC.swift in Sources */,
-				996D03EE1DC206B00004E357 /* FSAlbumVC.swift in Sources */,
-				EDDC0B581D0511F2009135DB /* FSCameraView.swift in Sources */,
-				EDDC0B541D0511F2009135DB /* FSAlbumView.swift in Sources */,
-				EDDC0B5B1D0511F2009135DB /* FSImageCropView.swift in Sources */,
-				EDDC0B561D0511F2009135DB /* FSAlbumViewCell.swift in Sources */,
-				99A7BA851DC2623900CED1D9 /* FilterCollectionViewCell.swift in Sources */,
-				9980A1871DD474C700E50A81 /* PhotoSaver.swift in Sources */,
-				996272661DBFA2480046E701 /* FusumaVC.swift in Sources */,
+				99C6D6C81F1FB5C100711DB2 /* FiltersView.swift in Sources */,
+				99C6D6C71F1FB5C100711DB2 /* FiltersVC.swift in Sources */,
+				99C6D6C51F1FB5C100711DB2 /* FilterCollectionViewCell.swift in Sources */,
+				99C6D6C11F1FB5C100711DB2 /* ImageCropViewContainer.swift in Sources */,
+				99C6D6D11F1FB5C100711DB2 /* YPImagePicker.swift in Sources */,
+				99C6D6BB1F1FB5C100711DB2 /* FSAlbumVC.swift in Sources */,
+				99C6D6CA1F1FB5C100711DB2 /* FSConfiguration.swift in Sources */,
+				99C6D6CB1F1FB5C100711DB2 /* FSHelpers.swift in Sources */,
+				99C6D6CE1F1FB5C100711DB2 /* PhotoSaver.swift in Sources */,
+				99C6D6C31F1FB5C100711DB2 /* FSCameraView.swift in Sources */,
+				99C6D6C21F1FB5C100711DB2 /* FSCameraVC.swift in Sources */,
+				99C6D6BF1F1FB5C100711DB2 /* FSGridView.swift in Sources */,
+				99C6D6D01F1FB5C100711DB2 /* FSVideoVC.swift in Sources */,
+				99C6D6BC1F1FB5C100711DB2 /* FSAlbumView.swift in Sources */,
+				99C6D6CF1F1FB5C100711DB2 /* PickerVC.swift in Sources */,
+				99C6D6BE1F1FB5C100711DB2 /* FSAlbumViewCell.swift in Sources */,
+				99C6D6C41F1FB5C100711DB2 /* Filter.swift in Sources */,
+				99C6D6C91F1FB5C100711DB2 /* FSBottomPager.swift in Sources */,
+				99C6D6C61F1FB5C100711DB2 /* FilterPreview.swift in Sources */,
+				99C6D6C01F1FB5C100711DB2 /* FSImageCropView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		9992CFE41DCA133400D47E4B /* Localizable.strings */ = {
+		99C6D6991F1FB5C100711DB2 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				9992CFE31DCA133400D47E4B /* en */,
-				9992CFE51DCA14D300D47E4B /* fr */,
-				9992CFE61DCA14DC00D47E4B /* es */,
+				99C6D69A1F1FB5C100711DB2 /* en */,
+				99C6D69B1F1FB5C100711DB2 /* es */,
+				99C6D69C1F1FB5C100711DB2 /* fr */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -417,7 +417,7 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/Carthage/Build/iOS";
-				INFOPLIST_FILE = Fusuma/Info.plist;
+				INFOPLIST_FILE = Source/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				ONLY_ACTIVE_ARCH = YES;
@@ -439,7 +439,7 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/Carthage/Build/iOS";
-				INFOPLIST_FILE = Fusuma/Info.plist;
+				INFOPLIST_FILE = Source/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				ONLY_ACTIVE_ARCH = NO;
