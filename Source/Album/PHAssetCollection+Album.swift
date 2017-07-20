@@ -17,69 +17,57 @@ class AlbumsManager {
         return instance
     }
     
+    var noVideos = false
+    
     func fetchAlbums() -> [Album] {
         var albums = [Album]()
-        
-        // .smartAlbum / moment
         let options = PHFetchOptions()
-        //        options.predicate = NSPredicate(format: "estimatedAssetCount > 0")
-        let result = PHAssetCollection
-            .fetchAssetCollections(with: .smartAlbum,
-                                   subtype: .any,
-                                   options: options)
-        print(result.count)
-        result.enumerateObjects({ assetCollection, index, stop in
-            
-            
-            var album = Album()
-            album.title = assetCollection.localizedTitle ?? ""
-            album.numberOfPhotos = self.mediaCountFor(collection: assetCollection)
-            
-            if album.numberOfPhotos > 0 {
                 
-                let r = PHAsset.fetchKeyAssets(in: assetCollection, options: nil)
-                //                print("KEY aSSET COUNT: \(r?.count)")
-                //                r?.enumerateObjects({ asset, index, stop in
-                //                    print(asset)
-                //                })
-                if let first = r?.firstObject {
-                    let targetSize = CGSize(width: 60, height: 60)
-                    let options = PHImageRequestOptions()
-                    options.isSynchronous = true
-                    options.deliveryMode = .fastFormat
-                    //                    options.resizeMode = .fast
-                    
-                    
-                    PHImageManager.default().requestImage(for: first,
-                                                          targetSize: targetSize,
-                                                          contentMode: .aspectFill,
-                                                          options: options,
-                                                          resultHandler: { image, dic in
-                                                            print(image)
-                                                            print(dic)
-                                                            
-                                                            print("Got Image")
-                                                            if let image = image {
+        let smartAlbumsResult = PHAssetCollection
+            .fetchAssetCollections(with: .smartAlbum, subtype: .any, options: options)
+        let albumsResult = PHAssetCollection
+            .fetchAssetCollections(with: .album, subtype: .any, options: options) //(synced only?)
+        for result in [smartAlbumsResult, albumsResult] {
+            result.enumerateObjects({ assetCollection, _, _ in
+                var album = Album()
+                album.title = assetCollection.localizedTitle ?? ""
+                album.numberOfPhotos = self.mediaCountFor(collection: assetCollection)
+                if album.numberOfPhotos > 0 {
+                    let r = PHAsset.fetchKeyAssets(in: assetCollection, options: nil)
+                    if let first = r?.firstObject {
+                        let targetSize = CGSize(width: 78*2, height: 78*2)
+                        let options = PHImageRequestOptions()
+                        options.isSynchronous = true
+                        options.deliveryMode = .fastFormat
+                        PHImageManager.default().requestImage(for: first,
+                                                              targetSize: targetSize,
+                                                              contentMode: .aspectFit,
+                                                              options: options,
+                                                              resultHandler: { image, _ in
                                                                 album.thumbnail = image
-                                                            }
-                    })
+                        })
+                    }
+                    album.collection = assetCollection
+                    if self.noVideos {
+                        if !(assetCollection.assetCollectionSubtype == .smartAlbumSlomoVideos
+                            || assetCollection.assetCollectionSubtype == .smartAlbumVideos) {
+                            albums.append(album)
+                        }
+                    } else {
+                        albums.append(album)
+                    }
                 }
-                print("Adding album")
-                album.collection = assetCollection
-                albums.append(album)
-            }
-            
-            
-        })
-        print("Done")
-        
-        
+            })
+        }
         return albums
     }
     
     func mediaCountFor(collection: PHAssetCollection) -> Int {
-        let result = PHAsset.fetchAssets(in: collection, options: nil)
+        let options = PHFetchOptions()
+        if noVideos {
+            options.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
+        }
+        let result = PHAsset.fetchAssets(in: collection, options: options)
         return result.count
     }
 }
-

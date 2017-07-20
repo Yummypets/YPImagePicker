@@ -131,7 +131,6 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
         
         refreshMediaRequest()
 
-        
         let tapImageGesture = UITapGestureRecognizer(target: self, action: #selector(tappedImage))
         v.imageCropViewContainer.addGestureRecognizer(tapImageGesture)
     }
@@ -146,18 +145,17 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
         
         DispatchQueue.global(qos: DispatchQoS.QoSClass.background).async {
             if let collection = self.collection {
-//                options.predicate = NSPredicate(format: "")
-                self.images = self.showsVideo
-                    ? PHAsset.fetchKeyAssets(in: collection, options: options)
-                    : PHAsset.fetchKeyAssets(in: collection, options: options)
-                //                    PHAsset.fetchAssets(with: PHAssetMediaType.image, options: options)
+    
+                if !self.showsVideo {
+                    options.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
+                }
+                self.images = PHAsset.fetchAssets(in: collection, options: options)
             } else {
                 self.images = self.showsVideo
                     ? PHAsset.fetchAssets(with: options)
                     : PHAsset.fetchAssets(with: PHAssetMediaType.image, options: options)
             }
-            
-
+        
             DispatchQueue.main.async {
                 if let images = self.images, images.count > 0 {
                     self.changeImage(images[0])
@@ -647,17 +645,6 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
         }
     }
     
-    func navBarTapped() {
-        print("navBarTapped")
-        let vc = YPAlbumFolderSelectionVC()
-        vc.didSelectAlbum = { [weak self] album in
-            print(album.title)
-            self?.collection = album.collection
-            self?.refreshMediaRequest()
-            self?.dismiss(animated: true, completion: nil)
-        }
-        present(vc, animated: true, completion: nil)
-    }
 }
 
 internal extension UICollectionView {

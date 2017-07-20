@@ -14,6 +14,7 @@
 		99428A251E7BE17800B765A9 /* Stevia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 99428A241E7BE17800B765A9 /* Stevia.framework */; };
 		99428A271E7BE1D600B765A9 /* YPImagePicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 99428A201E7BE04000B765A9 /* YPImagePicker.framework */; };
 		99428A281E7BE1D600B765A9 /* YPImagePicker.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 99428A201E7BE04000B765A9 /* YPImagePicker.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		99A052A61F20DF21005600B3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 99A052A81F20DF21005600B3 /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +64,9 @@
 		99428A151E7BE02400B765A9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		99428A1B1E7BE04000B765A9 /* YPImagePicker.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = YPImagePicker.xcodeproj; path = ../YPImagePicker.xcodeproj; sourceTree = "<group>"; };
 		99428A241E7BE17800B765A9 /* Stevia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Stevia.framework; path = Carthage/Build/iOS/Stevia.framework; sourceTree = "<group>"; };
+		99A052A91F20DF24005600B3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		99A052AA1F20DF39005600B3 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		99A052AB1F20DF54005600B3 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +105,7 @@
 			children = (
 				99428A091E7BE02400B765A9 /* AppDelegate.swift */,
 				99428A0B1E7BE02400B765A9 /* ViewController.swift */,
+				99A052A81F20DF21005600B3 /* Localizable.strings */,
 				99428A101E7BE02400B765A9 /* Assets.xcassets */,
 				99428A121E7BE02400B765A9 /* LaunchScreen.storyboard */,
 				99428A151E7BE02400B765A9 /* Info.plist */,
@@ -172,6 +177,8 @@
 			knownRegions = (
 				en,
 				Base,
+				fr,
+				es,
 			);
 			mainGroup = 994289FD1E7BE02400B765A9;
 			productRefGroup = 99428A071E7BE02400B765A9 /* Products */;
@@ -205,6 +212,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				99428A141E7BE02400B765A9 /* LaunchScreen.storyboard in Resources */,
+				99A052A61F20DF21005600B3 /* Localizable.strings in Resources */,
 				99428A111E7BE02400B765A9 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -262,6 +270,16 @@
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
+		99A052A81F20DF21005600B3 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				99A052A91F20DF24005600B3 /* en */,
+				99A052AA1F20DF39005600B3 /* fr */,
+				99A052AB1F20DF54005600B3 /* es */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -269,6 +287,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -319,6 +338,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";

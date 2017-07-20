@@ -47,19 +47,5 @@ class ViewController: UIViewController {
             // video picked
         }
         present(picker, animated: true, completion: nil)
-        
-        
-        
-        //        let titleView = UIView()
-        let button = UIButton()
-        
-        
-        //        titleView.addSubview(button)
-        //        button.fillContainer()
-        button.backgroundColor = .red
-        
-        button.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
-        
-        picker.navigationItem.titleView = button
     }
 }

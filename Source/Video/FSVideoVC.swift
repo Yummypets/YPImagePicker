@@ -147,7 +147,6 @@ public class FSVideoVC: UIViewController {
                 do {
                     try fileManager.removeItem(atPath: outputPath)
                 } catch {
-                    print("error removing item at path: \(outputPath)")
                     isRecording = false
                     return
                 }
@@ -206,7 +205,6 @@ extension FSVideoVC: AVCaptureFileOutputRecordingDelegate {
     public func capture(_ captureOutput: AVCaptureFileOutput!,
                         didStartRecordingToOutputFileAt fileURL: URL!,
                         fromConnections connections: [Any]!) {
-        print("started recording to: \(fileURL)")
         timer = Timer.scheduledTimer(timeInterval: 1,
                                      target: self,
                                      selector: #selector(tick),
@@ -239,7 +237,6 @@ extension FSVideoVC: AVCaptureFileOutputRecordingDelegate {
                         didFinishRecordingToOutputFileAt outputFileURL: URL!,
                         fromConnections connections: [Any]!,
                         error: Error!) {
-        print("finished recording to: \(outputFileURL)")
         didCaptureVideo?(outputFileURL)
         resetVisualState()
         timer.invalidate()

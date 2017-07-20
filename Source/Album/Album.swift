@@ -10,7 +10,7 @@ import UIKit
 import Photos
 
 struct Album {
-    var thumbnail: UIImage? = nil
+    var thumbnail: UIImage?
     var title: String = ""
     var numberOfPhotos: Int = 0
     var collection: PHAssetCollection?
