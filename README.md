@@ -21,10 +21,10 @@ It comes with adjustable square crop and filters.
 
 ## Preview
 
-<img src="https://raw.githubusercontent.com/Yummypets/YPFusuma/master/Images/library.PNG" width="340px">
-<img src="https://raw.githubusercontent.com/Yummypets/YPFusuma/master/Images/photo.PNG" width="340px">
-<img src="https://raw.githubusercontent.com/Yummypets/YPFusuma/master/Images/video.PNG" width="340px">
-<img src="https://raw.githubusercontent.com/Yummypets/YPFusuma/master/Images/filters.PNG" width="340px">
+<img src="https://raw.githubusercontent.com/Yummypets/YPImagePicker/master/Images/library.PNG" width="340px">
+<img src="https://raw.githubusercontent.com/Yummypets/YPImagePicker/master/Images/photo.PNG" width="340px">
+<img src="https://raw.githubusercontent.com/Yummypets/YPImagePicker/master/Images/video.PNG" width="340px">
+<img src="https://raw.githubusercontent.com/Yummypets/YPImagePicker/master/Images/filters.PNG" width="340px">
 
 
 Those features are available just with a few lines of code!
@@ -66,7 +66,8 @@ github "Yummypets/YPImagePicker"
 ```
 
 ## Usage
-Import Fusuma ```import YPImagePicker``` then use the following codes in some function except for viewDidLoad and give FusumaDelegate to the view controller.  
+
+`import YPImagePicker` then use the following:
 
 ```swift
 let picker = YPImagePicker()
