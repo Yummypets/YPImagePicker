@@ -110,7 +110,7 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
             return
         }
         
-        let panGesture      = UIPanGestureRecognizer(target: self, action: #selector(panned(_:)))
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(panned(_:)))
         panGesture.delegate = self
         v.addGestureRecognizer(panGesture)
         
@@ -129,16 +129,35 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
         // Never load photos Unless the user allows to access to photo album
         checkPhotoAuth()
         
+        refreshMediaRequest()
+
+        
+        let tapImageGesture = UITapGestureRecognizer(target: self, action: #selector(tappedImage))
+        v.imageCropViewContainer.addGestureRecognizer(tapImageGesture)
+    }
+    
+    var collection: PHAssetCollection?
+    
+    func refreshMediaRequest() {
+        
         // Sorting condition
         let options = PHFetchOptions()
-        options.sortDescriptors = [
-            NSSortDescriptor(key: "creationDate", ascending: false)
-        ]
+        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         
         DispatchQueue.global(qos: DispatchQoS.QoSClass.background).async {
-            self.images = self.showsVideo
-                ? PHAsset.fetchAssets(with: options)
-                : PHAsset.fetchAssets(with: PHAssetMediaType.image, options: options)
+            if let collection = self.collection {
+//                options.predicate = NSPredicate(format: "")
+                self.images = self.showsVideo
+                    ? PHAsset.fetchKeyAssets(in: collection, options: options)
+                    : PHAsset.fetchKeyAssets(in: collection, options: options)
+                //                    PHAsset.fetchAssets(with: PHAssetMediaType.image, options: options)
+            } else {
+                self.images = self.showsVideo
+                    ? PHAsset.fetchAssets(with: options)
+                    : PHAsset.fetchAssets(with: PHAssetMediaType.image, options: options)
+            }
+            
+
             DispatchQueue.main.async {
                 if let images = self.images, images.count > 0 {
                     self.changeImage(images[0])
@@ -150,9 +169,6 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
             }
         }
         PHPhotoLibrary.shared().register(self)
-        
-        let tapImageGesture = UITapGestureRecognizer(target: self, action: #selector(tappedImage))
-        v.imageCropViewContainer.addGestureRecognizer(tapImageGesture)
     }
     
     func tappedImage() {
@@ -629,6 +645,18 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
                 }
             }
         }
+    }
+    
+    func navBarTapped() {
+        print("navBarTapped")
+        let vc = YPAlbumFolderSelectionVC()
+        vc.didSelectAlbum = { [weak self] album in
+            print(album.title)
+            self?.collection = album.collection
+            self?.refreshMediaRequest()
+            self?.dismiss(animated: true, completion: nil)
+        }
+        present(vc, animated: true, completion: nil)
     }
 }
 

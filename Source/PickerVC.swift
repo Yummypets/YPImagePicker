@@ -83,6 +83,13 @@ public class PickerVC: FSBottomPager, PagerDelegate {
         startOnPage(1)
         
         updateUI()
+        
+//        let titleView = UIView()
+//        titleView.backgroundColor = .red
+//        titleView.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
+//        navigationItem.titleView = titleView
+        
+
     }
     
     public override func viewWillAppear(_ animated: Bool) {
@@ -166,16 +173,39 @@ public class PickerVC: FSBottomPager, PagerDelegate {
         navigationItem.leftBarButtonItem?.tintColor = UIColor(r: 38, g: 38, b: 38)
         switch mode {
         case .library:
-            title = albumVC.title
+//            title = albumVC.title
+            
+            
+//            //        let titleView = UIView()
+//            let button = UIButton()
+//            
+//            
+//            //        titleView.addSubview(button)
+//            //        button.fillContainer()
+//            button.backgroundColor = .red
+//            
+//            button.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
+//            
+//            navigationController?.navigationItem.titleView = button
+            
+            let button = UIButton()
+            button.backgroundColor = UIColor.blue.withAlphaComponent(0.5)
+            button.frame = CGRect(x: 0, y: 0, width: 100, height: 40)
+            button.addTarget(albumVC, action: #selector(FSAlbumVC.navBarTapped), for: .touchUpInside)
+            navigationItem.titleView = button
+            
+            
             navigationItem.rightBarButtonItem = UIBarButtonItem(title: fsLocalized("YPImagePickerNext"),
                                                                 style: .done,
                                                                 target: self,
                                                                 action: #selector(done))
             navigationItem.rightBarButtonItem?.isEnabled = true
         case .camera:
+            navigationItem.titleView = nil
             title = cameraVC.title
             navigationItem.rightBarButtonItem = nil
         case .video:
+            navigationItem.titleView = nil
             title = videoVC.title
             navigationItem.rightBarButtonItem = nil
         }
