@@ -173,6 +173,13 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
             }
         }
         PHPhotoLibrary.shared().register(self)
+        
+        scrollToTop()
+    }
+    
+    func scrollToTop() {
+        tappedImage()
+        v.collectionView.contentOffset = CGPoint.zero
     }
     
     func tappedImage() {
