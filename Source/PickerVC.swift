@@ -179,26 +179,29 @@ public class PickerVC: FSBottomPager, PagerDelegate {
     func setTitleViewWithTitle(aTitle: String) {
         
         let titleView = UIView()
-        titleView.frame = CGRect(x: 0, y: 0, width: 100, height: 40)
+        titleView.frame = CGRect(x: 0, y: 0, width: 200, height: 40)
         
         let label = UILabel()
         label.text = aTitle
         label.textColor = .black
         
-        let arrow = UIView()
-        arrow.backgroundColor = .red
+        let arrow = UIImageView()
+        arrow.image = imageFromBundle("yp_arrow")
         
         let button = UIButton()
         button.addTarget(self, action: #selector(navBarTapped), for: .touchUpInside)
+        button.setBackgroundColor(UIColor.white.withAlphaComponent(0.5), forState: .highlighted)
         
-        titleView.sv(label)
-        label.centerInContainer()
+        titleView.sv(
+            label,
+            arrow,
+            button
+        )
         
-        titleView.sv(arrow)
-        arrow.size(10).centerInContainer()
-        
-        titleView.sv(button)
+        |-(>=8)-label.centerInContainer()-(>=8)-|
+    
         button.fillContainer()
+        alignHorizontally(label-arrow)
         
         navigationItem.titleView = titleView
     }
@@ -271,4 +274,21 @@ extension PickerVC: FSAlbumViewDelegate {
     public func albumViewCameraRollUnauthorized() {
         
     }
+}
+
+public extension UIButton {
+    func setBackgroundColor(_ color:UIColor, forState:UIControlState) {
+        setBackgroundImage(imageWithColor(color), for: forState)
+    }
+}
+
+func imageWithColor(_ color: UIColor) -> UIImage {
+    let rect = CGRect(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
+    UIGraphicsBeginImageContext(rect.size)
+    let context = UIGraphicsGetCurrentContext()
+    context?.setFillColor(color.cgColor)
+    context?.fill(rect)
+    let image = UIGraphicsGetImageFromCurrentImageContext()
+    UIGraphicsEndImageContext()
+    return image ?? UIImage()
 }
