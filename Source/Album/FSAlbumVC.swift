@@ -424,9 +424,11 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
                 PHImageManager.default().requestAVAsset(forVideo: asset, options: videosOptions) { v, _, _ in
                     DispatchQueue.main.async {
                         if v == nil {
-                            self.v.imageCropViewContainer.spinnerView.isHidden = false
+                            self.v.imageCropViewContainer.spinnerView.alpha = 1
                         } else {
-                            self.v.imageCropViewContainer.spinnerView.isHidden = true
+                            UIView.animate(withDuration: 0.2) {
+                                self.v.imageCropViewContainer.spinnerView.alpha = 0
+                            }
                         }
                     }
                 }
@@ -445,11 +447,15 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
                 // Prevent long images to come after user selected another in the meantime.
                 if self.latestImageTapped == asset.localIdentifier {
                     DispatchQueue.main.async {
+
                         if let isFromCloud = info?[PHImageResultIsDegradedKey] as? Bool, isFromCloud  == true {
-                            self.v.imageCropViewContainer.spinnerView.isHidden = false
+                            self.v.imageCropViewContainer.spinnerView.alpha = 1
                         } else {
-                            self.v.imageCropViewContainer.spinnerView.isHidden = true
+                            UIView.animate(withDuration: 0.2) {
+                                self.v.imageCropViewContainer.spinnerView.alpha = 0
+                            }
                         }
+                    
                         self.v.imageCropView.imageSize = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
                         self.v.imageCropView.image = result
                         
