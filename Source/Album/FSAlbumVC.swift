@@ -133,6 +133,12 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
 
         let tapImageGesture = UITapGestureRecognizer(target: self, action: #selector(tappedImage))
         v.imageCropViewContainer.addGestureRecognizer(tapImageGesture)
+                
+        // FIX - Fixes collectionViewImage not appearing on first load
+        let containerHeight = v.imageCropViewContainer.frame.height
+        let height = v.frame.height
+        v.collectionViewConstraintHeight.constant =
+            height - imageCropViewOriginalConstraintTop - containerHeight
     }
     
     var collection: PHAssetCollection?
