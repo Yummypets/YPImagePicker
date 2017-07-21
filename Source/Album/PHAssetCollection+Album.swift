@@ -17,9 +17,15 @@ class AlbumsManager {
         return instance
     }
     
+    private var cachedAlbums: [Album]?
+    
     var noVideos = false
     
     func fetchAlbums() -> [Album] {
+        if let cachedAlbums = cachedAlbums {
+            return cachedAlbums
+        }
+        
         var albums = [Album]()
         let options = PHFetchOptions()
                 
@@ -59,6 +65,7 @@ class AlbumsManager {
                 }
             })
         }
+        cachedAlbums = albums
         return albums
     }
     

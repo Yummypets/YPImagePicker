@@ -19,6 +19,7 @@ class YPAlbumFolderSelectionVC: UIViewController {
     var didSelectAlbum: ((Album) -> Void)?
     var albums = [Album]()
     var noVideos = false
+    let albumsManager = AlbumsManager.default
     
     let v = YPAlbumFolderSelectionView()
     override func loadView() { view = v }
@@ -26,14 +27,24 @@ class YPAlbumFolderSelectionVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Albums"
-        setUpTableView()
-        let am = AlbumsManager.default
-        am.noVideos = noVideos
-        albums = am.fetchAlbums()
-        v.tableView.reloadData()
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel,
                                                            target: self,
                                                            action: #selector(close))
+        setUpTableView()
+        albumsManager.noVideos = noVideos
+        fetchAlbumsInBackground()
+    }
+    
+    func fetchAlbumsInBackground() {
+        v.spinner.startAnimating()
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            self?.albums = self?.albumsManager.fetchAlbums() ?? []
+            DispatchQueue.main.async {
+                self?.v.spinner.stopAnimating()
+                self?.v.tableView.isHidden = false
+                self?.v.tableView.reloadData()
+            }
+        }
     }
     
     func close() {
@@ -41,6 +52,7 @@ class YPAlbumFolderSelectionVC: UIViewController {
     }
     
     func setUpTableView() {
+        v.tableView.isHidden = true
         v.tableView.dataSource = self
         v.tableView.delegate = self
         v.tableView.rowHeight = UITableViewAutomaticDimension
