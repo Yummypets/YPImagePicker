@@ -110,7 +110,7 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
             return
         }
         
-        let panGesture      = UIPanGestureRecognizer(target: self, action: #selector(panned(_:)))
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(panned(_:)))
         panGesture.delegate = self
         v.addGestureRecognizer(panGesture)
         
@@ -129,16 +129,39 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
         // Never load photos Unless the user allows to access to photo album
         checkPhotoAuth()
         
+        refreshMediaRequest()
+
+        let tapImageGesture = UITapGestureRecognizer(target: self, action: #selector(tappedImage))
+        v.imageCropViewContainer.addGestureRecognizer(tapImageGesture)
+                
+        // FIX - Fixes collectionViewImage not appearing on first load
+        let containerHeight = v.imageCropViewContainer.frame.height
+        let height = v.frame.height
+        v.collectionViewConstraintHeight.constant =
+            height - imageCropViewOriginalConstraintTop - containerHeight
+    }
+    
+    var collection: PHAssetCollection?
+    
+    func refreshMediaRequest() {
+        
         // Sorting condition
         let options = PHFetchOptions()
-        options.sortDescriptors = [
-            NSSortDescriptor(key: "creationDate", ascending: false)
-        ]
+        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         
         DispatchQueue.global(qos: DispatchQoS.QoSClass.background).async {
-            self.images = self.showsVideo
-                ? PHAsset.fetchAssets(with: options)
-                : PHAsset.fetchAssets(with: PHAssetMediaType.image, options: options)
+            if let collection = self.collection {
+    
+                if !self.showsVideo {
+                    options.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
+                }
+                self.images = PHAsset.fetchAssets(in: collection, options: options)
+            } else {
+                self.images = self.showsVideo
+                    ? PHAsset.fetchAssets(with: options)
+                    : PHAsset.fetchAssets(with: PHAssetMediaType.image, options: options)
+            }
+        
             DispatchQueue.main.async {
                 if let images = self.images, images.count > 0 {
                     self.changeImage(images[0])
@@ -151,8 +174,12 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
         }
         PHPhotoLibrary.shared().register(self)
         
-        let tapImageGesture = UITapGestureRecognizer(target: self, action: #selector(tappedImage))
-        v.imageCropViewContainer.addGestureRecognizer(tapImageGesture)
+        scrollToTop()
+    }
+    
+    func scrollToTop() {
+        tappedImage()
+        v.collectionView.contentOffset = CGPoint.zero
     }
     
     func tappedImage() {
@@ -410,9 +437,11 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
                 PHImageManager.default().requestAVAsset(forVideo: asset, options: videosOptions) { v, _, _ in
                     DispatchQueue.main.async {
                         if v == nil {
-                            self.v.imageCropViewContainer.spinnerView.isHidden = false
+                            self.v.imageCropViewContainer.spinnerView.alpha = 1
                         } else {
-                            self.v.imageCropViewContainer.spinnerView.isHidden = true
+                            UIView.animate(withDuration: 0.2) {
+                                self.v.imageCropViewContainer.spinnerView.alpha = 0
+                            }
                         }
                     }
                 }
@@ -431,11 +460,15 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
                 // Prevent long images to come after user selected another in the meantime.
                 if self.latestImageTapped == asset.localIdentifier {
                     DispatchQueue.main.async {
+
                         if let isFromCloud = info?[PHImageResultIsDegradedKey] as? Bool, isFromCloud  == true {
-                            self.v.imageCropViewContainer.spinnerView.isHidden = false
+                            self.v.imageCropViewContainer.spinnerView.alpha = 1
                         } else {
-                            self.v.imageCropViewContainer.spinnerView.isHidden = true
+                            UIView.animate(withDuration: 0.2) {
+                                self.v.imageCropViewContainer.spinnerView.alpha = 0
+                            }
                         }
+                    
                         self.v.imageCropView.imageSize = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
                         self.v.imageCropView.image = result
                         
@@ -630,6 +663,7 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
             }
         }
     }
+    
 }
 
 internal extension UICollectionView {

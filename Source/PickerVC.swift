@@ -22,9 +22,12 @@ extension UIColor {
 
 public class PickerVC: FSBottomPager, PagerDelegate {
     
-    var shouldShowStatusBar = false
+    var shouldHideStatusBar = false
+    var initialStatusBarHidden = false
     
-    override public var prefersStatusBarHidden: Bool { return shouldShowStatusBar }
+    override public var prefersStatusBarHidden: Bool {
+        return shouldHideStatusBar || initialStatusBarHidden
+    }
     
     public var showsVideo = false
     public var usesFrontCamera = false
@@ -81,7 +84,6 @@ public class PickerVC: FSBottomPager, PagerDelegate {
         }
         
         startOnPage(1)
-        
         updateUI()
     }
     
@@ -92,7 +94,8 @@ public class PickerVC: FSBottomPager, PagerDelegate {
     
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        shouldShowStatusBar = true
+        shouldHideStatusBar = true
+        initialStatusBarHidden = true
         UIView.animate(withDuration: 0.3) {
             self.setNeedsStatusBarAppearanceUpdate()
         }
@@ -154,8 +157,53 @@ public class PickerVC: FSBottomPager, PagerDelegate {
     
     public override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        shouldShowStatusBar = false
+        shouldHideStatusBar = false
         stopAll()
+    }
+    
+    func navBarTapped() {
+        
+        let vc = YPAlbumFolderSelectionVC()
+        vc.noVideos = !showsVideo
+        let navVC = UINavigationController(rootViewController: vc)
+
+        vc.didSelectAlbum = { [weak self] album in
+            self?.albumVC.collection = album.collection
+            self?.albumVC.refreshMediaRequest()
+            self?.setTitleViewWithTitle(aTitle: album.title)
+            self?.dismiss(animated: true, completion: nil)
+        }
+        present(navVC, animated: true, completion: nil)
+    }
+    
+    func setTitleViewWithTitle(aTitle: String) {
+        
+        let titleView = UIView()
+        titleView.frame = CGRect(x: 0, y: 0, width: 200, height: 40)
+        
+        let label = UILabel()
+        label.text = aTitle
+        label.textColor = .black
+        
+        let arrow = UIImageView()
+        arrow.image = imageFromBundle("yp_arrow")
+        
+        let button = UIButton()
+        button.addTarget(self, action: #selector(navBarTapped), for: .touchUpInside)
+        button.setBackgroundColor(UIColor.white.withAlphaComponent(0.5), forState: .highlighted)
+        
+        titleView.sv(
+            label,
+            arrow,
+            button
+        )
+        
+        |-(>=8)-label.centerInContainer()-(>=8)-|
+    
+        button.fillContainer()
+        alignHorizontally(label-arrow)
+        
+        navigationItem.titleView = titleView
     }
     
     func updateUI() {
@@ -166,16 +214,19 @@ public class PickerVC: FSBottomPager, PagerDelegate {
         navigationItem.leftBarButtonItem?.tintColor = UIColor(r: 38, g: 38, b: 38)
         switch mode {
         case .library:
-            title = albumVC.title
+//            title = albumVC.title
+            setTitleViewWithTitle(aTitle: albumVC.title ?? "")
             navigationItem.rightBarButtonItem = UIBarButtonItem(title: fsLocalized("YPImagePickerNext"),
                                                                 style: .done,
                                                                 target: self,
                                                                 action: #selector(done))
             navigationItem.rightBarButtonItem?.isEnabled = true
         case .camera:
+            navigationItem.titleView = nil
             title = cameraVC.title
             navigationItem.rightBarButtonItem = nil
         case .video:
+            navigationItem.titleView = nil
             title = videoVC.title
             navigationItem.rightBarButtonItem = nil
         }
@@ -223,4 +274,21 @@ extension PickerVC: FSAlbumViewDelegate {
     public func albumViewCameraRollUnauthorized() {
         
     }
+}
+
+public extension UIButton {
+    func setBackgroundColor(_ color: UIColor, forState: UIControlState) {
+        setBackgroundImage(imageWithColor(color), for: forState)
+    }
+}
+
+func imageWithColor(_ color: UIColor) -> UIImage {
+    let rect = CGRect(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
+    UIGraphicsBeginImageContext(rect.size)
+    let context = UIGraphicsGetCurrentContext()
+    context?.setFillColor(color.cgColor)
+    context?.fill(rect)
+    let image = UIGraphicsGetImageFromCurrentImageContext()
+    UIGraphicsEndImageContext()
+    return image ?? UIImage()
 }
