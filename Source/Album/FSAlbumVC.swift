@@ -30,12 +30,12 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
         return myQueue.sync { _images }
     }
 
-    func setImages(_ newImages: PHFetchResult<PHAsset>, completion: () -> Void) {
+    func setImages(_ newImages: PHFetchResult<PHAsset>, completion: @escaping () -> Void) {
         // Make sure writes blokc access
         // No reads can happen while the array is written :)
-        myQueue.sync(flags: DispatchWorkItemFlags.barrier) {
+        myQueue.async(flags: DispatchWorkItemFlags.barrier) {
             self._images = newImages
-            completion()
+            DispatchQueue.main.async(execute: completion)
         }
     }
     
@@ -147,17 +147,13 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         
         DispatchQueue.global(qos: DispatchQoS.QoSClass.background).async {
-            
-            
             let completion = {
-                DispatchQueue.main.async {
-                    if let images = self.getImages(), images.count > 0 {
-                        self.changeImage(images[0])
-                        self.v.collectionView.reloadData()
-                        self.v.collectionView.selectItem(at: IndexPath(row: 0, section: 0),
-                                                         animated: false,
-                                                         scrollPosition: UICollectionViewScrollPosition())
-                    }
+                if let images = self.getImages(), images.count > 0 {
+                    self.changeImage(images[0])
+                    self.v.collectionView.reloadData()
+                    self.v.collectionView.selectItem(at: IndexPath(row: 0, section: 0),
+                                                     animated: false,
+                                                     scrollPosition: UICollectionViewScrollPosition())
                 }
             }
             
