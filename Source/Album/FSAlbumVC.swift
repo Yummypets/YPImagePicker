@@ -23,22 +23,19 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
     public var showsVideo = false
     
     let myQueue = DispatchQueue(label: "com.octopepper.ypImagePicker.imagesQueue",
-                                qos: DispatchQoS.background,
-                                attributes: DispatchQueue.Attributes.concurrent,
-                                autoreleaseFrequency: DispatchQueue.AutoreleaseFrequency.inherit,
-                                target: nil)
+                                attributes: .concurrent)
 
-    var _images: PHFetchResult<PHAsset>?
-    var images: PHFetchResult<PHAsset>? {
-        get {
-            return myQueue.sync {
-                return _images
-            }
-        }
-        set {
-            myQueue.sync {
-                _images = newValue
-            }
+    private var _images: PHFetchResult<PHAsset>?
+    func getImages() -> PHFetchResult<PHAsset>? {
+        return myQueue.sync { _images }
+    }
+
+    func setImages(_ newImages: PHFetchResult<PHAsset>, completion: () -> Void) {
+        // Make sure writes blokc access
+        // No reads can happen while the array is written :)
+        myQueue.sync(flags: DispatchWorkItemFlags.barrier) {
+            self._images = newImages
+            completion()
         }
     }
     
@@ -106,7 +103,7 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
     }
 
     func initialize() {
-        if images != nil {
+        if getImages() != nil {
             return
         }
         
@@ -150,26 +147,30 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         
         DispatchQueue.global(qos: DispatchQoS.QoSClass.background).async {
+            
+            
+            let completion = {
+                DispatchQueue.main.async {
+                    if let images = self.getImages(), images.count > 0 {
+                        self.changeImage(images[0])
+                        self.v.collectionView.reloadData()
+                        self.v.collectionView.selectItem(at: IndexPath(row: 0, section: 0),
+                                                         animated: false,
+                                                         scrollPosition: UICollectionViewScrollPosition())
+                    }
+                }
+            }
+            
             if let collection = self.collection {
-    
                 if !self.showsVideo {
                     options.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
                 }
-                self.images = PHAsset.fetchAssets(in: collection, options: options)
+                self.setImages(PHAsset.fetchAssets(in: collection, options: options), completion: completion)
             } else {
-                self.images = self.showsVideo
+                let newImages = self.showsVideo
                     ? PHAsset.fetchAssets(with: options)
                     : PHAsset.fetchAssets(with: PHAssetMediaType.image, options: options)
-            }
-        
-            DispatchQueue.main.async {
-                if let images = self.images, images.count > 0 {
-                    self.changeImage(images[0])
-                    self.v.collectionView.reloadData()
-                    self.v.collectionView.selectItem(at: IndexPath(row: 0, section: 0),
-                                                     animated: false,
-                                                     scrollPosition: UICollectionViewScrollPosition())
-                }
+                self.setImages(newImages, completion: completion)
             }
         }
         PHPhotoLibrary.shared().register(self)
@@ -328,7 +329,7 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
                                                          for: indexPath) as? FSAlbumViewCell {
             let currentTag = cell.tag + 1
             cell.tag = currentTag
-            if let images = images {
+            if let images = getImages() {
                 let asset = images[(indexPath as NSIndexPath).item]
                 imageManager?.requestImage(for: asset,
                                            targetSize: cellSize,
@@ -356,7 +357,7 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
     }
     
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return images == nil ? 0 : images!.count
+        return getImages() == nil ? 0 : getImages()!.count
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -367,7 +368,7 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
     }
     
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if let images = images {
+        if let images = getImages() {
             changeImage(images[(indexPath as NSIndexPath).row])
             v.imageCropViewConstraintTop.constant = imageCropViewOriginalConstraintTop
             v.collectionViewConstraintHeight.constant =
@@ -392,31 +393,32 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
     
     public func photoLibraryDidChange(_ changeInstance: PHChange) {
         DispatchQueue.main.async {
-            if let images = self.images {
+            if let images = self.getImages() {
                 let collectionChanges = changeInstance.changeDetails(for: images)
                 if collectionChanges != nil {
-                    self.images = collectionChanges!.fetchResultAfterChanges
-                    let collectionView = self.v.collectionView!
-                    if !collectionChanges!.hasIncrementalChanges || collectionChanges!.hasMoves {
-                        collectionView.reloadData()
-                    } else {
-                        collectionView.performBatchUpdates({
-                            let removedIndexes = collectionChanges!.removedIndexes
-                            if (removedIndexes?.count ?? 0) != 0 {
-                                collectionView.deleteItems(at: removedIndexes!.aapl_indexPathsFromIndexesWithSection(0))
-                            }
-                            let insertedIndexes = collectionChanges!.insertedIndexes
-                            if (insertedIndexes?.count ?? 0) != 0 {
-                                collectionView
-                                    .insertItems(at: insertedIndexes!.aapl_indexPathsFromIndexesWithSection(0))
-                            }
-                            let changedIndexes = collectionChanges!.changedIndexes
-                            if (changedIndexes?.count ?? 0) != 0 {
-                                collectionView.reloadItems(at: changedIndexes!.aapl_indexPathsFromIndexesWithSection(0))
-                            }
+                    self.setImages(collectionChanges!.fetchResultAfterChanges, completion: {
+                        let collectionView = self.v.collectionView!
+                        if !collectionChanges!.hasIncrementalChanges || collectionChanges!.hasMoves {
+                            collectionView.reloadData()
+                        } else {
+                            collectionView.performBatchUpdates({
+                                let removedIndexes = collectionChanges!.removedIndexes
+                                if (removedIndexes?.count ?? 0) != 0 {
+                                    collectionView.deleteItems(at: removedIndexes!.aapl_indexPathsFromIndexesWithSection(0))
+                                }
+                                let insertedIndexes = collectionChanges!.insertedIndexes
+                                if (insertedIndexes?.count ?? 0) != 0 {
+                                    collectionView
+                                        .insertItems(at: insertedIndexes!.aapl_indexPathsFromIndexesWithSection(0))
+                                }
+                                let changedIndexes = collectionChanges!.changedIndexes
+                                if (changedIndexes?.count ?? 0) != 0 {
+                                    collectionView.reloadItems(at: changedIndexes!.aapl_indexPathsFromIndexesWithSection(0))
+                                }
                             }, completion: nil)
-                    }
-                    self.resetCachedAssets()
+                        }
+                        self.resetCachedAssets()
+                    })
                 }
             }
         }
@@ -489,7 +491,7 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
             switch status {
             case .authorized:
                 self.imageManager = PHCachingImageManager()
-                if let images = self.images, images.count > 0 {
+                if let images = self.getImages(), images.count > 0 {
                     self.changeImage(images[0])
                 }
             case .restricted, .denied:
@@ -594,7 +596,7 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
         var assets: [PHAsset] = []
         assets.reserveCapacity(indexPaths.count)
         for indexPath in indexPaths {
-            if let images = images {
+            if let images = getImages() {
                 let asset = images[(indexPath as NSIndexPath).item]
                 assets.append(asset)
             }
