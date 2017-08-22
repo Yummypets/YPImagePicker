@@ -10,8 +10,9 @@ Pod::Spec.new do |s|
                          :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/sachadso'
   s.requires_arc     = true
-  s.ios.deployment_target = "8.0"
+  s.ios.deployment_target = "9.0"
   s.source_files = 'Source/**/*.swift'
+  s.dependency 'SteviaLayout', '~> 3.2.0'
   s.resources    = ['Source/Assets.xcassets', 'Source/**/*.xib']
-  s.description  = "Instagram-like image picker & filters for iOS"
+  s.description  = "Instagram-like image picker & filters for iOS supporting videos and albums"
 end
