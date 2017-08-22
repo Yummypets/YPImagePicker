@@ -47,7 +47,7 @@ final class FSImageCropView: UIScrollView, UIScrollViewDelegate {
                 return
             }
             
-            let screenSize: CGFloat = 375
+            let screenSize: CGFloat = UIScreen.main.bounds.width
             self.imageView.frame.size.width = screenSize
             self.imageView.frame.size.height = screenSize
             
