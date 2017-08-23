@@ -53,8 +53,9 @@ You can also use CocoaPods or Carthage.
 Add `pod 'YPImagePicker'` to your `Podfile` and run `pod install`. Also add `use_frameworks!` to the `Podfile`.
 
 ```
-use_frameworks!
+target 'MyApp'
 pod 'YPImagePicker'
+use_frameworks!
 ```
 
 #### Using [Carthage](https://github.com/Carthage/Carthage)
