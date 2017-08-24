@@ -15,7 +15,7 @@ class YPImagePickerConfiguration {
 }
 
 public class YPImagePicker: UINavigationController {
-        
+    
     public static var albumName = "DefaultYPImagePickerAlbumName" {
         didSet { PhotoSaver.albumName = albumName }
     }
@@ -33,6 +33,8 @@ public class YPImagePicker: UINavigationController {
             YPImagePickerConfiguration.shared.onlySquareImages = onlySquareImages
         }
     }
+    
+    public var videoCompression: String = AVAssetExportPresetHighestQuality
     
     private let picker = PickerVC()
     
@@ -79,7 +81,8 @@ public class YPImagePicker: UINavigationController {
                 let path = firstPath + "/\(Int(Date().timeIntervalSince1970))temporary.mov"
                 let uploadURL = URL(fileURLWithPath: path)
                 let asset = AVURLAsset(url: videoURL)
-                let exportSession = AVAssetExportSession(asset: asset, presetName: AVAssetExportPreset640x480)
+                
+                let exportSession = AVAssetExportSession(asset: asset, presetName: self.videoCompression)
                 exportSession?.outputURL = uploadURL
                 exportSession?.outputFileType = AVFileTypeQuickTimeMovie
                 exportSession?.shouldOptimizeForNetworkUse = true //USEFUL?
