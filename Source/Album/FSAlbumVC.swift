@@ -139,7 +139,7 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
                 
         // FIX - Fixes collectionViewImage not appearing on first load
         let containerHeight = v.imageCropViewContainer.frame.height
-        let height = v.frame.height
+        let height = v.frame.height + 47
         v.collectionViewConstraintHeight.constant =
             height - imageCropViewOriginalConstraintTop - containerHeight
     }
