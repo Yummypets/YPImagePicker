@@ -120,8 +120,6 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
         panGesture.delegate = self
         v.addGestureRecognizer(panGesture)
         
-        v.collectionViewConstraintHeight.constant =
-            v.frame.height - v.imageCropView.frame.height - imageCropViewOriginalConstraintTop
         v.imageCropViewConstraintTop.constant = 0
         dragDirection = Direction.up
         
@@ -136,12 +134,6 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
 
         let tapImageGesture = UITapGestureRecognizer(target: self, action: #selector(tappedImage))
         v.imageCropViewContainer.addGestureRecognizer(tapImageGesture)
-                
-        // FIX - Fixes collectionViewImage not appearing on first load
-        let containerHeight = v.imageCropViewContainer.frame.height
-        let height = v.frame.height + 47
-        v.collectionViewConstraintHeight.constant =
-            height - imageCropViewOriginalConstraintTop - containerHeight
     }
     
     var collection: PHAssetCollection?
@@ -182,8 +174,6 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
     func tappedImage() {
         if !isImageShown {
             v.imageCropViewConstraintTop.constant = imageCropViewOriginalConstraintTop
-            v.collectionViewConstraintHeight.constant =
-                v.frame.height - imageCropViewOriginalConstraintTop - v.imageCropViewContainer.frame.height
             UIView.animate(withDuration: 0.2, delay: 0.0, options: UIViewAnimationOptions.curveEaseOut, animations: {
                 self.v.layoutIfNeeded()
             }, completion: nil)
@@ -243,15 +233,9 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
             if dragDirection == Direction.up && currentPos.y < cropBottomY - dragDiff {
                 v.imageCropViewConstraintTop.constant =
                     max(imageCropViewMinimalVisibleHeight - containerHeight, currentPos.y + dragDiff - containerHeight)
-                v.collectionViewConstraintHeight.constant =
-                    min(height - imageCropViewMinimalVisibleHeight,
-                        height - v.imageCropViewConstraintTop.constant - containerHeight)
             } else if dragDirection == Direction.down && currentPos.y > cropBottomY {
                 v.imageCropViewConstraintTop.constant =
                     min(imageCropViewOriginalConstraintTop, currentPos.y - containerHeight)
-                v.collectionViewConstraintHeight.constant =
-                    max(height - imageCropViewOriginalConstraintTop - containerHeight,
-                        height - v.imageCropViewConstraintTop.constant - containerHeight)
             } else if dragDirection == Direction.stop && v.collectionView.contentOffset.y < 0 {
                 dragDirection = Direction.scroll
                 imaginaryCollectionViewOffsetStartPosY = currentPos.y
@@ -259,10 +243,6 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
                 v.imageCropViewConstraintTop.constant =
                     imageCropViewMinimalVisibleHeight - containerHeight
                     + currentPos.y - imaginaryCollectionViewOffsetStartPosY
-                v.collectionViewConstraintHeight.constant =
-                    max(height - imageCropViewOriginalConstraintTop - containerHeight,
-                        height - v.imageCropViewConstraintTop.constant - containerHeight)
-                
             }
         } else {
             imaginaryCollectionViewOffsetStartPosY = 0.0
@@ -275,8 +255,6 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
                 // The largest movement
                 v.imageCropViewConstraintTop.constant =
                     imageCropViewMinimalVisibleHeight - containerHeight
-                v.collectionViewConstraintHeight.constant = height - imageCropViewMinimalVisibleHeight
-                
                 UIView.animate(withDuration: 0.3,
                                delay: 0.0,
                                options: UIViewAnimationOptions.curveEaseOut,
@@ -287,9 +265,6 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
             } else {
                 // Get back to the original position
                 v.imageCropViewConstraintTop.constant = imageCropViewOriginalConstraintTop
-                v.collectionViewConstraintHeight.constant =
-                    height - imageCropViewOriginalConstraintTop - containerHeight
-                
                 UIView.animate(withDuration: 0.3,
                                delay: 0.0,
                                options: UIViewAnimationOptions.curveEaseOut,
@@ -363,8 +338,6 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         changeImage(fetchResult[indexPath.row])
         v.imageCropViewConstraintTop.constant = imageCropViewOriginalConstraintTop
-        v.collectionViewConstraintHeight.constant =
-            v.frame.height - imageCropViewOriginalConstraintTop - v.imageCropViewContainer.frame.height
         UIView.animate(withDuration: 0.2, delay: 0.0, options: UIViewAnimationOptions.curveEaseOut, animations: {
             self.v.layoutIfNeeded()
             }, completion: nil)
