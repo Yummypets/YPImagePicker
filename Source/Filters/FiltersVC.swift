@@ -87,6 +87,7 @@ class FiltersVC: UIViewController {
                                                             action: #selector(done))
     }
     
+    @objc
     func done() {
         didSelectImage?(v.imageView.image!, isImageFiltered)
     }

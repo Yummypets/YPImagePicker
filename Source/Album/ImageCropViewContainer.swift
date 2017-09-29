@@ -30,6 +30,7 @@ class ImageCropViewContainer: UIView, FSImageCropViewDelegate, UIGestureRecogniz
         return YPImagePickerConfiguration.shared.onlySquareImages
     }
     
+    @objc
     func squareCropButtonTapped() {
         if let cropView = cropView {
             let z = cropView.zoomScale
@@ -109,6 +110,7 @@ class ImageCropViewContainer: UIView, FSImageCropViewDelegate, UIGestureRecogniz
          return !(touch.view is UIButton)
     }
     
+    @objc
     func handleTouchDown(sender: UILongPressGestureRecognizer) {
         switch sender.state {
         case .began:

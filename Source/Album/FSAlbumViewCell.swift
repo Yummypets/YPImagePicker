@@ -11,6 +11,7 @@ import Stevia
 
 class FSAlbumViewCell: UICollectionViewCell {
     
+    var representedAssetIdentifier: String!
     let imageView = UIImageView()
     let durationLabel = UILabel()
     let selectionOverlay = UIView()

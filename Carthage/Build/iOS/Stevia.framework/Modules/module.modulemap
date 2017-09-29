@@ -7,4 +7,5 @@ framework module Stevia {
 
 module Stevia.Swift {
     header "Stevia-Swift.h"
+    requires objc
 }

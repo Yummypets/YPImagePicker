@@ -9,37 +9,23 @@
 import UIKit
 import Photos
 
-@objc public protocol FSAlbumViewDelegate: class {
+@objc
+public protocol FSAlbumViewDelegate: class {
     func albumViewCameraRollUnauthorized()
     func albumViewStartedLoadingImage()
     func albumViewFinishedLoadingImage()
 }
 
 public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate,
-PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
+PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDelegateFlowLayout {
     
     weak var delegate: FSAlbumViewDelegate?
     
     public var showsVideo = false
     
-    let myQueue = DispatchQueue(label: "com.octopepper.ypImagePicker.imagesQueue",
-                                attributes: .concurrent)
-
-    private var _images: PHFetchResult<PHAsset>?
-    func getImages() -> PHFetchResult<PHAsset>? {
-        return myQueue.sync { _images }
-    }
-
-    func setImages(_ newImages: PHFetchResult<PHAsset>, completion: @escaping () -> Void) {
-        // Make sure writes blokc access
-        // No reads can happen while the array is written :)
-        myQueue.async(flags: DispatchWorkItemFlags.barrier) {
-            self._images = newImages
-            DispatchQueue.main.async(execute: completion)
-        }
-    }
+    private var fetchResult: PHFetchResult<PHAsset>!
     
-    var imageManager: PHCachingImageManager?
+    let imageManager = PHCachingImageManager()
     var previousPreheatRect: CGRect = CGRect.zero
     let cellSize = CGSize(width: UIScreen.main.bounds.width/4, height: UIScreen.main.bounds.width/4)
     var phAsset: PHAsset!
@@ -97,15 +83,38 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        v.collectionView.dataSource = self
-        v.collectionView.delegate = self
-        initialize()
+        
+        // Only intilialize picker if photo permission is Allowed by user.
+        let status = PHPhotoLibrary.authorizationStatus()
+        switch status {
+        case .authorized:
+            initialize()
+        case .restricted, .denied:
+            print("restricted or denied")
+        case .notDetermined:
+            // Show permission popup and get new status
+            PHPhotoLibrary.requestAuthorization { s in
+                if s == .authorized {
+                    DispatchQueue.main.async(execute: self.initialize)
+                }
+            }
+        }
+    }
+    
+    deinit {
+        PHPhotoLibrary.shared().unregisterChangeObserver(self)
     }
 
     func initialize() {
-        if getImages() != nil {
+        if fetchResult != nil {
             return
         }
+        
+        resetCachedAssets()
+        PHPhotoLibrary.shared().register(self)
+        
+        v.collectionView.dataSource = self
+        v.collectionView.delegate = self
         
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(panned(_:)))
         panGesture.delegate = self
@@ -122,9 +131,6 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
         v.imageCropViewContainer.layer.shadowOffset  = CGSize.zero
         
         v.collectionView.register(FSAlbumViewCell.self, forCellWithReuseIdentifier: "FSAlbumViewCell")
-        
-        // Never load photos Unless the user allows to access to photo album
-        checkPhotoAuth()
         
         refreshMediaRequest()
 
@@ -146,31 +152,24 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
         let options = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         
-        DispatchQueue.global(qos: DispatchQoS.QoSClass.background).async {
-            let completion = {
-                if let images = self.getImages(), images.count > 0 {
-                    self.changeImage(images[0])
-                    self.v.collectionView.reloadData()
-                    self.v.collectionView.selectItem(at: IndexPath(row: 0, section: 0),
-                                                     animated: false,
-                                                     scrollPosition: UICollectionViewScrollPosition())
-                }
+        if let collection = self.collection {
+            if !showsVideo {
+                options.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
             }
-            
-            if let collection = self.collection {
-                if !self.showsVideo {
-                    options.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
-                }
-                self.setImages(PHAsset.fetchAssets(in: collection, options: options), completion: completion)
-            } else {
-                let newImages = self.showsVideo
-                    ? PHAsset.fetchAssets(with: options)
-                    : PHAsset.fetchAssets(with: PHAssetMediaType.image, options: options)
-                self.setImages(newImages, completion: completion)
-            }
+            fetchResult = PHAsset.fetchAssets(in: collection, options: options)
+        } else {
+            fetchResult = showsVideo
+                ? PHAsset.fetchAssets(with: options)
+                : PHAsset.fetchAssets(with: PHAssetMediaType.image, options: options)
         }
-        PHPhotoLibrary.shared().register(self)
         
+        if fetchResult.count > 0 {
+            changeImage(fetchResult[0])
+            v.collectionView.reloadData()
+            v.collectionView.selectItem(at: IndexPath(row: 0, section: 0),
+                                             animated: false,
+                                             scrollPosition: UICollectionViewScrollPosition())
+        }
         scrollToTop()
     }
     
@@ -179,6 +178,7 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
         v.collectionView.contentOffset = CGPoint.zero
     }
     
+    @objc
     func tappedImage() {
         if !isImageShown {
             v.imageCropViewConstraintTop.constant = imageCropViewOriginalConstraintTop
@@ -190,13 +190,7 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
             refreshImageCurtainAlpha()
         }
     }
-    
-    deinit {
-        if PHPhotoLibrary.authorizationStatus() == PHAuthorizationStatus.authorized {
-            PHPhotoLibrary.shared().unregisterChangeObserver(self)
-        }
-    }
-    
+
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith
                                   otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
@@ -213,6 +207,7 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
         return true
     }
     
+    @objc
     func panned(_ sender: UIPanGestureRecognizer) {
         
         let containerHeight = v.imageCropViewContainer.frame.height
@@ -321,31 +316,32 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
     
     public func collectionView(_ collectionView: UICollectionView,
                                cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FSAlbumViewCell",
-                                                         for: indexPath) as? FSAlbumViewCell {
-            let currentTag = cell.tag + 1
-            cell.tag = currentTag
-            if let images = getImages() {
-                let asset = images[(indexPath as NSIndexPath).item]
-                imageManager?.requestImage(for: asset,
-                                           targetSize: cellSize,
-                                           contentMode: .aspectFill,
-                                           options: nil) { result, _ in
-                                            if cell.tag == currentTag {
-                                                cell.imageView.image = result
-                                            }
-                }
-                if asset.mediaType == .video {
-                    cell.durationLabel.isHidden = false
-                    cell.durationLabel.text = formattedStrigFrom(asset.duration)
-                } else {
-                    cell.durationLabel.isHidden = true
-                    cell.durationLabel.text = ""
-                }
-            }
-            return cell
+        let asset = fetchResult[indexPath.item]
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FSAlbumViewCell",
+                                                         for: indexPath) as? FSAlbumViewCell else {
+            fatalError("unexpected cell in collection view")
         }
-        return UICollectionViewCell()
+        cell.representedAssetIdentifier = asset.localIdentifier
+        imageManager.requestImage(for: asset,
+                                  targetSize: cellSize,
+                                  contentMode: .aspectFill,
+                                  options: nil) { image, _ in
+            // The cell may have been recycled when the time this gets called
+            // set image only if it's still showing the same asset.
+            if cell.representedAssetIdentifier == asset.localIdentifier && image != nil {
+                cell.imageView.image = image
+            }
+        }
+        
+        let isVideo = (asset.mediaType == .video)
+        cell.durationLabel.isHidden = !isVideo
+        cell.durationLabel.text = isVideo ? formattedStrigFrom(asset.duration) : ""
+        
+        // Prevent weird animation where thumbnail fills cell on first scrolls.
+        UIView.performWithoutAnimation {
+            cell.layoutIfNeeded()
+        }
+        return cell
     }
 
     public func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -353,29 +349,28 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
     }
     
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return getImages() == nil ? 0 : getImages()!.count
+        return fetchResult.count
     }
     
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize {
+    public func collectionView(_ collectionView: UICollectionView,
+                               layout collectionViewLayout: UICollectionViewLayout,
+                               sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
         let width = (collectionView.frame.width - 3) / 4
         return CGSize(width: width, height: width)
     }
     
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if let images = getImages() {
-            changeImage(images[(indexPath as NSIndexPath).row])
-            v.imageCropViewConstraintTop.constant = imageCropViewOriginalConstraintTop
-            v.collectionViewConstraintHeight.constant =
-                v.frame.height - imageCropViewOriginalConstraintTop - v.imageCropViewContainer.frame.height
-            UIView.animate(withDuration: 0.2, delay: 0.0, options: UIViewAnimationOptions.curveEaseOut, animations: {
-                self.v.layoutIfNeeded()
-                }, completion: nil)
-            dragDirection = Direction.up
-            collectionView.scrollToItem(at: indexPath, at: .top, animated: true)
-            refreshImageCurtainAlpha()
-        }
+        changeImage(fetchResult[indexPath.row])
+        v.imageCropViewConstraintTop.constant = imageCropViewOriginalConstraintTop
+        v.collectionViewConstraintHeight.constant =
+            v.frame.height - imageCropViewOriginalConstraintTop - v.imageCropViewContainer.frame.height
+        UIView.animate(withDuration: 0.2, delay: 0.0, options: UIViewAnimationOptions.curveEaseOut, animations: {
+            self.v.layoutIfNeeded()
+            }, completion: nil)
+        dragDirection = Direction.up
+        collectionView.scrollToItem(at: indexPath, at: .top, animated: true)
+        refreshImageCurtainAlpha()
     }
     
     // MARK: - ScrollViewDelegate
@@ -389,33 +384,30 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
     
     public func photoLibraryDidChange(_ changeInstance: PHChange) {
         DispatchQueue.main.async {
-            if let images = self.getImages() {
-                let collectionChanges = changeInstance.changeDetails(for: images)
-                if collectionChanges != nil {
-                    self.setImages(collectionChanges!.fetchResultAfterChanges, completion: {
-                        let collectionView = self.v.collectionView!
-                        if !collectionChanges!.hasIncrementalChanges || collectionChanges!.hasMoves {
-                            collectionView.reloadData()
-                        } else {
-                            collectionView.performBatchUpdates({
-                                let removedIndexes = collectionChanges!.removedIndexes
-                                if (removedIndexes?.count ?? 0) != 0 {
-                                    collectionView.deleteItems(at: removedIndexes!.aapl_indexPathsFromIndexesWithSection(0))
-                                }
-                                let insertedIndexes = collectionChanges!.insertedIndexes
-                                if (insertedIndexes?.count ?? 0) != 0 {
-                                    collectionView
-                                        .insertItems(at: insertedIndexes!.aapl_indexPathsFromIndexesWithSection(0))
-                                }
-                                let changedIndexes = collectionChanges!.changedIndexes
-                                if (changedIndexes?.count ?? 0) != 0 {
-                                    collectionView.reloadItems(at: changedIndexes!.aapl_indexPathsFromIndexesWithSection(0))
-                                }
-                            }, completion: nil)
+            let collectionChanges = changeInstance.changeDetails(for: self.fetchResult)
+            if collectionChanges != nil {
+                self.fetchResult = collectionChanges!.fetchResultAfterChanges
+                let collectionView = self.v.collectionView!
+                if !collectionChanges!.hasIncrementalChanges || collectionChanges!.hasMoves {
+                    collectionView.reloadData()
+                } else {
+                    collectionView.performBatchUpdates({
+                        let removedIndexes = collectionChanges!.removedIndexes
+                        if (removedIndexes?.count ?? 0) != 0 {
+                            collectionView.deleteItems(at: removedIndexes!.aapl_indexPathsFromIndexesWithSection(0))
                         }
-                        self.resetCachedAssets()
-                    })
+                        let insertedIndexes = collectionChanges!.insertedIndexes
+                        if (insertedIndexes?.count ?? 0) != 0 {
+                            collectionView
+                                .insertItems(at: insertedIndexes!.aapl_indexPathsFromIndexesWithSection(0))
+                        }
+                        let changedIndexes = collectionChanges!.changedIndexes
+                        if (changedIndexes?.count ?? 0) != 0 {
+                            collectionView.reloadItems(at: changedIndexes!.aapl_indexPathsFromIndexesWithSection(0))
+                        }
+                    }, completion: nil)
                 }
+                self.resetCachedAssets()
             }
         }
     }
@@ -451,7 +443,7 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
         DispatchQueue.global(qos: .default).async {
             let options = PHImageRequestOptions()
             options.isNetworkAccessAllowed = true
-            self.imageManager?.requestImage(for: asset,
+            self.imageManager.requestImage(for: asset,
                                             targetSize: CGSize(width: asset.pixelWidth, height: asset.pixelHeight),
                                             contentMode: .aspectFill,
                                             options: options) { result, info in
@@ -481,43 +473,24 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
         }
     }
     
-    // Check the status of authorization for PHPhotoLibrary
-    func checkPhotoAuth() {
-        PHPhotoLibrary.requestAuthorization { status  in
-            switch status {
-            case .authorized:
-                self.imageManager = PHCachingImageManager()
-                if let images = self.getImages(), images.count > 0 {
-                    self.changeImage(images[0])
-                }
-            case .restricted, .denied:
-                DispatchQueue.main.async {
-                    self.delegate?.albumViewCameraRollUnauthorized()
-                }
-            default:
-                break
-            }
-        }
-    }
-    
     // MARK: - Asset Caching
     
     func resetCachedAssets() {
-        imageManager?.stopCachingImagesForAllAssets()
-        previousPreheatRect = CGRect.zero
+        imageManager.stopCachingImagesForAllAssets()
+        previousPreheatRect = .zero
     }
     
     func updateCachedAssets() {
         var preheatRect = v.collectionView!.bounds
         preheatRect = preheatRect.insetBy(dx: 0.0, dy: -0.5 * preheatRect.height)
         
-        let delta = abs(preheatRect.midY - self.previousPreheatRect.midY)
-        if delta > self.v.collectionView!.bounds.height / 3.0 {
+        let delta = abs(preheatRect.midY - previousPreheatRect.midY)
+        if delta > v.collectionView!.bounds.height / 3.0 {
             
             var addedIndexPaths: [IndexPath] = []
             var removedIndexPaths: [IndexPath] = []
             
-            self.computeDifferenceBetweenRect(self.previousPreheatRect,
+            computeDifferenceBetweenRect(previousPreheatRect,
                                               andRect: preheatRect,
                                               removedHandler: { removedRect in
                 let indexPaths = self.v.collectionView.aapl_indexPathsForElementsInRect(removedRect)
@@ -527,19 +500,19 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
                     addedIndexPaths += indexPaths
             })
             
-            let assetsToStartCaching = self.assetsAtIndexPaths(addedIndexPaths)
-            let assetsToStopCaching = self.assetsAtIndexPaths(removedIndexPaths)
+            let assetsToStartCaching = assetsAtIndexPaths(addedIndexPaths)
+            let assetsToStopCaching = assetsAtIndexPaths(removedIndexPaths)
             
-            self.imageManager?.startCachingImages(for: assetsToStartCaching,
+            imageManager.startCachingImages(for: assetsToStartCaching,
                                                   targetSize: cellSize,
                                                   contentMode: .aspectFill,
                                                   options: nil)
-            self.imageManager?.stopCachingImages(for: assetsToStopCaching,
+            imageManager.stopCachingImages(for: assetsToStopCaching,
                                                  targetSize: cellSize,
                                                  contentMode: .aspectFill,
                                                  options: nil)
             
-            self.previousPreheatRect = preheatRect
+            previousPreheatRect = preheatRect
         }
     }
     
@@ -592,10 +565,8 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate {
         var assets: [PHAsset] = []
         assets.reserveCapacity(indexPaths.count)
         for indexPath in indexPaths {
-            if let images = getImages() {
-                let asset = images[(indexPath as NSIndexPath).item]
+                let asset = fetchResult[indexPath.item]
                 assets.append(asset)
-            }
         }
         return assets
     }

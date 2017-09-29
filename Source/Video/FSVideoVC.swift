@@ -56,9 +56,9 @@ public class FSVideoVC: UIViewController {
     
     func setupPreview() {
         let videoLayer = AVCaptureVideoPreviewLayer(session: session)
-        videoLayer?.frame = v.previewViewContainer.bounds
-        videoLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
-        v.previewViewContainer.layer.addSublayer(videoLayer!)
+        videoLayer.frame = v.previewViewContainer.bounds
+        videoLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
+        v.previewViewContainer.layer.addSublayer(videoLayer)
         let tapRecognizer = UITapGestureRecognizer(target: self, action:#selector(focus(_:)))
         v.previewViewContainer.addGestureRecognizer(tapRecognizer)
     }
@@ -77,29 +77,34 @@ public class FSVideoVC: UIViewController {
     private func setupCaptureSession() {
         session.beginConfiguration()
         let aDevice = deviceForPosition(.back)
-        videoInput = try? AVCaptureDeviceInput(device: aDevice)
-        if session.canAddInput(videoInput) {
-            session.addInput(videoInput)
+        if let d = aDevice {
+            videoInput = try? AVCaptureDeviceInput(device: d)
         }
         
-        // Add audio recording
-        for device in AVCaptureDevice.devices(withMediaType:AVMediaTypeAudio) {
-            if let device = device as? AVCaptureDevice, let audioInput = try? AVCaptureDeviceInput(device: device) {
-                if session.canAddInput(audioInput) {
-                    session.addInput(audioInput)
+        if let videoInput = videoInput {
+            if session.canAddInput(videoInput) {
+                session.addInput(videoInput)
+            }
+            
+            // Add audio recording
+            for device in AVCaptureDevice.devices(for:AVMediaType.audio) {
+                if let audioInput = try? AVCaptureDeviceInput(device: device) {
+                    if session.canAddInput(audioInput) {
+                        session.addInput(audioInput)
+                    }
                 }
             }
+            
+            let totalSeconds = 30.0 //Total Seconds of capture time
+            let timeScale: Int32 = 30 //FPS
+            let maxDuration = CMTimeMakeWithSeconds(totalSeconds, timeScale)
+            videoOutput.maxRecordedDuration = maxDuration
+            videoOutput.minFreeDiskSpaceLimit = 1024 * 1024
+            if session.canAddOutput(videoOutput) {
+                session.addOutput(videoOutput)
+            }
+            session.sessionPreset = AVCaptureSession.Preset.high
         }
-        
-        let totalSeconds = 30.0 //Total Seconds of capture time
-        let timeScale: Int32 = 30 //FPS
-        let maxDuration = CMTimeMakeWithSeconds(totalSeconds, timeScale)
-        videoOutput.maxRecordedDuration = maxDuration
-        videoOutput.minFreeDiskSpaceLimit = 1024 * 1024
-        if session.canAddOutput(videoOutput) {
-            session.addOutput(videoOutput)
-        }
-        session.sessionPreset = AVCaptureSessionPresetHigh
         session.commitConfiguration()
     }
 
@@ -107,8 +112,8 @@ public class FSVideoVC: UIViewController {
         if !session.isRunning {
             sessionQueue.async { [unowned self] in
                 // Re-apply session preset
-                self.session.sessionPreset = AVCaptureSessionPresetHigh
-                let status = AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo)
+                self.session.sessionPreset = AVCaptureSession.Preset.high
+                let status = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
                 switch status {
                 case .notDetermined, .restricted, .denied:
                     self.session.stopRunning()
@@ -127,6 +132,7 @@ public class FSVideoVC: UIViewController {
         }
     }
     
+    @objc
     func shotButtonTapped() {
         isRecording = !isRecording
         
@@ -153,7 +159,7 @@ public class FSVideoVC: UIViewController {
             }
             v.flipButton.isEnabled = false
             v.flashButton.isEnabled = false
-            videoOutput.startRecording(toOutputFileURL: outputURL, recordingDelegate: self)
+            videoOutput.startRecording(to: outputURL, recordingDelegate: self)
         } else {
             videoOutput.stopRecording()
             v.flipButton.isEnabled = true
@@ -162,6 +168,7 @@ public class FSVideoVC: UIViewController {
         return
     }
     
+    @objc
     func flipButtonTapped() {
         sessionQueue.async { [unowned self] in
             self.session.beginConfiguration()
@@ -172,8 +179,8 @@ public class FSVideoVC: UIViewController {
             }
             
             // Re Add audio recording
-            for device in AVCaptureDevice.devices(withMediaType:AVMediaTypeAudio) {
-                if let device = device as? AVCaptureDevice, let audioInput = try? AVCaptureDeviceInput(device: device) {
+            for device in AVCaptureDevice.devices(for:AVMediaType.audio) {
+                if let audioInput = try? AVCaptureDeviceInput(device: device) {
                     if self.session.canAddInput(audioInput) {
                         self.session.addInput(audioInput)
                     }
@@ -186,12 +193,13 @@ public class FSVideoVC: UIViewController {
         }
     }
     
+    @objc
     func flashButtonTapped() {
         device?.tryToggleFlash()
         refreshFlashButton()
     }
     
-    func flashImage(forAVCaptureFlashMode: AVCaptureFlashMode) -> UIImage {
+    func flashImage(forAVCaptureFlashMode: AVCaptureDevice.FlashMode) -> UIImage {
         switch forAVCaptureFlashMode {
         case .on: return flashOnImage!
         case .off: return flashOffImage!
@@ -202,9 +210,9 @@ public class FSVideoVC: UIViewController {
 
 extension FSVideoVC: AVCaptureFileOutputRecordingDelegate {
     
-    public func capture(_ captureOutput: AVCaptureFileOutput!,
-                        didStartRecordingToOutputFileAt fileURL: URL!,
-                        fromConnections connections: [Any]!) {
+    public func fileOutput(_ captureOutput: AVCaptureFileOutput,
+                           didStartRecordingTo fileURL: URL,
+                           from connections: [AVCaptureConnection]) {
         timer = Timer.scheduledTimer(timeInterval: 1,
                                      target: self,
                                      selector: #selector(tick),
@@ -213,6 +221,7 @@ extension FSVideoVC: AVCaptureFileOutputRecordingDelegate {
         dateVideoStarted = Date()
     }
     
+    @objc
     func tick() {
         let timeElapsed = Date().timeIntervalSince(dateVideoStarted)
         v.timeElapsedLabel.text = formattedStrigFrom(timeElapsed)
@@ -233,10 +242,10 @@ extension FSVideoVC: AVCaptureFileOutputRecordingDelegate {
         return String(format: "%02d:%02d", seconds, miliseconds)
     }
     
-    public func capture(_ captureOutput: AVCaptureFileOutput!,
-                        didFinishRecordingToOutputFileAt outputFileURL: URL!,
-                        fromConnections connections: [Any]!,
-                        error: Error!) {
+    public func fileOutput(_ captureOutput: AVCaptureFileOutput,
+                           didFinishRecordingTo outputFileURL: URL,
+                           from connections: [AVCaptureConnection],
+                           error: Error?) {
         didCaptureVideo?(outputFileURL)
         resetVisualState()
         timer.invalidate()
@@ -250,6 +259,7 @@ extension FSVideoVC: AVCaptureFileOutputRecordingDelegate {
 
 extension FSVideoVC {
     
+    @objc
     func focus(_ recognizer: UITapGestureRecognizer) {
         let point = recognizer.location(in: v.previewViewContainer)
         let viewsize = v.previewViewContainer.bounds.size

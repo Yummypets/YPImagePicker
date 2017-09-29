@@ -84,7 +84,7 @@ public class YPImagePicker: UINavigationController {
                 
                 let exportSession = AVAssetExportSession(asset: asset, presetName: self.videoCompression)
                 exportSession?.outputURL = uploadURL
-                exportSession?.outputFileType = AVFileTypeQuickTimeMovie
+                exportSession?.outputFileType = AVFileType.mov
                 exportSession?.shouldOptimizeForNetworkUse = true //USEFUL?
                 exportSession?.exportAsynchronously {
                     switch exportSession!.status {

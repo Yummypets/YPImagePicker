@@ -106,7 +106,7 @@ final class MenuItem: UIView {
         
         text.style { l in
             l.textAlignment = .center
-            l.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightMedium)
+            l.font = UIFont.systemFont(ofSize: 17, weight: UIFont.Weight.medium)
             l.textColor = self.unselectedColor()
         }
     }
@@ -240,6 +240,7 @@ public class FSBottomPager: UIViewController, UIScrollViewDelegate {
         v.header.selector.widthConstraint?.constant = v.frame.width / CGFloat(controllers.count)
     }
     
+    @objc
     func tabTapped(_ b: UIButton) {
         showPage(b.tag)
     }

@@ -161,6 +161,7 @@ public class PickerVC: FSBottomPager, PagerDelegate {
         stopAll()
     }
     
+    @objc
     func navBarTapped() {
         
         let vc = YPAlbumFolderSelectionVC()
@@ -232,12 +233,14 @@ public class PickerVC: FSBottomPager, PagerDelegate {
         }
     }
     
+    @objc
     func close() {
         dismiss(animated: true) {
             self.didClose?()
         }
     }
     
+    @objc
     func done() {
         if mode == .library {
             albumVC.selectedMedia(photo: { img in

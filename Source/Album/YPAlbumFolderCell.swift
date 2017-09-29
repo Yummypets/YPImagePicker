@@ -41,7 +41,7 @@ class YPAlbumFolderCell: UITableViewCell {
         thumbnail.contentMode = .scaleAspectFill
         thumbnail.clipsToBounds = true
         
-        title.font = UIFont.systemFont(ofSize: 16, weight: UIFontWeightRegular)
-        numberOfPhotos.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
+        title.font = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.regular)
+        numberOfPhotos.font = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.regular)
     }
 }

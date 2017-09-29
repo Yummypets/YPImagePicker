@@ -26,8 +26,8 @@ class FilterCollectionViewCell: UICollectionViewCell {
             : UIColor(r: 154, g: 154, b: 154)
         
         name.font = .systemFont(ofSize: 11, weight: isSelected
-            ? UIFontWeightMedium
-            : UIFontWeightRegular)
+            ? UIFont.Weight.medium
+            : UIFont.Weight.regular)
         }
     }
     
@@ -43,7 +43,7 @@ class FilterCollectionViewCell: UICollectionViewCell {
         |name|.top(0)
         |imageView|.bottom(0).heightEqualsWidth()
         
-        name.font = .systemFont(ofSize: 11, weight: UIFontWeightRegular)
+        name.font = .systemFont(ofSize: 11, weight: UIFont.Weight.regular)
         name.textColor = UIColor(r: 154, g: 154, b: 154)
         name.textAlignment = .center
         imageView.contentMode = .scaleAspectFill

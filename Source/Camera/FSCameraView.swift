@@ -72,7 +72,7 @@ class FSCameraView: UIView, UIGestureRecognizerDelegate {
             l.textColor = .white
             l.text = "00:00"
             l.isHidden = true
-            l.font = .monospacedDigitSystemFont(ofSize: 13, weight: UIFontWeightMedium)
+            l.font = .monospacedDigitSystemFont(ofSize: 13, weight: UIFont.Weight.medium)
         }
         progressBar.trackTintColor = .clear
         progressBar.tintColor = .red

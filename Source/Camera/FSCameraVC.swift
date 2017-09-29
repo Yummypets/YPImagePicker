@@ -54,9 +54,9 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
     
     func setupPreview() {
         let videoLayer = AVCaptureVideoPreviewLayer(session: session)
-        videoLayer?.frame = v.previewViewContainer.bounds
-        videoLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
-        v.previewViewContainer.layer.addSublayer(videoLayer!)
+        videoLayer.frame = v.previewViewContainer.bounds
+        videoLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
+        v.previewViewContainer.layer.addSublayer(videoLayer)
         let tapRecognizer = UITapGestureRecognizer(target: self, action:#selector(focus(_:)))
         tapRecognizer.delegate = self
         v.previewViewContainer.addGestureRecognizer(tapRecognizer)
@@ -64,20 +64,24 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
     
     private func setupCaptureSession() {
         session.beginConfiguration()
-        session.sessionPreset = AVCaptureSessionPresetPhoto
-        let cameraPosition: AVCaptureDevicePosition = usesFrontCamera ? .front : .back
+        session.sessionPreset = AVCaptureSession.Preset.photo
+        let cameraPosition: AVCaptureDevice.Position = usesFrontCamera ? .front : .back
         let aDevice = deviceForPosition(cameraPosition)
-        videoInput = try? AVCaptureDeviceInput(device: aDevice)
-        
-        if session.canAddInput(videoInput) {
-            session.addInput(videoInput)
+        if let d = aDevice {
+            videoInput = try? AVCaptureDeviceInput(device: d)
         }
-        if session.canAddOutput(imageOutput) {
-            session.addOutput(imageOutput)
+        if let videoInput = videoInput {
+            if session.canAddInput(videoInput) {
+                session.addInput(videoInput)
+            }
+            if session.canAddOutput(imageOutput) {
+                session.addOutput(imageOutput)
+            }
         }
         session.commitConfiguration()
     }
     
+    @objc
     func focus(_ recognizer: UITapGestureRecognizer) {
         let point = recognizer.location(in: v.previewViewContainer)
         let viewsize = v.previewViewContainer.bounds.size
@@ -93,8 +97,8 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
         if !session.isRunning {
             sessionQueue.async { [unowned self] in
                 // Re-apply session preset
-                self.session.sessionPreset = AVCaptureSessionPresetPhoto
-                let status = AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo)
+                self.session.sessionPreset = AVCaptureSession.Preset.photo
+                let status = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
                 switch status {
                 case .notDetermined, .restricted, .denied:
                     self.session.stopRunning()
@@ -113,6 +117,7 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
         }
     }
     
+    @objc
     func flipButtonTapped() {
         sessionQueue.async { [unowned self] in
             self.session.resetInputs()
@@ -126,9 +131,10 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
         }
     }
 
+    @objc
     func shotButtonTapped() {
         DispatchQueue.global(qos: .default).async {
-            let videoConnection = self.imageOutput.connection(withMediaType: AVMediaTypeVideo)
+            let videoConnection = self.imageOutput.connection(with: AVMediaType.video)
             let orientation: UIDeviceOrientation = UIDevice.current.orientation
             switch orientation {
             case .portrait:
@@ -143,9 +149,9 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
                 videoConnection?.videoOrientation = .portrait
             }
             
-            self.imageOutput.captureStillImageAsynchronously(from: videoConnection) { buffer, _ in
+            self.imageOutput.captureStillImageAsynchronously(from: videoConnection!) { buffer, _ in
                 self.session.stopRunning()
-                let data = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(buffer)
+                let data = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(buffer!)
                 if let image = UIImage(data: data!) {
                     
                     // Image size
@@ -193,6 +199,7 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
         }
     }
     
+    @objc
     func flashButtonTapped() {
         device?.tryToggleFlash()
         refreshFlashButton()
@@ -205,7 +212,7 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
         }
     }
 
-    func flashImage(forAVCaptureFlashMode: AVCaptureFlashMode) -> UIImage {
+    func flashImage(forAVCaptureFlashMode: AVCaptureDevice.FlashMode) -> UIImage {
         switch forAVCaptureFlashMode {
         case .on: return flashOnImage!
         case .off: return flashOffImage!

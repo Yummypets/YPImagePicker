@@ -22,11 +22,9 @@ func imageFromBundle(_ named: String) -> UIImage {
     return UIImage(named: named, in: Bundle(for: PickerVC.self), compatibleWith: nil) ?? UIImage()
 }
 
-func deviceForPosition(_ p: AVCaptureDevicePosition) -> AVCaptureDevice? {
-    for device in AVCaptureDevice.devices(withMediaType: AVMediaTypeVideo) {
-        if let d = device as? AVCaptureDevice, d.position == p {
-            return d
-        }
+func deviceForPosition(_ p: AVCaptureDevice.Position) -> AVCaptureDevice? {
+    for device in AVCaptureDevice.devices(for: AVMediaType.video) where device.position == p {
+        return device
     }
     return nil
 }
@@ -78,12 +76,12 @@ func animateFocusView(_ v: UIView) {
 func setFocusPointOnDevice(device: AVCaptureDevice, point: CGPoint) {
     do {
         try device.lockForConfiguration()
-        if device.isFocusModeSupported(AVCaptureFocusMode.autoFocus) {
-            device.focusMode = AVCaptureFocusMode.autoFocus
+        if device.isFocusModeSupported(AVCaptureDevice.FocusMode.autoFocus) {
+            device.focusMode = AVCaptureDevice.FocusMode.autoFocus
             device.focusPointOfInterest = point
         }
-        if device.isExposureModeSupported(AVCaptureExposureMode.continuousAutoExposure) {
-            device.exposureMode = AVCaptureExposureMode.continuousAutoExposure
+        if device.isExposureModeSupported(AVCaptureDevice.ExposureMode.continuousAutoExposure) {
+            device.exposureMode = AVCaptureDevice.ExposureMode.continuousAutoExposure
             device.exposurePointOfInterest = point
         }
         device.unlockForConfiguration()
@@ -93,15 +91,15 @@ func setFocusPointOnDevice(device: AVCaptureDevice, point: CGPoint) {
 }
 
 func setFocusPointOnCurrentDevice(_ point: CGPoint) {
-    if let device = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo) {
+    if let device = AVCaptureDevice.default(for: AVMediaType.video) {
         do {
             try device.lockForConfiguration()
-            if device.isFocusModeSupported(AVCaptureFocusMode.autoFocus) == true {
-                device.focusMode = AVCaptureFocusMode.autoFocus
+            if device.isFocusModeSupported(AVCaptureDevice.FocusMode.autoFocus) == true {
+                device.focusMode = AVCaptureDevice.FocusMode.autoFocus
                 device.focusPointOfInterest = point
             }
-            if device.isExposureModeSupported(AVCaptureExposureMode.continuousAutoExposure) == true {
-                device.exposureMode = AVCaptureExposureMode.continuousAutoExposure
+            if device.isExposureModeSupported(AVCaptureDevice.ExposureMode.continuousAutoExposure) == true {
+                device.exposureMode = AVCaptureDevice.ExposureMode.continuousAutoExposure
                 device.exposurePointOfInterest = point
             }
         } catch _ {
@@ -115,22 +113,20 @@ extension AVCaptureSession {
 
     func resetInputs() {
         // remove all sesison inputs
-        for input in inputs {
-            if let i = input as? AVCaptureInput {
-                removeInput(i)
-            }
+        for i in inputs {
+            removeInput(i)
         }
     }
 }
 
-func toggledPositionForDevice(_ device: AVCaptureDevice) -> AVCaptureDevicePosition {
+func toggledPositionForDevice(_ device: AVCaptureDevice) -> AVCaptureDevice.Position {
    return (device.position == .front) ? .back : .front
 }
 
 func flippedDeviceInputForInput(_ input: AVCaptureDeviceInput) -> AVCaptureDeviceInput? {
     let p = toggledPositionForDevice(input.device)
     let aDevice = deviceForPosition(p)
-    return try? AVCaptureDeviceInput(device: aDevice)
+    return try? AVCaptureDeviceInput(device: aDevice!)
 }
 
 func formattedStrigFrom(_ timeInterval: TimeInterval) -> String {
