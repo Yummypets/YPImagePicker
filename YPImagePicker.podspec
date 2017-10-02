@@ -13,6 +13,6 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = "9.0"
   s.source_files = 'Source/**/*.swift'
   s.dependency 'SteviaLayout', '~> 4.0.0'
-  s.resources    = ['Source/Assets.xcassets', 'Source/**/*.xib']
+  s.resources    = ['Resources/*', 'Source/**/*.xib']
   s.description  = "Instagram-like image picker & filters for iOS supporting videos and albums"
 end
