@@ -67,6 +67,15 @@ Add `github "Yummypets/YPImagePicker"` to your `Cartfile` and run `carthage upda
 github "Yummypets/YPImagePicker"
 ```
 
+## Plist entries
+
+In order for your app to access camera and photo libraries,
+you'll need to ad these `plist entries` :
+
+- Privacy - Camera Usage Description (photo/videos)
+- Privacy - Photo Library Usage Description (library)
+- Privacy - Microphone Usage Description (videos)
+
 ## Usage
 
 `import YPImagePicker` then use the following:
