@@ -201,8 +201,6 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
     func panned(_ sender: UIPanGestureRecognizer) {
         
         let containerHeight = v.imageCropViewContainer.frame.height
-        let height = v.frame.height
-        
         if sender.state == UIGestureRecognizerState.began {
             let view    = sender.view
             let loc     = sender.location(in: view)
