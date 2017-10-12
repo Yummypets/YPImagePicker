@@ -9,9 +9,11 @@
 import Foundation
 import UIKit
 import Stevia
+import AVFoundation
 
 class ImageCropViewContainer: UIView, FSImageCropViewDelegate, UIGestureRecognizerDelegate {
     
+    let playerLayer = AVPlayerLayer()
     var isShown = true
     let grid = FSGridView()
     let curtain = UIView()
@@ -48,9 +50,11 @@ class ImageCropViewContainer: UIView, FSImageCropViewDelegate, UIGestureRecogniz
     }
     
     func refreshSquareCropButton() {
-        if let image = cropView?.image {
+        if isVideoMode {
+            squareCropButton.isHidden = true
+        } else if let image = cropView?.image {
             let isShowingSquareImage = image.size.width == image.size.height
-            squareCropButton.isHidden = isVideoMode || isShowingSquareImage
+            squareCropButton.isHidden = isShowingSquareImage
         }
     }
     
@@ -73,6 +77,12 @@ class ImageCropViewContainer: UIView, FSImageCropViewDelegate, UIGestureRecogniz
         touchDownGR.minimumPressDuration = 0
         addGestureRecognizer(touchDownGR)
         touchDownGR.delegate = self
+        
+        let singleTapGR = UITapGestureRecognizer(target: self,
+                                                            action: #selector(singleTap))
+        singleTapGR.numberOfTapsRequired = 1
+        singleTapGR.delegate = self
+        addGestureRecognizer(singleTapGR)
         
         sv(
             spinnerView.sv(
@@ -99,6 +109,14 @@ class ImageCropViewContainer: UIView, FSImageCropViewDelegate, UIGestureRecogniz
             squareCropButton.Bottom == cropView!.Bottom - 15
             squareCropButton.addTarget(self, action: #selector(squareCropButtonTapped), for: .touchUpInside)
         }
+        
+        playerLayer.videoGravity = .resizeAspectFill
+        layer.insertSublayer(playerLayer, below: spinnerView.layer)
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        playerLayer.frame = frame
     }
     
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith
@@ -144,6 +162,13 @@ class ImageCropViewContainer: UIView, FSImageCropViewDelegate, UIGestureRecogniz
     func fsImageCropViewscrollViewDidEndZooming() {
         UIView.animate(withDuration: 0.3) {
             self.grid.alpha = 0
+        }
+    }
+    
+    @objc
+    func singleTap() {
+        if isVideoMode {
+            playerLayer.player?.togglePlayPause()
         }
     }
 }

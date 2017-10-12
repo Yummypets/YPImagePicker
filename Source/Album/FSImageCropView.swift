@@ -88,8 +88,8 @@ final class FSImageCropView: UIScrollView, UIScrollViewDelegate {
         squaredZoomScale = squareZoomScale
     }
     
-    func setFitImage(_ fit: Bool) {
-        let animated = !YPImagePickerConfiguration.shared.onlySquareImages
+    func setFitImage(_ fit: Bool, animated isAnimated: Bool? = nil) {
+        let animated = isAnimated ?? !YPImagePickerConfiguration.shared.onlySquareImages
         refreshZoomScale()
         if fit {
             setZoomScale(squaredZoomScale, animated: animated)

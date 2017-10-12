@@ -101,6 +101,17 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
         }
     }
     
+    public override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        registerForPlayerReachedEndNotifications()
+    }
+    
+    public override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        player?.pause()
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     deinit {
         PHPhotoLibrary.shared().unregisterChangeObserver(self)
     }
@@ -333,7 +344,12 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
         return CGSize(width: width, height: width)
     }
     
+    var previouslySelectedIndex: Int?
+    
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if indexPath.row == previouslySelectedIndex {
+            return
+        }
         changeImage(fetchResult[indexPath.row])
         v.imageCropViewConstraintTop.constant = imageCropViewOriginalConstraintTop
         UIView.animate(withDuration: 0.2, delay: 0.0, options: UIViewAnimationOptions.curveEaseOut, animations: {
@@ -342,6 +358,8 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
         dragDirection = Direction.up
         collectionView.scrollToItem(at: indexPath, at: .top, animated: true)
         refreshImageCurtainAlpha()
+        
+        previouslySelectedIndex = indexPath.row
     }
     
     // MARK: - ScrollViewDelegate
@@ -386,61 +404,95 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
     var latestImageTapped = ""
 
     func changeImage(_ asset: PHAsset) {
-        v.imageCropView.image = nil
         phAsset = asset
         latestImageTapped = asset.localIdentifier
-        if asset.mediaType == PHAssetMediaType.video {
-            v.imageCropViewContainer.isVideoMode = true
-            DispatchQueue.global(qos: .default).async {
-                // Show Loading when video is from the cloud
-                let videosOptions = PHVideoRequestOptions()
-                videosOptions.isNetworkAccessAllowed = true
-                PHImageManager.default().requestAVAsset(forVideo: asset, options: videosOptions) { v, _, _ in
-                    DispatchQueue.main.async {
-                        if v == nil {
-                            self.v.imageCropViewContainer.spinnerView.alpha = 1
-                        } else {
-                            UIView.animate(withDuration: 0.2) {
-                                self.v.imageCropViewContainer.spinnerView.alpha = 0
-                            }
-                        }
-                    }
-                }
-            }
-        } else {
-            v.imageCropViewContainer.isVideoMode = false
-        }
+        v.imageCropViewContainer.isVideoMode = asset.mediaType == .video
         
-        DispatchQueue.global(qos: .default).async {
-            let options = PHImageRequestOptions()
-            options.isNetworkAccessAllowed = true
-            self.imageManager.requestImage(for: asset,
-                                            targetSize: CGSize(width: asset.pixelWidth, height: asset.pixelHeight),
-                                            contentMode: .aspectFill,
-                                            options: options) { result, info in
-                // Prevent long images to come after user selected another in the meantime.
-                if self.latestImageTapped == asset.localIdentifier {
-                    DispatchQueue.main.async {
-
-                        if let isFromCloud = info?[PHImageResultIsDegradedKey] as? Bool, isFromCloud  == true {
-                            self.v.imageCropViewContainer.spinnerView.alpha = 1
-                        } else {
-                            UIView.animate(withDuration: 0.2) {
-                                self.v.imageCropViewContainer.spinnerView.alpha = 0
-                            }
-                        }
-                    
-                        self.v.imageCropView.imageSize = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
-                        self.v.imageCropView.image = result
-                        
-                        if YPImagePickerConfiguration.shared.onlySquareImages {
-                            self.v.imageCropView.setFitImage(true)
-                            self.v.imageCropView.minimumZoomScale = self.v.imageCropView.squaredZoomScale
-                        }
-                        self.v.imageCropViewContainer.refreshSquareCropButton()
-                    }
+        v.imageCropViewContainer.playerLayer.player?.pause()
+        v.imageCropViewContainer.playerLayer.isHidden = true
+        
+        switch asset.mediaType {
+        case .image:
+            DispatchQueue.global(qos: .default).async {
+                let options = PHImageRequestOptions()
+                options.isNetworkAccessAllowed = true
+                self.imageManager.requestImage(for: asset,
+                                               targetSize: CGSize(width: asset.pixelWidth, height: asset.pixelHeight),
+                                               contentMode: .aspectFill,
+                                               options: options) { result, info in
+                                                // Prevent long images to come after user selected another in the meantime.
+                                                if self.latestImageTapped == asset.localIdentifier {
+                                                    DispatchQueue.main.async {
+                                                        
+                                                        if let isFromCloud = info?[PHImageResultIsDegradedKey] as? Bool, isFromCloud  == true {
+                                                            self.v.imageCropViewContainer.spinnerView.alpha = 1
+                                                        } else {
+                                                            UIView.animate(withDuration: 0.2) {
+                                                                self.v.imageCropViewContainer.spinnerView.alpha = 0
+                                                            }
+                                                        }
+                                                        
+                                                        self.v.imageCropView.imageSize = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
+                                                        self.v.imageCropView.image = result
+                                                        
+                                                        if YPImagePickerConfiguration.shared.onlySquareImages {
+                                                            self.v.imageCropView.setFitImage(true)
+                                                            self.v.imageCropView.minimumZoomScale = self.v.imageCropView.squaredZoomScale
+                                                        }
+                                                        self.v.imageCropViewContainer.refreshSquareCropButton()
+                                                    }
+                                                }
                 }
+        }
+        case .video:
+            
+            DispatchQueue.main.async {
+                self.v.imageCropViewContainer.grid.alpha = 0
+                self.v.imageCropViewContainer.spinnerView.alpha = 1
+                self.v.imageCropViewContainer.refreshSquareCropButton()
             }
+            
+            DispatchQueue.global(qos: .default).async {
+                
+                // Load video image preview.
+                let options = PHImageRequestOptions()
+                options.isNetworkAccessAllowed = true
+                options.deliveryMode = .opportunistic
+                let screenWidth = UIScreen.main.bounds.width
+                self.imageManager.requestImage(for: asset,
+                                               targetSize: CGSize(width: screenWidth, height: screenWidth),
+                                               contentMode: .aspectFill,
+                                               options: options) { result, _ in
+                                                // Prevent long images to come after user selected another in the meantime.
+                                                if self.latestImageTapped == asset.localIdentifier {
+                                                    DispatchQueue.main.async {
+                                                        self.v.imageCropView.image = result
+                                                        self.v.imageCropViewContainer.cropView?.setFitImage(true, animated: false)
+                                                    }
+                                                }
+                }
+                
+                // Play video
+                let videosOptions = PHVideoRequestOptions()
+                videosOptions.deliveryMode = PHVideoRequestOptionsDeliveryMode.automatic
+                videosOptions.isNetworkAccessAllowed = true
+                PHImageManager.default().requestPlayerItem(forVideo: asset,
+                                                           options: videosOptions,
+                                                           resultHandler: { playerItem, _ in
+                    // Prevent long videos to come after user selected another in the meantime.
+                    if self.latestImageTapped == asset.localIdentifier {
+                        DispatchQueue.main.async {
+                            let player = AVPlayer(playerItem: playerItem)
+                            self.v.imageCropViewContainer.playerLayer.player = player
+                            self.v.imageCropViewContainer.playerLayer.isHidden = false
+                            self.v.imageCropViewContainer.spinnerView.alpha = 0
+                            player.play()
+                        }
+                    }
+                })
+            }
+        case .audio, .unknown:
+            ()
         }
     }
     
@@ -604,6 +656,41 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
         }
     }
     
+    private func registerForPlayerReachedEndNotifications() {
+        NotificationCenter.default
+            .addObserver(self,
+                         selector: #selector(playerItemDidReachEnd(_:)),
+                         name: .AVPlayerItemDidPlayToEndTime,
+                         object: nil)
+    }
+    
+    // MARK: Private
+    
+    var player: AVPlayer? {
+        return v.imageCropViewContainer.playerLayer.player
+    }
+    
+    @objc
+    func playerItemDidReachEnd(_ note: Notification) {
+        player?.actionAtItemEnd = .none
+        player?.seek(to: kCMTimeZero)
+        player?.play()
+    }
+    
+    func togglePlayPause() {
+        guard let player = player else { return }
+        player.togglePlayPause()
+    }
+}
+
+extension AVPlayer {
+    func togglePlayPause() {
+        if rate == 0 {
+            play()
+        } else {
+            pause()
+        }
+    }
 }
 
 internal extension UICollectionView {

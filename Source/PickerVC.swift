@@ -101,9 +101,11 @@ public class PickerVC: FSBottomPager, PagerDelegate {
         }
     }
     
-    internal func pagerScrollViewDidScroll(_ scrollView: UIScrollView) {    }
+    internal func pagerScrollViewDidScroll(_ scrollView: UIScrollView) { }
     
     func pagerDidSelectController(_ vc: UIViewController) {
+        
+        albumVC.player?.pause()
         
         var changedMode = true
         
