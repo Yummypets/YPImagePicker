@@ -84,13 +84,16 @@ you'll need to ad these `plist entries` :
 let picker = YPImagePicker()
 // picker.onlySquareImages = true
 // picker.showsFilters = false
-// picker.startsOnCameraMode = true
 // picker.usesFrontCamera = true
-// picker.showsVideo = true
-picker.didSelectImage = { img in
+picker.showsVideo = true
+picker.videoCompression = AVAssetExportPreset640x480
+// unowned is Mandatory since it would create a retain cycle otherwise :)
+picker.didSelectImage = { [unowned picker] img in
     // image picked
+    self.imageView.image = img
+    picker.dismiss(animated: true, completion: nil)
 }
-picker.didSelectVideo = { videoData in
+picker.didSelectVideo = { videoData, image in
     // video picked
 }
 present(picker, animated: true, completion: nil)
