@@ -76,6 +76,15 @@ you'll need to ad these `plist entries` :
 - Privacy - Photo Library Usage Description (library)
 - Privacy - Microphone Usage Description (videos)
 
+```xml
+<key>NSCameraUsageDescription</key>
+<string>yourWording</string>
+<key>NSPhotoLibraryUsageDescription</key>
+<string>yourWording</string>
+<key>NSMicrophoneUsageDescription</key>
+<string>yourWording</string>
+```
+
 ## Usage
 
 `import YPImagePicker` then use the following:
