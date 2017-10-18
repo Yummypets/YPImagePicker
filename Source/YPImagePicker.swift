@@ -12,6 +12,12 @@ import AVFoundation
 class YPImagePickerConfiguration {
     static let shared = YPImagePickerConfiguration()
     public var onlySquareImages = false
+    public var libraryTargetImageSize = LibraryImageSize.original
+}
+
+public enum LibraryImageSize {
+    case original
+    case cappedTo(size: CGFloat)
 }
 
 public class YPImagePicker: UINavigationController {
@@ -34,6 +40,17 @@ public class YPImagePicker: UINavigationController {
         }
     }
     
+    public var libraryTargetImageSize: LibraryImageSize {
+        get {
+            return YPImagePickerConfiguration.shared.libraryTargetImageSize
+        }
+        set {
+            YPImagePickerConfiguration.shared.libraryTargetImageSize = newValue
+        }
+    }
+    
+    public var shouldSaveNewPicturesToAlbum = true
+    
     public var videoCompression: String = AVAssetExportPresetHighestQuality
     
     private let picker = PickerVC()
@@ -52,7 +69,7 @@ public class YPImagePicker: UINavigationController {
                 let filterVC = FiltersVC(image:pickedImage)
                 filterVC.didSelectImage = { filteredImage, isImageFiltered in
                     self.didSelectImage?(filteredImage)
-                    if isNewPhoto || isImageFiltered {
+                    if (isNewPhoto || isImageFiltered) && self.shouldSaveNewPicturesToAlbum {
                         PhotoSaver.trySaveImage(filteredImage)
                     }
                 }
@@ -67,7 +84,7 @@ public class YPImagePicker: UINavigationController {
                 self.pushViewController(filterVC, animated: false)
             } else {
                 self.didSelectImage?(pickedImage)
-                if isNewPhoto {
+                if isNewPhoto && self.shouldSaveNewPicturesToAlbum {
                     PhotoSaver.trySaveImage(pickedImage)
                 }
             }

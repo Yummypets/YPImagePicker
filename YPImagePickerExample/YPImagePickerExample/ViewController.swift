@@ -35,6 +35,8 @@ class ViewController: UIViewController {
     @objc
     func showPicker() {
         let picker = YPImagePicker()
+        
+        picker.libraryTargetImageSize = .cappedTo(size: 2048)
 //        picker.onlySquareImages = true
 //        picker.showsFilters = false
 //        picker.usesFrontCamera = true
@@ -43,6 +45,7 @@ class ViewController: UIViewController {
         // unowned is Mandatory since it would create a retain cycle otherwise :)
         picker.didSelectImage = { [unowned picker] img in
             // image picked
+            print(img)
             self.imageView.image = img
             picker.dismiss(animated: true, completion: nil)
         }
