@@ -90,20 +90,36 @@ you'll need to ad these `plist entries` :
 `import YPImagePicker` then use the following:
 
 ```swift
-let picker = YPImagePicker()
-// picker.onlySquareImages = true
-// picker.showsFilters = false
-// picker.usesFrontCamera = true
-picker.showsVideo = true
-picker.videoCompression = AVAssetExportPreset640x480
+// Configuration
+var config = YPImagePickerConfiguration()
+config.onlySquareImages = false
+config.libraryTargetImageSize = .original
+config.showsVideo = true
+config.usesFrontCamera = true
+config.showsFilters = true
+config.shouldSaveNewPicturesToAlbum = true
+config.videoCompression = AVAssetExportPresetHighestQuality
+config.albumName = "MyGreatAppName"
+
+// Set it the default conf for all Pickers
+//      YPImagePicker.setDefaultConfiguration(config)
+// And then use the default configuration like so:
+//      let picker = YPImagePicker()
+
+// Here we use a per picker configuration.
+let picker = YPImagePicker(configuration: config)
+
 // unowned is Mandatory since it would create a retain cycle otherwise :)
 picker.didSelectImage = { [unowned picker] img in
     // image picked
+    print(img.size)
     self.imageView.image = img
     picker.dismiss(animated: true, completion: nil)
 }
-picker.didSelectVideo = { videoData, image in
+picker.didSelectVideo = { videoData, videoThumbnailImage in
     // video picked
+    self.imageView.image = videoThumbnailImage
+    picker.dismiss(animated: true, completion: nil)
 }
 present(picker, animated: true, completion: nil)
 ```
@@ -121,4 +137,4 @@ See LICENSE for details.
 
 ## Swift Version
 Swift 3 -> version **1.2.1**  
-Swift 4 -> version **2.0.0**
+Swift 4 -> version **2.1.0**
