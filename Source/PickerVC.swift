@@ -22,15 +22,25 @@ extension UIColor {
 
 public class PickerVC: FSBottomPager, PagerDelegate {
     
+    private let albumVC: FSAlbumVC
+    
+    private let configuration: YPImagePickerConfiguration!
+    public required init(configuration: YPImagePickerConfiguration) {
+        self.configuration = configuration
+        self.albumVC = FSAlbumVC(configuration: configuration)
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    public required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     var shouldHideStatusBar = false
     var initialStatusBarHidden = false
     
     override public var prefersStatusBarHidden: Bool {
         return shouldHideStatusBar || initialStatusBarHidden
     }
-    
-    public var showsVideo = false
-    public var usesFrontCamera = false
     
     public var didClose:(() -> Void)?
     public var didSelectImage: ((UIImage, Bool) -> Void)?
@@ -41,10 +51,9 @@ public class PickerVC: FSBottomPager, PagerDelegate {
         case camera
         case video
     }
-    
-    let albumVC = FSAlbumVC()
+
     lazy var cameraVC: FSCameraVC = {
-        return FSCameraVC(shouldUseFrontCamera: self.usesFrontCamera)
+        return FSCameraVC(shouldUseFrontCamera: self.configuration.usesFrontCamera)
     }()
     let videoVC = FSVideoVC()
     
@@ -63,7 +72,6 @@ public class PickerVC: FSBottomPager, PagerDelegate {
         flashOnImage = imageFromBundle("yp_iconFlash_on")
         flashOffImage = imageFromBundle("yp_iconFlash_off")
         
-        albumVC.showsVideo = showsVideo
         albumVC.delegate = self
         
         view.backgroundColor = UIColor(r:247, g:247, b:247)
@@ -76,7 +84,7 @@ public class PickerVC: FSBottomPager, PagerDelegate {
         delegate = self
         
         if controllers.isEmpty {
-            if showsVideo {
+            if configuration.showsVideo {
                 controllers = [albumVC, cameraVC, videoVC]
             } else {
                 controllers = [albumVC, cameraVC]
@@ -167,7 +175,7 @@ public class PickerVC: FSBottomPager, PagerDelegate {
     func navBarTapped() {
         
         let vc = YPAlbumFolderSelectionVC()
-        vc.noVideos = !showsVideo
+        vc.noVideos = !self.configuration.showsVideo
         let navVC = UINavigationController(rootViewController: vc)
 
         vc.didSelectAlbum = { [weak self] album in
@@ -217,7 +225,6 @@ public class PickerVC: FSBottomPager, PagerDelegate {
         navigationItem.leftBarButtonItem?.tintColor = UIColor(r: 38, g: 38, b: 38)
         switch mode {
         case .library:
-//            title = albumVC.title
             setTitleViewWithTitle(aTitle: albumVC.title ?? "")
             navigationItem.rightBarButtonItem = UIBarButtonItem(title: fsLocalized("YPImagePickerNext"),
                                                                 style: .done,

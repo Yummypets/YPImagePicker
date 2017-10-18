@@ -28,9 +28,7 @@ class ImageCropViewContainer: UIView, FSImageCropViewDelegate, UIGestureRecogniz
     }
     var cropView: FSImageCropView?
     var shouldCropToSquare = false
-    public var onlySquareImages: Bool {
-        return YPImagePickerConfiguration.shared.onlySquareImages
-    }
+    var onlySquareImages = false
     
     @objc
     func squareCropButtonTapped() {
@@ -50,11 +48,15 @@ class ImageCropViewContainer: UIView, FSImageCropViewDelegate, UIGestureRecogniz
     }
     
     func refreshSquareCropButton() {
-        if isVideoMode {
+        if onlySquareImages {
             squareCropButton.isHidden = true
-        } else if let image = cropView?.image {
-            let isShowingSquareImage = image.size.width == image.size.height
-            squareCropButton.isHidden = isShowingSquareImage
+        } else {
+            if isVideoMode {
+                squareCropButton.isHidden = true
+            } else if let image = cropView?.image {
+                let isShowingSquareImage = image.size.width == image.size.height
+                squareCropButton.isHidden = isShowingSquareImage
+            }
         }
     }
     

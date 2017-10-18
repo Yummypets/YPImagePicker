@@ -34,8 +34,6 @@ final class PagerMenu: UIView {
             |selector.width(300) ~ 1,
             0.5
         )
-        
-//        selector.backgroundColor = .black
         separator.backgroundColor = UIColor(r: 167, g: 167, b: 167)
     }
     

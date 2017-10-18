@@ -16,6 +16,13 @@ protocol FSImageCropViewDelegate: class {
 
 final class FSImageCropView: UIScrollView, UIScrollViewDelegate {
     
+    var onlySquareImages = false {
+        didSet {
+            bouncesZoom = false
+            bounces = false
+        }
+    }
+    
     var isVideoMode = false {
         didSet {
             isUserInteractionEnabled = !isVideoMode
@@ -89,7 +96,7 @@ final class FSImageCropView: UIScrollView, UIScrollViewDelegate {
     }
     
     func setFitImage(_ fit: Bool, animated isAnimated: Bool? = nil) {
-        let animated = isAnimated ?? !YPImagePickerConfiguration.shared.onlySquareImages
+        let animated = isAnimated ?? !onlySquareImages
         refreshZoomScale()
         if fit {
             setZoomScale(squaredZoomScale, animated: animated)
@@ -112,11 +119,6 @@ final class FSImageCropView: UIScrollView, UIScrollViewDelegate {
         alwaysBounceHorizontal = true
         alwaysBounceVertical = true
         isScrollEnabled = true
-        
-        if YPImagePickerConfiguration.shared.onlySquareImages {
-            bouncesZoom = false
-            bounces = false
-        }
     }
     
     override func layoutSubviews() {

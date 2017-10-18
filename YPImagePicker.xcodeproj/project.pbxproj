@@ -36,6 +36,7 @@
 		99C6D6CF1F1FB5C100711DB2 /* PickerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6B51F1FB5C100711DB2 /* PickerVC.swift */; };
 		99C6D6D01F1FB5C100711DB2 /* FSVideoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6B71F1FB5C100711DB2 /* FSVideoVC.swift */; };
 		99C6D6D11F1FB5C100711DB2 /* YPImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6B81F1FB5C100711DB2 /* YPImagePicker.swift */; };
+		99D1DC2B1F9788930047F0E0 /* YPImagePickerConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D1DC2A1F9788930047F0E0 /* YPImagePickerConfiguration.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -72,6 +73,7 @@
 		99C6D6B51F1FB5C100711DB2 /* PickerVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickerVC.swift; sourceTree = "<group>"; };
 		99C6D6B71F1FB5C100711DB2 /* FSVideoVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSVideoVC.swift; sourceTree = "<group>"; };
 		99C6D6B81F1FB5C100711DB2 /* YPImagePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPImagePicker.swift; sourceTree = "<group>"; };
+		99D1DC2A1F9788930047F0E0 /* YPImagePickerConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPImagePickerConfiguration.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +132,7 @@
 			children = (
 				99C6D6B31F1FB5C100711DB2 /* Info.plist */,
 				99C6D6B21F1FB5C100711DB2 /* YPImagePickerHeader.h */,
+				99D1DC2A1F9788930047F0E0 /* YPImagePickerConfiguration.swift */,
 				99C6D6B81F1FB5C100711DB2 /* YPImagePicker.swift */,
 				99C6D6B51F1FB5C100711DB2 /* PickerVC.swift */,
 				99C6D6AF1F1FB5C100711DB2 /* FSBottomPager.swift */,
@@ -292,6 +295,7 @@
 			files = (
 				99C6D6C81F1FB5C100711DB2 /* FiltersView.swift in Sources */,
 				99C6D6C71F1FB5C100711DB2 /* FiltersVC.swift in Sources */,
+				99D1DC2B1F9788930047F0E0 /* YPImagePickerConfiguration.swift in Sources */,
 				99C6D6C51F1FB5C100711DB2 /* FilterCollectionViewCell.swift in Sources */,
 				99C6D6C11F1FB5C100711DB2 /* ImageCropViewContainer.swift in Sources */,
 				99C6D6D11F1FB5C100711DB2 /* YPImagePicker.swift in Sources */,

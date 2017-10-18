@@ -19,9 +19,18 @@ public protocol FSAlbumViewDelegate: class {
 public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate,
 PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDelegateFlowLayout {
     
-    weak var delegate: FSAlbumViewDelegate?
+    private let configuration: YPImagePickerConfiguration!
+    public required init(configuration: YPImagePickerConfiguration) {
+        self.configuration = configuration
+        super.init(nibName: nil, bundle: nil)
+        title = fsLocalized("YPImagePickerLibrary")
+    }
     
-    public var showsVideo = false
+    public required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    weak var delegate: FSAlbumViewDelegate?
     
     private var fetchResult: PHFetchResult<PHAsset>!
     
@@ -60,7 +69,6 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
                 } else {
                    v.imageCropView.isScrollEnabled = false
                 }
-                
             }
         }
     }
@@ -74,11 +82,6 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
                                                         options: nil)[0] as? FSAlbumView
         v = xibView
         view = v
-    }
-    
-    convenience init() {
-        self.init(nibName:nil, bundle:nil)
-        title = fsLocalized("YPImagePickerLibrary")
     }
     
     public override func viewDidLoad() {
@@ -145,6 +148,9 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
 
         let tapImageGesture = UITapGestureRecognizer(target: self, action: #selector(tappedImage))
         v.imageCropViewContainer.addGestureRecognizer(tapImageGesture)
+        
+        v.imageCropViewContainer.onlySquareImages = configuration.onlySquareImages
+        v.imageCropView.onlySquareImages = configuration.onlySquareImages
     }
     
     var collection: PHAssetCollection?
@@ -156,12 +162,12 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         
         if let collection = self.collection {
-            if !showsVideo {
+            if !configuration.showsVideo {
                 options.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
             }
             fetchResult = PHAsset.fetchAssets(in: collection, options: options)
         } else {
-            fetchResult = showsVideo
+            fetchResult = configuration.showsVideo
                 ? PHAsset.fetchAssets(with: options)
                 : PHAsset.fetchAssets(with: PHAssetMediaType.image, options: options)
         }
@@ -435,7 +441,7 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
                                                         self.v.imageCropView.imageSize = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
                                                         self.v.imageCropView.image = result
                                                         
-                                                        if YPImagePickerConfiguration.shared.onlySquareImages {
+                                                        if self.configuration.onlySquareImages {
                                                             self.v.imageCropView.setFitImage(true)
                                                             self.v.imageCropView.minimumZoomScale = self.v.imageCropView.squaredZoomScale
                                                         }
@@ -643,7 +649,7 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
                     let targetWidth = floor(CGFloat(self.phAsset.pixelWidth) * cropRect.width)
                     let targetHeight = floor(CGFloat(self.phAsset.pixelHeight) * cropRect.height)
                     var targetSize = CGSize.zero
-                    switch YPImagePickerConfiguration.shared.libraryTargetImageSize {
+                    switch self.configuration.libraryTargetImageSize {
                         case .original:
                             targetSize = CGSize(width: targetWidth, height: targetHeight)
                         case .cappedTo(size: let capped):
@@ -660,7 +666,7 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
                         .requestImage(for: asset,
                                       targetSize: targetSize,
                                       contentMode: .aspectFit,
-                                      options: options) { result, info in
+                                      options: options) { result, _ in
                                         DispatchQueue.main.async {
                                             self.delegate?.albumViewFinishedLoadingImage()
                                             photo(result!)

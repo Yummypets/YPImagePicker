@@ -9,68 +9,49 @@
 import UIKit
 import AVFoundation
 
-class YPImagePickerConfiguration {
-    static let shared = YPImagePickerConfiguration()
-    public var onlySquareImages = false
-    public var libraryTargetImageSize = LibraryImageSize.original
-}
-
-public enum LibraryImageSize {
-    case original
-    case cappedTo(size: CGFloat)
-}
-
 public class YPImagePicker: UINavigationController {
     
-    public static var albumName = "DefaultYPImagePickerAlbumName" {
-        didSet { PhotoSaver.albumName = albumName }
+    /// Set a global configuration that will be applied whenever you call YPImagePicker().
+    public static func setDefaultConfiguration(_ config: YPImagePickerConfiguration) {
+        defaultConfiguration = config
     }
     
-    public var showsVideo = false
-    public var usesFrontCamera: Bool {
-        get { return picker.usesFrontCamera }
-        set { picker.usesFrontCamera = newValue }
+    private static var defaultConfiguration = YPImagePickerConfiguration()
+    
+    private let configuration: YPImagePickerConfiguration!
+    private let picker: PickerVC!
+    
+    /// Get a YPImagePicker instance with the default configuration.
+    public convenience init() {
+        let defaultConf = YPImagePicker.defaultConfiguration
+        self.init(configuration: defaultConf)
     }
-    public var showsFilters = true
+    
+    /// Get a YPImagePicker with the specified configuration.
+    public required init(configuration: YPImagePickerConfiguration) {
+        self.configuration = configuration
+        picker = PickerVC(configuration: configuration)
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    public required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     public var didSelectImage: ((UIImage) -> Void)?
     public var didSelectVideo: ((Data, UIImage) -> Void)?
-    public var onlySquareImages = false {
-        didSet {
-            YPImagePickerConfiguration.shared.onlySquareImages = onlySquareImages
-        }
-    }
-    
-    public var libraryTargetImageSize: LibraryImageSize {
-        get {
-            return YPImagePickerConfiguration.shared.libraryTargetImageSize
-        }
-        set {
-            YPImagePickerConfiguration.shared.libraryTargetImageSize = newValue
-        }
-    }
-    
-    public var shouldSaveNewPicturesToAlbum = true
-    
-    public var videoCompression: String = AVAssetExportPresetHighestQuality
-    
-    private let picker = PickerVC()
-    
-    public func preheat() {
-        _ = self.view
-    }
     
     override public func viewDidLoad() {
         super.viewDidLoad()
-        picker.showsVideo = showsVideo
         viewControllers = [picker]
         navigationBar.isTranslucent = false
         picker.didSelectImage = { [unowned self] pickedImage, isNewPhoto in
-            if self.showsFilters {
+            if self.configuration.showsFilters {
                 let filterVC = FiltersVC(image:pickedImage)
                 filterVC.didSelectImage = { filteredImage, isImageFiltered in
                     self.didSelectImage?(filteredImage)
-                    if (isNewPhoto || isImageFiltered) && self.shouldSaveNewPicturesToAlbum {
-                        PhotoSaver.trySaveImage(filteredImage)
+                    if (isNewPhoto || isImageFiltered) && self.configuration.shouldSaveNewPicturesToAlbum {
+                        PhotoSaver.trySaveImage(filteredImage, inAlbumNamed: self.configuration.albumName)
                     }
                 }
                 
@@ -84,8 +65,8 @@ public class YPImagePicker: UINavigationController {
                 self.pushViewController(filterVC, animated: false)
             } else {
                 self.didSelectImage?(pickedImage)
-                if isNewPhoto && self.shouldSaveNewPicturesToAlbum {
-                    PhotoSaver.trySaveImage(pickedImage)
+                if isNewPhoto && self.configuration.shouldSaveNewPicturesToAlbum {
+                    PhotoSaver.trySaveImage(pickedImage, inAlbumNamed: self.configuration.albumName)
                 }
             }
         }
@@ -99,7 +80,7 @@ public class YPImagePicker: UINavigationController {
                 let uploadURL = URL(fileURLWithPath: path)
                 let asset = AVURLAsset(url: videoURL)
                 
-                let exportSession = AVAssetExportSession(asset: asset, presetName: self.videoCompression)
+                let exportSession = AVAssetExportSession(asset: asset, presetName: self.configuration.videoCompression)
                 exportSession?.outputURL = uploadURL
                 exportSession?.outputFileType = AVFileType.mov
                 exportSession?.shouldOptimizeForNetworkUse = true //USEFUL?
@@ -122,8 +103,6 @@ public class YPImagePicker: UINavigationController {
                 }
             }
         }
-        //force picker load view
-        _ = picker.view
     }
 }
 

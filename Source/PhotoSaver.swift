@@ -11,15 +11,13 @@ import Photos
 
 public class PhotoSaver {
     
-    public static var albumName = "DefaultYPImagePickerAlbumName"
-    
-    class func trySaveImage(_ image: UIImage) {
+    class func trySaveImage(_ image: UIImage, inAlbumNamed: String) {
      
-        if let album = album(named: albumName) {
+        if let album = album(named: inAlbumNamed) {
             saveImage(image, toAlbum: album)
         } else {
-            createAlbum(withName: albumName) {
-                if let album = album(named: albumName) {
+            createAlbum(withName: inAlbumNamed) {
+                if let album = album(named: inAlbumNamed) {
                     saveImage(image, toAlbum: album)
                 }
             }
