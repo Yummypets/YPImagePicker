@@ -24,7 +24,7 @@ public struct YPImagePickerConfiguration {
     /// Enables selecting the front camera by default, useful for avatars. Defaults to false
     public var usesFrontCamera = false
     
-    /// Adds a Filter step in the photo taking process.  Defaults to false
+    /// Adds a Filter step in the photo taking process.  Defaults to true
     public var showsFilters = true
     
     /// Enables you to opt out from saving new (or old but filtered) images to the user's photo library. Defaults to true.
