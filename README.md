@@ -85,12 +85,9 @@ you'll need to ad these `plist entries` :
 <string>yourWording</string>
 ```
 
-## Usage
-
-`import YPImagePicker` then use the following:
+## Configuration
 
 ```swift
-// Configuration
 var config = YPImagePickerConfiguration()
 config.onlySquareImages = false
 config.libraryTargetImageSize = .original
@@ -101,13 +98,26 @@ config.shouldSaveNewPicturesToAlbum = true
 config.videoCompression = AVAssetExportPresetHighestQuality
 config.albumName = "MyGreatAppName"
 
-// Set it the default conf for all Pickers
-//      YPImagePicker.setDefaultConfiguration(config)
-// And then use the default configuration like so:
-//      let picker = YPImagePicker()
-
-// Here we use a per picker configuration.
+// Build a picker with your configuration
 let picker = YPImagePicker(configuration: config)
+```
+
+## Default Configuration
+
+```swift
+// Set the default configuration for all pickers
+YPImagePicker.setDefaultConfiguration(config)
+
+// And then use the default configuration like so:
+let picker = YPImagePicker()
+```
+
+## Usage
+
+`import YPImagePicker` then use the following:
+
+```swift
+let picker = YPImagePicker()
 
 // unowned is Mandatory since it would create a retain cycle otherwise :)
 picker.didSelectImage = { [unowned picker] img in
