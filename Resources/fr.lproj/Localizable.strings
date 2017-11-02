@@ -13,3 +13,9 @@
 "YPImagePickerFilter" = "Filtrer";
 "YPImagePickerVideoTooLongTitle" = "Durée de votre vidéo";
 "YPImagePickerVideoTooLongDetail" = "La durée d'une vidéo ne doit pas dépasser 60 secondes.";
+"YPImagePickerPermissionDeniedPopupTitle" = "Permission refusée";
+"YPImagePickerPermissionDeniedPopupMessage" = "Vous devez authorizer l'accès";
+"YPImagePickerPermissionDeniedPopupCancel" = "Annuler";
+"YPImagePickerPermissionDeniedPopupGrantPermission" = "Donner la permission";
+
+

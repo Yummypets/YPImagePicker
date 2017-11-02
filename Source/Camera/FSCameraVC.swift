@@ -8,6 +8,7 @@
 
 import UIKit
 import AVFoundation
+import Photos
 
 public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
     
@@ -57,7 +58,7 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
         videoLayer.frame = v.previewViewContainer.bounds
         videoLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
         v.previewViewContainer.layer.addSublayer(videoLayer)
-        let tapRecognizer = UITapGestureRecognizer(target: self, action:#selector(focus(_:)))
+        let tapRecognizer = UITapGestureRecognizer(target: self, action:#selector(focusTapped(_:)))
         tapRecognizer.delegate = self
         v.previewViewContainer.addGestureRecognizer(tapRecognizer)
     }
@@ -82,7 +83,13 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
     }
     
     @objc
-    func focus(_ recognizer: UITapGestureRecognizer) {
+    func focusTapped(_ recognizer: UITapGestureRecognizer) {
+        doAfterPermissionCheck { [weak self] in
+            self?.focus(recognizer: recognizer)
+        }
+    }
+    
+    func focus(recognizer: UITapGestureRecognizer) {
         let point = recognizer.location(in: v.previewViewContainer)
         let viewsize = v.previewViewContainer.bounds.size
         let newPoint = CGPoint(x:point.x/viewsize.width, y:point.y/viewsize.height)
@@ -119,6 +126,12 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
     
     @objc
     func flipButtonTapped() {
+        doAfterPermissionCheck { [weak self] in
+            self?.flip()
+        }
+    }
+    
+    func flip() {
         sessionQueue.async { [unowned self] in
             self.session.resetInputs()
             self.videoInput = flippedDeviceInputForInput(self.videoInput)
@@ -133,6 +146,16 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
 
     @objc
     func shotButtonTapped() {
+        doAfterPermissionCheck { [weak self] in
+            self?.shoot()
+        }
+    }
+    
+    func shoot() {
+        // Prevent from tapping multiple times in a row
+        // causing a crash
+        v.shotButton.isEnabled = false
+        
         DispatchQueue.global(qos: .default).async {
             let videoConnection = self.imageOutput.connection(with: AVMediaType.video)
             let orientation: UIDeviceOrientation = UIDevice.current.orientation
@@ -217,6 +240,65 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
         case .on: return flashOnImage!
         case .off: return flashOffImage!
         default: return flashOffImage!
+        }
+    }
+}
+
+class YPPermissionDeniedPopup {
+    
+    static func popup(cancelBlock: @escaping () -> Void) -> UIAlertController {
+        let alert = UIAlertController(title: fsLocalized("YPImagePickerPermissionDeniedPopupTitle"),
+                                      message: fsLocalized("YPImagePickerPermissionDeniedPopupMessage"),
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: fsLocalized("YPImagePickerPermissionDeniedPopupCancel"),
+                                      style: UIAlertActionStyle.cancel,
+                                      handler: { _ in
+                                        cancelBlock()
+        }))
+        alert.addAction(UIAlertAction(title: fsLocalized("YPImagePickerPermissionDeniedPopupGrantPermission"),
+                                      style: .default,
+                                      handler: { _ in
+            if #available(iOS 10.0, *) {
+                UIApplication.shared.open(URL(string:UIApplicationOpenSettingsURLString)!)
+            } else {
+                UIApplication.shared.openURL(URL(string:UIApplicationOpenSettingsURLString)!)
+            }
+        }))
+        return alert
+    }
+}
+
+extension FSCameraVC: PermissionCheckable {
+    
+    func checkPermission() {
+        checkPermissionToAccessVideo { _ in }
+    }
+    
+    func doAfterPermissionCheck(block:@escaping () -> Void) {
+        checkPermissionToAccessVideo { hasPermission in
+            if hasPermission {
+                block()
+            }
+        }
+    }
+    
+    // Async beacause will prompt permission if .notDetermined
+    // and ask custom popup if denied.
+    func checkPermissionToAccessVideo(block: @escaping (Bool) -> Void) {
+        switch AVCaptureDevice.authorizationStatus(for: AVMediaType.video) {
+        case .authorized:
+            block(true)
+        case .restricted, .denied:
+            let alert = YPPermissionDeniedPopup.popup(cancelBlock: {
+                block(false)
+            })
+            present(alert, animated: true, completion: nil)
+        case .notDetermined:
+            AVCaptureDevice.requestAccess(for: .video, completionHandler: { granted in
+                DispatchQueue.main.async {
+                    block(granted)
+                }
+            })
         }
     }
 }

@@ -59,7 +59,7 @@ public class FSVideoVC: UIViewController {
         videoLayer.frame = v.previewViewContainer.bounds
         videoLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
         v.previewViewContainer.layer.addSublayer(videoLayer)
-        let tapRecognizer = UITapGestureRecognizer(target: self, action:#selector(focus(_:)))
+        let tapRecognizer = UITapGestureRecognizer(target: self, action:#selector(focusTapped(_:)))
         v.previewViewContainer.addGestureRecognizer(tapRecognizer)
     }
     
@@ -134,6 +134,12 @@ public class FSVideoVC: UIViewController {
     
     @objc
     func shotButtonTapped() {
+        doAfterPermissionCheck { [weak self] in
+            self?.shoot()
+        }
+    }
+    
+    func shoot() {
         isRecording = !isRecording
         
         let shotImage: UIImage?
@@ -170,6 +176,12 @@ public class FSVideoVC: UIViewController {
     
     @objc
     func flipButtonTapped() {
+        doAfterPermissionCheck { [weak self] in
+            self?.flip()
+        }
+    }
+    
+    func flip() {
         sessionQueue.async { [unowned self] in
             self.session.beginConfiguration()
             self.session.resetInputs()
@@ -260,7 +272,13 @@ extension FSVideoVC: AVCaptureFileOutputRecordingDelegate {
 extension FSVideoVC {
     
     @objc
-    func focus(_ recognizer: UITapGestureRecognizer) {
+    func focusTapped(_ recognizer: UITapGestureRecognizer) {
+        doAfterPermissionCheck { [weak self] in
+            self?.focus(recognizer: recognizer)
+        }
+    }
+    
+    func focus(recognizer: UITapGestureRecognizer) {
         let point = recognizer.location(in: v.previewViewContainer)
         let viewsize = v.previewViewContainer.bounds.size
         let newPoint = CGPoint(x:point.x/viewsize.width, y:point.y/viewsize.height)
@@ -274,6 +292,43 @@ extension FSVideoVC {
     func refreshFlashButton() {
         if let device = device {
             v.flashButton.setImage(flashImage(forAVCaptureFlashMode:device.flashMode), for: .normal)
+        }
+    }
+}
+
+// Permission handling
+
+extension FSVideoVC: PermissionCheckable {
+    
+    func checkPermission() {
+        checkPermissionToAccessVideo { _ in }
+    }
+    
+    func doAfterPermissionCheck(block:@escaping () -> Void) {
+        checkPermissionToAccessVideo { hasPermission in
+            if hasPermission {
+                block()
+            }
+        }
+    }
+    
+    // Async beacause will prompt permission if .notDetermined
+    // and ask custom popup if denied.
+    func checkPermissionToAccessVideo(block: @escaping (Bool) -> Void) {
+        switch AVCaptureDevice.authorizationStatus(for: AVMediaType.video) {
+        case .authorized:
+            block(true)
+        case .restricted, .denied:
+            let alert = YPPermissionDeniedPopup.popup(cancelBlock: {
+                block(false)
+            })
+            present(alert, animated: true, completion: nil)
+        case .notDetermined:
+            AVCaptureDevice.requestAccess(for: .video, completionHandler: { granted in
+                DispatchQueue.main.async {
+                    block(granted)
+                }
+            })
         }
     }
 }

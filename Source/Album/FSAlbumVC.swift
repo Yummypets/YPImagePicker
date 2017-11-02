@@ -17,7 +17,7 @@ public protocol FSAlbumViewDelegate: class {
 }
 
 public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate,
-PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDelegateFlowLayout {
+PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDelegateFlowLayout, PermissionCheckable {
     
     private let configuration: YPImagePickerConfiguration!
     public required init(configuration: YPImagePickerConfiguration) {
@@ -84,29 +84,66 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
         view = v
     }
     
+    var initialized = false
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Only intilialize picker if photo permission is Allowed by user.
-        let status = PHPhotoLibrary.authorizationStatus()
-        switch status {
-        case .authorized:
-            initialize()
-        case .restricted, .denied:
-            print("restricted or denied")
-        case .notDetermined:
-            // Show permission popup and get new status
-            PHPhotoLibrary.requestAuthorization { s in
-                if s == .authorized {
-                    DispatchQueue.main.async(execute: self.initialize)
-                }
-            }
-        }
     }
     
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         registerForPlayerReachedEndNotifications()
+        v.imageCropViewContainer.squareCropButton
+            .addTarget(self,
+                       action: #selector(squareCropButtonTapped),
+                       for: .touchUpInside)
+    }
+    
+    @objc
+    func squareCropButtonTapped() {
+        doAfterPermissionCheck { [weak self] in
+            self?.v.imageCropViewContainer.squareCropButtonTapped()
+        }
+    }
+    
+    func doAfterPermissionCheck(block:@escaping () -> Void) {
+        checkPermissionToAccessPhotoLibrary { hasPermission in
+            if hasPermission {
+                block()
+            }
+        }
+    }
+    
+    func checkPermission() {
+        checkPermissionToAccessPhotoLibrary { [unowned self] hasPermission in
+            if hasPermission && !self.initialized {
+                self.initialize()
+                self.initialized = true
+            }
+        }
+    }
+
+    // Async beacause will prompt permission if .notDetermined
+    // and ask custom popup if denied.
+    func checkPermissionToAccessPhotoLibrary(block: @escaping (Bool) -> Void) {
+        // Only intilialize picker if photo permission is Allowed by user.
+        let status = PHPhotoLibrary.authorizationStatus()
+        switch status {
+        case .authorized:
+            block(true)
+        case .restricted, .denied:
+            let alert = YPPermissionDeniedPopup.popup(cancelBlock: {
+                block(false)
+            })
+            present(alert, animated: true, completion: nil)
+        case .notDetermined:
+            // Show permission popup and get new status
+            PHPhotoLibrary.requestAuthorization { s in
+                DispatchQueue.main.async {
+                    block(s == .authorized)
+                }
+            }
+        }
     }
     
     public override func viewWillDisappear(_ animated: Bool) {
@@ -426,11 +463,13 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
                                                targetSize: CGSize(width: asset.pixelWidth, height: asset.pixelHeight),
                                                contentMode: .aspectFill,
                                                options: options) { result, info in
-                                                // Prevent long images to come after user selected another in the meantime.
+                                                // Prevent long images to come after user selected
+                                                // another in the meantime.
                                                 if self.latestImageTapped == asset.localIdentifier {
                                                     DispatchQueue.main.async {
                                                         
-                                                        if let isFromCloud = info?[PHImageResultIsDegradedKey] as? Bool, isFromCloud  == true {
+                                                        if let isFromCloud = info?[PHImageResultIsDegradedKey] as? Bool,
+                                                            isFromCloud == true {
                                                             self.v.imageCropViewContainer.spinnerView.alpha = 1
                                                         } else {
                                                             UIView.animate(withDuration: 0.2) {

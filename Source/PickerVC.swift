@@ -14,6 +14,10 @@ var flashOnImage: UIImage?
 var videoStartImage: UIImage?
 var videoStopImage: UIImage?
 
+protocol PermissionCheckable {
+    func checkPermission()
+}
+
 extension UIColor {
     convenience init(r: CGFloat, g: CGFloat, b: CGFloat, a: CGFloat = 1.0) {
         self.init(red: r / 255.0, green: g / 255.0, blue: b / 255.0, alpha: a)
@@ -98,6 +102,7 @@ public class PickerVC: FSBottomPager, PagerDelegate {
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         startCurrentCamera()
+        cameraVC.v.shotButton.isEnabled = true
     }
     
     public override func viewDidAppear(_ animated: Bool) {
@@ -110,8 +115,13 @@ public class PickerVC: FSBottomPager, PagerDelegate {
     }
     
     internal func pagerScrollViewDidScroll(_ scrollView: UIScrollView) { }
-    
+ 
     func pagerDidSelectController(_ vc: UIViewController) {
+        
+        // Re-trigger permission check
+        if let vc = vc as? PermissionCheckable {
+            vc.checkPermission()
+        }
         
         albumVC.player?.pause()
         
@@ -252,11 +262,13 @@ public class PickerVC: FSBottomPager, PagerDelegate {
     @objc
     func done() {
         if mode == .library {
-            albumVC.selectedMedia(photo: { img in
-                self.didSelectImage?(img, false)
-            }, video: { videoURL in
-                self.didSelectVideo?(videoURL)
-            })
+            albumVC.doAfterPermissionCheck { [weak self] in
+                self?.albumVC.selectedMedia(photo: { img in
+                    self?.didSelectImage?(img, false)
+                }, video: { videoURL in
+                    self?.didSelectVideo?(videoURL)
+                })
+            }
         }
     }
     

@@ -109,7 +109,6 @@ class ImageCropViewContainer: UIView, FSImageCropViewDelegate, UIGestureRecogniz
             squareCropButton.size(42)
             |-15-squareCropButton
             squareCropButton.Bottom == cropView!.Bottom - 15
-            squareCropButton.addTarget(self, action: #selector(squareCropButtonTapped), for: .touchUpInside)
         }
         
         playerLayer.videoGravity = .resizeAspectFill

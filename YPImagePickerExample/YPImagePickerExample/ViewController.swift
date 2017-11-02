@@ -38,14 +38,13 @@ class ViewController: UIViewController {
         // Configuration
         var config = YPImagePickerConfiguration()
         config.onlySquareImages = false
-        config.libraryTargetImageSize = .original
+//        config.libraryTargetImageSize = .original
         config.showsVideo = true //false
-        config.usesFrontCamera = true // false
-        config.showsFilters = true
-        config.shouldSaveNewPicturesToAlbum = true
+//        config.usesFrontCamera = true // false
+//        config.showsFilters = true
+//        config.shouldSaveNewPicturesToAlbum = true
         config.videoCompression = AVAssetExportPresetHighestQuality
         config.albumName = "MyGreatAppName"
-        
         // Set it the default conf for all Pickers
         //      YPImagePicker.setDefaultConfiguration(config)
         // And then use the default configuration like so:

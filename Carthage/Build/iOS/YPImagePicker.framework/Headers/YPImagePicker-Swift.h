@@ -252,6 +252,8 @@ SWIFT_CLASS("_TtC13YPImagePicker10FSCameraVC")
 @end
 
 
+
+
 SWIFT_CLASS("_TtC13YPImagePicker9FSVideoVC")
 @interface FSVideoVC : UIViewController
 - (void)loadView;
@@ -261,6 +263,8 @@ SWIFT_CLASS("_TtC13YPImagePicker9FSVideoVC")
 - (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil OBJC_DESIGNATED_INITIALIZER;
 - (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
 @end
+
+
 
 
 
