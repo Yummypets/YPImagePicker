@@ -186,8 +186,8 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
         let tapImageGesture = UITapGestureRecognizer(target: self, action: #selector(tappedImage))
         v.imageCropViewContainer.addGestureRecognizer(tapImageGesture)
         
-        v.imageCropViewContainer.onlySquareImages = configuration.onlySquareImages
-        v.imageCropView.onlySquareImages = configuration.onlySquareImages
+        v.imageCropViewContainer.onlySquareImages = configuration.onlySquareImagesFromLibrary
+        v.imageCropView.onlySquareImages = configuration.onlySquareImagesFromLibrary
     }
     
     var collection: PHAssetCollection?
@@ -480,7 +480,7 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
                                                         self.v.imageCropView.imageSize = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
                                                         self.v.imageCropView.image = result
                                                         
-                                                        if self.configuration.onlySquareImages {
+                                                        if self.configuration.onlySquareImagesFromLibrary {
                                                             self.v.imageCropView.setFitImage(true)
                                                             self.v.imageCropView.minimumZoomScale = self.v.imageCropView.squaredZoomScale
                                                         }

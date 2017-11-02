@@ -37,10 +37,11 @@ class ViewController: UIViewController {
         
         // Configuration
         var config = YPImagePickerConfiguration()
-        config.onlySquareImages = false
+        config.onlySquareImagesFromLibrary = false
+        config.onlySquareImagesFromCamera = true
 //        config.libraryTargetImageSize = .original
         config.showsVideo = true //false
-//        config.usesFrontCamera = true // false
+//        config.u∫sesFrontCamera = true // false
 //        config.showsFilters = true
 //        config.shouldSaveNewPicturesToAlbum = true
         config.videoCompression = AVAssetExportPresetHighestQuality

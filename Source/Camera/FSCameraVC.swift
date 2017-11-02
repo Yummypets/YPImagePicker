@@ -12,7 +12,6 @@ import Photos
 
 public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
     
-    public var usesFrontCamera = false
     public var didCapturePhoto: ((UIImage) -> Void)?
     private let sessionQueue = DispatchQueue(label: "FSCameraVCSerialQueue")
     let session = AVCaptureSession()
@@ -27,10 +26,15 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
     
     override public func loadView() { view = v }
     
-    convenience init(shouldUseFrontCamera: Bool) {
-        self.init(nibName:nil, bundle:nil)
-        usesFrontCamera = shouldUseFrontCamera
+    private let configuration: YPImagePickerConfiguration!
+    public required init(configuration: YPImagePickerConfiguration) {
+        self.configuration = configuration
+        super.init(nibName: nil, bundle: nil)
         title = fsLocalized("YPImagePickerPhoto")
+    }
+    
+    public required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override public func viewDidLoad() {
@@ -66,7 +70,7 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
     private func setupCaptureSession() {
         session.beginConfiguration()
         session.sessionPreset = AVCaptureSession.Preset.photo
-        let cameraPosition: AVCaptureDevice.Position = usesFrontCamera ? .front : .back
+        let cameraPosition: AVCaptureDevice.Position = self.configuration.usesFrontCamera ? .front : .back
         let aDevice = deviceForPosition(cameraPosition)
         if let d = aDevice {
             videoInput = try? AVCaptureDeviceInput(device: d)
@@ -175,51 +179,61 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
             self.imageOutput.captureStillImageAsynchronously(from: videoConnection!) { buffer, _ in
                 self.session.stopRunning()
                 let data = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(buffer!)
-                if let image = UIImage(data: data!) {
+                if var image = UIImage(data: data!) {
                     
-                    // Image size
-                    var iw: CGFloat
-                    var ih: CGFloat
-                    
-                    switch orientation {
-                    case .landscapeLeft, .landscapeRight:
-                        // Swap width and height if orientation is landscape
-                        iw = image.size.height
-                        ih = image.size.width
-                    default:
-                        iw = image.size.width
-                        ih = image.size.height
+                    // Crop the image if the output needs to be square.
+                    if self.configuration.onlySquareImagesFromCamera {
+                        image = self.cropImageToSquare(image)
                     }
-                    // Frame size
-                    let sw = self.v.previewViewContainer.frame.width
-                    // The center coordinate along Y axis
-                    let rcy = ih * 0.5
-                    let imageRef = image.cgImage?.cropping(to: CGRect(x: rcy-iw*0.5, y: 0, width: iw, height: iw))
+                    
+                    // Flip image if taken form the front camera.
+                    if let device = self.device, let cgImg = image.cgImage, device.position == .front {
+                        image = self.flipImage(image: image)
+                    }
+                    
                     DispatchQueue.main.async {
-                        var resizedImage = UIImage(cgImage: imageRef!, scale: 1.0, orientation: image.imageOrientation)
-                        if let device = self.device, let cgImg =  resizedImage.cgImage, device.position == .front {
-                            func flipImage(image: UIImage!) -> UIImage! {
-                                let imageSize: CGSize = image.size
-                                UIGraphicsBeginImageContextWithOptions(imageSize, true, 1.0)
-                                let ctx = UIGraphicsGetCurrentContext()!
-                                ctx.rotate(by: CGFloat(Double.pi/2.0))
-                                ctx.translateBy(x: 0, y: -imageSize.width)
-                                ctx.scaleBy(x: imageSize.height/imageSize.width, y: imageSize.width/imageSize.height)
-                                ctx.draw(image.cgImage!, in: CGRect(x:0.0,
-                                                                    y:0.0,
-                                                                    width:imageSize.width,
-                                                                    height:imageSize.height))
-                                let newImage: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
-                                UIGraphicsEndImageContext()
-                                return newImage
-                            }
-                            resizedImage = flipImage(image: resizedImage)
-                        }
-                        self.didCapturePhoto?(resizedImage)
+                        self.didCapturePhoto?(image)
                     }
                 }
             }
         }
+    }
+    
+    func cropImageToSquare(_ image: UIImage) -> UIImage {
+        let orientation: UIDeviceOrientation = UIDevice.current.orientation
+        var imageWidth = image.size.width
+        var imageHeight = image.size.height
+        switch orientation {
+        case .landscapeLeft, .landscapeRight:
+            // Swap width and height if orientation is landscape
+            imageWidth = image.size.height
+            imageHeight = image.size.width
+        default:
+            break
+        }
+        
+        // The center coordinate along Y axis
+        let rcy = imageHeight * 0.5
+        let rect = CGRect(x: rcy - imageWidth * 0.5, y: 0, width: imageWidth, height: imageWidth)
+        let imageRef = image.cgImage?.cropping(to: rect)
+        return UIImage(cgImage: imageRef!, scale: 1.0, orientation: image.imageOrientation)
+    }
+    
+    // Used when image is taken from the front camera.
+    func flipImage(image: UIImage!) -> UIImage! {
+        let imageSize: CGSize = image.size
+        UIGraphicsBeginImageContextWithOptions(imageSize, true, 1.0)
+        let ctx = UIGraphicsGetCurrentContext()!
+        ctx.rotate(by: CGFloat(Double.pi/2.0))
+        ctx.translateBy(x: 0, y: -imageSize.width)
+        ctx.scaleBy(x: imageSize.height/imageSize.width, y: imageSize.width/imageSize.height)
+        ctx.draw(image.cgImage!, in: CGRect(x:0.0,
+                                            y:0.0,
+                                            width:imageSize.width,
+                                            height:imageSize.height))
+        let newImage: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        return newImage
     }
     
     @objc

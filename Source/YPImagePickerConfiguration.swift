@@ -13,7 +13,15 @@ public struct YPImagePickerConfiguration {
     public init() {}
     
     /// Set this to true if you want to force the output to be a squared image. Defaults to false
+//    @available(*, renamed:"onlySquareImagesFromLibrary", message: "use also onlySquareImagesFromCamera")
+    @available(*, unavailable, renamed:"onlySquareImagesFromLibrary")
     public var onlySquareImages = false
+    
+    /// Set this to true if you want to force the  library output to be a squared image. Defaults to false
+    public var onlySquareImagesFromLibrary = false
+    
+    /// Set this to true if you want to force the camera output to be a squared image. Defaults to true
+    public var onlySquareImagesFromCamera = true
     
     /// Ex: cappedTo:1024 will make sure images from the library will be
     /// resized to fit in a 1024x1024 box. Defaults to original image size.

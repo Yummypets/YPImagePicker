@@ -57,7 +57,7 @@ public class PickerVC: FSBottomPager, PagerDelegate {
     }
 
     lazy var cameraVC: FSCameraVC = {
-        return FSCameraVC(shouldUseFrontCamera: self.configuration.usesFrontCamera)
+        return FSCameraVC(configuration: self.configuration)
     }()
     let videoVC = FSVideoVC()
     
