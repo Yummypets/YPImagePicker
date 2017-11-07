@@ -8,7 +8,7 @@ It comes with adjustable square crop and filters.
 [![CI Status](http://img.shields.io/travis/ytakzk/Fusuma.svg?style=flat)](https://travis-ci.org/ytakzk/Fusuma)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![codebeat badge](https://codebeat.co/badges/6a591267-c444-4c88-a410-56270d8ed9bc)](https://codebeat.co/projects/github-com-yummypets-ypfusuma)
-[![Release version](https://img.shields.io/badge/release-2.2-blue.svg)]()
+[![Release version](https://img.shields.io/badge/release-2.3-blue.svg)]()
 
 |         | Features  |
 ----------|-----------------
@@ -89,7 +89,8 @@ you'll need to ad these `plist entries` :
 
 ```swift
 var config = YPImagePickerConfiguration()
-config.onlySquareImages = false
+config.onlySquareImagesFromLibrary = false
+config.onlySquareImagesFromCamera = true
 config.libraryTargetImageSize = .original
 config.showsVideo = true
 config.usesFrontCamera = true
@@ -147,4 +148,4 @@ See LICENSE for details.
 
 ## Swift Version
 Swift 3 -> version **1.2.1**  
-Swift 4 -> version **2.2.0**
+Swift 4 -> version **2.3.0**
