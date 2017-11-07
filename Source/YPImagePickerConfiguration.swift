@@ -13,7 +13,6 @@ public struct YPImagePickerConfiguration {
     public init() {}
     
     /// Set this to true if you want to force the output to be a squared image. Defaults to false
-//    @available(*, renamed:"onlySquareImagesFromLibrary", message: "use also onlySquareImagesFromCamera")
     @available(*, unavailable, renamed:"onlySquareImagesFromLibrary")
     public var onlySquareImages = false
     

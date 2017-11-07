@@ -41,7 +41,7 @@ class ViewController: UIViewController {
         config.onlySquareImagesFromCamera = true
 //        config.libraryTargetImageSize = .original
         config.showsVideo = true //false
-//        config.u∫sesFrontCamera = true // false
+//        config.usesFrontCamera = true // false
 //        config.showsFilters = true
 //        config.shouldSaveNewPicturesToAlbum = true
         config.videoCompression = AVAssetExportPresetHighestQuality
