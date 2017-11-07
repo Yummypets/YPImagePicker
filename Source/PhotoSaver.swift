@@ -12,13 +12,14 @@ import Photos
 public class PhotoSaver {
     
     class func trySaveImage(_ image: UIImage, inAlbumNamed: String) {
-     
-        if let album = album(named: inAlbumNamed) {
-            saveImage(image, toAlbum: album)
-        } else {
-            createAlbum(withName: inAlbumNamed) {
-                if let album = album(named: inAlbumNamed) {
-                    saveImage(image, toAlbum: album)
+        if PHPhotoLibrary.authorizationStatus() == .authorized {
+            if let album = album(named: inAlbumNamed) {
+                saveImage(image, toAlbum: album)
+            } else {
+                createAlbum(withName: inAlbumNamed) {
+                    if let album = album(named: inAlbumNamed) {
+                        saveImage(image, toAlbum: album)
+                    }
                 }
             }
         }
