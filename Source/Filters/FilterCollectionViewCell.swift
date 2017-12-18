@@ -50,7 +50,7 @@ class FilterCollectionViewCell: UICollectionViewCell {
         
         imageView.layer.shadowColor = UIColor(r: 46, g: 43, b: 37).cgColor
         imageView.layer.shadowOpacity = 0.3
-        imageView.layer.shadowOffset = CGSize(width:0, height:10)
+        imageView.layer.shadowOffset = CGSize(width: 0, height: 10)
         imageView.layer.shadowRadius = 20
         imageView.clipsToBounds = true
     }

@@ -20,7 +20,7 @@ class FSCameraView: UIView, UIGestureRecognizerDelegate {
     let progressBar = UIProgressView()
 
     convenience init() {
-        self.init(frame:CGRect.zero)
+        self.init(frame: .zero)
         
         sv(
             previewViewContainer,

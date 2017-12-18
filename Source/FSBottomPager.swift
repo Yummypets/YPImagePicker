@@ -17,8 +17,8 @@ final class PagerMenu: UIView {
     var separator = UIView()
     
     convenience init() {
-        self.init(frame:CGRect.zero)
-        backgroundColor = UIColor(r:247, g:247, b:247)
+        self.init(frame: .zero)
+        backgroundColor = UIColor(r: 247, g: 247, b: 247)
         
         sv(
             separator,
@@ -49,7 +49,7 @@ final class PagerMenu: UIView {
             addConstraint(item: m, attribute: .height, toItem: self)
             addConstraint(item: m, attribute: .width, constant: menuItemWidth)
             if let pm = previousMenuItem {
-                addConstraint(item: m, attribute: .left, toItem: pm, attribute:.right)
+                addConstraint(item: m, attribute: .left, toItem: pm, attribute: .right)
             } else {
                 addConstraint(item: m, attribute: .left, toItem: self)
             }
@@ -60,7 +60,7 @@ final class PagerMenu: UIView {
                 addSubview(separator)
                 separator.translatesAutoresizingMaskIntoConstraints = false
                 separator.backgroundColor = .clear
-                addConstraint(item: separator, attribute: .width, constant:1)
+                addConstraint(item: separator, attribute: .width, constant: 1)
                 addConstraint(item: separator, attribute: .left, toItem: previousMenuItem,
                               attribute: .right)
                 addConstraint(item: separator, attribute: .top, toItem: self, constant: 7)
@@ -91,7 +91,7 @@ final class MenuItem: UIView {
     var button = UIButton()
     
     convenience init() {
-        self.init(frame:CGRect.zero)
+        self.init(frame: .zero)
         backgroundColor = .clear
         
         sv(
@@ -132,7 +132,7 @@ final class PagerView: UIView {
     var scrollView = UIScrollView()
     
     convenience init() {
-        self.init(frame:CGRect.zero)
+        self.init(frame: .zero)
         backgroundColor = UIColor(red: 239/255, green: 238/255, blue: 237/255, alpha: 1)
         
         sv(
@@ -160,7 +160,7 @@ final class PagerView: UIView {
         let menuItemWidth: CGFloat = UIScreen.main.bounds.width
             / CGFloat(header.menuItems.count)
         header.selector.leftConstraint?.constant = CGFloat(page) * menuItemWidth
-        UIView.animate(withDuration: 0.2, animations:layoutIfNeeded)
+        UIView.animate(withDuration: 0.2, animations: layoutIfNeeded)
     }
 }
 
@@ -217,7 +217,7 @@ public class FSBottomPager: UIViewController, UIScrollViewDelegate {
         }
         
         let scrollableWidth: CGFloat = CGFloat(controllers.count) * CGFloat(viewWidth)
-        v.scrollView.contentSize = CGSize(width:scrollableWidth, height:0)
+        v.scrollView.contentSize = CGSize(width: scrollableWidth, height: 0)
         
         // Build headers
         for (index, c) in controllers.enumerated() {
@@ -246,7 +246,7 @@ public class FSBottomPager: UIViewController, UIScrollViewDelegate {
     func showPage(_ page: Int, animated: Bool = true) {
         v.animateSelectorToPage(page)
         let x = CGFloat(page) * UIScreen.main.bounds.width
-        v.scrollView.setContentOffset(CGPoint(x:x, y:0), animated: animated)
+        v.scrollView.setContentOffset(CGPoint(x: x, y: 0), animated: animated)
         selectPage(page)
     }
 
@@ -265,7 +265,7 @@ public class FSBottomPager: UIViewController, UIScrollViewDelegate {
         currentPage = page
         v.animateSelectorToPage(page)
         let x = CGFloat(page) * UIScreen.main.bounds.width
-        v.scrollView.setContentOffset(CGPoint(x:x, y:0), animated: false)
+        v.scrollView.setContentOffset(CGPoint(x: x, y: 0), animated: false)
         //select menut item and deselect others
         for mi in v.header.menuItems {
             mi.unselect()

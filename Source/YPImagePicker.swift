@@ -47,7 +47,7 @@ public class YPImagePicker: UINavigationController {
         navigationBar.isTranslucent = false
         picker.didSelectImage = { [unowned self] pickedImage, isNewPhoto in
             if self.configuration.showsFilters {
-                let filterVC = FiltersVC(image:pickedImage)
+                let filterVC = FiltersVC(image: pickedImage)
                 filterVC.didSelectImage = { filteredImage, isImageFiltered in
                     self.didSelectImage?(filteredImage)
                     if (isNewPhoto || isImageFiltered) && self.configuration.shouldSaveNewPicturesToAlbum {

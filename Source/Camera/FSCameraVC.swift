@@ -62,7 +62,7 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
         videoLayer.frame = v.previewViewContainer.bounds
         videoLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
         v.previewViewContainer.layer.addSublayer(videoLayer)
-        let tapRecognizer = UITapGestureRecognizer(target: self, action:#selector(focusTapped(_:)))
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(focusTapped(_:)))
         tapRecognizer.delegate = self
         v.previewViewContainer.addGestureRecognizer(tapRecognizer)
     }
@@ -96,7 +96,7 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
     func focus(recognizer: UITapGestureRecognizer) {
         let point = recognizer.location(in: v.previewViewContainer)
         let viewsize = v.previewViewContainer.bounds.size
-        let newPoint = CGPoint(x:point.x/viewsize.width, y:point.y/viewsize.height)
+        let newPoint = CGPoint(x: point.x/viewsize.width, y: point.y/viewsize.height)
         setFocusPointOnDevice(device: device!, point: newPoint)
         focusView.center = point
         configureFocusView(focusView)
@@ -187,7 +187,7 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
                     }
                     
                     // Flip image if taken form the front camera.
-                    if let device = self.device, let cgImg = image.cgImage, device.position == .front {
+                    if let device = self.device, device.position == .front {
                         image = self.flipImage(image: image)
                     }
                     
@@ -227,10 +227,10 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
         ctx.rotate(by: CGFloat(Double.pi/2.0))
         ctx.translateBy(x: 0, y: -imageSize.width)
         ctx.scaleBy(x: imageSize.height/imageSize.width, y: imageSize.width/imageSize.height)
-        ctx.draw(image.cgImage!, in: CGRect(x:0.0,
-                                            y:0.0,
-                                            width:imageSize.width,
-                                            height:imageSize.height))
+        ctx.draw(image.cgImage!, in: CGRect(x: 0.0,
+                                            y: 0.0,
+                                            width: imageSize.width,
+                                            height: imageSize.height))
         let newImage: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
         return newImage
@@ -244,7 +244,7 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
     
     func refreshFlashButton() {
         if let device = device {
-            v.flashButton.setImage(flashImage(forAVCaptureFlashMode:device.flashMode), for: .normal)
+            v.flashButton.setImage(flashImage(forAVCaptureFlashMode: device.flashMode), for: .normal)
             v.flashButton.isHidden = !device.hasFlash
         }
     }
@@ -273,9 +273,9 @@ class YPPermissionDeniedPopup {
                                       style: .default,
                                       handler: { _ in
             if #available(iOS 10.0, *) {
-                UIApplication.shared.open(URL(string:UIApplicationOpenSettingsURLString)!)
+                UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!)
             } else {
-                UIApplication.shared.openURL(URL(string:UIApplicationOpenSettingsURLString)!)
+                UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
             }
         }))
         return alert

@@ -61,8 +61,8 @@ class FiltersVC: UIViewController {
     func thumbFromImage(_ img: UIImage) -> UIImage {
         let width: CGFloat = img.size.width / 5
         let height: CGFloat = img.size.height / 5
-        UIGraphicsBeginImageContext(CGSize(width:width, height:height))
-        img.draw(in: CGRect(x:0, y:0, width:width, height:height))
+        UIGraphicsBeginImageContext(CGSize(width: width, height: height))
+        img.draw(in: CGRect(x: 0, y: 0, width: width, height: height))
         let smallImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return smallImage!

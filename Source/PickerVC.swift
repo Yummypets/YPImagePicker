@@ -78,7 +78,7 @@ public class PickerVC: FSBottomPager, PagerDelegate {
         
         albumVC.delegate = self
         
-        view.backgroundColor = UIColor(r:247, g:247, b:247)
+        view.backgroundColor = UIColor(r: 247, g: 247, b: 247)
         cameraVC.didCapturePhoto = { [unowned self] img in
             self.didSelectImage?(img, true)
         }
@@ -283,7 +283,7 @@ extension PickerVC: FSAlbumViewDelegate {
     public func albumViewStartedLoadingImage() {
         DispatchQueue.main.async {
             let spinner = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView:spinner)
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: spinner)
             spinner.startAnimating()
         }
     }

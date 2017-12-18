@@ -16,7 +16,7 @@ class FSGridView: UIView {
     let line4 = UIView()
     
     convenience init() {
-        self.init(frame:CGRect.zero)
+        self.init(frame: .zero)
         isUserInteractionEnabled = false
         sv(
             line1,

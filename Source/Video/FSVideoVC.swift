@@ -28,7 +28,7 @@ public class FSVideoVC: UIViewController {
     override public func loadView() { view = v }
     
     convenience init() {
-        self.init(nibName:nil, bundle:nil)
+        self.init(nibName: nil, bundle: nil)
         title = fsLocalized("YPImagePickerVideo")
         sessionQueue.async { [unowned self] in
             self.setupCaptureSession()
@@ -59,7 +59,7 @@ public class FSVideoVC: UIViewController {
         videoLayer.frame = v.previewViewContainer.bounds
         videoLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
         v.previewViewContainer.layer.addSublayer(videoLayer)
-        let tapRecognizer = UITapGestureRecognizer(target: self, action:#selector(focusTapped(_:)))
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(focusTapped(_:)))
         v.previewViewContainer.addGestureRecognizer(tapRecognizer)
     }
     
@@ -87,7 +87,7 @@ public class FSVideoVC: UIViewController {
             }
             
             // Add audio recording
-            for device in AVCaptureDevice.devices(for:AVMediaType.audio) {
+            for device in AVCaptureDevice.devices(for: .audio) {
                 if let audioInput = try? AVCaptureDeviceInput(device: device) {
                     if session.canAddInput(audioInput) {
                         session.addInput(audioInput)
@@ -191,7 +191,7 @@ public class FSVideoVC: UIViewController {
             }
             
             // Re Add audio recording
-            for device in AVCaptureDevice.devices(for:AVMediaType.audio) {
+            for device in AVCaptureDevice.devices(for: .audio) {
                 if let audioInput = try? AVCaptureDeviceInput(device: device) {
                     if self.session.canAddInput(audioInput) {
                         self.session.addInput(audioInput)
@@ -281,7 +281,7 @@ extension FSVideoVC {
     func focus(recognizer: UITapGestureRecognizer) {
         let point = recognizer.location(in: v.previewViewContainer)
         let viewsize = v.previewViewContainer.bounds.size
-        let newPoint = CGPoint(x:point.x/viewsize.width, y:point.y/viewsize.height)
+        let newPoint = CGPoint(x: point.x/viewsize.width, y: point.y/viewsize.height)
         setFocusPointOnDevice(device: device!, point: newPoint)
         focusView.center = point
         configureFocusView(focusView)
@@ -291,7 +291,7 @@ extension FSVideoVC {
     
     func refreshFlashButton() {
         if let device = device {
-            v.flashButton.setImage(flashImage(forAVCaptureFlashMode:device.flashMode), for: .normal)
+            v.flashButton.setImage(flashImage(forAVCaptureFlashMode: device.flashMode), for: .normal)
         }
     }
 }

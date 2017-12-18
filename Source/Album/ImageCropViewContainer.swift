@@ -147,7 +147,7 @@ class ImageCropViewContainer: UIView, FSImageCropViewDelegate, UIGestureRecogniz
     }
     
     func fsImageCropViewDidLayoutSubviews() {
-        let newFrame = cropView!.imageView.convert(cropView!.imageView.bounds, to:self)
+        let newFrame = cropView!.imageView.convert(cropView!.imageView.bounds, to: self)
         grid.frame = frame.intersection(newFrame)
         grid.layoutIfNeeded()
     }

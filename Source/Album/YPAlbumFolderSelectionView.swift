@@ -15,7 +15,7 @@ class YPAlbumFolderSelectionView: UIView {
     let spinner = UIActivityIndicatorView(activityIndicatorStyle: .gray)
     
     convenience init() {
-        self.init(frame:CGRect.zero)
+        self.init(frame: .zero)
         
         sv(
             tableView,

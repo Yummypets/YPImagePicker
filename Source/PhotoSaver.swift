@@ -47,9 +47,9 @@ func saveImage(_ image: UIImage, toAlbum album: PHAssetCollection) {
 func createAlbum(withName name: String, completion:@escaping () -> Void) {
     PHPhotoLibrary.shared().performChanges({
         PHAssetCollectionChangeRequest.creationRequestForAssetCollection(withTitle: name)
-    }) { success, _ in
+    }, completionHandler: { success, _ in
         if success {
             completion()
         }
-    }
+    })
 }
