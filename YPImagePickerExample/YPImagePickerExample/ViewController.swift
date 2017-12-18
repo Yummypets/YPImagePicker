@@ -61,7 +61,7 @@ class ViewController: UIViewController {
             self.imageView.image = img
             picker.dismiss(animated: true, completion: nil)
         }
-        picker.didSelectVideo = { videoData, videoThumbnailImage in
+        picker.didSelectVideo = { [unowned picker] videoData, videoThumbnailImage in
             // video picked
             self.imageView.image = videoThumbnailImage
             picker.dismiss(animated: true, completion: nil)
