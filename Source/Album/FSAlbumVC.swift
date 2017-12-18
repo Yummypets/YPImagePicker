@@ -34,7 +34,7 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
     
     private var fetchResult: PHFetchResult<PHAsset>!
     
-    let imageManager = PHCachingImageManager()
+    var imageManager: PHCachingImageManager?
     var previousPreheatRect: CGRect = CGRect.zero
     let cellSize = CGSize(width: UIScreen.main.bounds.width/4, height: UIScreen.main.bounds.width/4)
     var phAsset: PHAsset!
@@ -157,6 +157,8 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
     }
 
     func initialize() {
+        imageManager = PHCachingImageManager()
+        
         if fetchResult != nil {
             return
         }
@@ -349,7 +351,7 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
             fatalError("unexpected cell in collection view")
         }
         cell.representedAssetIdentifier = asset.localIdentifier
-        imageManager.requestImage(for: asset,
+        imageManager?.requestImage(for: asset,
                                   targetSize: cellSize,
                                   contentMode: .aspectFill,
                                   options: nil) { image, _ in
@@ -459,7 +461,7 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
             DispatchQueue.global(qos: .default).async {
                 let options = PHImageRequestOptions()
                 options.isNetworkAccessAllowed = true
-                self.imageManager.requestImage(for: asset,
+                self.imageManager?.requestImage(for: asset,
                                                targetSize: CGSize(width: asset.pixelWidth, height: asset.pixelHeight),
                                                contentMode: .aspectFill,
                                                options: options) { result, info in
@@ -504,7 +506,7 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
                 options.isNetworkAccessAllowed = true
                 options.deliveryMode = .opportunistic
                 let screenWidth = UIScreen.main.bounds.width
-                self.imageManager.requestImage(for: asset,
+                self.imageManager?.requestImage(for: asset,
                                                targetSize: CGSize(width: screenWidth, height: screenWidth),
                                                contentMode: .aspectFill,
                                                options: options) { result, _ in
@@ -521,7 +523,7 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
                 let videosOptions = PHVideoRequestOptions()
                 videosOptions.deliveryMode = PHVideoRequestOptionsDeliveryMode.automatic
                 videosOptions.isNetworkAccessAllowed = true
-                PHImageManager.default().requestPlayerItem(forVideo: asset,
+                self.imageManager?.requestPlayerItem(forVideo: asset,
                                                            options: videosOptions,
                                                            resultHandler: { playerItem, _ in
                     // Prevent long videos to come after user selected another in the meantime.
@@ -544,7 +546,7 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
     // MARK: - Asset Caching
     
     func resetCachedAssets() {
-        imageManager.stopCachingImagesForAllAssets()
+        imageManager?.stopCachingImagesForAllAssets()
         previousPreheatRect = .zero
     }
     
@@ -571,11 +573,11 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
             let assetsToStartCaching = assetsAtIndexPaths(addedIndexPaths)
             let assetsToStopCaching = assetsAtIndexPaths(removedIndexPaths)
             
-            imageManager.startCachingImages(for: assetsToStartCaching,
+            imageManager?.startCachingImages(for: assetsToStartCaching,
                                                   targetSize: cellSize,
                                                   contentMode: .aspectFill,
                                                   options: nil)
-            imageManager.stopCachingImages(for: assetsToStopCaching,
+            imageManager?.stopCachingImages(for: assetsToStopCaching,
                                                  targetSize: cellSize,
                                                  contentMode: .aspectFill,
                                                  options: nil)
@@ -666,7 +668,7 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
                         let videosOptions = PHVideoRequestOptions()
                         videosOptions.isNetworkAccessAllowed = true
                         self.delegate?.albumViewStartedLoadingImage()
-                        PHImageManager.default().requestAVAsset(forVideo: asset,
+                        self.imageManager?.requestAVAsset(forVideo: asset,
                                                                 options: videosOptions) { v, _, _ in
                                                                     if let urlAsset = v as? AVURLAsset {
                                                                         DispatchQueue.main.async {
@@ -701,7 +703,7 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
                     }
                     
                     self.delegate?.albumViewStartedLoadingImage()
-                    PHImageManager.default()
+                    self.imageManager?
                         .requestImage(for: asset,
                                       targetSize: targetSize,
                                       contentMode: .aspectFit,
