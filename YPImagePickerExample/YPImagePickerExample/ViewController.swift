@@ -46,6 +46,7 @@ class ViewController: UIViewController {
 //        config.shouldSaveNewPicturesToAlbum = true
         config.videoCompression = AVAssetExportPresetHighestQuality
         config.albumName = "MyGreatAppName"
+        config.startOnScreen = .library
         // Set it the default conf for all Pickers
         //      YPImagePicker.setDefaultConfiguration(config)
         // And then use the default configuration like so:

@@ -8,7 +8,7 @@ It comes with adjustable square crop and filters.
 [![CI Status](http://img.shields.io/travis/ytakzk/Fusuma.svg?style=flat)](https://travis-ci.org/ytakzk/Fusuma)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![codebeat badge](https://codebeat.co/badges/6a591267-c444-4c88-a410-56270d8ed9bc)](https://codebeat.co/projects/github-com-yummypets-ypfusuma)
-[![Release version](https://img.shields.io/badge/release-2.3-blue.svg)]()
+[![GitHub tag](https://img.shields.io/github/release/Yummypets/YPImagePicker.svg)]()
 
 |         | Features  |
 ----------|-----------------
@@ -98,6 +98,7 @@ config.showsFilters = true
 config.shouldSaveNewPicturesToAlbum = true
 config.videoCompression = AVAssetExportPresetHighestQuality
 config.albumName = "MyGreatAppName"
+config.startOnScreen = .library
 
 // Build a picker with your configuration
 let picker = YPImagePicker(configuration: config)

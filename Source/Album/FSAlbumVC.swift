@@ -97,6 +97,10 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
             .addTarget(self,
                        action: #selector(squareCropButtonTapped),
                        for: .touchUpInside)
+        
+        if configuration.startOnScreen == .library {
+            checkPermission()
+        }
     }
     
     @objc

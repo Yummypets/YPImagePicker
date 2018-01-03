@@ -45,9 +45,18 @@ public struct YPImagePickerConfiguration {
     /// Defines the name of the album when saving pictures in the user's photo library.
     /// In general that would be your App name. Defaults to "DefaultYPImagePickerAlbumName"
     public var albumName = "DefaultYPImagePickerAlbumName"
+    
+    /// Defines which screen is shown at launch. Video mode will only work if `showsVideo = true`. Default value is `.photo`
+    public var startOnScreen: YPPickerScreen = .photo
 }
 
 public enum LibraryImageSize {
     case original
     case cappedTo(size: CGFloat)
+}
+
+public enum YPPickerScreen {
+    case library
+    case photo
+    case video
 }
