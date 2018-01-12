@@ -10,6 +10,9 @@ It comes with adjustable square crop and filters.
 [![codebeat badge](https://codebeat.co/badges/6a591267-c444-4c88-a410-56270d8ed9bc)](https://codebeat.co/projects/github-com-yummypets-ypfusuma)
 [![GitHub tag](https://img.shields.io/github/release/Yummypets/YPImagePicker.svg)]()
 
+Give it a quick try :  
+`pod try YPImagePicker`
+
 |         | Features  |
 ----------|-----------------
 🌅        | Library
