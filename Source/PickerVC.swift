@@ -97,10 +97,13 @@ public class PickerVC: FSBottomPager, PagerDelegate {
         
         switch configuration.startOnScreen {
         case .library:
+            mode = .library
             startOnPage(0)
         case .photo:
+            mode = .camera
             startOnPage(1)
         case .video:
+            mode = .video
             startOnPage(configuration.showsVideo ? 2 : 1)
         }
         
