@@ -35,30 +35,18 @@ final class PagerMenu: UIView {
         let menuItemWidth: CGFloat = UIScreen.main.bounds.width / CGFloat(menuItems.count)
         var previousMenuItem: MenuItem?
         for m in menuItems {
-            addSubview(m)
-            m.translatesAutoresizingMaskIntoConstraints = false
-            addConstraint(item: m, attribute: .top, toItem: self)
-            addConstraint(item: m, attribute: .height, toItem: self)
-            addConstraint(item: m, attribute: .width, constant: menuItemWidth)
+            
+            sv(
+                m
+            )
+
+            m.fillVertically().width(menuItemWidth)
             if let pm = previousMenuItem {
-                addConstraint(item: m, attribute: .left, toItem: pm, attribute: .right)
+                pm-0-m
             } else {
-                addConstraint(item: m, attribute: .left, toItem: self)
+                |-m
             }
-            
-            if let previousMenuItem = previousMenuItem {
-                //Add separator next to it
-                let separator = UIView()
-                addSubview(separator)
-                separator.translatesAutoresizingMaskIntoConstraints = false
-                separator.backgroundColor = .clear
-                addConstraint(item: separator, attribute: .width, constant: 1)
-                addConstraint(item: separator, attribute: .left, toItem: previousMenuItem,
-                              attribute: .right)
-                addConstraint(item: separator, attribute: .top, toItem: self, constant: 7)
-                addConstraint(item: separator, attribute: .bottom, toItem: self, constant: -7)
-            }
-            
+                        
             previousMenuItem = m
         }
     }

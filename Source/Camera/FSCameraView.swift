@@ -58,9 +58,7 @@ class FSCameraView: UIView, UIGestureRecognizerDelegate {
             flipButton.size(42)-(15+sideMargin)-|
         )
         
-        addConstraint(item: timeElapsedLabel, attribute: .bottom,
-                      toItem: previewViewContainer, constant: -15)
-        
+        timeElapsedLabel.Bottom == previewViewContainer.Bottom - 15
         timeElapsedLabel-(15+sideMargin)-|
         
         shotButton.centerVertically()
