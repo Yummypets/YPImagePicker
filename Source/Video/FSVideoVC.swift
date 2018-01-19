@@ -126,8 +126,8 @@ public class FSVideoVC: UIViewController {
     
     func stopCamera() {
         if session.isRunning {
-            sessionQueue.async { [unowned self] in
-                self.session.stopRunning()
+            sessionQueue.async { [weak self] in
+                self?.session.stopRunning()
             }
         }
     }
