@@ -14,27 +14,19 @@ final class PagerMenu: UIView {
     var didSetConstraints = false
     var menuItems = [MenuItem]()
     var selector = UIView()
-    var separator = UIView()
     
     convenience init() {
         self.init(frame: .zero)
         backgroundColor = UIColor(r: 247, g: 247, b: 247)
         
         sv(
-            separator,
             selector
-        )
-        
-        layout(
-            |separator| ~ 0.5,
-            0
         )
         
         layout(
             |selector.width(300) ~ 1,
             0.5
         )
-        separator.backgroundColor = UIColor(r: 167, g: 167, b: 167)
     }
     
     var separators = [UIView]()
@@ -144,9 +136,14 @@ final class PagerView: UIView {
             0,
             |scrollView|,
             0,
-            |header| ~ 50,
-            0
+            |header| ~ 50
         )
+        
+        if #available(iOS 11.0, *) {
+            header.Bottom == safeAreaLayoutGuide.Bottom
+        } else {
+            header.bottom(0)
+        }
 
         clipsToBounds = false
         scrollView.clipsToBounds = false
