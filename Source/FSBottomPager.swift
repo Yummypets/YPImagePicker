@@ -13,20 +13,10 @@ final class PagerMenu: UIView {
     
     var didSetConstraints = false
     var menuItems = [MenuItem]()
-    var selector = UIView()
     
     convenience init() {
         self.init(frame: .zero)
         backgroundColor = UIColor(r: 247, g: 247, b: 247)
-        
-        sv(
-            selector
-        )
-        
-        layout(
-            |selector.width(300) ~ 1,
-            0.5
-        )
     }
     
     var separators = [UIView]()
@@ -140,13 +130,6 @@ final class PagerView: UIView {
         scrollView.scrollsToTop = false
         scrollView.bounces = false
     }
-    
-    func animateSelectorToPage(_ page: Int) {
-        let menuItemWidth: CGFloat = UIScreen.main.bounds.width
-            / CGFloat(header.menuItems.count)
-        header.selector.leftConstraint?.constant = CGFloat(page) * menuItemWidth
-        UIView.animate(withDuration: 0.2, animations: layoutIfNeeded)
-    }
 }
 
 protocol PagerDelegate: class {
@@ -167,10 +150,6 @@ public class FSBottomPager: UIViewController, UIScrollViewDelegate {
         self.automaticallyAdjustsScrollViewInsets = false
         v.scrollView.delegate = self
         view = v
-    }
-    
-    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        v.animateSelectorToPage(currentPage)
     }
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -218,9 +197,6 @@ public class FSBottomPager: UIViewController, UIScrollViewDelegate {
         let currentMenuItem = v.header.menuItems[0]
         currentMenuItem.select()
         v.header.refreshMenuItems()
-        
-        //Adjsut seletor size
-        v.header.selector.widthConstraint?.constant = v.frame.width / CGFloat(controllers.count)
     }
     
     @objc
@@ -229,7 +205,6 @@ public class FSBottomPager: UIViewController, UIScrollViewDelegate {
     }
     
     func showPage(_ page: Int, animated: Bool = true) {
-        v.animateSelectorToPage(page)
         let x = CGFloat(page) * UIScreen.main.bounds.width
         v.scrollView.setContentOffset(CGPoint(x: x, y: 0), animated: animated)
         selectPage(page)
@@ -248,7 +223,6 @@ public class FSBottomPager: UIViewController, UIScrollViewDelegate {
     
     func startOnPage(_ page: Int) {
         currentPage = page
-        v.animateSelectorToPage(page)
         let x = CGFloat(page) * UIScreen.main.bounds.width
         v.scrollView.setContentOffset(CGPoint(x: x, y: 0), animated: false)
         //select menut item and deselect others
