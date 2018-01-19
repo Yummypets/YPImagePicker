@@ -34,7 +34,7 @@ final class PagerMenu: UIView {
             if let pm = previousMenuItem {
                 pm-0-m
             } else {
-                |-m
+                |m
             }
                         
             previousMenuItem = m
