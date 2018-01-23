@@ -104,7 +104,13 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
         animateFocusView(focusView)
     }
     
-    func startCamera() {
+    public func tryToStartCamera() {
+        doAfterPermissionCheck { [weak self] in
+            self?.startCamera()
+        }
+    }
+    
+    private func startCamera() {
         if !session.isRunning {
             sessionQueue.async { [unowned self] in
                 // Re-apply session preset

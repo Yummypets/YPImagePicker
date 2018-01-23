@@ -107,8 +107,14 @@ public class FSVideoVC: UIViewController {
         }
         session.commitConfiguration()
     }
+    
+    public func tryToStartCamera() {
+        doAfterPermissionCheck { [weak self] in
+            self?.startCamera()
+        }
+    }
 
-    func startCamera() {
+    private func startCamera() {
         if !session.isRunning {
             sessionQueue.async { [unowned self] in
                 // Re-apply session preset

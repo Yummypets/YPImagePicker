@@ -146,6 +146,10 @@ public class FSBottomPager: UIViewController, UIScrollViewDelegate {
     
     var currentPage = 0
     
+    var currentController: UIViewController {
+        return controllers[currentPage]
+    }
+    
     override public func loadView() {
         self.automaticallyAdjustsScrollViewInsets = false
         v.scrollView.delegate = self
@@ -211,14 +215,16 @@ public class FSBottomPager: UIViewController, UIScrollViewDelegate {
     }
 
     func selectPage(_ page: Int) {
-        currentPage = page
-        //select menut item and deselect others
-        for mi in v.header.menuItems {
-            mi.unselect()
+        if page != currentPage {
+            currentPage = page
+            //select menut item and deselect others
+            for mi in v.header.menuItems {
+                mi.unselect()
+            }
+            let currentMenuItem = v.header.menuItems[page]
+            currentMenuItem.select()
+            delegate?.pagerDidSelectController(controllers[page])
         }
-        let currentMenuItem = v.header.menuItems[page]
-        currentMenuItem.select()
-        delegate?.pagerDidSelectController(controllers[page])
     }
     
     func startOnPage(_ page: Int) {

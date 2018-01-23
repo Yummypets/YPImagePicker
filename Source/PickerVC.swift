@@ -112,7 +112,6 @@ public class PickerVC: FSBottomPager, PagerDelegate {
     
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        startCurrentCamera()
         cameraVC.v.shotButton.isEnabled = true
     }
     
@@ -123,66 +122,63 @@ public class PickerVC: FSBottomPager, PagerDelegate {
         UIView.animate(withDuration: 0.3) {
             self.setNeedsStatusBarAppearanceUpdate()
         }
+        
+       updateMode(with: currentController)
     }
     
     internal func pagerScrollViewDidScroll(_ scrollView: UIScrollView) { }
- 
+    
+    func modeFor(vc: UIViewController) -> Mode {
+        switch vc {
+        case albumVC:
+            return .library
+        case cameraVC:
+            return .camera
+        case videoVC:
+            return .video
+        default:
+            return .camera
+        }
+    }
+    
     func pagerDidSelectController(_ vc: UIViewController) {
+        updateMode(with: vc)
+    }
+    
+    func updateMode(with vc: UIViewController) {
+        stopCurrentCamera()
+        
+        // Set new mode
+        mode = modeFor(vc: vc)
         
         // Re-trigger permission check
         if let vc = vc as? PermissionCheckable {
             vc.checkPermission()
         }
         
-        albumVC.player?.pause()
-        
-        var changedMode = true
-        
-        switch mode {
-        case .library where vc == albumVC:
-            changedMode = false
-        case .camera where vc == cameraVC:
-            changedMode = false
-        case .video where vc == videoVC:
-            changedMode = false
-        default:()
-        }
-        
-        if changedMode {
-            
-            // Set new mode
-            if vc == albumVC {
-                mode = .library
-            } else if vc == cameraVC {
-                mode = .camera
-            } else if vc == videoVC {
-                mode = .video
-            }
-            
-            updateUI()
-            stopCamerasNotShownOnScreen()
-            startCurrentCamera()
-        }
+        updateUI()
+        startCurrentCamera()
     }
     
-    func stopCamerasNotShownOnScreen() {
-        if mode != .video {
-            videoVC.stopCamera()
-        }
-        if mode != .camera {
+    func stopCurrentCamera() {
+        switch mode {
+        case .library:
+            albumVC.player?.pause()
+        case .camera:
             cameraVC.stopCamera()
+        case .video:
+            videoVC.stopCamera()
         }
     }
     
     func startCurrentCamera() {
-        //Start current camera
         switch mode {
         case .library:
             break
         case .camera:
-            self.cameraVC.startCamera()
+            cameraVC.tryToStartCamera()
         case .video:
-            self.videoVC.startCamera()
+            videoVC.tryToStartCamera()
         }
     }
     
