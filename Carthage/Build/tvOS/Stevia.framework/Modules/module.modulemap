@@ -1,4 +1,0 @@
-framework module Stevia {
-    header "Stevia-Swift.h"
-    requires objc
-}

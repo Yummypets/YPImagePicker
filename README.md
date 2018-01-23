@@ -152,4 +152,4 @@ See LICENSE for details.
 
 ## Swift Version
 Swift 3 -> version **1.2.1**  
-Swift 4 -> version **2.4.0**
+Swift 4 -> version **2.4.2**

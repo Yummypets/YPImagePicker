@@ -234,7 +234,6 @@ SWIFT_PROTOCOL("_TtP13YPImagePicker19FSAlbumViewDelegate_")
 SWIFT_CLASS("_TtC13YPImagePicker13FSBottomPager")
 @interface FSBottomPager : UIViewController <UIScrollViewDelegate>
 - (void)loadView;
-- (void)scrollViewDidEndDecelerating:(UIScrollView * _Nonnull)scrollView;
 - (void)scrollViewDidScroll:(UIScrollView * _Nonnull)scrollView;
 - (void)scrollViewWillEndDragging:(UIScrollView * _Nonnull)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(CGPoint * _Nonnull)targetContentOffset;
 - (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil OBJC_DESIGNATED_INITIALIZER;
