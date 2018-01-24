@@ -107,7 +107,7 @@ public class PickerVC: FSBottomPager, PagerDelegate {
             startOnPage(configuration.showsVideo ? 2 : 1)
         }
         
-        updateUI()
+        updateMode(with: currentController)
     }
     
     public override func viewWillAppear(_ animated: Bool) {
@@ -122,8 +122,6 @@ public class PickerVC: FSBottomPager, PagerDelegate {
         UIView.animate(withDuration: 0.3) {
             self.setNeedsStatusBarAppearanceUpdate()
         }
-        
-       updateMode(with: currentController)
     }
     
     internal func pagerScrollViewDidScroll(_ scrollView: UIScrollView) { }
