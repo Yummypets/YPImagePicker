@@ -43,11 +43,15 @@ extension AVCaptureDevice {
         } catch _ { }
     }
     
-    func disableFlash() {
+    func tryToggleTorch() {
         guard hasFlash else { return }
         do {
             try lockForConfiguration()
-            flashMode = .off
+            if torchMode == .off {
+                torchMode = .on
+            } else if torchMode == .on {
+                torchMode = .off
+            }
             unlockForConfiguration()
         } catch _ { }
     }

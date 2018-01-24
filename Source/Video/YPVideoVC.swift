@@ -45,7 +45,6 @@ public class YPVideoVC: UIViewController {
         super.viewDidLoad()
         setupButtons()
         v.flashButton.addTarget(self, action: #selector(flashButtonTapped), for: .touchUpInside)
-        v.flashButton.isHidden = true
         v.timeElapsedLabel.isHidden = false
         v.shotButton.addTarget(self, action: #selector(shotButtonTapped), for: .touchUpInside)
         v.flipButton.addTarget(self, action: #selector(flipButtonTapped), for: .touchUpInside)
@@ -219,12 +218,12 @@ public class YPVideoVC: UIViewController {
     
     @objc
     func flashButtonTapped() {
-        device?.tryToggleFlash()
+        device?.tryToggleTorch()
         refreshFlashButton()
     }
     
-    func flashImage(forAVCaptureFlashMode: AVCaptureDevice.FlashMode) -> UIImage {
-        switch forAVCaptureFlashMode {
+    func flashImage(for torchMode: AVCaptureDevice.TorchMode) -> UIImage {
+        switch torchMode {
         case .on: return flashOnImage!
         case .off: return flashOffImage!
         default: return flashOffImage!
@@ -295,7 +294,8 @@ extension YPVideoVC {
     
     func refreshFlashButton() {
         if let device = device {
-            v.flashButton.setImage(flashImage(forAVCaptureFlashMode: device.flashMode), for: .normal)
+            v.flashButton.setImage(flashImage(for: device.torchMode), for: .normal)
+            v.flashButton.isHidden = !device.hasFlash
         }
     }
 }
