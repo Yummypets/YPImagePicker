@@ -13,20 +13,9 @@ It comes with adjustable square crop and filters.
 Give it a quick try :  
 `pod try YPImagePicker`
 
-|         | Features  |
-----------|-----------------
-🌅        | Library
-📷        | Photo
-🎥        | Video
-✂️        | Crop
-⚡️        | Flash
-🖼        | Filters
-
-
-## Preview
+🌅 Library - 📷 Photo - 🎥 Video - ✂️ Crop - ⚡️ Flash - 🖼 Filters
 
 <img src="https://raw.githubusercontent.com/Yummypets/YPImagePicker/master/Images/library.PNG" width="200px" ><img src="https://raw.githubusercontent.com/Yummypets/YPImagePicker/master/Images/photo.PNG" width="200px" ><img src="https://raw.githubusercontent.com/Yummypets/YPImagePicker/master/Images/video.PNG" width="200px" ><img src="https://raw.githubusercontent.com/Yummypets/YPImagePicker/master/Images/filters.PNG" width="200px" >
-
 
 Those features are available just with a few lines of code!
 
