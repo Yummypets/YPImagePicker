@@ -37,15 +37,22 @@ Those features are available just with a few lines of code!
 YPImagePicker was built from the great Fusuma library.
 
 Here are the improvements we added :
+
+- Albums
+- Filters
+- Videos in the library
+- Both Square and non-square images
+- Permission managenent
+- Pan between tabs which feels smoother
 - Improve Overall Code Quality
 - Simplify API
-- Added Filters View ala Instagram
 - Replaces icons with lighter Text
 - Preselect Front camera (e.g for avatars)
-- Scroll between tabs which feels smoother
-- Grab videos form the library view as well
 - Replaces Delegate based with callbacks based api
 - Uses Native Navigation bar over custom View (gotta be a good UIKit citizen)
+- Faster library load
+- Hidden status bar for a more immersive XP
+- Iphone X support
 
 ## Installation
 
