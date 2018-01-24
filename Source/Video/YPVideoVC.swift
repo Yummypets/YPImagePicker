@@ -43,6 +43,7 @@ public class YPVideoVC: UIViewController {
     
     override public func viewDidLoad() {
         super.viewDidLoad()
+        v.flashButton.isHidden = true
         setupButtons()
         v.flashButton.addTarget(self, action: #selector(flashButtonTapped), for: .touchUpInside)
         v.timeElapsedLabel.isHidden = false
@@ -56,7 +57,7 @@ public class YPVideoVC: UIViewController {
             setupPreview()
             isPreviewSetup = true
         }
-        refreshFlashButton()
+        refreshTorchButton()
     }
     
     func setupPreview() {
@@ -211,7 +212,7 @@ public class YPVideoVC: UIViewController {
             }
             self.session.commitConfiguration()
             DispatchQueue.main.async {
-                self.refreshFlashButton()
+                self.refreshTorchButton()
             }
         }
     }
@@ -219,7 +220,7 @@ public class YPVideoVC: UIViewController {
     @objc
     func flashButtonTapped() {
         device?.tryToggleTorch()
-        refreshFlashButton()
+        refreshTorchButton()
     }
     
     func flashImage(for torchMode: AVCaptureDevice.TorchMode) -> UIImage {
@@ -292,10 +293,10 @@ extension YPVideoVC {
         animateFocusView(focusView)
     }
     
-    func refreshFlashButton() {
+    func refreshTorchButton() {
         if let device = device {
             v.flashButton.setImage(flashImage(for: device.torchMode), for: .normal)
-            v.flashButton.isHidden = !device.hasFlash
+            v.flashButton.isHidden = !device.hasTorch
         }
     }
 }
