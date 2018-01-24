@@ -174,9 +174,9 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 #if __has_feature(modules)
 @import AVFoundation;
 @import UIKit;
+@import CoreGraphics;
 @import Photos;
 @import Foundation;
-@import CoreGraphics;
 #endif
 
 #pragma clang diagnostic ignored "-Wproperty-attribute-mismatch"
@@ -194,17 +194,56 @@ SWIFT_MODULE_NAMESPACE_PUSH("YPImagePicker")
 
 
 
+
+
+
+
+
+
+@class UIScrollView;
+@class NSBundle;
 @class NSCoder;
+
+SWIFT_CLASS("_TtC13YPImagePicker13YPBottomPager")
+@interface YPBottomPager : UIViewController <UIScrollViewDelegate>
+- (void)loadView;
+- (void)scrollViewDidScroll:(UIScrollView * _Nonnull)scrollView;
+- (void)scrollViewWillEndDragging:(UIScrollView * _Nonnull)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(CGPoint * _Nonnull)targetContentOffset;
+- (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil OBJC_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
+@end
+
+
+SWIFT_CLASS("_TtC13YPImagePicker10YPCameraVC")
+@interface YPCameraVC : UIViewController <UIGestureRecognizerDelegate>
+- (void)loadView;
+- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
+- (void)viewDidLoad;
+- (void)viewDidAppear:(BOOL)animated;
+- (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil SWIFT_UNAVAILABLE;
+@end
+
+
+
+
+SWIFT_CLASS("_TtC13YPImagePicker13YPImagePicker")
+@interface YPImagePicker : UINavigationController
+/// Get a YPImagePicker instance with the default configuration.
+- (nonnull instancetype)init;
+- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
+- (void)viewDidLoad;
+- (nonnull instancetype)initWithNavigationBarClass:(Class _Nullable)navigationBarClass toolbarClass:(Class _Nullable)toolbarClass SWIFT_UNAVAILABLE;
+- (nonnull instancetype)initWithRootViewController:(UIViewController * _Nonnull)rootViewController SWIFT_UNAVAILABLE;
+- (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil SWIFT_UNAVAILABLE;
+@end
+
 @class UIGestureRecognizer;
-@class UICollectionView;
 @class UICollectionViewCell;
 @class UICollectionViewLayout;
-@class UIScrollView;
 @class PHChange;
-@class NSBundle;
 
-SWIFT_CLASS("_TtC13YPImagePicker9FSAlbumVC")
-@interface FSAlbumVC : UIViewController <PHPhotoLibraryChangeObserver, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate>
+SWIFT_CLASS("_TtC13YPImagePicker11YPLibraryVC")
+@interface YPLibraryVC : UIViewController <PHPhotoLibraryChangeObserver, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate>
 - (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
 - (void)loadView;
 - (void)viewDidLoad;
@@ -223,61 +262,16 @@ SWIFT_CLASS("_TtC13YPImagePicker9FSAlbumVC")
 @end
 
 
-SWIFT_PROTOCOL("_TtP13YPImagePicker19FSAlbumViewDelegate_")
-@protocol FSAlbumViewDelegate
-- (void)albumViewCameraRollUnauthorized;
-- (void)albumViewStartedLoadingImage;
-- (void)albumViewFinishedLoadingImage;
+SWIFT_PROTOCOL("_TtP13YPImagePicker21YPLibraryViewDelegate_")
+@protocol YPLibraryViewDelegate
+- (void)libraryViewCameraRollUnauthorized;
+- (void)libraryViewStartedLoadingImage;
+- (void)libraryViewFinishedLoadingImage;
 @end
 
 
-SWIFT_CLASS("_TtC13YPImagePicker13FSBottomPager")
-@interface FSBottomPager : UIViewController <UIScrollViewDelegate>
-- (void)loadView;
-- (void)scrollViewDidScroll:(UIScrollView * _Nonnull)scrollView;
-- (void)scrollViewWillEndDragging:(UIScrollView * _Nonnull)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(CGPoint * _Nonnull)targetContentOffset;
-- (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil OBJC_DESIGNATED_INITIALIZER;
-- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
-@end
-
-
-SWIFT_CLASS("_TtC13YPImagePicker10FSCameraVC")
-@interface FSCameraVC : UIViewController <UIGestureRecognizerDelegate>
-- (void)loadView;
-- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
-- (void)viewDidLoad;
-- (void)viewDidAppear:(BOOL)animated;
-- (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil SWIFT_UNAVAILABLE;
-@end
-
-
-
-
-SWIFT_CLASS("_TtC13YPImagePicker9FSVideoVC")
-@interface FSVideoVC : UIViewController
-- (void)loadView;
-- (nonnull instancetype)init SWIFT_UNAVAILABLE;
-- (void)viewDidLoad;
-- (void)viewDidAppear:(BOOL)animated;
-- (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil OBJC_DESIGNATED_INITIALIZER;
-- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
-@end
-
-
-
-
-
-@class AVCaptureFileOutput;
-@class AVCaptureConnection;
-
-@interface FSVideoVC (SWIFT_EXTENSION(YPImagePicker)) <AVCaptureFileOutputRecordingDelegate>
-- (void)captureOutput:(AVCaptureFileOutput * _Nonnull)captureOutput didStartRecordingToOutputFileAtURL:(NSURL * _Nonnull)fileURL fromConnections:(NSArray<AVCaptureConnection *> * _Nonnull)connections;
-- (void)captureOutput:(AVCaptureFileOutput * _Nonnull)captureOutput didFinishRecordingToOutputFileAtURL:(NSURL * _Nonnull)outputFileURL fromConnections:(NSArray<AVCaptureConnection *> * _Nonnull)connections error:(NSError * _Nullable)error;
-@end
-
-
-SWIFT_CLASS("_TtC13YPImagePicker8PickerVC")
-@interface PickerVC : FSBottomPager
+SWIFT_CLASS("_TtC13YPImagePicker10YPPickerVC")
+@interface YPPickerVC : YPBottomPager
 - (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
 @property (nonatomic, readonly) BOOL prefersStatusBarHidden;
 - (void)viewDidLoad;
@@ -288,28 +282,32 @@ SWIFT_CLASS("_TtC13YPImagePicker8PickerVC")
 @end
 
 
-@interface PickerVC (SWIFT_EXTENSION(YPImagePicker)) <FSAlbumViewDelegate>
-- (void)albumViewStartedLoadingImage;
-- (void)albumViewFinishedLoadingImage;
-- (void)albumViewCameraRollUnauthorized;
+@interface YPPickerVC (SWIFT_EXTENSION(YPImagePicker)) <YPLibraryViewDelegate>
+- (void)libraryViewStartedLoadingImage;
+- (void)libraryViewFinishedLoadingImage;
+- (void)libraryViewCameraRollUnauthorized;
+@end
+
+
+SWIFT_CLASS("_TtC13YPImagePicker9YPVideoVC")
+@interface YPVideoVC : UIViewController
+- (void)loadView;
+- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
+- (void)viewDidLoad;
+- (void)viewDidAppear:(BOOL)animated;
+- (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil SWIFT_UNAVAILABLE;
 @end
 
 
 
 
 
+@class AVCaptureFileOutput;
+@class AVCaptureConnection;
 
-
-
-SWIFT_CLASS("_TtC13YPImagePicker13YPImagePicker")
-@interface YPImagePicker : UINavigationController
-/// Get a YPImagePicker instance with the default configuration.
-- (nonnull instancetype)init;
-- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
-- (void)viewDidLoad;
-- (nonnull instancetype)initWithNavigationBarClass:(Class _Nullable)navigationBarClass toolbarClass:(Class _Nullable)toolbarClass SWIFT_UNAVAILABLE;
-- (nonnull instancetype)initWithRootViewController:(UIViewController * _Nonnull)rootViewController SWIFT_UNAVAILABLE;
-- (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil SWIFT_UNAVAILABLE;
+@interface YPVideoVC (SWIFT_EXTENSION(YPImagePicker)) <AVCaptureFileOutputRecordingDelegate>
+- (void)captureOutput:(AVCaptureFileOutput * _Nonnull)captureOutput didStartRecordingToOutputFileAtURL:(NSURL * _Nonnull)fileURL fromConnections:(NSArray<AVCaptureConnection *> * _Nonnull)connections;
+- (void)captureOutput:(AVCaptureFileOutput * _Nonnull)captureOutput didFinishRecordingToOutputFileAtURL:(NSURL * _Nonnull)outputFileURL fromConnections:(NSArray<AVCaptureConnection *> * _Nonnull)connections error:(NSError * _Nullable)error;
 @end
 
 SWIFT_MODULE_NAMESPACE_POP

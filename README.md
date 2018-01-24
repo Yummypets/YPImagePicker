@@ -52,7 +52,9 @@ Here are the improvements we added :
 - Uses Native Navigation bar over custom View (gotta be a good UIKit citizen)
 - Faster library load
 - Hidden status bar for a more immersive XP
-- Iphone X support
+- Flash Auto mode
+- Video Torch Mode
+- iPhone X support
 
 ## Installation
 
