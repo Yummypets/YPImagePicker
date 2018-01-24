@@ -665,9 +665,16 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
             let asset = self.phAsset!
             switch asset.mediaType {
             case .video:
-                if asset.duration > 60 {
+                if asset.duration > self.configuration.videoFromLibraryTimeLimit {
+                    
+                    let msg = String(format: NSLocalizedString("YPImagePickerVideoTooLongDetail",
+                                                tableName: nil,
+                                                bundle: Bundle(for: PickerVC.self),
+                                                value: "",
+                                                comment: ""), "\(self.configuration.videoFromLibraryTimeLimit)")
+                    
                     let alert = UIAlertController(title: fsLocalized("YPImagePickerVideoTooLongTitle"),
-                                                  message: fsLocalized("YPImagePickerVideoTooLongDetail"),
+                                                  message: msg,
                                                   preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
                     self.present(alert, animated: true, completion: nil)

@@ -27,12 +27,18 @@ public class FSVideoVC: UIViewController {
     
     override public func loadView() { view = v }
     
-    convenience init() {
-        self.init(nibName: nil, bundle: nil)
+    private let configuration: YPImagePickerConfiguration!
+    public required init(configuration: YPImagePickerConfiguration) {
+        self.configuration = configuration
+        super.init(nibName: nil, bundle: nil)
         title = fsLocalized("YPImagePickerVideo")
         sessionQueue.async { [unowned self] in
             self.setupCaptureSession()
         }
+    }
+    
+    public required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override public func viewDidLoad() {
@@ -95,9 +101,9 @@ public class FSVideoVC: UIViewController {
                 }
             }
             
-            let totalSeconds = 30.0 //Total Seconds of capture time
-            let timeScale: Int32 = 30 //FPS
-            let maxDuration = CMTimeMakeWithSeconds(totalSeconds, timeScale)
+            let timeScale: Int32 = 30 // FPS
+            let maxDuration =
+            CMTimeMakeWithSeconds(configuration.videoRecordingTimeLimit, timeScale)
             videoOutput.maxRecordedDuration = maxDuration
             videoOutput.minFreeDiskSpaceLimit = 1024 * 1024
             if session.canAddOutput(videoOutput) {
@@ -243,21 +249,13 @@ extension FSVideoVC: AVCaptureFileOutputRecordingDelegate {
     func tick() {
         let timeElapsed = Date().timeIntervalSince(dateVideoStarted)
         v.timeElapsedLabel.text = formattedStrigFrom(timeElapsed)
-        let p: Float = Float(timeElapsed) / Float(30)
+        let p: Float = Float(timeElapsed) / Float(configuration.videoRecordingTimeLimit)
         DispatchQueue.main.async {
             self.v.progressBar.progress = p
             UIView.animate(withDuration: 1, animations: {
                 self.v.layoutIfNeeded()
             })
         }
-    }
-    
-    func foo(_ timeInterval: TimeInterval) -> String {
-        let interval = Int(timeInterval)
-        let seconds = interval % 60
-        let r = timeInterval-Double(interval)
-        let miliseconds: Int = Int(r*100)
-        return String(format: "%02d:%02d", seconds, miliseconds)
     }
     
     public func fileOutput(_ captureOutput: AVCaptureFileOutput,

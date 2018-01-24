@@ -47,6 +47,10 @@ class ViewController: UIViewController {
         config.videoCompression = AVAssetExportPresetHighestQuality
         config.albumName = "MyGreatAppName"
         config.startOnScreen = .library
+        
+//        config.videoRecordingTimeLimit = 10
+//        config.videoFromLibraryTimeLimit = 10
+        
         // Set it the default conf for all Pickers
         //      YPImagePicker.setDefaultConfiguration(config)
         // And then use the default configuration like so:

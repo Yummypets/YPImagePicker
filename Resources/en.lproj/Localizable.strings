@@ -12,7 +12,7 @@
 "YPImagePickerNext" = "Next";
 "YPImagePickerFilter" = "Filter";
 "YPImagePickerVideoTooLongTitle" = "Video duration";
-"YPImagePickerVideoTooLongDetail" = "Pick a video less than 60 seconds long.";
+"YPImagePickerVideoTooLongDetail" = "Pick a video less than %@ seconds long.";
 "YPImagePickerPermissionDeniedPopupTitle" = "Permission denied";
 "YPImagePickerPermissionDeniedPopupMessage" = "Please allow access";
 "YPImagePickerPermissionDeniedPopupCancel" = "Cancel";
