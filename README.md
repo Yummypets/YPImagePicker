@@ -109,6 +109,8 @@ config.shouldSaveNewPicturesToAlbum = true
 config.videoCompression = AVAssetExportPresetHighestQuality
 config.albumName = "MyGreatAppName"
 config.startOnScreen = .library
+config.videoRecordingTimeLimit = 10
+config.videoFromLibraryTimeLimit = 20
 
 // Build a picker with your configuration
 let picker = YPImagePicker(configuration: config)

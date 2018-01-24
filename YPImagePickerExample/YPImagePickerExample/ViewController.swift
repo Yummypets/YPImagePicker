@@ -47,7 +47,6 @@ class ViewController: UIViewController {
         config.videoCompression = AVAssetExportPresetHighestQuality
         config.albumName = "MyGreatAppName"
         config.startOnScreen = .library
-        
 //        config.videoRecordingTimeLimit = 10
 //        config.videoFromLibraryTimeLimit = 10
         
