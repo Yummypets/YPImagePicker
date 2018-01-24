@@ -11,6 +11,7 @@ import Stevia
 
 var flashOffImage: UIImage?
 var flashOnImage: UIImage?
+var flashAutoImage: UIImage?
 var videoStartImage: UIImage?
 var videoStopImage: UIImage?
 
@@ -78,6 +79,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
 
         flashOnImage = imageFromBundle("yp_iconFlash_on")
         flashOffImage = imageFromBundle("yp_iconFlash_off")
+        flashAutoImage = imageFromBundle("yp_iconFlash_auto")
         
         albumVC.delegate = self
         

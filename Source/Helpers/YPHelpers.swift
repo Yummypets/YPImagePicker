@@ -34,10 +34,13 @@ extension AVCaptureDevice {
         guard hasFlash else { return }
         do {
             try lockForConfiguration()
-            if flashMode == .off {
+            switch flashMode {
+            case .auto:
                 flashMode = .on
-            } else if flashMode == .on {
+            case .on:
                 flashMode = .off
+            case .off:
+                flashMode = .auto
             }
             unlockForConfiguration()
         } catch _ { }
@@ -47,10 +50,13 @@ extension AVCaptureDevice {
         guard hasFlash else { return }
         do {
             try lockForConfiguration()
-            if torchMode == .off {
+            switch torchMode {
+            case .auto:
                 torchMode = .on
-            } else if torchMode == .on {
+            case .on:
                 torchMode = .off
+            case .off:
+                torchMode = .auto
             }
             unlockForConfiguration()
         } catch _ { }

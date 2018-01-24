@@ -263,7 +263,7 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate {
         switch forAVCaptureFlashMode {
         case .on: return flashOnImage!
         case .off: return flashOffImage!
-        default: return flashOffImage!
+        case .auto: return flashAutoImage!
         }
     }
 }

@@ -226,7 +226,7 @@ public class YPVideoVC: UIViewController {
         switch torchMode {
         case .on: return flashOnImage!
         case .off: return flashOffImage!
-        default: return flashOffImage!
+        case .auto: return flashAutoImage!
         }
     }
 }
