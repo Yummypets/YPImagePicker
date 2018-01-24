@@ -1,5 +1,5 @@
 //
-//  FZImageCropView.swift
+//  YPImageCropView.swift
 //  YPImgePicker
 //
 //  Created by Sacha Durand Saint Omer on 2015/11/16.
@@ -8,13 +8,13 @@
 
 import UIKit
 
-protocol FSImageCropViewDelegate: class {
-    func fsImageCropViewDidLayoutSubviews()
-    func fsImageCropViewscrollViewDidZoom()
-    func fsImageCropViewscrollViewDidEndZooming()
+protocol YPImageCropViewDelegate: class {
+    func ypImageCropViewDidLayoutSubviews()
+    func ypImageCropViewscrollViewDidZoom()
+    func ypImageCropViewscrollViewDidEndZooming()
 }
 
-final class FSImageCropView: UIScrollView, UIScrollViewDelegate {
+final class YPImageCropView: UIScrollView, UIScrollViewDelegate {
     
     var onlySquareImages = false {
         didSet {
@@ -29,7 +29,7 @@ final class FSImageCropView: UIScrollView, UIScrollViewDelegate {
         }
     }
     var squaredZoomScale: CGFloat = 1
-    weak var myDelegate: FSImageCropViewDelegate?
+    weak var myDelegate: YPImageCropViewDelegate?
     var imageView = UIImageView()
     var imageSize: CGSize?
     var image: UIImage! = nil {
@@ -123,7 +123,7 @@ final class FSImageCropView: UIScrollView, UIScrollViewDelegate {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        myDelegate?.fsImageCropViewDidLayoutSubviews()
+        myDelegate?.ypImageCropViewDidLayoutSubviews()
     }
     
     // MARK: UIScrollViewDelegate Protocol
@@ -132,7 +132,7 @@ final class FSImageCropView: UIScrollView, UIScrollViewDelegate {
     }
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
-        myDelegate?.fsImageCropViewscrollViewDidZoom()
+        myDelegate?.ypImageCropViewscrollViewDidZoom()
         let boundsSize = scrollView.bounds.size
         var contentsFrame = imageView.frame
         if contentsFrame.size.width < boundsSize.width {
@@ -150,7 +150,7 @@ final class FSImageCropView: UIScrollView, UIScrollViewDelegate {
     }
     
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
-        myDelegate?.fsImageCropViewscrollViewDidEndZooming()
+        myDelegate?.ypImageCropViewscrollViewDidEndZooming()
         contentSize = CGSize(width: imageView.frame.width + 1, height: imageView.frame.height + 1)
     }
 }

@@ -1,5 +1,5 @@
 //
-//  FSBottomPager.swift
+//  YPBottomPager.swift
 //  YPImagePicker
 //
 //  Created by Sacha Durand Saint Omer on 27/10/16.
@@ -9,140 +9,17 @@
 import UIKit
 import Stevia
 
-final class PagerMenu: UIView {
-    
-    var didSetConstraints = false
-    var menuItems = [MenuItem]()
-    
-    convenience init() {
-        self.init(frame: .zero)
-        backgroundColor = UIColor(r: 247, g: 247, b: 247)
-    }
-    
-    var separators = [UIView]()
-    
-    func setUpMenuItemsConstraints() {
-        let menuItemWidth: CGFloat = UIScreen.main.bounds.width / CGFloat(menuItems.count)
-        var previousMenuItem: MenuItem?
-        for m in menuItems {
-            
-            sv(
-                m
-            )
-
-            m.fillVertically().width(menuItemWidth)
-            if let pm = previousMenuItem {
-                pm-0-m
-            } else {
-                |m
-            }
-                        
-            previousMenuItem = m
-        }
-    }
-    
-    override func updateConstraints() {
-        super.updateConstraints()
-        if !didSetConstraints {
-            setUpMenuItemsConstraints()
-        }
-        didSetConstraints = true
-    }
-    
-    func refreshMenuItems() {
-        didSetConstraints = false
-        updateConstraints()
-    }
-}
-
-final class MenuItem: UIView {
-    
-    var text = UILabel()
-    var button = UIButton()
-    
-    convenience init() {
-        self.init(frame: .zero)
-        backgroundColor = .clear
-        
-        sv(
-            text,
-            button
-        )
-        
-        text.centerInContainer()
-        button.fillContainer()
-        
-        text.style { l in
-            l.textAlignment = .center
-            l.font = UIFont.systemFont(ofSize: 17, weight: UIFont.Weight.medium)
-            l.textColor = self.unselectedColor()
-        }
-    }
-    
-    func selectedColor() -> UIColor {
-        return UIColor(r: 38, g: 38, b: 38)
-    }
-    
-    func unselectedColor() -> UIColor {
-        return UIColor(r: 153, g: 153, b: 153)
-    }
-    
-    func select() {
-        text.textColor = selectedColor()
-    }
-    
-    func unselect() {
-        text.textColor = unselectedColor()
-    }
-}
-
-final class PagerView: UIView {
-    
-    var header = PagerMenu()
-    var scrollView = UIScrollView()
-    
-    convenience init() {
-        self.init(frame: .zero)
-        backgroundColor = UIColor(red: 239/255, green: 238/255, blue: 237/255, alpha: 1)
-        
-        sv(
-            scrollView,
-            header
-        )
-        
-        layout(
-            0,
-            |scrollView|,
-            0,
-            |header| ~ 50
-        )
-        
-        if #available(iOS 11.0, *) {
-            header.Bottom == safeAreaLayoutGuide.Bottom
-        } else {
-            header.bottom(0)
-        }
-
-        clipsToBounds = false
-        scrollView.clipsToBounds = false
-        scrollView.isPagingEnabled = true
-        scrollView.showsHorizontalScrollIndicator = false
-        scrollView.scrollsToTop = false
-        scrollView.bounces = false
-    }
-}
-
-protocol PagerDelegate: class {
+protocol YPBottomPagerDelegate: class {
     func pagerScrollViewDidScroll(_ scrollView: UIScrollView)
     func pagerDidSelectController(_ vc: UIViewController)
 }
 
-public class FSBottomPager: UIViewController, UIScrollViewDelegate {
+public class YPBottomPager: UIViewController, UIScrollViewDelegate {
     
-    weak var delegate: PagerDelegate?
+    weak var delegate: YPBottomPagerDelegate?
     var controllers = [UIViewController]() { didSet { reload() } }
     
-    var v = PagerView()
+    var v = YPBottomPagerView()
     
     var currentPage = 0
     
@@ -189,7 +66,7 @@ public class FSBottomPager: UIViewController, UIScrollViewDelegate {
         
         // Build headers
         for (index, c) in controllers.enumerated() {
-            let menuItem = MenuItem()
+            let menuItem = YPMenuItem()
             menuItem.text.text = c.title?.capitalized
             menuItem.button.tag = index
             menuItem.button.addTarget(self,

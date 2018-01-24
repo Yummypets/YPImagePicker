@@ -24,7 +24,7 @@ public struct YPImagePickerConfiguration {
     
     /// Ex: cappedTo:1024 will make sure images from the library will be
     /// resized to fit in a 1024x1024 box. Defaults to original image size.
-    public var libraryTargetImageSize = LibraryImageSize.original
+    public var libraryTargetImageSize = YPLibraryImageSize.original
     
     /// Enables videos within the library and video taking. Defaults to false
     public var showsVideo = false
@@ -57,15 +57,4 @@ public struct YPImagePickerConfiguration {
     /// Defines the time limit for videos from the library.
     /// Defaults to 60 seconds.
     public var videoFromLibraryTimeLimit: TimeInterval = 60.0
-}
-
-public enum LibraryImageSize {
-    case original
-    case cappedTo(size: CGFloat)
-}
-
-public enum YPPickerScreen {
-    case library
-    case photo
-    case video
 }

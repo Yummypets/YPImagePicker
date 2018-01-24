@@ -1,5 +1,5 @@
 //
-//  ImageCropViewContainer.swift
+//  YPImageCropViewContainer.swift
 //  YPImgePicker
 //
 //  Created by Sacha Durand Saint Omer on 15/11/2016.
@@ -11,11 +11,11 @@ import UIKit
 import Stevia
 import AVFoundation
 
-class ImageCropViewContainer: UIView, FSImageCropViewDelegate, UIGestureRecognizerDelegate {
+class YPImageCropViewContainer: UIView, YPImageCropViewDelegate, UIGestureRecognizerDelegate {
     
     let playerLayer = AVPlayerLayer()
     var isShown = true
-    let grid = FSGridView()
+    let grid = YPGridView()
     let curtain = UIView()
     let spinnerView = UIView()
     let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
@@ -26,7 +26,7 @@ class ImageCropViewContainer: UIView, FSImageCropViewDelegate, UIGestureRecogniz
             self.refresh()
         }
     }
-    var cropView: FSImageCropView?
+    var cropView: YPImageCropView?
     var shouldCropToSquare = false
     var onlySquareImages = false
     
@@ -67,7 +67,7 @@ class ImageCropViewContainer: UIView, FSImageCropViewDelegate, UIGestureRecogniz
         clipsToBounds = true
         
         for sv in subviews {
-            if let cv = sv as? FSImageCropView {
+            if let cv = sv as? YPImageCropView {
                 cropView = cv
                 cropView?.myDelegate = self
             }
@@ -146,13 +146,13 @@ class ImageCropViewContainer: UIView, FSImageCropViewDelegate, UIGestureRecogniz
         }
     }
     
-    func fsImageCropViewDidLayoutSubviews() {
+    func ypImageCropViewDidLayoutSubviews() {
         let newFrame = cropView!.imageView.convert(cropView!.imageView.bounds, to: self)
         grid.frame = frame.intersection(newFrame)
         grid.layoutIfNeeded()
     }
     
-    func fsImageCropViewscrollViewDidZoom() {
+    func ypImageCropViewscrollViewDidZoom() {
         if isShown && !isVideoMode {
             UIView.animate(withDuration: 0.1) {
                 self.grid.alpha = 1
@@ -160,7 +160,7 @@ class ImageCropViewContainer: UIView, FSImageCropViewDelegate, UIGestureRecogniz
         }
     }
     
-    func fsImageCropViewscrollViewDidEndZooming() {
+    func ypImageCropViewscrollViewDidEndZooming() {
         UIView.animate(withDuration: 0.3) {
             self.grid.alpha = 0
         }

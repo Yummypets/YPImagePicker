@@ -1,5 +1,5 @@
 //
-//  FSVideoVC.swift
+//  YPVideoVC.swift
 //  YPImgePicker
 //
 //  Created by Sacha Durand Saint Omer on 27/10/16.
@@ -9,10 +9,10 @@
 import UIKit
 import AVFoundation
 
-public class FSVideoVC: UIViewController {
+public class YPVideoVC: UIViewController {
     
     public var didCaptureVideo: ((URL) -> Void)?
-    private let sessionQueue = DispatchQueue(label: "FSVideoVCSerialQueue")
+    private let sessionQueue = DispatchQueue(label: "YPVideoVCSerialQueue")
     let session = AVCaptureSession()
     var device: AVCaptureDevice? {
         return videoInput?.device
@@ -22,7 +22,7 @@ public class FSVideoVC: UIViewController {
     let focusView = UIView(frame: CGRect(x: 0, y: 0, width: 90, height: 90))
     fileprivate var timer = Timer()
     fileprivate var dateVideoStarted = Date()
-    fileprivate var v = FSCameraView()
+    fileprivate var v = YPCameraView()
     var isPreviewSetup = false
     
     override public func loadView() { view = v }
@@ -31,7 +31,7 @@ public class FSVideoVC: UIViewController {
     public required init(configuration: YPImagePickerConfiguration) {
         self.configuration = configuration
         super.init(nibName: nil, bundle: nil)
-        title = fsLocalized("YPImagePickerVideo")
+        title = ypLocalized("YPImagePickerVideo")
         sessionQueue.async { [unowned self] in
             self.setupCaptureSession()
         }
@@ -232,7 +232,7 @@ public class FSVideoVC: UIViewController {
     }
 }
 
-extension FSVideoVC: AVCaptureFileOutputRecordingDelegate {
+extension YPVideoVC: AVCaptureFileOutputRecordingDelegate {
     
     public func fileOutput(_ captureOutput: AVCaptureFileOutput,
                            didStartRecordingTo fileURL: URL,
@@ -273,7 +273,7 @@ extension FSVideoVC: AVCaptureFileOutputRecordingDelegate {
     }
 }
 
-extension FSVideoVC {
+extension YPVideoVC {
     
     @objc
     func focusTapped(_ recognizer: UITapGestureRecognizer) {
@@ -302,7 +302,7 @@ extension FSVideoVC {
 
 // Permission handling
 
-extension FSVideoVC: PermissionCheckable {
+extension YPVideoVC: PermissionCheckable {
     
     func checkPermission() {
         checkPermissionToAccessVideo { _ in }

@@ -1,5 +1,5 @@
 //
-//  YPAlbumFolderSelectionVC.swift
+//  YPAlbumVC.swift
 //  YPImagePicker
 //
 //  Created by Sacha Durand Saint Omer on 20/07/2017.
@@ -10,18 +10,18 @@ import UIKit
 import Stevia
 import Photos
 
-class YPAlbumFolderSelectionVC: UIViewController {
+class YPAlbumVC: UIViewController {
     
     override var prefersStatusBarHidden: Bool {
         return true
     }
     
-    var didSelectAlbum: ((Album) -> Void)?
-    var albums = [Album]()
+    var didSelectAlbum: ((YPAlbum) -> Void)?
+    var albums = [YPAlbum]()
     var noVideos = false
-    let albumsManager = AlbumsManager.default
+    let albumsManager = YPAlbumsManager.default
     
-    let v = YPAlbumFolderSelectionView()
+    let v = YPAlbumView()
     override func loadView() { view = v }
     
     override func viewDidLoad() {
@@ -59,11 +59,11 @@ class YPAlbumFolderSelectionVC: UIViewController {
         v.tableView.rowHeight = UITableViewAutomaticDimension
         v.tableView.estimatedRowHeight = 80
         v.tableView.separatorStyle = .none
-        v.tableView.register(YPAlbumFolderCell.self, forCellReuseIdentifier: "AlbumCell")
+        v.tableView.register(YPAlbumCell.self, forCellReuseIdentifier: "AlbumCell")
     }
 }
 
-extension YPAlbumFolderSelectionVC: UITableViewDataSource {
+extension YPAlbumVC: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return albums.count
@@ -71,7 +71,7 @@ extension YPAlbumFolderSelectionVC: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let album = albums[indexPath.row]
-        if let cell = tableView.dequeueReusableCell(withIdentifier: "AlbumCell", for: indexPath) as? YPAlbumFolderCell {
+        if let cell = tableView.dequeueReusableCell(withIdentifier: "AlbumCell", for: indexPath) as? YPAlbumCell {
             cell.thumbnail.backgroundColor = .gray
             cell.thumbnail.image = album.thumbnail
             cell.title.text = album.title
@@ -82,7 +82,7 @@ extension YPAlbumFolderSelectionVC: UITableViewDataSource {
     }
 }
 
-extension YPAlbumFolderSelectionVC: UITableViewDelegate {
+extension YPAlbumVC: UITableViewDelegate {
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         didSelectAlbum?(albums[indexPath.row])

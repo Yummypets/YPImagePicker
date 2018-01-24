@@ -1,5 +1,5 @@
 //
-//  FSAlbumVC.swift
+//  YPLibraryVC.swift
 //  YPImagePicker
 //
 //  Created by Sacha Durand Saint Omer on 27/10/16.
@@ -10,27 +10,27 @@ import UIKit
 import Photos
 
 @objc
-public protocol FSAlbumViewDelegate: class {
-    func albumViewCameraRollUnauthorized()
-    func albumViewStartedLoadingImage()
-    func albumViewFinishedLoadingImage()
+public protocol YPLibraryViewDelegate: class {
+    func libraryViewCameraRollUnauthorized()
+    func libraryViewStartedLoadingImage()
+    func libraryViewFinishedLoadingImage()
 }
 
-public class FSAlbumVC: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate,
+public class YPLibraryVC: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate,
 PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDelegateFlowLayout, PermissionCheckable {
     
     private let configuration: YPImagePickerConfiguration!
     public required init(configuration: YPImagePickerConfiguration) {
         self.configuration = configuration
         super.init(nibName: nil, bundle: nil)
-        title = fsLocalized("YPImagePickerLibrary")
+        title = ypLocalized("YPImagePickerLibrary")
     }
     
     public required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    weak var delegate: FSAlbumViewDelegate?
+    weak var delegate: YPLibraryViewDelegate?
     
     private var fetchResult: PHFetchResult<PHAsset>!
     
@@ -74,13 +74,13 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
         }
     }
 
-    var v: FSAlbumView!
+    var v: YPLibraryView!
     
     public override func loadView() {
         let bundle = Bundle(for: self.classForCoder)
-        let xibView = UINib(nibName: "FSAlbumView",
+        let xibView = UINib(nibName: "YPLibraryView",
                             bundle: bundle).instantiate(withOwner: self,
-                                                        options: nil)[0] as? FSAlbumView
+                                                        options: nil)[0] as? YPLibraryView
         v = xibView
         view = v
     }
@@ -183,7 +183,7 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
         v.imageCropViewContainer.layer.shadowOpacity = 0.9
         v.imageCropViewContainer.layer.shadowOffset  = CGSize.zero
         
-        v.collectionView.register(FSAlbumViewCell.self, forCellWithReuseIdentifier: "FSAlbumViewCell")
+        v.collectionView.register(YPLibraryViewCell.self, forCellWithReuseIdentifier: "YPLibraryViewCell")
         
         refreshMediaRequest()
 
@@ -348,8 +348,8 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
     public func collectionView(_ collectionView: UICollectionView,
                                cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let asset = fetchResult[indexPath.item]
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FSAlbumViewCell",
-                                                         for: indexPath) as? FSAlbumViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "YPLibraryViewCell",
+                                                         for: indexPath) as? YPLibraryViewCell else {
             fatalError("unexpected cell in collection view")
         }
         cell.representedAssetIdentifier = asset.localIdentifier
@@ -669,11 +669,11 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
                     
                     let msg = String(format: NSLocalizedString("YPImagePickerVideoTooLongDetail",
                                                 tableName: nil,
-                                                bundle: Bundle(for: PickerVC.self),
+                                                bundle: Bundle(for: YPPickerVC.self),
                                                 value: "",
                                                 comment: ""), "\(self.configuration.videoFromLibraryTimeLimit)")
                     
-                    let alert = UIAlertController(title: fsLocalized("YPImagePickerVideoTooLongTitle"),
+                    let alert = UIAlertController(title: ypLocalized("YPImagePickerVideoTooLongTitle"),
                                                   message: msg,
                                                   preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
@@ -681,12 +681,12 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
                 } else {
                     let videosOptions = PHVideoRequestOptions()
                     videosOptions.isNetworkAccessAllowed = true
-                    self.delegate?.albumViewStartedLoadingImage()
+                    self.delegate?.libraryViewStartedLoadingImage()
                     self.imageManager?.requestAVAsset(forVideo: asset,
                                                       options: videosOptions) { v, _, _ in
                                                         if let urlAsset = v as? AVURLAsset {
                                                             DispatchQueue.main.async {
-                                                                self.delegate?.albumViewFinishedLoadingImage()
+                                                                self.delegate?.libraryViewFinishedLoadingImage()
                                                                 video(urlAsset.url)
                                                             }
                                                         }
@@ -715,14 +715,14 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
                     }
                 }
                 
-                self.delegate?.albumViewStartedLoadingImage()
+                self.delegate?.libraryViewStartedLoadingImage()
                 self.imageManager?
                     .requestImage(for: asset,
                                   targetSize: targetSize,
                                   contentMode: .aspectFit,
                                   options: options) { result, _ in
                                     DispatchQueue.main.async {
-                                        self.delegate?.albumViewFinishedLoadingImage()
+                                        self.delegate?.libraryViewFinishedLoadingImage()
                                         photo(result!)
                                     }
                 }

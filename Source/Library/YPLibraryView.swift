@@ -1,5 +1,5 @@
 //
-//  FSAlbumView.swift
+//  YPLibraryView.swift
 //  YPImgePicker
 //
 //  Created by Sacha Durand Saint Omer on 2015/11/14.
@@ -9,11 +9,11 @@
 import UIKit
 import Stevia
 
-final class FSAlbumView: UIView {
+final class YPLibraryView: UIView {
     
     @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var imageCropView: FSImageCropView!
-    @IBOutlet weak var imageCropViewContainer: ImageCropViewContainer!
+    @IBOutlet weak var imageCropView: YPImageCropView!
+    @IBOutlet weak var imageCropViewContainer: YPImageCropViewContainer!
     @IBOutlet weak var imageCropViewConstraintTop: NSLayoutConstraint!
     
     let line = UIView()

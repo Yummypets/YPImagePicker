@@ -1,5 +1,5 @@
 //
-//  YPAlbumFolderCell.swift
+//  YPAlbumCell.swift
 //  YPImagePicker
 //
 //  Created by Sacha Durand Saint Omer on 20/07/2017.
@@ -9,7 +9,7 @@
 import UIKit
 import Stevia
 
-class YPAlbumFolderCell: UITableViewCell {
+class YPAlbumCell: UITableViewCell {
     
     let thumbnail = UIImageView()
     let title = UILabel()

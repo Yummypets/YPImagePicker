@@ -1,5 +1,5 @@
 //
-//  FSGridView.swift
+//  YPGridView.swift
 //  YPImgePicker
 //
 //  Created by Sacha Durand Saint Omer on 15/11/2016.
@@ -8,7 +8,7 @@
 
 import Stevia
 
-class FSGridView: UIView {
+class YPGridView: UIView {
     
     let line1 = UIView()
     let line2 = UIView()

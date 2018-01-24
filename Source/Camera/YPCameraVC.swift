@@ -1,5 +1,5 @@
 //
-//  FSCameraVC.swift
+//  YPCameraVC.swift
 //  YPImgePicker
 //
 //  Created by Sacha Durand Saint Omer on 25/10/16.
@@ -10,10 +10,10 @@ import UIKit
 import AVFoundation
 import Photos
 
-public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
+public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate {
     
     public var didCapturePhoto: ((UIImage) -> Void)?
-    private let sessionQueue = DispatchQueue(label: "FSCameraVCSerialQueue")
+    private let sessionQueue = DispatchQueue(label: "YPCameraVCSerialQueue")
     let session = AVCaptureSession()
     var device: AVCaptureDevice? {
         return videoInput?.device
@@ -21,7 +21,7 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
     var videoInput: AVCaptureDeviceInput!
     let imageOutput = AVCaptureStillImageOutput()
     let focusView = UIView(frame: CGRect(x: 0, y: 0, width: 90, height: 90))
-    var v = FSCameraView()
+    var v = YPCameraView()
     var isPreviewSetup = false
     
     override public func loadView() { view = v }
@@ -30,7 +30,7 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
     public required init(configuration: YPImagePickerConfiguration) {
         self.configuration = configuration
         super.init(nibName: nil, bundle: nil)
-        title = fsLocalized("YPImagePickerPhoto")
+        title = ypLocalized("YPImagePickerPhoto")
     }
     
     public required init?(coder aDecoder: NSCoder) {
@@ -271,15 +271,15 @@ public class FSCameraVC: UIViewController, UIGestureRecognizerDelegate {
 class YPPermissionDeniedPopup {
     
     static func popup(cancelBlock: @escaping () -> Void) -> UIAlertController {
-        let alert = UIAlertController(title: fsLocalized("YPImagePickerPermissionDeniedPopupTitle"),
-                                      message: fsLocalized("YPImagePickerPermissionDeniedPopupMessage"),
+        let alert = UIAlertController(title: ypLocalized("YPImagePickerPermissionDeniedPopupTitle"),
+                                      message: ypLocalized("YPImagePickerPermissionDeniedPopupMessage"),
                                       preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: fsLocalized("YPImagePickerPermissionDeniedPopupCancel"),
+        alert.addAction(UIAlertAction(title: ypLocalized("YPImagePickerPermissionDeniedPopupCancel"),
                                       style: UIAlertActionStyle.cancel,
                                       handler: { _ in
                                         cancelBlock()
         }))
-        alert.addAction(UIAlertAction(title: fsLocalized("YPImagePickerPermissionDeniedPopupGrantPermission"),
+        alert.addAction(UIAlertAction(title: ypLocalized("YPImagePickerPermissionDeniedPopupGrantPermission"),
                                       style: .default,
                                       handler: { _ in
             if #available(iOS 10.0, *) {
@@ -292,7 +292,7 @@ class YPPermissionDeniedPopup {
     }
 }
 
-extension FSCameraVC: PermissionCheckable {
+extension YPCameraVC: PermissionCheckable {
     
     func checkPermission() {
         checkPermissionToAccessVideo { _ in }

@@ -1,5 +1,5 @@
 //
-//  FSAlbumViewCell.swift
+//  YPLibraryViewCell.swift
 //  YPImgePicker
 //
 //  Created by Sacha Durand Saint Omer on 2015/11/14.
@@ -9,7 +9,7 @@
 import UIKit
 import Stevia
 
-class FSAlbumViewCell: UICollectionViewCell {
+class YPLibraryViewCell: UICollectionViewCell {
     
     var representedAssetIdentifier: String!
     let imageView = UIImageView()

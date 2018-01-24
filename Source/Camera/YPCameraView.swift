@@ -1,5 +1,5 @@
 //
-//  FSCameraView.swift
+//  YPCameraView.swift
 //  YPImgePicker
 //
 //  Created by Sacha Durand Saint Omer on 2015/11/14.
@@ -9,7 +9,7 @@
 import UIKit
 import Stevia
 
-class FSCameraView: UIView, UIGestureRecognizerDelegate {
+class YPCameraView: UIView, UIGestureRecognizerDelegate {
     
     let previewViewContainer = UIView()
     let buttonsContainer = UIView()

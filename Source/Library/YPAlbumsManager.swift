@@ -1,5 +1,5 @@
 //
-//  PHAssetCollection+Album.swift
+//  YPAlbumsManager.swift
 //  YPImagePicker
 //
 //  Created by Sacha Durand Saint Omer on 20/07/2017.
@@ -9,24 +9,24 @@
 import Foundation
 import Photos
 
-class AlbumsManager {
+class YPAlbumsManager {
     
-    private static let instance = AlbumsManager()
+    private static let instance = YPAlbumsManager()
     
-    class var `default`: AlbumsManager {
+    class var `default`: YPAlbumsManager {
         return instance
     }
     
-    private var cachedAlbums: [Album]?
+    private var cachedAlbums: [YPAlbum]?
     
     var noVideos = false
     
-    func fetchAlbums() -> [Album] {
+    func fetchAlbums() -> [YPAlbum] {
         if let cachedAlbums = cachedAlbums {
             return cachedAlbums
         }
         
-        var albums = [Album]()
+        var albums = [YPAlbum]()
         let options = PHFetchOptions()
                 
         let smartAlbumsResult = PHAssetCollection
@@ -35,7 +35,7 @@ class AlbumsManager {
             .fetchAssetCollections(with: .album, subtype: .any, options: options) //(synced only?)
         for result in [smartAlbumsResult, albumsResult] {
             result.enumerateObjects({ assetCollection, _, _ in
-                var album = Album()
+                var album = YPAlbum()
                 album.title = assetCollection.localizedTitle ?? ""
                 album.numberOfPhotos = self.mediaCountFor(collection: assetCollection)
                 if album.numberOfPhotos > 0 {

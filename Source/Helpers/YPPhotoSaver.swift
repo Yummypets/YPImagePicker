@@ -1,5 +1,5 @@
 //
-//  PhotoSaver.swift
+//  YPPhotoSaver.swift
 //  YPImgePicker
 //
 //  Created by Sacha Durand Saint Omer on 10/11/16.
@@ -9,7 +9,7 @@
 import Foundation
 import Photos
 
-public class PhotoSaver {
+public class YPPhotoSaver {
     
     class func trySaveImage(_ image: UIImage, inAlbumNamed: String) {
         if PHPhotoLibrary.authorizationStatus() == .authorized {

@@ -1,5 +1,5 @@
 //
-//  YPAlbumFolderSelectionView.swift
+//  YPAlbumView.swift
 //  YPImagePicker
 //
 //  Created by Sacha Durand Saint Omer on 20/07/2017.
@@ -9,7 +9,7 @@
 import UIKit
 import Stevia
 
-class YPAlbumFolderSelectionView: UIView {
+class YPAlbumView: UIView {
     
     let tableView = UITableView()
     let spinner = UIActivityIndicatorView(activityIndicatorStyle: .gray)

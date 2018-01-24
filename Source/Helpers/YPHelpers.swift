@@ -10,16 +10,16 @@ import Foundation
 import AVFoundation
 import UIKit
 
-func fsLocalized(_ str: String) -> String {
+func ypLocalized(_ str: String) -> String {
     return NSLocalizedString(str,
                              tableName: nil,
-                             bundle: Bundle(for: PickerVC.self),
+                             bundle: Bundle(for: YPPickerVC.self),
                              value: "",
                              comment: "")
 }
 
 func imageFromBundle(_ named: String) -> UIImage {
-    return UIImage(named: named, in: Bundle(for: PickerVC.self), compatibleWith: nil) ?? UIImage()
+    return UIImage(named: named, in: Bundle(for: YPPickerVC.self), compatibleWith: nil) ?? UIImage()
 }
 
 func deviceForPosition(_ p: AVCaptureDevice.Position) -> AVCaptureDevice? {
@@ -56,7 +56,7 @@ extension AVCaptureDevice {
 func configureFocusView(_ v: UIView) {
     v.alpha = 0.0
     v.backgroundColor = UIColor.clear
-    v.layer.borderColor = ypImagePickerBaseTintColor.cgColor
+    v.layer.borderColor = UIColor(r: 204, g: 204, b: 204).cgColor
     v.layer.borderWidth = 1.0
     v.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
 }

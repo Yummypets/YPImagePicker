@@ -1,6 +1,6 @@
 //
-//  YPImgePickerVC.swift
-//  YPImgePicker
+//  YYPPickerVC.swift
+//  YPPickerVC
 //
 //  Created by Sacha Durand Saint Omer on 25/10/16.
 //  Copyright © 2016 Yummypets. All rights reserved.
@@ -24,14 +24,14 @@ extension UIColor {
     }
 }
 
-public class PickerVC: FSBottomPager, PagerDelegate {
+public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     
-    private let albumVC: FSAlbumVC
+    private let albumVC: YPLibraryVC
     
     private let configuration: YPImagePickerConfiguration!
     public required init(configuration: YPImagePickerConfiguration) {
         self.configuration = configuration
-        self.albumVC = FSAlbumVC(configuration: configuration)
+        self.albumVC = YPLibraryVC(configuration: configuration)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -56,12 +56,12 @@ public class PickerVC: FSBottomPager, PagerDelegate {
         case video
     }
 
-    lazy var cameraVC: FSCameraVC = {
-        return FSCameraVC(configuration: self.configuration)
+    lazy var cameraVC: YPCameraVC = {
+        return YPCameraVC(configuration: self.configuration)
     }()
     
-    lazy var videoVC: FSVideoVC = {
-        return FSVideoVC(configuration: self.configuration)
+    lazy var videoVC: YPVideoVC = {
+        return YPVideoVC(configuration: self.configuration)
     }()
     
     var mode = Mode.camera
@@ -192,7 +192,7 @@ public class PickerVC: FSBottomPager, PagerDelegate {
     @objc
     func navBarTapped() {
         
-        let vc = YPAlbumFolderSelectionVC()
+        let vc = YPAlbumVC()
         vc.noVideos = !self.configuration.showsVideo
         let navVC = UINavigationController(rootViewController: vc)
 
@@ -244,7 +244,7 @@ public class PickerVC: FSBottomPager, PagerDelegate {
         switch mode {
         case .library:
             setTitleViewWithTitle(aTitle: albumVC.title ?? "")
-            navigationItem.rightBarButtonItem = UIBarButtonItem(title: fsLocalized("YPImagePickerNext"),
+            navigationItem.rightBarButtonItem = UIBarButtonItem(title: ypLocalized("YPImagePickerNext"),
                                                                 style: .done,
                                                                 target: self,
                                                                 action: #selector(done))
@@ -286,9 +286,9 @@ public class PickerVC: FSBottomPager, PagerDelegate {
     }
 }
 
-extension PickerVC: FSAlbumViewDelegate {
+extension YPPickerVC: YPLibraryViewDelegate {
     
-    public func albumViewStartedLoadingImage() {
+    public func libraryViewStartedLoadingImage() {
         DispatchQueue.main.async {
             let spinner = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
             self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: spinner)
@@ -296,14 +296,14 @@ extension PickerVC: FSAlbumViewDelegate {
         }
     }
     
-    public func albumViewFinishedLoadingImage() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: fsLocalized("YPImagePickerNext"),
+    public func libraryViewFinishedLoadingImage() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: ypLocalized("YPImagePickerNext"),
                                                             style: .done,
                                                             target: self,
                                                             action: #selector(done))
     }
     
-    public func albumViewCameraRollUnauthorized() {
+    public func libraryViewCameraRollUnauthorized() {
         
     }
 }

@@ -1,5 +1,5 @@
 //
-//  Album.swift
+//  YPAlbum.swift
 //  YPImagePicker
 //
 //  Created by Sacha Durand Saint Omer on 20/07/2017.
@@ -9,7 +9,7 @@
 import UIKit
 import Photos
 
-struct Album {
+struct YPAlbum {
     var thumbnail: UIImage?
     var title: String = ""
     var numberOfPhotos: Int = 0

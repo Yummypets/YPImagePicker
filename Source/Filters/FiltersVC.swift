@@ -24,7 +24,7 @@ class FiltersVC: UIViewController {
     
     required init(image: UIImage) {
         super.init(nibName: nil, bundle: nil)
-        title = fsLocalized("YPImagePickerFilter")
+        title = ypLocalized("YPImagePickerFilter")
         self.originalImage = image
         
         filterPreviews = [
