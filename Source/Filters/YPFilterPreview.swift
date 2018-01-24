@@ -1,5 +1,5 @@
 //
-//  FilterPreview.swift
+//  YPFilterPreview.swift
 //  photoTaking
 //
 //  Created by Sacha Durand Saint Omer on 21/10/16.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class FilterPreview {
+class YPFilterPreview {
     
     let name: String
     var image: UIImage?

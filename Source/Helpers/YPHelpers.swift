@@ -1,5 +1,5 @@
 //
-//  FSHelpers.swift
+//  YPHelpers.swift
 //  YPImgePicker
 //
 //  Created by Sacha Durand Saint Omer on 02/11/16.

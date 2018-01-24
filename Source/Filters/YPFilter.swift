@@ -1,5 +1,5 @@
 //
-//  Filter.swift
+//  YPFilter.swift
 //  photoTaking
 //
 //  Created by Sacha Durand Saint Omer on 21/10/16.
@@ -11,7 +11,7 @@ import CoreImage
 
 var _filterSharedContext: CIContext!
 
-struct Filter {
+struct YPFilter {
     
     var name = ""
     

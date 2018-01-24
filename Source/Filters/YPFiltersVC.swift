@@ -1,5 +1,5 @@
 //
-//  FiltersVC.swift
+//  YPFiltersVC.swift
 //  photoTaking
 //
 //  Created by Sacha Durand Saint Omer on 21/10/16.
@@ -8,13 +8,13 @@
 
 import UIKit
 
-class FiltersVC: UIViewController {
+class YPFiltersVC: UIViewController {
     
     override var prefersStatusBarHidden: Bool { return true }
     
-    var v = FiltersView()
-    var filterPreviews = [FilterPreview]()
-    var filters = [Filter]()
+    var v = YPFiltersView()
+    var filterPreviews = [YPFilterPreview]()
+    var filters = [YPFilter]()
     var originalImage = UIImage()
     var thumbImage = UIImage()
     var didSelectImage: ((UIImage, Bool) -> Void)?
@@ -28,16 +28,16 @@ class FiltersVC: UIViewController {
         self.originalImage = image
         
         filterPreviews = [
-            FilterPreview("Normal"),
-            FilterPreview("Mono"),
-            FilterPreview("Tonal"),
-            FilterPreview("Noir"),
-            FilterPreview("Fade"),
-            FilterPreview("Chrome"),
-            FilterPreview("Process"),
-            FilterPreview("Transfer"),
-            FilterPreview("Instant"),
-            FilterPreview("Sepia")
+            YPFilterPreview("Normal"),
+            YPFilterPreview("Mono"),
+            YPFilterPreview("Tonal"),
+            YPFilterPreview("Noir"),
+            YPFilterPreview("Fade"),
+            YPFilterPreview("Chrome"),
+            YPFilterPreview("Process"),
+            YPFilterPreview("Transfer"),
+            YPFilterPreview("Instant"),
+            YPFilterPreview("Sepia")
         ]
         
         let filterNames = [
@@ -54,7 +54,7 @@ class FiltersVC: UIViewController {
         ]
         
         for fn in filterNames {
-            filters.append(Filter(fn))
+            filters.append(YPFilter(fn))
         }
     }
     
@@ -76,7 +76,7 @@ class FiltersVC: UIViewController {
         super.viewDidLoad()
         v.imageView.image = originalImage
         thumbImage = thumbFromImage(originalImage)
-        v.collectionView.register(FilterCollectionViewCell.self, forCellWithReuseIdentifier: "FilterCell")
+        v.collectionView.register(YPFilterCollectionViewCell.self, forCellWithReuseIdentifier: "FilterCell")
         v.collectionView.dataSource = self
         v.collectionView.delegate = self
         v.collectionView.selectItem(at: IndexPath(row: 0, section: 0),
@@ -93,7 +93,7 @@ class FiltersVC: UIViewController {
     }
 }
 
-extension FiltersVC: UICollectionViewDataSource {
+extension YPFiltersVC: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return filterPreviews.count
@@ -103,7 +103,7 @@ extension FiltersVC: UICollectionViewDataSource {
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let filterPreview = filterPreviews[indexPath.row]
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FilterCell",
-                                                         for: indexPath) as? FilterCollectionViewCell {
+                                                         for: indexPath) as? YPFilterCollectionViewCell {
             cell.name.text = filterPreview.name
             if let img = filterPreview.image {
                 cell.imageView.image = img
@@ -119,7 +119,7 @@ extension FiltersVC: UICollectionViewDataSource {
     }
 }
 
-extension FiltersVC: UICollectionViewDelegate {
+extension YPFiltersVC: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let selectedFilter = filters[indexPath.row]
         DispatchQueue.global(qos: DispatchQoS.QoSClass.default).async {

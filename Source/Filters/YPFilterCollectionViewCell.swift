@@ -1,5 +1,5 @@
 //
-//  FilterCollectionViewCell.swift
+//  YPFilterCollectionViewCell.swift
 //  photoTaking
 //
 //  Created by Sacha Durand Saint Omer on 21/10/16.
@@ -8,7 +8,7 @@
 
 import Stevia
 
-class FilterCollectionViewCell: UICollectionViewCell {
+class YPFilterCollectionViewCell: UICollectionViewCell {
     
     let name = UILabel()
     let imageView = UIImageView()

@@ -1,5 +1,5 @@
 //
-//  FiltersView.swift
+//  YPFiltersView.swift
 //  photoTaking
 //
 //  Created by Sacha Durand Saint Omer on 21/10/16.
@@ -8,7 +8,7 @@
 
 import Stevia
 
-class FiltersView: UIView {
+class YPFiltersView: UIView {
     
     let imageView = UIImageView()
     var collectionView: UICollectionView!

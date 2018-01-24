@@ -28,11 +28,11 @@
 		99C6D6C11F1FB5C100711DB2 /* YPImageCropViewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6A51F1FB5C100711DB2 /* YPImageCropViewContainer.swift */; };
 		99C6D6C21F1FB5C100711DB2 /* YPCameraVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6A71F1FB5C100711DB2 /* YPCameraVC.swift */; };
 		99C6D6C31F1FB5C100711DB2 /* YPCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6A81F1FB5C100711DB2 /* YPCameraView.swift */; };
-		99C6D6C41F1FB5C100711DB2 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6AA1F1FB5C100711DB2 /* Filter.swift */; };
-		99C6D6C51F1FB5C100711DB2 /* FilterCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6AB1F1FB5C100711DB2 /* FilterCollectionViewCell.swift */; };
-		99C6D6C61F1FB5C100711DB2 /* FilterPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6AC1F1FB5C100711DB2 /* FilterPreview.swift */; };
-		99C6D6C71F1FB5C100711DB2 /* FiltersVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6AD1F1FB5C100711DB2 /* FiltersVC.swift */; };
-		99C6D6C81F1FB5C100711DB2 /* FiltersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6AE1F1FB5C100711DB2 /* FiltersView.swift */; };
+		99C6D6C41F1FB5C100711DB2 /* YPFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6AA1F1FB5C100711DB2 /* YPFilter.swift */; };
+		99C6D6C51F1FB5C100711DB2 /* YPFilterCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6AB1F1FB5C100711DB2 /* YPFilterCollectionViewCell.swift */; };
+		99C6D6C61F1FB5C100711DB2 /* YPFilterPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6AC1F1FB5C100711DB2 /* YPFilterPreview.swift */; };
+		99C6D6C71F1FB5C100711DB2 /* YPFiltersVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6AD1F1FB5C100711DB2 /* YPFiltersVC.swift */; };
+		99C6D6C81F1FB5C100711DB2 /* YPFiltersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6AE1F1FB5C100711DB2 /* YPFiltersView.swift */; };
 		99C6D6C91F1FB5C100711DB2 /* YPBottomPager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6AF1F1FB5C100711DB2 /* YPBottomPager.swift */; };
 		99C6D6CB1F1FB5C100711DB2 /* YPHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6B11F1FB5C100711DB2 /* YPHelpers.swift */; };
 		99C6D6CC1F1FB5C100711DB2 /* YPImagePickerHeader.h in Headers */ = {isa = PBXBuildFile; fileRef = 99C6D6B21F1FB5C100711DB2 /* YPImagePickerHeader.h */; };
@@ -68,11 +68,11 @@
 		99C6D6A51F1FB5C100711DB2 /* YPImageCropViewContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPImageCropViewContainer.swift; sourceTree = "<group>"; };
 		99C6D6A71F1FB5C100711DB2 /* YPCameraVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPCameraVC.swift; sourceTree = "<group>"; };
 		99C6D6A81F1FB5C100711DB2 /* YPCameraView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPCameraView.swift; sourceTree = "<group>"; };
-		99C6D6AA1F1FB5C100711DB2 /* Filter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
-		99C6D6AB1F1FB5C100711DB2 /* FilterCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterCollectionViewCell.swift; sourceTree = "<group>"; };
-		99C6D6AC1F1FB5C100711DB2 /* FilterPreview.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterPreview.swift; sourceTree = "<group>"; };
-		99C6D6AD1F1FB5C100711DB2 /* FiltersVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FiltersVC.swift; sourceTree = "<group>"; };
-		99C6D6AE1F1FB5C100711DB2 /* FiltersView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FiltersView.swift; sourceTree = "<group>"; };
+		99C6D6AA1F1FB5C100711DB2 /* YPFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPFilter.swift; sourceTree = "<group>"; };
+		99C6D6AB1F1FB5C100711DB2 /* YPFilterCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPFilterCollectionViewCell.swift; sourceTree = "<group>"; };
+		99C6D6AC1F1FB5C100711DB2 /* YPFilterPreview.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPFilterPreview.swift; sourceTree = "<group>"; };
+		99C6D6AD1F1FB5C100711DB2 /* YPFiltersVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPFiltersVC.swift; sourceTree = "<group>"; };
+		99C6D6AE1F1FB5C100711DB2 /* YPFiltersView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPFiltersView.swift; sourceTree = "<group>"; };
 		99C6D6AF1F1FB5C100711DB2 /* YPBottomPager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPBottomPager.swift; sourceTree = "<group>"; };
 		99C6D6B11F1FB5C100711DB2 /* YPHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPHelpers.swift; sourceTree = "<group>"; };
 		99C6D6B21F1FB5C100711DB2 /* YPImagePickerHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YPImagePickerHeader.h; sourceTree = "<group>"; };
@@ -210,11 +210,11 @@
 		99C6D6A91F1FB5C100711DB2 /* Filters */ = {
 			isa = PBXGroup;
 			children = (
-				99C6D6AA1F1FB5C100711DB2 /* Filter.swift */,
-				99C6D6AB1F1FB5C100711DB2 /* FilterCollectionViewCell.swift */,
-				99C6D6AC1F1FB5C100711DB2 /* FilterPreview.swift */,
-				99C6D6AD1F1FB5C100711DB2 /* FiltersVC.swift */,
-				99C6D6AE1F1FB5C100711DB2 /* FiltersView.swift */,
+				99C6D6AA1F1FB5C100711DB2 /* YPFilter.swift */,
+				99C6D6AB1F1FB5C100711DB2 /* YPFilterCollectionViewCell.swift */,
+				99C6D6AC1F1FB5C100711DB2 /* YPFilterPreview.swift */,
+				99C6D6AD1F1FB5C100711DB2 /* YPFiltersVC.swift */,
+				99C6D6AE1F1FB5C100711DB2 /* YPFiltersView.swift */,
 			);
 			path = Filters;
 			sourceTree = "<group>";
@@ -329,10 +329,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				99C6D6C81F1FB5C100711DB2 /* FiltersView.swift in Sources */,
-				99C6D6C71F1FB5C100711DB2 /* FiltersVC.swift in Sources */,
+				99C6D6C81F1FB5C100711DB2 /* YPFiltersView.swift in Sources */,
+				99C6D6C71F1FB5C100711DB2 /* YPFiltersVC.swift in Sources */,
 				99D1DC2B1F9788930047F0E0 /* YPImagePickerConfiguration.swift in Sources */,
-				99C6D6C51F1FB5C100711DB2 /* FilterCollectionViewCell.swift in Sources */,
+				99C6D6C51F1FB5C100711DB2 /* YPFilterCollectionViewCell.swift in Sources */,
 				99C6D6C11F1FB5C100711DB2 /* YPImageCropViewContainer.swift in Sources */,
 				99C6D6D11F1FB5C100711DB2 /* YPImagePicker.swift in Sources */,
 				99019E4C2018CCD6007325C2 /* YPBottomPagerView.swift in Sources */,
@@ -353,9 +353,9 @@
 				99019E512018CDED007325C2 /* YPLibraryImageSize.swift in Sources */,
 				99C6D6CF1F1FB5C100711DB2 /* YPPickerVC.swift in Sources */,
 				99C6D6BE1F1FB5C100711DB2 /* YPLibraryViewCell.swift in Sources */,
-				99C6D6C41F1FB5C100711DB2 /* Filter.swift in Sources */,
+				99C6D6C41F1FB5C100711DB2 /* YPFilter.swift in Sources */,
 				99C6D6C91F1FB5C100711DB2 /* YPBottomPager.swift in Sources */,
-				99C6D6C61F1FB5C100711DB2 /* FilterPreview.swift in Sources */,
+				99C6D6C61F1FB5C100711DB2 /* YPFilterPreview.swift in Sources */,
 				99019E4E2018CD31007325C2 /* YPPagerMenu.swift in Sources */,
 				99C6D6C01F1FB5C100711DB2 /* YPImageCropView.swift in Sources */,
 				99A052A11F20B49B005600B3 /* YPAlbum.swift in Sources */,
