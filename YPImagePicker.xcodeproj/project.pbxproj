@@ -12,6 +12,7 @@
 		99019E512018CDED007325C2 /* YPLibraryImageSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99019E502018CDED007325C2 /* YPLibraryImageSize.swift */; };
 		99019E532018CE19007325C2 /* YPPickerScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99019E522018CE19007325C2 /* YPPickerScreen.swift */; };
 		99019E562018D008007325C2 /* YPMenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99019E552018D008007325C2 /* YPMenuItem.swift */; };
+		990FD28F201A49D3002A39A1 /* PermissionCheckable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 990FD28E201A49D3002A39A1 /* PermissionCheckable.swift */; };
 		99A0529A1F20A19B005600B3 /* YPAlbumVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A052991F20A19B005600B3 /* YPAlbumVC.swift */; };
 		99A0529D1F20B45D005600B3 /* YPAlbumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A0529C1F20B45D005600B3 /* YPAlbumView.swift */; };
 		99A0529F1F20B480005600B3 /* YPAlbumCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A0529E1F20B480005600B3 /* YPAlbumCell.swift */; };
@@ -50,6 +51,7 @@
 		99019E502018CDED007325C2 /* YPLibraryImageSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPLibraryImageSize.swift; sourceTree = "<group>"; };
 		99019E522018CE19007325C2 /* YPPickerScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPPickerScreen.swift; sourceTree = "<group>"; };
 		99019E552018D008007325C2 /* YPMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPMenuItem.swift; sourceTree = "<group>"; };
+		990FD28E201A49D3002A39A1 /* PermissionCheckable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionCheckable.swift; sourceTree = "<group>"; };
 		99A052991F20A19B005600B3 /* YPAlbumVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPAlbumVC.swift; sourceTree = "<group>"; };
 		99A0529C1F20B45D005600B3 /* YPAlbumView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPAlbumView.swift; sourceTree = "<group>"; };
 		99A0529E1F20B480005600B3 /* YPAlbumCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPAlbumCell.swift; sourceTree = "<group>"; };
@@ -140,6 +142,7 @@
 			children = (
 				99C6D6B11F1FB5C100711DB2 /* YPHelpers.swift */,
 				99C6D6B41F1FB5C100711DB2 /* YPPhotoSaver.swift */,
+				990FD28E201A49D3002A39A1 /* PermissionCheckable.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -330,6 +333,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				99C6D6C81F1FB5C100711DB2 /* YPFiltersView.swift in Sources */,
+				990FD28F201A49D3002A39A1 /* PermissionCheckable.swift in Sources */,
 				99C6D6C71F1FB5C100711DB2 /* YPFiltersVC.swift in Sources */,
 				99D1DC2B1F9788930047F0E0 /* YPImagePickerConfiguration.swift in Sources */,
 				99C6D6C51F1FB5C100711DB2 /* YPFilterCollectionViewCell.swift in Sources */,

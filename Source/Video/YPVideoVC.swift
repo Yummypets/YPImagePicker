@@ -9,7 +9,7 @@
 import UIKit
 import AVFoundation
 
-public class YPVideoVC: UIViewController {
+public class YPVideoVC: UIViewController, PermissionCheckable {
     
     public var didCaptureVideo: ((URL) -> Void)?
     private let sessionQueue = DispatchQueue(label: "YPVideoVCSerialQueue")
@@ -297,43 +297,6 @@ extension YPVideoVC {
         if let device = device {
             v.flashButton.setImage(flashImage(for: device.torchMode), for: .normal)
             v.flashButton.isHidden = !device.hasTorch
-        }
-    }
-}
-
-// Permission handling
-
-extension YPVideoVC: PermissionCheckable {
-    
-    func checkPermission() {
-        checkPermissionToAccessVideo { _ in }
-    }
-    
-    func doAfterPermissionCheck(block:@escaping () -> Void) {
-        checkPermissionToAccessVideo { hasPermission in
-            if hasPermission {
-                block()
-            }
-        }
-    }
-    
-    // Async beacause will prompt permission if .notDetermined
-    // and ask custom popup if denied.
-    func checkPermissionToAccessVideo(block: @escaping (Bool) -> Void) {
-        switch AVCaptureDevice.authorizationStatus(for: AVMediaType.video) {
-        case .authorized:
-            block(true)
-        case .restricted, .denied:
-            let alert = YPPermissionDeniedPopup.popup(cancelBlock: {
-                block(false)
-            })
-            present(alert, animated: true, completion: nil)
-        case .notDetermined:
-            AVCaptureDevice.requestAccess(for: .video, completionHandler: { granted in
-                DispatchQueue.main.async {
-                    block(granted)
-                }
-            })
         }
     }
 }
