@@ -145,3 +145,13 @@ func formattedStrigFrom(_ timeInterval: TimeInterval) -> String {
     let minutes = (interval / 60) % 60
     return String(format: "%02d:%02d", minutes, seconds)
 }
+
+extension AVPlayer {
+    func togglePlayPause() {
+        if rate == 0 {
+            play()
+        } else {
+            pause()
+        }
+    }
+}

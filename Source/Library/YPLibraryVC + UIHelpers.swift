@@ -10,7 +10,7 @@ import UIKit
 import Photos
 
 extension YPLibraryVC {
-        
+    
     func display(photo asset: PHAsset, image: UIImage) {
         v.imageCropView.imageSize = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
         v.imageCropView.image = image
@@ -18,40 +18,9 @@ extension YPLibraryVC {
             v.imageCropView.setFitImage(true)
             v.imageCropView.minimumZoomScale = v.imageCropView.squaredZoomScale
         }
-        refreshCropControl()
+        v.refreshCropControl()
     }
-    
-    func setVideoMode(_ isVideoMode: Bool) {
-        v.imageCropViewContainer.isVideoMode = isVideoMode
-    }
-    
-    func resetPlayer() {
-        v.imageCropViewContainer.playerLayer.player?.pause()
-        v.imageCropViewContainer.playerLayer.isHidden = true
-    }
-    
-    func hideGrid() {
-        v.imageCropViewContainer.grid.alpha = 0
-    }
-    
-    func showLoader() {
-        v.imageCropViewContainer.spinnerView.alpha = 1
-    }
-    
-    func fadeOutLoader() {
-        UIView.animate(withDuration: 0.2) {
-            self.v.imageCropViewContainer.spinnerView.alpha = 0
-        }
-    }
-    
-    func refreshCropControl() {
-        v.imageCropViewContainer.refreshSquareCropButton()
-    }
-    
-    func setPreview(_ image: UIImage) {
-        v.imageCropView.image = image
-    }
-    
+
     func fitImage(animated: Bool = true) {
         v.imageCropViewContainer.cropView?.setFitImage(true, animated: animated)
     }
@@ -70,7 +39,7 @@ extension YPLibraryVC {
             // another in the meantime.
             if self.latestImageTapped == asset.localIdentifier {
                 DispatchQueue.main.async {
-                    self.setPreview(preview)
+                    self.v.setPreview(preview)
                     self.fitImage(animated: false)
                 }
             }
@@ -86,4 +55,3 @@ extension YPLibraryVC {
         }
     }
 }
-

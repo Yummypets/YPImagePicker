@@ -9,10 +9,45 @@
 import UIKit
 import Photos
 
-public class YPLibraryVC: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate,
-PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDelegateFlowLayout, PermissionCheckable {
+public class YPLibraryVC: UIViewController, PermissionCheckable {
+    
+    weak var delegate: YPLibraryViewDelegate?
+    var collection: PHAssetCollection?
     
     internal let configuration: YPImagePickerConfiguration!
+    private var initialized = false
+    internal var previouslySelectedIndex: Int?
+    internal var fetchResult: PHFetchResult<PHAsset>!
+    internal var imageManager: PHCachingImageManager?
+    internal var previousPreheatRect: CGRect = CGRect.zero
+    private var selectedAsset: PHAsset!
+    internal var latestImageTapped = ""
+    var v: YPLibraryView!
+    internal static let cellSize = CGSize(width: UIScreen.main.bounds.width/4 * UIScreen.main.scale,
+                                          height: UIScreen.main.bounds.width/4 * UIScreen.main.scale)
+    
+    // Pan gesture
+    internal let imageCropViewOriginalConstraintTop: CGFloat = 0
+    internal var dragDirection = YPDragDirection.up
+    internal var imaginaryCollectionViewOffsetStartPosY: CGFloat = 0.0
+    internal var cropBottomY: CGFloat  = 0.0
+    internal var dragStartPos: CGPoint = .zero
+    internal let dragDiff: CGFloat = 0
+    var _isImageShown = true
+    var isImageShown: Bool {
+        get { return self._isImageShown }
+        set {
+            if newValue != isImageShown {
+                self._isImageShown = newValue
+                v.imageCropViewContainer.isShown = newValue
+                // Update imageCropContainer
+                v.imageCropView.isScrollEnabled = isImageShown
+            }
+        }
+    }
+    
+    // MARK: - Init
+    
     public required init(configuration: YPImagePickerConfiguration) {
         self.configuration = configuration
         super.init(nibName: nil, bundle: nil)
@@ -23,71 +58,48 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
         fatalError("init(coder:) has not been implemented")
     }
     
-    weak var delegate: YPLibraryViewDelegate?
-    
-    private var fetchResult: PHFetchResult<PHAsset>!
-    
-    var imageManager: PHCachingImageManager?
-    var previousPreheatRect: CGRect = CGRect.zero
-    let cellSize = CGSize(width: UIScreen.main.bounds.width/4 * UIScreen.main.scale,
-                          height: UIScreen.main.bounds.width/4 * UIScreen.main.scale)
-    var phAsset: PHAsset!
-    
-    let imageCropViewOriginalConstraintTop: CGFloat = 0
-    let imageCropViewMinimalVisibleHeight: CGFloat  = 50
-    var dragDirection = YPDragDirection.up
-    var imaginaryCollectionViewOffsetStartPosY: CGFloat = 0.0
-    
-    var cropBottomY: CGFloat  = 0.0
-    var dragStartPos: CGPoint = CGPoint.zero
-    let dragDiff: CGFloat     = 0//20.0
-
-    var _isImageShown = true
-    var isImageShown: Bool {
-        get { return self._isImageShown }
-        set {
-            if newValue != isImageShown {
-                self._isImageShown = newValue
-                v.imageCropViewContainer.isShown = newValue
-                
-                //Update imageCropContainer
-                if isImageShown {
-                    v.imageCropView.isScrollEnabled = true
-                } else {
-                   v.imageCropView.isScrollEnabled = false
-                }
-            }
+    func initialize() {
+        imageManager = PHCachingImageManager()
+        if fetchResult != nil {
+            return
         }
+        resetCachedAssets()
+        setupCollectionView()
+        registerForLibraryChanges()
+        registerForPanGesture()
+        registerForTapOnPreview()
+        
+        v.imageCropViewConstraintTop.constant = 0
+        dragDirection = YPDragDirection.up
+        
+        refreshMediaRequest()
+        
+        v.imageCropViewContainer.onlySquareImages = configuration.onlySquareImagesFromLibrary
+        v.imageCropView.onlySquareImages = configuration.onlySquareImagesFromLibrary
     }
     
-    var latestImageTapped = ""
-
-    var v: YPLibraryView!
+    // MARK: - View Lifecycle
     
     public override func loadView() {
-        let bundle = Bundle(for: self.classForCoder)
-        let xibView = UINib(nibName: "YPLibraryView",
-                            bundle: bundle).instantiate(withOwner: self,
-                                                        options: nil)[0] as? YPLibraryView
-        v = xibView
+        v = YPLibraryView.xibView()
         view = v
-    }
-    
-    var initialized = false
-    
-    public override func viewDidLoad() {
-        super.viewDidLoad()
     }
     
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         registerForPlayerReachedEndNotifications()
-        v.imageCropViewContainer.squareCropButton
-            .addTarget(self,
-                       action: #selector(squareCropButtonTapped),
-                       for: .touchUpInside)
-        
+        v.imageCropViewContainer.squareCropButton.addTarget(self,
+                                                            action: #selector(squareCropButtonTapped),
+                                                            for: .touchUpInside)
     }
+    
+    public override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        pausePlayer()
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    // MARK: - Crop control
     
     @objc
     func squareCropButtonTapped() {
@@ -95,6 +107,28 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
             self?.v.imageCropViewContainer.squareCropButtonTapped()
         }
     }
+    
+    // MARK: - Tap Preview
+    
+    func registerForTapOnPreview() {
+        let tapImageGesture = UITapGestureRecognizer(target: self, action: #selector(tappedImage))
+        v.imageCropViewContainer.addGestureRecognizer(tapImageGesture)
+    }
+    
+    @objc
+    func tappedImage() {
+        if !isImageShown {
+            v.imageCropViewConstraintTop.constant = imageCropViewOriginalConstraintTop
+            UIView.animate(withDuration: 0.2,
+                           delay: 0.0,
+                           options: .curveEaseOut,
+                           animations: v.layoutIfNeeded,
+                           completion: nil)
+            v.refreshImageCurtainAlpha()
+        }
+    }
+    
+    // MARK: - Permissions
     
     func doAfterPermissionCheck(block:@escaping () -> Void) {
         checkPermissionToAccessPhotoLibrary { hasPermission in
@@ -136,54 +170,6 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
         }
     }
     
-    public override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        player?.pause()
-        NotificationCenter.default.removeObserver(self)
-    }
-    
-    deinit {
-        PHPhotoLibrary.shared().unregisterChangeObserver(self)
-    }
-
-    func initialize() {
-        imageManager = PHCachingImageManager()
-        
-        if fetchResult != nil {
-            return
-        }
-        
-        resetCachedAssets()
-        PHPhotoLibrary.shared().register(self)
-        
-        v.collectionView.dataSource = self
-        v.collectionView.delegate = self
-        
-        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(panned(_:)))
-        panGesture.delegate = self
-        v.addGestureRecognizer(panGesture)
-        
-        v.imageCropViewConstraintTop.constant = 0
-        dragDirection = YPDragDirection.up
-        
-        v.imageCropViewContainer.layer.shadowColor   = UIColor.black.cgColor
-        v.imageCropViewContainer.layer.shadowRadius  = 30.0
-        v.imageCropViewContainer.layer.shadowOpacity = 0.9
-        v.imageCropViewContainer.layer.shadowOffset  = CGSize.zero
-        
-        v.collectionView.register(YPLibraryViewCell.self, forCellWithReuseIdentifier: "YPLibraryViewCell")
-        
-        refreshMediaRequest()
-
-        let tapImageGesture = UITapGestureRecognizer(target: self, action: #selector(tappedImage))
-        v.imageCropViewContainer.addGestureRecognizer(tapImageGesture)
-        
-        v.imageCropViewContainer.onlySquareImages = configuration.onlySquareImagesFromLibrary
-        v.imageCropView.onlySquareImages = configuration.onlySquareImagesFromLibrary
-    }
-    
-    var collection: PHAssetCollection?
-    
     func refreshMediaRequest() {
         
         // Sorting condition
@@ -216,230 +202,18 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
         v.collectionView.contentOffset = CGPoint.zero
     }
     
-    @objc
-    func tappedImage() {
-        if !isImageShown {
-            v.imageCropViewConstraintTop.constant = imageCropViewOriginalConstraintTop
-            UIView.animate(withDuration: 0.2, delay: 0.0, options: UIViewAnimationOptions.curveEaseOut, animations: {
-                self.v.layoutIfNeeded()
-            }, completion: nil)
-            refreshImageCurtainAlpha()
-        }
-    }
-
-    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith
-                                  otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
-    }
-    
-    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        let p = gestureRecognizer.location(ofTouch: 0, in: v)
-        // Desactivate pan on image when it is shown.
-        if isImageShown {
-            if p.y < v.imageCropView.frame.height {
-                return false
-            }
-        }
-        return true
-    }
-    
-    @objc
-    func panned(_ sender: UIPanGestureRecognizer) {
-        
-        let containerHeight = v.imageCropViewContainer.frame.height
-        if sender.state == UIGestureRecognizerState.began {
-            let view    = sender.view
-            let loc     = sender.location(in: view)
-            let subview = view?.hitTest(loc, with: nil)
-            
-            if subview == v.imageCropView
-                && v.imageCropViewConstraintTop.constant == imageCropViewOriginalConstraintTop {
-                return
-            }
-            
-            dragStartPos = sender.location(in: v)
-            cropBottomY = v.imageCropViewContainer.frame.origin.y + containerHeight
-            
-            // Move
-            if dragDirection == .stop {
-                dragDirection = (v.imageCropViewConstraintTop.constant == imageCropViewOriginalConstraintTop)
-                    ? .up
-                    : .down
-            }
-            
-            // Scroll event of CollectionView is preferred.
-            if (dragDirection == .up && dragStartPos.y < cropBottomY + dragDiff) ||
-                (dragDirection == .down && dragStartPos.y > cropBottomY) {
-                dragDirection = .stop
-            }
-        } else if sender.state == UIGestureRecognizerState.changed {
-            let currentPos = sender.location(in: v)
-            if dragDirection == .up && currentPos.y < cropBottomY - dragDiff {
-                v.imageCropViewConstraintTop.constant =
-                    max(imageCropViewMinimalVisibleHeight - containerHeight, currentPos.y + dragDiff - containerHeight)
-            } else if dragDirection == .down && currentPos.y > cropBottomY {
-                v.imageCropViewConstraintTop.constant =
-                    min(imageCropViewOriginalConstraintTop, currentPos.y - containerHeight)
-            } else if dragDirection == .stop && v.collectionView.contentOffset.y < 0 {
-                dragDirection = .scroll
-                imaginaryCollectionViewOffsetStartPosY = currentPos.y
-            } else if dragDirection == .scroll {
-                v.imageCropViewConstraintTop.constant =
-                    imageCropViewMinimalVisibleHeight - containerHeight
-                    + currentPos.y - imaginaryCollectionViewOffsetStartPosY
-            }
-        } else {
-            imaginaryCollectionViewOffsetStartPosY = 0.0
-            if sender.state == UIGestureRecognizerState.ended && dragDirection == .stop {
-                return
-            }
-            let currentPos = sender.location(in: v)
-            if currentPos.y < cropBottomY - dragDiff
-                && v.imageCropViewConstraintTop.constant != imageCropViewOriginalConstraintTop {
-                // The largest movement
-                v.imageCropViewConstraintTop.constant =
-                    imageCropViewMinimalVisibleHeight - containerHeight
-                UIView.animate(withDuration: 0.3,
-                               delay: 0.0,
-                               options: UIViewAnimationOptions.curveEaseOut,
-                               animations: {
-                    self.v.layoutIfNeeded()
-                    }, completion: nil)
-                dragDirection = .down
-            } else {
-                // Get back to the original position
-                v.imageCropViewConstraintTop.constant = imageCropViewOriginalConstraintTop
-                UIView.animate(withDuration: 0.3,
-                               delay: 0.0,
-                               options: UIViewAnimationOptions.curveEaseOut,
-                               animations: {
-                    self.v.layoutIfNeeded()
-                    }, completion: nil)
-                dragDirection = .up
-            }
-        }
-        
-        // Update isImageShown
-        isImageShown = v.imageCropViewConstraintTop.constant == 0
-
-        refreshImageCurtainAlpha()
-    }
-    
-    func refreshImageCurtainAlpha() {
-        let imageCurtainAlpha = abs(v.imageCropViewConstraintTop.constant)
-            / (v.imageCropViewContainer.frame.height - imageCropViewMinimalVisibleHeight)
-        v.imageCropViewContainer.curtain.alpha = imageCurtainAlpha
-    }
-    
-    // MARK: - UICollectionViewDelegate Protocol
-    
-    public func collectionView(_ collectionView: UICollectionView,
-                               cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let asset = fetchResult[indexPath.item]
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "YPLibraryViewCell",
-                                                         for: indexPath) as? YPLibraryViewCell else {
-            fatalError("unexpected cell in collection view")
-        }
-        cell.representedAssetIdentifier = asset.localIdentifier
-        imageManager?.requestImage(for: asset,
-                                  targetSize: cellSize,
-                                  contentMode: .aspectFill,
-                                  options: nil) { image, _ in
-            // The cell may have been recycled when the time this gets called
-            // set image only if it's still showing the same asset.
-            if cell.representedAssetIdentifier == asset.localIdentifier && image != nil {
-                cell.imageView.image = image
-            }
-        }
-        
-        let isVideo = (asset.mediaType == .video)
-        cell.durationLabel.isHidden = !isVideo
-        cell.durationLabel.text = isVideo ? formattedStrigFrom(asset.duration) : ""
-        
-        // Prevent weird animation where thumbnail fills cell on first scrolls.
-        UIView.performWithoutAnimation {
-            cell.layoutIfNeeded()
-        }
-        return cell
-    }
-
-    public func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-    
-    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return fetchResult.count
-    }
-    
-    public func collectionView(_ collectionView: UICollectionView,
-                               layout collectionViewLayout: UICollectionViewLayout,
-                               sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        let width = (collectionView.frame.width - 3) / 4
-        return CGSize(width: width, height: width)
-    }
-    
-    var previouslySelectedIndex: Int?
-    
-    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if indexPath.row == previouslySelectedIndex {
-            return
-        }
-        changeImage(fetchResult[indexPath.row])
-        v.imageCropViewConstraintTop.constant = imageCropViewOriginalConstraintTop
-        UIView.animate(withDuration: 0.2, delay: 0.0, options: UIViewAnimationOptions.curveEaseOut, animations: {
-            self.v.layoutIfNeeded()
-            }, completion: nil)
-        dragDirection = .up
-        collectionView.scrollToItem(at: indexPath, at: .top, animated: true)
-        refreshImageCurtainAlpha()
-        
-        previouslySelectedIndex = indexPath.row
-    }
-    
     // MARK: - ScrollViewDelegate
+    
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView == v.collectionView {
             updateCachedAssets()
         }
     }
     
-    // MARK: - PHPhotoLibraryChangeObserver
-    
-    public func photoLibraryDidChange(_ changeInstance: PHChange) {
-        DispatchQueue.main.async {
-            let collectionChanges = changeInstance.changeDetails(for: self.fetchResult)
-            if collectionChanges != nil {
-                self.fetchResult = collectionChanges!.fetchResultAfterChanges
-                let collectionView = self.v.collectionView!
-                if !collectionChanges!.hasIncrementalChanges || collectionChanges!.hasMoves {
-                    collectionView.reloadData()
-                } else {
-                    collectionView.performBatchUpdates({
-                        let removedIndexes = collectionChanges!.removedIndexes
-                        if (removedIndexes?.count ?? 0) != 0 {
-                            collectionView.deleteItems(at: removedIndexes!.aapl_indexPathsFromIndexesWithSection(0))
-                        }
-                        let insertedIndexes = collectionChanges!.insertedIndexes
-                        if (insertedIndexes?.count ?? 0) != 0 {
-                            collectionView
-                                .insertItems(at: insertedIndexes!.aapl_indexPathsFromIndexesWithSection(0))
-                        }
-                        let changedIndexes = collectionChanges!.changedIndexes
-                        if (changedIndexes?.count ?? 0) != 0 {
-                            collectionView.reloadItems(at: changedIndexes!.aapl_indexPathsFromIndexesWithSection(0))
-                        }
-                    }, completion: nil)
-                }
-                self.resetCachedAssets()
-            }
-        }
-    }
-    
     private func changeImageVideo(_ asset: PHAsset) {
-        hideGrid()
-        showLoader()
-        refreshCropControl()
+        v.hideGrid()
+        v.showLoader()
+        v.refreshCropControl()
         downloadAndSetPreviewFor(video: asset)
         downloadAndPlay(video: asset)
     }
@@ -450,9 +224,9 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
             // another in the meantime.
             if self.latestImageTapped == asset.localIdentifier {
                 if isFromCloud {
-                    self.showLoader()
+                    self.v.showLoader()
                 } else {
-                    self.fadeOutLoader()
+                    self.v.fadeOutLoader()
                 }
                 self.display(photo: asset, image: image)
             }
@@ -460,10 +234,10 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
     }
 
     func changeImage(_ asset: PHAsset) {
-        phAsset = asset
+        selectedAsset = asset
         latestImageTapped = asset.localIdentifier
-        setVideoMode(asset.mediaType == .video)
-        resetPlayer()
+        asset.mediaType == .video ? v.setVideoMode() : v.setPhotoMode()
+        v.hidePlayer()
         
         switch asset.mediaType {
         case .image:
@@ -492,8 +266,7 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
             var addedIndexPaths: [IndexPath] = []
             var removedIndexPaths: [IndexPath] = []
             
-            computeDifferenceBetweenRect(previousPreheatRect,
-                                              andRect: preheatRect,
+            previousPreheatRect.differenceWith(rect: preheatRect,
                                               removedHandler: { removedRect in
                 let indexPaths = self.v.collectionView.aapl_indexPathsForElementsInRect(removedRect)
                 removedIndexPaths += indexPaths
@@ -502,89 +275,33 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
                     addedIndexPaths += indexPaths
             })
             
-            let assetsToStartCaching = assetsAtIndexPaths(addedIndexPaths)
-            let assetsToStopCaching = assetsAtIndexPaths(removedIndexPaths)
+            let assetsToStartCaching =  fetchResult.assetsAtIndexPaths(addedIndexPaths)
+            let assetsToStopCaching = fetchResult.assetsAtIndexPaths(removedIndexPaths)
             
             imageManager?.startCachingImages(for: assetsToStartCaching,
-                                                  targetSize: cellSize,
+                                                  targetSize: YPLibraryVC.cellSize,
                                                   contentMode: .aspectFill,
                                                   options: nil)
             imageManager?.stopCachingImages(for: assetsToStopCaching,
-                                                 targetSize: cellSize,
+                                                 targetSize: YPLibraryVC.cellSize,
                                                  contentMode: .aspectFill,
                                                  options: nil)
-            
             previousPreheatRect = preheatRect
         }
     }
     
-    func computeDifferenceBetweenRect(_ oldRect: CGRect,
-                                      andRect newRect: CGRect,
-                                      removedHandler: (CGRect) -> Void,
-                                      addedHandler: (CGRect) -> Void) {
-        if newRect.intersects(oldRect) {
-            let oldMaxY = oldRect.maxY
-            let oldMinY = oldRect.minY
-            let newMaxY = newRect.maxY
-            let newMinY = newRect.minY
-            if newMaxY > oldMaxY {
-                let rectToAdd = CGRect(x: newRect.origin.x,
-                                       y: oldMaxY,
-                                       width: newRect.size.width,
-                                       height: (newMaxY - oldMaxY))
-                addedHandler(rectToAdd)
-            }
-            if oldMinY > newMinY {
-                let rectToAdd = CGRect(x: newRect.origin.x,
-                                       y: newMinY,
-                                       width: newRect.size.width,
-                                       height: (oldMinY - newMinY))
-                addedHandler(rectToAdd)
-            }
-            if newMaxY < oldMaxY {
-                let rectToRemove = CGRect(x: newRect.origin.x,
-                                          y: newMaxY,
-                                          width: newRect.size.width,
-                                          height: (oldMaxY - newMaxY))
-                removedHandler(rectToRemove)
-            }
-            if oldMinY < newMinY {
-                let rectToRemove = CGRect(x: newRect.origin.x,
-                                          y: oldMinY,
-                                          width: newRect.size.width,
-                                          height: (newMinY - oldMinY))
-                removedHandler(rectToRemove)
-            }
-        } else {
-            addedHandler(newRect)
-            removedHandler(oldRect)
-        }
-    }
-    
-    func assetsAtIndexPaths(_ indexPaths: [IndexPath]) -> [PHAsset] {
-        if indexPaths.count == 0 { return [] }
-        
-        var assets: [PHAsset] = []
-        assets.reserveCapacity(indexPaths.count)
-        for indexPath in indexPaths {
-                let asset = fetchResult[indexPath.item]
-                assets.append(asset)
-        }
-        return assets
-    }
-    
     private func showVideoTooLongAlert() {
-        let msg = String(format: NSLocalizedString("YPImagePickerVideoTooLongDetail",
-                                                   tableName: nil,
-                                                   bundle: Bundle(for: YPPickerVC.self),
-                                                   value: "",
-                                                   comment: ""), "\(self.configuration.videoFromLibraryTimeLimit)")
-        
-        let alert = UIAlertController(title: ypLocalized("YPImagePickerVideoTooLongTitle"),
-                                      message: msg,
-                                      preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
+        let alert = YPAlerts.videoTooLongAlert(with: configuration)
         present(alert, animated: true, completion: nil)
+    }
+    
+    // MARK: - Fetching Media
+    
+    private func fetchImage(for asset: PHAsset, callback: @escaping (_ photo: UIImage) -> Void) {
+        delegate?.libraryViewStartedLoadingImage()
+        let cropRect = v.currentCropRect()
+        let ts = targetSize(for: asset, cropRect: cropRect)
+        imageManager?.fetchImage(for: asset, cropRect: cropRect, targetSize: ts, callback: callback)
     }
     
     private func fetchVideoURL(for asset: PHAsset, callback: @escaping (_ videoURL: URL) -> Void) {
@@ -596,16 +313,7 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
         }
     }
     
-    private func currentCropRect() -> CGRect {
-        guard let cropView = v.imageCropView else {
-            return CGRect.zero
-        }
-        let normalizedX = min(1, cropView.contentOffset.x / cropView.contentSize.width)
-        let normalizedY = min(1, cropView.contentOffset.y / cropView.contentSize.height)
-        let normalizedWidth = min(1, cropView.frame.width / cropView.contentSize.width)
-        let normalizedHeight = min(1, cropView.frame.height / cropView.contentSize.height)
-        return CGRect(x: normalizedX, y: normalizedY, width: normalizedWidth, height: normalizedHeight)
-    }
+    // MARK: - TargetSize
     
     private func targetSize(for asset: PHAsset, cropRect: CGRect) -> CGSize {
         let width = floor(CGFloat(asset.pixelWidth) * cropRect.width)
@@ -618,17 +326,10 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
         return CGSize(width: width, height: height)
     }
     
-    private func fetchImage(for asset: PHAsset, callback: @escaping (_ photo: UIImage) -> Void) {
-        delegate?.libraryViewStartedLoadingImage()
-        let cropRect = currentCropRect()
-        let ts = targetSize(for: asset, cropRect: cropRect)
-        imageManager?.fetchImage(for: asset, cropRect: cropRect, targetSize: ts, callback: callback)
-    }
-    
     public func selectedMedia(photoCallback:@escaping (_ photo: UIImage) -> Void,
                               videoCallback: @escaping (_ videoURL: URL) -> Void) {
         DispatchQueue.global(qos: .userInitiated).async {
-            let asset = self.phAsset!
+            let asset = self.selectedAsset!
             switch asset.mediaType {
             case .video:
                 self.fetchVideoURL(for: asset, callback: { videoURL in
@@ -650,6 +351,8 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
         }
     }
     
+    // MARK: - Player
+    
     private func registerForPlayerReachedEndNotifications() {
         NotificationCenter.default
             .addObserver(self,
@@ -658,58 +361,25 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
                          object: nil)
     }
     
-    // MARK: Private
-    
-    var player: AVPlayer? {
-        return v.imageCropViewContainer.playerLayer.player
-    }
-    
     @objc
     func playerItemDidReachEnd(_ note: Notification) {
-        player?.actionAtItemEnd = .none
-        player?.seek(to: kCMTimeZero)
-        player?.play()
+        v.player?.actionAtItemEnd = .none
+        v.player?.seek(to: kCMTimeZero)
+        v.player?.play()
+    }
+    
+    func pausePlayer() {
+        v.pausePlayer()
     }
     
     func togglePlayPause() {
-        guard let player = player else { return }
+        guard let player = v.player else { return }
         player.togglePlayPause()
     }
-}
-
-extension AVPlayer {
-    func togglePlayPause() {
-        if rate == 0 {
-            play()
-        } else {
-            pause()
-        }
-    }
-}
-
-internal extension UICollectionView {
     
-    func aapl_indexPathsForElementsInRect(_ rect: CGRect) -> [IndexPath] {
-        let allLayoutAttributes = collectionViewLayout.layoutAttributesForElements(in: rect)
-        if (allLayoutAttributes?.count ?? 0) == 0 {return []}
-        var indexPaths: [IndexPath] = []
-        indexPaths.reserveCapacity(allLayoutAttributes!.count)
-        for layoutAttributes in allLayoutAttributes! {
-            let indexPath = layoutAttributes.indexPath
-            indexPaths.append(indexPath)
-        }
-        return indexPaths
-    }
-}
-
-internal extension IndexSet {
+    // MARK: - Deinit
     
-    func aapl_indexPathsFromIndexesWithSection(_ section: Int) -> [IndexPath] {
-        var indexPaths: [IndexPath] = []
-        indexPaths.reserveCapacity(count)
-        (self as NSIndexSet).enumerate({idx, _ in
-            indexPaths.append(IndexPath(item: idx, section: section))
-        })
-        return indexPaths
+    deinit {
+        PHPhotoLibrary.shared().unregisterChangeObserver(self)
     }
 }

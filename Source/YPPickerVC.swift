@@ -162,7 +162,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     func stopCurrentCamera() {
         switch mode {
         case .library:
-            albumVC.player?.pause()
+            albumVC.pausePlayer()
         case .camera:
             cameraVC.stopCamera()
         case .video:

@@ -252,9 +252,7 @@ extension YPVideoVC: AVCaptureFileOutputRecordingDelegate {
         let p: Float = Float(timeElapsed) / Float(configuration.videoRecordingTimeLimit)
         DispatchQueue.main.async {
             self.v.progressBar.progress = p
-            UIView.animate(withDuration: 1, animations: {
-                self.v.layoutIfNeeded()
-            })
+            UIView.animate(withDuration: 1, animations: self.v.layoutIfNeeded)
         }
     }
     
