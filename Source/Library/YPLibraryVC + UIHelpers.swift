@@ -34,7 +34,7 @@ extension YPLibraryVC {
     }
     
     func downloadAndSetPreviewFor(video asset: PHAsset) {
-        imageManager?.fetchPreviewFor(video: asset) { preview in
+        mediaManager.imageManager?.fetchPreviewFor(video: asset) { preview in
             // Prevent long images to come after user selected
             // another in the meantime.
             if self.latestImageTapped == asset.localIdentifier {
@@ -47,7 +47,7 @@ extension YPLibraryVC {
     }
     
     func downloadAndPlay(video asset: PHAsset) {
-        imageManager?.fetchPlayerItem(for: asset) { playerItem in
+        mediaManager.imageManager?.fetchPlayerItem(for: asset) { playerItem in
             // Prevent long videos to come after user selected another in the meantime.
             if self.latestImageTapped == asset.localIdentifier {
                 self.play(videoItem: playerItem)

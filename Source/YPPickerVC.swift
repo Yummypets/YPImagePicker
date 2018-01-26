@@ -195,7 +195,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         let navVC = UINavigationController(rootViewController: vc)
 
         vc.didSelectAlbum = { [weak self] album in
-            self?.albumVC.collection = album.collection
+            self?.albumVC.setAlbum(album)
             self?.albumVC.refreshMediaRequest()
             self?.setTitleViewWithTitle(aTitle: album.title)
             self?.dismiss(animated: true, completion: nil)

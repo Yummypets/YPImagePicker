@@ -23,7 +23,7 @@ extension YPLibraryVC: UICollectionViewDataSource {
     }
     
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return fetchResult.count
+        return  mediaManager.fetchResult.count
     }
 }
 
@@ -31,14 +31,14 @@ extension YPLibraryVC: UICollectionViewDelegate {
     
     public func collectionView(_ collectionView: UICollectionView,
                                cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let asset = fetchResult[indexPath.item]
+        let asset = mediaManager.fetchResult[indexPath.item]
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "YPLibraryViewCell",
                                                             for: indexPath) as? YPLibraryViewCell else {
                                                                 fatalError("unexpected cell in collection view")
         }
         cell.representedAssetIdentifier = asset.localIdentifier
-        imageManager?.requestImage(for: asset,
-                                   targetSize: YPLibraryVC.cellSize,
+        mediaManager.imageManager?.requestImage(for: asset,
+                                   targetSize: v.cellSize(),
                                    contentMode: .aspectFill,
                                    options: nil) { image, _ in
                                     // The cell may have been recycled when the time this gets called
@@ -63,14 +63,8 @@ extension YPLibraryVC: UICollectionViewDelegate {
         if indexPath.row == previouslySelectedIndex {
             return
         }
-        changeImage(fetchResult[indexPath.row])
-        v.imageCropViewConstraintTop.constant = imageCropViewOriginalConstraintTop
-        UIView.animate(withDuration: 0.2,
-                       delay: 0.0,
-                       options: .curveEaseOut,
-                       animations: v.layoutIfNeeded,
-                       completion: nil)
-        dragDirection = .up
+        changeImage(mediaManager.fetchResult[indexPath.row])
+        panGestureHelper.resetToOriginalState()
         collectionView.scrollToItem(at: indexPath, at: .top, animated: true)
         v.refreshImageCurtainAlpha()
         previouslySelectedIndex = indexPath.row

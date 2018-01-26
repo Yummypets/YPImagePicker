@@ -8,14 +8,47 @@
 
 import UIKit
 
-extension YPLibraryVC: UIGestureRecognizerDelegate {
+public class PanGestureHelper: NSObject, UIGestureRecognizerDelegate {
     
-    func registerForPanGesture() {
+    var v: YPLibraryView!
+    private let imageCropViewOriginalConstraintTop: CGFloat = 0
+    private var dragDirection = YPDragDirection.up
+    private var imaginaryCollectionViewOffsetStartPosY: CGFloat = 0.0
+    private var cropBottomY: CGFloat  = 0.0
+    private var dragStartPos: CGPoint = .zero
+    private let dragDiff: CGFloat = 0
+    private var _isImageShown = true
+    
+    var isImageShown: Bool {
+        get { return self._isImageShown }
+        set {
+            if newValue != isImageShown {
+                self._isImageShown = newValue
+                v.imageCropViewContainer.isShown = newValue
+                // Update imageCropContainer
+                v.imageCropView.isScrollEnabled = isImageShown
+            }
+        }
+    }
+    
+    func registerForPanGesture(on view: YPLibraryView) {
+        v = view
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(panned(_:)))
         panGesture.delegate = self
-        v.addGestureRecognizer(panGesture)
+        view.addGestureRecognizer(panGesture)
+        v.imageCropViewConstraintTop.constant = 0
     }
-  
+    
+    func resetToOriginalState() {
+        v.imageCropViewConstraintTop.constant = imageCropViewOriginalConstraintTop
+        UIView.animate(withDuration: 0.3,
+                       delay: 0.0,
+                       options: .curveEaseOut,
+                       animations: v.layoutIfNeeded,
+                       completion: nil)
+        dragDirection = .up
+    }
+
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith
         otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
@@ -97,13 +130,7 @@ extension YPLibraryVC: UIGestureRecognizerDelegate {
                 dragDirection = .down
             } else {
                 // Get back to the original position
-                v.imageCropViewConstraintTop.constant = imageCropViewOriginalConstraintTop
-                UIView.animate(withDuration: 0.3,
-                               delay: 0.0,
-                               options: .curveEaseOut,
-                               animations: v.layoutIfNeeded,
-                               completion: nil)
-                dragDirection = .up
+                resetToOriginalState()
             }
         }
         

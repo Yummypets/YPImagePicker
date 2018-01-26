@@ -12,40 +12,16 @@ import Photos
 public class YPLibraryVC: UIViewController, PermissionCheckable {
     
     weak var delegate: YPLibraryViewDelegate?
-    var collection: PHAssetCollection?
     
     internal let configuration: YPImagePickerConfiguration!
     private var initialized = false
     internal var previouslySelectedIndex: Int?
-    internal var fetchResult: PHFetchResult<PHAsset>!
-    internal var imageManager: PHCachingImageManager?
-    internal var previousPreheatRect: CGRect = CGRect.zero
-    private var selectedAsset: PHAsset!
+    internal let mediaManager = LibraryMediaManager()
     internal var latestImageTapped = ""
     var v: YPLibraryView!
-    internal static let cellSize = CGSize(width: UIScreen.main.bounds.width/4 * UIScreen.main.scale,
-                                          height: UIScreen.main.bounds.width/4 * UIScreen.main.scale)
     
-    // Pan gesture
-    internal let imageCropViewOriginalConstraintTop: CGFloat = 0
-    internal var dragDirection = YPDragDirection.up
-    internal var imaginaryCollectionViewOffsetStartPosY: CGFloat = 0.0
-    internal var cropBottomY: CGFloat  = 0.0
-    internal var dragStartPos: CGPoint = .zero
-    internal let dragDiff: CGFloat = 0
-    var _isImageShown = true
-    var isImageShown: Bool {
-        get { return self._isImageShown }
-        set {
-            if newValue != isImageShown {
-                self._isImageShown = newValue
-                v.imageCropViewContainer.isShown = newValue
-                // Update imageCropContainer
-                v.imageCropView.isScrollEnabled = isImageShown
-            }
-        }
-    }
-    
+    internal let panGestureHelper = PanGestureHelper()
+
     // MARK: - Init
     
     public required init(configuration: YPImagePickerConfiguration) {
@@ -58,22 +34,21 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func setAlbum(_ album: YPAlbum) {
+        mediaManager.collection = album.collection
+    }
+    
     func initialize() {
-        imageManager = PHCachingImageManager()
-        if fetchResult != nil {
+        mediaManager.initialize()
+    
+        if mediaManager.fetchResult != nil {
             return
         }
-        resetCachedAssets()
         setupCollectionView()
         registerForLibraryChanges()
-        registerForPanGesture()
+        panGestureHelper.registerForPanGesture(on: v)
         registerForTapOnPreview()
-        
-        v.imageCropViewConstraintTop.constant = 0
-        dragDirection = YPDragDirection.up
-        
         refreshMediaRequest()
-        
         v.imageCropViewContainer.onlySquareImages = configuration.onlySquareImagesFromLibrary
         v.imageCropView.onlySquareImages = configuration.onlySquareImagesFromLibrary
     }
@@ -117,13 +92,9 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
     
     @objc
     func tappedImage() {
-        if !isImageShown {
-            v.imageCropViewConstraintTop.constant = imageCropViewOriginalConstraintTop
-            UIView.animate(withDuration: 0.2,
-                           delay: 0.0,
-                           options: .curveEaseOut,
-                           animations: v.layoutIfNeeded,
-                           completion: nil)
+        if !panGestureHelper.isImageShown {
+            panGestureHelper.resetToOriginalState()
+            // no dragup? needed? dragDirection = .up
             v.refreshImageCurtainAlpha()
         }
     }
@@ -176,19 +147,19 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
         let options = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         
-        if let collection = self.collection {
+        if let collection = self.mediaManager.collection {
             if !configuration.showsVideo {
                 options.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
             }
-            fetchResult = PHAsset.fetchAssets(in: collection, options: options)
+            mediaManager.fetchResult = PHAsset.fetchAssets(in: collection, options: options)
         } else {
-            fetchResult = configuration.showsVideo
+            mediaManager.fetchResult = configuration.showsVideo
                 ? PHAsset.fetchAssets(with: options)
                 : PHAsset.fetchAssets(with: PHAssetMediaType.image, options: options)
         }
         
-        if fetchResult.count > 0 {
-            changeImage(fetchResult[0])
+        if mediaManager.fetchResult.count > 0 {
+            changeImage(mediaManager.fetchResult[0])
             v.collectionView.reloadData()
             v.collectionView.selectItem(at: IndexPath(row: 0, section: 0),
                                              animated: false,
@@ -206,7 +177,7 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView == v.collectionView {
-            updateCachedAssets()
+            mediaManager.updateCachedAssets(in: self.v.collectionView)
         }
     }
     
@@ -219,7 +190,7 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
     }
     
     private func changeImagePhoto(_ asset: PHAsset) {
-        imageManager?.fetch(photo: asset) { image, isFromCloud in
+        mediaManager.imageManager?.fetch(photo: asset) { image, isFromCloud in
             // Prevent long images to come after user selected
             // another in the meantime.
             if self.latestImageTapped == asset.localIdentifier {
@@ -234,7 +205,7 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
     }
 
     func changeImage(_ asset: PHAsset) {
-        selectedAsset = asset
+        mediaManager.selectedAsset = asset
         latestImageTapped = asset.localIdentifier
         asset.mediaType == .video ? v.setVideoMode() : v.setPhotoMode()
         v.hidePlayer()
@@ -249,47 +220,6 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
         }
     }
     
-    // MARK: - Asset Caching
-    
-    func resetCachedAssets() {
-        imageManager?.stopCachingImagesForAllAssets()
-        previousPreheatRect = .zero
-    }
-    
-    func updateCachedAssets() {
-        var preheatRect = v.collectionView!.bounds
-        preheatRect = preheatRect.insetBy(dx: 0.0, dy: -0.5 * preheatRect.height)
-        
-        let delta = abs(preheatRect.midY - previousPreheatRect.midY)
-        if delta > v.collectionView!.bounds.height / 3.0 {
-            
-            var addedIndexPaths: [IndexPath] = []
-            var removedIndexPaths: [IndexPath] = []
-            
-            previousPreheatRect.differenceWith(rect: preheatRect,
-                                              removedHandler: { removedRect in
-                let indexPaths = self.v.collectionView.aapl_indexPathsForElementsInRect(removedRect)
-                removedIndexPaths += indexPaths
-                }, addedHandler: {addedRect in
-                    let indexPaths = self.v.collectionView.aapl_indexPathsForElementsInRect(addedRect)
-                    addedIndexPaths += indexPaths
-            })
-            
-            let assetsToStartCaching =  fetchResult.assetsAtIndexPaths(addedIndexPaths)
-            let assetsToStopCaching = fetchResult.assetsAtIndexPaths(removedIndexPaths)
-            
-            imageManager?.startCachingImages(for: assetsToStartCaching,
-                                                  targetSize: YPLibraryVC.cellSize,
-                                                  contentMode: .aspectFill,
-                                                  options: nil)
-            imageManager?.stopCachingImages(for: assetsToStopCaching,
-                                                 targetSize: YPLibraryVC.cellSize,
-                                                 contentMode: .aspectFill,
-                                                 options: nil)
-            previousPreheatRect = preheatRect
-        }
-    }
-    
     private func showVideoTooLongAlert() {
         let alert = YPAlerts.videoTooLongAlert(with: configuration)
         present(alert, animated: true, completion: nil)
@@ -301,7 +231,7 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
         delegate?.libraryViewStartedLoadingImage()
         let cropRect = v.currentCropRect()
         let ts = targetSize(for: asset, cropRect: cropRect)
-        imageManager?.fetchImage(for: asset, cropRect: cropRect, targetSize: ts, callback: callback)
+        mediaManager.imageManager?.fetchImage(for: asset, cropRect: cropRect, targetSize: ts, callback: callback)
     }
     
     private func fetchVideoURL(for asset: PHAsset, callback: @escaping (_ videoURL: URL) -> Void) {
@@ -309,7 +239,7 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
             showVideoTooLongAlert()
         } else {
             delegate?.libraryViewStartedLoadingImage()
-            imageManager?.fetchUrl(for: asset, callback: callback)
+            mediaManager.imageManager?.fetchUrl(for: asset, callback: callback)
         }
     }
     
@@ -329,7 +259,7 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
     public func selectedMedia(photoCallback:@escaping (_ photo: UIImage) -> Void,
                               videoCallback: @escaping (_ videoURL: URL) -> Void) {
         DispatchQueue.global(qos: .userInitiated).async {
-            let asset = self.selectedAsset!
+            let asset = self.mediaManager.selectedAsset!
             switch asset.mediaType {
             case .video:
                 self.fetchVideoURL(for: asset, callback: { videoURL in

@@ -124,4 +124,9 @@ extension YPLibraryView {
             / (imageCropViewContainer.frame.height - imageCropViewMinimalVisibleHeight)
         imageCropViewContainer.curtain.alpha = imageCurtainAlpha
     }
+    
+    func cellSize() -> CGSize {
+        let size = UIScreen.main.bounds.width/4 * UIScreen.main.scale
+        return CGSize(width: size, height: size)
+    }
 }
