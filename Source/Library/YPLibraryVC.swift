@@ -9,17 +9,10 @@
 import UIKit
 import Photos
 
-@objc
-public protocol YPLibraryViewDelegate: class {
-    func libraryViewCameraRollUnauthorized()
-    func libraryViewStartedLoadingImage()
-    func libraryViewFinishedLoadingImage()
-}
-
 public class YPLibraryVC: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate,
 PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDelegateFlowLayout, PermissionCheckable {
     
-    private let configuration: YPImagePickerConfiguration!
+    internal let configuration: YPImagePickerConfiguration!
     public required init(configuration: YPImagePickerConfiguration) {
         self.configuration = configuration
         super.init(nibName: nil, bundle: nil)
@@ -40,16 +33,9 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
                           height: UIScreen.main.bounds.width/4 * UIScreen.main.scale)
     var phAsset: PHAsset!
     
-    // Variables for calculating the position
-    enum Direction {
-        case scroll
-        case stop
-        case up
-        case down
-    }
     let imageCropViewOriginalConstraintTop: CGFloat = 0
     let imageCropViewMinimalVisibleHeight: CGFloat  = 50
-    var dragDirection = Direction.up
+    var dragDirection = YPDragDirection.up
     var imaginaryCollectionViewOffsetStartPosY: CGFloat = 0.0
     
     var cropBottomY: CGFloat  = 0.0
@@ -73,6 +59,8 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
             }
         }
     }
+    
+    var latestImageTapped = ""
 
     var v: YPLibraryView!
     
@@ -176,7 +164,7 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
         v.addGestureRecognizer(panGesture)
         
         v.imageCropViewConstraintTop.constant = 0
-        dragDirection = Direction.up
+        dragDirection = YPDragDirection.up
         
         v.imageCropViewContainer.layer.shadowColor   = UIColor.black.cgColor
         v.imageCropViewContainer.layer.shadowRadius  = 30.0
@@ -273,36 +261,36 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
             cropBottomY = v.imageCropViewContainer.frame.origin.y + containerHeight
             
             // Move
-            if dragDirection == Direction.stop {
+            if dragDirection == .stop {
                 dragDirection = (v.imageCropViewConstraintTop.constant == imageCropViewOriginalConstraintTop)
-                    ? Direction.up
-                    : Direction.down
+                    ? .up
+                    : .down
             }
             
             // Scroll event of CollectionView is preferred.
-            if (dragDirection == Direction.up && dragStartPos.y < cropBottomY + dragDiff) ||
-                (dragDirection == Direction.down && dragStartPos.y > cropBottomY) {
-                dragDirection = Direction.stop
+            if (dragDirection == .up && dragStartPos.y < cropBottomY + dragDiff) ||
+                (dragDirection == .down && dragStartPos.y > cropBottomY) {
+                dragDirection = .stop
             }
         } else if sender.state == UIGestureRecognizerState.changed {
             let currentPos = sender.location(in: v)
-            if dragDirection == Direction.up && currentPos.y < cropBottomY - dragDiff {
+            if dragDirection == .up && currentPos.y < cropBottomY - dragDiff {
                 v.imageCropViewConstraintTop.constant =
                     max(imageCropViewMinimalVisibleHeight - containerHeight, currentPos.y + dragDiff - containerHeight)
-            } else if dragDirection == Direction.down && currentPos.y > cropBottomY {
+            } else if dragDirection == .down && currentPos.y > cropBottomY {
                 v.imageCropViewConstraintTop.constant =
                     min(imageCropViewOriginalConstraintTop, currentPos.y - containerHeight)
-            } else if dragDirection == Direction.stop && v.collectionView.contentOffset.y < 0 {
-                dragDirection = Direction.scroll
+            } else if dragDirection == .stop && v.collectionView.contentOffset.y < 0 {
+                dragDirection = .scroll
                 imaginaryCollectionViewOffsetStartPosY = currentPos.y
-            } else if dragDirection == Direction.scroll {
+            } else if dragDirection == .scroll {
                 v.imageCropViewConstraintTop.constant =
                     imageCropViewMinimalVisibleHeight - containerHeight
                     + currentPos.y - imaginaryCollectionViewOffsetStartPosY
             }
         } else {
             imaginaryCollectionViewOffsetStartPosY = 0.0
-            if sender.state == UIGestureRecognizerState.ended && dragDirection == Direction.stop {
+            if sender.state == UIGestureRecognizerState.ended && dragDirection == .stop {
                 return
             }
             let currentPos = sender.location(in: v)
@@ -317,7 +305,7 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
                                animations: {
                     self.v.layoutIfNeeded()
                     }, completion: nil)
-                dragDirection = Direction.down
+                dragDirection = .down
             } else {
                 // Get back to the original position
                 v.imageCropViewConstraintTop.constant = imageCropViewOriginalConstraintTop
@@ -327,7 +315,7 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
                                animations: {
                     self.v.layoutIfNeeded()
                     }, completion: nil)
-                dragDirection = Direction.up
+                dragDirection = .up
             }
         }
         
@@ -402,7 +390,7 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
         UIView.animate(withDuration: 0.2, delay: 0.0, options: UIViewAnimationOptions.curveEaseOut, animations: {
             self.v.layoutIfNeeded()
             }, completion: nil)
-        dragDirection = Direction.up
+        dragDirection = .up
         collectionView.scrollToItem(at: indexPath, at: .top, animated: true)
         refreshImageCurtainAlpha()
         
@@ -448,103 +436,40 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
         }
     }
     
-    var latestImageTapped = ""
+    private func changeImageVideo(_ asset: PHAsset) {
+        hideGrid()
+        showLoader()
+        refreshCropControl()
+        downloadAndSetPreviewFor(video: asset)
+        downloadAndPlay(video: asset)
+    }
+    
+    private func changeImagePhoto(_ asset: PHAsset) {
+        imageManager?.fetch(photo: asset) { image, isFromCloud in
+            // Prevent long images to come after user selected
+            // another in the meantime.
+            if self.latestImageTapped == asset.localIdentifier {
+                if isFromCloud {
+                    self.showLoader()
+                } else {
+                    self.fadeOutLoader()
+                }
+                self.display(photo: asset, image: image)
+            }
+        }
+    }
 
     func changeImage(_ asset: PHAsset) {
         phAsset = asset
         latestImageTapped = asset.localIdentifier
-        v.imageCropViewContainer.isVideoMode = asset.mediaType == .video
-        
-        v.imageCropViewContainer.playerLayer.player?.pause()
-        v.imageCropViewContainer.playerLayer.isHidden = true
+        setVideoMode(asset.mediaType == .video)
+        resetPlayer()
         
         switch asset.mediaType {
         case .image:
-            DispatchQueue.global(qos: .default).async {
-                let options = PHImageRequestOptions()
-                options.isNetworkAccessAllowed = true
-                self.imageManager?.requestImage(for: asset,
-                                               targetSize: CGSize(width: asset.pixelWidth, height: asset.pixelHeight),
-                                               contentMode: .aspectFill,
-                                               options: options) { result, info in
-                                                // Prevent long images to come after user selected
-                                                // another in the meantime.
-                                                if self.latestImageTapped == asset.localIdentifier {
-                                                    DispatchQueue.main.async {
-                                                        
-                                                        if let isFromCloud = info?[PHImageResultIsDegradedKey] as? Bool,
-                                                            isFromCloud == true {
-                                                            self.v.imageCropViewContainer.spinnerView.alpha = 1
-                                                        } else {
-                                                            UIView.animate(withDuration: 0.2) {
-                                                                self.v.imageCropViewContainer.spinnerView.alpha = 0
-                                                            }
-                                                        }
-                                                    
-                                                        self.v.imageCropView.imageSize = CGSize(
-                                                            width: asset.pixelWidth,
-                                                            height: asset.pixelHeight)
-                                                        self.v.imageCropView.image = result
-                                                        
-                                                        if self.configuration.onlySquareImagesFromLibrary {
-                                                            self.v.imageCropView.setFitImage(true)
-                                                            self.v.imageCropView.minimumZoomScale =
-                                                                self.v.imageCropView.squaredZoomScale
-                                                        }
-                                                        self.v.imageCropViewContainer.refreshSquareCropButton()
-                                                    }
-                                                }
-                }
-        }
+            self.changeImagePhoto(asset)
         case .video:
-            
-            DispatchQueue.main.async {
-                self.v.imageCropViewContainer.grid.alpha = 0
-                self.v.imageCropViewContainer.spinnerView.alpha = 1
-                self.v.imageCropViewContainer.refreshSquareCropButton()
-            }
-            
-            DispatchQueue.global(qos: .default).async {
-                
-                // Load video image preview.
-                let options = PHImageRequestOptions()
-                options.isNetworkAccessAllowed = true
-                options.deliveryMode = .opportunistic
-                let screenWidth = UIScreen.main.bounds.width
-                self.imageManager?.requestImage(for: asset,
-                                               targetSize: CGSize(width: screenWidth, height: screenWidth),
-                                               contentMode: .aspectFill,
-                                               options: options) { result, _ in
-                                                // Prevent long images to come after user selected
-                                                // another in the meantime.
-                                                if self.latestImageTapped == asset.localIdentifier {
-                                                    DispatchQueue.main.async {
-                                                        self.v.imageCropView.image = result
-                                                        self.v.imageCropViewContainer.cropView?
-                                                            .setFitImage(true, animated: false)
-                                                    }
-                                                }
-                }
-                
-                // Play video
-                let videosOptions = PHVideoRequestOptions()
-                videosOptions.deliveryMode = PHVideoRequestOptionsDeliveryMode.automatic
-                videosOptions.isNetworkAccessAllowed = true
-                self.imageManager?.requestPlayerItem(forVideo: asset,
-                                                           options: videosOptions,
-                                                           resultHandler: { playerItem, _ in
-                    // Prevent long videos to come after user selected another in the meantime.
-                    if self.latestImageTapped == asset.localIdentifier {
-                        DispatchQueue.main.async {
-                            let player = AVPlayer(playerItem: playerItem)
-                            self.v.imageCropViewContainer.playerLayer.player = player
-                            self.v.imageCropViewContainer.playerLayer.isHidden = false
-                            self.v.imageCropViewContainer.spinnerView.alpha = 0
-                            player.play()
-                        }
-                    }
-                })
-            }
+            self.changeImageVideo(asset)
         case .audio, .unknown:
             ()
         }
@@ -662,23 +587,12 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
         present(alert, animated: true, completion: nil)
     }
     
-    private func fetchUrl(for videoAsset: PHAsset, callback: @escaping (URL) -> Void) {
-        let videosOptions = PHVideoRequestOptions()
-        videosOptions.isNetworkAccessAllowed = true
-        delegate?.libraryViewStartedLoadingImage()
-        imageManager?.requestAVAsset(forVideo: videoAsset, options: videosOptions) { v, _, _ in
-            guard let urlAsset = v as? AVURLAsset else {
-                return
-            }
-            callback(urlAsset.url)
-        }
-    }
-    
     private func fetchVideoURL(for asset: PHAsset, callback: @escaping (_ videoURL: URL) -> Void) {
         if asset.duration > configuration.videoFromLibraryTimeLimit {
             showVideoTooLongAlert()
         } else {
-            fetchUrl(for: asset, callback: callback)
+            delegate?.libraryViewStartedLoadingImage()
+            imageManager?.fetchUrl(for: asset, callback: callback)
         }
     }
     
@@ -693,15 +607,6 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
         return CGRect(x: normalizedX, y: normalizedY, width: normalizedWidth, height: normalizedHeight)
     }
     
-    private func photoImageRequestOptions() -> PHImageRequestOptions {
-        let options = PHImageRequestOptions()
-        options.deliveryMode = .highQualityFormat
-        options.isNetworkAccessAllowed = true
-        options.resizeMode = PHImageRequestOptionsResizeMode.exact
-        options.isSynchronous = true // Ok since we're already in a background thread
-        return options
-    }
-    
     private func targetSize(for asset: PHAsset, cropRect: CGRect) -> CGSize {
         let width = floor(CGFloat(asset.pixelWidth) * cropRect.width)
         let height = floor(CGFloat(asset.pixelHeight) * cropRect.height)
@@ -714,16 +619,10 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
     }
     
     private func fetchImage(for asset: PHAsset, callback: @escaping (_ photo: UIImage) -> Void) {
-        let cropRect = currentCropRect()
-        let options = photoImageRequestOptions()
-        options.normalizedCropRect = cropRect
-        let ts = targetSize(for: asset, cropRect: cropRect)
         delegate?.libraryViewStartedLoadingImage()
-        imageManager?.requestImage(for: asset, targetSize: ts, contentMode: .aspectFit, options: options) { image, _ in
-            if let image = image {
-                callback(image)
-            }
-        }
+        let cropRect = currentCropRect()
+        let ts = targetSize(for: asset, cropRect: cropRect)
+        imageManager?.fetchImage(for: asset, cropRect: cropRect, targetSize: ts, callback: callback)
     }
     
     public func selectedMedia(photoCallback:@escaping (_ photo: UIImage) -> Void,
