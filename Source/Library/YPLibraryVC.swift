@@ -648,86 +648,105 @@ PHPhotoLibraryChangeObserver, UIGestureRecognizerDelegate, UICollectionViewDeleg
         return assets
     }
     
-    public func selectedMedia(photo:@escaping (_ photo: UIImage) -> Void,
-                              video: @escaping (_ videoURL: URL) -> Void) {
+    private func showVideoTooLongAlert() {
+        let msg = String(format: NSLocalizedString("YPImagePickerVideoTooLongDetail",
+                                                   tableName: nil,
+                                                   bundle: Bundle(for: YPPickerVC.self),
+                                                   value: "",
+                                                   comment: ""), "\(self.configuration.videoFromLibraryTimeLimit)")
         
-        // Get crop rect if cropped to square
-        var cropRect = CGRect.zero
-        if let cropView = v.imageCropView {
-            let normalizedX = min(1, cropView.contentOffset.x / cropView.contentSize.width)
-            let normalizedY = min(1, cropView.contentOffset.y / cropView.contentSize.height)
-            let normalizedWidth = min(1, cropView.frame.width / cropView.contentSize.width)
-            let normalizedHeight = min(1, cropView.frame.height / cropView.contentSize.height)
-            cropRect = CGRect(x: normalizedX, y: normalizedY, width: normalizedWidth, height: normalizedHeight)
+        let alert = UIAlertController(title: ypLocalized("YPImagePickerVideoTooLongTitle"),
+                                      message: msg,
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
+    
+    private func fetchUrl(for videoAsset: PHAsset, callback: @escaping (URL) -> Void) {
+        let videosOptions = PHVideoRequestOptions()
+        videosOptions.isNetworkAccessAllowed = true
+        delegate?.libraryViewStartedLoadingImage()
+        imageManager?.requestAVAsset(forVideo: videoAsset, options: videosOptions) { v, _, _ in
+            guard let urlAsset = v as? AVURLAsset else {
+                return
+            }
+            callback(urlAsset.url)
         }
-        
+    }
+    
+    private func fetchVideoURL(for asset: PHAsset, callback: @escaping (_ videoURL: URL) -> Void) {
+        if asset.duration > configuration.videoFromLibraryTimeLimit {
+            showVideoTooLongAlert()
+        } else {
+            fetchUrl(for: asset, callback: callback)
+        }
+    }
+    
+    private func currentCropRect() -> CGRect {
+        guard let cropView = v.imageCropView else {
+            return CGRect.zero
+        }
+        let normalizedX = min(1, cropView.contentOffset.x / cropView.contentSize.width)
+        let normalizedY = min(1, cropView.contentOffset.y / cropView.contentSize.height)
+        let normalizedWidth = min(1, cropView.frame.width / cropView.contentSize.width)
+        let normalizedHeight = min(1, cropView.frame.height / cropView.contentSize.height)
+        return CGRect(x: normalizedX, y: normalizedY, width: normalizedWidth, height: normalizedHeight)
+    }
+    
+    private func photoImageRequestOptions() -> PHImageRequestOptions {
+        let options = PHImageRequestOptions()
+        options.deliveryMode = .highQualityFormat
+        options.isNetworkAccessAllowed = true
+        options.resizeMode = PHImageRequestOptionsResizeMode.exact
+        options.isSynchronous = true // Ok since we're already in a background thread
+        return options
+    }
+    
+    private func targetSize(for asset: PHAsset, cropRect: CGRect) -> CGSize {
+        let width = floor(CGFloat(asset.pixelWidth) * cropRect.width)
+        let height = floor(CGFloat(asset.pixelHeight) * cropRect.height)
+        if case let YPLibraryImageSize.cappedTo(size: capped) = configuration.libraryTargetImageSize {
+            let cappedWidth = min(width, capped)
+            let cappedHeight = min(height, capped)
+            return CGSize(width: cappedWidth, height: cappedHeight)
+        }
+        return CGSize(width: width, height: height)
+    }
+    
+    private func fetchImage(for asset: PHAsset, callback: @escaping (_ photo: UIImage) -> Void) {
+        let cropRect = currentCropRect()
+        let options = photoImageRequestOptions()
+        options.normalizedCropRect = cropRect
+        let ts = targetSize(for: asset, cropRect: cropRect)
+        delegate?.libraryViewStartedLoadingImage()
+        imageManager?.requestImage(for: asset, targetSize: ts, contentMode: .aspectFit, options: options) { image, _ in
+            if let image = image {
+                callback(image)
+            }
+        }
+    }
+    
+    public func selectedMedia(photoCallback:@escaping (_ photo: UIImage) -> Void,
+                              videoCallback: @escaping (_ videoURL: URL) -> Void) {
         DispatchQueue.global(qos: .userInitiated).async {
             let asset = self.phAsset!
             switch asset.mediaType {
             case .video:
-                if asset.duration > self.configuration.videoFromLibraryTimeLimit {
-                    
-                    let msg = String(format: NSLocalizedString("YPImagePickerVideoTooLongDetail",
-                                                tableName: nil,
-                                                bundle: Bundle(for: YPPickerVC.self),
-                                                value: "",
-                                                comment: ""), "\(self.configuration.videoFromLibraryTimeLimit)")
-                    
-                    let alert = UIAlertController(title: ypLocalized("YPImagePickerVideoTooLongTitle"),
-                                                  message: msg,
-                                                  preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
-                    self.present(alert, animated: true, completion: nil)
-                } else {
-                    let videosOptions = PHVideoRequestOptions()
-                    videosOptions.isNetworkAccessAllowed = true
-                    self.delegate?.libraryViewStartedLoadingImage()
-                    self.imageManager?.requestAVAsset(forVideo: asset,
-                                                      options: videosOptions) { v, _, _ in
-                                                        if let urlAsset = v as? AVURLAsset {
-                                                            DispatchQueue.main.async {
-                                                                self.delegate?.libraryViewFinishedLoadingImage()
-                                                                video(urlAsset.url)
-                                                            }
-                                                        }
+                self.fetchVideoURL(for: asset, callback: { videoURL in
+                    DispatchQueue.main.async {
+                        self.delegate?.libraryViewFinishedLoadingImage()
+                        videoCallback(videoURL)
                     }
-                }
+                })
             case .image:
-                let options = PHImageRequestOptions()
-                options.deliveryMode = .highQualityFormat
-                options.isNetworkAccessAllowed = true
-                options.normalizedCropRect = cropRect
-                options.resizeMode = PHImageRequestOptionsResizeMode.exact
-                options.isSynchronous = true // Ok since we're already in a Backgroudn thread
-                
-                let targetWidth = floor(CGFloat(self.phAsset.pixelWidth) * cropRect.width)
-                let targetHeight = floor(CGFloat(self.phAsset.pixelHeight) * cropRect.height)
-                var targetSize = CGSize.zero
-                switch self.configuration.libraryTargetImageSize {
-                case .original:
-                    targetSize = CGSize(width: targetWidth, height: targetHeight)
-                case .cappedTo(size: let capped):
-                    // If image is smaller than limit, use original image size.
-                    if targetWidth <= capped && targetHeight <= capped {
-                        targetSize = CGSize(width: targetWidth, height: targetHeight)
-                    } else {
-                        targetSize = CGSize(width: capped, height: capped)
+                self.fetchImage(for: asset) { image in
+                    DispatchQueue.main.async {
+                        self.delegate?.libraryViewFinishedLoadingImage()
+                        photoCallback(image)
                     }
-                }
-                
-                self.delegate?.libraryViewStartedLoadingImage()
-                self.imageManager?
-                    .requestImage(for: asset,
-                                  targetSize: targetSize,
-                                  contentMode: .aspectFit,
-                                  options: options) { result, _ in
-                                    DispatchQueue.main.async {
-                                        self.delegate?.libraryViewFinishedLoadingImage()
-                                        photo(result!)
-                                    }
                 }
             case .audio, .unknown:
-                ()
+                return
             }
         }
     }

@@ -269,9 +269,9 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     func done() {
         if mode == .library {
             albumVC.doAfterPermissionCheck { [weak self] in
-                self?.albumVC.selectedMedia(photo: { img in
+                self?.albumVC.selectedMedia(photoCallback: { img in
                     self?.didSelectImage?(img, false)
-                }, video: { videoURL in
+                }, videoCallback: { videoURL in
                     self?.didSelectVideo?(videoURL)
                 })
             }
