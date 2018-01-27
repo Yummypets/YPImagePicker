@@ -11,6 +11,7 @@ import Stevia
 
 class YPCameraView: UIView, UIGestureRecognizerDelegate {
     
+    let focusView = UIView(frame: CGRect(x: 0, y: 0, width: 90, height: 90))
     let previewViewContainer = UIView()
     let buttonsContainer = UIView()
     let flipButton = UIButton()

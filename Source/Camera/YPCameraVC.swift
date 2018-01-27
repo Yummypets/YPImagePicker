@@ -20,7 +20,6 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, Permissi
     }
     var videoInput: AVCaptureDeviceInput!
     let imageOutput = AVCaptureStillImageOutput()
-    let focusView = UIView(frame: CGRect(x: 0, y: 0, width: 90, height: 90))
     var v = YPCameraView()
     var isPreviewSetup = false
     
@@ -98,10 +97,10 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, Permissi
         let viewsize = v.previewViewContainer.bounds.size
         let newPoint = CGPoint(x: point.x/viewsize.width, y: point.y/viewsize.height)
         setFocusPointOnDevice(device: device!, point: newPoint)
-        focusView.center = point
-        configureFocusView(focusView)
-        v.addSubview(focusView)
-        animateFocusView(focusView)
+        v.focusView.center = point
+        configureFocusView(v.focusView)
+        v.addSubview(v.focusView)
+        animateFocusView(v.focusView)
     }
     
     public func tryToStartCamera() {
