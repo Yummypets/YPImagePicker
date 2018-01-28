@@ -29,6 +29,10 @@ public struct YPImagePickerConfiguration {
     /// Enables videos within the library and video taking. Defaults to false
     public var showsVideo = false
     
+    /// Enables videos only within the library and video taking. Defaults to false
+    /// If you set both showsVideo and showsVideOnly to true, showsVideoOnly will take priority.
+    public var showsVideoOnly = false
+    
     /// Enables selecting the front camera by default, useful for avatars. Defaults to false
     public var usesFrontCamera = false
     

@@ -89,7 +89,9 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         delegate = self
         
         if controllers.isEmpty {
-            if configuration.showsVideo {
+            if configuration.showsVideoOnly {
+                controllers = [videoVC]
+            } else if configuration.showsVideo {
                 controllers = [albumVC, cameraVC, videoVC]
             } else {
                 controllers = [albumVC, cameraVC]
@@ -105,7 +107,11 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
             startOnPage(1)
         case .video:
             mode = .video
-            startOnPage(configuration.showsVideo ? 2 : 1)
+            if configuration.showsVideoOnly {
+                startOnPage(0)
+            } else {
+                startOnPage(configuration.showsVideo ? 2 : 1)
+            }
         }
         
         updateMode(with: currentController)
