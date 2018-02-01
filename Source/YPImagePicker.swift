@@ -41,6 +41,55 @@ public class YPImagePicker: UINavigationController {
     public var didSelectImage: ((UIImage) -> Void)?
     public var didSelectVideo: ((Data, UIImage, URL) -> Void)?
     
+    private let loadingContainerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(white: 0, alpha: 0.8)
+        return view
+    }()
+    
+    private let activityIndicatorView: UIActivityIndicatorView = {
+        let aiv = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+        aiv.hidesWhenStopped = true
+        aiv.translatesAutoresizingMaskIntoConstraints = false
+        return aiv
+    }()
+    
+    private let label: UILabel = {
+        let frame = CGRect(x: 0, y: 0, width: 200, height: 20)
+        let label = UILabel(frame: frame)
+        label.text = NSLocalizedString("Processing...", comment: "Processing...")
+        label.textColor = .white
+        return label
+    }()
+    
+    private func setupActivityIndicator() {
+        self.view.addSubview(loadingContainerView)
+        loadingContainerView.alpha = 0
+        loadingContainerView.frame = self.view.bounds
+        
+        loadingContainerView.addSubview(label)
+        let labelWidth:CGFloat = 200.0
+        let labelHeight:CGFloat = 20.0
+        let offset:CGFloat = 40.0
+        let frame = CGRect(x: (loadingContainerView.frame.width/2) - offset, y: (loadingContainerView.frame.height/2) + offset, width: labelWidth, height: labelHeight)
+        label.frame = frame
+        
+        loadingContainerView.addSubview(activityIndicatorView)
+        activityIndicatorView.centerXAnchor.constraint(equalTo: loadingContainerView.centerXAnchor).isActive = true
+        activityIndicatorView.centerYAnchor.constraint(equalTo: loadingContainerView.centerYAnchor).isActive = true
+    }
+    
+    func showHideActivityIndicator() {
+        
+        if !activityIndicatorView.isAnimating {
+            activityIndicatorView.startAnimating()
+            loadingContainerView.alpha = 1
+        } else {
+            activityIndicatorView.stopAnimating()
+            loadingContainerView.alpha = 0
+        }
+    }
+    
     override public func viewDidLoad() {
         super.viewDidLoad()
         viewControllers = [picker]
@@ -72,31 +121,39 @@ public class YPImagePicker: UINavigationController {
         }
         
         picker.didSelectVideo = { [unowned self] videoURL in
-            let thumb = thunbmailFromVideoPath(videoURL)
-            // Compress Video to 640x480 format.
-            let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-            if let firstPath = paths.first {
-                let path = firstPath + "/\(Int(Date().timeIntervalSince1970))temporary.mov"
-                let uploadURL = URL(fileURLWithPath: path)
-                let asset = AVURLAsset(url: videoURL)
-                
-                let exportSession = AVAssetExportSession(asset: asset, presetName: self.configuration.videoCompression)
-                exportSession?.outputURL = uploadURL
-                exportSession?.outputFileType = AVFileType.mov
-                exportSession?.shouldOptimizeForNetworkUse = true //USEFUL?
-                exportSession?.exportAsynchronously {
-                    switch exportSession!.status {
-                    case .completed:
-                        if let videoData = FileManager.default.contents(atPath: uploadURL.path) {
-                            DispatchQueue.main.async {
-                                self.didSelectVideo?(videoData, thumb, uploadURL)
+            
+            self.showHideActivityIndicator()
+            
+            DispatchQueue.global(qos: .background).async {
+                let thumb = thunbmailFromVideoPath(videoURL)
+                // Compress Video to 640x480 format.
+                let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+                if let firstPath = paths.first {
+                    
+                    let path = firstPath + "/\(Int(Date().timeIntervalSince1970))temporary.mov"
+                    let uploadURL = URL(fileURLWithPath: path)
+                    let asset = AVURLAsset(url: videoURL)
+                    
+                    let exportSession = AVAssetExportSession(asset: asset, presetName: self.configuration.videoCompression)
+                    exportSession?.outputURL = uploadURL
+                    exportSession?.outputFileType = AVFileType.mov
+                    exportSession?.shouldOptimizeForNetworkUse = true //USEFUL?
+                    exportSession?.exportAsynchronously {
+                        switch exportSession!.status {
+                        case .completed:
+                            if let videoData = FileManager.default.contents(atPath: uploadURL.path) {
+                                DispatchQueue.main.async {
+                                    self.showHideActivityIndicator()
+                                    self.didSelectVideo?(videoData, thumb, uploadURL)
+                                }
                             }
-                        }
-                    default:
-                        // Fall back to default video size:
-                        if let videoData = FileManager.default.contents(atPath: videoURL.path) {
-                            DispatchQueue.main.async {
-                                self.didSelectVideo?(videoData, thumb, uploadURL)
+                        default:
+                            // Fall back to default video size:
+                            if let videoData = FileManager.default.contents(atPath: videoURL.path) {
+                                DispatchQueue.main.async {
+                                    self.showHideActivityIndicator()
+                                    self.didSelectVideo?(videoData, thumb, uploadURL)
+                                }
                             }
                         }
                     }
