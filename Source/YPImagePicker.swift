@@ -93,6 +93,7 @@ public class YPImagePicker: UINavigationController {
     override public func viewDidLoad() {
         super.viewDidLoad()
         viewControllers = [picker]
+        setupActivityIndicator()
         navigationBar.isTranslucent = false
         picker.didSelectImage = { [unowned self] pickedImage, isNewPhoto in
             if self.configuration.showsFilters {
