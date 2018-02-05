@@ -23,12 +23,12 @@ extension UIColor {
 
 public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     
-    private let albumVC: YPLibraryVC
+    private let libraryVC: YPLibraryVC
     
     private let configuration: YPImagePickerConfiguration!
     public required init(configuration: YPImagePickerConfiguration) {
         self.configuration = configuration
-        self.albumVC = YPLibraryVC(configuration: configuration)
+        self.libraryVC = YPLibraryVC(configuration: configuration)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -77,7 +77,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         flashOffImage = imageFromBundle("yp_iconFlash_off")
         flashAutoImage = imageFromBundle("yp_iconFlash_auto")
         
-        albumVC.delegate = self
+        libraryVC.delegate = self
         
         view.backgroundColor = UIColor(r: 247, g: 247, b: 247)
         cameraVC.didCapturePhoto = { [unowned self] img in
@@ -87,31 +87,36 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
             self.didSelectVideo?(videoURL)
         }
         delegate = self
-        
-        if controllers.isEmpty {
-            if configuration.showsVideoOnly {
-                controllers = [videoVC]
-            } else if configuration.showsVideo {
-                controllers = [albumVC, cameraVC, videoVC]
-            } else {
-                controllers = [albumVC, cameraVC]
+    
+        // Show screens
+        var vcs = [UIViewController]()
+        for screen in configuration.screens {
+            switch screen {
+            case .library:
+                vcs.append(libraryVC)
+            case .photo:
+                vcs.append(cameraVC)
+            case .video:
+                vcs.append(videoVC)
+            }
+        }
+        controllers = vcs
+      
+        // Select good mode
+        if configuration.screens.contains(configuration.startOnScreen) {
+            switch configuration.startOnScreen {
+            case .library:
+                mode = .library
+            case .photo:
+                mode = .camera
+            case .video:
+                mode = .video
             }
         }
         
-        switch configuration.startOnScreen {
-        case .library:
-            mode = .library
-            startOnPage(0)
-        case .photo:
-            mode = .camera
-            startOnPage(1)
-        case .video:
-            mode = .video
-            if configuration.showsVideoOnly {
-                startOnPage(0)
-            } else {
-                startOnPage(configuration.showsVideo ? 2 : 1)
-            }
+        // Select good screen
+        if let index = configuration.screens.index(of: configuration.startOnScreen) {
+            startOnPage(index)
         }
         
         updateMode(with: currentController)
@@ -135,7 +140,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     
     func modeFor(vc: UIViewController) -> Mode {
         switch vc {
-        case albumVC:
+        case libraryVC:
             return .library
         case cameraVC:
             return .camera
@@ -168,7 +173,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     func stopCurrentCamera() {
         switch mode {
         case .library:
-            albumVC.pausePlayer()
+            libraryVC.pausePlayer()
         case .camera:
             cameraVC.stopCamera()
         case .video:
@@ -197,12 +202,12 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     func navBarTapped() {
         
         let vc = YPAlbumVC()
-        vc.noVideos = !self.configuration.showsVideo
+        vc.noVideos = !self.configuration.showsVideoInLibrary
         let navVC = UINavigationController(rootViewController: vc)
 
         vc.didSelectAlbum = { [weak self] album in
-            self?.albumVC.setAlbum(album)
-            self?.albumVC.refreshMediaRequest()
+            self?.libraryVC.setAlbum(album)
+            self?.libraryVC.refreshMediaRequest()
             self?.setTitleViewWithTitle(aTitle: album.title)
             self?.dismiss(animated: true, completion: nil)
         }
@@ -247,7 +252,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         navigationItem.leftBarButtonItem?.tintColor = UIColor(r: 38, g: 38, b: 38)
         switch mode {
         case .library:
-            setTitleViewWithTitle(aTitle: albumVC.title ?? "")
+            setTitleViewWithTitle(aTitle: libraryVC.title ?? "")
             navigationItem.rightBarButtonItem = UIBarButtonItem(title: ypLocalized("YPImagePickerNext"),
                                                                 style: .done,
                                                                 target: self,
@@ -274,8 +279,8 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     @objc
     func done() {
         if mode == .library {
-            albumVC.doAfterPermissionCheck { [weak self] in
-                self?.albumVC.selectedMedia(photoCallback: { img in
+            libraryVC.doAfterPermissionCheck { [weak self] in
+                self?.libraryVC.selectedMedia(photoCallback: { img in
                     self?.didSelectImage?(img, false)
                 }, videoCallback: { videoURL in
                     self?.didSelectVideo?(videoURL)

@@ -40,12 +40,13 @@ class ViewController: UIViewController {
         config.onlySquareImagesFromLibrary = false
         config.onlySquareImagesFromCamera = true
 //        config.libraryTargetImageSize = .original
-        config.showsVideo = true //false
+        config.showsVideoInLibrary = true //false
 //        config.usesFrontCamera = true // false
 //        config.showsFilters = true
 //        config.shouldSaveNewPicturesToAlbum = true
         config.videoCompression = AVAssetExportPresetHighestQuality
         config.albumName = "MyGreatAppName"
+        config.screens = [.photo, .library] // customize screens and their order here.
         config.startOnScreen = .library
 //        config.videoRecordingTimeLimit = 10
 //        config.videoFromLibraryTimeLimit = 10
@@ -65,7 +66,7 @@ class ViewController: UIViewController {
             self.imageView.image = img
             picker.dismiss(animated: true, completion: nil)
         }
-        picker.didSelectVideo = { [unowned picker] videoData, videoThumbnailImage in
+        picker.didSelectVideo = { [unowned picker] videoData, videoThumbnailImage, url in
             // video picked
             self.imageView.image = videoThumbnailImage
             picker.dismiss(animated: true, completion: nil)

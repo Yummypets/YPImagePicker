@@ -27,11 +27,11 @@ public struct YPImagePickerConfiguration {
     public var libraryTargetImageSize = YPLibraryImageSize.original
     
     /// Enables videos within the library and video taking. Defaults to false
+    @available(*, unavailable, renamed:"showsVideoInLibrary")
     public var showsVideo = false
     
-    /// Enables videos only within the library and video taking. Defaults to false
-    /// If you set both showsVideo and showsVideOnly to true, showsVideoOnly will take priority.
-    public var showsVideoOnly = false
+    /// Enables videos within the library. Defaults to false
+    public var showsVideoInLibrary = false
     
     /// Enables selecting the front camera by default, useful for avatars. Defaults to false
     public var usesFrontCamera = false
@@ -53,6 +53,10 @@ public struct YPImagePickerConfiguration {
     /// Defines which screen is shown at launch. Video mode will only work if `showsVideo = true`.
     /// Default value is `.photo`
     public var startOnScreen: YPPickerScreen = .photo
+    
+    /// Defines which screens are shown at launch, and their order.
+    /// Default value is `[.library, .photo, .video]`
+    public var screens: [YPPickerScreen] = [.library, .photo, .video]
     
     /// Defines the time limit for recording videos.
     /// Default is 30 seconds.
