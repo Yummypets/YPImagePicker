@@ -72,6 +72,7 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
         super.viewWillDisappear(animated)
         pausePlayer()
         NotificationCenter.default.removeObserver(self)
+        PHPhotoLibrary.shared().unregisterChangeObserver(self)
     }
     
     // MARK: - Crop control
