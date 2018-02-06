@@ -13,7 +13,7 @@ import Photos
 public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, PermissionCheckable {
     
     public var didCapturePhoto: ((UIImage) -> Void)?
-    private let sessionQueue = DispatchQueue(label: "YPCameraVCSerialQueue")
+    private let sessionQueue = DispatchQueue(label: "YPCameraVCSerialQueue", qos: .background)
     let session = AVCaptureSession()
     var device: AVCaptureDevice? {
         return videoInput?.device
@@ -49,21 +49,27 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, Permissi
     
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        refreshFlashButton()
+    }
+    
+    func tryToSetupPreview() {
         if !isPreviewSetup {
             setupPreview()
             isPreviewSetup = true
         }
-        refreshFlashButton()
     }
     
     func setupPreview() {
         let videoLayer = AVCaptureVideoPreviewLayer(session: session)
-        videoLayer.frame = v.previewViewContainer.bounds
-        videoLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
-        v.previewViewContainer.layer.addSublayer(videoLayer)
-        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(focusTapped(_:)))
-        tapRecognizer.delegate = self
-        v.previewViewContainer.addGestureRecognizer(tapRecognizer)
+        
+        DispatchQueue.main.async {
+            videoLayer.frame = self.v.previewViewContainer.bounds
+            videoLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
+            self.v.previewViewContainer.layer.addSublayer(videoLayer)
+            let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.focusTapped(_:)))
+            tapRecognizer.delegate = self
+            self.v.previewViewContainer.addGestureRecognizer(tapRecognizer)
+        }
     }
     
     private func setupCaptureSession() {
@@ -120,6 +126,7 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, Permissi
                     self.session.stopRunning()
                 case .authorized:
                     self.session.startRunning()
+                    self.tryToSetupPreview()
                 }
             }
         }
