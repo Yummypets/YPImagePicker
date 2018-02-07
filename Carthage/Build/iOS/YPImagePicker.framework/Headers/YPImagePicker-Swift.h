@@ -173,9 +173,10 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 #endif
 #if __has_feature(modules)
 @import AVFoundation;
+@import Photos;
+@import ObjectiveC;
 @import UIKit;
 @import CoreGraphics;
-@import Photos;
 @import Foundation;
 #endif
 
@@ -193,6 +194,19 @@ SWIFT_MODULE_NAMESPACE_PUSH("YPImagePicker")
 
 
 
+
+
+
+
+
+@class UIGestureRecognizer;
+
+SWIFT_CLASS("_TtC13YPImagePicker16PanGestureHelper")
+@interface PanGestureHelper : NSObject <UIGestureRecognizerDelegate>
+- (BOOL)gestureRecognizer:(UIGestureRecognizer * _Nonnull)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer * _Nonnull)otherGestureRecognizer SWIFT_WARN_UNUSED_RESULT;
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer * _Nonnull)gestureRecognizer SWIFT_WARN_UNUSED_RESULT;
+- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
+@end
 
 
 
@@ -224,8 +238,6 @@ SWIFT_CLASS("_TtC13YPImagePicker10YPCameraVC")
 @end
 
 
-
-
 SWIFT_CLASS("_TtC13YPImagePicker13YPImagePicker")
 @interface YPImagePicker : UINavigationController
 /// Get a YPImagePicker instance with the default configuration.
@@ -237,29 +249,45 @@ SWIFT_CLASS("_TtC13YPImagePicker13YPImagePicker")
 - (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil SWIFT_UNAVAILABLE;
 @end
 
-@class UIGestureRecognizer;
-@class UICollectionViewCell;
-@class UICollectionViewLayout;
-@class PHChange;
 
 SWIFT_CLASS("_TtC13YPImagePicker11YPLibraryVC")
-@interface YPLibraryVC : UIViewController <PHPhotoLibraryChangeObserver, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate>
+@interface YPLibraryVC : UIViewController
 - (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
 - (void)loadView;
-- (void)viewDidLoad;
 - (void)viewDidAppear:(BOOL)animated;
 - (void)viewWillDisappear:(BOOL)animated;
-- (BOOL)gestureRecognizer:(UIGestureRecognizer * _Nonnull)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer * _Nonnull)otherGestureRecognizer SWIFT_WARN_UNUSED_RESULT;
-- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer * _Nonnull)gestureRecognizer SWIFT_WARN_UNUSED_RESULT;
-- (UICollectionViewCell * _Nonnull)collectionView:(UICollectionView * _Nonnull)collectionView cellForItemAtIndexPath:(NSIndexPath * _Nonnull)indexPath SWIFT_WARN_UNUSED_RESULT;
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView * _Nonnull)collectionView SWIFT_WARN_UNUSED_RESULT;
-- (NSInteger)collectionView:(UICollectionView * _Nonnull)collectionView numberOfItemsInSection:(NSInteger)section SWIFT_WARN_UNUSED_RESULT;
-- (CGSize)collectionView:(UICollectionView * _Nonnull)collectionView layout:(UICollectionViewLayout * _Nonnull)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath * _Nonnull)indexPath SWIFT_WARN_UNUSED_RESULT;
-- (void)collectionView:(UICollectionView * _Nonnull)collectionView didSelectItemAtIndexPath:(NSIndexPath * _Nonnull)indexPath;
 - (void)scrollViewDidScroll:(UIScrollView * _Nonnull)scrollView;
-- (void)photoLibraryDidChange:(PHChange * _Nonnull)changeInstance;
 - (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil SWIFT_UNAVAILABLE;
 @end
+
+
+
+@class UICollectionViewLayout;
+
+@interface YPLibraryVC (SWIFT_EXTENSION(YPImagePicker)) <UICollectionViewDelegateFlowLayout>
+- (CGSize)collectionView:(UICollectionView * _Nonnull)collectionView layout:(UICollectionViewLayout * _Nonnull)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath * _Nonnull)indexPath SWIFT_WARN_UNUSED_RESULT;
+@end
+
+
+@interface YPLibraryVC (SWIFT_EXTENSION(YPImagePicker)) <UICollectionViewDataSource>
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView * _Nonnull)collectionView SWIFT_WARN_UNUSED_RESULT;
+- (NSInteger)collectionView:(UICollectionView * _Nonnull)collectionView numberOfItemsInSection:(NSInteger)section SWIFT_WARN_UNUSED_RESULT;
+@end
+
+@class PHChange;
+
+@interface YPLibraryVC (SWIFT_EXTENSION(YPImagePicker)) <PHPhotoLibraryChangeObserver>
+- (void)photoLibraryDidChange:(PHChange * _Nonnull)changeInstance;
+@end
+
+@class UICollectionViewCell;
+
+@interface YPLibraryVC (SWIFT_EXTENSION(YPImagePicker)) <UICollectionViewDelegate>
+- (UICollectionViewCell * _Nonnull)collectionView:(UICollectionView * _Nonnull)collectionView cellForItemAtIndexPath:(NSIndexPath * _Nonnull)indexPath SWIFT_WARN_UNUSED_RESULT;
+- (void)collectionView:(UICollectionView * _Nonnull)collectionView didSelectItemAtIndexPath:(NSIndexPath * _Nonnull)indexPath;
+@end
+
+
 
 
 SWIFT_PROTOCOL("_TtP13YPImagePicker21YPLibraryViewDelegate_")
@@ -291,23 +319,11 @@ SWIFT_CLASS("_TtC13YPImagePicker10YPPickerVC")
 
 SWIFT_CLASS("_TtC13YPImagePicker9YPVideoVC")
 @interface YPVideoVC : UIViewController
-- (void)loadView;
 - (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
+- (void)loadView;
 - (void)viewDidLoad;
 - (void)viewDidAppear:(BOOL)animated;
 - (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil SWIFT_UNAVAILABLE;
-@end
-
-
-
-
-
-@class AVCaptureFileOutput;
-@class AVCaptureConnection;
-
-@interface YPVideoVC (SWIFT_EXTENSION(YPImagePicker)) <AVCaptureFileOutputRecordingDelegate>
-- (void)captureOutput:(AVCaptureFileOutput * _Nonnull)captureOutput didStartRecordingToOutputFileAtURL:(NSURL * _Nonnull)fileURL fromConnections:(NSArray<AVCaptureConnection *> * _Nonnull)connections;
-- (void)captureOutput:(AVCaptureFileOutput * _Nonnull)captureOutput didFinishRecordingToOutputFileAtURL:(NSURL * _Nonnull)outputFileURL fromConnections:(NSArray<AVCaptureConnection *> * _Nonnull)connections error:(NSError * _Nullable)error;
 @end
 
 SWIFT_MODULE_NAMESPACE_POP
