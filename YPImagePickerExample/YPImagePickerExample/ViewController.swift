@@ -40,12 +40,13 @@ class ViewController: UIViewController {
         config.onlySquareImagesFromLibrary = false
         config.onlySquareImagesFromCamera = true
 //        config.libraryTargetImageSize = .original
-        config.showsVideo = true //false
+        config.showsVideoInLibrary = true //false
 //        config.usesFrontCamera = true // false
 //        config.showsFilters = true
 //        config.shouldSaveNewPicturesToAlbum = true
         config.videoCompression = AVAssetExportPresetHighestQuality
         config.albumName = "MyGreatAppName"
+        config.screens = [.photo, .library] // customize screens and their order here.
         config.startOnScreen = .library
 //        config.videoRecordingTimeLimit = 10
 //        config.videoFromLibraryTimeLimit = 10

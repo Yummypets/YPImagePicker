@@ -72,6 +72,7 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
         super.viewWillDisappear(animated)
         pausePlayer()
         NotificationCenter.default.removeObserver(self)
+        PHPhotoLibrary.shared().unregisterChangeObserver(self)
     }
     
     // MARK: - Crop control
@@ -148,12 +149,12 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         
         if let collection = self.mediaManager.collection {
-            if !configuration.showsVideo {
+            if !configuration.showsVideoInLibrary {
                 options.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
             }
             mediaManager.fetchResult = PHAsset.fetchAssets(in: collection, options: options)
         } else {
-            mediaManager.fetchResult = configuration.showsVideo
+            mediaManager.fetchResult = configuration.showsVideoInLibrary
                 ? PHAsset.fetchAssets(with: options)
                 : PHAsset.fetchAssets(with: PHAssetMediaType.image, options: options)
         }

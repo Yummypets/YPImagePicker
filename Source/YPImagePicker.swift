@@ -68,10 +68,13 @@ public class YPImagePicker: UINavigationController {
         loadingContainerView.frame = self.view.bounds
         
         loadingContainerView.addSubview(label)
-        let labelWidth:CGFloat = 200.0
-        let labelHeight:CGFloat = 20.0
-        let offset:CGFloat = 40.0
-        let frame = CGRect(x: (loadingContainerView.frame.width/2) - offset, y: (loadingContainerView.frame.height/2) + offset, width: labelWidth, height: labelHeight)
+        let labelWidth: CGFloat = 200.0
+        let labelHeight: CGFloat = 20.0
+        let offset: CGFloat = 40.0
+        let frame = CGRect(x: (loadingContainerView.frame.width/2) - offset,
+                           y: (loadingContainerView.frame.height/2) + offset,
+                           width: labelWidth,
+                           height: labelHeight)
         label.frame = frame
         
         loadingContainerView.addSubview(activityIndicatorView)
@@ -135,7 +138,8 @@ public class YPImagePicker: UINavigationController {
                     let uploadURL = URL(fileURLWithPath: path)
                     let asset = AVURLAsset(url: videoURL)
                     
-                    let exportSession = AVAssetExportSession(asset: asset, presetName: self.configuration.videoCompression)
+                    let exportSession = AVAssetExportSession(asset: asset,
+                                                             presetName: self.configuration.videoCompression)
                     exportSession?.outputURL = uploadURL
                     exportSession?.outputFileType = AVFileType.mov
                     exportSession?.shouldOptimizeForNetworkUse = true //USEFUL?
