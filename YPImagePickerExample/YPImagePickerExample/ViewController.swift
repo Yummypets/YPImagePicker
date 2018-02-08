@@ -46,7 +46,7 @@ class ViewController: UIViewController {
 //        config.shouldSaveNewPicturesToAlbum = true
         config.videoCompression = AVAssetExportPresetHighestQuality
         config.albumName = "MyGreatAppName"
-        config.screens = [.photo, .library] // customize screens and their order here.
+        config.screens = [.library, .photo, .video] // customize screens and their order here.
         config.startOnScreen = .library
 //        config.videoRecordingTimeLimit = 10
 //        config.videoFromLibraryTimeLimit = 10
