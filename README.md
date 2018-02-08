@@ -4,8 +4,7 @@ YPImagePicker is an instagram-like photo/video picker for iOS written in pure Sw
 It comes with adjustable square crop and filters.
 
 [![Version](https://img.shields.io/cocoapods/v/YPImagePicker.svg?style=flat)](http://cocoapods.org/pods/YPImagePicker)
-[![Platform](https://img.shields.io/cocoapods/p/Fusuma.svg?style=flat)](http://cocoapods.org/pods/Fusuma)
-[![CI Status](http://img.shields.io/travis/ytakzk/Fusuma.svg?style=flat)](https://travis-ci.org/ytakzk/Fusuma)
+[![Platform](https://img.shields.io/cocoapods/p/YPImagePicker.svg?style=flat)](http://cocoapods.org/pods/YPImagePicker)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![codebeat badge](https://codebeat.co/badges/9710a89d-b1e2-4e55-a4a2-3ae1f98f4c53)](https://codebeat.co/projects/github-com-yummypets-ypimagepicker-master)
 [![GitHub tag](https://img.shields.io/github/release/Yummypets/YPImagePicker.svg)]()
@@ -89,12 +88,12 @@ var config = YPImagePickerConfiguration()
 config.onlySquareImagesFromLibrary = false
 config.onlySquareImagesFromCamera = true
 config.libraryTargetImageSize = .original
-config.showsVideo = true
 config.usesFrontCamera = true
 config.showsFilters = true
 config.shouldSaveNewPicturesToAlbum = true
 config.videoCompression = AVAssetExportPresetHighestQuality
 config.albumName = "MyGreatAppName"
+config.screens = [.library, .photo, .video]
 config.startOnScreen = .library
 config.videoRecordingTimeLimit = 10
 config.videoFromLibraryTimeLimit = 20
