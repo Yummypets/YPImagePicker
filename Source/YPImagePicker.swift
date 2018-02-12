@@ -102,9 +102,17 @@ public class YPImagePicker: UINavigationController {
             if self.configuration.showsFilters {
                 let filterVC = YPFiltersVC(image: pickedImage)
                 filterVC.didSelectImage = { filteredImage, isImageFiltered in
-                    self.didSelectImage?(filteredImage)
-                    if (isNewPhoto || isImageFiltered) && self.configuration.shouldSaveNewPicturesToAlbum {
-                        YPPhotoSaver.trySaveImage(filteredImage, inAlbumNamed: self.configuration.albumName)
+                    if case let YPCropType.rectangle(ratio) = self.configuration.showsCrop {
+                        let cropVC = YPCropVC(image: filteredImage, ratio: ratio)
+                        cropVC.didFinishCropping = { croppedImage in
+                            self.didSelectImage?(croppedImage)
+                        }
+                        self.pushViewController(cropVC, animated: true)
+                    } else {
+                        self.didSelectImage?(filteredImage)
+                        if (isNewPhoto || isImageFiltered) && self.configuration.shouldSaveNewPicturesToAlbum {
+                            YPPhotoSaver.trySaveImage(filteredImage, inAlbumNamed: self.configuration.albumName)
+                        }
                     }
                 }
                 

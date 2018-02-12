@@ -23,6 +23,8 @@
 		99A0529F1F20B480005600B3 /* YPAlbumCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A0529E1F20B480005600B3 /* YPAlbumCell.swift */; };
 		99A052A11F20B49B005600B3 /* YPAlbum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A052A01F20B49B005600B3 /* YPAlbum.swift */; };
 		99A052A31F20B4CA005600B3 /* YPAlbumsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A052A21F20B4CA005600B3 /* YPAlbumsManager.swift */; };
+		99A3C91020319227008D7E23 /* YPCropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A3C90F20319227008D7E23 /* YPCropView.swift */; };
+		99A3C91220319231008D7E23 /* YPCropVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A3C91120319231008D7E23 /* YPCropVC.swift */; };
 		99C6D6B91F1FB5C100711DB2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 99C6D6981F1FB5C100711DB2 /* Assets.xcassets */; };
 		99C6D6BA1F1FB5C100711DB2 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 99C6D6991F1FB5C100711DB2 /* Localizable.strings */; };
 		99C6D6BB1F1FB5C100711DB2 /* YPLibraryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D69F1F1FB5C100711DB2 /* YPLibraryVC.swift */; };
@@ -76,6 +78,8 @@
 		99A0529E1F20B480005600B3 /* YPAlbumCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPAlbumCell.swift; sourceTree = "<group>"; };
 		99A052A01F20B49B005600B3 /* YPAlbum.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPAlbum.swift; sourceTree = "<group>"; };
 		99A052A21F20B4CA005600B3 /* YPAlbumsManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPAlbumsManager.swift; sourceTree = "<group>"; };
+		99A3C90F20319227008D7E23 /* YPCropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPCropView.swift; sourceTree = "<group>"; };
+		99A3C91120319231008D7E23 /* YPCropVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPCropVC.swift; sourceTree = "<group>"; };
 		99C6D6981F1FB5C100711DB2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		99C6D69A1F1FB5C100711DB2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		99C6D69B1F1FB5C100711DB2 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -194,6 +198,15 @@
 			name = Albums;
 			sourceTree = "<group>";
 		};
+		99A3C90E20319212008D7E23 /* Crop */ = {
+			isa = PBXGroup;
+			children = (
+				99A3C91120319231008D7E23 /* YPCropVC.swift */,
+				99A3C90F20319227008D7E23 /* YPCropView.swift */,
+			);
+			path = Crop;
+			sourceTree = "<group>";
+		};
 		99C6D6971F1FB5C100711DB2 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -216,6 +229,7 @@
 				99C6D6A61F1FB5C100711DB2 /* Camera */,
 				99C6D6B61F1FB5C100711DB2 /* Video */,
 				99C6D6A91F1FB5C100711DB2 /* Filters */,
+				99A3C90E20319212008D7E23 /* Crop */,
 				99019E542018CECC007325C2 /* Helpers */,
 			);
 			path = Source;
@@ -386,6 +400,7 @@
 				99CF6D21201B70A000487F77 /* YPLibraryVC+CollectionView.swift in Sources */,
 				99CF6D1B201B6A5C00487F77 /* UICollectionView+IndexPath.swift in Sources */,
 				99C6D6C11F1FB5C100711DB2 /* YPImageCropViewContainer.swift in Sources */,
+				99A3C91020319227008D7E23 /* YPCropView.swift in Sources */,
 				99C6D6D11F1FB5C100711DB2 /* YPImagePicker.swift in Sources */,
 				99019E4C2018CCD6007325C2 /* YPBottomPagerView.swift in Sources */,
 				99C6D6BB1F1FB5C100711DB2 /* YPLibraryVC.swift in Sources */,
@@ -406,6 +421,7 @@
 				99A052A31F20B4CA005600B3 /* YPAlbumsManager.swift in Sources */,
 				99A0529F1F20B480005600B3 /* YPAlbumCell.swift in Sources */,
 				99C6D6BC1F1FB5C100711DB2 /* YPLibraryView.swift in Sources */,
+				99A3C91220319231008D7E23 /* YPCropVC.swift in Sources */,
 				99019E512018CDED007325C2 /* YPLibraryImageSize.swift in Sources */,
 				99CF6D25201B727900487F77 /* YPLibraryVC+PanGesture.swift in Sources */,
 				99CF6D27201B739600487F77 /* YPAlerts.swift in Sources */,
