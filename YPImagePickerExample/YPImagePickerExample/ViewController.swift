@@ -48,6 +48,7 @@ class ViewController: UIViewController {
         config.albumName = "MyGreatAppName"
         config.screens = [.library, .photo, .video] // customize screens and their order here.
         config.startOnScreen = .library
+        config.showsCrop = .rectangle(ratio: (16/9))
 //        config.videoRecordingTimeLimit = 10
 //        config.videoFromLibraryTimeLimit = 10
         
