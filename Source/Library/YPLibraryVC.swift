@@ -230,7 +230,7 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
     
     private func fetchImage(for asset: PHAsset, callback: @escaping (_ photo: UIImage) -> Void) {
         delegate?.libraryViewStartedLoadingImage()
-        let cropRect = v.currentCropRect()
+        let cropRect = DispatchQueue.main.sync { v.currentCropRect() }
         let ts = targetSize(for: asset, cropRect: cropRect)
         mediaManager.imageManager?.fetchImage(for: asset, cropRect: cropRect, targetSize: ts, callback: callback)
     }
