@@ -74,6 +74,7 @@ class YPCropView: UIView {
     
     private func applyStyle() {
         backgroundColor = .black
+        clipsToBounds = true
         imageView.style { i in
             i.isUserInteractionEnabled = true
             i.isMultipleTouchEnabled = true
