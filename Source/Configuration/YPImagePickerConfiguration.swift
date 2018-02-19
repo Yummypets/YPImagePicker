@@ -55,7 +55,7 @@ public struct YPImagePickerConfiguration {
     public var startOnScreen: YPPickerScreen = .photo
     
     /// Defines which screens are shown at launch, and their order.
-    /// Default value is `[.library, .photo, .video]`
+    /// Default value is `[.library, .photo]`
     public var screens: [YPPickerScreen] = [.library, .photo]
     
     /// Defines the time limit for recording videos.
