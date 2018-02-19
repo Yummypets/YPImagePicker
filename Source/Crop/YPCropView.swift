@@ -19,9 +19,13 @@ class YPCropView: UIView {
 
     convenience init(image: UIImage, ratio: Double) {
         self.init(frame: .zero)
-        
-        // MARK: - View Hierarchy
-        
+        setupViewHierarchy()
+        setupLayout(with: image, ratio: ratio)
+        applyStyle()
+        imageView.image = image
+    }
+    
+    private func setupViewHierarchy() {
         sv(
             imageView,
             topCurtain,
@@ -29,9 +33,9 @@ class YPCropView: UIView {
             bottomCurtain,
             toolbar
         )
-        
-        // MARK: - Layout
-        
+    }
+    
+    private func setupLayout(with image: UIImage, ratio: Double) {
         layout(
             0,
             |topCurtain|,
@@ -66,9 +70,9 @@ class YPCropView: UIView {
         
         // Fit imageView to image's bounds
         imageView.Width == imageView.Height * CGFloat(imageRatio)
-        
-        // MARK: - Style
-        
+    }
+    
+    private func applyStyle() {
         backgroundColor = .black
         imageView.style { i in
             i.isUserInteractionEnabled = true
@@ -84,8 +88,6 @@ class YPCropView: UIView {
             t.setBackgroundImage(UIImage(), forToolbarPosition: .any, barMetrics: .default)
             t.setShadowImage(UIImage(), forToolbarPosition: .any)
         }
-        
-        imageView.image = image
     }
     
     func curtainStyle(v: UIView) {
