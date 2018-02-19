@@ -9,7 +9,8 @@ It comes with adjustable square crop and filters.
 [![codebeat badge](https://codebeat.co/badges/9710a89d-b1e2-4e55-a4a2-3ae1f98f4c53)](https://codebeat.co/projects/github-com-yummypets-ypimagepicker-master)
 [![GitHub tag](https://img.shields.io/github/release/Yummypets/YPImagePicker.svg)]()
 
-Give it a quick try : `pod try YPImagePicker`
+Give it a quick try :
+`pod repo update` then `pod try YPImagePicker`
 
 🌅 Library - 📷 Photo - 🎥 Video - ✂️ Crop - ⚡️ Flash - 🖼 Filters
 
@@ -46,6 +47,8 @@ Drop in the Classes folder to your Xcode project.
 You can also use CocoaPods or Carthage.
 
 #### Using [CocoaPods](http://cocoapods.org/)
+
+First be sure to run `pod repo update` to get the latest version available.
 
 Add `pod 'YPImagePicker'` to your `Podfile` and run `pod install`. Also add `use_frameworks!` to the `Podfile`.
 
@@ -147,4 +150,4 @@ See LICENSE for details.
 
 ## Swift Version
 Swift 3 -> version **1.2.1**  
-Swift 4 -> version **2.5.0**
+Swift 4 -> version **2.6.2**
