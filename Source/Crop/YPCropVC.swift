@@ -11,7 +11,6 @@ import UIKit
 public enum YPCropType {
     case none
     case rectangle(ratio: Double)
-//  TODO case circle
 }
 
 class YPCropVC: UIViewController {
@@ -115,36 +114,40 @@ extension YPCropVC: UIGestureRecognizerDelegate {
                                             y: sender.scale)
             v.imageView.transform = transform
         case .ended:
-            var transform = v.imageView.transform
-            let kMinZoomLevel: CGFloat = 1.0
-            let kMaxZoomLevel: CGFloat = 3.0
-            var wentOutOfAllowedBounds = false
-            
-            // Prevent zooming out too much
-            if transform.a < kMinZoomLevel {
-                transform = .identity
-                wentOutOfAllowedBounds = true
-            }
-            
-            // Prevent zooming in too much
-            if transform.a > kMaxZoomLevel {
-                transform.a = kMaxZoomLevel
-                transform.d = kMaxZoomLevel
-                wentOutOfAllowedBounds = true
-            }
-            
-            // Animate coming back to the allowed bounds with a haptic feedback.
-            if wentOutOfAllowedBounds {
-                generateHapticFeedback()
-                UIView.animate(withDuration: 0.3, animations: {
-                    self.v.imageView.transform = transform
-                })
-            }
+            pinchGestureEnded()
         case .cancelled, .failed, .possible:
             ()
         }
         // Reset the pinch scale.
         sender.scale = 1.0
+    }
+    
+    private func pinchGestureEnded() {
+        var transform = v.imageView.transform
+        let kMinZoomLevel: CGFloat = 1.0
+        let kMaxZoomLevel: CGFloat = 3.0
+        var wentOutOfAllowedBounds = false
+        
+        // Prevent zooming out too much
+        if transform.a < kMinZoomLevel {
+            transform = .identity
+            wentOutOfAllowedBounds = true
+        }
+        
+        // Prevent zooming in too much
+        if transform.a > kMaxZoomLevel {
+            transform.a = kMaxZoomLevel
+            transform.d = kMaxZoomLevel
+            wentOutOfAllowedBounds = true
+        }
+        
+        // Animate coming back to the allowed bounds with a haptic feedback.
+        if wentOutOfAllowedBounds {
+            generateHapticFeedback()
+            UIView.animate(withDuration: 0.3, animations: {
+                self.v.imageView.transform = transform
+            })
+        }
     }
     
     func generateHapticFeedback() {
