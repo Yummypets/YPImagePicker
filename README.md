@@ -146,7 +146,7 @@ Original Fusuma author is [ytakz](http://ytakzk.me)
 
 ## License
 YPImagePicker is released under the MIT license.  
-See LICENSE for details.
+See [LICENSE](LICENSE) for details.
 
 ## Swift Version
 Swift 3 -> version [**1.2.1**](https://github.com/Yummypets/YPImagePicker/tree/1.2.1)
