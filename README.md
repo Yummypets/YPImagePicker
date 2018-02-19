@@ -149,5 +149,5 @@ YPImagePicker is released under the MIT license.
 See [LICENSE](LICENSE) for details.
 
 ## Swift Version
-Swift 3 -> version [**1.2.1**](https://github.com/Yummypets/YPImagePicker/tree/1.2.1)
-Swift 4 -> version [**2.6.2**](https://github.com/Yummypets/YPImagePicker/tree/2.6.2)
+Swift 3 -> version [**1.2.1**](https://github.com/Yummypets/YPImagePicker/releases/tag/1.2.1)
+Swift 4 -> version [**2.6.2**](https://github.com/Yummypets/YPImagePicker/releases/tag/2.6.2)
