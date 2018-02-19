@@ -23,12 +23,9 @@ extension UIColor {
 
 public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     
-    private let libraryVC: YPLibraryVC
-    
     private let configuration: YPImagePickerConfiguration!
     public required init(configuration: YPImagePickerConfiguration) {
         self.configuration = configuration
-        self.libraryVC = YPLibraryVC(configuration: configuration)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -53,13 +50,9 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         case video
     }
 
-    lazy var cameraVC: YPCameraVC = {
-        return YPCameraVC(configuration: self.configuration)
-    }()
-    
-    lazy var videoVC: YPVideoVC = {
-        return YPVideoVC(configuration: self.configuration)
-    }()
+    private var libraryVC: YPLibraryVC?
+    private var cameraVC: YPCameraVC?
+    private var videoVC: YPVideoVC?
     
     var mode = Mode.camera
     
@@ -77,27 +70,48 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         flashOffImage = imageFromBundle("yp_iconFlash_off")
         flashAutoImage = imageFromBundle("yp_iconFlash_auto")
         
-        libraryVC.delegate = self
-        
         view.backgroundColor = UIColor(r: 247, g: 247, b: 247)
-        cameraVC.didCapturePhoto = { [unowned self] img in
-            self.didSelectImage?(img, true)
-        }
-        videoVC.didCaptureVideo = { [unowned self] videoURL in
-            self.didSelectVideo?(videoURL)
-        }
+
         delegate = self
+        
+        // Library
+        if configuration.screens.contains(.library) {
+            libraryVC = YPLibraryVC(configuration: configuration)
+            libraryVC?.delegate = self
+        }
+        
+        // Camera
+        if configuration.screens.contains(.photo) {
+            cameraVC = YPCameraVC(configuration: configuration)
+            cameraVC?.didCapturePhoto = { [unowned self] img in
+                self.didSelectImage?(img, true)
+            }
+        }
+        
+        // Video
+        if configuration.screens.contains(.video) {
+            videoVC = YPVideoVC(configuration: configuration)
+            videoVC?.didCaptureVideo = { [unowned self] videoURL in
+                self.didSelectVideo?(videoURL)
+            }
+        }
     
         // Show screens
         var vcs = [UIViewController]()
         for screen in configuration.screens {
             switch screen {
             case .library:
-                vcs.append(libraryVC)
+                if let libraryVC = libraryVC {
+                    vcs.append(libraryVC)
+                }
             case .photo:
-                vcs.append(cameraVC)
+                if let cameraVC = cameraVC {
+                    vcs.append(cameraVC)
+                }
             case .video:
-                vcs.append(videoVC)
+                if let videoVC = videoVC {
+                    vcs.append(videoVC)
+                }
             }
         }
         controllers = vcs
@@ -124,7 +138,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        cameraVC.v.shotButton.isEnabled = true
+        cameraVC?.v.shotButton.isEnabled = true
     }
     
     public override func viewDidAppear(_ animated: Bool) {
@@ -140,11 +154,11 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     
     func modeFor(vc: UIViewController) -> Mode {
         switch vc {
-        case libraryVC:
+        case is YPLibraryVC:
             return .library
-        case cameraVC:
+        case is YPCameraVC:
             return .camera
-        case videoVC:
+        case is YPVideoVC:
             return .video
         default:
             return .camera
@@ -173,11 +187,11 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     func stopCurrentCamera() {
         switch mode {
         case .library:
-            libraryVC.pausePlayer()
+            libraryVC?.pausePlayer()
         case .camera:
-            cameraVC.stopCamera()
+            cameraVC?.stopCamera()
         case .video:
-            videoVC.stopCamera()
+            videoVC?.stopCamera()
         }
     }
     
@@ -186,9 +200,9 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         case .library:
             break
         case .camera:
-            cameraVC.tryToStartCamera()
+            cameraVC?.tryToStartCamera()
         case .video:
-            videoVC.tryToStartCamera()
+            videoVC?.tryToStartCamera()
         }
     }
     
@@ -206,8 +220,8 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         let navVC = UINavigationController(rootViewController: vc)
 
         vc.didSelectAlbum = { [weak self] album in
-            self?.libraryVC.setAlbum(album)
-            self?.libraryVC.refreshMediaRequest()
+            self?.libraryVC?.setAlbum(album)
+            self?.libraryVC?.refreshMediaRequest()
             self?.setTitleViewWithTitle(aTitle: album.title)
             self?.dismiss(animated: true, completion: nil)
         }
@@ -252,7 +266,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         navigationItem.leftBarButtonItem?.tintColor = UIColor(r: 38, g: 38, b: 38)
         switch mode {
         case .library:
-            setTitleViewWithTitle(aTitle: libraryVC.title ?? "")
+            setTitleViewWithTitle(aTitle: libraryVC?.title ?? "")
             navigationItem.rightBarButtonItem = UIBarButtonItem(title: ypLocalized("YPImagePickerNext"),
                                                                 style: .done,
                                                                 target: self,
@@ -260,11 +274,11 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
             navigationItem.rightBarButtonItem?.isEnabled = true
         case .camera:
             navigationItem.titleView = nil
-            title = cameraVC.title
+            title = cameraVC?.title
             navigationItem.rightBarButtonItem = nil
         case .video:
             navigationItem.titleView = nil
-            title = videoVC.title
+            title = videoVC?.title
             navigationItem.rightBarButtonItem = nil
         }
     }
@@ -279,8 +293,8 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     @objc
     func done() {
         if mode == .library {
-            libraryVC.doAfterPermissionCheck { [weak self] in
-                self?.libraryVC.selectedMedia(photoCallback: { img in
+            libraryVC?.doAfterPermissionCheck { [weak self] in
+                self?.libraryVC?.selectedMedia(photoCallback: { img in
                     self?.didSelectImage?(img, false)
                 }, videoCallback: { videoURL in
                     self?.didSelectVideo?(videoURL)
@@ -290,8 +304,8 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     }
     
     func stopAll() {
-        videoVC.stopCamera()
-        cameraVC.stopCamera()
+        videoVC?.stopCamera()
+        cameraVC?.stopCamera()
     }
 }
 
