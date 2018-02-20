@@ -117,7 +117,6 @@ public class YPImagePicker: UINavigationController {
                         }
                         self.pushViewController(cropVC, animated: true)
                     } else {
-                        self.didSelectImage?(filteredImage)
                         completion(filteredImage)
                     }
                 }
