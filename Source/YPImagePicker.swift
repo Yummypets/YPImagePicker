@@ -102,9 +102,22 @@ public class YPImagePicker: UINavigationController {
             if self.configuration.showsFilters {
                 let filterVC = YPFiltersVC(image: pickedImage)
                 filterVC.didSelectImage = { filteredImage, isImageFiltered in
-                    self.didSelectImage?(filteredImage)
-                    if (isNewPhoto || isImageFiltered) && self.configuration.shouldSaveNewPicturesToAlbum {
-                        YPPhotoSaver.trySaveImage(filteredImage, inAlbumNamed: self.configuration.albumName)
+                    
+                    let completion = { (image: UIImage) in
+                        self.didSelectImage?(image)
+                        if (isNewPhoto || isImageFiltered) && self.configuration.shouldSaveNewPicturesToAlbum {
+                            YPPhotoSaver.trySaveImage(filteredImage, inAlbumNamed: self.configuration.albumName)
+                        }
+                    }
+                    
+                    if case let YPCropType.rectangle(ratio) = self.configuration.showsCrop {
+                        let cropVC = YPCropVC(image: filteredImage, ratio: ratio)
+                        cropVC.didFinishCropping = { croppedImage in
+                            completion(croppedImage)
+                        }
+                        self.pushViewController(cropVC, animated: true)
+                    } else {
+                        completion(filteredImage)
                     }
                 }
                 
@@ -117,9 +130,20 @@ public class YPImagePicker: UINavigationController {
                 
                 self.pushViewController(filterVC, animated: false)
             } else {
-                self.didSelectImage?(pickedImage)
-                if isNewPhoto && self.configuration.shouldSaveNewPicturesToAlbum {
-                    YPPhotoSaver.trySaveImage(pickedImage, inAlbumNamed: self.configuration.albumName)
+                let completion = { (image: UIImage) in
+                    self.didSelectImage?(image)
+                    if isNewPhoto && self.configuration.shouldSaveNewPicturesToAlbum {
+                        YPPhotoSaver.trySaveImage(pickedImage, inAlbumNamed: self.configuration.albumName)
+                    }
+                }
+                if case let YPCropType.rectangle(ratio) = self.configuration.showsCrop {
+                    let cropVC = YPCropVC(image: pickedImage, ratio: ratio)
+                    cropVC.didFinishCropping = { croppedImage in
+                        completion(croppedImage)
+                    }
+                    self.pushViewController(cropVC, animated: true)
+                } else {
+                    completion(pickedImage)
                 }
             }
         }

@@ -37,19 +37,57 @@ class ViewController: UIViewController {
         
         // Configuration
         var config = YPImagePickerConfiguration()
-        config.onlySquareImagesFromLibrary = false
-        config.onlySquareImagesFromCamera = true
-//        config.libraryTargetImageSize = .original
-        config.showsVideoInLibrary = true //false
-//        config.usesFrontCamera = true // false
-//        config.showsFilters = true
-//        config.shouldSaveNewPicturesToAlbum = true
-        config.videoCompression = AVAssetExportPresetHighestQuality
-        config.albumName = "MyGreatAppName"
-        config.screens = [.library, .photo, .video] // customize screens and their order here.
-        config.startOnScreen = .library
-//        config.videoRecordingTimeLimit = 10
-//        config.videoFromLibraryTimeLimit = 10
+        
+        // Uncomment and play around with the configuration 👨‍🔬 🚀
+
+//        /// Set this to true if you want to force the  library output to be a squared image. Defaults to false
+//        config.onlySquareImagesFromLibrary = true
+//
+//        /// Set this to true if you want to force the camera output to be a squared image. Defaults to true
+//        config.onlySquareImagesFromCamera = false
+//
+//        /// Ex: cappedTo:1024 will make sure images from the library will be
+//        /// resized to fit in a 1024x1024 box. Defaults to original image size.
+//        config.libraryTargetImageSize = .cappedTo(size: 1024)
+//
+//        /// Enables videos within the library. Defaults to false
+        config.showsVideoInLibrary = true
+//
+//        /// Enables selecting the front camera by default, useful for avatars. Defaults to false
+//        config.usesFrontCamera = true
+//
+//        /// Adds a Filter step in the photo taking process.  Defaults to true
+        config.showsFilters = false
+//
+//        /// Enables you to opt out from saving new (or old but filtered) images to the
+//        /// user's photo library. Defaults to true.
+//        config.shouldSaveNewPicturesToAlbum = false
+//
+//        /// Choose the videoCompression.  Defaults to AVAssetExportPresetHighestQuality
+//        config.videoCompression = AVAssetExportPreset640x480
+//
+//        /// Defines the name of the album when saving pictures in the user's photo library.
+//        /// In general that would be your App name. Defaults to "DefaultYPImagePickerAlbumName"
+//        config.albumName = "ThisIsMyAlbum"
+//
+//        /// Defines which screen is shown at launch. Video mode will only work if `showsVideo = true`.
+//        /// Default value is `.photo`
+//        config.startOnScreen = .video
+//
+//        /// Defines which screens are shown at launch, and their order.
+//        /// Default value is `[.library, .photo]`
+        config.screens = [.library, .photo, .video]
+//
+//        /// Defines the time limit for recording videos.
+//        /// Default is 30 seconds.
+//        config.videoRecordingTimeLimit = 5.0
+//
+//        /// Defines the time limit for videos from the library.
+//        /// Defaults to 60 seconds.
+//        config.videoFromLibraryTimeLimit = 10.0
+//
+//        /// Adds a Crop step in the photo taking process, after filters.  Defaults to .none
+        config.showsCrop = .rectangle(ratio: (16/9))
         
         // Set it the default conf for all Pickers
         //      YPImagePicker.setDefaultConfiguration(config)

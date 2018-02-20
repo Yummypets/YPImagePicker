@@ -65,4 +65,7 @@ public struct YPImagePickerConfiguration {
     /// Defines the time limit for videos from the library.
     /// Defaults to 60 seconds.
     public var videoFromLibraryTimeLimit: TimeInterval = 60.0
+    
+    /// Adds a Crop step in the photo taking process, after filters.  Defaults to .none
+    public var showsCrop: YPCropType = .none
 }
