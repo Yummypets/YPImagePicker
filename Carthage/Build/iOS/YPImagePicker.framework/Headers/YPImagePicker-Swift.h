@@ -214,6 +214,8 @@ SWIFT_CLASS("_TtC13YPImagePicker16PanGestureHelper")
 
 
 
+
+
 @class UIScrollView;
 @class NSBundle;
 @class NSCoder;
