@@ -81,21 +81,23 @@ class YPCropVC: UIViewController {
             return
         }
         
-        // TODO fix the crop ain't working yet
-        let scaleRatio = v.imageView.frame.width / image.size.width
-        var cropRect = view.convert(v.cropArea.frame, to: v.imageView)
+        let xCrop = v.cropArea.frame.minX - v.imageView.frame.minX
+        let yCrop = v.cropArea.frame.minY - v.imageView.frame.minY
+        let widthCrop = v.cropArea.frame.width
+        let heightCrop = v.cropArea.frame.height
+        let scaleRatio = image.size.width / v.imageView.frame.width
+        let scaledCropRect = CGRect(x: xCrop * scaleRatio,
+                                    y: yCrop * scaleRatio,
+                                    width: widthCrop * scaleRatio,
+                                    height: heightCrop * scaleRatio)
         
-        cropRect.origin.x = max(cropRect.origin.x, 0)
-        cropRect.origin.y = max(cropRect.origin.y, 0)
-        
-        // rect to actual coordinates (scale)
-        let scaledCropRect = CGRect(x: cropRect.minX * 1/scaleRatio,
-                                    y: cropRect.minY * 1/scaleRatio,
-                                    width: cropRect.width * 1/scaleRatio,
-                                    height: cropRect.height * 1/scaleRatio)
-        let imageRef = image.cgImage?.cropping(to: scaledCropRect)
-        let croppedImage = UIImage(cgImage: imageRef!, scale: UIScreen.main.scale, orientation: image.imageOrientation)
-        didFinishCropping?(croppedImage)
+        if let imageRef = image.cgImage?.cropping(to: scaledCropRect) {
+            let croppedImage = UIImage(cgImage: imageRef,
+                                       scale: UIScreen.main.scale,
+                                       orientation: image.imageOrientation)
+            didFinishCropping?(croppedImage)
+        }
+
     }
 }
 

@@ -58,7 +58,6 @@ class YPCropView: UIView {
         let imageRatio: Double = Double(image.size.width / image.size.height)
         if ratio > imageRatio {
             let scaledDownRatio = UIScreen.main.bounds.width / image.size.width
-            print(scaledDownRatio)
             imageView.width(image.size.width * scaledDownRatio )
             imageView.centerInContainer()
         } else if ratio < imageRatio {
