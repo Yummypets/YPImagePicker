@@ -17,10 +17,10 @@ extension YPLibraryVC: PHPhotoLibraryChangeObserver {
     
     public func photoLibraryDidChange(_ changeInstance: PHChange) {
         DispatchQueue.main.async {
-            var fetchResult = self.mediaManager.fetchResult!
+            let fetchResult = self.mediaManager.fetchResult!
             let collectionChanges = changeInstance.changeDetails(for: fetchResult)
             if collectionChanges != nil {
-                fetchResult = collectionChanges!.fetchResultAfterChanges
+                self.mediaManager.fetchResult = collectionChanges!.fetchResultAfterChanges
                 let collectionView = self.v.collectionView!
                 if !collectionChanges!.hasIncrementalChanges || collectionChanges!.hasMoves {
                     collectionView.reloadData()
