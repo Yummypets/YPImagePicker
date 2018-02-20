@@ -90,11 +90,8 @@ class YPCropVC: UIViewController {
                                     y: yCrop * scaleRatio,
                                     width: widthCrop * scaleRatio,
                                     height: heightCrop * scaleRatio)
-        
         if let imageRef = image.cgImage?.cropping(to: scaledCropRect) {
-            let croppedImage = UIImage(cgImage: imageRef,
-                                       scale: UIScreen.main.scale,
-                                       orientation: image.imageOrientation)
+            let croppedImage = UIImage(cgImage: imageRef)
             didFinishCropping?(croppedImage)
         }
 

@@ -215,7 +215,8 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, Permissi
                     }
                     
                     DispatchQueue.main.async {
-                        self.didCapturePhoto?(image)
+                        let noOrietationImage = image.resetOrientation()
+                        self.didCapturePhoto?(noOrietationImage)
                     }
                 }
             }
@@ -304,3 +305,4 @@ class YPPermissionDeniedPopup {
         return alert
     }
 }
+

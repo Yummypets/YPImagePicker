@@ -18,6 +18,7 @@
 		990FD295201B3E59002A39A1 /* YPDragDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 990FD294201B3E59002A39A1 /* YPDragDirection.swift */; };
 		990FD297201B4A5F002A39A1 /* PHCachingImageManager+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 990FD296201B4A5F002A39A1 /* PHCachingImageManager+Helpers.swift */; };
 		990FD299201B67FE002A39A1 /* PHFetchResult + IndexPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 990FD298201B67FE002A39A1 /* PHFetchResult + IndexPath.swift */; };
+		9911FA24203C3A31000E9B06 /* UIImage+ResetOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9911FA23203C3A31000E9B06 /* UIImage+ResetOrientation.swift */; };
 		99A0529A1F20A19B005600B3 /* YPAlbumVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A052991F20A19B005600B3 /* YPAlbumVC.swift */; };
 		99A0529D1F20B45D005600B3 /* YPAlbumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A0529C1F20B45D005600B3 /* YPAlbumView.swift */; };
 		99A0529F1F20B480005600B3 /* YPAlbumCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A0529E1F20B480005600B3 /* YPAlbumCell.swift */; };
@@ -73,6 +74,7 @@
 		990FD294201B3E59002A39A1 /* YPDragDirection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPDragDirection.swift; sourceTree = "<group>"; };
 		990FD296201B4A5F002A39A1 /* PHCachingImageManager+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PHCachingImageManager+Helpers.swift"; sourceTree = "<group>"; };
 		990FD298201B67FE002A39A1 /* PHFetchResult + IndexPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PHFetchResult + IndexPath.swift"; sourceTree = "<group>"; };
+		9911FA23203C3A31000E9B06 /* UIImage+ResetOrientation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+ResetOrientation.swift"; sourceTree = "<group>"; };
 		99A052991F20A19B005600B3 /* YPAlbumVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPAlbumVC.swift; sourceTree = "<group>"; };
 		99A0529C1F20B45D005600B3 /* YPAlbumView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPAlbumView.swift; sourceTree = "<group>"; };
 		99A0529E1F20B480005600B3 /* YPAlbumCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPAlbumCell.swift; sourceTree = "<group>"; };
@@ -181,6 +183,7 @@
 				99CF6D1A201B6A5C00487F77 /* UICollectionView+IndexPath.swift */,
 				99CF6D1C201B6ABA00487F77 /* IndexSet+IndexPath.swift */,
 				99CF6D1E201B6B9E00487F77 /* CGRect+Difference.swift */,
+				9911FA23203C3A31000E9B06 /* UIImage+ResetOrientation.swift */,
 				99CF6D26201B739600487F77 /* YPAlerts.swift */,
 			);
 			path = Helpers;
@@ -408,6 +411,7 @@
 				99019E532018CE19007325C2 /* YPPickerScreen.swift in Sources */,
 				99CF6D1F201B6B9E00487F77 /* CGRect+Difference.swift in Sources */,
 				99CF6D1D201B6ABA00487F77 /* IndexSet+IndexPath.swift in Sources */,
+				9911FA24203C3A31000E9B06 /* UIImage+ResetOrientation.swift in Sources */,
 				990FD291201B3CB4002A39A1 /* YPLibraryVC + UIHelpers.swift in Sources */,
 				99C6D6CE1F1FB5C100711DB2 /* YPPhotoSaver.swift in Sources */,
 				99C6D6C31F1FB5C100711DB2 /* YPCameraView.swift in Sources */,
