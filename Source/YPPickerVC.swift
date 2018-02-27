@@ -221,6 +221,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
 
         vc.didSelectAlbum = { [weak self] album in
             self?.libraryVC?.setAlbum(album)
+            self?.libraryVC?.title = album.title
             self?.libraryVC?.refreshMediaRequest()
             self?.setTitleViewWithTitle(aTitle: album.title)
             self?.dismiss(animated: true, completion: nil)
@@ -229,7 +230,6 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     }
     
     func setTitleViewWithTitle(aTitle: String) {
-        
         let titleView = UIView()
         titleView.frame = CGRect(x: 0, y: 0, width: 200, height: 40)
         
