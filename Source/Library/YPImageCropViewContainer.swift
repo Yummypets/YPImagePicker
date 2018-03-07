@@ -111,7 +111,7 @@ class YPImageCropViewContainer: UIView, YPImageCropViewDelegate, UIGestureRecogn
             squareCropButton.Bottom == cropView!.Bottom - 15
         }
         
-        playerLayer.videoGravity = .resizeAspectFill
+        playerLayer.videoGravity = .resizeAspect
         layer.insertSublayer(playerLayer, below: spinnerView.layer)
     }
     

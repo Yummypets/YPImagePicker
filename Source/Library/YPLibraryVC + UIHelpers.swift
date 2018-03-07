@@ -20,10 +20,6 @@ extension YPLibraryVC {
         }
         v.refreshCropControl()
     }
-
-    func fitImage(animated: Bool = true) {
-        v.imageCropViewContainer.cropView?.setFitImage(true, animated: animated)
-    }
     
     func play(videoItem: AVPlayerItem) {
         let player = AVPlayer(playerItem: videoItem)
@@ -40,7 +36,6 @@ extension YPLibraryVC {
             if self.latestImageTapped == asset.localIdentifier {
                 DispatchQueue.main.async {
                     self.v.setPreview(preview)
-                    self.fitImage(animated: false)
                 }
             }
         }
