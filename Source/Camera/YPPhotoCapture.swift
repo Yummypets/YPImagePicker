@@ -13,27 +13,28 @@ import UIKit
 protocol YPPhotoCapture: class {
     
     // Public api
-    func setup(with previewView: UIView) // try setup with previewView.
+    func setup(with previewView: UIView)
     func tryToStartCamera()
     func stopCamera()
     func focus(on point: CGPoint)
     func tryToggleFlash()
     var hasFlash: Bool { get }
-    var currentFlashMode: YPFlashMode { get } // putno flash in falshmode.
+    var currentFlashMode: YPFlashMode { get }
     func flipCamera()
     func shoot(completion: @escaping (Data) -> Void)
     var videoLayer: AVCaptureVideoPreviewLayer! { get set }
+    var device: AVCaptureDevice? { get }
     
     
-    // Used in Default extension
-    var previewView: UIView! { get }
+    // Used by Default extension
+    var previewView: UIView! { get set }
     func startCamera()
     var isPreviewSetup: Bool { get set }
     var sessionQueue: DispatchQueue { get }
     var session: AVCaptureSession { get }
     var output: AVCaptureOutput { get }
     var deviceInput: AVCaptureDeviceInput! { get set }
-    var device: AVCaptureDevice? { get } // not needed
+    func configure()
 }
 
 func newPhotoCapture() -> YPPhotoCapture {

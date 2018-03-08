@@ -11,6 +11,39 @@ import AVFoundation
 
 extension YPPhotoCapture {
     
+    // MARK: - Setup
+    
+    func setup(with previewView: UIView) {
+        self.previewView = previewView
+        sessionQueue.async { [unowned self] in
+            self.setupCaptureSession()
+        }
+    }
+    
+    private func setupCaptureSession() {
+        session.beginConfiguration()
+        session.sessionPreset = .photo
+        let cameraPosition: AVCaptureDevice.Position = .back
+        
+        //TODO self.configuration.usesFrontCamera ? .front : .back
+        let aDevice = deviceForPosition(cameraPosition)
+        if let d = aDevice {
+            deviceInput = try? AVCaptureDeviceInput(device: d)
+        }
+        if let videoInput = deviceInput {
+            if session.canAddInput(videoInput) {
+                session.addInput(videoInput)
+            }
+            if session.canAddOutput(output) {
+                session.addOutput(output)
+                configure()
+            }
+        }
+        session.commitConfiguration()
+    }
+    
+    // MARK: - Start/Stop Camera
+    
     func tryToStartCamera() {
         if isPreviewSetup {
             startCamera()
@@ -34,6 +67,16 @@ extension YPPhotoCapture {
         }
     }
     
+    func stopCamera() {
+        if session.isRunning {
+            sessionQueue.async { [weak self] in
+                self?.session.stopRunning()
+            }
+        }
+    }
+    
+    // MARK: - Preview
+    
     func tryToSetupPreview() {
         if !isPreviewSetup {
             setupPreview()
@@ -50,27 +93,29 @@ extension YPPhotoCapture {
         }
     }
     
-    func stopCamera() {
-        if session.isRunning {
-            sessionQueue.async { [weak self] in
-                self?.session.stopRunning()
-            }
-        }
+    // MARK: - Focus
+    
+    func focus(on point: CGPoint) {
+        setFocusPointOnDevice(device: device!, point: point)
     }
+    
+    // MARK: - Flip
     
     func flipCamera() {
         sessionQueue.async { [weak self] in
-            self?.pflipCamera()
+            self?.flip()
         }
     }
     
-    private func pflipCamera() {
+    private func flip() {
         session.resetInputs()
         deviceInput = flippedDeviceInputForInput(deviceInput)
         if session.canAddInput(deviceInput) {
             session.addInput(deviceInput)
         }
     }
+    
+    // MARK: - Orientation
     
     func setCurrentOrienation() {
         let connection = output.connection(with: .video)
