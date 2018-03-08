@@ -108,5 +108,12 @@ class PostiOS10PhotoCapture: NSObject, YPPhotoCapture, AVCapturePhotoCaptureDele
         guard let data = photo.fileDataRepresentation() else { return }
         block?(data)
     }
+    
+    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photoSampleBuffer: CMSampleBuffer?, previewPhoto previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Error?) {
+        guard let buffer = photoSampleBuffer else { return }
+        if let data = AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer: buffer, previewPhotoSampleBuffer: previewPhotoSampleBuffer) {
+            block?(data)
+        }
+    }
 }
 
