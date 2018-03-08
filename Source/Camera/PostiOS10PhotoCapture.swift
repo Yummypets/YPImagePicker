@@ -30,7 +30,6 @@ class PostiOS10PhotoCapture: NSObject, YPPhotoCapture, AVCapturePhotoCaptureDele
     
     // MARK: - Configuration
     
-    
     private func newSettings() -> AVCapturePhotoSettings {
         var settings = AVCapturePhotoSettings()
         
@@ -50,20 +49,14 @@ class PostiOS10PhotoCapture: NSObject, YPPhotoCapture, AVCapturePhotoCaptureDele
             case .auto:
                 if photoOutput.supportedFlashModes.contains(.auto) {
                     settings.flashMode = .auto
-                } else {
-                    print("NOPE")
                 }
             case .off:
                 if photoOutput.supportedFlashModes.contains(.off) {
                     settings.flashMode = .off
-                } else {
-                    print("NOPE")
                 }
             case .on:
                 if photoOutput.supportedFlashModes.contains(.on) {
                     settings.flashMode = .on
-                } else {
-                    print("NOPE")
                 }
             }
         }
