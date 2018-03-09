@@ -15,7 +15,9 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
     
     internal let configuration: YPImagePickerConfiguration!
     private var initialized = false
-    internal var previouslySelectedIndex: Int?
+    
+    var multipleSelectionEnabled = false
+    internal var selectedIndices = [Int]()
     internal let mediaManager = LibraryMediaManager()
     internal var latestImageTapped = ""
     var v: YPLibraryView!
@@ -50,6 +52,8 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
         registerForTapOnPreview()
         refreshMediaRequest()
         v.imageCropViewContainer.onlySquareImages = configuration.onlySquareImagesFromLibrary
+        
+        v.imageCropViewContainer.multipleSelectionButton.isHidden = !(configuration.maxNumberOfPhotos > 1)
         v.imageCropView.onlySquareImages = configuration.onlySquareImagesFromLibrary
     }
     
@@ -65,6 +69,9 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
         registerForPlayerReachedEndNotifications()
         v.imageCropViewContainer.squareCropButton.addTarget(self,
                                                             action: #selector(squareCropButtonTapped),
+                                                            for: .touchUpInside)
+        v.imageCropViewContainer.multipleSelectionButton.addTarget(self,
+                                                            action: #selector(multipleSelectionButtonTapped),
                                                             for: .touchUpInside)
     }
     
@@ -82,6 +89,21 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
         doAfterPermissionCheck { [weak self] in
             self?.v.imageCropViewContainer.squareCropButtonTapped()
         }
+    }
+    
+    // MARK: - Multiple Selection
+
+    @objc
+    func multipleSelectionButtonTapped() {
+        multipleSelectionEnabled = !multipleSelectionEnabled
+        let color: UIColor = multipleSelectionEnabled ? .blue : .black
+        v.imageCropViewContainer.multipleSelectionButton.setBackgroundColor(color, forState: .normal)
+        v.imageCropViewContainer.squareCropButton.isHidden = multipleSelectionEnabled
+        
+        v.collectionView.reloadData()
+        
+        
+        delegate?.libraryViewDidToggleMultipleSelection(enabled: multipleSelectionEnabled)
     }
     
     // MARK: - Tap Preview

@@ -51,6 +51,15 @@ extension YPLibraryVC: UICollectionViewDelegate {
         let isVideo = (asset.mediaType == .video)
         cell.durationLabel.isHidden = !isVideo
         cell.durationLabel.text = isVideo ? formattedStrigFrom(asset.duration) : ""
+        cell.multipleSelectionIndicator.isHidden = !multipleSelectionEnabled
+        
+        //reselect previously selected
+        
+//        if selectedIndices.contains(indexPath.row) {
+            cell.isSelected = selectedIndices.contains(indexPath.row)
+//        }
+
+        
         
         // Prevent weird animation where thumbnail fills cell on first scrolls.
         UIView.performWithoutAnimation {
@@ -60,14 +69,37 @@ extension YPLibraryVC: UICollectionViewDelegate {
     }
     
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if indexPath.row == previouslySelectedIndex {
+        
+        
+        
+        // If this is the only selected cell, do not deselect.
+        if selectedIndices.count == 1 && selectedIndices.first == indexPath.row {
             return
         }
+        
         changeImage(mediaManager.fetchResult[indexPath.row])
         panGestureHelper.resetToOriginalState()
         collectionView.scrollToItem(at: indexPath, at: .top, animated: true)
         v.refreshImageCurtainAlpha()
-        previouslySelectedIndex = indexPath.row
+
+        if !multipleSelectionEnabled {
+            let previouslySelectedIndices = selectedIndices
+            selectedIndices.removeAll()
+            if let selectedRow = previouslySelectedIndices.first {
+                let previouslySelectedIndexPath = IndexPath(row: selectedRow, section: 0)
+                collectionView.reloadItems(at: [previouslySelectedIndexPath])
+            }
+            
+        }
+        
+        // If already selected, remove
+        if let positionIndex = selectedIndices.index(of: indexPath.row) {
+            selectedIndices.remove(at: positionIndex)
+        } else {
+            selectedIndices.append(indexPath.row)
+        }
+        collectionView.reloadItems(at: [indexPath])
+        
     }
 }
 

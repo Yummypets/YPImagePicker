@@ -329,6 +329,18 @@ extension YPPickerVC: YPLibraryViewDelegate {
     public func libraryViewCameraRollUnauthorized() {
         
     }
+    
+    public func libraryViewDidToggleMultipleSelection(enabled: Bool) {
+        var offset = v.header.frame.height
+        if #available(iOS 11.0, *) {
+            offset += v.safeAreaInsets.bottom
+        }
+        
+        v.header.bottomConstraint?.constant = enabled ? offset : 0
+        v.layoutIfNeeded()
+        
+//        UIView.animate(withDuration: 0.3, animations: v.layoutIfNeeded)
+    }
 }
 
 public extension UIButton {

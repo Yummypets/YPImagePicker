@@ -89,6 +89,8 @@ class ViewController: UIViewController {
 //        /// Adds a Crop step in the photo taking process, after filters.  Defaults to .none
         config.showsCrop = .rectangle(ratio: (16/9))
         
+        config.maxNumberOfPhotos = 3
+        
         // Set it the default conf for all Pickers
         //      YPImagePicker.setDefaultConfiguration(config)
         // And then use the default configuration like so:

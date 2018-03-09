@@ -68,4 +68,7 @@ public struct YPImagePickerConfiguration {
     
     /// Adds a Crop step in the photo taking process, after filters.  Defaults to .none
     public var showsCrop: YPCropType = .none
+    
+    /// Anything superior than 1 will enable the multiple selection feature.
+    public var maxNumberOfPhotos = 1
 }

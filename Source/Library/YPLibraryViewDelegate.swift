@@ -13,4 +13,5 @@ public protocol YPLibraryViewDelegate: class {
     func libraryViewCameraRollUnauthorized()
     func libraryViewStartedLoadingImage()
     func libraryViewFinishedLoadingImage()
+    func libraryViewDidToggleMultipleSelection(enabled: Bool)
 }

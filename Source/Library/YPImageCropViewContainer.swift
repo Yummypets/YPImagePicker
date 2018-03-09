@@ -20,6 +20,8 @@ class YPImageCropViewContainer: UIView, YPImageCropViewDelegate, UIGestureRecogn
     let spinnerView = UIView()
     let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
     let squareCropButton = UIButton()
+    let multipleSelectionButton = UIButton()
+    
     var isVideoMode = false {
         didSet {
             self.cropView?.isVideoMode = isVideoMode
@@ -110,6 +112,13 @@ class YPImageCropViewContainer: UIView, YPImageCropViewDelegate, UIGestureRecogn
             |-15-squareCropButton
             squareCropButton.Bottom == cropView!.Bottom - 15
         }
+        
+        // Multiple selection button
+        multipleSelectionButton.setBackgroundColor(.black, forState: .normal)
+        sv(multipleSelectionButton)
+        multipleSelectionButton.size(42)
+        multipleSelectionButton-15-|
+        multipleSelectionButton.Bottom == cropView!.Bottom - 15
         
         playerLayer.videoGravity = .resizeAspect
         layer.insertSublayer(playerLayer, below: spinnerView.layer)

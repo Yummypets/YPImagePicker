@@ -9,12 +9,38 @@
 import UIKit
 import Stevia
 
+class YPMultipleSelectionIndicator: UIView {
+    
+    let circle = UIView()
+    
+    convenience init() {
+        self.init(frame: .zero)
+        
+        let size: CGFloat = 20
+        
+        sv(
+            circle
+        )
+        
+        circle.fillContainer()
+        circle.size(size)
+        
+        circle.backgroundColor = UIColor.white.withAlphaComponent(0.3)
+        circle.layer.cornerRadius = size / 2.0
+        circle.layer.borderColor = UIColor.white.cgColor
+        circle.layer.borderWidth = 1
+        
+    }
+}
+
+
 class YPLibraryViewCell: UICollectionViewCell {
     
     var representedAssetIdentifier: String!
     let imageView = UIImageView()
     let durationLabel = UILabel()
     let selectionOverlay = UIView()
+    let multipleSelectionIndicator = YPMultipleSelectionIndicator()
     
     required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     override init(frame: CGRect) {
@@ -23,7 +49,8 @@ class YPLibraryViewCell: UICollectionViewCell {
         sv(
             imageView,
             durationLabel,
-            selectionOverlay
+            selectionOverlay,
+            multipleSelectionIndicator
         )
 
         imageView.fillContainer()
@@ -31,6 +58,11 @@ class YPLibraryViewCell: UICollectionViewCell {
         layout(
             durationLabel-5-|,
             5
+        )
+        
+        layout(
+            3,
+            multipleSelectionIndicator-3-|
         )
         
         imageView.contentMode = .scaleAspectFill
