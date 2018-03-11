@@ -54,13 +54,14 @@ extension YPLibraryVC: UICollectionViewDelegate {
         cell.multipleSelectionIndicator.isHidden = !multipleSelectionEnabled
         
         //reselect previously selected
+        cell.isSelected = selectedIndices.contains(indexPath.row)
         
-//        if selectedIndices.contains(indexPath.row) {
-            cell.isSelected = selectedIndices.contains(indexPath.row)
-//        }
+        // Set correct selection number
+        if let index = selectedIndices.index(of: indexPath.row) {                cell.multipleSelectionIndicator.set(number: index+1) // start at 1, not 0
+        } else {
+            cell.multipleSelectionIndicator.set(number: nil)
+        }
 
-        
-        
         // Prevent weird animation where thumbnail fills cell on first scrolls.
         UIView.performWithoutAnimation {
             cell.layoutIfNeeded()
@@ -70,8 +71,6 @@ extension YPLibraryVC: UICollectionViewDelegate {
     
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        
-        
         // If this is the only selected cell, do not deselect.
         if selectedIndices.count == 1 && selectedIndices.first == indexPath.row {
             return
@@ -79,7 +78,11 @@ extension YPLibraryVC: UICollectionViewDelegate {
         
         changeImage(mediaManager.fetchResult[indexPath.row])
         panGestureHelper.resetToOriginalState()
-        collectionView.scrollToItem(at: indexPath, at: .top, animated: true)
+        
+        // Only scroll cell to top if preview is hidden.
+        if !panGestureHelper.isImageShown {
+            collectionView.scrollToItem(at: indexPath, at: .top, animated: true)
+        }
         v.refreshImageCurtainAlpha()
 
         if !multipleSelectionEnabled {

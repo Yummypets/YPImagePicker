@@ -12,6 +12,7 @@ import Stevia
 class YPMultipleSelectionIndicator: UIView {
     
     let circle = UIView()
+    let label = UILabel()
     
     convenience init() {
         self.init(frame: .zero)
@@ -19,17 +20,34 @@ class YPMultipleSelectionIndicator: UIView {
         let size: CGFloat = 20
         
         sv(
-            circle
+            circle,
+            label
         )
         
         circle.fillContainer()
         circle.size(size)
+        label.fillContainer()
         
-        circle.backgroundColor = UIColor.white.withAlphaComponent(0.3)
         circle.layer.cornerRadius = size / 2.0
-        circle.layer.borderColor = UIColor.white.cgColor
-        circle.layer.borderWidth = 1
+        label.textAlignment = .center
+        label.textColor = .white
         
+        set(number: nil)
+    }
+    
+    func set(number: Int?) {
+        label.isHidden = (number == nil)
+        if let number = number {
+            circle.backgroundColor = .blue
+            circle.layer.borderColor = UIColor.clear.cgColor
+            circle.layer.borderWidth = 0
+            label.text = "\(number)"
+        } else {
+            circle.backgroundColor = UIColor.white.withAlphaComponent(0.3)
+            circle.layer.borderColor = UIColor.white.cgColor
+            circle.layer.borderWidth = 1
+            label.text = ""
+        }
     }
 }
 

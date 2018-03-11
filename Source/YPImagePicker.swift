@@ -9,6 +9,27 @@
 import UIKit
 import AVFoundation
 
+public enum YPMediaType {
+    case photo
+    case video
+}
+
+public protocol YPMedia {
+    var type: YPMediaType { get }
+}
+
+public struct YPPhoto: YPMedia {
+    public let type = YPMediaType.photo
+    public let image: UIImage
+}
+
+public struct YPVideo: YPMedia {
+    public let type = YPMediaType.video
+    public let data: Data
+    public let thumbnail: UIImage
+    public let url: URL
+}
+
 public class YPImagePicker: UINavigationController {
     
     /// Set a global configuration that will be applied whenever you call YPImagePicker().
@@ -40,6 +61,7 @@ public class YPImagePicker: UINavigationController {
 
     public var didSelectImage: ((UIImage) -> Void)?
     public var didSelectVideo: ((Data, UIImage, URL) -> Void)?
+    public var didSelectMultipleItems: (([YPMedia]) -> Void)?
     
     private let loadingContainerView: UIView = {
         let view = UIView()

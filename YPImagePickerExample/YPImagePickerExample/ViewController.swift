@@ -89,7 +89,7 @@ class ViewController: UIViewController {
 //        /// Adds a Crop step in the photo taking process, after filters.  Defaults to .none
         config.showsCrop = .rectangle(ratio: (16/9))
         
-        config.maxNumberOfPhotos = 3
+        config.maxNumberOfItems = 3
         
         // Set it the default conf for all Pickers
         //      YPImagePicker.setDefaultConfiguration(config)
@@ -110,6 +110,20 @@ class ViewController: UIViewController {
             // video picked
             self.imageView.image = videoThumbnailImage
             picker.dismiss(animated: true, completion: nil)
+        }
+        
+        picker.didSelectMultipleItems = { selectedItems in
+            print(selectedItems)
+            for item in selectedItems {
+                if let photo = item as? YPPhoto {
+                    print(photo.image)
+                }
+                if let video = item as? YPVideo {
+                    print(video.data)
+                    print(video.thumbnail)
+                    print(video.data)
+                }
+            }
         }
         present(picker, animated: true, completion: nil)
     }

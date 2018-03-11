@@ -70,5 +70,5 @@ public struct YPImagePickerConfiguration {
     public var showsCrop: YPCropType = .none
     
     /// Anything superior than 1 will enable the multiple selection feature.
-    public var maxNumberOfPhotos = 1
+    public var maxNumberOfItems = 1
 }

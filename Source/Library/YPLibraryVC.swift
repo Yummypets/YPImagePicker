@@ -53,7 +53,7 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
         refreshMediaRequest()
         v.imageCropViewContainer.onlySquareImages = configuration.onlySquareImagesFromLibrary
         
-        v.imageCropViewContainer.multipleSelectionButton.isHidden = !(configuration.maxNumberOfPhotos > 1)
+        v.imageCropViewContainer.multipleSelectionButton.isHidden = !(configuration.maxNumberOfItems > 1)
         v.imageCropView.onlySquareImages = configuration.onlySquareImagesFromLibrary
     }
     
@@ -100,8 +100,15 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
         v.imageCropViewContainer.multipleSelectionButton.setBackgroundColor(color, forState: .normal)
         v.imageCropViewContainer.squareCropButton.isHidden = multipleSelectionEnabled
         
-        v.collectionView.reloadData()
+        if multipleSelectionEnabled == false {
+            if let last = selectedIndices.last {
+                selectedIndices = [last]
+            } else {
+                selectedIndices.removeAll()
+            }
+        }
         
+        v.collectionView.reloadData()
         
         delegate?.libraryViewDidToggleMultipleSelection(enabled: multipleSelectionEnabled)
     }
