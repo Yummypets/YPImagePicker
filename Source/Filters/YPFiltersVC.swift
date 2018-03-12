@@ -12,6 +12,7 @@ class YPFiltersVC: UIViewController {
     
     override var prefersStatusBarHidden: Bool { return true }
     
+    internal let configuration: YPImagePickerConfiguration!
     var v = YPFiltersView()
     var filterPreviews = [YPFilterPreview]()
     var filters = [YPFilter]()
@@ -22,9 +23,10 @@ class YPFiltersVC: UIViewController {
     
     override func loadView() { view = v }
     
-    required init(image: UIImage) {
+    required init(image: UIImage, configuration: YPImagePickerConfiguration) {
+        self.configuration = configuration
         super.init(nibName: nil, bundle: nil)
-        title = ypLocalized("YPImagePickerFilter")
+        title = configuration.wordings.filter
         self.originalImage = image
         
         filterPreviews = [

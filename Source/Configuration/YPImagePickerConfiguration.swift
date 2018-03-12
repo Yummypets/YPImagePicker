@@ -12,6 +12,9 @@ import AVFoundation
 public struct YPImagePickerConfiguration {
     public init() {}
     
+    /// Use this property to modify the default wordings provided.
+    public var wordings = YPWordings()
+    
     /// Set this to true if you want to force the output to be a squared image. Defaults to false
     @available(*, unavailable, renamed:"onlySquareImagesFromLibrary")
     public var onlySquareImages = false

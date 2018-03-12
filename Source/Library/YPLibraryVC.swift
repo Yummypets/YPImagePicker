@@ -27,7 +27,7 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
     public required init(configuration: YPImagePickerConfiguration) {
         self.configuration = configuration
         super.init(nibName: nil, bundle: nil)
-        title = ypLocalized("YPImagePickerLibrary")
+        title = configuration.wordings.libraryTitle
     }
     
     public required init?(coder aDecoder: NSCoder) {
@@ -128,7 +128,7 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
         case .authorized:
             block(true)
         case .restricted, .denied:
-            let alert = YPPermissionDeniedPopup.popup(cancelBlock: {
+            let alert = YPPermissionDeniedPopup.shared.popup(cancelBlock: {
                 block(false)
             })
             present(alert, animated: true, completion: nil)

@@ -29,7 +29,7 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, Permissi
     public required init(configuration: YPImagePickerConfiguration) {
         self.configuration = configuration
         super.init(nibName: nil, bundle: nil)
-        title = ypLocalized("YPImagePickerPhoto")
+        title = configuration.wordings.cameraTitle
     }
     
     public required init?(coder aDecoder: NSCoder) {
@@ -279,29 +279,5 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, Permissi
         case .off: return flashOffImage!
         case .auto: return flashAutoImage!
         }
-    }
-}
-
-class YPPermissionDeniedPopup {
-    
-    static func popup(cancelBlock: @escaping () -> Void) -> UIAlertController {
-        let alert = UIAlertController(title: ypLocalized("YPImagePickerPermissionDeniedPopupTitle"),
-                                      message: ypLocalized("YPImagePickerPermissionDeniedPopupMessage"),
-                                      preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: ypLocalized("YPImagePickerPermissionDeniedPopupCancel"),
-                                      style: UIAlertActionStyle.cancel,
-                                      handler: { _ in
-                                        cancelBlock()
-        }))
-        alert.addAction(UIAlertAction(title: ypLocalized("YPImagePickerPermissionDeniedPopupGrantPermission"),
-                                      style: .default,
-                                      handler: { _ in
-            if #available(iOS 10.0, *) {
-                UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!)
-            } else {
-                UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
-            }
-        }))
-        return alert
     }
 }

@@ -25,7 +25,7 @@ public class YPVideoVC: UIViewController, PermissionCheckable {
     public required init(configuration: YPImagePickerConfiguration) {
         self.configuration = configuration
         super.init(nibName: nil, bundle: nil)
-        title = ypLocalized("YPImagePickerVideo")
+        title = configuration.wordings.videoTitle
         
         videoHelper.initialize(withVideoRecordingLimit: configuration.videoRecordingTimeLimit)
         

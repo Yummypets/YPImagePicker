@@ -34,7 +34,7 @@ extension PermissionCheckable where Self: UIViewController {
         case .authorized:
             block(true)
         case .restricted, .denied:
-            let alert = YPPermissionDeniedPopup.popup(cancelBlock: {
+            let alert = YPPermissionDeniedPopup.shared.popup(cancelBlock: {
                 block(false)
             })
             present(alert, animated: true, completion: nil)
