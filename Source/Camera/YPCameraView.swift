@@ -23,6 +23,7 @@ class YPCameraView: UIView, UIGestureRecognizerDelegate {
     convenience init() {
         self.init(frame: .zero)
         
+        // View Hierarchy
         sv(
             previewViewContainer,
             progressBar,
@@ -34,9 +35,9 @@ class YPCameraView: UIView, UIGestureRecognizerDelegate {
             )
         )
         
+        // Layout
         let isIphone4 = UIScreen.main.bounds.height == 480
         let sideMargin: CGFloat = isIphone4 ? 20 : 0
-        
         layout(
             0,
             |-sideMargin-previewViewContainer-sideMargin-|,
@@ -46,25 +47,21 @@ class YPCameraView: UIView, UIGestureRecognizerDelegate {
             |buttonsContainer|,
             0
         )
-        
         previewViewContainer.heightEqualsWidth()
+
+        |-(15+sideMargin)-flashButton.size(42)
+        flashButton.Bottom == previewViewContainer.Bottom - 15
+
+        flipButton.size(42)-(15+sideMargin)-|
+        flipButton.Bottom == previewViewContainer.Bottom - 15
         
-        layout(
-            15,
-            |-(15+sideMargin)-flashButton.size(42)
-        )
-        
-        layout(
-            15,
-            flipButton.size(42)-(15+sideMargin)-|
-        )
-        
-        timeElapsedLabel.Bottom == previewViewContainer.Bottom - 15
         timeElapsedLabel-(15+sideMargin)-|
+        timeElapsedLabel.Top == previewViewContainer.Top + 15
         
         shotButton.centerVertically()
         shotButton.size(84).centerHorizontally()
         
+        // Style
         backgroundColor = .clear
         previewViewContainer.backgroundColor = .black
         timeElapsedLabel.style { l in
@@ -73,9 +70,10 @@ class YPCameraView: UIView, UIGestureRecognizerDelegate {
             l.isHidden = true
             l.font = .monospacedDigitSystemFont(ofSize: 13, weight: UIFont.Weight.medium)
         }
-        progressBar.trackTintColor = .clear
-        progressBar.tintColor = .red
-        
+        progressBar.style { p in
+            p.trackTintColor = .clear
+            p.tintColor = .red
+        }
         let flipImage = imageFromBundle("yp_iconLoop")
         let shotImage = imageFromBundle("yp_iconCapture")
         flashButton.setImage(flashOffImage, for: .normal)
