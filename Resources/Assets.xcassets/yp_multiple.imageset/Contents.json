@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "yp_iconCrop2.png",
+      "filename" : "yp_multiple.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "yp_iconCrop2@2x.png",
+      "filename" : "yp_multiple@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "yp_iconCrop2@3x.png",
+      "filename" : "yp_multiple@3x.png",
       "scale" : "3x"
     }
   ],

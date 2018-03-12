@@ -14,8 +14,8 @@ extension YPLibraryVC {
     func display(photo asset: PHAsset, image: UIImage) {
         v.imageCropView.imageSize = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
         v.imageCropView.image = image
+        v.imageCropView.setFitImage(true)
         if configuration.onlySquareImagesFromLibrary {
-            v.imageCropView.setFitImage(true)
             v.imageCropView.minimumZoomScale = v.imageCropView.squaredZoomScale
         }
         v.refreshCropControl()

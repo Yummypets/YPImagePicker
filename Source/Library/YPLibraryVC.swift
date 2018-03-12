@@ -97,16 +97,14 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
     @objc
     func multipleSelectionButtonTapped() {
         multipleSelectionEnabled = !multipleSelectionEnabled
-        let color: UIColor = multipleSelectionEnabled ? .blue : .black
-        v.imageCropViewContainer.multipleSelectionButton.setBackgroundColor(color, forState: .normal)
-        v.imageCropViewContainer.squareCropButton.isHidden = multipleSelectionEnabled
+    
+        v.imageCropViewContainer.setMultipleSelectionMode(on: multipleSelectionEnabled)
         
         if multipleSelectionEnabled {
             if let currentlySelectedIndex = currentlySelectedIndex {
                 selectedIndices = [currentlySelectedIndex]
             }
-        }
-        else {
+        } else {
             selectedIndices.removeAll()
         }
         
@@ -336,7 +334,7 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
     
     func togglePlayPause() {
         guard let player = v.player else { return }
-        player.togglePlayPause()
+        player.togglePlayPause { _ in }
     }
     
     // MARK: - Deinit

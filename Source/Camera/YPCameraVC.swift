@@ -123,17 +123,20 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, Permissi
     }
     
     private func startCamera() {
-        if !session.isRunning {
-            sessionQueue.async { [unowned self] in
-                // Re-apply session preset
-                self.session.sessionPreset = AVCaptureSession.Preset.photo
-                let status = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
-                switch status {
-                case .notDetermined, .restricted, .denied:
-                    self.session.stopRunning()
-                case .authorized:
-                    self.session.startRunning()
-                    self.tryToSetupPreview()
+        // if not a simulator to prevent crash
+        if TARGET_OS_SIMULATOR == 0 {
+            if !session.isRunning {
+                sessionQueue.async { [unowned self] in
+                    // Re-apply session preset
+                    self.session.sessionPreset = AVCaptureSession.Preset.photo
+                    let status = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
+                    switch status {
+                    case .notDetermined, .restricted, .denied:
+                        self.session.stopRunning()
+                    case .authorized:
+                        self.session.startRunning()
+                        self.tryToSetupPreview()
+                    }
                 }
             }
         }

@@ -55,7 +55,8 @@ extension YPLibraryVC: UICollectionViewDelegate {
         cell.isSelected = currentlySelectedIndex == indexPath.row
         
         // Set correct selection number
-        if let index = selectedIndices.index(of: indexPath.row) {                cell.multipleSelectionIndicator.set(number: index+1) // start at 1, not 0
+        if let index = selectedIndices.index(of: indexPath.row) {
+            cell.multipleSelectionIndicator.set(number: index + 1) // start at 1, not 0
         } else {
             cell.multipleSelectionIndicator.set(number: nil)
         }
@@ -98,7 +99,6 @@ extension YPLibraryVC: UICollectionViewDelegate {
             
         }
         
-        
         if multipleSelectionEnabled {
             let cellIsInTheSelectionPool = selectedIndices.contains(indexPath.row)
             let cellIsCurrentlySelected = indexPath.row == currentlySelectedIndex
@@ -111,7 +111,6 @@ extension YPLibraryVC: UICollectionViewDelegate {
                 addToSelection(indexPath: indexPath)
             }
         }
-        
         
         currentlySelectedIndex = indexPath.row
         collectionView.reloadItems(at: [indexPath])

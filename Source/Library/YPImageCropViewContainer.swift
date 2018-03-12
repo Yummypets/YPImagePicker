@@ -13,27 +13,29 @@ import AVFoundation
 
 class YPImageCropViewContainer: UIView, YPImageCropViewDelegate, UIGestureRecognizerDelegate {
     
-    let playerLayer = AVPlayerLayer()
-    var isShown = true
-    let grid = YPGridView()
-    let curtain = UIView()
-    let spinnerView = UIView()
-    let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
-    let squareCropButton = UIButton()
-    let multipleSelectionButton = UIButton()
-    
-    var isVideoMode = false {
+    public let playerLayer = AVPlayerLayer()
+    public let grid = YPGridView()
+    public let curtain = UIView()
+    public let spinnerView = UIView()
+    public let squareCropButton = UIButton()
+    public let multipleSelectionButton = UIButton()
+    public var onlySquareImages = false
+    public var isShown = true
+    public var isVideoMode = false {
         didSet {
             self.cropView?.isVideoMode = isVideoMode
             self.refresh()
         }
     }
-    var cropView: YPImageCropView?
-    var shouldCropToSquare = false
-    var onlySquareImages = false
     
+    private let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
+    private let playImageView = UIImageView(image: imageFromBundle("yp_play"))
+    private var cropView: YPImageCropView?
+    private var shouldCropToSquare = false
+    private var isMultipleSelection = false
+
     @objc
-    func squareCropButtonTapped() {
+    public func squareCropButtonTapped() {
         if let cropView = cropView {
             let z = cropView.zoomScale
             if z >= 1 && z < cropView.squaredZoomScale {
@@ -42,15 +44,11 @@ class YPImageCropViewContainer: UIView, YPImageCropViewDelegate, UIGestureRecogn
                 shouldCropToSquare = false
             }
         }
-        cropView?.setFitImage(shouldCropToSquare)
+        cropView?.setFitImage(shouldCropToSquare, animated: true)
     }
     
-    func refresh() {
-        refreshSquareCropButton()
-    }
-    
-    func refreshSquareCropButton() {
-        if onlySquareImages {
+    public func refreshSquareCropButton() {
+        if onlySquareImages || isMultipleSelection {
             squareCropButton.isHidden = true
         } else {
             if isVideoMode {
@@ -59,6 +57,33 @@ class YPImageCropViewContainer: UIView, YPImageCropViewDelegate, UIGestureRecogn
                 let isShowingSquareImage = image.size.width == image.size.height
                 squareCropButton.isHidden = isShowingSquareImage
             }
+        }
+    }
+    
+    /// Use this to update the multiple selection mode UI state for the YPImageCropViewContainer
+    public func setMultipleSelectionMode(on: Bool) {
+        isMultipleSelection = on
+        multipleSelectionButton.setImage(imageFromBundle(on ? "yp_multiple_colored" : "yp_multiple"), for: .normal)
+        refreshSquareCropButton()
+    }
+    
+    public func ypImageCropViewDidLayoutSubviews() {
+        let newFrame = cropView!.imageView.convert(cropView!.imageView.bounds, to: self)
+        grid.frame = frame.intersection(newFrame)
+        grid.layoutIfNeeded()
+    }
+    
+    public func ypImageCropViewscrollViewDidZoom() {
+        if isShown && !isVideoMode {
+            UIView.animate(withDuration: 0.1) {
+                self.grid.alpha = 1
+            }
+        }
+    }
+    
+    public func ypImageCropViewscrollViewDidEndZooming() {
+        UIView.animate(withDuration: 0.3) {
+            self.grid.alpha = 0
         }
     }
     
@@ -77,13 +102,14 @@ class YPImageCropViewContainer: UIView, YPImageCropViewDelegate, UIGestureRecogn
         
         grid.alpha = 0
         
-        let touchDownGR = UILongPressGestureRecognizer(target: self, action: #selector(handleTouchDown))
+        let touchDownGR = UILongPressGestureRecognizer(target: self,
+                                                       action: #selector(handleTouchDown))
         touchDownGR.minimumPressDuration = 0
         addGestureRecognizer(touchDownGR)
         touchDownGR.delegate = self
         
         let singleTapGR = UITapGestureRecognizer(target: self,
-                                                            action: #selector(singleTap))
+                                                 action: #selector(singleTap))
         singleTapGR.numberOfTapsRequired = 1
         singleTapGR.delegate = self
         addGestureRecognizer(singleTapGR)
@@ -92,15 +118,18 @@ class YPImageCropViewContainer: UIView, YPImageCropViewDelegate, UIGestureRecogn
             spinnerView.sv(
                 spinner
             ),
+            playImageView,
             curtain
-        )
+            )
         
-        spinnerView.fillContainer()
         spinner.centerInContainer()
+        spinnerView.fillContainer()
+        playImageView.centerInContainer()
         curtain.fillContainer()
         
         spinner.startAnimating()
         spinnerView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+        playImageView.alpha = 0
         curtain.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         curtain.alpha = 0
         
@@ -114,10 +143,10 @@ class YPImageCropViewContainer: UIView, YPImageCropViewDelegate, UIGestureRecogn
         }
         
         // Multiple selection button
-        multipleSelectionButton.setBackgroundColor(.black, forState: .normal)
         sv(multipleSelectionButton)
         multipleSelectionButton.size(42)
         multipleSelectionButton-15-|
+        multipleSelectionButton.setImage(imageFromBundle("yp_multiple"), for: .normal)
         multipleSelectionButton.Bottom == cropView!.Bottom - 15
         
         playerLayer.videoGravity = .resizeAspect
@@ -129,17 +158,34 @@ class YPImageCropViewContainer: UIView, YPImageCropViewDelegate, UIGestureRecogn
         playerLayer.frame = frame
     }
     
-    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith
-                                  otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
-    }
-    
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-         return !(touch.view is UIButton)
+    private func refresh() {
+        refreshSquareCropButton()
     }
     
     @objc
-    func handleTouchDown(sender: UILongPressGestureRecognizer) {
+    private func singleTap() {
+        if isVideoMode {
+            playerLayer.player?.togglePlayPause { isPlaying in
+                UIView.animate(withDuration: 0.1) {
+                    self.playImageView.alpha = isPlaying ? 0 : 0.8
+                }
+            }
+        }
+    }
+}
+
+extension YPImageCropViewContainer {
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith
+        otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+    
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        return !(touch.view is UIButton)
+    }
+    
+    @objc
+    private func handleTouchDown(sender: UILongPressGestureRecognizer) {
         switch sender.state {
         case .began:
             if isShown && !isVideoMode {
@@ -152,33 +198,6 @@ class YPImageCropViewContainer: UIView, YPImageCropViewDelegate, UIGestureRecogn
                 self.grid.alpha = 0
             }
         default : ()
-        }
-    }
-    
-    func ypImageCropViewDidLayoutSubviews() {
-        let newFrame = cropView!.imageView.convert(cropView!.imageView.bounds, to: self)
-        grid.frame = frame.intersection(newFrame)
-        grid.layoutIfNeeded()
-    }
-    
-    func ypImageCropViewscrollViewDidZoom() {
-        if isShown && !isVideoMode {
-            UIView.animate(withDuration: 0.1) {
-                self.grid.alpha = 1
-            }
-        }
-    }
-    
-    func ypImageCropViewscrollViewDidEndZooming() {
-        UIView.animate(withDuration: 0.3) {
-            self.grid.alpha = 0
-        }
-    }
-    
-    @objc
-    func singleTap() {
-        if isVideoMode {
-            playerLayer.player?.togglePlayPause()
         }
     }
 }

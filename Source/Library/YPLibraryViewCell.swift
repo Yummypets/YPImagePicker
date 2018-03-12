@@ -52,7 +52,6 @@ class YPMultipleSelectionIndicator: UIView {
     }
 }
 
-
 class YPLibraryViewCell: UICollectionViewCell {
     
     var representedAssetIdentifier: String!

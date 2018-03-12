@@ -147,11 +147,13 @@ func formattedStrigFrom(_ timeInterval: TimeInterval) -> String {
 }
 
 extension AVPlayer {
-    func togglePlayPause() {
+    func togglePlayPause(completion: (_ isPlaying: Bool) -> Void) {
         if rate == 0 {
             play()
+            completion(true)
         } else {
             pause()
+            completion(false)
         }
     }
 }

@@ -142,7 +142,7 @@
 				99428A021E7BE02400B765A9 /* Sources */,
 				99428A031E7BE02400B765A9 /* Frameworks */,
 				99428A041E7BE02400B765A9 /* Resources */,
-				99428A261E7BE18700B765A9 /* ShellScript */,
+				99428A261E7BE18700B765A9 /* Carthage */,
 				99428A2B1E7BE1D600B765A9 /* Embed Frameworks */,
 			);
 			buildRules = (
@@ -168,7 +168,7 @@
 				TargetAttributes = {
 					99428A051E7BE02400B765A9 = {
 						CreatedOnToolsVersion = 8.2;
-						DevelopmentTeam = 4TATSTJ3J3;
+						DevelopmentTeam = B3U3XRF8D7;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -224,7 +224,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		99428A261E7BE18700B765A9 /* ShellScript */ = {
+		99428A261E7BE18700B765A9 /* Carthage */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -232,6 +232,7 @@
 			inputPaths = (
 				"$(SRCROOT)/../Carthage/Build/iOS/Stevia.framework",
 			);
+			name = Carthage;
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -400,7 +401,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 4TATSTJ3J3;
+				DEVELOPMENT_TEAM = B3U3XRF8D7;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/../Carthage/Build/iOS",
@@ -408,7 +409,7 @@
 				INFOPLIST_FILE = YPImagePickerExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.octopepper.YPImagePickerExample;
+				PRODUCT_BUNDLE_IDENTIFIER = com.octopepper.YPImagePickerExampl;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 			};
@@ -419,7 +420,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 4TATSTJ3J3;
+				DEVELOPMENT_TEAM = B3U3XRF8D7;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/../Carthage/Build/iOS",
@@ -427,7 +428,7 @@
 				INFOPLIST_FILE = YPImagePickerExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.octopepper.YPImagePickerExample;
+				PRODUCT_BUNDLE_IDENTIFIER = com.octopepper.YPImagePickerExampl;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 			};
