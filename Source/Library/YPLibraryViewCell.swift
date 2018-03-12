@@ -31,6 +31,7 @@ class YPMultipleSelectionIndicator: UIView {
         circle.layer.cornerRadius = size / 2.0
         label.textAlignment = .center
         label.textColor = .white
+        label.font = UIFont.systemFont(ofSize: 12, weight: .regular)
         
         set(number: nil)
     }
@@ -38,7 +39,7 @@ class YPMultipleSelectionIndicator: UIView {
     func set(number: Int?) {
         label.isHidden = (number == nil)
         if let number = number {
-            circle.backgroundColor = .blue
+            circle.backgroundColor = .black
             circle.layer.borderColor = UIColor.clear.cgColor
             circle.layer.borderWidth = 0
             label.text = "\(number)"
@@ -88,7 +89,7 @@ class YPLibraryViewCell: UICollectionViewCell {
         durationLabel.textColor = .white
         durationLabel.font = .systemFont(ofSize: 12)
         durationLabel.isHidden = true
-        selectionOverlay.backgroundColor = .black
+        selectionOverlay.backgroundColor = .white
         selectionOverlay.alpha = 0
         backgroundColor = UIColor(r: 247, g: 247, b: 247)
     }
@@ -99,7 +100,7 @@ class YPLibraryViewCell: UICollectionViewCell {
     
     override var isHighlighted: Bool {
         didSet {
-            selectionOverlay.alpha = isHighlighted ? 0.5 : 0
+            selectionOverlay.alpha = isHighlighted ? 0.6 : 0
         }
     }
 }
