@@ -305,4 +305,3 @@ class YPPermissionDeniedPopup {
         return alert
     }
 }
-

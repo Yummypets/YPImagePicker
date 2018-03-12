@@ -1,0 +1,19 @@
+/* 
+  Localizable.strings
+  YPImagePicker
+
+  Created by Sacha Durand Saint Omer on 02/11/16.
+  Copyright © 2016 Yummypets. All rights reserved.
+*/
+
+"YPImagePickerLibrary" = "Bibliotheek";
+"YPImagePickerPhoto" = "Foto";
+"YPImagePickerVideo" = "Video";
+"YPImagePickerNext" = "Volgende";
+"YPImagePickerFilter" = "Filter";
+"YPImagePickerVideoTooLongTitle" = "Video lengte";
+"YPImagePickerVideoTooLongDetail" = "Selecteer een video korter dan %@ seconden.";
+"YPImagePickerPermissionDeniedPopupTitle" = "Toestemming geweigerd";
+"YPImagePickerPermissionDeniedPopupMessage" = "Verleen alstublieft toestemming";
+"YPImagePickerPermissionDeniedPopupCancel" = "Annuleer";
+"YPImagePickerPermissionDeniedPopupGrantPermission" = "Verleen toestemming";

@@ -56,6 +56,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		991C0E5520567E1300764131 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		99428A061E7BE02400B765A9 /* YPImagePickerExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YPImagePickerExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		99428A091E7BE02400B765A9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		99428A0B1E7BE02400B765A9 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -181,6 +182,7 @@
 				Base,
 				fr,
 				es,
+				nl,
 			);
 			mainGroup = 994289FD1E7BE02400B765A9;
 			productRefGroup = 99428A071E7BE02400B765A9 /* Products */;
@@ -278,6 +280,7 @@
 				99A052A91F20DF24005600B3 /* en */,
 				99A052AA1F20DF39005600B3 /* fr */,
 				99A052AB1F20DF54005600B3 /* es */,
+				991C0E5520567E1300764131 /* nl */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
