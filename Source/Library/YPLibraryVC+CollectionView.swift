@@ -52,9 +52,7 @@ extension YPLibraryVC: UICollectionViewDelegate {
         cell.durationLabel.isHidden = !isVideo
         cell.durationLabel.text = isVideo ? formattedStrigFrom(asset.duration) : ""
         cell.multipleSelectionIndicator.isHidden = !multipleSelectionEnabled
-        
-        //reselect previously selected
-        cell.isSelected = selectedIndices.contains(indexPath.row)
+        cell.isSelected = currentlySelectedIndex == indexPath.row
         
         // Set correct selection number
         if let index = selectedIndices.index(of: indexPath.row) {                cell.multipleSelectionIndicator.set(number: index+1) // start at 1, not 0
@@ -70,6 +68,11 @@ extension YPLibraryVC: UICollectionViewDelegate {
     }
     
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        var previouslySelectedIndexPath: IndexPath?
+        if let currentlySelectedIndex = currentlySelectedIndex {
+            previouslySelectedIndexPath = IndexPath(row: currentlySelectedIndex, section: 0)
+        }
         
         // If this is the only selected cell, do not deselect.
         if selectedIndices.count == 1 && selectedIndices.first == indexPath.row {
@@ -95,14 +98,40 @@ extension YPLibraryVC: UICollectionViewDelegate {
             
         }
         
-        // If already selected, remove
+        
+        if multipleSelectionEnabled {
+            let cellIsInTheSelectionPool = selectedIndices.contains(indexPath.row)
+            let cellIsCurrentlySelected = indexPath.row == currentlySelectedIndex
+            
+            if cellIsInTheSelectionPool {
+                if cellIsCurrentlySelected {
+                    deselect(indexPath: indexPath)
+                }
+            } else {
+                addToSelection(indexPath: indexPath)
+            }
+        }
+        
+        
+        currentlySelectedIndex = indexPath.row
+        collectionView.reloadItems(at: [indexPath])
+        if let previouslySelectedIndexPath = previouslySelectedIndexPath {
+            collectionView.reloadItems(at: [previouslySelectedIndexPath])
+        }
+    }
+    
+    func deselect(indexPath: IndexPath) {
         if let positionIndex = selectedIndices.index(of: indexPath.row) {
             selectedIndices.remove(at: positionIndex)
-        } else {
-            selectedIndices.append(indexPath.row)
+            // Refresh the numbers
+            
+            let selectedIndexPaths = selectedIndices.map { IndexPath(row: $0, section: 0 )}
+            v.collectionView.reloadItems(at: selectedIndexPaths)
         }
-        collectionView.reloadItems(at: [indexPath])
-        
+    }
+    
+    func addToSelection(indexPath: IndexPath) {
+        selectedIndices.append(indexPath.row) // Add cell to selection
     }
 }
 

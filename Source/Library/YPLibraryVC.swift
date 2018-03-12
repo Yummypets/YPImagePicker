@@ -18,6 +18,7 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
     
     var multipleSelectionEnabled = false
     internal var selectedIndices = [Int]()
+    internal var currentlySelectedIndex: Int?
     internal let mediaManager = LibraryMediaManager()
     internal var latestImageTapped = ""
     var v: YPLibraryView!
@@ -100,12 +101,13 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
         v.imageCropViewContainer.multipleSelectionButton.setBackgroundColor(color, forState: .normal)
         v.imageCropViewContainer.squareCropButton.isHidden = multipleSelectionEnabled
         
-        if multipleSelectionEnabled == false {
-            if let last = selectedIndices.last {
-                selectedIndices = [last]
-            } else {
-                selectedIndices.removeAll()
+        if multipleSelectionEnabled {
+            if let currentlySelectedIndex = currentlySelectedIndex {
+                selectedIndices = [currentlySelectedIndex]
             }
+        }
+        else {
+            selectedIndices.removeAll()
         }
         
         v.collectionView.reloadData()
