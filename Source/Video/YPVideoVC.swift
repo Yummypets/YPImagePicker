@@ -15,7 +15,7 @@ public class YPVideoVC: UIViewController, PermissionCheckable {
     private let videoHelper = YPVideoHelper()
     private let v = YPCameraView()
     private var isPreviewSetup = false
-    private let configuration: YPImagePickerConfiguration!
+    let configuration: YPImagePickerConfiguration!
     private var viewState = ViewState()
     
     // MARK: - Init

@@ -25,7 +25,7 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, Permissi
     
     override public func loadView() { view = v }
     
-    private let configuration: YPImagePickerConfiguration!
+    let configuration: YPImagePickerConfiguration!
     public required init(configuration: YPImagePickerConfiguration) {
         self.configuration = configuration
         super.init(nibName: nil, bundle: nil)

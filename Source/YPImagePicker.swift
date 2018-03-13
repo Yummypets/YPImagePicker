@@ -31,7 +31,6 @@ public class YPImagePicker: UINavigationController {
     public required init(configuration: YPImagePickerConfiguration) {
         self.configuration = configuration
         picker = YPPickerVC(configuration: configuration)
-        YPPermissionDeniedPopup.shared = YPPermissionDeniedPopup(configuration: configuration)
         super.init(nibName: nil, bundle: nil)
     }
     

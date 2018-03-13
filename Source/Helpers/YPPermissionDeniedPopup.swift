@@ -10,8 +10,6 @@ import UIKit
 
 class YPPermissionDeniedPopup {
     
-    public static var shared: YPPermissionDeniedPopup!
-    
     private let configuration: YPImagePickerConfiguration!
     public required init(configuration: YPImagePickerConfiguration) {
         self.configuration = configuration

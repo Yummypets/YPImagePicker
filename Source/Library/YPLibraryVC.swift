@@ -128,7 +128,8 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
         case .authorized:
             block(true)
         case .restricted, .denied:
-            let alert = YPPermissionDeniedPopup.shared.popup(cancelBlock: {
+            let popup = YPPermissionDeniedPopup(configuration: configuration)
+            let alert = popup.popup(cancelBlock: {
                 block(false)
             })
             present(alert, animated: true, completion: nil)
