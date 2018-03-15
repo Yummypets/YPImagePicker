@@ -26,14 +26,14 @@ class YPCameraView: UIView, UIGestureRecognizerDelegate {
         // View Hierarchy
         sv(
             previewViewContainer,
+            overlayView,
             progressBar,
             timeElapsedLabel,
             flashButton,
             flipButton,
             buttonsContainer.sv(
                 shotButton
-            ),
-            overlayView
+            )
         )
         
         // Layout
@@ -50,6 +50,8 @@ class YPCameraView: UIView, UIGestureRecognizerDelegate {
         )
         previewViewContainer.heightEqualsWidth()
 
+        overlayView.followEdges(previewViewContainer)
+
         |-(15+sideMargin)-flashButton.size(42)
         flashButton.Bottom == previewViewContainer.Bottom - 15
 
@@ -61,9 +63,7 @@ class YPCameraView: UIView, UIGestureRecognizerDelegate {
         
         shotButton.centerVertically()
         shotButton.size(84).centerHorizontally()
-        
-        overlayView.followEdges(previewViewContainer)
-        
+
         // Style
         backgroundColor = .clear
         previewViewContainer.backgroundColor = .black
