@@ -100,7 +100,7 @@ public class YPImagePicker: UINavigationController {
         navigationBar.isTranslucent = false
         picker.didSelectImage = { [unowned self] pickedImage, isNewPhoto in
             if self.configuration.showsFilters {
-                let filterVC = YPFiltersVC(image: pickedImage)
+                let filterVC = YPFiltersVC(image: pickedImage, configuration: self.configuration)
                 filterVC.didSelectImage = { filteredImage, isImageFiltered in
                     
                     let completion = { (image: UIImage) in

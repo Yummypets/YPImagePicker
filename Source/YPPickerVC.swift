@@ -267,7 +267,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         switch mode {
         case .library:
             setTitleViewWithTitle(aTitle: libraryVC?.title ?? "")
-            navigationItem.rightBarButtonItem = UIBarButtonItem(title: ypLocalized("YPImagePickerNext"),
+            navigationItem.rightBarButtonItem = UIBarButtonItem(title: configuration.wordings.next,
                                                                 style: .done,
                                                                 target: self,
                                                                 action: #selector(done))
@@ -320,7 +320,7 @@ extension YPPickerVC: YPLibraryViewDelegate {
     }
     
     public func libraryViewFinishedLoadingImage() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: ypLocalized("YPImagePickerNext"),
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: configuration.wordings.next,
                                                             style: .done,
                                                             target: self,
                                                             action: #selector(done))
