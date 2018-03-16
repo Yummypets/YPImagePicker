@@ -10,7 +10,7 @@ import UIKit
 
 class YPFiltersVC: UIViewController {
     
-    override var prefersStatusBarHidden: Bool { return true }
+    override var prefersStatusBarHidden: Bool { return configuration.hidesStatusBar }
     
     internal let configuration: YPImagePickerConfiguration!
     var v = YPFiltersView()
