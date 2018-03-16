@@ -111,7 +111,7 @@ public class YPImagePicker: UINavigationController {
                     }
                     
                     if case let YPCropType.rectangle(ratio) = self.configuration.showsCrop {
-                        let cropVC = YPCropVC(image: filteredImage, ratio: ratio)
+                        let cropVC = YPCropVC(configuration: self.configuration, image: filteredImage, ratio: ratio)
                         cropVC.didFinishCropping = { croppedImage in
                             completion(croppedImage)
                         }
@@ -137,7 +137,7 @@ public class YPImagePicker: UINavigationController {
                     }
                 }
                 if case let YPCropType.rectangle(ratio) = self.configuration.showsCrop {
-                    let cropVC = YPCropVC(image: pickedImage, ratio: ratio)
+                    let cropVC = YPCropVC(configuration: self.configuration, image: pickedImage, ratio: ratio)
                     cropVC.didFinishCropping = { croppedImage in
                         completion(croppedImage)
                     }

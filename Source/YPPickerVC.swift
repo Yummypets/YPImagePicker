@@ -37,7 +37,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     var initialStatusBarHidden = false
     
     override public var prefersStatusBarHidden: Bool {
-        return shouldHideStatusBar || initialStatusBarHidden
+        return (shouldHideStatusBar || initialStatusBarHidden) && configuration.hidesStatusBar
     }
     
     public var didClose:(() -> Void)?
@@ -215,7 +215,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     @objc
     func navBarTapped() {
         
-        let vc = YPAlbumVC()
+        let vc = YPAlbumVC(configuration: configuration)
         vc.noVideos = !self.configuration.showsVideoInLibrary
         let navVC = UINavigationController(rootViewController: vc)
 

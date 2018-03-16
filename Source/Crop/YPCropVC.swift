@@ -17,7 +17,7 @@ class YPCropVC: UIViewController {
     
     public var didFinishCropping: ((UIImage) -> Void)?
     
-    override var prefersStatusBarHidden: Bool { return true }
+    override var prefersStatusBarHidden: Bool { return configuration.hidesStatusBar }
     
     private let originalImage: UIImage
     private let pinchGR = UIPinchGestureRecognizer()
@@ -26,7 +26,9 @@ class YPCropVC: UIViewController {
     private let v: YPCropView
     override func loadView() { view = v }
     
-    required init(image: UIImage, ratio: Double) {
+    private let configuration: YPImagePickerConfiguration!
+    required init(configuration: YPImagePickerConfiguration, image: UIImage, ratio: Double) {
+        self.configuration = configuration
         v = YPCropView(image: image, ratio: ratio)
         originalImage = image
         super.init(nibName: nil, bundle: nil)

@@ -92,6 +92,9 @@ class ViewController: UIViewController {
         // Customize wordings
         config.wordings.libraryTitle = "Gallery"
         
+        /// Defines if the status bar should be hidden when showing the picker. Default is true
+        config.hidesStatusBar = false
+        
         // Set it the default conf for all Pickers
         //      YPImagePicker.setDefaultConfiguration(config)
         // And then use the default configuration like so:
