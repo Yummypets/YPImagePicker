@@ -241,6 +241,8 @@ SWIFT_CLASS("_TtC13YPImagePicker10YPCameraVC")
 @end
 
 
+
+
 SWIFT_CLASS("_TtC13YPImagePicker13YPImagePicker")
 @interface YPImagePicker : UINavigationController
 /// Get a YPImagePicker instance with the default configuration.
@@ -271,16 +273,16 @@ SWIFT_CLASS("_TtC13YPImagePicker11YPLibraryVC")
 - (CGSize)collectionView:(UICollectionView * _Nonnull)collectionView layout:(UICollectionViewLayout * _Nonnull)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath * _Nonnull)indexPath SWIFT_WARN_UNUSED_RESULT;
 @end
 
-
-@interface YPLibraryVC (SWIFT_EXTENSION(YPImagePicker)) <UICollectionViewDataSource>
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView * _Nonnull)collectionView SWIFT_WARN_UNUSED_RESULT;
-- (NSInteger)collectionView:(UICollectionView * _Nonnull)collectionView numberOfItemsInSection:(NSInteger)section SWIFT_WARN_UNUSED_RESULT;
-@end
-
 @class PHChange;
 
 @interface YPLibraryVC (SWIFT_EXTENSION(YPImagePicker)) <PHPhotoLibraryChangeObserver>
 - (void)photoLibraryDidChange:(PHChange * _Nonnull)changeInstance;
+@end
+
+
+@interface YPLibraryVC (SWIFT_EXTENSION(YPImagePicker)) <UICollectionViewDataSource>
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView * _Nonnull)collectionView SWIFT_WARN_UNUSED_RESULT;
+- (NSInteger)collectionView:(UICollectionView * _Nonnull)collectionView numberOfItemsInSection:(NSInteger)section SWIFT_WARN_UNUSED_RESULT;
 @end
 
 @class UICollectionViewCell;
@@ -328,6 +330,8 @@ SWIFT_CLASS("_TtC13YPImagePicker9YPVideoVC")
 - (void)viewDidAppear:(BOOL)animated;
 - (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil SWIFT_UNAVAILABLE;
 @end
+
+
 
 SWIFT_MODULE_NAMESPACE_POP
 #pragma clang diagnostic pop

@@ -11,13 +11,9 @@ import UIKit
 struct YPAlerts {
     
     static func videoTooLongAlert(with config: YPImagePickerConfiguration ) -> UIAlertController {
-        let msg = String(format: NSLocalizedString("YPImagePickerVideoTooLongDetail",
-                                                   tableName: nil,
-                                                   bundle: Bundle(for: YPPickerVC.self),
-                                                   value: "",
-                                                   comment: ""), "\(config.videoFromLibraryTimeLimit)")
-        
-        let alert = UIAlertController(title: ypLocalized("YPImagePickerVideoTooLongTitle"),
+        let str = config.wordings.videoTooLongDetail
+        let msg = String(format: str, "\(config.videoFromLibraryTimeLimit)")
+        let alert = UIAlertController(title: config.wordings.videoTooLongTitle,
                                       message: msg,
                                       preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
