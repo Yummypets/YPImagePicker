@@ -20,14 +20,16 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, Permissi
     }
     var videoInput: AVCaptureDeviceInput!
     let imageOutput = AVCaptureStillImageOutput()
-    var v = YPCameraView()
     var isPreviewSetup = false
     
+    let v: YPCameraView!
     override public func loadView() { view = v }
-    
+
     let configuration: YPImagePickerConfiguration!
+
     public required init(configuration: YPImagePickerConfiguration) {
         self.configuration = configuration
+        self.v = YPCameraView(overlayView: configuration.overlayView)
         super.init(nibName: nil, bundle: nil)
         title = configuration.wordings.cameraTitle
     }

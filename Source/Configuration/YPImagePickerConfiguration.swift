@@ -8,6 +8,7 @@
 
 import Foundation
 import AVFoundation
+import UIKit
 
 public struct YPImagePickerConfiguration {
     public init() {}
@@ -71,6 +72,9 @@ public struct YPImagePickerConfiguration {
     
     /// Adds a Crop step in the photo taking process, after filters.  Defaults to .none
     public var showsCrop: YPCropType = .none
+
+    /// Adds a Overlay View to the camera
+    public var overlayView = UIView()
     
     /// Defines if the status bar should be hidden when showing the picker. Default is true
     public var hidesStatusBar = true

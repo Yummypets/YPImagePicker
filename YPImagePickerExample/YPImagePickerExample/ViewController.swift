@@ -88,6 +88,13 @@ class ViewController: UIViewController {
 //
 //        /// Adds a Crop step in the photo taking process, after filters.  Defaults to .none
         config.showsCrop = .rectangle(ratio: (16/9))
+
+//        /// Defines the overlay view for the camera.
+//        /// Defaults to UIView().
+//        let overlayView = UIView()
+//        overlayView.backgroundColor = .red
+//        overlayView.alpha = 0.3
+//        config.overlayView = overlayView
         
         // Customize wordings
         config.wordings.libraryTitle = "Gallery"

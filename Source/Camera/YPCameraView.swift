@@ -20,12 +20,13 @@ class YPCameraView: UIView, UIGestureRecognizerDelegate {
     let timeElapsedLabel = UILabel()
     let progressBar = UIProgressView()
 
-    convenience init() {
+    convenience init(overlayView: UIView) {
         self.init(frame: .zero)
         
         // View Hierarchy
         sv(
             previewViewContainer,
+            overlayView,
             progressBar,
             timeElapsedLabel,
             flashButton,
@@ -49,6 +50,8 @@ class YPCameraView: UIView, UIGestureRecognizerDelegate {
         )
         previewViewContainer.heightEqualsWidth()
 
+        overlayView.followEdges(previewViewContainer)
+
         |-(15+sideMargin)-flashButton.size(42)
         flashButton.Bottom == previewViewContainer.Bottom - 15
 
@@ -60,7 +63,7 @@ class YPCameraView: UIView, UIGestureRecognizerDelegate {
         
         shotButton.centerVertically()
         shotButton.size(84).centerHorizontally()
-        
+
         // Style
         backgroundColor = .clear
         previewViewContainer.backgroundColor = .black
