@@ -13,7 +13,7 @@ public class YPVideoVC: UIViewController, PermissionCheckable {
     public var didCaptureVideo: ((URL) -> Void)?
     
     private let videoHelper = YPVideoHelper()
-    private let v = YPCameraView()
+    private let v = YPCameraView(overlayView: nil)
     private var isPreviewSetup = false
     let configuration: YPImagePickerConfiguration!
     private var viewState = ViewState()

@@ -33,7 +33,7 @@ protocol YPPhotoCapture: class {
     var sessionQueue: DispatchQueue { get }
     var session: AVCaptureSession { get }
     var output: AVCaptureOutput { get }
-    var deviceInput: AVCaptureDeviceInput! { get set }
+    var deviceInput: AVCaptureDeviceInput? { get set }
     func configure()
 }
 

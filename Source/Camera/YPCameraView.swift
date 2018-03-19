@@ -20,21 +20,36 @@ class YPCameraView: UIView, UIGestureRecognizerDelegate {
     let timeElapsedLabel = UILabel()
     let progressBar = UIProgressView()
 
-    convenience init(overlayView: UIView) {
+    convenience init(overlayView: UIView? = nil) {
         self.init(frame: .zero)
         
-        // View Hierarchy
-        sv(
-            previewViewContainer,
-            overlayView,
-            progressBar,
-            timeElapsedLabel,
-            flashButton,
-            flipButton,
-            buttonsContainer.sv(
-                shotButton
+        
+        if let overlayView = overlayView {
+            // View Hierarchy
+            sv(
+                previewViewContainer,
+                overlayView,
+                progressBar,
+                timeElapsedLabel,
+                flashButton,
+                flipButton,
+                buttonsContainer.sv(
+                    shotButton
+                )
             )
-        )
+        } else {
+            // View Hierarchy
+            sv(
+                previewViewContainer,
+                progressBar,
+                timeElapsedLabel,
+                flashButton,
+                flipButton,
+                buttonsContainer.sv(
+                    shotButton
+                )
+            )
+        }
         
         // Layout
         let isIphone4 = UIScreen.main.bounds.height == 480
@@ -50,7 +65,7 @@ class YPCameraView: UIView, UIGestureRecognizerDelegate {
         )
         previewViewContainer.heightEqualsWidth()
 
-        overlayView.followEdges(previewViewContainer)
+        overlayView?.followEdges(previewViewContainer)
 
         |-(15+sideMargin)-flashButton.size(42)
         flashButton.Bottom == previewViewContainer.Bottom - 15

@@ -109,7 +109,9 @@ extension YPPhotoCapture {
     
     private func flip() {
         session.resetInputs()
-        deviceInput = flippedDeviceInputForInput(deviceInput)
+        guard let di = deviceInput else { return }
+        deviceInput = flippedDeviceInputForInput(di)
+        guard let deviceInput = deviceInput else { return }
         if session.canAddInput(deviceInput) {
             session.addInput(deviceInput)
         }

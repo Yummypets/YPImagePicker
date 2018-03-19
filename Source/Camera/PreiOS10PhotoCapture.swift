@@ -14,8 +14,8 @@ class PreiOS10PhotoCapture: YPPhotoCapture {
 
     let sessionQueue = DispatchQueue(label: "YPCameraVCSerialQueue", qos: .background)
     let session = AVCaptureSession()
-    var deviceInput: AVCaptureDeviceInput!
-    var device: AVCaptureDevice? { return deviceInput.device }
+    var deviceInput: AVCaptureDeviceInput?
+    var device: AVCaptureDevice? { return deviceInput?.device }
     private let imageOutput = AVCaptureStillImageOutput()
     var output: AVCaptureOutput { return imageOutput }
     var isPreviewSetup: Bool = false

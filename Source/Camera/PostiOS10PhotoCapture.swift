@@ -14,8 +14,8 @@ class PostiOS10PhotoCapture: NSObject, YPPhotoCapture, AVCapturePhotoCaptureDele
 
     let sessionQueue = DispatchQueue(label: "YPCameraVCSerialQueue", qos: .background)
     let session = AVCaptureSession()
-    var deviceInput: AVCaptureDeviceInput!
-    var device: AVCaptureDevice? { return deviceInput.device }
+    var deviceInput: AVCaptureDeviceInput?
+    var device: AVCaptureDevice? { return deviceInput?.device }
     private let photoOutput = AVCapturePhotoOutput()
     var output: AVCaptureOutput { return photoOutput }
     var isPreviewSetup: Bool = false
@@ -44,19 +44,21 @@ class PostiOS10PhotoCapture: NSObject, YPPhotoCapture, AVCapturePhotoCaptureDele
         settings.isHighResolutionPhotoEnabled = true
         
         // Set flash mode.
-        if deviceInput.device.isFlashAvailable {
-            switch currentFlashMode {
-            case .auto:
-                if photoOutput.supportedFlashModes.contains(.auto) {
-                    settings.flashMode = .auto
-                }
-            case .off:
-                if photoOutput.supportedFlashModes.contains(.off) {
-                    settings.flashMode = .off
-                }
-            case .on:
-                if photoOutput.supportedFlashModes.contains(.on) {
-                    settings.flashMode = .on
+        if let deviceInput = deviceInput {
+            if deviceInput.device.isFlashAvailable {
+                switch currentFlashMode {
+                case .auto:
+                    if photoOutput.supportedFlashModes.contains(.auto) {
+                        settings.flashMode = .auto
+                    }
+                case .off:
+                    if photoOutput.supportedFlashModes.contains(.off) {
+                        settings.flashMode = .off
+                    }
+                case .on:
+                    if photoOutput.supportedFlashModes.contains(.on) {
+                        settings.flashMode = .on
+                    }
                 }
             }
         }
