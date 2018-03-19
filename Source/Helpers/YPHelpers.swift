@@ -30,22 +30,22 @@ func deviceForPosition(_ p: AVCaptureDevice.Position) -> AVCaptureDevice? {
 }
 
 extension AVCaptureDevice {
-    func tryToggleFlash() {
-        guard hasFlash else { return }
-        do {
-            try lockForConfiguration()
-            switch flashMode {
-            case .auto:
-                flashMode = .on
-            case .on:
-                flashMode = .off
-            case .off:
-                flashMode = .auto
-            }
-            unlockForConfiguration()
-        } catch _ { }
-    }
-    
+//    func tryToggleFlash() {
+//        guard hasFlash else { return }
+//        do {
+//            try lockForConfiguration()
+//            switch flashMode {
+//            case .auto:
+//                flashMode = .on
+//            case .on:
+//                flashMode = .off
+//            case .off:
+//                flashMode = .auto
+//            }
+//            unlockForConfiguration()
+//        } catch _ { }
+//    }
+//    
     func tryToggleTorch() {
         guard hasFlash else { return }
         do {
