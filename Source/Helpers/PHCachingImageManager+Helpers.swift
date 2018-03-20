@@ -26,17 +26,29 @@ extension PHCachingImageManager {
         let options = PHImageRequestOptions()
         options.deliveryMode = .highQualityFormat
         options.isNetworkAccessAllowed = true
-        options.resizeMode = PHImageRequestOptionsResizeMode.exact
+        options.resizeMode = .exact
         options.isSynchronous = true // Ok since we're already in a background thread
         return options
     }
     
     func fetchImage(for asset: PHAsset, cropRect: CGRect, targetSize: CGSize, callback: @escaping (UIImage) -> Void) {
         let options = photoImageRequestOptions()
-        options.normalizedCropRect = cropRect
-        requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFit, options: options) { image, _ in
-            if let image = image {
-                callback(image)
+    
+        // Fetch Highiest quality image possible.
+        requestImageData(for: asset, options: options) { (data, string, orientation, info) in
+            if let data = data , let image = UIImage(data: data)?.resetOrientation() {
+            
+                // Crop the high quality image manually.
+                let xCrop: CGFloat = cropRect.origin.x * CGFloat(asset.pixelWidth)
+                let yCrop: CGFloat = cropRect.origin.y * CGFloat(asset.pixelHeight)
+                let scaledCropRect = CGRect(x: xCrop,
+                                            y: yCrop,
+                                            width: targetSize.width,
+                                            height: targetSize.height)
+                if let imageRef = image.cgImage?.cropping(to: scaledCropRect) {
+                    let croppedImage = UIImage(cgImage: imageRef)
+                    callback(croppedImage)
+                }
             }
         }
     }

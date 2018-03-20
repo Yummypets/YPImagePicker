@@ -250,11 +250,6 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
     private func targetSize(for asset: PHAsset, cropRect: CGRect) -> CGSize {
         let width = floor(CGFloat(asset.pixelWidth) * cropRect.width)
         let height = floor(CGFloat(asset.pixelHeight) * cropRect.height)
-        if case let YPLibraryImageSize.cappedTo(size: capped) = configuration.libraryTargetImageSize {
-            let cappedWidth = min(width, capped)
-            let cappedHeight = min(height, capped)
-            return CGSize(width: cappedWidth, height: cappedHeight)
-        }
         return CGSize(width: width, height: height)
     }
     
@@ -274,13 +269,28 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
                 self.fetchImage(for: asset) { image in
                     DispatchQueue.main.async {
                         self.delegate?.libraryViewFinishedLoadingImage()
-                        photoCallback(image)
+                        let resizedImage = self.resizedImageIfNeeded(image: image)
+                        photoCallback(resizedImage)
                     }
                 }
             case .audio, .unknown:
                 return
             }
         }
+    }
+    
+    // Reduce image size further if needed libraryTargetImageSize is capped.
+    func resizedImageIfNeeded(image: UIImage) -> UIImage {
+        
+        if case let YPLibraryImageSize.cappedTo(size: capped) = self.configuration.libraryTargetImageSize {
+            let cappedWidth = min(image.size.width, capped)
+            let cappedHeight = min(image.size.height, capped)
+            let cappedSize = CGSize(width: cappedWidth, height: cappedHeight)
+            if let resizedImage = image.resized(to: cappedSize) {
+                return resizedImage
+            }
+        }
+        return image
     }
     
     // MARK: - Player
@@ -313,5 +323,15 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
     
     deinit {
         PHPhotoLibrary.shared().unregisterChangeObserver(self)
+    }
+}
+
+extension UIImage {
+    
+    func resized(to size: CGSize) -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(size, false, scale)
+        defer { UIGraphicsEndImageContext() }
+        draw(in: CGRect(origin: .zero, size: size))
+        return UIGraphicsGetImageFromCurrentImageContext()
     }
 }
