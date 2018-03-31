@@ -69,6 +69,7 @@
 
 /* Begin PBXFileReference section */
 		52412A931CA6114A0073C4BE /* YPImagePicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = YPImagePicker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7157B4CA206FD7270004EF6C /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		99019E4B2018CCD6007325C2 /* YPBottomPagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPBottomPagerView.swift; sourceTree = "<group>"; };
 		99019E4D2018CD31007325C2 /* YPPagerMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPPagerMenu.swift; sourceTree = "<group>"; };
 		99019E502018CDED007325C2 /* YPLibraryImageSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPLibraryImageSize.swift; sourceTree = "<group>"; };
@@ -368,6 +369,7 @@
 				es,
 				nl,
 				ru,
+				"pt-BR",
 			);
 			mainGroup = 52412A891CA6114A0073C4BE;
 			productRefGroup = 52412A941CA6114A0073C4BE /* Products */;
@@ -483,6 +485,7 @@
 				99C6D69C1F1FB5C100711DB2 /* fr */,
 				991C0E5320567D3400764131 /* nl */,
 				EB11EE9820572F3700A19365 /* ru */,
+				7157B4CA206FD7270004EF6C /* pt-BR */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
