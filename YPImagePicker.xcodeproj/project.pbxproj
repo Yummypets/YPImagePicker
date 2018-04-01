@@ -19,12 +19,12 @@
 		990FD297201B4A5F002A39A1 /* PHCachingImageManager+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 990FD296201B4A5F002A39A1 /* PHCachingImageManager+Helpers.swift */; };
 		990FD299201B67FE002A39A1 /* PHFetchResult + IndexPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 990FD298201B67FE002A39A1 /* PHFetchResult + IndexPath.swift */; };
 		9911FA24203C3A31000E9B06 /* UIImage+ResetOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9911FA23203C3A31000E9B06 /* UIImage+ResetOrientation.swift */; };
-		99472DED2056E33700419F9E /* YPWordings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99472DEC2056E33700419F9E /* YPWordings.swift */; };
 		99278DA820512BD90059532E /* PreiOS10PhotoCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99278DA720512BD90059532E /* PreiOS10PhotoCapture.swift */; };
 		99278DAA20512BFB0059532E /* PostiOS10PhotoCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99278DA920512BFB0059532E /* PostiOS10PhotoCapture.swift */; };
 		99278DAC20512C330059532E /* YPPhotoCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99278DAB20512C330059532E /* YPPhotoCapture.swift */; };
 		99278DAE205140F60059532E /* YPPermissionDeniedPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99278DAD205140F60059532E /* YPPermissionDeniedPopup.swift */; };
 		99278DB02051816F0059532E /* YPPhotoCaptureDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99278DAF2051816F0059532E /* YPPhotoCaptureDefaults.swift */; };
+		99472DED2056E33700419F9E /* YPWordings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99472DEC2056E33700419F9E /* YPWordings.swift */; };
 		99A0529A1F20A19B005600B3 /* YPAlbumVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A052991F20A19B005600B3 /* YPAlbumVC.swift */; };
 		99A0529D1F20B45D005600B3 /* YPAlbumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A0529C1F20B45D005600B3 /* YPAlbumView.swift */; };
 		99A0529F1F20B480005600B3 /* YPAlbumCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A0529E1F20B480005600B3 /* YPAlbumCell.swift */; };
@@ -68,6 +68,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3B0E1B962070669B0048E95B /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		52412A931CA6114A0073C4BE /* YPImagePicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = YPImagePicker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7157B4CA206FD7270004EF6C /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		99019E4B2018CCD6007325C2 /* YPBottomPagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPBottomPagerView.swift; sourceTree = "<group>"; };
@@ -83,12 +84,12 @@
 		990FD298201B67FE002A39A1 /* PHFetchResult + IndexPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PHFetchResult + IndexPath.swift"; sourceTree = "<group>"; };
 		9911FA23203C3A31000E9B06 /* UIImage+ResetOrientation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+ResetOrientation.swift"; sourceTree = "<group>"; };
 		991C0E5320567D3400764131 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
-		99472DEC2056E33700419F9E /* YPWordings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPWordings.swift; sourceTree = "<group>"; };
 		99278DA720512BD90059532E /* PreiOS10PhotoCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreiOS10PhotoCapture.swift; sourceTree = "<group>"; };
 		99278DA920512BFB0059532E /* PostiOS10PhotoCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostiOS10PhotoCapture.swift; sourceTree = "<group>"; };
 		99278DAB20512C330059532E /* YPPhotoCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPPhotoCapture.swift; sourceTree = "<group>"; };
 		99278DAD205140F60059532E /* YPPermissionDeniedPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPPermissionDeniedPopup.swift; sourceTree = "<group>"; };
 		99278DAF2051816F0059532E /* YPPhotoCaptureDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPPhotoCaptureDefaults.swift; sourceTree = "<group>"; };
+		99472DEC2056E33700419F9E /* YPWordings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPWordings.swift; sourceTree = "<group>"; };
 		99A052991F20A19B005600B3 /* YPAlbumVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPAlbumVC.swift; sourceTree = "<group>"; };
 		99A0529C1F20B45D005600B3 /* YPAlbumView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPAlbumView.swift; sourceTree = "<group>"; };
 		99A0529E1F20B480005600B3 /* YPAlbumCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPAlbumCell.swift; sourceTree = "<group>"; };
@@ -195,7 +196,6 @@
 				990FD294201B3E59002A39A1 /* YPDragDirection.swift */,
 				99C6D6B41F1FB5C100711DB2 /* YPPhotoSaver.swift */,
 				990FD28E201A49D3002A39A1 /* PermissionCheckable.swift */,
-				99472DEE2056E55B00419F9E /* YPPermissionDeniedPopup.swift */,
 				990FD296201B4A5F002A39A1 /* PHCachingImageManager+Helpers.swift */,
 				990FD298201B67FE002A39A1 /* PHFetchResult + IndexPath.swift */,
 				99CF6D1A201B6A5C00487F77 /* UICollectionView+IndexPath.swift */,
@@ -370,6 +370,7 @@
 				nl,
 				ru,
 				"pt-BR",
+				tr,
 			);
 			mainGroup = 52412A891CA6114A0073C4BE;
 			productRefGroup = 52412A941CA6114A0073C4BE /* Products */;
@@ -438,7 +439,6 @@
 				99C6D6CB1F1FB5C100711DB2 /* YPHelpers.swift in Sources */,
 				99019E532018CE19007325C2 /* YPPickerScreen.swift in Sources */,
 				99CF6D1F201B6B9E00487F77 /* CGRect+Difference.swift in Sources */,
-				99472DEF2056E55B00419F9E /* YPPermissionDeniedPopup.swift in Sources */,
 				99CF6D1D201B6ABA00487F77 /* IndexSet+IndexPath.swift in Sources */,
 				9911FA24203C3A31000E9B06 /* UIImage+ResetOrientation.swift in Sources */,
 				99278DAC20512C330059532E /* YPPhotoCapture.swift in Sources */,
@@ -486,6 +486,7 @@
 				991C0E5320567D3400764131 /* nl */,
 				EB11EE9820572F3700A19365 /* ru */,
 				7157B4CA206FD7270004EF6C /* pt-BR */,
+				3B0E1B962070669B0048E95B /* tr */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
