@@ -52,16 +52,16 @@ extension YPPhotoCapture {
     
     func startCamera() {
         if !session.isRunning {
-            sessionQueue.async { [unowned self] in
+            sessionQueue.async { [weak self] in
                 // Re-apply session preset
-                self.session.sessionPreset = .photo
+                self?.session.sessionPreset = .photo
                 let status = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
                 switch status {
                 case .notDetermined, .restricted, .denied:
-                    self.session.stopRunning()
+                    self?.session.stopRunning()
                 case .authorized:
-                    self.session.startRunning()
-                    self.tryToSetupPreview()
+                    self?.session.startRunning()
+                    self?.tryToSetupPreview()
                 }
             }
         }
