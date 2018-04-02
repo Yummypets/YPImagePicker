@@ -58,7 +58,7 @@ public class YPBottomPager: UIViewController, UIScrollViewDelegate {
             c.view.left(x)
             c.view.top(0)
             c.view.width(viewWidth)
-            equalHeights(c.view, v.scrollView)
+            equal(heights: c.view, v.scrollView)
         }
         
         let scrollableWidth: CGFloat = CGFloat(controllers.count) * CGFloat(viewWidth)

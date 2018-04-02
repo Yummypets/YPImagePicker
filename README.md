@@ -103,6 +103,7 @@ config.videoFromLibraryTimeLimit = 20
 config.showsCrop = .rectangle(ratio: (16/9))
 config.wordings.libraryTitle = "Gallery"
 config.hidesStatusBar = false
+config.overlayView = myOverlayView
 
 // Build a picker with your configuration
 let picker = YPImagePicker(configuration: config)
@@ -147,6 +148,8 @@ Supported languages out of the box:
 - French
 - Russian
 - Dutch
+- Brazilian
+- Turkish
 
 If your language is not supported, you can still customize the wordings via the `configuration.wordings` api:
 
