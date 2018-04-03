@@ -122,6 +122,9 @@ class ViewController: UIViewController {
             self.imageView.image = videoThumbnailImage
             picker.dismiss(animated: true, completion: nil)
         }
+        picker.didCancel = {
+            print("Did Cancel")
+        }
         present(picker, animated: true, completion: nil)
     }
 }

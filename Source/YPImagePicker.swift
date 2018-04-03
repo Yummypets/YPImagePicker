@@ -38,6 +38,7 @@ public class YPImagePicker: UINavigationController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    public var didCancel: (() -> Void)?
     public var didSelectImage: ((UIImage) -> Void)?
     public var didSelectVideo: ((Data, UIImage, URL) -> Void)?
     
@@ -95,6 +96,7 @@ public class YPImagePicker: UINavigationController {
     
     override public func viewDidLoad() {
         super.viewDidLoad()
+        picker.didClose = didCancel
         viewControllers = [picker]
         setupActivityIndicator()
         navigationBar.isTranslucent = false
