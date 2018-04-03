@@ -1,3 +1,4 @@
+<img src="https://raw.githubusercontent.com/Yummypets/YPImagePicker/master/Images/visual.jpg">
 ## YPImagePicker
 
 YPImagePicker is an instagram-like photo/video picker for iOS written in pure Swift.
