@@ -237,6 +237,14 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         label.text = aTitle
         label.textColor = .black
         
+        if let navBarTitleFont = UINavigationBar.appearance().titleTextAttributes?[.font] as? UIFont {
+            // Use custom font if set by user.
+            label.font = navBarTitleFont
+        } else {
+            // Use standard font by default.
+            label.font = UIFont.boldSystemFont(ofSize: 17)
+        }
+        
         let arrow = UIImageView()
         arrow.image = imageFromBundle("yp_arrow")
         
@@ -250,11 +258,14 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
             button
         )
         
-        |-(>=8)-label.centerInContainer()-(>=8)-|
-    
+        label.firstBaselineAnchor.constraint(equalTo: titleView.bottomAnchor, constant: -14).isActive = true
+        
         button.fillContainer()
+        
+        |-(>=8)-label.centerHorizontally()-arrow-(>=8)-|
         align(horizontally: label-arrow)
         
+        titleView.heightAnchor.constraint(equalToConstant: 40).isActive = true
         navigationItem.titleView = titleView
     }
     
