@@ -133,6 +133,7 @@
 		99CF6D28201B900400487F77 /* LibraryMediaManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryMediaManager.swift; sourceTree = "<group>"; };
 		99CF6D2A201CB96700487F77 /* YPVideoHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPVideoHelper.swift; sourceTree = "<group>"; };
 		99D1DC2A1F9788930047F0E0 /* YPImagePickerConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPImagePickerConfiguration.swift; sourceTree = "<group>"; };
+		A7FD716620755C2D0044A8E8 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
 		EB11EE9820572F3700A19365 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -371,6 +372,7 @@
 				ru,
 				"pt-BR",
 				tr,
+				ar,
 			);
 			mainGroup = 52412A891CA6114A0073C4BE;
 			productRefGroup = 52412A941CA6114A0073C4BE /* Products */;
@@ -487,6 +489,7 @@
 				EB11EE9820572F3700A19365 /* ru */,
 				7157B4CA206FD7270004EF6C /* pt-BR */,
 				3B0E1B962070669B0048E95B /* tr */,
+				A7FD716620755C2D0044A8E8 /* ar */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
