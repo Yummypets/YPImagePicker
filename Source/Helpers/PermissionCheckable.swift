@@ -13,7 +13,14 @@ protocol PermissionCheckable {
     func checkPermission()
 }
 
-extension PermissionCheckable where Self: UIViewController {
+protocol HasConfiguration {
+    var configuration: YPImagePickerConfiguration! { get }
+}
+
+extension YPCameraVC: HasConfiguration { }
+extension YPVideoVC: HasConfiguration { }
+
+extension PermissionCheckable where Self: UIViewController, Self: HasConfiguration {
     
     func checkPermission() {
         checkPermissionToAccessVideo { _ in }
@@ -34,7 +41,8 @@ extension PermissionCheckable where Self: UIViewController {
         case .authorized:
             block(true)
         case .restricted, .denied:
-            let alert = YPPermissionDeniedPopup.popup(cancelBlock: {
+            let popup = YPPermissionDeniedPopup(configuration: configuration)
+            let alert = popup.popup(cancelBlock: {
                 block(false)
             })
             present(alert, animated: true, completion: nil)

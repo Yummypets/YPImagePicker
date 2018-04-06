@@ -89,6 +89,19 @@ class ViewController: UIViewController {
 //
 //        /// Adds a Crop step in the photo taking process, after filters.  Defaults to .none
         config.showsCrop = .rectangle(ratio: (16/9))
+
+//        /// Defines the overlay view for the camera.
+//        /// Defaults to UIView().
+//        let overlayView = UIView()
+//        overlayView.backgroundColor = .red
+//        overlayView.alpha = 0.3
+//        config.overlayView = overlayView
+        
+        // Customize wordings
+        config.wordings.libraryTitle = "Gallery"
+        
+        /// Defines if the status bar should be hidden when showing the picker. Default is true
+        config.hidesStatusBar = false
         
         config.maxNumberOfItems = 3
         
@@ -112,7 +125,6 @@ class ViewController: UIViewController {
             self.imageView.image = videoThumbnailImage
             picker.dismiss(animated: true, completion: nil)
         }
-        
         picker.didSelectMultipleItems = { selectedItems in
             print(selectedItems)
             for item in selectedItems {
@@ -125,6 +137,9 @@ class ViewController: UIViewController {
                     print(video.data)
                 }
             }
+        }
+        picker.didCancel = {
+            print("Did Cancel")
         }
         present(picker, animated: true, completion: nil)
     }

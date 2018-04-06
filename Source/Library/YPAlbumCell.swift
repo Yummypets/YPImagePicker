@@ -36,7 +36,7 @@ class YPAlbumCell: UITableViewCell {
             6
         )
         
-        alignHorizontally(thumbnail-10-stackView)
+        align(horizontally: thumbnail-10-stackView)
         
         thumbnail.contentMode = .scaleAspectFill
         thumbnail.clipsToBounds = true

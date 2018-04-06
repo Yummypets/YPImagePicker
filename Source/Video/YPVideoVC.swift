@@ -13,9 +13,9 @@ public class YPVideoVC: UIViewController, PermissionCheckable {
     public var didCaptureVideo: ((URL) -> Void)?
     
     private let videoHelper = YPVideoHelper()
-    private let v = YPCameraView()
+    private let v = YPCameraView(overlayView: nil)
     private var isPreviewSetup = false
-    private let configuration: YPImagePickerConfiguration!
+    let configuration: YPImagePickerConfiguration!
     private var viewState = ViewState()
     
     // MARK: - Init
@@ -25,7 +25,7 @@ public class YPVideoVC: UIViewController, PermissionCheckable {
     public required init(configuration: YPImagePickerConfiguration) {
         self.configuration = configuration
         super.init(nibName: nil, bundle: nil)
-        title = ypLocalized("YPImagePickerVideo")
+        title = configuration.wordings.videoTitle
         
         videoHelper.initialize(withVideoRecordingLimit: configuration.videoRecordingTimeLimit)
         

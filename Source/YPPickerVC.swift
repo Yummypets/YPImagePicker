@@ -37,7 +37,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     var initialStatusBarHidden = false
     
     override public var prefersStatusBarHidden: Bool {
-        return shouldHideStatusBar || initialStatusBarHidden
+        return (shouldHideStatusBar || initialStatusBarHidden) && configuration.hidesStatusBar
     }
     
     public var didClose:(() -> Void)?
@@ -215,7 +215,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     @objc
     func navBarTapped() {
         
-        let vc = YPAlbumVC()
+        let vc = YPAlbumVC(configuration: configuration)
         vc.noVideos = !self.configuration.showsVideoInLibrary
         let navVC = UINavigationController(rootViewController: vc)
 
@@ -237,6 +237,14 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         label.text = aTitle
         label.textColor = .black
         
+        if let navBarTitleFont = UINavigationBar.appearance().titleTextAttributes?[.font] as? UIFont {
+            // Use custom font if set by user.
+            label.font = navBarTitleFont
+        } else {
+            // Use standard font by default.
+            label.font = UIFont.boldSystemFont(ofSize: 17)
+        }
+        
         let arrow = UIImageView()
         arrow.image = imageFromBundle("yp_arrow")
         
@@ -250,11 +258,14 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
             button
         )
         
-        |-(>=8)-label.centerInContainer()-(>=8)-|
-    
-        button.fillContainer()
-        alignHorizontally(label-arrow)
+        label.firstBaselineAnchor.constraint(equalTo: titleView.bottomAnchor, constant: -14).isActive = true
         
+        button.fillContainer()
+        
+        |-(>=8)-label.centerHorizontally()-arrow-(>=8)-|
+        align(horizontally: label-arrow)
+        
+        titleView.heightAnchor.constraint(equalToConstant: 40).isActive = true
         navigationItem.titleView = titleView
     }
     
@@ -267,7 +278,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         switch mode {
         case .library:
             setTitleViewWithTitle(aTitle: libraryVC?.title ?? "")
-            navigationItem.rightBarButtonItem = UIBarButtonItem(title: ypLocalized("YPImagePickerNext"),
+            navigationItem.rightBarButtonItem = UIBarButtonItem(title: configuration.wordings.next,
                                                                 style: .done,
                                                                 target: self,
                                                                 action: #selector(done))
@@ -320,7 +331,7 @@ extension YPPickerVC: YPLibraryViewDelegate {
     }
     
     public func libraryViewFinishedLoadingImage() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: ypLocalized("YPImagePickerNext"),
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: configuration.wordings.next,
                                                             style: .done,
                                                             target: self,
                                                             action: #selector(done))

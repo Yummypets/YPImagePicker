@@ -1,3 +1,5 @@
+<img src="https://raw.githubusercontent.com/Yummypets/YPImagePicker/master/Images/visual.jpg" width="400px" >
+
 ## YPImagePicker
 
 YPImagePicker is an instagram-like photo/video picker for iOS written in pure Swift.
@@ -101,6 +103,9 @@ config.startOnScreen = .library
 config.videoRecordingTimeLimit = 10
 config.videoFromLibraryTimeLimit = 20
 config.showsCrop = .rectangle(ratio: (16/9))
+config.wordings.libraryTitle = "Gallery"
+config.hidesStatusBar = false
+config.overlayView = myOverlayView
 
 // Build a picker with your configuration
 let picker = YPImagePicker(configuration: config)
@@ -135,9 +140,30 @@ picker.didSelectVideo = { videoData, videoThumbnailImage in
     self.imageView.image = videoThumbnailImage
     picker.dismiss(animated: true, completion: nil)
 }
+picker.didCancel = {
+  print("Did Cancel")
+}
 present(picker, animated: true, completion: nil)
 ```
 
+## Languages
+Supported languages out of the box:
+- English
+- Spanish
+- French
+- Russian
+- Dutch
+- Brazilian
+- Turkish
+
+If your language is not supported, you can still customize the wordings via the `configuration.wordings` api:
+
+```swift
+config.wordings.libraryTitle = "Gallery"
+config.wordings.cameraTitle = "Camera"
+config.wordings.next = "OK"
+```
+Better yet you can submit an issue or pull request with your `Localizable.strings` file to add a new language !
 
 ## Original Project & Author
 
@@ -152,4 +178,4 @@ See [LICENSE](LICENSE) for details.
 ## Swift Version
 
 - Swift 3 -> version [**1.2.1**](https://github.com/Yummypets/YPImagePicker/releases/tag/1.2.1)
-- Swift 4 -> version [**2.7.2**](https://github.com/Yummypets/YPImagePicker/releases/tag/2.7.2)
+- Swift 4 -> version [**2.7.3**](https://github.com/Yummypets/YPImagePicker/releases/tag/2.8.1)

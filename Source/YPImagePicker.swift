@@ -59,6 +59,7 @@ public class YPImagePicker: UINavigationController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    public var didCancel: (() -> Void)?
     public var didSelectImage: ((UIImage) -> Void)?
     public var didSelectVideo: ((Data, UIImage, URL) -> Void)?
     public var didSelectMultipleItems: (([YPMedia]) -> Void)?
@@ -117,12 +118,13 @@ public class YPImagePicker: UINavigationController {
     
     override public func viewDidLoad() {
         super.viewDidLoad()
+        picker.didClose = didCancel
         viewControllers = [picker]
         setupActivityIndicator()
         navigationBar.isTranslucent = false
         picker.didSelectImage = { [unowned self] pickedImage, isNewPhoto in
             if self.configuration.showsFilters {
-                let filterVC = YPFiltersVC(image: pickedImage)
+                let filterVC = YPFiltersVC(image: pickedImage, configuration: self.configuration)
                 filterVC.didSelectImage = { filteredImage, isImageFiltered in
                     
                     let completion = { (image: UIImage) in
@@ -133,7 +135,7 @@ public class YPImagePicker: UINavigationController {
                     }
                     
                     if case let YPCropType.rectangle(ratio) = self.configuration.showsCrop {
-                        let cropVC = YPCropVC(image: filteredImage, ratio: ratio)
+                        let cropVC = YPCropVC(configuration: self.configuration, image: filteredImage, ratio: ratio)
                         cropVC.didFinishCropping = { croppedImage in
                             completion(croppedImage)
                         }
@@ -159,7 +161,7 @@ public class YPImagePicker: UINavigationController {
                     }
                 }
                 if case let YPCropType.rectangle(ratio) = self.configuration.showsCrop {
-                    let cropVC = YPCropVC(image: pickedImage, ratio: ratio)
+                    let cropVC = YPCropVC(configuration: self.configuration, image: pickedImage, ratio: ratio)
                     cropVC.didFinishCropping = { croppedImage in
                         completion(croppedImage)
                     }

@@ -1,0 +1,25 @@
+/* 
+  Localizable.strings
+  YPImagePicker
+
+  Created by Sacha Durand Saint Omer on 02/11/16.
+  Copyright © 2016 Yummypets. All rights reserved.
+*/
+
+"YPImagePickerLibrary" = "Kütüphane";
+"YPImagePickerPhoto" = "Fotoğraf";
+"YPImagePickerVideo" = "Video";
+"YPImagePickerNext" = "İleri";
+"YPImagePickerFilter" = "Filtrele";
+"YPImagePickerVideoTooLongTitle" = "Video uzunluğu";
+"YPImagePickerVideoTooLongDetail" = "%@ saniyeden daha kısa bir video seç.";
+"YPImagePickerPermissionDeniedPopupTitle" = "Erişim izni reddedildi";
+"YPImagePickerPermissionDeniedPopupMessage" = "Lütfen erişime izin ver";
+"YPImagePickerPermissionDeniedPopupCancel" = "İptal";
+"YPImagePickerPermissionDeniedPopupGrantPermission" = "Erişime İzin Ver";
+
+
+
+
+
+

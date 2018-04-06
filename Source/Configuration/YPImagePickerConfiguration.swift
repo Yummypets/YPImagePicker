@@ -8,9 +8,13 @@
 
 import Foundation
 import AVFoundation
+import UIKit
 
 public struct YPImagePickerConfiguration {
     public init() {}
+    
+    /// Use this property to modify the default wordings provided.
+    public var wordings = YPWordings()
     
     /// Set this to true if you want to force the output to be a squared image. Defaults to false
     @available(*, unavailable, renamed:"onlySquareImagesFromLibrary")
@@ -71,4 +75,10 @@ public struct YPImagePickerConfiguration {
     
     /// Anything superior than 1 will enable the multiple selection feature.
     public var maxNumberOfItems = 1
+
+    /// Adds a Overlay View to the camera
+    public var overlayView = UIView()
+    
+    /// Defines if the status bar should be hidden when showing the picker. Default is true
+    public var hidesStatusBar = true
 }
