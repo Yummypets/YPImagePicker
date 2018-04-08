@@ -9,10 +9,65 @@
 import UIKit
 
 extension YPLibraryVC {
+    var isLimitExceeded: Bool { return selectedIndices.count >= configuration.maxNumberOfItems }
+    
     func setupCollectionView() {
         v.collectionView.dataSource = self
         v.collectionView.delegate = self
         v.collectionView.register(YPLibraryViewCell.self, forCellWithReuseIdentifier: "YPLibraryViewCell")
+        
+        // Long press on cell to enable multiple selection
+        let longPressGR = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(longPressGR:)))
+        longPressGR.minimumPressDuration = 0.5
+        longPressGR.delaysTouchesBegan = true
+        v.collectionView.addGestureRecognizer(longPressGR)
+    }
+    
+    /// When tapping on the cell with long press, clear all previously selected cells.
+    @objc func handleLongPress(longPressGR: UILongPressGestureRecognizer) {
+        if longPressGR.state != .ended {
+            return
+        }
+        
+        if multipleSelectionEnabled == true {
+            return
+        }
+        
+        selectedIndices.removeAll()
+        
+        let point = longPressGR.location(in: v.collectionView)
+        let indexPath = v.collectionView.indexPathForItem(at: point)
+        
+        if let indexPath = indexPath {
+            currentlySelectedIndex = indexPath.row
+            multipleSelectionButtonTapped()
+            v.collectionView.reloadData()
+        }
+    }
+    
+    /// Removes cell from selection
+    func deselect(indexPath: IndexPath) {
+        if let positionIndex = selectedIndices.index(of: indexPath.row) {
+            selectedIndices.remove(at: positionIndex)
+            // Refresh the numbers
+            
+            let selectedIndexPaths = selectedIndices.map { IndexPath(row: $0, section: 0 )}
+            v.collectionView.reloadItems(at: selectedIndexPaths)
+            
+            checkLimit()
+        }
+    }
+    
+    /// Adds cell to selection
+    func addToSelection(indexPath: IndexPath) {
+        selectedIndices.append(indexPath.row)
+        
+        checkLimit()
+    }
+    
+    /// Checks if there can be selected more items. If no - present warning.
+    func checkLimit() {
+        v.maxNumberWarningView.isHidden = !isLimitExceeded || multipleSelectionEnabled == false
     }
 }
 
@@ -37,6 +92,7 @@ extension YPLibraryVC: UICollectionViewDelegate {
                                                                 fatalError("unexpected cell in collection view")
         }
         cell.representedAssetIdentifier = asset.localIdentifier
+        cell.multipleSelectionIndicator.selectionColor = configuration.multipleItemsSelectedCircleColor
         mediaManager.imageManager?.requestImage(for: asset,
                                    targetSize: v.cellSize(),
                                    contentMode: .aspectFill,
@@ -96,7 +152,6 @@ extension YPLibraryVC: UICollectionViewDelegate {
                 let previouslySelectedIndexPath = IndexPath(row: selectedRow, section: 0)
                 collectionView.reloadItems(at: [previouslySelectedIndexPath])
             }
-            
         }
         
         if multipleSelectionEnabled {
@@ -107,7 +162,7 @@ extension YPLibraryVC: UICollectionViewDelegate {
                 if cellIsCurrentlySelected {
                     deselect(indexPath: indexPath)
                 }
-            } else {
+            } else if isLimitExceeded == false {
                 addToSelection(indexPath: indexPath)
             }
         }
@@ -117,20 +172,6 @@ extension YPLibraryVC: UICollectionViewDelegate {
         if let previouslySelectedIndexPath = previouslySelectedIndexPath {
             collectionView.reloadItems(at: [previouslySelectedIndexPath])
         }
-    }
-    
-    func deselect(indexPath: IndexPath) {
-        if let positionIndex = selectedIndices.index(of: indexPath.row) {
-            selectedIndices.remove(at: positionIndex)
-            // Refresh the numbers
-            
-            let selectedIndexPaths = selectedIndices.map { IndexPath(row: $0, section: 0 )}
-            v.collectionView.reloadItems(at: selectedIndexPaths)
-        }
-    }
-    
-    func addToSelection(indexPath: IndexPath) {
-        selectedIndices.append(indexPath.row) // Add cell to selection
     }
 }
 
@@ -142,4 +183,8 @@ extension YPLibraryVC: UICollectionViewDelegateFlowLayout {
         let width = (collectionView.frame.width - 3) / 4
         return CGSize(width: width, height: width)
     }
+}
+
+extension YPLibraryVC: UIGestureRecognizerDelegate {
+    
 }

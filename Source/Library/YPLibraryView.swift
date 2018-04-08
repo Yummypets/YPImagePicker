@@ -18,6 +18,8 @@ final class YPLibraryView: UIView {
     @IBOutlet weak var imageCropView: YPImageCropView!
     @IBOutlet weak var imageCropViewContainer: YPImageCropViewContainer!
     @IBOutlet weak var imageCropViewConstraintTop: NSLayoutConstraint!
+    @IBOutlet weak var maxNumberWarningView: UIView!
+    @IBOutlet weak var maxNumberWarningLabel: UILabel!
     
     let line = UIView()
     

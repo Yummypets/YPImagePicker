@@ -56,6 +56,7 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
         
         v.imageCropViewContainer.multipleSelectionButton.isHidden = !(configuration.maxNumberOfItems > 1)
         v.imageCropView.onlySquareImages = configuration.onlySquareImagesFromLibrary
+        v.maxNumberWarningLabel.text = String(format: configuration.wordings.warningMaxItemsLimit, configuration.maxNumberOfItems)
     }
     
     // MARK: - View Lifecycle
@@ -97,18 +98,20 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
     @objc
     func multipleSelectionButtonTapped() {
         multipleSelectionEnabled = !multipleSelectionEnabled
-    
-        v.imageCropViewContainer.setMultipleSelectionMode(on: multipleSelectionEnabled)
-        
+
         if multipleSelectionEnabled {
-            if let currentlySelectedIndex = currentlySelectedIndex {
+            if let currentlySelectedIndex = currentlySelectedIndex, selectedIndices.isEmpty {
                 selectedIndices = [currentlySelectedIndex]
             }
         } else {
             selectedIndices.removeAll()
         }
+
+        v.imageCropViewContainer.setMultipleSelectionMode(on: multipleSelectionEnabled)
         
         v.collectionView.reloadData()
+        
+        checkLimit()
         
         delegate?.libraryViewDidToggleMultipleSelection(enabled: multipleSelectionEnabled)
     }

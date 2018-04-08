@@ -10,6 +10,8 @@ import Foundation
 
 public struct YPWordings {
     
+    public var permissionPopup = PermissionPopup()
+
     public struct PermissionPopup {
         public var title = ypLocalized("YPImagePickerPermissionDeniedPopupTitle")
         public var message = ypLocalized("YPImagePickerPermissionDeniedPopupMessage")
@@ -24,5 +26,5 @@ public struct YPWordings {
     public var filter = ypLocalized("YPImagePickerFilter")
     public var videoTooLongTitle = ypLocalized("YPImagePickerVideoTooLongDetail")
     public var videoTooLongDetail = ypLocalized("YPImagePickerNext")
-    public var permissionPopup = PermissionPopup()
+    public var warningMaxItemsLimit = ypLocalized("YPImagePickerWarningItemsLimit")
 }

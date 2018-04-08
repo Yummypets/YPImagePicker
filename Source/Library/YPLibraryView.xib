@@ -9,6 +9,11 @@
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="HelveticaNeue.ttc">
+            <string>HelveticaNeue</string>
+        </array>
+    </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -56,14 +61,34 @@
                         <constraint firstAttribute="trailing" secondItem="Mc5-1c-z7q" secondAttribute="trailing" id="sKD-NK-t20"/>
                     </constraints>
                 </view>
+                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3d4-kY-zZv">
+                    <rect key="frame" x="0.0" y="510" width="400" height="40"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="___The limit is label___" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qvc-4d-iDf">
+                            <rect key="frame" x="129.5" y="12.5" width="142.5" height="16.5"/>
+                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" red="0.96329711294416243" green="0.97283470812182737" blue="0.97283470812182737" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstItem="qvc-4d-iDf" firstAttribute="centerX" secondItem="3d4-kY-zZv" secondAttribute="centerX" id="XEs-pc-6Oy"/>
+                        <constraint firstAttribute="height" constant="40" id="rhI-AF-Fz7"/>
+                        <constraint firstItem="qvc-4d-iDf" firstAttribute="centerY" secondItem="3d4-kY-zZv" secondAttribute="centerY" id="tfo-nv-JkD"/>
+                    </constraints>
+                </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="6id-Ro-HHC" firstAttribute="top" secondItem="Mc5-1c-z7q" secondAttribute="bottom" id="2VS-x4-Kjb"/>
+                <constraint firstItem="3d4-kY-zZv" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="6XD-ms-2Px"/>
                 <constraint firstAttribute="trailing" secondItem="90B-0c-ych" secondAttribute="trailing" id="7re-q7-aoD"/>
                 <constraint firstAttribute="bottom" secondItem="9Cu-Zp-X0j" secondAttribute="bottom" id="94b-v2-S3a"/>
+                <constraint firstAttribute="bottom" secondItem="3d4-kY-zZv" secondAttribute="bottom" id="FX7-18-Lzz"/>
                 <constraint firstItem="90B-0c-ych" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="Nqq-tJ-MXy"/>
                 <constraint firstAttribute="trailing" secondItem="9Cu-Zp-X0j" secondAttribute="trailing" id="Uhw-Pi-jJn"/>
+                <constraint firstAttribute="trailing" secondItem="3d4-kY-zZv" secondAttribute="trailing" id="baV-Ml-ZeA"/>
                 <constraint firstItem="9Cu-Zp-X0j" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="gu4-5B-2qu"/>
                 <constraint firstItem="90B-0c-ych" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="u5j-7G-j99"/>
                 <constraint firstItem="9Cu-Zp-X0j" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="zCK-Xd-fZp"/>
@@ -75,6 +100,8 @@
                 <outlet property="imageCropView" destination="Mc5-1c-z7q" id="oCj-GQ-fQS"/>
                 <outlet property="imageCropViewConstraintTop" destination="u5j-7G-j99" id="8dd-IK-PW2"/>
                 <outlet property="imageCropViewContainer" destination="90B-0c-ych" id="UNv-Xg-Rcp"/>
+                <outlet property="maxNumberWarningLabel" destination="qvc-4d-iDf" id="wUC-o4-G8v"/>
+                <outlet property="maxNumberWarningView" destination="3d4-kY-zZv" id="gel-Kf-iZ4"/>
             </connections>
         </view>
     </objects>

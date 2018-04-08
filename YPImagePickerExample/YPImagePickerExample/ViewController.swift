@@ -57,7 +57,7 @@ class ViewController: UIViewController {
 //        config.usesFrontCamera = true
 //
 //        /// Adds a Filter step in the photo taking process.  Defaults to true
-        config.showsFilters = false
+        config.showsFilters = true
 //
 //        /// Enables you to opt out from saving new (or old but filtered) images to the
 //        /// user's photo library. Defaults to true.
