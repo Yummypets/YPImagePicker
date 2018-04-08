@@ -294,10 +294,10 @@
 		99C6D6A91F1FB5C100711DB2 /* Filters */ = {
 			isa = PBXGroup;
 			children = (
+				99C6D6AD1F1FB5C100711DB2 /* YPFiltersVC.swift */,
 				99C6D6AA1F1FB5C100711DB2 /* YPFilter.swift */,
 				99C6D6AB1F1FB5C100711DB2 /* YPFilterCollectionViewCell.swift */,
 				99C6D6AC1F1FB5C100711DB2 /* YPFilterPreview.swift */,
-				99C6D6AD1F1FB5C100711DB2 /* YPFiltersVC.swift */,
 				99C6D6AE1F1FB5C100711DB2 /* YPFiltersView.swift */,
 			);
 			path = Filters;
