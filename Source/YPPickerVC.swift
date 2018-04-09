@@ -40,10 +40,12 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         return (shouldHideStatusBar || initialStatusBarHidden) && configuration.hidesStatusBar
     }
     
+    /// Private callbacks to YPImagePicker
     public var didClose:(() -> Void)?
     public var didSelectImage: ((UIImage, Bool) -> Void)?
     public var didSelectVideo: ((URL) -> Void)?
-    
+    public var didSelectMultipleItems: (([YPMediaItem]) -> Void)?
+
     enum Mode {
         case library
         case camera
@@ -304,13 +306,18 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     // When pressing "Next"
     @objc
     func done() {
+        guard let libraryVC = libraryVC else { print("⚠️ YPPickerVC >>> YPLibraryVC deallocated"); return }
+        
         if mode == .library {
-            libraryVC?.doAfterPermissionCheck { [weak self] in
-                self?.libraryVC?.selectedMedia(photoCallback: { img in
-                    self?.didSelectImage?(img, false)
-                }, videoCallback: { videoURL in
-                    self?.didSelectVideo?(videoURL)
-                })
+            libraryVC.doAfterPermissionCheck { [weak self] in
+                    libraryVC.selectedMedia(photoCallback: { img in
+                        self?.didSelectImage?(img, false)
+                    }, videoCallback: { videoURL in
+                        self?.didSelectVideo?(videoURL)
+                    }, multipleItemsCallback: { items in
+                        self?.libraryViewFinishedLoadingImage()
+                        self?.didSelectMultipleItems?(items)
+                    })
             }
         }
     }

@@ -12,7 +12,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SelectionsGalleryVC" customModule="YPImagePicker" customModuleProvider="target">
             <connections>
-                <outlet property="collectionV" destination="dd0-7Y-Cmb" id="h06-KG-OnH"/>
+                <outlet property="collectionV" destination="dd0-7Y-Cmb" id="MoL-jN-NgU"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -22,13 +22,13 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceHorizontal="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="none" prefetchingEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dd0-7Y-Cmb">
-                    <rect key="frame" x="0.0" y="70" width="375" height="397"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Gyd-zO-4D7">
+                    <rect key="frame" x="0.0" y="70" width="375" height="447"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="1" minimumInteritemSpacing="5" id="Gyd-zO-4D7">
                         <size key="itemSize" width="50" height="50"/>
                         <size key="headerReferenceSize" width="0.0" height="0.0"/>
                         <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        <inset key="sectionInset" minX="1" minY="0.0" maxX="1" maxY="0.0"/>
                     </collectionViewFlowLayout>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="cgF-sG-vYz"/>
@@ -40,7 +40,7 @@
             <constraints>
                 <constraint firstItem="dd0-7Y-Cmb" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="REB-PC-t9a"/>
                 <constraint firstItem="dd0-7Y-Cmb" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="50" id="cDa-3y-36v"/>
-                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="dd0-7Y-Cmb" secondAttribute="bottom" constant="200" id="nSb-4m-ylM"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="dd0-7Y-Cmb" secondAttribute="bottom" constant="150" id="nSb-4m-ylM"/>
                 <constraint firstItem="dd0-7Y-Cmb" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="o5t-wJ-gJi"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>

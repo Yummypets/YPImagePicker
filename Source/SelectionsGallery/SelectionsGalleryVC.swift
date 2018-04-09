@@ -12,19 +12,20 @@ public class SelectionsGalleryVC: UIViewController {
     
     /// Designated initializer
     class func initWith(items: [YPMediaItem]) -> SelectionsGalleryVC {
-        let vc = SelectionsGalleryVC()
+        let vc = SelectionsGalleryVC(nibName: "SelectionsGalleryVC", bundle: Bundle(for: SelectionsGalleryVC.self))
         vc.items = items
         return vc
     }
 
-    @IBOutlet private weak var collectionV: UICollectionView!
+    @IBOutlet weak var collectionV: UICollectionView!
 
-    public var items: [YPMediaItem] = [] { didSet { collectionV.reloadData() } }
+    public var items: [YPMediaItem] = []
 
     override public func viewDidLoad() {
         super.viewDidLoad()
 
-        collectionV.register(UINib(nibName: "SelectionsGalleryCVCell", bundle: nil), forCellWithReuseIdentifier: "item")
+        let bundle = Bundle(for: SelectionsGalleryVC.self)
+        collectionV.register(UINib(nibName: "SelectionsGalleryCVCell", bundle: bundle), forCellWithReuseIdentifier: "item")
     }
 
 }
@@ -41,7 +42,7 @@ extension SelectionsGalleryVC: UICollectionViewDataSource {
         let item = items[indexPath.row]
         switch item.type {
         case .photo:
-            cell.imageV.image = item.image?.image
+            cell.imageV.image = item.photo?.image
         case .video:
             cell.imageV.image = item.video?.thumbnail
         }
@@ -56,3 +57,11 @@ extension SelectionsGalleryVC: UICollectionViewDelegate {
 
     }
 }
+
+extension SelectionsGalleryVC: UICollectionViewDelegateFlowLayout {
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let sideSize = collectionView.frame.size.height - 20
+        return CGSize(width: sideSize, height: sideSize)
+    }
+}
+

@@ -103,7 +103,7 @@ class ViewController: UIViewController {
         /// Defines if the status bar should be hidden when showing the picker. Default is true
         config.hidesStatusBar = false
         
-        config.maxNumberOfItems = 3
+        config.maxNumberOfItems = 5
         
         config.delegate = self
         
@@ -127,19 +127,6 @@ class ViewController: UIViewController {
             self.imageView.image = videoThumbnailImage
             picker.dismiss(animated: true, completion: nil)
         }
-        picker.didSelectMultipleItems = { selectedItems in
-            print(selectedItems)
-            for item in selectedItems {
-                if let photo = item as? YPPhoto {
-                    print(photo.image)
-                }
-                if let video = item as? YPVideo {
-                    print(video.data)
-                    print(video.thumbnail)
-                    print(video.data)
-                }
-            }
-        }
         picker.didCancel = {
             print("Did Cancel")
         }
@@ -150,5 +137,7 @@ class ViewController: UIViewController {
 extension ViewController: YPImagePickerDelegate {
     func imagePicker(imagePicker: YPImagePicker, didSelect items: [YPMediaItem]) {
         print("🧀 \(items)")
+        print("--------")
+        _ = items.map { print("🧀 \($0.type)") }
     }
 }

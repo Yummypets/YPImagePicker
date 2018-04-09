@@ -276,38 +276,79 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
         }
     }
     
+    public func selectedMedia(photoCallback:@escaping (_ photo: UIImage) -> Void,
+                              videoCallback: @escaping (_ videoURL: URL) -> Void,
+                              multipleItemsCallback: @escaping (_ items: [YPMediaItem]) -> Void) {
+        DispatchQueue.global(qos: .userInitiated).async {
+            if self.multipleSelectionEnabled {
+            let selectedAssets = self.selectedIndices.map { self.mediaManager.fetchResult[$0] }
+                var resultMediaItems: [YPMediaItem] = []
+                
+                let asyncGroup = DispatchGroup()
+                for asset in selectedAssets {
+                    asyncGroup.enter()
+                    
+                    switch asset.mediaType {
+                    case .image:
+                        self.fetchImage(for: asset) { image in
+                            let resizedImage = self.resizedImageIfNeeded(image: image)
+                            let photo = YPPhoto(image: resizedImage)
+                            resultMediaItems.append(YPMediaItem(type: .photo,
+                                               photo: photo,
+                                               video: nil))
+                            asyncGroup.leave()
+                        }
+                        
+                    case .video:
+                        self.fetchVideoURL(for: asset, callback: { videoURL in
+                            createVideoItem(videoURL: videoURL,
+                                            configuration: self.configuration,
+                                            completion: { video in
+                                                resultMediaItems.append(YPMediaItem(type: .video,
+                                                                                    photo: nil,
+                                                                                    video: video))
+                                                asyncGroup.leave()
+                            })
+                        })
+                    default:
+                        break
+                    }
+                }
+                
+                asyncGroup.notify(queue: .main) {
+                    multipleItemsCallback(resultMediaItems)
+                }
+        } else {
+                let asset = self.mediaManager.selectedAsset!
+                switch asset.mediaType {
+                case .video:
+                    self.fetchVideoURL(for: asset, callback: { videoURL in
+                        DispatchQueue.main.async {
+                            self.delegate?.libraryViewFinishedLoadingImage()
+                            videoCallback(videoURL)
+                        }
+                    })
+                case .image:
+                    self.fetchImage(for: asset) { image in
+                        DispatchQueue.main.async {
+                            self.delegate?.libraryViewFinishedLoadingImage()
+                            let resizedImage = self.resizedImageIfNeeded(image: image)
+                            photoCallback(resizedImage)
+                        }
+                    }
+                case .audio, .unknown:
+                    return
+                }
+            }
+        }
+    }
+    
     // MARK: - TargetSize
     
     private func targetSize(for asset: PHAsset, cropRect: CGRect) -> CGSize {
         let width = floor(CGFloat(asset.pixelWidth) * cropRect.width)
         let height = floor(CGFloat(asset.pixelHeight) * cropRect.height)
         return CGSize(width: width, height: height)
-    }
-    
-    public func selectedMedia(photoCallback:@escaping (_ photo: UIImage) -> Void,
-                              videoCallback: @escaping (_ videoURL: URL) -> Void) {
-        DispatchQueue.global(qos: .userInitiated).async {
-            let asset = self.mediaManager.selectedAsset!
-            switch asset.mediaType {
-            case .video:
-                self.fetchVideoURL(for: asset, callback: { videoURL in
-                    DispatchQueue.main.async {
-                        self.delegate?.libraryViewFinishedLoadingImage()
-                        videoCallback(videoURL)
-                    }
-                })
-            case .image:
-                self.fetchImage(for: asset) { image in
-                    DispatchQueue.main.async {
-                        self.delegate?.libraryViewFinishedLoadingImage()
-                        let resizedImage = self.resizedImageIfNeeded(image: image)
-                        photoCallback(resizedImage)
-                    }
-                }
-            case .audio, .unknown:
-                return
-            }
-        }
     }
     
     // Reduce image size further if needed libraryTargetImageSize is capped.

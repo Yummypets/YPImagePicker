@@ -78,7 +78,7 @@ extension YPLibraryVC: UICollectionViewDataSource {
     }
     
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return  mediaManager.fetchResult.count
+        return mediaManager.fetchResult.count
     }
 }
 
@@ -185,6 +185,3 @@ extension YPLibraryVC: UICollectionViewDelegateFlowLayout {
     }
 }
 
-extension YPLibraryVC: UIGestureRecognizerDelegate {
-    
-}
