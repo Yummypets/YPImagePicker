@@ -102,6 +102,7 @@ public class YPImagePicker: UINavigationController {
         viewControllers = [picker]
         setupActivityIndicator()
         navigationBar.isTranslucent = false
+        
         picker.didSelectImage = { [unowned self] pickedImage, isNewPhoto in
             if self.configuration.showsFilters {
                 let filterVC = YPFiltersVC(image: pickedImage, configuration: self.configuration)
