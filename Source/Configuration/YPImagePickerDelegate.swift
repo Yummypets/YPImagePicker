@@ -9,5 +9,5 @@
 import Foundation
 
 public protocol YPImagePickerDelegate: class {
-    func imagePicker(imagePicker: YPImagePicker, didSelect items: [YPMediaItem])
+    func imagePicker(_ imagePicker: YPImagePicker, didSelect items: [YPMediaItem])
 }

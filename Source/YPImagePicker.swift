@@ -111,7 +111,7 @@ public class YPImagePicker: UINavigationController {
                     let completion = { (image: UIImage) in
                         self.didSelectImage?(image)
                         let mediaItem = YPMediaItem(type: .photo, photo: YPPhoto(image: image), video: nil)
-                        self.configuration.delegate?.imagePicker(imagePicker: self, didSelect: [mediaItem])
+                        self.configuration.delegate?.imagePicker(self, didSelect: [mediaItem])
                         
                         if (isNewPhoto || isImageFiltered) && self.configuration.shouldSaveNewPicturesToAlbum {
                             YPPhotoSaver.trySaveImage(filteredImage, inAlbumNamed: self.configuration.albumName)
@@ -141,7 +141,7 @@ public class YPImagePicker: UINavigationController {
                 let completion = { (image: UIImage) in
                     self.didSelectImage?(image)
                     let mediaItem = YPMediaItem(type: .photo, photo: YPPhoto(image: image), video: nil)
-                    self.configuration.delegate?.imagePicker(imagePicker: self, didSelect: [mediaItem])
+                    self.configuration.delegate?.imagePicker(self, didSelect: [mediaItem])
 
                     if isNewPhoto && self.configuration.shouldSaveNewPicturesToAlbum {
                         YPPhotoSaver.trySaveImage(pickedImage, inAlbumNamed: self.configuration.albumName)
@@ -169,13 +169,14 @@ public class YPImagePicker: UINavigationController {
                                 self.didSelectVideo?(video.data!, video.thumbnail!, video.url!)
                                 
                                 let mediaItem = YPMediaItem(type: .video, photo: nil, video: video)
-                                self.configuration.delegate?.imagePicker(imagePicker: self, didSelect: [mediaItem])
+                                self.configuration.delegate?.imagePicker(self, didSelect: [mediaItem])
             })
         }
         
         picker.didSelectMultipleItems = { items in
-            // If need to get a raw items without filters, place a delegate here
-            let selectionsGalleryVC = SelectionsGalleryVC.initWith(items: items)
+            let selectionsGalleryVC = SelectionsGalleryVC.initWith(items: items,
+                                                                   imagePicker: self,
+                                                                   configuration: self.configuration)
             self.pushViewController(selectionsGalleryVC, animated: true)
         }
     }

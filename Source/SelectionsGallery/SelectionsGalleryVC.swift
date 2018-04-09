@@ -8,26 +8,44 @@
 
 import UIKit
 
+// TODO: Add paging to collection view
+
 public class SelectionsGalleryVC: UIViewController {
     
     /// Designated initializer
-    class func initWith(items: [YPMediaItem]) -> SelectionsGalleryVC {
+    class func initWith(items: [YPMediaItem],
+                        imagePicker: YPImagePicker,
+                        configuration: YPImagePickerConfiguration) -> SelectionsGalleryVC {
         let vc = SelectionsGalleryVC(nibName: "SelectionsGalleryVC", bundle: Bundle(for: SelectionsGalleryVC.self))
         vc.items = items
+        vc.imagePicker = imagePicker
+        vc.configuration = configuration
         return vc
     }
 
     @IBOutlet weak var collectionV: UICollectionView!
 
     public var items: [YPMediaItem] = []
+    public var imagePicker: YPImagePicker!
+    public var configuration: YPImagePickerConfiguration!
 
     override public func viewDidLoad() {
         super.viewDidLoad()
 
+        // Register collection view cell
         let bundle = Bundle(for: SelectionsGalleryVC.self)
         collectionV.register(UINib(nibName: "SelectionsGalleryCVCell", bundle: bundle), forCellWithReuseIdentifier: "item")
+        
+        // Install right bar button
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: configuration.wordings.next,
+                                                            style: .done,
+                                                            target: self,
+                                                            action: #selector(done))
     }
 
+    @objc private func done() {
+        configuration.delegate?.imagePicker(imagePicker, didSelect: items)
+    }
 }
 
 // MARK: - Collection View
@@ -60,7 +78,7 @@ extension SelectionsGalleryVC: UICollectionViewDelegate {
 
 extension SelectionsGalleryVC: UICollectionViewDelegateFlowLayout {
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let sideSize = collectionView.frame.size.height - 20
+        let sideSize = collectionView.frame.size.height - 30
         return CGSize(width: sideSize, height: sideSize)
     }
 }

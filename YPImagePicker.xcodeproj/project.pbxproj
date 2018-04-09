@@ -196,6 +196,7 @@
 			isa = PBXGroup;
 			children = (
 				99D1DC2A1F9788930047F0E0 /* YPImagePickerConfiguration.swift */,
+				EBD2B63B207B7C3B00E711C2 /* YPImagePickerDelegate.swift */,
 				99472DEC2056E33700419F9E /* YPWordings.swift */,
 				99019E502018CDED007325C2 /* YPLibraryImageSize.swift */,
 				99019E522018CE19007325C2 /* YPPickerScreen.swift */,
@@ -259,7 +260,6 @@
 				99C6D6B31F1FB5C100711DB2 /* Info.plist */,
 				99C6D6B21F1FB5C100711DB2 /* YPImagePickerHeader.h */,
 				99C6D6B81F1FB5C100711DB2 /* YPImagePicker.swift */,
-				EBD2B63B207B7C3B00E711C2 /* YPImagePickerDelegate.swift */,
 				99C6D6B51F1FB5C100711DB2 /* YPPickerVC.swift */,
 				99019E4F2018CDDF007325C2 /* Configuration */,
 				99019E4A2018CCB8007325C2 /* BottomPager */,

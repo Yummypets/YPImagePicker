@@ -273,7 +273,8 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     
     func updateUI() {
         // Update Nav Bar state.
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel,
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: configuration.wordings.cancel,
+                                                           style: .plain,
                                                            target: self,
                                                            action: #selector(close))
         navigationItem.leftBarButtonItem?.tintColor = UIColor(r: 38, g: 38, b: 38)
@@ -357,8 +358,6 @@ extension YPPickerVC: YPLibraryViewDelegate {
         
         v.header.bottomConstraint?.constant = enabled ? offset : 0
         v.layoutIfNeeded()
-        
-//        UIView.animate(withDuration: 0.3, animations: v.layoutIfNeeded)
     }
 }
 

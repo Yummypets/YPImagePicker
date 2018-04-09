@@ -254,6 +254,28 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
         }
     }
     
+    // MARK: - Verification
+    
+    private func fitsVideoLengthLimits(asset: PHAsset) -> Bool {
+        guard asset.mediaType == .video else {
+            return true
+        }
+        
+        let tooLong = asset.duration > configuration.videoFromLibraryTimeLimit
+        let tooShort = asset.duration < configuration.videoMinimumTimeLimit
+        
+        if tooLong || tooShort {
+            DispatchQueue.main.async {
+                let alert = tooLong ? YPAlerts.videoTooLongAlert(with: self.configuration)
+                    : YPAlerts.videoTooShortAlert(with: self.configuration)
+                self.present(alert, animated: true, completion: nil)
+            }
+            return false
+        }
+        
+        return true
+    }
+    
     // MARK: - Fetching Media
     
     private func fetchImage(for asset: PHAsset, callback: @escaping (_ photo: UIImage) -> Void) {
@@ -264,13 +286,7 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
     }
     
     private func fetchVideoURL(for asset: PHAsset, callback: @escaping (_ videoURL: URL) -> Void) {
-        if asset.duration > configuration.videoFromLibraryTimeLimit {
-            let alert = YPAlerts.videoTooLongAlert(with: configuration)
-            present(alert, animated: true, completion: nil)
-        } else if asset.duration < configuration.videoMinimumTimeLimit {
-            let alert = YPAlerts.videoTooShortAlert(with: configuration)
-            present(alert, animated: true, completion: nil)
-        } else {
+        if fitsVideoLengthLimits(asset: asset) == true {
             delegate?.libraryViewStartedLoadingImage()
             mediaManager.imageManager?.fetchUrl(for: asset, callback: callback)
         }
@@ -280,10 +296,21 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
                               videoCallback: @escaping (_ videoURL: URL) -> Void,
                               multipleItemsCallback: @escaping (_ items: [YPMediaItem]) -> Void) {
         DispatchQueue.global(qos: .userInitiated).async {
-            if self.multipleSelectionEnabled {
+            
+            // Multiple selection
+            if self.multipleSelectionEnabled && self.selectedIndices.count > 1 {
             let selectedAssets = self.selectedIndices.map { self.mediaManager.fetchResult[$0] }
-                var resultMediaItems: [YPMediaItem] = []
                 
+                // Check video length
+                for asset in selectedAssets {
+                    if self.fitsVideoLengthLimits(asset: asset) == false {
+                        return
+                    }
+                }
+                
+                // Fill result media items array
+                var resultMediaItems: [YPMediaItem] = []
+
                 let asyncGroup = DispatchGroup()
                 for asset in selectedAssets {
                     asyncGroup.enter()

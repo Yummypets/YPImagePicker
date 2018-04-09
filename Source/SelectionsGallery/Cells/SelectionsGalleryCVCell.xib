@@ -6,7 +6,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -21,19 +20,16 @@
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="If6-Aa-FVS">
-                        <rect key="frame" x="10" y="10" width="232" height="232"/>
-                        <constraints>
-                            <constraint firstAttribute="width" secondItem="If6-Aa-FVS" secondAttribute="height" multiplier="1:1" id="CMc-eK-xKO"/>
-                        </constraints>
+                        <rect key="frame" x="0.0" y="0.0" width="252" height="252"/>
                     </imageView>
                 </subviews>
             </view>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="If6-Aa-FVS" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="10" id="Dpq-Ao-7MJ"/>
-                <constraint firstAttribute="bottom" secondItem="If6-Aa-FVS" secondAttribute="bottom" constant="10" id="Zud-Ds-e9n"/>
-                <constraint firstAttribute="trailing" secondItem="If6-Aa-FVS" secondAttribute="trailing" constant="10" id="dcD-JR-MG2"/>
-                <constraint firstItem="If6-Aa-FVS" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="10" id="pFY-RV-QQq"/>
+                <constraint firstItem="If6-Aa-FVS" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="Dpq-Ao-7MJ"/>
+                <constraint firstAttribute="bottom" secondItem="If6-Aa-FVS" secondAttribute="bottom" id="Zud-Ds-e9n"/>
+                <constraint firstAttribute="trailing" secondItem="If6-Aa-FVS" secondAttribute="trailing" id="dcD-JR-MG2"/>
+                <constraint firstItem="If6-Aa-FVS" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="pFY-RV-QQq"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <size key="customSize" width="252" height="251"/>

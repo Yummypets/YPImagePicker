@@ -75,6 +75,7 @@ extension YPLibraryView {
     func hidePlayer() {
         imageCropViewContainer.playerLayer.player?.pause()
         imageCropViewContainer.playerLayer.isHidden = true
+        imageCropViewContainer.showPlayImage(show: false)
     }
     
     // MARK: - Grid

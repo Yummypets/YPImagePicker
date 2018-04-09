@@ -135,7 +135,9 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: YPImagePickerDelegate {
-    func imagePicker(imagePicker: YPImagePicker, didSelect items: [YPMediaItem]) {
+    func imagePicker(_ imagePicker: YPImagePicker, didSelect items: [YPMediaItem]) {
+        imagePicker.dismiss(animated: true, completion: nil)
+
         print("🧀 \(items)")
         print("--------")
         _ = items.map { print("🧀 \($0.type)") }

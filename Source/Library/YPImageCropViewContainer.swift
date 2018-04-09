@@ -90,7 +90,7 @@ class YPImageCropViewContainer: UIView, YPImageCropViewDelegate, UIGestureRecogn
     /// Shows or hide the play image over the view.
     public func showPlayImage(show: Bool) {
         UIView.animate(withDuration: 0.1) {
-            self.playImageView.alpha = show ? 0 : 0.8
+            self.playImageView.alpha = show ? 0.8 : 0
         }
     }
     
@@ -175,7 +175,7 @@ class YPImageCropViewContainer: UIView, YPImageCropViewDelegate, UIGestureRecogn
     private func singleTap() {
         if isVideoMode {
             playerLayer.player?.togglePlayPause { isPlaying in
-               self.showPlayImage(show: isPlaying)
+               self.showPlayImage(show: !isPlaying)
             }
         }
     }
