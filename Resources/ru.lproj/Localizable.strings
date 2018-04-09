@@ -11,8 +11,8 @@
 "YPImagePickerVideo" = "Видео";
 "YPImagePickerNext" = "Дальше";
 "YPImagePickerFilter" = "Фильтр";
-"YPImagePickerVideoTooLongTitle" = "Видео слишком длинное";
-"YPImagePickerVideoTooLongDetail" = "Выберите видео короче %@ секунд.";
+"YPImagePickerVideoDurationTitle" = "Видео слишком длинное";
+"YPImagePickerVideoTooLong" = "Выберите видео короче %@ секунд";
 "YPImagePickerPermissionDeniedPopupTitle" = "Не хватает полномочий";
 "YPImagePickerPermissionDeniedPopupMessage" = "Пожалуйста, разрешите доступ";
 "YPImagePickerPermissionDeniedPopupCancel" = "Отмена";

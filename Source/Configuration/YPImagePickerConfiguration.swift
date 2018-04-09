@@ -13,6 +13,9 @@ import UIKit
 public struct YPImagePickerConfiguration {
     public init() {}
     
+    /// The delegate needs to get selected photo and video. It's duplicate a callback functional, but the callback doesn't support multiple selection.
+    public weak var delegate: YPImagePickerDelegate?
+    
     /// Use this property to modify the default wordings provided.
     public var wordings = YPWordings()
     
@@ -69,6 +72,10 @@ public struct YPImagePickerConfiguration {
     /// Defines the time limit for videos from the library.
     /// Defaults to 60 seconds.
     public var videoFromLibraryTimeLimit: TimeInterval = 60.0
+    
+    /// Defines the minimum time for the video
+    /// Defaults to 3 seconds.
+    public var videoMinimumTimeLimit: TimeInterval = 3.0
     
     /// Adds a Crop step in the photo taking process, after filters.  Defaults to .none
     public var showsCrop: YPCropType = .none

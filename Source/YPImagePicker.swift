@@ -9,27 +9,6 @@
 import UIKit
 import AVFoundation
 
-public enum YPMediaType {
-    case photo
-    case video
-}
-
-public protocol YPMedia {
-    var type: YPMediaType { get }
-}
-
-public struct YPPhoto: YPMedia {
-    public let type = YPMediaType.photo
-    public let image: UIImage
-}
-
-public struct YPVideo: YPMedia {
-    public let type = YPMediaType.video
-    public let data: Data
-    public let thumbnail: UIImage
-    public let url: URL
-}
-
 public class YPImagePicker: UINavigationController {
     
     /// Set a global configuration that will be applied whenever you call YPImagePicker().
@@ -118,6 +97,7 @@ public class YPImagePicker: UINavigationController {
     
     override public func viewDidLoad() {
         super.viewDidLoad()
+        
         picker.didClose = didCancel
         viewControllers = [picker]
         setupActivityIndicator()
@@ -214,19 +194,4 @@ public class YPImagePicker: UINavigationController {
             }
         }
     }
-}
-
-func thunbmailFromVideoPath(_ path: URL) -> UIImage {
-    let asset = AVURLAsset(url: path, options: nil)
-    let gen = AVAssetImageGenerator(asset: asset)
-    gen.appliesPreferredTrackTransform = true
-    let time = CMTimeMakeWithSeconds(0.0, 600)
-    var actualTime = CMTimeMake(0, 0)
-    let image: CGImage
-    do {
-        image = try gen.copyCGImage(at: time, actualTime: &actualTime)
-        let thumbnail = UIImage(cgImage: image)
-        return thumbnail
-    } catch { }
-    return UIImage()
 }

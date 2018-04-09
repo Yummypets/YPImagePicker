@@ -105,8 +105,10 @@ class ViewController: UIViewController {
         
         config.maxNumberOfItems = 3
         
+        config.delegate = self
+        
         // Set it the default conf for all Pickers
-        //      YPImagePicker.setDefaultConfiguration(config)
+              YPImagePicker.setDefaultConfiguration(config)
         // And then use the default configuration like so:
         //      let picker = YPImagePicker()
         
@@ -142,5 +144,11 @@ class ViewController: UIViewController {
             print("Did Cancel")
         }
         present(picker, animated: true, completion: nil)
+    }
+}
+
+extension ViewController: YPImagePickerDelegate {
+    func imagePicker(imagePicker: YPImagePicker, didSelect items: [YPMediaItem]) {
+        print("🧀 \(items)")
     }
 }

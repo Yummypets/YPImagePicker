@@ -87,6 +87,13 @@ class YPImageCropViewContainer: UIView, YPImageCropViewDelegate, UIGestureRecogn
         }
     }
     
+    /// Shows or hide the play image over the view.
+    public func showPlayImage(show: Bool) {
+        UIView.animate(withDuration: 0.1) {
+            self.playImageView.alpha = show ? 0 : 0.8
+        }
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         addSubview(grid)
@@ -162,13 +169,13 @@ class YPImageCropViewContainer: UIView, YPImageCropViewDelegate, UIGestureRecogn
         refreshSquareCropButton()
     }
     
+ 
+    
     @objc
     private func singleTap() {
         if isVideoMode {
             playerLayer.player?.togglePlayPause { isPlaying in
-                UIView.animate(withDuration: 0.1) {
-                    self.playImageView.alpha = isPlaying ? 0 : 0.8
-                }
+               self.showPlayImage(show: isPlaying)
             }
         }
     }

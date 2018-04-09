@@ -6,18 +6,18 @@
   Copyright © 2016 Yummypets. All rights reserved.
 */
 
+"YPImagePickerOk" = "Ok";
+"YPImagePickerCancel" = "Cancel";
 "YPImagePickerLibrary" = "Library";
 "YPImagePickerWarningItemsLimit" = "The limit is %d photos or videos";
 "YPImagePickerPhoto" = "Photo";
 "YPImagePickerVideo" = "Video";
 "YPImagePickerNext" = "Next";
 "YPImagePickerFilter" = "Filter";
-"YPImagePickerVideoTooLongTitle" = "Video duration";
-"YPImagePickerVideoTooLongDetail" = "Pick a video less than %@ seconds long.";
+"YPImagePickerVideoDurationTitle" = "Video duration";
+"YPImagePickerVideoTooShort" = "The video must not be shorter than %@ seconds";
+"YPImagePickerVideoTooLong" = "Pick a video less than %@ seconds long";
 "YPImagePickerPermissionDeniedPopupTitle" = "Permission denied";
 "YPImagePickerPermissionDeniedPopupMessage" = "Please allow access";
 "YPImagePickerPermissionDeniedPopupCancel" = "Cancel";
 "YPImagePickerPermissionDeniedPopupGrantPermission" = "Grant Permission";
-
-
-

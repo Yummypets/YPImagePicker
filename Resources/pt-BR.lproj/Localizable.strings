@@ -11,8 +11,8 @@
 "YPImagePickerVideo" = "Vídeo";
 "YPImagePickerNext" = "Avançar";
 "YPImagePickerFilter" = "Filtro";
-"YPImagePickerVideoTooLongTitle" = "Duração do vídeo";
-"YPImagePickerVideoTooLongDetail" = "Escolha um vídeo menor que %@ segundos.";
+"YPImagePickerVideoDurationTitle" = "Duração do vídeo";
+"YPImagePickerVideoTooLong" = "Escolha um vídeo menor que %@ segundos";
 "YPImagePickerPermissionDeniedPopupTitle" = "Permissão negada";
 "YPImagePickerPermissionDeniedPopupMessage" = "Por favor, permita o acesso";
 "YPImagePickerPermissionDeniedPopupCancel" = "Cancelar";

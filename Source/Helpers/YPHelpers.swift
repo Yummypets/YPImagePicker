@@ -29,6 +29,21 @@ func deviceForPosition(_ p: AVCaptureDevice.Position) -> AVCaptureDevice? {
     return nil
 }
 
+func thunbmailFromVideoPath(_ path: URL) -> UIImage {
+    let asset = AVURLAsset(url: path, options: nil)
+    let gen = AVAssetImageGenerator(asset: asset)
+    gen.appliesPreferredTrackTransform = true
+    let time = CMTimeMakeWithSeconds(0.0, 600)
+    var actualTime = CMTimeMake(0, 0)
+    let image: CGImage
+    do {
+        image = try gen.copyCGImage(at: time, actualTime: &actualTime)
+        let thumbnail = UIImage(cgImage: image)
+        return thumbnail
+    } catch { }
+    return UIImage()
+}
+
 extension AVCaptureDevice {
 //    func tryToggleFlash() {
 //        guard hasFlash else { return }

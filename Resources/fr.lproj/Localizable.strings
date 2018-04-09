@@ -11,11 +11,9 @@
 "YPImagePickerVideo" = "Vidéo";
 "YPImagePickerNext" = "Suivant";
 "YPImagePickerFilter" = "Filtrer";
-"YPImagePickerVideoTooLongTitle" = "Durée de votre vidéo";
-"YPImagePickerVideoTooLongDetail" = "La durée d'une vidéo ne doit pas dépasser %@ secondes.";
+"YPImagePickerVideoDurationTitle" = "Durée de votre vidéo";
+"YPImagePickerVideoTooLong" = "La durée d'une vidéo ne doit pas dépasser %@ secondes";
 "YPImagePickerPermissionDeniedPopupTitle" = "Permission refusée";
 "YPImagePickerPermissionDeniedPopupMessage" = "Vous devez authorizer l'accès";
 "YPImagePickerPermissionDeniedPopupCancel" = "Annuler";
 "YPImagePickerPermissionDeniedPopupGrantPermission" = "Donner la permission";
-
-

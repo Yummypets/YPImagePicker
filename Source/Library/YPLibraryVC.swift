@@ -254,11 +254,6 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
         }
     }
     
-    private func showVideoTooLongAlert() {
-        let alert = YPAlerts.videoTooLongAlert(with: configuration)
-        present(alert, animated: true, completion: nil)
-    }
-    
     // MARK: - Fetching Media
     
     private func fetchImage(for asset: PHAsset, callback: @escaping (_ photo: UIImage) -> Void) {
@@ -270,7 +265,11 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
     
     private func fetchVideoURL(for asset: PHAsset, callback: @escaping (_ videoURL: URL) -> Void) {
         if asset.duration > configuration.videoFromLibraryTimeLimit {
-            showVideoTooLongAlert()
+            let alert = YPAlerts.videoTooLongAlert(with: configuration)
+            present(alert, animated: true, completion: nil)
+        } else if asset.duration < configuration.videoMinimumTimeLimit {
+            let alert = YPAlerts.videoTooShortAlert(with: configuration)
+            present(alert, animated: true, completion: nil)
         } else {
             delegate?.libraryViewStartedLoadingImage()
             mediaManager.imageManager?.fetchUrl(for: asset, callback: callback)
@@ -313,8 +312,7 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
     
     // Reduce image size further if needed libraryTargetImageSize is capped.
     func resizedImageIfNeeded(image: UIImage) -> UIImage {
-        
-        if case let YPLibraryImageSize.cappedTo(size: capped) = self.configuration.libraryTargetImageSize {
+                if case let YPLibraryImageSize.cappedTo(size: capped) = self.configuration.libraryTargetImageSize {
             let cappedWidth = min(image.size.width, capped)
             let cappedHeight = min(image.size.height, capped)
             let cappedSize = CGSize(width: cappedWidth, height: cappedHeight)

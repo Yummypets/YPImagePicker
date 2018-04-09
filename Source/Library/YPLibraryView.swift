@@ -69,6 +69,7 @@ extension YPLibraryView {
     
     func pausePlayer() {
         player?.pause()
+        imageCropViewContainer.showPlayImage(show: false)
     }
     
     func hidePlayer() {

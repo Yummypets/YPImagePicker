@@ -11,12 +11,9 @@
 "YPImagePickerVideo" = "فيديو";
 "YPImagePickerNext" = "التالي";
 "YPImagePickerFilter" = "فلتر";
-"YPImagePickerVideoTooLongTitle" = "مدة الفيديو";
-"YPImagePickerVideoTooLongDetail" = "ثانية %@ اختار فيديو بمدة اقل من ";
+"YPImagePickerVideoDurationTitle" = "مدة الفيديو";
+"YPImagePickerVideoTooLong" = "ثانية %@ اختار فيديو بمدة اقل من ";
 "YPImagePickerPermissionDeniedPopupTitle" = "الطلب مرفوض";
 "YPImagePickerPermissionDeniedPopupMessage" = "يرجى السماح بالوصول";
 "YPImagePickerPermissionDeniedPopupCancel" = "إلغاء";
 "YPImagePickerPermissionDeniedPopupGrantPermission" = "السماح بالوصول";
-
-
-

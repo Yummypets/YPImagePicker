@@ -11,8 +11,8 @@
 "YPImagePickerVideo" = "Video";
 "YPImagePickerNext" = "Volgende";
 "YPImagePickerFilter" = "Filter";
-"YPImagePickerVideoTooLongTitle" = "Video lengte";
-"YPImagePickerVideoTooLongDetail" = "Selecteer een video korter dan %@ seconden.";
+"YPImagePickerVideoDurationTitle" = "Video lengte";
+"YPImagePickerVideoTooLong" = "Selecteer een video korter dan %@ seconden";
 "YPImagePickerPermissionDeniedPopupTitle" = "Toestemming geweigerd";
 "YPImagePickerPermissionDeniedPopupMessage" = "Verleen alstublieft toestemming";
 "YPImagePickerPermissionDeniedPopupCancel" = "Annuleer";

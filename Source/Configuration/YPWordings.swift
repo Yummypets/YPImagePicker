@@ -19,12 +19,15 @@ public struct YPWordings {
         public var grantPermission = ypLocalized("YPImagePickerPermissionDeniedPopupGrantPermission")
     }
     
+    public var ok = ypLocalized("YPImagePickerOk")
+    public var cancel = ypLocalized("YPImagePickerCancel")
     public var libraryTitle = ypLocalized("YPImagePickerLibrary")
     public var cameraTitle = ypLocalized("YPImagePickerPhoto")
     public var videoTitle = ypLocalized("YPImagePickerVideo")
     public var next = ypLocalized("YPImagePickerNext")
     public var filter = ypLocalized("YPImagePickerFilter")
-    public var videoTooLongTitle = ypLocalized("YPImagePickerVideoTooLongDetail")
-    public var videoTooLongDetail = ypLocalized("YPImagePickerNext")
+    public var videoDurationTitle = ypLocalized("YPImagePickerVideoDurationTitle")
+    public var videoTooShortMessage = ypLocalized("YPImagePickerVideoTooShort")
+    public var videoTooLongMessage = ypLocalized("YPImagePickerVideoTooLong")
     public var warningMaxItemsLimit = ypLocalized("YPImagePickerWarningItemsLimit")
 }
