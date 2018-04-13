@@ -28,7 +28,7 @@ class YPAlbumVC: UIViewController {
     required init(configuration: YPImagePickerConfiguration) {
         self.configuration = configuration
         super.init(nibName: nil, bundle: nil)
-        title = "Albums"
+        title = configuration.wordings.albumsTitle
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -37,7 +37,8 @@ class YPAlbumVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel,
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: configuration.wordings.cancel,
+                                                           style: .plain,
                                                            target: self,
                                                            action: #selector(close))
         setUpTableView()

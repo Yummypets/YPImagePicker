@@ -8,9 +8,9 @@
 
 import UIKit
 
-class YPFiltersVC: UIViewController {
+open class YPFiltersVC: UIViewController {
     
-    override var prefersStatusBarHidden: Bool { return configuration.hidesStatusBar }
+    override open var prefersStatusBarHidden: Bool { return configuration.hidesStatusBar }
     
     internal let configuration: YPImagePickerConfiguration!
     var v = YPFiltersView()
@@ -21,9 +21,9 @@ class YPFiltersVC: UIViewController {
     var didSelectImage: ((UIImage, Bool) -> Void)?
     var isImageFiltered = false
     
-    override func loadView() { view = v }
+    override open func loadView() { view = v }
     
-    required init(image: UIImage, configuration: YPImagePickerConfiguration) {
+    required public init(image: UIImage, configuration: YPImagePickerConfiguration) {
         self.configuration = configuration
         super.init(nibName: nil, bundle: nil)
         title = configuration.wordings.filter
@@ -70,11 +70,11 @@ class YPFiltersVC: UIViewController {
         return smallImage!
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func viewDidLoad() {
+    override open func viewDidLoad() {
         super.viewDidLoad()
         v.imageView.image = originalImage
         thumbImage = thumbFromImage(originalImage)
@@ -97,11 +97,11 @@ class YPFiltersVC: UIViewController {
 
 extension YPFiltersVC: UICollectionViewDataSource {
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return filterPreviews.count
     }
     
-    func collectionView(_ collectionView: UICollectionView,
+    public func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let filterPreview = filterPreviews[indexPath.row]
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FilterCell",
@@ -122,7 +122,7 @@ extension YPFiltersVC: UICollectionViewDataSource {
 }
 
 extension YPFiltersVC: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let selectedFilter = filters[indexPath.row]
         DispatchQueue.global(qos: DispatchQoS.QoSClass.default).async {
             let filteredImage = selectedFilter.filter(self.originalImage)

@@ -56,10 +56,9 @@ public class YPImagePicker: UINavigationController {
         return aiv
     }()
     
-    private let label: UILabel = {
+    private let processingTitleLabel: UILabel = {
         let frame = CGRect(x: 0, y: 0, width: 200, height: 20)
         let label = UILabel(frame: frame)
-        label.text = NSLocalizedString("Processing...", comment: "Processing...")
         label.textColor = .white
         return label
     }()
@@ -69,7 +68,7 @@ public class YPImagePicker: UINavigationController {
         loadingContainerView.alpha = 0
         loadingContainerView.frame = self.view.bounds
         
-        loadingContainerView.addSubview(label)
+        loadingContainerView.addSubview(processingTitleLabel)
         let labelWidth: CGFloat = 200.0
         let labelHeight: CGFloat = 20.0
         let offset: CGFloat = 40.0
@@ -77,7 +76,8 @@ public class YPImagePicker: UINavigationController {
                            y: (loadingContainerView.frame.height/2) + offset,
                            width: labelWidth,
                            height: labelHeight)
-        label.frame = frame
+        processingTitleLabel.frame = frame
+        processingTitleLabel.text = configuration.wordings.processing
         
         loadingContainerView.addSubview(activityIndicatorView)
         activityIndicatorView.centerXAnchor.constraint(equalTo: loadingContainerView.centerXAnchor).isActive = true
@@ -174,7 +174,7 @@ public class YPImagePicker: UINavigationController {
         }
         
         picker.didSelectMultipleItems = { items in
-            let selectionsGalleryVC = SelectionsGalleryVC.initWith(items: items,
+            let selectionsGalleryVC = YPSelectionsGalleryVC.initWith(items: items,
                                                                    imagePicker: self,
                                                                    configuration: self.configuration)
             self.pushViewController(selectionsGalleryVC, animated: true)

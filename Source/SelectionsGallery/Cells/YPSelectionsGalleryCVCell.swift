@@ -2,13 +2,13 @@
 //  SelectionsGalleryCVCell.swift
 //  YPImagePicker
 //
-//  Created by Nik Kov on 09.04.18.
+//  Created by Nik Kov || nik-kov.com on 09.04.18.
 //  Copyright © 2018 Yummypets. All rights reserved.
 //
 
 import UIKit
 
-class SelectionsGalleryCVCell: UICollectionViewCell {
+class YPSelectionsGalleryCVCell: UICollectionViewCell {
     @IBOutlet weak var imageV: UIImageView!
     
     override func awakeFromNib() {

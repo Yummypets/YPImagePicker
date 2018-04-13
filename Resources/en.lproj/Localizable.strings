@@ -8,6 +8,8 @@
 
 "YPImagePickerOk" = "Ok";
 "YPImagePickerCancel" = "Cancel";
+"YPImagePickerProcessing" = "Processing..";
+"YPImagePickerAlbums" = "Albums";
 "YPImagePickerLibrary" = "Library";
 "YPImagePickerWarningItemsLimit" = "The limit is %d photos or videos";
 "YPImagePickerPhoto" = "Photo";

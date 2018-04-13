@@ -108,11 +108,8 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
         }
 
         v.imageCropViewContainer.setMultipleSelectionMode(on: multipleSelectionEnabled)
-        
         v.collectionView.reloadData()
-        
         checkLimit()
-        
         delegate?.libraryViewDidToggleMultipleSelection(enabled: multipleSelectionEnabled)
     }
     

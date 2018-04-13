@@ -10,13 +10,13 @@ import UIKit
 
 // TODO: Add paging to collection view
 
-public class SelectionsGalleryVC: UIViewController {
+public class YPSelectionsGalleryVC: UIViewController {
     
     /// Designated initializer
     class func initWith(items: [YPMediaItem],
                         imagePicker: YPImagePicker,
-                        configuration: YPImagePickerConfiguration) -> SelectionsGalleryVC {
-        let vc = SelectionsGalleryVC(nibName: "SelectionsGalleryVC", bundle: Bundle(for: SelectionsGalleryVC.self))
+                        configuration: YPImagePickerConfiguration) -> YPSelectionsGalleryVC {
+        let vc = YPSelectionsGalleryVC(nibName: "YPSelectionsGalleryVC", bundle: Bundle(for: YPSelectionsGalleryVC.self))
         vc.items = items
         vc.imagePicker = imagePicker
         vc.configuration = configuration
@@ -33,8 +33,8 @@ public class SelectionsGalleryVC: UIViewController {
         super.viewDidLoad()
 
         // Register collection view cell
-        let bundle = Bundle(for: SelectionsGalleryVC.self)
-        collectionV.register(UINib(nibName: "SelectionsGalleryCVCell", bundle: bundle), forCellWithReuseIdentifier: "item")
+        let bundle = Bundle(for: YPSelectionsGalleryVC.self)
+        collectionV.register(UINib(nibName: "YPSelectionsGalleryCVCell", bundle: bundle), forCellWithReuseIdentifier: "item")
         
         // Install right bar button
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: configuration.wordings.next,
@@ -49,13 +49,13 @@ public class SelectionsGalleryVC: UIViewController {
 }
 
 // MARK: - Collection View
-extension SelectionsGalleryVC: UICollectionViewDataSource {
+extension YPSelectionsGalleryVC: UICollectionViewDataSource {
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return items.count
     }
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "item", for: indexPath) as! SelectionsGalleryCVCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "item", for: indexPath) as! YPSelectionsGalleryCVCell
         
         let item = items[indexPath.row]
         switch item.type {
@@ -69,7 +69,7 @@ extension SelectionsGalleryVC: UICollectionViewDataSource {
     }
 }
 
-extension SelectionsGalleryVC: UICollectionViewDelegate {
+extension YPSelectionsGalleryVC: UICollectionViewDelegate {
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let item = items[indexPath.row]
         if item.type == .photo {
@@ -80,7 +80,7 @@ extension SelectionsGalleryVC: UICollectionViewDelegate {
     }
 }
 
-extension SelectionsGalleryVC: UICollectionViewDelegateFlowLayout {
+extension YPSelectionsGalleryVC: UICollectionViewDelegateFlowLayout {
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let sideSize = collectionView.frame.size.height - 30
         return CGSize(width: sideSize, height: sideSize)

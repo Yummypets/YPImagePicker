@@ -216,7 +216,6 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     
     @objc
     func navBarTapped() {
-        
         let vc = YPAlbumVC(configuration: configuration)
         vc.noVideos = !self.configuration.showsVideoInLibrary
         let navVC = UINavigationController(rootViewController: vc)

@@ -10,8 +10,8 @@ import UIKit
 
 struct YPAlerts {
     static func videoTooLongAlert(with config: YPImagePickerConfiguration) -> UIAlertController {
-        let msg = String(format: config.wordings.videoTooLongMessage, "\(config.videoFromLibraryTimeLimit)")
-        let alert = UIAlertController(title: config.wordings.videoDurationTitle,
+        let msg = String(format: config.wordings.videoDurationPopup.tooLongMessage, "\(config.videoFromLibraryTimeLimit)")
+        let alert = UIAlertController(title: config.wordings.videoDurationPopup.title,
                                       message: msg,
                                       preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: config.wordings.ok, style: UIAlertActionStyle.default, handler: nil))
@@ -19,8 +19,8 @@ struct YPAlerts {
     }
     
     static func videoTooShortAlert(with config: YPImagePickerConfiguration) -> UIAlertController {
-        let msg = String(format: config.wordings.videoTooShortMessage, "\(config.videoMinimumTimeLimit)")
-        let alert = UIAlertController(title: config.wordings.videoDurationTitle,
+        let msg = String(format: config.wordings.videoDurationPopup.tooShortMessage, "\(config.videoMinimumTimeLimit)")
+        let alert = UIAlertController(title: config.wordings.videoDurationPopup.title,
                                       message: msg,
                                       preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: config.wordings.ok, style: UIAlertActionStyle.default, handler: nil))
