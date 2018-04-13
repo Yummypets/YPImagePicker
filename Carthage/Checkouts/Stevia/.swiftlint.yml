@@ -1,0 +1,16 @@
+disabled_rules:
+- trailing_whitespace
+- cyclomatic_complexity
+- variable_name
+- function_body_length
+- type_body_length
+- valid_docs
+opt_in_rules:
+- empty_count
+# - missing_docs
+# - force_unwrapping
+
+excluded:
+  - LoginExample
+  - SteviaTests
+  - Playground

@@ -71,8 +71,12 @@ extension SelectionsGalleryVC: UICollectionViewDataSource {
 
 extension SelectionsGalleryVC: UICollectionViewDelegate {
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        let item = items[indexPath.row]
-
+        let item = items[indexPath.row]
+        if item.type == .photo {
+            /// open image filter
+        } else {
+            /// open video crop
+        }
     }
 }
 

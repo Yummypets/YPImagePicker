@@ -278,14 +278,16 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
     
     // MARK: - Fetching Media
     
-    private func fetchImage(for asset: PHAsset, callback: @escaping (_ photo: UIImage) -> Void) {
+    private func fetchImage(for asset: PHAsset,
+                            callback: @escaping (_ photo: UIImage) -> Void) {
         delegate?.libraryViewStartedLoadingImage()
         let cropRect = DispatchQueue.main.sync { v.currentCropRect() }
         let ts = targetSize(for: asset, cropRect: cropRect)
         mediaManager.imageManager?.fetchImage(for: asset, cropRect: cropRect, targetSize: ts, callback: callback)
     }
     
-    private func fetchVideoURL(for asset: PHAsset, callback: @escaping (_ videoURL: URL) -> Void) {
+    private func fetchVideoURL(for asset: PHAsset,
+                               callback: @escaping (_ videoURL: URL) -> Void) {
         if fitsVideoLengthLimits(asset: asset) == true {
             delegate?.libraryViewStartedLoadingImage()
             mediaManager.imageManager?.fetchUrl(for: asset, callback: callback)
@@ -299,7 +301,7 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
             
             // Multiple selection
             if self.multipleSelectionEnabled && self.selectedIndices.count > 1 {
-            let selectedAssets = self.selectedIndices.map { self.mediaManager.fetchResult[$0] }
+                let selectedAssets = self.selectedIndices.map { self.mediaManager.fetchResult[$0] }
                 
                 // Check video length
                 for asset in selectedAssets {
@@ -310,8 +312,8 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
                 
                 // Fill result media items array
                 var resultMediaItems: [YPMediaItem] = []
-
                 let asyncGroup = DispatchGroup()
+                
                 for asset in selectedAssets {
                     asyncGroup.enter()
                     

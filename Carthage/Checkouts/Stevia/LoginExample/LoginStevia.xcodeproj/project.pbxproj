@@ -1,0 +1,397 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		99FC80DF1BBD147B0068503C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC80DE1BBD147B0068503C /* AppDelegate.swift */; };
+		99FC80E11BBD147B0068503C /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC80E01BBD147B0068503C /* LoginVC.swift */; };
+		99FC80E61BBD147B0068503C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 99FC80E51BBD147B0068503C /* Assets.xcassets */; };
+		99FC80E91BBD147B0068503C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 99FC80E71BBD147B0068503C /* LaunchScreen.storyboard */; };
+		99FC80F31BBD14BB0068503C /* LoginViewNative.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC80F21BBD14BB0068503C /* LoginViewNative.swift */; };
+		99FC80FA1BBD16840068503C /* LoginViewStevia.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99FC80F91BBD16840068503C /* LoginViewStevia.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		99F90BC51FB0DE4E00C2AD9C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 99F90BBF1FB0DE4E00C2AD9C /* Stevia.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9991C8551BDB6C8B007D9B75;
+			remoteInfo = Stevia;
+		};
+		99F90BC71FB0DE4E00C2AD9C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 99F90BBF1FB0DE4E00C2AD9C /* Stevia.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9934B7891EF126D10065EA50;
+			remoteInfo = SteviaTV;
+		};
+		99F90BC91FB0DE4E00C2AD9C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 99F90BBF1FB0DE4E00C2AD9C /* Stevia.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 99B621781BF75D0E00A54B05;
+			remoteInfo = SteviaTests;
+		};
+		99F90BCB1FB0DE7500C2AD9C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 99F90BBF1FB0DE4E00C2AD9C /* Stevia.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 9991C8541BDB6C8B007D9B75;
+			remoteInfo = Stevia;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		99F90BBF1FB0DE4E00C2AD9C /* Stevia.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Stevia.xcodeproj; path = ../Stevia.xcodeproj; sourceTree = "<group>"; };
+		99FC80DB1BBD147B0068503C /* LoginStevia.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LoginStevia.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		99FC80DE1BBD147B0068503C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		99FC80E01BBD147B0068503C /* LoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
+		99FC80E51BBD147B0068503C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		99FC80E81BBD147B0068503C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		99FC80EA1BBD147B0068503C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		99FC80F21BBD14BB0068503C /* LoginViewNative.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewNative.swift; sourceTree = "<group>"; };
+		99FC80F91BBD16840068503C /* LoginViewStevia.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewStevia.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		99FC80D81BBD147B0068503C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		99F90BC01FB0DE4E00C2AD9C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				99F90BC61FB0DE4E00C2AD9C /* Stevia.framework */,
+				99F90BC81FB0DE4E00C2AD9C /* Stevia.framework */,
+				99F90BCA1FB0DE4E00C2AD9C /* SteviaTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		99FC80D21BBD147B0068503C = {
+			isa = PBXGroup;
+			children = (
+				99F90BBF1FB0DE4E00C2AD9C /* Stevia.xcodeproj */,
+				99FC80DD1BBD147B0068503C /* LoginStevia */,
+				99FC80DC1BBD147B0068503C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		99FC80DC1BBD147B0068503C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				99FC80DB1BBD147B0068503C /* LoginStevia.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		99FC80DD1BBD147B0068503C /* LoginStevia */ = {
+			isa = PBXGroup;
+			children = (
+				99FC80DE1BBD147B0068503C /* AppDelegate.swift */,
+				99FC80E01BBD147B0068503C /* LoginVC.swift */,
+				99FC80F21BBD14BB0068503C /* LoginViewNative.swift */,
+				99FC80F91BBD16840068503C /* LoginViewStevia.swift */,
+				99FC80E51BBD147B0068503C /* Assets.xcassets */,
+				99FC80E71BBD147B0068503C /* LaunchScreen.storyboard */,
+				99FC80EA1BBD147B0068503C /* Info.plist */,
+			);
+			path = LoginStevia;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		99FC80DA1BBD147B0068503C /* LoginStevia */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 99FC80ED1BBD147B0068503C /* Build configuration list for PBXNativeTarget "LoginStevia" */;
+			buildPhases = (
+				99FC80D71BBD147B0068503C /* Sources */,
+				99FC80D81BBD147B0068503C /* Frameworks */,
+				99FC80D91BBD147B0068503C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				99F90BCC1FB0DE7500C2AD9C /* PBXTargetDependency */,
+			);
+			name = LoginStevia;
+			productName = LoginNadir;
+			productReference = 99FC80DB1BBD147B0068503C /* LoginStevia.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		99FC80D31BBD147B0068503C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0900;
+				ORGANIZATIONNAME = "Sacha Durand Saint Omer";
+				TargetAttributes = {
+					99FC80DA1BBD147B0068503C = {
+						CreatedOnToolsVersion = 7.0;
+						LastSwiftMigration = 0800;
+					};
+				};
+			};
+			buildConfigurationList = 99FC80D61BBD147B0068503C /* Build configuration list for PBXProject "LoginStevia" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 99FC80D21BBD147B0068503C;
+			productRefGroup = 99FC80DC1BBD147B0068503C /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 99F90BC01FB0DE4E00C2AD9C /* Products */;
+					ProjectRef = 99F90BBF1FB0DE4E00C2AD9C /* Stevia.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				99FC80DA1BBD147B0068503C /* LoginStevia */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		99F90BC61FB0DE4E00C2AD9C /* Stevia.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Stevia.framework;
+			remoteRef = 99F90BC51FB0DE4E00C2AD9C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		99F90BC81FB0DE4E00C2AD9C /* Stevia.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Stevia.framework;
+			remoteRef = 99F90BC71FB0DE4E00C2AD9C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		99F90BCA1FB0DE4E00C2AD9C /* SteviaTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = SteviaTests.xctest;
+			remoteRef = 99F90BC91FB0DE4E00C2AD9C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		99FC80D91BBD147B0068503C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				99FC80E91BBD147B0068503C /* LaunchScreen.storyboard in Resources */,
+				99FC80E61BBD147B0068503C /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		99FC80D71BBD147B0068503C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				99FC80F31BBD14BB0068503C /* LoginViewNative.swift in Sources */,
+				99FC80FA1BBD16840068503C /* LoginViewStevia.swift in Sources */,
+				99FC80E11BBD147B0068503C /* LoginVC.swift in Sources */,
+				99FC80DF1BBD147B0068503C /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		99F90BCC1FB0DE7500C2AD9C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Stevia;
+			targetProxy = 99F90BCB1FB0DE7500C2AD9C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		99FC80E71BBD147B0068503C /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				99FC80E81BBD147B0068503C /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		99FC80EB1BBD147B0068503C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		99FC80EC1BBD147B0068503C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		99FC80EE1BBD147B0068503C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
+				INFOPLIST_FILE = LoginStevia/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.octopepper.LoginNadir;
+				PRODUCT_NAME = LoginStevia;
+				SWIFT_VERSION = 4.0;
+			};
+			name = Debug;
+		};
+		99FC80EF1BBD147B0068503C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
+				INFOPLIST_FILE = LoginStevia/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.octopepper.LoginNadir;
+				PRODUCT_NAME = LoginStevia;
+				SWIFT_VERSION = 4.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		99FC80D61BBD147B0068503C /* Build configuration list for PBXProject "LoginStevia" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				99FC80EB1BBD147B0068503C /* Debug */,
+				99FC80EC1BBD147B0068503C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		99FC80ED1BBD147B0068503C /* Build configuration list for PBXNativeTarget "LoginStevia" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				99FC80EE1BBD147B0068503C /* Debug */,
+				99FC80EF1BBD147B0068503C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 99FC80D31BBD147B0068503C /* Project object */;
+}
