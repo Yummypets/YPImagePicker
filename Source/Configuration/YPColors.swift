@@ -6,8 +6,10 @@
 //  Copyright © 2018 Yummypets. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 public struct YPColors {
+    
+    public var pickerNavigationBarTextColor = UIColor.black
     
 }

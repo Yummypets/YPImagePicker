@@ -236,7 +236,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         
         let label = UILabel()
         label.text = aTitle
-        label.textColor = .black
+        label.textColor = configuration.colors.pickerNavigationBarTextColor
         
         if let navBarTitleFont = UINavigationBar.appearance().titleTextAttributes?[.font] as? UIFont {
             // Use custom font if set by user.
@@ -276,7 +276,8 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
                                                            style: .plain,
                                                            target: self,
                                                            action: #selector(close))
-        navigationItem.leftBarButtonItem?.tintColor = UIColor(r: 38, g: 38, b: 38)
+        navigationItem.leftBarButtonItem?.tintColor = configuration.colors.pickerNavigationBarTextColor
+        
         switch mode {
         case .library:
             setTitleViewWithTitle(aTitle: libraryVC?.title ?? "")
@@ -284,6 +285,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
                                                                 style: .done,
                                                                 target: self,
                                                                 action: #selector(done))
+            navigationItem.rightBarButtonItem?.tintColor = configuration.colors.pickerNavigationBarTextColor
             navigationItem.rightBarButtonItem?.isEnabled = true
         case .camera:
             navigationItem.titleView = nil
