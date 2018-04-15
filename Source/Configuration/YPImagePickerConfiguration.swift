@@ -78,4 +78,18 @@ public struct YPImagePickerConfiguration {
     
     /// Defines if the status bar should be hidden when showing the picker. Default is true
     public var hidesStatusBar = true
+    
+    /// List of default filters which will be added on the filter screen
+    public var filters:[YPFilterDescriptor] = [
+        YPFilterDescriptor(name: "Normal", filterName: ""),
+        YPFilterDescriptor(name: "Mono", filterName: "CIPhotoEffectMono"),
+        YPFilterDescriptor(name: "Tonal", filterName: "CIPhotoEffectTonal"),
+        YPFilterDescriptor(name: "Noir", filterName: "CIPhotoEffectNoir"),
+        YPFilterDescriptor(name: "Fade", filterName: "CIPhotoEffectFade"),
+        YPFilterDescriptor(name: "Chrome", filterName: "CIPhotoEffectChrome"),
+        YPFilterDescriptor(name: "Process", filterName: "CIPhotoEffectProcess"),
+        YPFilterDescriptor(name: "Transfer", filterName: "CIPhotoEffectTransfer"),
+        YPFilterDescriptor(name: "Instant", filterName: "CIPhotoEffectInstant"),
+        YPFilterDescriptor(name: "Sepia", filterName: "CISepiaTone")
+    ]
 }

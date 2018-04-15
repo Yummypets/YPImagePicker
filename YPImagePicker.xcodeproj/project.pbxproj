@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		20B6BB042081E065009064E9 /* YPFilterDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20B6BB032081E065009064E9 /* YPFilterDescriptor.swift */; };
 		99019E4C2018CCD6007325C2 /* YPBottomPagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99019E4B2018CCD6007325C2 /* YPBottomPagerView.swift */; };
 		99019E4E2018CD31007325C2 /* YPPagerMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99019E4D2018CD31007325C2 /* YPPagerMenu.swift */; };
 		99019E512018CDED007325C2 /* YPLibraryImageSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99019E502018CDED007325C2 /* YPLibraryImageSize.swift */; };
@@ -68,6 +69,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		20B6BB032081E065009064E9 /* YPFilterDescriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPFilterDescriptor.swift; sourceTree = "<group>"; };
 		3B0E1B962070669B0048E95B /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		52412A931CA6114A0073C4BE /* YPImagePicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = YPImagePicker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7157B4CA206FD7270004EF6C /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
@@ -182,6 +184,7 @@
 			isa = PBXGroup;
 			children = (
 				99D1DC2A1F9788930047F0E0 /* YPImagePickerConfiguration.swift */,
+				20B6BB032081E065009064E9 /* YPFilterDescriptor.swift */,
 				99472DEC2056E33700419F9E /* YPWordings.swift */,
 				99019E502018CDED007325C2 /* YPLibraryImageSize.swift */,
 				99019E522018CE19007325C2 /* YPPickerScreen.swift */,
@@ -462,6 +465,7 @@
 				99A3C91220319231008D7E23 /* YPCropVC.swift in Sources */,
 				99019E512018CDED007325C2 /* YPLibraryImageSize.swift in Sources */,
 				99CF6D25201B727900487F77 /* YPLibraryVC+PanGesture.swift in Sources */,
+				20B6BB042081E065009064E9 /* YPFilterDescriptor.swift in Sources */,
 				99CF6D27201B739600487F77 /* YPAlerts.swift in Sources */,
 				99C6D6CF1F1FB5C100711DB2 /* YPPickerVC.swift in Sources */,
 				99CF6D29201B900400487F77 /* LibraryMediaManager.swift in Sources */,
