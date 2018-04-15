@@ -135,7 +135,7 @@ class YPImageCropViewContainer: UIView, YPImageCropViewDelegate, UIGestureRecogn
         curtain.fillContainer()
         
         spinner.startAnimating()
-        spinnerView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+        spinnerView.backgroundColor = UIColor.black.withAlphaComponent(0.3)
         playImageView.alpha = 0
         curtain.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         curtain.alpha = 0
