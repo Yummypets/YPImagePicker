@@ -341,10 +341,12 @@ extension YPPickerVC: YPLibraryViewDelegate {
     }
     
     public func libraryViewFinishedLoadingImage() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: configuration.wordings.next,
-                                                            style: .done,
-                                                            target: self,
-                                                            action: #selector(done))
+        DispatchQueue.main.async {
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: self.configuration.wordings.next,
+                                                                style: .done,
+                                                                target: self,
+                                                                action: #selector(self.done))
+        }
     }
     
     public func libraryViewCameraRollUnauthorized() {
