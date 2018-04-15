@@ -92,14 +92,14 @@ extension YPLibraryView {
     
     // MARK: - Loader
     
-    func showLoader() {
-        imageCropViewContainer.spinnerView.alpha = 1
+    func fadeInLoader() {
+        UIView.animate(withDuration: 0.2) {
+            self.imageCropViewContainer.spinnerView.alpha = 1
+        }
     }
     
-    func fadeOutLoader() {
-        UIView.animate(withDuration: 0.2) {
-            self.imageCropViewContainer.spinnerView.alpha = 0
-        }
+    func hideLoader() {
+        imageCropViewContainer.spinnerView.alpha = 0
     }
     
     // MARK: - Crop Control

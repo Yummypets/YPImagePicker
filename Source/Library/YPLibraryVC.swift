@@ -21,6 +21,7 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
     internal var currentlySelectedIndex: Int?
     internal let mediaManager = LibraryMediaManager()
     internal var latestImageTapped = ""
+    private var imageLoadingTimer: Timer?
     var v: YPLibraryView!
     
     internal let panGestureHelper = PanGestureHelper()
@@ -214,21 +215,34 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
     
     private func changeImageVideo(_ asset: PHAsset) {
         v.hideGrid()
-        v.showLoader()
         v.refreshCropControl()
         downloadAndSetPreviewFor(video: asset)
         downloadAndPlay(video: asset)
     }
     
+    @objc
+    func tick() {
+        v.fadeInLoader()
+        delegate?.libraryViewStartedLoadingImage()
+    }
+    
     private func changeImagePhoto(_ asset: PHAsset) {
+        self.delegate?.libraryViewFinishedLoadingImage()
+        self.v.hideLoader()
+        imageLoadingTimer = Timer(timeInterval: 0.3, target: self,
+                                  selector: #selector(tick),
+                                  userInfo: nil,
+                                  repeats: false)
+        RunLoop.main.add(imageLoadingTimer!, forMode: .defaultRunLoopMode)
         mediaManager.imageManager?.fetch(photo: asset) { image, isFromCloud in
             // Prevent long images to come after user selected
             // another in the meantime.
             if self.latestImageTapped == asset.localIdentifier {
-                if isFromCloud {
-                    self.v.showLoader()
-                } else {
-                    self.v.fadeOutLoader()
+                if !isFromCloud {
+                    self.imageLoadingTimer?.invalidate()
+                    self.imageLoadingTimer = nil
+                    self.delegate?.libraryViewFinishedLoadingImage()
+                    self.v.hideLoader()
                 }
                 self.display(photo: asset, image: image)
             }
