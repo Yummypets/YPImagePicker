@@ -7,6 +7,7 @@
 */
 
 "YPImagePickerOk" = "Ok";
+"YPImagePickerDone" = "Done";
 "YPImagePickerCancel" = "Cancel";
 "YPImagePickerProcessing" = "Processing..";
 "YPImagePickerAlbums" = "Albums";
@@ -16,6 +17,8 @@
 "YPImagePickerVideo" = "Video";
 "YPImagePickerNext" = "Next";
 "YPImagePickerFilter" = "Filter";
+"YPImagePickerTrim" = "Trim";
+"YPImagePickerCover" = "Cover";
 "YPImagePickerVideoDurationTitle" = "Video duration";
 "YPImagePickerVideoTooShort" = "The video must not be shorter than %@ seconds";
 "YPImagePickerVideoTooLong" = "Pick a video less than %@ seconds long";
@@ -23,3 +26,4 @@
 "YPImagePickerPermissionDeniedPopupMessage" = "Please allow access";
 "YPImagePickerPermissionDeniedPopupCancel" = "Cancel";
 "YPImagePickerPermissionDeniedPopupGrantPermission" = "Grant Permission";
+

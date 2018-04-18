@@ -8,10 +8,10 @@
 
 import UIKit
 
-class YPSelectionsGalleryCVCell: UICollectionViewCell {
+public class YPSelectionsGalleryCVCell: UICollectionViewCell {
     @IBOutlet weak var imageV: UIImageView!
     
-    override func awakeFromNib() {
+    override public func awakeFromNib() {
         super.awakeFromNib()
 
         self.clipsToBounds = false

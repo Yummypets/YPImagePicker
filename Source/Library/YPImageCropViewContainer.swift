@@ -168,9 +168,7 @@ class YPImageCropViewContainer: UIView, YPImageCropViewDelegate, UIGestureRecogn
     private func refresh() {
         refreshSquareCropButton()
     }
-    
  
-    
     @objc
     private func singleTap() {
         if isVideoMode {

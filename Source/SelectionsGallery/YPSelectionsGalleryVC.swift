@@ -13,7 +13,7 @@ import UIKit
 public class YPSelectionsGalleryVC: UIViewController {
     
     /// Designated initializer
-    class func initWith(items: [YPMediaItem],
+    public class func initWith(items: [YPMediaItem],
                         imagePicker: YPImagePicker,
                         configuration: YPImagePickerConfiguration) -> YPSelectionsGalleryVC {
         let vc = YPSelectionsGalleryVC(nibName: "YPSelectionsGalleryVC", bundle: Bundle(for: YPSelectionsGalleryVC.self))
@@ -73,11 +73,12 @@ extension YPSelectionsGalleryVC: UICollectionViewDelegate {
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let item = items[indexPath.row]
         switch item {
-        case .photo(let photo):
+        case .photo:
             /// open image filter
             break
         case .video(let video):
-            /// open video crop
+            let videoFiltersVC = YPVideoFiltersVC.initWith(video: video, configuration: configuration)
+            navigationController?.pushViewController(videoFiltersVC, animated: true)
             break
         }
     }
@@ -89,4 +90,3 @@ extension YPSelectionsGalleryVC: UICollectionViewDelegateFlowLayout {
         return CGSize(width: sideSize, height: sideSize)
     }
 }
-

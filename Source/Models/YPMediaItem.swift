@@ -31,6 +31,6 @@ public class YPVideo {
 }
 
 public enum YPMediaItem {
-    case photo(photo: YPPhoto)
-    case video(video: YPVideo)
+    case photo(p: YPPhoto)
+    case video(v: YPVideo)
 }

@@ -27,8 +27,11 @@ public struct YPWordings {
     }
     
     public var ok = ypLocalized("YPImagePickerOk")
+    public var done = ypLocalized("YPImagePickerDone")
     public var cancel = ypLocalized("YPImagePickerCancel")
     public var processing = ypLocalized("YPImagePickerProcessing")
+    public var trim = ypLocalized("YPImagePickerTrim")
+    public var cover = ypLocalized("YPImagePickerCover")
     public var albumsTitle = ypLocalized("YPImagePickerAlbums")
     public var libraryTitle = ypLocalized("YPImagePickerLibrary")
     public var cameraTitle = ypLocalized("YPImagePickerPhoto")

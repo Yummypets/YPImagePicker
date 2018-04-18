@@ -91,9 +91,9 @@ class ViewController: UIViewController {
 //
 //        /// Defines the time limit for videos from the library.
 //        /// Defaults to 60 seconds.
-//        config.videoFromLibraryTimeLimit = 10.0
+        config.videoFromLibraryTimeLimit = 500.0
 //
-//        /// Adds a Crop step in the photo taking process, after filters.  Defaults to .none
+//        /// Adds a Crop step in the photo taking process, after filters. Defaults to .none
         config.showsCrop = .rectangle(ratio: (16/9))
 //
 //        /// Defines the overlay view for the camera.

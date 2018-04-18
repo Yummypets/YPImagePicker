@@ -106,7 +106,7 @@ public class YPImagePicker: UINavigationController {
                 filterVC.didSelectImage = { filteredImage, isImageFiltered in
                     
                     let completion = { (image: UIImage) in
-                        let mediaItem = YPMediaItem.photo(photo: YPPhoto(image: image))
+                        let mediaItem = YPMediaItem.photo(p: YPPhoto(image: image))
                         self.configuration.delegate?.imagePicker(self, didSelect: [mediaItem])
                         
                         if (isNewPhoto || isImageFiltered) && self.configuration.shouldSaveNewPicturesToAlbum {
@@ -135,7 +135,7 @@ public class YPImagePicker: UINavigationController {
                 self.pushViewController(filterVC, animated: false)
             } else {
                 let completion = { (image: UIImage) in
-                    let mediaItem = YPMediaItem.photo(photo: YPPhoto(image: image))
+                    let mediaItem = YPMediaItem.photo(p: YPPhoto(image: image))
                     self.configuration.delegate?.imagePicker(self, didSelect: [mediaItem])
                     
                     if isNewPhoto && self.configuration.shouldSaveNewPicturesToAlbum {
@@ -161,7 +161,7 @@ public class YPImagePicker: UINavigationController {
             },
                             configuration: self.configuration,
                             completion: { video in
-                                let mediaItem = YPMediaItem.video(video: video)
+                                let mediaItem = YPMediaItem.video(v: video)
                                 self.configuration.delegate?.imagePicker(self, didSelect: [mediaItem])
             })
         }

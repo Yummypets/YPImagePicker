@@ -333,7 +333,7 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
                         self.fetchImage(for: asset) { image in
                             let resizedImage = self.resizedImageIfNeeded(image: image)
                             let photo = YPPhoto(image: resizedImage)
-                            resultMediaItems.append(YPMediaItem.photo(photo: photo))
+                            resultMediaItems.append(YPMediaItem.photo(p: photo))
                             asyncGroup.leave()
                         }
                         
@@ -342,7 +342,7 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
                             createVideoItem(videoURL: videoURL,
                                             configuration: self.configuration,
                                             completion: { video in
-                                                resultMediaItems.append(YPMediaItem.video(video: video))
+                                                resultMediaItems.append(YPMediaItem.video(v: video))
                                                 asyncGroup.leave()
                             })
                         })
