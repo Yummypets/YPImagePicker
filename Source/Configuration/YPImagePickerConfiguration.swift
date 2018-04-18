@@ -97,4 +97,18 @@ public struct YPImagePickerConfiguration {
     
     /// A color for circle for selected items in multiple selection
     public var multipleItemsSelectedCircleColor: UIColor = UIColor.blue
+
+    /// List of default filters which will be added on the filter screen
+    public var filters: [YPFilterDescriptor] = [
+        YPFilterDescriptor(name: "Normal", filterName: ""),
+        YPFilterDescriptor(name: "Mono", filterName: "CIPhotoEffectMono"),
+        YPFilterDescriptor(name: "Tonal", filterName: "CIPhotoEffectTonal"),
+        YPFilterDescriptor(name: "Noir", filterName: "CIPhotoEffectNoir"),
+        YPFilterDescriptor(name: "Fade", filterName: "CIPhotoEffectFade"),
+        YPFilterDescriptor(name: "Chrome", filterName: "CIPhotoEffectChrome"),
+        YPFilterDescriptor(name: "Process", filterName: "CIPhotoEffectProcess"),
+        YPFilterDescriptor(name: "Transfer", filterName: "CIPhotoEffectTransfer"),
+        YPFilterDescriptor(name: "Instant", filterName: "CIPhotoEffectInstant"),
+        YPFilterDescriptor(name: "Sepia", filterName: "CISepiaTone")
+    ]
 }
