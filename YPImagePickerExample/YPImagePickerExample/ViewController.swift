@@ -51,13 +51,19 @@ class ViewController: UIViewController {
 //        config.libraryTargetImageSize = .cappedTo(size: 1024)
 //
 //        /// Enables videos within the library. Defaults to false
-        config.showsVideoInLibrary = true
+            config.showsVideoInLibrary = true
 //
 //        /// Enables selecting the front camera by default, useful for avatars. Defaults to false
 //        config.usesFrontCamera = true
 //
-//        /// Adds a Filter step in the photo taking process.  Defaults to true
-        config.showsFilters = false
+//        /// Adds a Filter step in the photo taking process. Defaults to true
+//        config.showsFilters = false
+        
+        /// Manage filters by yourself
+//        config.filters = [YPFilterDescriptor(name: "Normal", filterName: ""),
+//                          YPFilterDescriptor(name: "Mono", filterName: "CIPhotoEffectMono")]
+        config.filters.remove(at: 1)
+        config.filters.insert(YPFilterDescriptor(name: "Blur" , filterName: "CIBoxBlur"), at: 1)
 //
 //        /// Enables you to opt out from saving new (or old but filtered) images to the
 //        /// user's photo library. Defaults to true.
@@ -88,7 +94,7 @@ class ViewController: UIViewController {
 //
 //        /// Adds a Crop step in the photo taking process, after filters.  Defaults to .none
         config.showsCrop = .rectangle(ratio: (16/9))
-
+//
 //        /// Defines the overlay view for the camera.
 //        /// Defaults to UIView().
 //        let overlayView = UIView()

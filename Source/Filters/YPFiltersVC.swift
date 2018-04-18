@@ -29,34 +29,10 @@ class YPFiltersVC: UIViewController {
         title = configuration.wordings.filter
         self.originalImage = image
         
-        filterPreviews = [
-            YPFilterPreview("Normal"),
-            YPFilterPreview("Mono"),
-            YPFilterPreview("Tonal"),
-            YPFilterPreview("Noir"),
-            YPFilterPreview("Fade"),
-            YPFilterPreview("Chrome"),
-            YPFilterPreview("Process"),
-            YPFilterPreview("Transfer"),
-            YPFilterPreview("Instant"),
-            YPFilterPreview("Sepia")
-        ]
-        
-        let filterNames = [
-            "",
-            "CIPhotoEffectMono",
-            "CIPhotoEffectTonal",
-            "CIPhotoEffectNoir",
-            "CIPhotoEffectFade",
-            "CIPhotoEffectChrome",
-            "CIPhotoEffectProcess",
-            "CIPhotoEffectTransfer",
-            "CIPhotoEffectInstant",
-            "CISepiaTone"
-        ]
-        
-        for fn in filterNames {
-            filters.append(YPFilter(fn))
+        //use the configuration to create all filters
+        for filterDescriptor in configuration.filters {
+            filterPreviews.append(YPFilterPreview(filterDescriptor.name))
+            filters.append(YPFilter(filterDescriptor.filterName))
         }
     }
     
