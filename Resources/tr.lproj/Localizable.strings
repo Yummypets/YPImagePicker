@@ -17,3 +17,10 @@
 "YPImagePickerPermissionDeniedPopupMessage" = "Lütfen erişime izin ver";
 "YPImagePickerPermissionDeniedPopupCancel" = "İptal";
 "YPImagePickerPermissionDeniedPopupGrantPermission" = "Erişime İzin Ver";
+
+"YPImagePickerOk" = "";
+"YPImagePickerCancel" = "";
+"YPImagePickerProcessing" = "..";
+"YPImagePickerAlbums" = "";
+"YPImagePickerWarningItemsLimit" = " %d ";
+"YPImagePickerVideoTooShort" = " %@ ";

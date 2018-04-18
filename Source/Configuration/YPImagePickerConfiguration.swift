@@ -25,10 +25,6 @@ public struct YPImagePickerConfiguration {
     /// Use this property to modify the default colors provided.
     public var colors = YPColors()
     
-    /// Set this to true if you want to force the output to be a squared image. Defaults to false
-    @available(*, unavailable, renamed:"onlySquareImagesFromLibrary")
-    public var onlySquareImages = false
-    
     /// Set this to true if you want to force the  library output to be a squared image. Defaults to false
     public var onlySquareImagesFromLibrary = false
     
@@ -38,10 +34,6 @@ public struct YPImagePickerConfiguration {
     /// Ex: cappedTo:1024 will make sure images from the library will be
     /// resized to fit in a 1024x1024 box. Defaults to original image size.
     public var libraryTargetImageSize = YPLibraryImageSize.original
-    
-    /// Enables videos within the library and video taking. Defaults to false
-    @available(*, unavailable, renamed:"showsVideoInLibrary")
-    public var showsVideo = false
     
     /// Enables videos within the library. Defaults to false
     public var showsVideoInLibrary = false
@@ -95,9 +87,6 @@ public struct YPImagePickerConfiguration {
     /// Defines if the status bar should be hidden when showing the picker. Default is true
     public var hidesStatusBar = true
     
-    /// A color for circle for selected items in multiple selection
-    public var multipleItemsSelectedCircleColor: UIColor = UIColor.blue
-
     /// List of default filters which will be added on the filter screen
     public var filters: [YPFilterDescriptor] = [
         YPFilterDescriptor(name: "Normal", filterName: ""),

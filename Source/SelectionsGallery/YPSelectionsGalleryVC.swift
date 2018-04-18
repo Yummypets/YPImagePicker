@@ -58,11 +58,11 @@ extension YPSelectionsGalleryVC: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "item", for: indexPath) as! YPSelectionsGalleryCVCell
         
         let item = items[indexPath.row]
-        switch item.type {
-        case .photo:
-            cell.imageV.image = item.photo?.image
-        case .video:
-            cell.imageV.image = item.video?.thumbnail
+        switch item {
+        case .photo(let photo):
+            cell.imageV.image = photo.image
+        case .video(let video):
+            cell.imageV.image = video.thumbnail
         }
         
         return cell
@@ -72,10 +72,13 @@ extension YPSelectionsGalleryVC: UICollectionViewDataSource {
 extension YPSelectionsGalleryVC: UICollectionViewDelegate {
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let item = items[indexPath.row]
-        if item.type == .photo {
+        switch item {
+        case .photo(let photo):
             /// open image filter
-        } else {
+            break
+        case .video(let video):
             /// open video crop
+            break
         }
     }
 }

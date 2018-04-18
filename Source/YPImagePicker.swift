@@ -37,11 +37,6 @@ public class YPImagePicker: UINavigationController {
     public required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    /// Callbacks to the user
-    public var didCancel: (() -> Void)?
-    public var didSelectImage: ((UIImage) -> Void)?
-    public var didSelectVideo: ((Data, UIImage, URL) -> Void)?
     
     private let loadingContainerView: UIView = {
         let view = UIView()
@@ -98,7 +93,9 @@ public class YPImagePicker: UINavigationController {
     override public func viewDidLoad() {
         super.viewDidLoad()
         
-        picker.didClose = didCancel
+        picker.didClose = {
+            self.configuration.delegate?.imagePickerDidCancel(self)
+        }
         viewControllers = [picker]
         setupActivityIndicator()
         navigationBar.isTranslucent = false
@@ -109,8 +106,7 @@ public class YPImagePicker: UINavigationController {
                 filterVC.didSelectImage = { filteredImage, isImageFiltered in
                     
                     let completion = { (image: UIImage) in
-                        self.didSelectImage?(image)
-                        let mediaItem = YPMediaItem(type: .photo, photo: YPPhoto(image: image), video: nil)
+                        let mediaItem = YPMediaItem.photo(photo: YPPhoto(image: image))
                         self.configuration.delegate?.imagePicker(self, didSelect: [mediaItem])
                         
                         if (isNewPhoto || isImageFiltered) && self.configuration.shouldSaveNewPicturesToAlbum {
@@ -139,10 +135,9 @@ public class YPImagePicker: UINavigationController {
                 self.pushViewController(filterVC, animated: false)
             } else {
                 let completion = { (image: UIImage) in
-                    self.didSelectImage?(image)
-                    let mediaItem = YPMediaItem(type: .photo, photo: YPPhoto(image: image), video: nil)
+                    let mediaItem = YPMediaItem.photo(photo: YPPhoto(image: image))
                     self.configuration.delegate?.imagePicker(self, didSelect: [mediaItem])
-
+                    
                     if isNewPhoto && self.configuration.shouldSaveNewPicturesToAlbum {
                         YPPhotoSaver.trySaveImage(pickedImage, inAlbumNamed: self.configuration.albumName)
                     }
@@ -166,18 +161,17 @@ public class YPImagePicker: UINavigationController {
             },
                             configuration: self.configuration,
                             completion: { video in
-                                self.didSelectVideo?(video.data!, video.thumbnail!, video.url!)
-                                
-                                let mediaItem = YPMediaItem(type: .video, photo: nil, video: video)
+                                let mediaItem = YPMediaItem.video(video: video)
                                 self.configuration.delegate?.imagePicker(self, didSelect: [mediaItem])
             })
         }
         
         picker.didSelectMultipleItems = { items in
             let selectionsGalleryVC = YPSelectionsGalleryVC.initWith(items: items,
-                                                                   imagePicker: self,
-                                                                   configuration: self.configuration)
+                                                                     imagePicker: self,
+                                                                     configuration: self.configuration)
             self.pushViewController(selectionsGalleryVC, animated: true)
         }
     }
 }
+

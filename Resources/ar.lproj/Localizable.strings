@@ -17,3 +17,10 @@
 "YPImagePickerPermissionDeniedPopupMessage" = "يرجى السماح بالوصول";
 "YPImagePickerPermissionDeniedPopupCancel" = "إلغاء";
 "YPImagePickerPermissionDeniedPopupGrantPermission" = "السماح بالوصول";
+
+"YPImagePickerOk" = "";
+"YPImagePickerCancel" = "";
+"YPImagePickerProcessing" = "..";
+"YPImagePickerAlbums" = "";
+"YPImagePickerWarningItemsLimit" = " %d ";
+"YPImagePickerVideoTooShort" = " %@ ";

@@ -9,7 +9,9 @@
 import UIKit
 
 public struct YPColors {
-    
+    /// A color for navigation bar text
     public var pickerNavigationBarTextColor = UIColor.black
     
+    /// A color for circle for selected items in multiple selection
+    public var multipleItemsSelectedCircleColor: UIColor = UIColor.blue
 }

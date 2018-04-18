@@ -10,23 +10,11 @@ import UIKit
 import Foundation
 import AVFoundation
 
-
-public enum YPMediaType {
-    case photo
-    case video
-}
-
-public protocol YPMedia {
-    var type: YPMediaType { get }
-}
-
-public struct YPPhoto: YPMedia {
-    public let type = YPMediaType.photo
+public struct YPPhoto {
     public let image: UIImage
 }
 
-public class YPVideo: YPMedia {
-    public let type = YPMediaType.video
+public class YPVideo {
     public var data: Data?
     public var thumbnail: UIImage?
     public var url: URL?
@@ -42,18 +30,7 @@ public class YPVideo: YPMedia {
     }
 }
 
-public struct YPMediaItem: YPMedia {
-    public var type: YPMediaType
-    
-    public var photo: YPPhoto?
-    public var video: YPVideo?
-    
-    public init(type: YPMediaType,
-         photo: YPPhoto?,
-         video: YPVideo?) {
-        self.type = type
-        self.photo = photo
-        self.video = video
-    }
+public enum YPMediaItem {
+    case photo(photo: YPPhoto)
+    case video(video: YPVideo)
 }
-

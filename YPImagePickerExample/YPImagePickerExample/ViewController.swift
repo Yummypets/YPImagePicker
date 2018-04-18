@@ -103,7 +103,7 @@ class ViewController: UIViewController {
 //        overlayView.alpha = 0.3
 //        config.overlayView = overlayView
         
-        // Customize wordings
+        /// Customize wordings
         config.wordings.libraryTitle = "Gallery"
         
         /// Defines if the status bar should be hidden when showing the picker. Default is true
@@ -113,29 +113,14 @@ class ViewController: UIViewController {
         
         config.delegate = self
         
-        // Set it the default conf for all Pickers
-              YPImagePicker.setDefaultConfiguration(config)
-        // And then use the default configuration like so:
-        //      let picker = YPImagePicker()
+        /// Set it the default conf for all Pickers
+//        YPImagePicker.setDefaultConfiguration(config)
+        /// And then use the default configuration like so:
+//        let picker = YPImagePicker()
         
         // Here we use a per picker configuration.
         let picker = YPImagePicker(configuration: config)
         
-        // unowned is Mandatory since it would create a retain cycle otherwise :)
-        picker.didSelectImage = { [unowned picker] img in
-            // image picked
-            print(img.size)
-            self.imageView.image = img
-            picker.dismiss(animated: true, completion: nil)
-        }
-        picker.didSelectVideo = { [unowned picker] videoData, videoThumbnailImage, url in
-            // video picked
-            self.imageView.image = videoThumbnailImage
-            picker.dismiss(animated: true, completion: nil)
-        }
-        picker.didCancel = {
-            print("Did Cancel")
-        }
         present(picker, animated: true, completion: nil)
     }
 }
@@ -143,9 +128,18 @@ class ViewController: UIViewController {
 extension ViewController: YPImagePickerDelegate {
     func imagePicker(_ imagePicker: YPImagePicker, didSelect items: [YPMediaItem]) {
         imagePicker.dismiss(animated: true, completion: nil)
-
-        print("🧀 \(items)")
-        print("--------")
-        _ = items.map { print("🧀 \($0.type)") }
+        
+        _ = items.map { print("🧀 \($0)") }
+        
+        if let firstItem = items.first {
+            switch firstItem {
+            case .photo(let photo):
+                self.imageView.image = photo.image
+            case .video(let video):
+                self.imageView.image = video.thumbnail
+            }
+        }
     }
+    
+    func imagePickerDidCancel(_ imagePicker: YPImagePicker) {}
 }

@@ -17,3 +17,10 @@
 "YPImagePickerPermissionDeniedPopupMessage" = "Por favor, permite el acceso";
 "YPImagePickerPermissionDeniedPopupCancel" = "Cancelar";
 "YPImagePickerPermissionDeniedPopupGrantPermission" = "Permitir";
+
+"YPImagePickerOk" = "";
+"YPImagePickerCancel" = "";
+"YPImagePickerProcessing" = "..";
+"YPImagePickerAlbums" = "";
+"YPImagePickerWarningItemsLimit" = " %d ";
+"YPImagePickerVideoTooShort" = " %@ ";

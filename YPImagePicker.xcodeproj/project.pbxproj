@@ -71,6 +71,7 @@
 		EB584BFF207B883A00265B38 /* YPSelectionsGalleryCVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB584BFD207B883A00265B38 /* YPSelectionsGalleryCVCell.swift */; };
 		EB584C00207B883A00265B38 /* YPSelectionsGalleryCVCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB584BFE207B883A00265B38 /* YPSelectionsGalleryCVCell.xib */; };
 		EB584C03207B990200265B38 /* AVFoundation+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB584C02207B990200265B38 /* AVFoundation+Extensions.swift */; };
+		EB59F44C20875DCD00811B7B /* YPFetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB59F44B20875DCD00811B7B /* YPFetch.swift */; };
 		EBD2B63C207B7C3B00E711C2 /* YPImagePickerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B63B207B7C3B00E711C2 /* YPImagePickerDelegate.swift */; };
 		EBD2B641207B7D7400E711C2 /* YPMediaItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B640207B7D7400E711C2 /* YPMediaItem.swift */; };
 		EBD66105208104EA00EA276E /* YPIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD66104208104EA00EA276E /* YPIcons.swift */; };
@@ -151,6 +152,7 @@
 		EB584BFD207B883A00265B38 /* YPSelectionsGalleryCVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPSelectionsGalleryCVCell.swift; sourceTree = "<group>"; };
 		EB584BFE207B883A00265B38 /* YPSelectionsGalleryCVCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = YPSelectionsGalleryCVCell.xib; sourceTree = "<group>"; };
 		EB584C02207B990200265B38 /* AVFoundation+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVFoundation+Extensions.swift"; sourceTree = "<group>"; };
+		EB59F44B20875DCD00811B7B /* YPFetch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPFetch.swift; sourceTree = "<group>"; };
 		EBD2B63B207B7C3B00E711C2 /* YPImagePickerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPImagePickerDelegate.swift; sourceTree = "<group>"; };
 		EBD2B640207B7D7400E711C2 /* YPMediaItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPMediaItem.swift; sourceTree = "<group>"; };
 		EBD66104208104EA00EA276E /* YPIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPIcons.swift; sourceTree = "<group>"; };
@@ -216,6 +218,7 @@
 		99019E542018CECC007325C2 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				EB59F44B20875DCD00811B7B /* YPFetch.swift */,
 				99C6D6B11F1FB5C100711DB2 /* YPHelpers.swift */,
 				99278DAD205140F60059532E /* YPPermissionDeniedPopup.swift */,
 				990FD294201B3E59002A39A1 /* YPDragDirection.swift */,
@@ -531,6 +534,7 @@
 				99C6D6BE1F1FB5C100711DB2 /* YPLibraryViewCell.swift in Sources */,
 				99C6D6C41F1FB5C100711DB2 /* YPFilter.swift in Sources */,
 				99C6D6C91F1FB5C100711DB2 /* YPBottomPager.swift in Sources */,
+				EB59F44C20875DCD00811B7B /* YPFetch.swift in Sources */,
 				99C6D6C61F1FB5C100711DB2 /* YPFilterPreview.swift in Sources */,
 				99CF6D2B201CB96700487F77 /* YPVideoHelper.swift in Sources */,
 				99019E4E2018CD31007325C2 /* YPPagerMenu.swift in Sources */,

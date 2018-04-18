@@ -17,3 +17,10 @@
 "YPImagePickerPermissionDeniedPopupMessage" = "Verleen alstublieft toestemming";
 "YPImagePickerPermissionDeniedPopupCancel" = "Annuleer";
 "YPImagePickerPermissionDeniedPopupGrantPermission" = "Verleen toestemming";
+
+"YPImagePickerOk" = "";
+"YPImagePickerCancel" = "";
+"YPImagePickerProcessing" = "..";
+"YPImagePickerAlbums" = "";
+"YPImagePickerWarningItemsLimit" = " %d ";
+"YPImagePickerVideoTooShort" = " %@ ";
