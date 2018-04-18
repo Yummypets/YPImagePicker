@@ -17,7 +17,7 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
     private var initialized = false
     
     var multipleSelectionEnabled = false
-    internal var selectedIndices = [Int]()
+    internal var selection = [YPLibrarySelection]()
     internal var currentlySelectedIndex: Int?
     internal let mediaManager = LibraryMediaManager()
     internal var latestImageTapped = ""
@@ -101,11 +101,11 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
         multipleSelectionEnabled = !multipleSelectionEnabled
 
         if multipleSelectionEnabled {
-            if let currentlySelectedIndex = currentlySelectedIndex, selectedIndices.isEmpty {
-                selectedIndices = [currentlySelectedIndex]
+            if let currentlySelectedIndex = currentlySelectedIndex, selection.isEmpty {
+                selection = [YPLibrarySelection(index: currentlySelectedIndex, cropRect: v.currentCropRect())  ]
             }
         } else {
-            selectedIndices.removeAll()
+            selection.removeAll()
         }
 
         v.imageCropViewContainer.setMultipleSelectionMode(on: multipleSelectionEnabled)
@@ -290,9 +290,11 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
     // MARK: - Fetching Media
     
     private func fetchImage(for asset: PHAsset,
+                            withCropRect: CGRect? = nil,
                             callback: @escaping (_ photo: UIImage) -> Void) {
         delegate?.libraryViewStartedLoadingImage()
-        let cropRect = DispatchQueue.main.sync { v.currentCropRect() }
+        let cropRect = withCropRect ?? DispatchQueue.main.sync { v.currentCropRect() }
+        print(cropRect)
         let ts = targetSize(for: asset, cropRect: cropRect)
         mediaManager.imageManager?.fetchImage(for: asset, cropRect: cropRect, targetSize: ts, callback: callback)
     }
@@ -311,12 +313,15 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
         DispatchQueue.global(qos: .userInitiated).async {
             
             // Multiple selection
-            if self.multipleSelectionEnabled && self.selectedIndices.count > 1 {
-                let selectedAssets = self.selectedIndices.map { self.mediaManager.fetchResult[$0] }
+            if self.multipleSelectionEnabled && self.selection.count > 1 {
+                let selectedAssets: [(asset: PHAsset, cropRect: CGRect?)] = self.selection.map {
+                    return (self.mediaManager.fetchResult[$0.index], $0.cropRect)
+                }
+                
                 
                 // Check video length
                 for asset in selectedAssets {
-                    if self.fitsVideoLengthLimits(asset: asset) == false {
+                    if self.fitsVideoLengthLimits(asset: asset.asset) == false {
                         return
                     }
                 }
@@ -328,9 +333,9 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
                 for asset in selectedAssets {
                     asyncGroup.enter()
                     
-                    switch asset.mediaType {
+                    switch asset.asset.mediaType {
                     case .image:
-                        self.fetchImage(for: asset) { image in
+                        self.fetchImage(for: asset.asset, withCropRect: asset.cropRect) { image in
                             let resizedImage = self.resizedImageIfNeeded(image: image)
                             let photo = YPPhoto(image: resizedImage)
                             resultMediaItems.append(YPMediaItem.photo(p: photo))
@@ -338,7 +343,7 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
                         }
                         
                     case .video:
-                        self.fetchVideoURL(for: asset, callback: { videoURL in
+                        self.fetchVideoURL(for: asset.asset, callback: { videoURL in
                             createVideoItem(videoURL: videoURL,
                                             configuration: self.configuration,
                                             completion: { video in

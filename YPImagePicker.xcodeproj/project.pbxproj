@@ -20,6 +20,7 @@
 		990FD297201B4A5F002A39A1 /* PHCachingImageManager+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 990FD296201B4A5F002A39A1 /* PHCachingImageManager+Helpers.swift */; };
 		990FD299201B67FE002A39A1 /* PHFetchResult + IndexPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 990FD298201B67FE002A39A1 /* PHFetchResult + IndexPath.swift */; };
 		9911FA24203C3A31000E9B06 /* UIImage+ResetOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9911FA23203C3A31000E9B06 /* UIImage+ResetOrientation.swift */; };
+		9915D9D32087E692003FC307 /* YPLibrarySelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9915D9D22087E692003FC307 /* YPLibrarySelection.swift */; };
 		99278DA820512BD90059532E /* PreiOS10PhotoCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99278DA720512BD90059532E /* PreiOS10PhotoCapture.swift */; };
 		99278DAA20512BFB0059532E /* PostiOS10PhotoCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99278DA920512BFB0059532E /* PostiOS10PhotoCapture.swift */; };
 		99278DAC20512C330059532E /* YPPhotoCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99278DAB20512C330059532E /* YPPhotoCapture.swift */; };
@@ -107,6 +108,7 @@
 		990FD296201B4A5F002A39A1 /* PHCachingImageManager+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PHCachingImageManager+Helpers.swift"; sourceTree = "<group>"; };
 		990FD298201B67FE002A39A1 /* PHFetchResult + IndexPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PHFetchResult + IndexPath.swift"; sourceTree = "<group>"; };
 		9911FA23203C3A31000E9B06 /* UIImage+ResetOrientation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+ResetOrientation.swift"; sourceTree = "<group>"; };
+		9915D9D22087E692003FC307 /* YPLibrarySelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPLibrarySelection.swift; sourceTree = "<group>"; };
 		991C0E5320567D3400764131 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		99278DA720512BD90059532E /* PreiOS10PhotoCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreiOS10PhotoCapture.swift; sourceTree = "<group>"; };
 		99278DA920512BFB0059532E /* PostiOS10PhotoCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostiOS10PhotoCapture.swift; sourceTree = "<group>"; };
@@ -457,6 +459,7 @@
 			isa = PBXGroup;
 			children = (
 				EBD2B640207B7D7400E711C2 /* YPMediaItem.swift */,
+				9915D9D22087E692003FC307 /* YPLibrarySelection.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -612,6 +615,7 @@
 				99C6D6CE1F1FB5C100711DB2 /* YPPhotoSaver.swift in Sources */,
 				99C6D6C31F1FB5C100711DB2 /* YPCameraView.swift in Sources */,
 				99019E562018D008007325C2 /* YPMenuItem.swift in Sources */,
+				9915D9D32087E692003FC307 /* YPLibrarySelection.swift in Sources */,
 				99C6D6C21F1FB5C100711DB2 /* YPCameraVC.swift in Sources */,
 				EB703B0F2087CAAC00F131CB /* VideoCropView.swift in Sources */,
 				990FD299201B67FE002A39A1 /* PHFetchResult + IndexPath.swift in Sources */,
