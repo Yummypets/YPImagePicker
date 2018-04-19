@@ -11,4 +11,15 @@ import UIKit
 struct YPLibrarySelection {
     let index: Int
     var cropRect: CGRect?
+    var scrollViewContentOffset: CGPoint?
+    var scrollViewZoomScale: CGFloat?
+    
+    init(index: Int,
+         cropRect:CGRect? = nil,
+         scrollViewContentOffset: CGPoint? = nil,
+         scrollViewZoomScale: CGFloat? = nil) {
+        self.index = index
+        self.scrollViewContentOffset = scrollViewContentOffset
+        self.scrollViewZoomScale = scrollViewZoomScale
+    }
 }

@@ -16,6 +16,8 @@ protocol YPImageCropViewDelegate: class {
 
 final class YPImageCropView: UIScrollView, UIScrollViewDelegate {
     
+    var cropAreaDidChange = {}
+    
     var onlySquareImages = false {
         didSet {
             bouncesZoom = false
@@ -153,5 +155,15 @@ final class YPImageCropView: UIScrollView, UIScrollViewDelegate {
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
         myDelegate?.ypImageCropViewscrollViewDidEndZooming()
         contentSize = CGSize(width: imageView.frame.width + 1, height: imageView.frame.height + 1)
+        cropAreaDidChange()
+    }
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        cropAreaDidChange()
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        cropAreaDidChange()
     }
 }
+

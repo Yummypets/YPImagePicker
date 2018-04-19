@@ -60,14 +60,6 @@ extension YPLibraryVC {
     
     /// Adds cell to selection
     func addToSelection(indexPath: IndexPath) {
-        
-        // Fill cropRect for latest selection
-        if var previousSelection = selection.last {
-            previousSelection.cropRect = v.currentCropRect()
-            selection.removeLast()
-            selection.append(previousSelection)
-        }
-        
         selection.append(YPLibrarySelection(index: indexPath.row, cropRect: nil))
         checkLimit()
     }
@@ -162,6 +154,8 @@ extension YPLibraryVC: UICollectionViewDelegate {
         }
         
         if multipleSelectionEnabled {
+            updateSelectedAssetCropInfos()
+            
             let cellIsInTheSelectionPool = selection.contains(where: { $0.index == indexPath.row })
             let cellIsCurrentlySelected = indexPath.row == currentlySelectedIndex
             

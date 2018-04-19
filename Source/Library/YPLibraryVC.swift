@@ -67,6 +67,35 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
         view = v
     }
     
+    public override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        // When crop area changes in multiple selection mode,
+        // we need to update the scrollView values in order to restore
+        // them when user selects a previously selected item.
+        v.imageCropView.cropAreaDidChange = { [unowned self] in
+            if self.multipleSelectionEnabled {
+                self.updateSelectedAssetCropInfos()
+            }
+        }
+    }
+    
+    private func updateSelectedAssetCropInfos() {
+        guard let selectedAssetIndex = selection.index(where: { $0.index == currentlySelectedIndex }) else {
+            return
+        }
+        
+        // Fill new values
+        var selectedAsset = selection[selectedAssetIndex]
+        selectedAsset.scrollViewContentOffset = v.imageCropView.contentOffset
+        selectedAsset.scrollViewZoomScale = v.imageCropView.zoomScale
+        selectedAsset.cropRect = v.currentCropRect()
+        
+        // Replace
+        selection.remove(at: selectedAssetIndex)
+        selection.insert(selectedAsset, at: selectedAssetIndex)
+    }
+    
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         registerForPlayerReachedEndNotifications()
@@ -102,7 +131,13 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
 
         if multipleSelectionEnabled {
             if let currentlySelectedIndex = currentlySelectedIndex, selection.isEmpty {
-                selection = [YPLibrarySelection(index: currentlySelectedIndex, cropRect: v.currentCropRect())  ]
+                print(v.imageCropView!.zoomScale)
+                selection = [
+                    YPLibrarySelection(index: currentlySelectedIndex,
+                                       cropRect: v.currentCropRect(),
+                                       scrollViewContentOffset: v.imageCropView!.contentOffset,
+                                       scrollViewZoomScale: v.imageCropView!.zoomScale)
+                    ]
             }
         } else {
             selection.removeAll()
