@@ -60,11 +60,6 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     
     var capturedImage: UIImage?
     
-    func imageFromBundle(_ named: String) -> UIImage {
-        let bundle = Bundle(for: self.classForCoder)
-        return UIImage(named: named, in: bundle, compatibleWith: nil) ?? UIImage()
-    }
-    
     public override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -247,7 +242,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         }
         
         let arrow = UIImageView()
-        arrow.image = imageFromBundle("yp_arrow")
+        arrow.image = imageFromBundle("yp_arrow_down")
         
         let button = UIButton()
         button.addTarget(self, action: #selector(navBarTapped), for: .touchUpInside)

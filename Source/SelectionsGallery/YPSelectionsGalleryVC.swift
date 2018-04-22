@@ -36,11 +36,13 @@ public class YPSelectionsGalleryVC: UIViewController {
         let bundle = Bundle(for: YPSelectionsGalleryVC.self)
         collectionV.register(UINib(nibName: "YPSelectionsGalleryCVCell", bundle: bundle), forCellWithReuseIdentifier: "item")
         
-        // Install right bar button
+        // Setup navigation bar
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: configuration.wordings.next,
                                                             style: .done,
                                                             target: self,
                                                             action: #selector(done))
+        YPHelpers.changeBackButtonIcon(self, configuration: configuration)
+        YPHelpers.changeBackButtonTitle(self, configuration: configuration)
     }
 
     @objc private func done() {

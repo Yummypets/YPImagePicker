@@ -20,6 +20,7 @@
 
 "YPImagePickerOk" = "";
 "YPImagePickerCancel" = "";
+"YPImagePickerSave" = "";
 "YPImagePickerProcessing" = "..";
 "YPImagePickerAlbums" = "";
 "YPImagePickerWarningItemsLimit" = " %d ";

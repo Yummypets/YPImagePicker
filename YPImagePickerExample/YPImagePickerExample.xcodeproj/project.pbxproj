@@ -15,6 +15,8 @@
 		99428A281E7BE1D600B765A9 /* YPImagePicker.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 99428A201E7BE04000B765A9 /* YPImagePicker.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		997A4CD21F4C3DC0009C3703 /* Stevia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 997A4CD11F4C3DC0009C3703 /* Stevia.framework */; };
 		99A052A61F20DF21005600B3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 99A052A81F20DF21005600B3 /* Localizable.strings */; };
+		EB473E11208C949200D16105 /* Trimmer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB473E10208C949100D16105 /* Trimmer.framework */; };
+		EB473E12208C949200D16105 /* Trimmer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = EB473E10208C949100D16105 /* Trimmer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +51,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				99428A281E7BE1D600B765A9 /* YPImagePicker.framework in Embed Frameworks */,
+				EB473E12208C949200D16105 /* Trimmer.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -72,6 +75,7 @@
 		99A052AB1F20DF54005600B3 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A7B961E020755CF500216346 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
 		EB11EE9A2057C58600A19365 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		EB473E10208C949100D16105 /* Trimmer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Trimmer.framework; path = ../Resources/Trimmer.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +84,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				997A4CD21F4C3DC0009C3703 /* Stevia.framework in Frameworks */,
+				EB473E11208C949200D16105 /* Trimmer.framework in Frameworks */,
 				99428A271E7BE1D600B765A9 /* YPImagePicker.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -129,6 +134,7 @@
 		99428A231E7BE17800B765A9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				EB473E10208C949100D16105 /* Trimmer.framework */,
 				997A4CD11F4C3DC0009C3703 /* Stevia.framework */,
 			);
 			name = Frameworks;

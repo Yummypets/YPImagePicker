@@ -6,8 +6,13 @@
 //  Copyright © 2018 Yummypets. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 public struct YPIcons {
+
+    public var shouldChangeDefaultBackButtonIcon = true
+    public var hideBackButtonTitle = true
+    
+    public var backButtonIcon: UIImage = imageFromBundle("yp_arrow_left")
 
 }

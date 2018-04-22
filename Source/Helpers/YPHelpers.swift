@@ -9,6 +9,23 @@
 import Foundation
 import UIKit
 
+struct YPHelpers {
+    static func changeBackButtonIcon(_ controller: UIViewController,
+                                     configuration: YPImagePickerConfiguration) {
+        if configuration.icons.shouldChangeDefaultBackButtonIcon {
+            controller.navigationController?.navigationBar.backIndicatorImage = configuration.icons.backButtonIcon
+            controller.navigationController?.navigationBar.backIndicatorTransitionMaskImage = configuration.icons.backButtonIcon
+        }
+    }
+    
+    static func changeBackButtonTitle(_ controller: UIViewController,
+                                      configuration: YPImagePickerConfiguration) {
+        if configuration.icons.hideBackButtonTitle {
+            controller.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.plain, target: nil, action: nil)
+        }
+    }
+}
+
 func ypLocalized(_ str: String) -> String {
     return NSLocalizedString(str,
                              tableName: nil,

@@ -79,6 +79,11 @@ public class YPImagePicker: UINavigationController {
         activityIndicatorView.centerYAnchor.constraint(equalTo: loadingContainerView.centerYAnchor).isActive = true
     }
     
+    private func setupNavigationBar() {
+        navigationBar.isTranslucent = false
+        YPHelpers.changeBackButtonIcon(self, configuration: configuration)
+    }
+    
     func showHideActivityIndicator() {
         
         if !activityIndicatorView.isAnimating {
@@ -98,7 +103,7 @@ public class YPImagePicker: UINavigationController {
         }
         viewControllers = [picker]
         setupActivityIndicator()
-        navigationBar.isTranslucent = false
+        setupNavigationBar()
         
         picker.didSelectImage = { [unowned self] pickedImage, isNewPhoto in
             if self.configuration.showsFilters {

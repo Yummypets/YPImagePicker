@@ -66,7 +66,6 @@
 		99CF6D29201B900400487F77 /* LibraryMediaManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CF6D28201B900400487F77 /* LibraryMediaManager.swift */; };
 		99CF6D2B201CB96700487F77 /* YPVideoHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CF6D2A201CB96700487F77 /* YPVideoHelper.swift */; };
 		99D1DC2B1F9788930047F0E0 /* YPImagePickerConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D1DC2A1F9788930047F0E0 /* YPImagePickerConfiguration.swift */; };
-		EB3251B42087899800A6190D /* YPVideoTrimmerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3251B32087899800A6190D /* YPVideoTrimmerVC.swift */; };
 		EB584BFB207B870F00265B38 /* YPSelectionsGalleryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB584BF9207B870F00265B38 /* YPSelectionsGalleryVC.swift */; };
 		EB584BFC207B870F00265B38 /* YPSelectionsGalleryVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB584BFA207B870F00265B38 /* YPSelectionsGalleryVC.xib */; };
 		EB584BFF207B883A00265B38 /* YPSelectionsGalleryCVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB584BFD207B883A00265B38 /* YPSelectionsGalleryCVCell.swift */; };
@@ -75,14 +74,6 @@
 		EB59F44C20875DCD00811B7B /* YPFetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB59F44B20875DCD00811B7B /* YPFetch.swift */; };
 		EB59F452208766B800811B7B /* YPVideoFiltersVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB59F450208766B800811B7B /* YPVideoFiltersVC.swift */; };
 		EB59F453208766B800811B7B /* YPVideoFiltersVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB59F451208766B800811B7B /* YPVideoFiltersVC.xib */; };
-		EB703B0F2087CAAC00F131CB /* VideoCropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB703B052087CAAB00F131CB /* VideoCropView.swift */; };
-		EB703B102087CAAC00F131CB /* VideoScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB703B062087CAAB00F131CB /* VideoScrollView.swift */; };
-		EB703B112087CAAC00F131CB /* CropMaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB703B072087CAAB00F131CB /* CropMaskView.swift */; };
-		EB703B122087CAAC00F131CB /* HandlerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB703B092087CAAB00F131CB /* HandlerView.swift */; };
-		EB703B132087CAAC00F131CB /* PryntTrimmerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB703B0A2087CAAB00F131CB /* PryntTrimmerView.swift */; };
-		EB703B142087CAAC00F131CB /* AssetVideoScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB703B0C2087CAAB00F131CB /* AssetVideoScrollView.swift */; };
-		EB703B152087CAAC00F131CB /* AVAssetTimeSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB703B0D2087CAAB00F131CB /* AVAssetTimeSelector.swift */; };
-		EB703B162087CAAC00F131CB /* ThumbSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB703B0E2087CAAB00F131CB /* ThumbSelectorView.swift */; };
 		EBB0FF7A20877A7500C84E25 /* YPVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB0FF7920877A7500C84E25 /* YPVideoView.swift */; };
 		EBD2B63C207B7C3B00E711C2 /* YPImagePickerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B63B207B7C3B00E711C2 /* YPImagePickerDelegate.swift */; };
 		EBD2B641207B7D7400E711C2 /* YPMediaItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B640207B7D7400E711C2 /* YPMediaItem.swift */; };
@@ -159,7 +150,6 @@
 		99D1DC2A1F9788930047F0E0 /* YPImagePickerConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPImagePickerConfiguration.swift; sourceTree = "<group>"; };
 		A7FD716620755C2D0044A8E8 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
 		EB11EE9820572F3700A19365 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
-		EB3251B32087899800A6190D /* YPVideoTrimmerVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPVideoTrimmerVC.swift; sourceTree = "<group>"; };
 		EB584BF9207B870F00265B38 /* YPSelectionsGalleryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPSelectionsGalleryVC.swift; sourceTree = "<group>"; };
 		EB584BFA207B870F00265B38 /* YPSelectionsGalleryVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = YPSelectionsGalleryVC.xib; sourceTree = "<group>"; };
 		EB584BFD207B883A00265B38 /* YPSelectionsGalleryCVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPSelectionsGalleryCVCell.swift; sourceTree = "<group>"; };
@@ -168,14 +158,6 @@
 		EB59F44B20875DCD00811B7B /* YPFetch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPFetch.swift; sourceTree = "<group>"; };
 		EB59F450208766B800811B7B /* YPVideoFiltersVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPVideoFiltersVC.swift; sourceTree = "<group>"; };
 		EB59F451208766B800811B7B /* YPVideoFiltersVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = YPVideoFiltersVC.xib; sourceTree = "<group>"; };
-		EB703B052087CAAB00F131CB /* VideoCropView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoCropView.swift; sourceTree = "<group>"; };
-		EB703B062087CAAB00F131CB /* VideoScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoScrollView.swift; sourceTree = "<group>"; };
-		EB703B072087CAAB00F131CB /* CropMaskView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropMaskView.swift; sourceTree = "<group>"; };
-		EB703B092087CAAB00F131CB /* HandlerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HandlerView.swift; sourceTree = "<group>"; };
-		EB703B0A2087CAAB00F131CB /* PryntTrimmerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PryntTrimmerView.swift; sourceTree = "<group>"; };
-		EB703B0C2087CAAB00F131CB /* AssetVideoScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetVideoScrollView.swift; sourceTree = "<group>"; };
-		EB703B0D2087CAAB00F131CB /* AVAssetTimeSelector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AVAssetTimeSelector.swift; sourceTree = "<group>"; };
-		EB703B0E2087CAAB00F131CB /* ThumbSelectorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThumbSelectorView.swift; sourceTree = "<group>"; };
 		EBB0FF7920877A7500C84E25 /* YPVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPVideoView.swift; sourceTree = "<group>"; };
 		EBD2B63B207B7C3B00E711C2 /* YPImagePickerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPImagePickerDelegate.swift; sourceTree = "<group>"; };
 		EBD2B640207B7D7400E711C2 /* YPMediaItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPMediaItem.swift; sourceTree = "<group>"; };
@@ -399,7 +381,6 @@
 		EB59F44F2087669B00811B7B /* Trim */ = {
 			isa = PBXGroup;
 			children = (
-				EB3251B32087899800A6190D /* YPVideoTrimmerVC.swift */,
 			);
 			path = Trim;
 			sourceTree = "<group>";
@@ -407,40 +388,8 @@
 		EB703AEE2087B8C700F131CB /* Temp */ = {
 			isa = PBXGroup;
 			children = (
-				EB703B042087CAAB00F131CB /* Cropper */,
-				EB703B0B2087CAAB00F131CB /* Parents */,
-				EB703B0E2087CAAB00F131CB /* ThumbSelectorView.swift */,
-				EB703B082087CAAB00F131CB /* Trimmer */,
 			);
 			path = Temp;
-			sourceTree = "<group>";
-		};
-		EB703B042087CAAB00F131CB /* Cropper */ = {
-			isa = PBXGroup;
-			children = (
-				EB703B052087CAAB00F131CB /* VideoCropView.swift */,
-				EB703B062087CAAB00F131CB /* VideoScrollView.swift */,
-				EB703B072087CAAB00F131CB /* CropMaskView.swift */,
-			);
-			path = Cropper;
-			sourceTree = "<group>";
-		};
-		EB703B082087CAAB00F131CB /* Trimmer */ = {
-			isa = PBXGroup;
-			children = (
-				EB703B092087CAAB00F131CB /* HandlerView.swift */,
-				EB703B0A2087CAAB00F131CB /* PryntTrimmerView.swift */,
-			);
-			path = Trimmer;
-			sourceTree = "<group>";
-		};
-		EB703B0B2087CAAB00F131CB /* Parents */ = {
-			isa = PBXGroup;
-			children = (
-				EB703B0C2087CAAB00F131CB /* AssetVideoScrollView.swift */,
-				EB703B0D2087CAAB00F131CB /* AVAssetTimeSelector.swift */,
-			);
-			path = Parents;
 			sourceTree = "<group>";
 		};
 		EBD2B639207B7B1100E711C2 /* SelectionsGallery */ = {
@@ -572,7 +521,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EB703B162087CAAC00F131CB /* ThumbSelectorView.swift in Sources */,
 				99C6D6C81F1FB5C100711DB2 /* YPFiltersView.swift in Sources */,
 				990FD293201B3D69002A39A1 /* YPLibraryViewDelegate.swift in Sources */,
 				990FD28F201A49D3002A39A1 /* PermissionCheckable.swift in Sources */,
@@ -580,17 +528,13 @@
 				EBD2B641207B7D7400E711C2 /* YPMediaItem.swift in Sources */,
 				99C6D6C71F1FB5C100711DB2 /* YPFiltersVC.swift in Sources */,
 				99D1DC2B1F9788930047F0E0 /* YPImagePickerConfiguration.swift in Sources */,
-				EB703B132087CAAC00F131CB /* PryntTrimmerView.swift in Sources */,
 				99278DAA20512BFB0059532E /* PostiOS10PhotoCapture.swift in Sources */,
 				990FD297201B4A5F002A39A1 /* PHCachingImageManager+Helpers.swift in Sources */,
 				99CF6D23201B71DC00487F77 /* YPLibrary+LibraryChange.swift in Sources */,
-				EB703B152087CAAC00F131CB /* AVAssetTimeSelector.swift in Sources */,
 				99C6D6C51F1FB5C100711DB2 /* YPFilterCollectionViewCell.swift in Sources */,
-				EB703B122087CAAC00F131CB /* HandlerView.swift in Sources */,
 				990FD295201B3E59002A39A1 /* YPDragDirection.swift in Sources */,
 				99278DAE205140F60059532E /* YPPermissionDeniedPopup.swift in Sources */,
 				99CF6D21201B70A000487F77 /* YPLibraryVC+CollectionView.swift in Sources */,
-				EB3251B42087899800A6190D /* YPVideoTrimmerVC.swift in Sources */,
 				99CF6D1B201B6A5C00487F77 /* UICollectionView+IndexPath.swift in Sources */,
 				99C6D6C11F1FB5C100711DB2 /* YPImageCropViewContainer.swift in Sources */,
 				99A3C91020319227008D7E23 /* YPCropView.swift in Sources */,
@@ -600,7 +544,6 @@
 				99C6D6CB1F1FB5C100711DB2 /* YPHelpers.swift in Sources */,
 				99019E532018CE19007325C2 /* YPPickerScreen.swift in Sources */,
 				99CF6D1F201B6B9E00487F77 /* CGRect+Difference.swift in Sources */,
-				EB703B112087CAAC00F131CB /* CropMaskView.swift in Sources */,
 				99CF6D1D201B6ABA00487F77 /* IndexSet+IndexPath.swift in Sources */,
 				EB59F452208766B800811B7B /* YPVideoFiltersVC.swift in Sources */,
 				9911FA24203C3A31000E9B06 /* UIImage+ResetOrientation.swift in Sources */,
@@ -613,7 +556,6 @@
 				99C6D6C31F1FB5C100711DB2 /* YPCameraView.swift in Sources */,
 				99019E562018D008007325C2 /* YPMenuItem.swift in Sources */,
 				99C6D6C21F1FB5C100711DB2 /* YPCameraVC.swift in Sources */,
-				EB703B0F2087CAAC00F131CB /* VideoCropView.swift in Sources */,
 				990FD299201B67FE002A39A1 /* PHFetchResult + IndexPath.swift in Sources */,
 				99A0529A1F20A19B005600B3 /* YPAlbumVC.swift in Sources */,
 				99A0529D1F20B45D005600B3 /* YPAlbumView.swift in Sources */,
@@ -636,14 +578,12 @@
 				99CF6D29201B900400487F77 /* LibraryMediaManager.swift in Sources */,
 				99C6D6BE1F1FB5C100711DB2 /* YPLibraryViewCell.swift in Sources */,
 				99C6D6C41F1FB5C100711DB2 /* YPFilter.swift in Sources */,
-				EB703B142087CAAC00F131CB /* AssetVideoScrollView.swift in Sources */,
 				99C6D6C91F1FB5C100711DB2 /* YPBottomPager.swift in Sources */,
 				EB59F44C20875DCD00811B7B /* YPFetch.swift in Sources */,
 				99C6D6C61F1FB5C100711DB2 /* YPFilterPreview.swift in Sources */,
 				99CF6D2B201CB96700487F77 /* YPVideoHelper.swift in Sources */,
 				99019E4E2018CD31007325C2 /* YPPagerMenu.swift in Sources */,
 				99C6D6C01F1FB5C100711DB2 /* YPImageCropView.swift in Sources */,
-				EB703B102087CAAC00F131CB /* VideoScrollView.swift in Sources */,
 				EBD66107208104F400EA276E /* YPColors.swift in Sources */,
 				99A052A11F20B49B005600B3 /* YPAlbum.swift in Sources */,
 			);

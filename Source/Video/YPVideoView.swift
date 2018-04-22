@@ -34,7 +34,7 @@ public class YPVideoView: UIView {
         singleTapGR.numberOfTapsRequired = 1
         addGestureRecognizer(singleTapGR)
         
-        playImageView.alpha = 0
+        playImageView.alpha = 0.8
         playerLayer.videoGravity = .resizeAspect
         
         sv(
@@ -58,11 +58,10 @@ public class YPVideoView: UIView {
 
 // MARK: - Video handling
 extension YPVideoView {
-    public func startPlayingVideo(video: YPVideo) {
+    public func loadVideo(video: YPVideo) {
         if let url = video.url {
             let player = AVPlayer(url: url)
             playerLayer.player = player
-            player.play()
         } else {
             print("⚠️ YPVideoView >>> Video URL is invalid"); return
         }

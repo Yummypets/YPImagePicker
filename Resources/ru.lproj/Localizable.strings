@@ -18,6 +18,7 @@
 
 "YPImagePickerOk" = "Ok";
 "YPImagePickerCancel" = "Отмена";
+"YPImagePickerSave" = "Сохранить";
 "YPImagePickerProcessing" = "Обработка..";
 "YPImagePickerAlbums" = "Альбомы";
 "YPImagePickerWarningItemsLimit" = "Максимум %d фото или видео";

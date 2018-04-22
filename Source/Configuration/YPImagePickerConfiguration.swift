@@ -65,7 +65,7 @@ public struct YPImagePickerConfiguration {
     
     /// Defines the time limit for recording videos.
     /// Default is 30 seconds.
-    public var videoRecordingTimeLimit: TimeInterval = 30.0
+    public var videoRecordingTimeLimit: TimeInterval = 60.0
     
     /// Defines the time limit for videos from the library.
     /// Defaults to 60 seconds.
@@ -75,6 +75,12 @@ public struct YPImagePickerConfiguration {
     /// Defaults to 3 seconds.
     public var videoMinimumTimeLimit: TimeInterval = 3.0
     
+    /// The maximum duration allowed for the trimming. Change it before setting the asset, as the asset preview
+    public var trimmerMaxDuration: Double = 60.0
+    
+    /// The minimum duration allowed for the trimming. The handles won't pan further if the minimum duration is attained.
+    public var trimmerMinDuration: Double = 3.0
+
     /// Adds a Crop step in the photo taking process, after filters.  Defaults to .none
     public var showsCrop: YPCropType = .none
     

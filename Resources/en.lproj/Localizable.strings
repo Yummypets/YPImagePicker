@@ -9,6 +9,7 @@
 "YPImagePickerOk" = "Ok";
 "YPImagePickerDone" = "Done";
 "YPImagePickerCancel" = "Cancel";
+"YPImagePickerSave" = "Save";
 "YPImagePickerProcessing" = "Processing..";
 "YPImagePickerAlbums" = "Albums";
 "YPImagePickerLibrary" = "Library";
