@@ -113,12 +113,8 @@ class ViewController: UIViewController {
         
         config.delegate = self
         
-        /// Set it the default conf for all Pickers
-//        YPImagePicker.setDefaultConfiguration(config)
-        /// And then use the default configuration like so:
-//        let picker = YPImagePicker()
-        
-        // Here we use a per picker configuration.
+        // Here we use a per picker configuration. Configuration is always shared.
+        // That means than when you create one picker with configuration, than you can create other picker with just let picker = YPImagePicker() and the configuration will be the same as the first picker.
         let picker = YPImagePicker(configuration: config)
         
         present(picker, animated: true, completion: nil)

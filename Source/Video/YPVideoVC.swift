@@ -70,10 +70,10 @@ public class YPVideoVC: UIViewController, PermissionCheckable {
     // MARK: - Setup
     
     private func setupButtons() {
-        videoStartImage = imageFromBundle("yp_iconVideoCapture")
-        videoStopImage = imageFromBundle("yp_iconVideoCaptureRecording")
+        videoStartImage = YPImagePickerConfiguration.shared.icons.captureVideoImage
+        videoStopImage = YPImagePickerConfiguration.shared.icons.captureVideoOnImage
         v.flashButton.setImage(flashOffImage, for: .normal)
-        v.flipButton.setImage(imageFromBundle("yp_iconLoop"), for: .normal)
+        v.flipButton.setImage(YPImagePickerConfiguration.shared.icons.loopIcon, for: .normal)
         v.shotButton.setImage(videoStartImage, for: .normal)
     }
     

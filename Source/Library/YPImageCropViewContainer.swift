@@ -29,7 +29,7 @@ class YPImageCropViewContainer: UIView, YPImageCropViewDelegate, UIGestureRecogn
     }
     
     private let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
-    private let playImageView = UIImageView(image: imageFromBundle("yp_play"))
+    private let playImageView = UIImageView(image: YPImagePickerConfiguration.shared.icons.playImage)
     private var cropView: YPImageCropView?
     private var shouldCropToSquare = false
     private var isMultipleSelection = false
@@ -63,7 +63,7 @@ class YPImageCropViewContainer: UIView, YPImageCropViewDelegate, UIGestureRecogn
     /// Use this to update the multiple selection mode UI state for the YPImageCropViewContainer
     public func setMultipleSelectionMode(on: Bool) {
         isMultipleSelection = on
-        multipleSelectionButton.setImage(imageFromBundle(on ? "yp_multiple_colored" : "yp_multiple"), for: .normal)
+        multipleSelectionButton.setImage(on ? YPImagePickerConfiguration.shared.icons.multipleSelectionOnIcon : YPImagePickerConfiguration.shared.icons.multipleSelectionOffIcon, for: .normal)
         refreshSquareCropButton()
     }
     
@@ -142,7 +142,7 @@ class YPImageCropViewContainer: UIView, YPImageCropViewDelegate, UIGestureRecogn
         
         if !onlySquareImages {
             // Crop Button
-            squareCropButton.setImage(imageFromBundle("yp_iconCrop"), for: .normal)
+            squareCropButton.setImage(YPImagePickerConfiguration.shared.icons.cropIcon, for: .normal)
             sv(squareCropButton)
             squareCropButton.size(42)
             |-15-squareCropButton
@@ -153,7 +153,7 @@ class YPImageCropViewContainer: UIView, YPImageCropViewDelegate, UIGestureRecogn
         sv(multipleSelectionButton)
         multipleSelectionButton.size(42)
         multipleSelectionButton-15-|
-        multipleSelectionButton.setImage(imageFromBundle("yp_multiple"), for: .normal)
+        multipleSelectionButton.setImage(YPImagePickerConfiguration.shared.icons.multipleSelectionOffIcon, for: .normal)
         multipleSelectionButton.Bottom == cropView!.Bottom - 15
         
         playerLayer.videoGravity = .resizeAspect

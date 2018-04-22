@@ -11,6 +11,8 @@ import AVFoundation
 import UIKit
 
 public struct YPImagePickerConfiguration {
+    public static var shared: YPImagePickerConfiguration = YPImagePickerConfiguration()
+    
     public init() {}
     
     /// The delegate needs to get selected photo and video. It's duplicate a callback functional, but the callback doesn't support multiple selection.

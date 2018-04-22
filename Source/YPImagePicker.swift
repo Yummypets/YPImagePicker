@@ -11,26 +11,17 @@ import AVFoundation
 
 public class YPImagePicker: UINavigationController {
     
-    /// Set a global configuration that will be applied whenever you call YPImagePicker().
-    public static func setDefaultConfiguration(_ config: YPImagePickerConfiguration) {
-        defaultConfiguration = config
-    }
-    
-    private static var defaultConfiguration = YPImagePickerConfiguration()
-    
-    private let configuration: YPImagePickerConfiguration!
     private let picker: YPPickerVC!
     
     /// Get a YPImagePicker instance with the default configuration.
     public convenience init() {
-        let defaultConf = YPImagePicker.defaultConfiguration
-        self.init(configuration: defaultConf)
+        self.init(configuration: YPImagePickerConfiguration.shared)
     }
     
     /// Get a YPImagePicker with the specified configuration.
     public required init(configuration: YPImagePickerConfiguration) {
-        self.configuration = configuration
-        picker = YPPickerVC(configuration: configuration)
+        YPImagePickerConfiguration.shared = configuration
+        picker = YPPickerVC(configuration: YPImagePickerConfiguration.shared)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -72,7 +63,7 @@ public class YPImagePicker: UINavigationController {
                            width: labelWidth,
                            height: labelHeight)
         processingTitleLabel.frame = frame
-        processingTitleLabel.text = configuration.wordings.processing
+        processingTitleLabel.text = YPImagePickerConfiguration.shared.wordings.processing
         
         loadingContainerView.addSubview(activityIndicatorView)
         activityIndicatorView.centerXAnchor.constraint(equalTo: loadingContainerView.centerXAnchor).isActive = true
@@ -81,7 +72,7 @@ public class YPImagePicker: UINavigationController {
     
     private func setupNavigationBar() {
         navigationBar.isTranslucent = false
-        YPHelpers.changeBackButtonIcon(self, configuration: configuration)
+        YPHelpers.changeBackButtonIcon(self)
     }
     
     func showHideActivityIndicator() {
@@ -99,28 +90,28 @@ public class YPImagePicker: UINavigationController {
         super.viewDidLoad()
         
         picker.didClose = {
-            self.configuration.delegate?.imagePickerDidCancel(self)
+            YPImagePickerConfiguration.shared.delegate?.imagePickerDidCancel(self)
         }
         viewControllers = [picker]
         setupActivityIndicator()
         setupNavigationBar()
         
         picker.didSelectImage = { [unowned self] pickedImage, isNewPhoto in
-            if self.configuration.showsFilters {
-                let filterVC = YPFiltersVC(image: pickedImage, configuration: self.configuration)
+            if YPImagePickerConfiguration.shared.showsFilters {
+                let filterVC = YPFiltersVC(image: pickedImage, configuration: YPImagePickerConfiguration.shared)
                 filterVC.didSelectImage = { filteredImage, isImageFiltered in
                     
                     let completion = { (image: UIImage) in
                         let mediaItem = YPMediaItem.photo(p: YPPhoto(image: image))
-                        self.configuration.delegate?.imagePicker(self, didSelect: [mediaItem])
+                        YPImagePickerConfiguration.shared.delegate?.imagePicker(self, didSelect: [mediaItem])
                         
-                        if (isNewPhoto || isImageFiltered) && self.configuration.shouldSaveNewPicturesToAlbum {
-                            YPPhotoSaver.trySaveImage(filteredImage, inAlbumNamed: self.configuration.albumName)
+                        if (isNewPhoto || isImageFiltered) && YPImagePickerConfiguration.shared.shouldSaveNewPicturesToAlbum {
+                            YPPhotoSaver.trySaveImage(filteredImage, inAlbumNamed: YPImagePickerConfiguration.shared.albumName)
                         }
                     }
                     
-                    if case let YPCropType.rectangle(ratio) = self.configuration.showsCrop {
-                        let cropVC = YPCropVC(configuration: self.configuration, image: filteredImage, ratio: ratio)
+                    if case let YPCropType.rectangle(ratio) = YPImagePickerConfiguration.shared.showsCrop {
+                        let cropVC = YPCropVC(configuration: YPImagePickerConfiguration.shared, image: filteredImage, ratio: ratio)
                         cropVC.didFinishCropping = { croppedImage in
                             completion(croppedImage)
                         }
@@ -141,14 +132,14 @@ public class YPImagePicker: UINavigationController {
             } else {
                 let completion = { (image: UIImage) in
                     let mediaItem = YPMediaItem.photo(p: YPPhoto(image: image))
-                    self.configuration.delegate?.imagePicker(self, didSelect: [mediaItem])
+                    YPImagePickerConfiguration.shared.delegate?.imagePicker(self, didSelect: [mediaItem])
                     
-                    if isNewPhoto && self.configuration.shouldSaveNewPicturesToAlbum {
-                        YPPhotoSaver.trySaveImage(pickedImage, inAlbumNamed: self.configuration.albumName)
+                    if isNewPhoto && YPImagePickerConfiguration.shared.shouldSaveNewPicturesToAlbum {
+                        YPPhotoSaver.trySaveImage(pickedImage, inAlbumNamed: YPImagePickerConfiguration.shared.albumName)
                     }
                 }
-                if case let YPCropType.rectangle(ratio) = self.configuration.showsCrop {
-                    let cropVC = YPCropVC(configuration: self.configuration, image: pickedImage, ratio: ratio)
+                if case let YPCropType.rectangle(ratio) = YPImagePickerConfiguration.shared.showsCrop {
+                    let cropVC = YPCropVC(configuration: YPImagePickerConfiguration.shared, image: pickedImage, ratio: ratio)
                     cropVC.didFinishCropping = { croppedImage in
                         completion(croppedImage)
                     }
@@ -164,17 +155,17 @@ public class YPImagePicker: UINavigationController {
                             activityIdicatorClosure: { _ in
                                 self.showHideActivityIndicator()
             },
-                            configuration: self.configuration,
+                            configuration: YPImagePickerConfiguration.shared,
                             completion: { video in
                                 let mediaItem = YPMediaItem.video(v: video)
-                                self.configuration.delegate?.imagePicker(self, didSelect: [mediaItem])
+                                YPImagePickerConfiguration.shared.delegate?.imagePicker(self, didSelect: [mediaItem])
             })
         }
         
         picker.didSelectMultipleItems = { items in
             let selectionsGalleryVC = YPSelectionsGalleryVC.initWith(items: items,
                                                                      imagePicker: self,
-                                                                     configuration: self.configuration)
+                                                                     configuration: YPImagePickerConfiguration.shared)
             self.pushViewController(selectionsGalleryVC, animated: true)
         }
     }

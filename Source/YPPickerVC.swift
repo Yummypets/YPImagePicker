@@ -63,9 +63,9 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     public override func viewDidLoad() {
         super.viewDidLoad()
 
-        flashOnImage = imageFromBundle("yp_iconFlash_on")
-        flashOffImage = imageFromBundle("yp_iconFlash_off")
-        flashAutoImage = imageFromBundle("yp_iconFlash_auto")
+        flashOnImage = YPImagePickerConfiguration.shared.icons.flashOnIcon
+        flashOffImage = YPImagePickerConfiguration.shared.icons.flashOffIcon
+        flashAutoImage = YPImagePickerConfiguration.shared.icons.flashAutoIcon
         
         view.backgroundColor = UIColor(r: 247, g: 247, b: 247)
 
@@ -242,7 +242,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         }
         
         let arrow = UIImageView()
-        arrow.image = imageFromBundle("yp_arrow_down")
+        arrow.image = configuration.icons.arrowDownIcon
         
         let button = UIButton()
         button.addTarget(self, action: #selector(navBarTapped), for: .touchUpInside)
