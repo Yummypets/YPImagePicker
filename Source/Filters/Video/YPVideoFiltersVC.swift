@@ -109,7 +109,6 @@ public class YPVideoFiltersVC: UIViewController {
                     let resultVideo = YPVideo(thumbnail: weakSelf.coverImageView.image!,
                                               videoURL: destinationURL)
                     saveCallback(resultVideo)
-                    weakSelf.navigationController?.popViewController(animated: true)
                 }
             }
         } catch let error {

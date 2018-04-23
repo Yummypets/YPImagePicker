@@ -88,6 +88,7 @@ extension YPSelectionsGalleryVC: UICollectionViewDelegate {
             videoFiltersVC.saveCallback = { [unowned self] outputVideo in
                 self.items[indexPath.row] = YPMediaItem.video(v: outputVideo)
                 collectionView.reloadData()
+                videoFiltersVC.navigationController?.popViewController(animated: true)
             }
             navigationController?.pushViewController(videoFiltersVC, animated: true)
             break
