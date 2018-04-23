@@ -80,7 +80,7 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
         }
     }
     
-    private func updateSelectedAssetCropInfos() {
+    internal func updateSelectedAssetCropInfos() {
         guard let selectedAssetIndex = selection.index(where: { $0.index == currentlySelectedIndex }) else {
             return
         }

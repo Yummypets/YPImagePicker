@@ -164,8 +164,7 @@ public class YPImagePicker: UINavigationController {
         
         picker.didSelectMultipleItems = { items in
             let selectionsGalleryVC = YPSelectionsGalleryVC.initWith(items: items,
-                                                                     imagePicker: self,
-                                                                     configuration: YPImagePickerConfiguration.shared)
+                                                                     imagePicker: self)
             self.pushViewController(selectionsGalleryVC, animated: true)
         }
     }

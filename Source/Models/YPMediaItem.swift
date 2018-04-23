@@ -15,22 +15,29 @@ public struct YPPhoto {
 }
 
 public class YPVideo {
-    public var data: Data?
     public var thumbnail: UIImage?
     public var url: URL?
     
-    init(data: Data?, thumbnail: UIImage?, videoURL: URL?) {
-        self.data = data
+    init(thumbnail: UIImage?, videoURL: URL?) {
         self.thumbnail = thumbnail
         self.url = videoURL
     }
     
     convenience init() {
-        self.init(data: nil, thumbnail: nil, videoURL: nil)
+        self.init(thumbnail: nil, videoURL: nil)
     }
 }
 
 public enum YPMediaItem {
     case photo(p: YPPhoto)
     case video(v: YPVideo)
+}
+
+// MARK: - Compression
+
+extension YPVideo {
+    /// Fetches a video data with selected compression in YPImagePickerConfiguration
+    func fetchData(completion: (_ videoData: Data) -> Void) {
+      // TODO: place here a compression code. Use YPImagePickerConfiguration.shared.videoCompression and YPImagePickerConfiguration.shared.videoExtension
+    }
 }

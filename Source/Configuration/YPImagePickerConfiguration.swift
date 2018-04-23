@@ -53,6 +53,9 @@ public struct YPImagePickerConfiguration {
     /// Choose the videoCompression.  Defaults to AVAssetExportPresetHighestQuality
     public var videoCompression: String = AVAssetExportPresetHighestQuality
     
+    /// Choose the result video extension if you trim or compress a video. Defaults to mov.
+    public var videoExtension: AVFileType = .mov
+    
     /// Defines the name of the album when saving pictures in the user's photo library.
     /// In general that would be your App name. Defaults to "DefaultYPImagePickerAlbumName"
     public var albumName = "DefaultYPImagePickerAlbumName"

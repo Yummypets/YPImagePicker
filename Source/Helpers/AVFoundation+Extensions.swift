@@ -36,25 +36,19 @@ public func createVideoItem(videoURL: URL,
                                                      presetName: configuration.videoCompression)
             exportSession?.outputURL = uploadURL
             exportSession?.outputFileType = AVFileType.mov
-            exportSession?.shouldOptimizeForNetworkUse = true //USEFUL?
+            exportSession?.shouldOptimizeForNetworkUse = true
             exportSession?.exportAsynchronously {
                 switch exportSession!.status {
                 case .completed:
-                    if let videoData = FileManager.default.contents(atPath: uploadURL.path) {
-                        DispatchQueue.main.async {
-                            videoItem.data = videoData
-                            activityIdicatorClosure?(false)
-                            completion(videoItem)
-                        }
+                    DispatchQueue.main.async {
+                        activityIdicatorClosure?(false)
+                        completion(videoItem)
                     }
                 default:
-                    // Fall back to default video size:
-                    if let videoData = FileManager.default.contents(atPath: videoURL.path) {
-                        DispatchQueue.main.async {
-                            videoItem.data = videoData
-                            activityIdicatorClosure?(false)
-                            completion(videoItem)
-                        }
+                    DispatchQueue.main.async {
+                        print("⚠️ createVideoItem >>> Error in creating the video item. Export status: \(exportSession!.status)")
+                        activityIdicatorClosure?(false)
+                        completion(videoItem)
                     }
                 }
             }

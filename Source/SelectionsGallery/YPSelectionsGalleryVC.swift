@@ -14,12 +14,10 @@ public class YPSelectionsGalleryVC: UIViewController {
     
     /// Designated initializer
     public class func initWith(items: [YPMediaItem],
-                        imagePicker: YPImagePicker,
-                        configuration: YPImagePickerConfiguration) -> YPSelectionsGalleryVC {
+                        imagePicker: YPImagePicker) -> YPSelectionsGalleryVC {
         let vc = YPSelectionsGalleryVC(nibName: "YPSelectionsGalleryVC", bundle: Bundle(for: YPSelectionsGalleryVC.self))
         vc.items = items
         vc.imagePicker = imagePicker
-        vc.configuration = configuration
         return vc
     }
 
@@ -27,7 +25,6 @@ public class YPSelectionsGalleryVC: UIViewController {
 
     public var items: [YPMediaItem] = []
     public var imagePicker: YPImagePicker!
-    public var configuration: YPImagePickerConfiguration!
 
     override public func viewDidLoad() {
         super.viewDidLoad()
@@ -37,7 +34,7 @@ public class YPSelectionsGalleryVC: UIViewController {
         collectionV.register(UINib(nibName: "YPSelectionsGalleryCVCell", bundle: bundle), forCellWithReuseIdentifier: "item")
         
         // Setup navigation bar
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: configuration.wordings.next,
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: YPImagePickerConfiguration.shared.wordings.next,
                                                             style: .done,
                                                             target: self,
                                                             action: #selector(done))
@@ -46,7 +43,7 @@ public class YPSelectionsGalleryVC: UIViewController {
     }
 
     @objc private func done() {
-        configuration.delegate?.imagePicker(imagePicker, didSelect: items)
+        YPImagePickerConfiguration.shared.delegate?.imagePicker(imagePicker, didSelect: items)
     }
 }
 
@@ -79,7 +76,11 @@ extension YPSelectionsGalleryVC: UICollectionViewDelegate {
             /// open image filter
             break
         case .video(let video):
-            let videoFiltersVC = YPVideoFiltersVC.initWith(video: video, configuration: configuration)
+            let videoFiltersVC = YPVideoFiltersVC.initWith(video: video)
+            videoFiltersVC.saveCallback = { [unowned self] resultVideo in
+                self.items[indexPath.row] = YPMediaItem.video(v: resultVideo)
+                collectionView.reloadData()
+            }
             navigationController?.pushViewController(videoFiltersVC, animated: true)
             break
         }

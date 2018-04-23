@@ -21,17 +21,15 @@ public class YPVideoFiltersVC: UIViewController {
     @IBOutlet weak var coverThumbSelectorView: ThumbSelectorView!
 
     public var inputVideo: YPVideo!
+    public var saveCallback: ((_ resultVideo: YPVideo) -> Void)?
     public var inputAsset: AVAsset { return AVAsset(url: inputVideo.url!) }
-    public var configuration: YPImagePickerConfiguration!
     
     private var playbackTimeCheckerTimer: Timer?
     private var imageGenerator: AVAssetImageGenerator?
 
     /// Designated initializer
-    public class func initWith(video: YPVideo,
-                        configuration: YPImagePickerConfiguration) -> YPVideoFiltersVC {
+    public class func initWith(video: YPVideo) -> YPVideoFiltersVC {
         let vc = YPVideoFiltersVC(nibName: "YPVideoFiltersVC", bundle: Bundle(for: YPVideoFiltersVC.self))
-        vc.configuration = configuration
         vc.inputVideo = video
         
         return vc
@@ -40,16 +38,16 @@ public class YPVideoFiltersVC: UIViewController {
     override public func viewDidLoad() {
         super.viewDidLoad()
 
-        trimmerView.mainColor = configuration.colors.trimmerMainColor
-        trimmerView.handleColor = configuration.colors.trimmerHandleColor
-        trimmerView.positionBarColor = configuration.colors.positionLineColor
-        trimmerView.maxDuration = configuration.trimmerMaxDuration
-        trimmerView.minDuration = configuration.trimmerMinDuration
+        trimmerView.mainColor = YPImagePickerConfiguration.shared.colors.trimmerMainColor
+        trimmerView.handleColor = YPImagePickerConfiguration.shared.colors.trimmerHandleColor
+        trimmerView.positionBarColor = YPImagePickerConfiguration.shared.colors.positionLineColor
+        trimmerView.maxDuration = YPImagePickerConfiguration.shared.trimmerMaxDuration
+        trimmerView.minDuration = YPImagePickerConfiguration.shared.trimmerMinDuration
         
-        coverThumbSelectorView.thumbBorderColor = configuration.colors.coverSelectorColor
+        coverThumbSelectorView.thumbBorderColor = YPImagePickerConfiguration.shared.colors.coverSelectorColor
         
-        trimBottomItem.textLabel.text = configuration.wordings.trim
-        coverBottomItem.textLabel.text = configuration.wordings.cover
+        trimBottomItem.textLabel.text = YPImagePickerConfiguration.shared.wordings.trim
+        coverBottomItem.textLabel.text = YPImagePickerConfiguration.shared.wordings.cover
 
         trimBottomItem.button.addTarget(self, action: #selector(selectTrim), for: .touchUpInside)
         coverBottomItem.button.addTarget(self, action: #selector(selectCover), for: .touchUpInside)
@@ -67,8 +65,8 @@ public class YPVideoFiltersVC: UIViewController {
         didChangeThumbPosition(CMTime(seconds: 1, preferredTimescale: 1))
         
         // Navigation bar setup
-        navigationController?.navigationBar.tintColor = configuration.colors.pickerNavigationBarTextColor
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: configuration.wordings.save,
+        navigationController?.navigationBar.tintColor = YPImagePickerConfiguration.shared.colors.pickerNavigationBarTextColor
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: YPImagePickerConfiguration.shared.wordings.save,
                                                            style: .done,
                                                            target: self,
                                                            action: #selector(save))
@@ -89,7 +87,30 @@ public class YPVideoFiltersVC: UIViewController {
     }
     
     @objc public func save() {
-        navigationController?.popViewController(animated: true)
+        guard let saveCallback = saveCallback else { return print("Don't have saveCallback") }
+        
+        do {
+            let asset = AVURLAsset(url: inputVideo.url!)
+            let trimmedAsset = try asset
+                .assetByTrimming(startTime: trimmerView.startTime ?? kCMTimeZero,
+                                 endTime: trimmerView.endTime ?? inputAsset.duration)
+            
+            // Looks like file:///private/var/mobile/Containers/Data/Application/FAD486B4-784D-4397-B00C-AD0EFFB45F52/tmp/8A2B410A-BD34-4E3F-8CB5-A548A946C1F1.mov
+            let destinationURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingUniquePathComponent(pathExtension: YPImagePickerConfiguration.shared.videoExtension.fileExtension)
+            
+            try trimmedAsset.export(to: destinationURL) { [weak self] in
+                guard let weakSelf = self else { return }
+                
+                DispatchQueue.main.async {
+                    let resultVideo = YPVideo(thumbnail: weakSelf.coverImageView.image,
+                                          videoURL: destinationURL)
+                    saveCallback(resultVideo)
+                    weakSelf.navigationController?.popViewController(animated: true)
+                }
+            }
+        } catch let error {
+            print("💩 \(error)")
+        }
     }
     
     // MARK: Bottom buttons
