@@ -176,7 +176,7 @@ Original Fusuma author is [ytakz](http://ytakzk.me)
   <img src="https://raw.githubusercontent.com/Yummypets/YPImagePicker/master/Images/coreTeam1.png" width="70px">
 </a>
 <a href="https://github.com/NikKovIos">
-  <img src="https://raw.githubusercontent.com/Yummypets/YPImagePicker/master/Images/coreTeam1.png" width="70px">
+  <img src="https://raw.githubusercontent.com/Yummypets/YPImagePicker/master/Images/coreTeam2.png" width="70px">
 </a>
 
 ## Contributors 🙏
