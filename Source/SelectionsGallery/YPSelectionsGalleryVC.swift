@@ -38,8 +38,8 @@ public class YPSelectionsGalleryVC: UIViewController {
                                                             style: .done,
                                                             target: self,
                                                             action: #selector(done))
-        YPHelpers.changeBackButtonIcon(self)
-        YPHelpers.changeBackButtonTitle(self)
+        YPHelper.changeBackButtonIcon(self)
+        YPHelper.changeBackButtonTitle(self)
     }
 
     @objc private func done() {

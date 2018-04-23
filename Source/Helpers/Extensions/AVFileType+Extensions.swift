@@ -7,6 +7,7 @@
 //
 
 import AVFoundation
+import MobileCoreServices
 
 extension AVFileType {
     /// Fetch and extension for a file from UTI string

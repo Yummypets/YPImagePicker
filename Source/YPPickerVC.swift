@@ -173,7 +173,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         mode = modeFor(vc: vc)
         
         // Re-trigger permission check
-        if let vc = vc as? PermissionCheckable {
+        if let vc = vc as? YPPermissionCheckable {
             vc.checkPermission()
         }
         

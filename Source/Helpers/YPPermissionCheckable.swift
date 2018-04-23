@@ -9,7 +9,7 @@
 import UIKit
 import AVFoundation
 
-protocol PermissionCheckable {
+protocol YPPermissionCheckable {
     func checkPermission()
 }
 
@@ -20,7 +20,7 @@ protocol HasConfiguration {
 extension YPCameraVC: HasConfiguration { }
 extension YPVideoVC: HasConfiguration { }
 
-extension PermissionCheckable where Self: UIViewController, Self: HasConfiguration {
+extension YPPermissionCheckable where Self: UIViewController, Self: HasConfiguration {
     
     func checkPermission() {
         checkPermissionToAccessVideo { _ in }

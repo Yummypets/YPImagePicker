@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class YPVideoVC: UIViewController, PermissionCheckable {
+public class YPVideoVC: UIViewController, YPPermissionCheckable {
     
     public var didCaptureVideo: ((URL) -> Void)?
     
@@ -170,9 +170,9 @@ public class YPVideoVC: UIViewController, PermissionCheckable {
         let newPoint = CGPoint(x: point.x/viewsize.width, y: point.y/viewsize.height)
         videoHelper.focus(onPoint: newPoint)
         v.focusView.center = point
-        configureFocusView(v.focusView)
+        YPHelper.configureFocusView(v.focusView)
         v.addSubview(v.focusView)
-        animateFocusView(v.focusView)
+        YPHelper.animateFocusView(v.focusView)
     }
     
     // MARK: - UI State
@@ -211,7 +211,7 @@ public class YPVideoVC: UIViewController, PermissionCheckable {
         v.shotButton.setImage(state.isRecording ? videoStopImage : videoStartImage, for: .normal)
         v.flipButton.isEnabled = !state.isRecording
         v.progressBar.progress = state.progress
-        v.timeElapsedLabel.text = formattedStrigFrom(state.timeElapsed)
+        v.timeElapsedLabel.text = YPHelper.formattedStrigFrom(state.timeElapsed)
         UIView.animate(withDuration: 1, animations: v.layoutIfNeeded)
     }
     

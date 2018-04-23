@@ -10,7 +10,7 @@ import UIKit
 import AVFoundation
 import Photos
 
-public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, PermissionCheckable {
+public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, YPPermissionCheckable {
     
     public var didCapturePhoto: ((UIImage) -> Void)?
     let photoCapture = newPhotoCapture()
@@ -74,9 +74,9 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, Permissi
         
         // Animate focus view
         v.focusView.center = point
-        configureFocusView(v.focusView)
+        YPHelper.configureFocusView(v.focusView)
         v.addSubview(v.focusView)
-        animateFocusView(v.focusView)
+        YPHelper.animateFocusView(v.focusView)
     }
     
     public func tryToStartCamera() {

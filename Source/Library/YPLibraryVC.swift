@@ -9,7 +9,7 @@
 import UIKit
 import Photos
 
-public class YPLibraryVC: UIViewController, PermissionCheckable {
+public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     
     weak var delegate: YPLibraryViewDelegate?
     
@@ -312,8 +312,8 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
         
         if tooLong || tooShort {
             DispatchQueue.main.async {
-                let alert = tooLong ? YPAlerts.videoTooLongAlert(with: self.configuration)
-                    : YPAlerts.videoTooShortAlert(with: self.configuration)
+                let alert = tooLong ? YPAlert.videoTooLongAlert(with: self.configuration)
+                    : YPAlert.videoTooShortAlert(with: self.configuration)
                 self.present(alert, animated: true, completion: nil)
             }
             return false

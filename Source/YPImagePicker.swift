@@ -72,7 +72,7 @@ public class YPImagePicker: UINavigationController {
     
     private func setupNavigationBar() {
         navigationBar.isTranslucent = false
-        YPHelpers.changeBackButtonIcon(self)
+        YPHelper.changeBackButtonIcon(self)
     }
     
     func showHideActivityIndicator() {

@@ -9,8 +9,7 @@
 import Foundation
 import Photos
 
-extension PHFetchResult where ObjectType == PHAsset {
-        
+internal extension PHFetchResult where ObjectType == PHAsset {
     func assetsAtIndexPaths(_ indexPaths: [IndexPath]) -> [PHAsset] {
         if indexPaths.count == 0 { return [] }
         var assets: [PHAsset] = []

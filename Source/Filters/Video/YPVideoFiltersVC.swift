@@ -70,7 +70,7 @@ public class YPVideoFiltersVC: UIViewController {
                                                            style: .done,
                                                            target: self,
                                                            action: #selector(save))
-        YPHelpers.changeBackButtonTitle(self)
+        YPHelper.changeBackButtonTitle(self)
     }
     
     override public func viewDidAppear(_ animated: Bool) {

@@ -105,7 +105,7 @@ extension YPLibraryVC: UICollectionViewDelegate {
         
         let isVideo = (asset.mediaType == .video)
         cell.durationLabel.isHidden = !isVideo
-        cell.durationLabel.text = isVideo ? formattedStrigFrom(asset.duration) : ""
+        cell.durationLabel.text = isVideo ? YPHelper.formattedStrigFrom(asset.duration) : ""
         cell.multipleSelectionIndicator.isHidden = !multipleSelectionEnabled
         cell.isSelected = currentlySelectedIndex == indexPath.row
         

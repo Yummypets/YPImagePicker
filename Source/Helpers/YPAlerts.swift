@@ -1,5 +1,5 @@
 //
-//  YPAlerts.swift
+//  YPAlert.swift
 //  YPImagePicker
 //
 //  Created by Sacha DSO on 26/01/2018.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct YPAlerts {
+struct YPAlert {
     static func videoTooLongAlert(with config: YPImagePickerConfiguration) -> UIAlertController {
         let msg = String(format: config.wordings.videoDurationPopup.tooLongMessage, "\(config.videoFromLibraryTimeLimit)")
         let alert = UIAlertController(title: config.wordings.videoDurationPopup.title,
