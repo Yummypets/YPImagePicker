@@ -172,7 +172,12 @@ Considering the big code and design changes, this moved form a fork to a standal
 Original Fusuma author is [ytakz](http://ytakzk.me)
 
 ## Core Team
-[S4cha](https://github.com/S4cha) & [Nik Kov](https://github.com/NikKovIos)
+<a href="https://github.com/S4cha">
+  <img src="https://raw.githubusercontent.com/Yummypets/YPImagePicker/master/Images/coreTeam1.png" width="70px">
+</a>
+<a href="https://github.com/NikKovIos">
+  <img src="https://raw.githubusercontent.com/Yummypets/YPImagePicker/master/Images/coreTeam1.png" width="70px">
+</a>
 
 ## Contributors 🙏
 [ezisazis](https://github.com/ezisazis),
