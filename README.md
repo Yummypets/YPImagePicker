@@ -172,7 +172,7 @@ Considering the big code and design changes, this moved form a fork to a standal
 Original Fusuma author is [ytakz](http://ytakzk.me)
 
 ## Core Team
-[S4cha](https://github.com/S4cha) & [Nik Kov](https://github.com/NikKovIos)
+<img src="https://avatars0.githubusercontent.com/u/1812953?s=460&v=4" width="50px" > [S4cha](https://github.com/S4cha) <img src="https://avatars1.githubusercontent.com/u/16647690?s=460&v=4" width="50px"> [Nik Kov](https://github.com/NikKovIos)
 
 ## Contributors 🙏
 [ezisazis](https://github.com/ezisazis),
