@@ -59,12 +59,8 @@ public class YPVideoView: UIView {
 // MARK: - Video handling
 extension YPVideoView {
     public func loadVideo(video: YPVideo) {
-        if let url = video.url {
-            let player = AVPlayer(url: url)
-            playerLayer.player = player
-        } else {
-            print("⚠️ YPVideoView >>> Video URL is invalid"); return
-        }
+        let player = AVPlayer(url: video.url)
+        playerLayer.player = player
     }
     
     /// Convenience func to pause or unpause video dependely of state

@@ -1,5 +1,5 @@
 //
-//  YPFiltersVC.swift
+//  YPPhotoFiltersVC.swift
 //  photoTaking
 //
 //  Created by Sacha Durand Saint Omer on 21/10/16.
@@ -8,29 +8,32 @@
 
 import UIKit
 
-open class YPFiltersVC: UIViewController {
+open class YPPhotoFiltersVC: UIViewController {
     
-    override open var prefersStatusBarHidden: Bool { return configuration.hidesStatusBar }
+    override open var prefersStatusBarHidden: Bool { return YPImagePickerConfiguration.shared.hidesStatusBar }
     
-    internal let configuration: YPImagePickerConfiguration!
     var v = YPFiltersView()
+    
     var filterPreviews = [YPFilterPreview]()
     var filters = [YPFilter]()
-    var originalImage = UIImage()
+    
+    var inputPhoto: YPPhoto!
     var thumbImage = UIImage()
-    var didSelectImage: ((UIImage, Bool) -> Void)?
+    
+    var saveCallback: ((YPPhoto) -> Void)?
     var isImageFiltered = false
+    public var isFromSelectionVC = false
     
     override open func loadView() { view = v }
     
-    required public init(image: UIImage, configuration: YPImagePickerConfiguration) {
-        self.configuration = configuration
+    required public init(inputPhoto: YPPhoto, isFromSelectionVC: Bool) {
         super.init(nibName: nil, bundle: nil)
-        title = configuration.wordings.filter
-        self.originalImage = image
         
-        //use the configuration to create all filters
-        for filterDescriptor in configuration.filters {
+        self.inputPhoto = inputPhoto
+        self.isFromSelectionVC = isFromSelectionVC
+        title = YPImagePickerConfiguration.shared.wordings.filter
+        
+        for filterDescriptor in YPImagePickerConfiguration.shared.filters {
             filterPreviews.append(YPFilterPreview(filterDescriptor.name))
             filters.append(YPFilter(filterDescriptor.filterName))
         }
@@ -52,26 +55,38 @@ open class YPFiltersVC: UIViewController {
     
     override open func viewDidLoad() {
         super.viewDidLoad()
-        v.imageView.image = originalImage
-        thumbImage = thumbFromImage(originalImage)
+        v.imageView.image = inputPhoto.image
+        thumbImage = thumbFromImage(inputPhoto.image)
         v.collectionView.register(YPFilterCollectionViewCell.self, forCellWithReuseIdentifier: "FilterCell")
         v.collectionView.dataSource = self
         v.collectionView.delegate = self
         v.collectionView.selectItem(at: IndexPath(row: 0, section: 0),
                                                   animated: false,
                                                   scrollPosition: UICollectionViewScrollPosition.bottom)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done,
+        
+        // Navigation bar setup
+        navigationController?.navigationBar.tintColor = YPImagePickerConfiguration.shared.colors.pickerNavigationBarTextColor
+        let rightBarButtonTitle = isFromSelectionVC ? YPImagePickerConfiguration.shared.wordings.save : YPImagePickerConfiguration.shared.wordings.next
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: rightBarButtonTitle,
+                                                            style: .done,
                                                             target: self,
-                                                            action: #selector(done))
+                                                            action: #selector(save))
+        YPHelper.changeBackButtonIcon(self)
+        YPHelper.changeBackButtonTitle(self)
     }
     
-    @objc
-    func done() {
-        didSelectImage?(v.imageView.image!, isImageFiltered)
+    @objc func save() {
+        let outputImage = v.imageView.image!
+
+        if isImageFiltered && YPImagePickerConfiguration.shared.shouldSaveNewPicturesToAlbum {
+            YPPhotoSaver.trySaveImage(outputImage, inAlbumNamed: YPImagePickerConfiguration.shared.albumName)
+        }
+        
+        saveCallback?(YPPhoto(image: v.imageView.image!))
     }
 }
 
-extension YPFiltersVC: UICollectionViewDataSource {
+extension YPPhotoFiltersVC: UICollectionViewDataSource {
     
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return filterPreviews.count
@@ -97,18 +112,16 @@ extension YPFiltersVC: UICollectionViewDataSource {
     }
 }
 
-extension YPFiltersVC: UICollectionViewDelegate {
+extension YPPhotoFiltersVC: UICollectionViewDelegate {
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let selectedFilter = filters[indexPath.row]
         DispatchQueue.global(qos: DispatchQoS.QoSClass.default).async {
-            let filteredImage = selectedFilter.filter(self.originalImage)
+            let filteredImage = selectedFilter.filter(self.inputPhoto.image)
             DispatchQueue.main.async {
                 self.v.imageView.image = filteredImage
             }
         }
         
-        if selectedFilter.name != "" {
-            self.isImageFiltered = true
-        }
+        self.isImageFiltered = selectedFilter.name != ""
     }
 }

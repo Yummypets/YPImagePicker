@@ -51,7 +51,7 @@ class ViewController: UIViewController {
 //        config.libraryTargetImageSize = .cappedTo(size: 1024)
 //
 //        /// Enables videos within the library. Defaults to false
-            config.showsVideoInLibrary = true
+        config.showsVideoInLibrary = true
 //
 //        /// Enables selecting the front camera by default, useful for avatars. Defaults to false
 //        config.usesFrontCamera = true

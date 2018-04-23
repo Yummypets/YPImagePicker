@@ -12,19 +12,23 @@ import AVFoundation
 
 public struct YPPhoto {
     public let image: UIImage
+    public let fromCamera: Bool
+    
+    init(image: UIImage, fromCamera: Bool = false) {
+        self.image = image
+        self.fromCamera = fromCamera
+    }
 }
 
 public class YPVideo {
-    public var thumbnail: UIImage?
-    public var url: URL?
-    
-    init(thumbnail: UIImage?, videoURL: URL?) {
+    public var thumbnail: UIImage
+    public var url: URL
+    public let fromCamera: Bool
+
+    init(thumbnail: UIImage, videoURL: URL, fromCamera: Bool = false) {
         self.thumbnail = thumbnail
         self.url = videoURL
-    }
-    
-    convenience init() {
-        self.init(thumbnail: nil, videoURL: nil)
+        self.fromCamera = fromCamera
     }
 }
 

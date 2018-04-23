@@ -16,13 +16,13 @@ public func createVideoItem(videoURL: URL,
                             activityIdicatorClosure: ((_ show: Bool) -> Void)? = nil,
                             configuration: YPImagePickerConfiguration,
                             completion: @escaping (_ video: YPVideo) -> Void) {
-    let videoItem = YPVideo()
     
-    videoItem.url = videoURL
+    let videoItem = YPVideo(thumbnail: thumbnailFromVideoPath(videoURL),
+                            videoURL: videoURL)
+    
     activityIdicatorClosure?(true)
     
     DispatchQueue.global(qos: .background).async {
-        videoItem.thumbnail = thumbnailFromVideoPath(videoURL)
         
         // Compress Video to 640x480 format.
         let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)

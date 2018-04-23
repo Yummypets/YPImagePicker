@@ -42,9 +42,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     
     /// Private callbacks to YPImagePicker
     public var didClose:(() -> Void)?
-    public var didSelectImage: ((UIImage, Bool) -> Void)?
-    public var didSelectVideo: ((URL) -> Void)?
-    public var didSelectMultipleItems: (([YPMediaItem]) -> Void)?
+    public var didSelectItems: (([YPMediaItem]) -> Void)?
 
     enum Mode {
         case library
@@ -81,7 +79,8 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         if configuration.screens.contains(.photo) {
             cameraVC = YPCameraVC(configuration: configuration)
             cameraVC?.didCapturePhoto = { [unowned self] img in
-                self.didSelectImage?(img, true)
+                self.didSelectItems?([YPMediaItem.photo(p: YPPhoto(image: img,
+                                                                   fromCamera: true))])
             }
         }
         
@@ -89,7 +88,10 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         if configuration.screens.contains(.video) {
             videoVC = YPVideoVC(configuration: configuration)
             videoVC?.didCaptureVideo = { [unowned self] videoURL in
-                self.didSelectVideo?(videoURL)
+                self.didSelectItems?([YPMediaItem
+                    .video(v: YPVideo(thumbnail: thumbnailFromVideoPath(videoURL),
+                                      videoURL: videoURL,
+                                      fromCamera: true))])
             }
         }
     
@@ -277,7 +279,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         case .library:
             setTitleViewWithTitle(aTitle: libraryVC?.title ?? "")
             navigationItem.rightBarButtonItem = UIBarButtonItem(title: configuration.wordings.next,
-                                                                style: .done,
+                                                                style: .plain,
                                                                 target: self,
                                                                 action: #selector(done))
             navigationItem.rightBarButtonItem?.tintColor = configuration.colors.pickerNavigationBarTextColor
@@ -307,14 +309,16 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         
         if mode == .library {
             libraryVC.doAfterPermissionCheck { [weak self] in
-                    libraryVC.selectedMedia(photoCallback: { img in
-                        self?.didSelectImage?(img, false)
-                    }, videoCallback: { videoURL in
-                        self?.didSelectVideo?(videoURL)
-                    }, multipleItemsCallback: { items in
-                        self?.libraryViewFinishedLoadingImage()
-                        self?.didSelectMultipleItems?(items)
-                    })
+                libraryVC.selectedMedia(photoCallback: { img in
+                    self?.didSelectItems?([YPMediaItem
+                        .photo(p: YPPhoto(image: img))])
+                }, videoCallback: { videoURL in
+                    self?.didSelectItems?([YPMediaItem
+                        .video(v: YPVideo(thumbnail: thumbnailFromVideoPath(videoURL),
+                                          videoURL: videoURL))])
+                }, multipleItemsCallback: { items in
+                    self?.didSelectItems?(items)
+                })
             }
         }
     }
@@ -329,18 +333,16 @@ extension YPPickerVC: YPLibraryViewDelegate {
     
     public func libraryViewStartedLoadingImage() {
         DispatchQueue.main.async {
-            let spinner = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: spinner)
-            spinner.startAnimating()
+            YPLoaders.enableActivityIndicator(barButtonItem: &self.navigationItem.rightBarButtonItem)
         }
     }
     
     public func libraryViewFinishedLoadingImage() {
         DispatchQueue.main.async {
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: self.configuration.wordings.next,
-                                                                style: .done,
-                                                                target: self,
-                                                                action: #selector(self.done))
+            YPLoaders.disableActivityIndicator(barButtonItem: &self.navigationItem.rightBarButtonItem,
+                                               title: self.configuration.wordings.next,
+                                               target: self,
+                                               action: #selector(self.done))
         }
     }
     

@@ -22,15 +22,18 @@ public class YPVideoFiltersVC: UIViewController {
 
     public var inputVideo: YPVideo!
     public var saveCallback: ((_ resultVideo: YPVideo) -> Void)?
-    public var inputAsset: AVAsset { return AVAsset(url: inputVideo.url!) }
+    public var inputAsset: AVAsset { return AVAsset(url: inputVideo.url) }
     
     private var playbackTimeCheckerTimer: Timer?
     private var imageGenerator: AVAssetImageGenerator?
+    private var isFromSelectionVC = false
 
     /// Designated initializer
-    public class func initWith(video: YPVideo) -> YPVideoFiltersVC {
+    public class func initWith(video: YPVideo,
+                               isFromSelectionVC: Bool) -> YPVideoFiltersVC {
         let vc = YPVideoFiltersVC(nibName: "YPVideoFiltersVC", bundle: Bundle(for: YPVideoFiltersVC.self))
         vc.inputVideo = video
+        vc.isFromSelectionVC = isFromSelectionVC
         
         return vc
     }
@@ -66,10 +69,11 @@ public class YPVideoFiltersVC: UIViewController {
         
         // Navigation bar setup
         navigationController?.navigationBar.tintColor = YPImagePickerConfiguration.shared.colors.pickerNavigationBarTextColor
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: YPImagePickerConfiguration.shared.wordings.save,
-                                                           style: .done,
-                                                           target: self,
-                                                           action: #selector(save))
+        let rightBarButtonTitle = isFromSelectionVC ? YPImagePickerConfiguration.shared.wordings.save : YPImagePickerConfiguration.shared.wordings.next
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: rightBarButtonTitle,
+                                                            style: .done,
+                                                            target: self,
+                                                            action: #selector(save))
         YPHelper.changeBackButtonTitle(self)
     }
     
@@ -88,9 +92,10 @@ public class YPVideoFiltersVC: UIViewController {
     
     @objc public func save() {
         guard let saveCallback = saveCallback else { return print("Don't have saveCallback") }
-        
+        YPLoaders.enableActivityIndicator(barButtonItem: &self.navigationItem.rightBarButtonItem)
+
         do {
-            let asset = AVURLAsset(url: inputVideo.url!)
+            let asset = AVURLAsset(url: inputVideo.url)
             let trimmedAsset = try asset
                 .assetByTrimming(startTime: trimmerView.startTime ?? kCMTimeZero,
                                  endTime: trimmerView.endTime ?? inputAsset.duration)
@@ -102,8 +107,8 @@ public class YPVideoFiltersVC: UIViewController {
                 guard let weakSelf = self else { return }
                 
                 DispatchQueue.main.async {
-                    let resultVideo = YPVideo(thumbnail: weakSelf.coverImageView.image,
-                                          videoURL: destinationURL)
+                    let resultVideo = YPVideo(thumbnail: weakSelf.coverImageView.image!,
+                                              videoURL: destinationURL)
                     saveCallback(resultVideo)
                     weakSelf.navigationController?.popViewController(animated: true)
                 }

@@ -72,13 +72,21 @@ extension YPSelectionsGalleryVC: UICollectionViewDelegate {
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let item = items[indexPath.row]
         switch item {
-        case .photo:
-            /// open image filter
+        case .photo(let photo):
+            let photoFiltersVC = YPPhotoFiltersVC(inputPhoto: photo,
+                                                  isFromSelectionVC: true)
+            photoFiltersVC.saveCallback = { outputPhoto in
+                self.items[indexPath.row] = YPMediaItem.photo(p: outputPhoto)
+                collectionView.reloadData()
+                photoFiltersVC.navigationController?.popViewController(animated: true)
+            }
+            navigationController?.pushViewController(photoFiltersVC, animated: true)
             break
         case .video(let video):
-            let videoFiltersVC = YPVideoFiltersVC.initWith(video: video)
-            videoFiltersVC.saveCallback = { [unowned self] resultVideo in
-                self.items[indexPath.row] = YPMediaItem.video(v: resultVideo)
+            let videoFiltersVC = YPVideoFiltersVC.initWith(video: video,
+                                                           isFromSelectionVC: true)
+            videoFiltersVC.saveCallback = { [unowned self] outputVideo in
+                self.items[indexPath.row] = YPMediaItem.video(v: outputVideo)
                 collectionView.reloadData()
             }
             navigationController?.pushViewController(videoFiltersVC, animated: true)

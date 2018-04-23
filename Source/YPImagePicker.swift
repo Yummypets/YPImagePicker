@@ -96,76 +96,70 @@ public class YPImagePicker: UINavigationController {
         setupActivityIndicator()
         setupNavigationBar()
         
-        picker.didSelectImage = { [unowned self] pickedImage, isNewPhoto in
-            if YPImagePickerConfiguration.shared.showsFilters {
-                let filterVC = YPFiltersVC(image: pickedImage, configuration: YPImagePickerConfiguration.shared)
-                filterVC.didSelectImage = { filteredImage, isImageFiltered in
-                    
-                    let completion = { (image: UIImage) in
-                        let mediaItem = YPMediaItem.photo(p: YPPhoto(image: image))
-                        YPImagePickerConfiguration.shared.delegate?.imagePicker(self, didSelect: [mediaItem])
-                        
-                        if (isNewPhoto || isImageFiltered) && YPImagePickerConfiguration.shared.shouldSaveNewPicturesToAlbum {
-                            YPPhotoSaver.trySaveImage(filteredImage, inAlbumNamed: YPImagePickerConfiguration.shared.albumName)
-                        }
-                    }
-                    
+        picker.didSelectItems = { [unowned self] items in
+            let showsFilters = YPImagePickerConfiguration.shared.showsFilters
+            
+            // Use Fade transition instead of default push animation
+            let transition = CATransition()
+            transition.duration = 0.3
+            transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+            transition.type = kCATransitionFade
+            self.view.layer.add(transition, forKey: nil)
+            
+            // Multiple items flow
+            if items.count > 1 {
+                let selectionsGalleryVC = YPSelectionsGalleryVC.initWith(items: items,
+                                                                         imagePicker: self)
+                self.pushViewController(selectionsGalleryVC, animated: true)
+                return
+            }
+            
+            // One item flow
+            let item = items.first!
+            
+            switch item {
+            case .photo(let photo):
+                // TODO: Save new photo ?
+                let completion = { (image: UIImage) in
+                    let mediaItem = YPMediaItem.photo(p: YPPhoto(image: image))
+                    YPImagePickerConfiguration.shared.delegate?.imagePicker(self, didSelect: [mediaItem])
+                }
+                
+                func showCropVC(photo: YPPhoto, completion: @escaping (_ image: UIImage) -> Void) {
                     if case let YPCropType.rectangle(ratio) = YPImagePickerConfiguration.shared.showsCrop {
-                        let cropVC = YPCropVC(configuration: YPImagePickerConfiguration.shared, image: filteredImage, ratio: ratio)
+                        let cropVC = YPCropVC(image: photo.image, ratio: ratio)
                         cropVC.didFinishCropping = { croppedImage in
                             completion(croppedImage)
                         }
                         self.pushViewController(cropVC, animated: true)
                     } else {
-                        completion(filteredImage)
+                        completion(photo.image)
                     }
                 }
                 
-                // Use Fade transition instead of default push animation
-                let transition = CATransition()
-                transition.duration = 0.3
-                transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
-                transition.type = kCATransitionFade
-                self.view.layer.add(transition, forKey: nil)
-                
-                self.pushViewController(filterVC, animated: false)
-            } else {
-                let completion = { (image: UIImage) in
-                    let mediaItem = YPMediaItem.photo(p: YPPhoto(image: image))
-                    YPImagePickerConfiguration.shared.delegate?.imagePicker(self, didSelect: [mediaItem])
-                    
-                    if isNewPhoto && YPImagePickerConfiguration.shared.shouldSaveNewPicturesToAlbum {
-                        YPPhotoSaver.trySaveImage(pickedImage, inAlbumNamed: YPImagePickerConfiguration.shared.albumName)
+                if showsFilters {
+                    let filterVC = YPPhotoFiltersVC(inputPhoto: photo,
+                                                    isFromSelectionVC: false)
+                    // Show filters and then crop
+                    filterVC.saveCallback = { outputPhoto in
+                        showCropVC(photo: outputPhoto, completion: completion)
                     }
-                }
-                if case let YPCropType.rectangle(ratio) = YPImagePickerConfiguration.shared.showsCrop {
-                    let cropVC = YPCropVC(configuration: YPImagePickerConfiguration.shared, image: pickedImage, ratio: ratio)
-                    cropVC.didFinishCropping = { croppedImage in
-                        completion(croppedImage)
-                    }
-                    self.pushViewController(cropVC, animated: true)
+                    self.pushViewController(filterVC, animated: false)
                 } else {
-                    completion(pickedImage)
+                    showCropVC(photo: photo, completion: completion)
+                }
+            case .video(let video):
+                if showsFilters {
+                    let videoFiltersVC = YPVideoFiltersVC.initWith(video: video,
+                                                                   isFromSelectionVC: false)
+                    videoFiltersVC.saveCallback = { [unowned self] outputVideo in
+                        YPImagePickerConfiguration.shared.delegate?.imagePicker(self, didSelect: [YPMediaItem.video(v: outputVideo)])
+                    }
+                    self.pushViewController(videoFiltersVC, animated: true)
+                } else {
+                    YPImagePickerConfiguration.shared.delegate?.imagePicker(self, didSelect: [YPMediaItem.video(v: video)])
                 }
             }
-        }
-        
-        picker.didSelectVideo = { [unowned self] videoURL in
-            createVideoItem(videoURL: videoURL,
-                            activityIdicatorClosure: { _ in
-                                self.showHideActivityIndicator()
-            },
-                            configuration: YPImagePickerConfiguration.shared,
-                            completion: { video in
-                                let mediaItem = YPMediaItem.video(v: video)
-                                YPImagePickerConfiguration.shared.delegate?.imagePicker(self, didSelect: [mediaItem])
-            })
-        }
-        
-        picker.didSelectMultipleItems = { items in
-            let selectionsGalleryVC = YPSelectionsGalleryVC.initWith(items: items,
-                                                                     imagePicker: self)
-            self.pushViewController(selectionsGalleryVC, animated: true)
         }
     }
 }
