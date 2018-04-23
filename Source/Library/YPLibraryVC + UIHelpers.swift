@@ -19,6 +19,24 @@ extension YPLibraryVC {
             v.imageCropView.minimumZoomScale = v.imageCropView.squaredZoomScale
         }
         v.refreshCropControl()
+        
+        // Re-apply correct scrollview settings if image has already been adjusted in
+        // multiple selection mode so that user can see where they left off.
+        if let currentlySelectedIndex = currentlySelectedIndex,
+            multipleSelectionEnabled,
+            selection.contains(where: { $0.index == currentlySelectedIndex }) {
+            guard let selectedAssetIndex = selection.index(where: { $0.index == currentlySelectedIndex }) else {
+                return
+            }
+            let selectedAsset = selection[selectedAssetIndex]
+            // ZoomScale needs to be set first.
+            if let zoomScale = selectedAsset.scrollViewZoomScale {
+                v.imageCropView.zoomScale = zoomScale
+            }
+            if let contentOffset = selectedAsset.scrollViewContentOffset {
+                v.imageCropView.contentOffset = contentOffset
+            }
+        }
     }
     
     func play(videoItem: AVPlayerItem) {
