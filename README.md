@@ -171,6 +171,19 @@ This project has been first inspired by [Fusuma](https://github.com/ytakzk/Fusum
 Considering the big code and design changes, this moved form a fork to a standalone separate repo, also for discoverability purposes.
 Original Fusuma author is [ytakz](http://ytakzk.me)
 
+## Core Team
+[S4cha](https://github.com/S4cha) & [Nik Kov](https://github.com/NikKovIos)
+
+## Contributors 🙏
+[ezisazis](https://github.com/ezisazis),
+[hanikeddah](https://github.com/hanikeddah),
+[tahaburak](https://github.com/tahaburak),
+[ajkolean](https://github.com/ajkolean),
+[Anarchoschnitzel](https://github.com/Anarchoschnitzel),
+[Emil](https://github.com/heitara),
+[Rafael Damasceno](https://github.com/DamascenoRafael),
+[cenkingunlugu](https://github.com/https://github.com/cenkingunlugu)
+
 ## License
 YPImagePicker is released under the MIT license.  
 See [LICENSE](LICENSE) for details.
