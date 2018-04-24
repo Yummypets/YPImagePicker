@@ -18,9 +18,9 @@ final class YPLibraryView: UIView {
     @IBOutlet weak var imageCropView: YPImageCropView!
     @IBOutlet weak var imageCropViewContainer: YPImageCropViewContainer!
     @IBOutlet weak var imageCropViewConstraintTop: NSLayoutConstraint!
+    
     let maxNumberWarningView = UIView()
     let maxNumberWarningLabel = UILabel()
-    
     let line = UIView()
     
     override func awakeFromNib() {
