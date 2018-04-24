@@ -16,7 +16,6 @@
 		997127C1208F45B30089272B /* PryntTrimmerView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 997127C0208F45B30089272B /* PryntTrimmerView.framework */; };
 		997A4CD21F4C3DC0009C3703 /* Stevia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 997A4CD11F4C3DC0009C3703 /* Stevia.framework */; };
 		99A052A61F20DF21005600B3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 99A052A81F20DF21005600B3 /* Localizable.strings */; };
-		EB473E12208C949200D16105 /* Trimmer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = EB473E10208C949100D16105 /* Trimmer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,7 +50,6 @@
 			dstSubfolderSpec = 10;
 			files = (
 				99428A281E7BE1D600B765A9 /* YPImagePicker.framework in Embed Frameworks */,
-				EB473E12208C949200D16105 /* Trimmer.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -76,7 +74,6 @@
 		99A052AB1F20DF54005600B3 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A7B961E020755CF500216346 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
 		EB11EE9A2057C58600A19365 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
-		EB473E10208C949100D16105 /* Trimmer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Trimmer.framework; path = ../Resources/Trimmer.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,7 +133,6 @@
 			isa = PBXGroup;
 			children = (
 				997127C0208F45B30089272B /* PryntTrimmerView.framework */,
-				EB473E10208C949100D16105 /* Trimmer.framework */,
 				997A4CD11F4C3DC0009C3703 /* Stevia.framework */,
 			);
 			name = Frameworks;
@@ -178,7 +174,7 @@
 				TargetAttributes = {
 					99428A051E7BE02400B765A9 = {
 						CreatedOnToolsVersion = 8.2;
-						DevelopmentTeam = 4TATSTJ3J3;
+						DevelopmentTeam = T4Q29AP976;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -424,7 +420,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 4TATSTJ3J3;
+				DEVELOPMENT_TEAM = T4Q29AP976;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/../Carthage/Build/iOS",
@@ -433,7 +429,7 @@
 				INFOPLIST_FILE = YPImagePickerExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.octopepper.YPImagePickerExampl;
+				PRODUCT_BUNDLE_IDENTIFIER = test.YPImagePickerExampl;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 			};
@@ -444,7 +440,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 4TATSTJ3J3;
+				DEVELOPMENT_TEAM = T4Q29AP976;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/../Carthage/Build/iOS",
@@ -453,7 +449,7 @@
 				INFOPLIST_FILE = YPImagePickerExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.octopepper.YPImagePickerExampl;
+				PRODUCT_BUNDLE_IDENTIFIER = test.YPImagePickerExampl;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 			};

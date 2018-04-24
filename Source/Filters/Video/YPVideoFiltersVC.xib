@@ -52,10 +52,10 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dMy-Fy-gyR">
                     <rect key="frame" x="0.0" y="395" width="375" height="232"/>
                     <subviews>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W4N-1E-jNP" customClass="TrimmerView" customModule="YPImagePicker" customModuleProvider="target">
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W4N-1E-jNP" customClass="TrimmerView" customModule="PryntTrimmerView">
                             <rect key="frame" x="30" y="77.5" width="315" height="77"/>
                         </view>
-                        <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Tqq-Gf-aeR" customClass="ThumbSelectorView" customModule="YPImagePicker" customModuleProvider="target">
+                        <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Tqq-Gf-aeR" customClass="ThumbSelectorView" customModule="PryntTrimmerView">
                             <rect key="frame" x="30" y="77.5" width="315" height="77"/>
                         </view>
                     </subviews>
