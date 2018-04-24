@@ -8,6 +8,7 @@
 
 import UIKit
 import Photos
+import PryntTrimmerView
 
 public class YPVideoFiltersVC: UIViewController {
     @IBOutlet weak var trimBottomItem: YPMenuItem!
