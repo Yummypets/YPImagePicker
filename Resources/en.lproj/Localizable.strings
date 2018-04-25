@@ -20,6 +20,7 @@
 "YPImagePickerFilter" = "Filter";
 "YPImagePickerTrim" = "Trim";
 "YPImagePickerCover" = "Cover";
+"YPImagePickerCrop" = "Crop";
 "YPImagePickerVideoDurationTitle" = "Video duration";
 "YPImagePickerVideoTooShort" = "The video must not be shorter than %@ seconds";
 "YPImagePickerVideoTooLong" = "Pick a video less than %@ seconds long";

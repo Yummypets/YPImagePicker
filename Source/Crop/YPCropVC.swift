@@ -30,7 +30,7 @@ class YPCropVC: UIViewController {
         v = YPCropView(image: image, ratio: ratio)
         originalImage = image
         super.init(nibName: nil, bundle: nil)
-        self.title = "Crop"
+        self.title = YPConfig.wordings.crop
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -44,18 +44,20 @@ class YPCropVC: UIViewController {
     }
     
     func setupToolbar() {
-        let cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel,
+        let cancelButton = UIBarButtonItem(title: YPConfig.wordings.cancel,
+                                           style: .plain,
                                            target: self,
                                            action: #selector(cancel))
         cancelButton.tintColor = .white
         
         let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         
-        let chooseButton = UIBarButtonItem(barButtonSystemItem: .save,
+        let saveButton = UIBarButtonItem(title: YPConfig.wordings.save,
+                                           style: .plain,
                                            target: self,
                                            action: #selector(done))
-        chooseButton.tintColor = .white
-        v.toolbar.items = [cancelButton, flexibleSpace, chooseButton]
+        saveButton.tintColor = .white
+        v.toolbar.items = [cancelButton, flexibleSpace, saveButton]
     }
     
     func setupGestureRecognizers() {
