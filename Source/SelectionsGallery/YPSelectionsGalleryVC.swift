@@ -34,7 +34,7 @@ public class YPSelectionsGalleryVC: UIViewController {
         collectionV.register(UINib(nibName: "YPSelectionsGalleryCVCell", bundle: bundle), forCellWithReuseIdentifier: "item")
         
         // Setup navigation bar
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: YPImagePickerConfiguration.shared.wordings.next,
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: YPConfig.wordings.next,
                                                             style: .done,
                                                             target: self,
                                                             action: #selector(done))
@@ -43,7 +43,7 @@ public class YPSelectionsGalleryVC: UIViewController {
     }
 
     @objc private func done() {
-        YPImagePickerConfiguration.shared.delegate?.imagePicker(imagePicker, didSelect: items)
+        YPConfig.delegate?.imagePicker(imagePicker, didSelect: items)
     }
 }
 

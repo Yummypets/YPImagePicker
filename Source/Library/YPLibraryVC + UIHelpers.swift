@@ -15,7 +15,7 @@ extension YPLibraryVC {
         v.imageCropView.imageSize = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
         v.imageCropView.image = image
         v.imageCropView.setFitImage(true)
-        if configuration.onlySquareImagesFromLibrary {
+        if YPConfig.onlySquareImagesFromLibrary {
             v.imageCropView.minimumZoomScale = v.imageCropView.squaredZoomScale
         }
         v.refreshCropControl()

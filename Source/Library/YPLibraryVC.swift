@@ -13,7 +13,6 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     
     weak var delegate: YPLibraryViewDelegate?
     
-    internal let configuration: YPImagePickerConfiguration!
     private var initialized = false
     
     var multipleSelectionEnabled = false
@@ -28,10 +27,9 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
 
     // MARK: - Init
     
-    public required init(configuration: YPImagePickerConfiguration) {
-        self.configuration = configuration
+    public required init() {
         super.init(nibName: nil, bundle: nil)
-        title = configuration.wordings.libraryTitle
+        title = YPConfig.wordings.libraryTitle
     }
     
     public required init?(coder aDecoder: NSCoder) {
@@ -48,16 +46,17 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         if mediaManager.fetchResult != nil {
             return
         }
+        
         setupCollectionView()
         registerForLibraryChanges()
         panGestureHelper.registerForPanGesture(on: v)
         registerForTapOnPreview()
         refreshMediaRequest()
-        v.imageCropViewContainer.onlySquareImages = configuration.onlySquareImagesFromLibrary
         
-        v.imageCropViewContainer.multipleSelectionButton.isHidden = !(configuration.maxNumberOfItems > 1)
-        v.imageCropView.onlySquareImages = configuration.onlySquareImagesFromLibrary
-        v.maxNumberWarningLabel.text = String(format: configuration.wordings.warningMaxItemsLimit, configuration.maxNumberOfItems)
+        v.imageCropViewContainer.onlySquareImages = YPConfig.onlySquareImagesFromLibrary
+        v.imageCropViewContainer.multipleSelectionButton.isHidden = !(YPConfig.maxNumberOfItems > 1)
+        v.imageCropView.onlySquareImages = YPConfig.onlySquareImagesFromLibrary
+        v.maxNumberWarningLabel.text = String(format: YPConfig.wordings.warningMaxItemsLimit, YPConfig.maxNumberOfItems)
     }
     
     // MARK: - View Lifecycle
@@ -193,7 +192,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         case .authorized:
             block(true)
         case .restricted, .denied:
-            let popup = YPPermissionDeniedPopup(configuration: configuration)
+            let popup = YPPermissionDeniedPopup()
             let alert = popup.popup(cancelBlock: {
                 block(false)
             })
@@ -215,18 +214,18 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         
         if let collection = self.mediaManager.collection {
-            if !configuration.showsVideoInLibrary {
+            if !YPConfig.showsVideoInLibrary {
                 options.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
             }
             mediaManager.fetchResult = PHAsset.fetchAssets(in: collection, options: options)
         } else {
-            mediaManager.fetchResult = configuration.showsVideoInLibrary
+            mediaManager.fetchResult = YPConfig.showsVideoInLibrary
                 ? PHAsset.fetchAssets(with: options)
                 : PHAsset.fetchAssets(with: PHAssetMediaType.image, options: options)
         }
         
         if mediaManager.fetchResult.count > 0 {
-            changeImage(mediaManager.fetchResult[0])
+            changeAsset(mediaManager.fetchResult[0])
             v.collectionView.reloadData()
             v.collectionView.selectItem(at: IndexPath(row: 0, section: 0),
                                              animated: false,
@@ -284,16 +283,17 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         }
     }
 
-    func changeImage(_ asset: PHAsset) {
+    func changeAsset(_ asset: PHAsset) {
         mediaManager.selectedAsset = asset
         latestImageTapped = asset.localIdentifier
-        asset.mediaType == .video ? v.setVideoMode() : v.setPhotoMode()
         v.hidePlayer()
         
         switch asset.mediaType {
         case .image:
+            v.imageCropViewContainer.isVideoMode = false
             self.changeImagePhoto(asset)
         case .video:
+            v.imageCropViewContainer.isVideoMode = true
             self.changeImageVideo(asset)
         case .audio, .unknown:
             ()
@@ -307,13 +307,12 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
             return true
         }
         
-        let tooLong = asset.duration > configuration.videoFromLibraryTimeLimit
-        let tooShort = asset.duration < configuration.videoMinimumTimeLimit
+        let tooLong = asset.duration > YPConfig.videoFromLibraryTimeLimit
+        let tooShort = asset.duration < YPConfig.videoMinimumTimeLimit
         
         if tooLong || tooShort {
             DispatchQueue.main.async {
-                let alert = tooLong ? YPAlert.videoTooLongAlert(with: self.configuration)
-                    : YPAlert.videoTooShortAlert(with: self.configuration)
+                let alert = tooLong ? YPAlert.videoTooLongAlert() : YPAlert.videoTooShortAlert()
                 self.present(alert, animated: true, completion: nil)
             }
             return false
@@ -380,7 +379,6 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                     case .video:
                         self.fetchVideoURL(for: asset.asset, callback: { videoURL in
                             createVideoItem(videoURL: videoURL,
-                                            configuration: self.configuration,
                                             completion: { video in
                                                 resultMediaItems.append(YPMediaItem.video(v: video))
                                                 asyncGroup.leave()
@@ -429,7 +427,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     
     // Reduce image size further if needed libraryTargetImageSize is capped.
     func resizedImageIfNeeded(image: UIImage) -> UIImage {
-                if case let YPLibraryImageSize.cappedTo(size: capped) = self.configuration.libraryTargetImageSize {
+                if case let YPLibraryImageSize.cappedTo(size: capped) = YPConfig.libraryTargetImageSize {
             let cappedWidth = min(image.size.width, capped)
             let cappedHeight = min(image.size.height, capped)
             let cappedSize = CGSize(width: cappedWidth, height: cappedHeight)

@@ -14,7 +14,6 @@ import AVFoundation
 
 public func createVideoItem(videoURL: URL,
                             activityIdicatorClosure: ((_ show: Bool) -> Void)? = nil,
-                            configuration: YPImagePickerConfiguration,
                             completion: @escaping (_ video: YPVideo) -> Void) {
     
     let videoItem = YPVideo(thumbnail: thumbnailFromVideoPath(videoURL),
@@ -33,7 +32,7 @@ public func createVideoItem(videoURL: URL,
             let asset = AVURLAsset(url: videoURL)
             
             let exportSession = AVAssetExportSession(asset: asset,
-                                                     presetName: configuration.videoCompression)
+                                                     presetName: YPConfig.videoCompression)
             exportSession?.outputURL = uploadURL
             exportSession?.outputFileType = AVFileType.mov
             exportSession?.shouldOptimizeForNetworkUse = true

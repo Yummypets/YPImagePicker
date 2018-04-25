@@ -9,7 +9,7 @@
 import UIKit
 
 extension YPLibraryVC {
-    var isLimitExceeded: Bool { return selection.count >= configuration.maxNumberOfItems }
+    var isLimitExceeded: Bool { return selection.count >= YPConfig.maxNumberOfItems }
     
     func setupCollectionView() {
         v.collectionView.dataSource = self
@@ -91,7 +91,7 @@ extension YPLibraryVC: UICollectionViewDelegate {
                                                                 fatalError("unexpected cell in collection view")
         }
         cell.representedAssetIdentifier = asset.localIdentifier
-        cell.multipleSelectionIndicator.selectionColor = configuration.colors.multipleItemsSelectedCircleColor
+        cell.multipleSelectionIndicator.selectionColor = YPConfig.colors.multipleItemsSelectedCircleColor
         mediaManager.imageManager?.requestImage(for: asset,
                                    targetSize: v.cellSize(),
                                    contentMode: .aspectFill,
@@ -135,7 +135,7 @@ extension YPLibraryVC: UICollectionViewDelegate {
             return
         }
         
-        changeImage(mediaManager.fetchResult[indexPath.row])
+        changeAsset(mediaManager.fetchResult[indexPath.row])
         panGestureHelper.resetToOriginalState()
         
         // Only scroll cell to top if preview is hidden.
@@ -144,15 +144,6 @@ extension YPLibraryVC: UICollectionViewDelegate {
         }
         v.refreshImageCurtainAlpha()
 
-        if !multipleSelectionEnabled {
-            let previouslySelectedIndices = selection
-            selection.removeAll()
-            if let selectedRow = previouslySelectedIndices.first?.index {
-                let previouslySelectedIndexPath = IndexPath(row: selectedRow, section: 0)
-                collectionView.reloadItems(at: [previouslySelectedIndexPath])
-            }
-        }
-        
         if multipleSelectionEnabled {
             updateSelectedAssetCropInfos()
             
@@ -166,10 +157,18 @@ extension YPLibraryVC: UICollectionViewDelegate {
             } else if isLimitExceeded == false {
                 addToSelection(indexPath: indexPath)
             }
+        } else {
+            let previouslySelectedIndices = selection
+            selection.removeAll()
+            if let selectedRow = previouslySelectedIndices.first?.index {
+                let previouslySelectedIndexPath = IndexPath(row: selectedRow, section: 0)
+                collectionView.reloadItems(at: [previouslySelectedIndexPath])
+            }
         }
         
         currentlySelectedIndex = indexPath.row
         collectionView.reloadItems(at: [indexPath])
+        
         if let previouslySelectedIndexPath = previouslySelectedIndexPath {
             collectionView.reloadItems(at: [previouslySelectedIndexPath])
         }

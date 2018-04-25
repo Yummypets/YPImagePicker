@@ -35,7 +35,7 @@ class YPLoadingView: UIView {
         spinner.hidesWhenStopped = true
         
         // Content
-        processingLabel.text = YPImagePickerConfiguration.shared.wordings.processing
+        processingLabel.text = YPConfig.wordings.processing
         
         spinner.startAnimating()
     }

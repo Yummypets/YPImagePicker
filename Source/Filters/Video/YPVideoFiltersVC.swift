@@ -41,16 +41,16 @@ public class YPVideoFiltersVC: UIViewController {
     override public func viewDidLoad() {
         super.viewDidLoad()
 
-        trimmerView.mainColor = YPImagePickerConfiguration.shared.colors.trimmerMainColor
-        trimmerView.handleColor = YPImagePickerConfiguration.shared.colors.trimmerHandleColor
-        trimmerView.positionBarColor = YPImagePickerConfiguration.shared.colors.positionLineColor
-        trimmerView.maxDuration = YPImagePickerConfiguration.shared.trimmerMaxDuration
-        trimmerView.minDuration = YPImagePickerConfiguration.shared.trimmerMinDuration
+        trimmerView.mainColor = YPConfig.colors.trimmerMainColor
+        trimmerView.handleColor = YPConfig.colors.trimmerHandleColor
+        trimmerView.positionBarColor = YPConfig.colors.positionLineColor
+        trimmerView.maxDuration = YPConfig.trimmerMaxDuration
+        trimmerView.minDuration = YPConfig.trimmerMinDuration
         
-        coverThumbSelectorView.thumbBorderColor = YPImagePickerConfiguration.shared.colors.coverSelectorColor
+        coverThumbSelectorView.thumbBorderColor = YPConfig.colors.coverSelectorColor
         
-        trimBottomItem.textLabel.text = YPImagePickerConfiguration.shared.wordings.trim
-        coverBottomItem.textLabel.text = YPImagePickerConfiguration.shared.wordings.cover
+        trimBottomItem.textLabel.text = YPConfig.wordings.trim
+        coverBottomItem.textLabel.text = YPConfig.wordings.cover
 
         trimBottomItem.button.addTarget(self, action: #selector(selectTrim), for: .touchUpInside)
         coverBottomItem.button.addTarget(self, action: #selector(selectCover), for: .touchUpInside)
@@ -68,8 +68,8 @@ public class YPVideoFiltersVC: UIViewController {
         didChangeThumbPosition(CMTime(seconds: 1, preferredTimescale: 1))
         
         // Navigation bar setup
-        navigationController?.navigationBar.tintColor = YPImagePickerConfiguration.shared.colors.pickerNavigationBarTextColor
-        let rightBarButtonTitle = isFromSelectionVC ? YPImagePickerConfiguration.shared.wordings.save : YPImagePickerConfiguration.shared.wordings.next
+        navigationController?.navigationBar.tintColor = YPConfig.colors.pickerNavigationBarTextColor
+        let rightBarButtonTitle = isFromSelectionVC ? YPConfig.wordings.save : YPConfig.wordings.next
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: rightBarButtonTitle,
                                                             style: .done,
                                                             target: self,
@@ -101,7 +101,7 @@ public class YPVideoFiltersVC: UIViewController {
                                  endTime: trimmerView.endTime ?? inputAsset.duration)
             
             // Looks like file:///private/var/mobile/Containers/Data/Application/FAD486B4-784D-4397-B00C-AD0EFFB45F52/tmp/8A2B410A-BD34-4E3F-8CB5-A548A946C1F1.mov
-            let destinationURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingUniquePathComponent(pathExtension: YPImagePickerConfiguration.shared.videoExtension.fileExtension)
+            let destinationURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingUniquePathComponent(pathExtension: YPConfig.videoExtension.fileExtension)
             
             try trimmedAsset.export(to: destinationURL) { [weak self] in
                 guard let weakSelf = self else { return }

@@ -17,13 +17,10 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, YPPermis
     let v: YPCameraView!
     override public func loadView() { view = v }
 
-    let configuration: YPImagePickerConfiguration!
-
-    public required init(configuration: YPImagePickerConfiguration) {
-        self.configuration = configuration
-        self.v = YPCameraView(overlayView: configuration.overlayView)
+    public required init() {
+        self.v = YPCameraView(overlayView: YPConfig.overlayView)
         super.init(nibName: nil, bundle: nil)
-        title = configuration.wordings.cameraTitle
+        title = YPConfig.wordings.cameraTitle
     }
     
     public required init?(coder aDecoder: NSCoder) {
@@ -121,7 +118,7 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, YPPermis
             
             var image = shotImage
             // Crop the image if the output needs to be square.
-            if self.configuration.onlySquareImagesFromCamera {
+            if YPConfig.onlySquareImagesFromCamera {
                 image = self.cropImageToSquare(image)
             }
 

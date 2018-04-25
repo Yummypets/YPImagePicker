@@ -13,7 +13,7 @@ import Photos
 class YPAlbumVC: UIViewController {
     
     override var prefersStatusBarHidden: Bool {
-         return configuration.hidesStatusBar
+         return YPConfig.hidesStatusBar
     }
     
     var didSelectAlbum: ((YPAlbum) -> Void)?
@@ -24,11 +24,9 @@ class YPAlbumVC: UIViewController {
     let v = YPAlbumView()
     override func loadView() { view = v }
     
-    private let configuration: YPImagePickerConfiguration!
-    required init(configuration: YPImagePickerConfiguration) {
-        self.configuration = configuration
+    required init() {
         super.init(nibName: nil, bundle: nil)
-        title = configuration.wordings.albumsTitle
+        title = YPConfig.wordings.albumsTitle
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -37,7 +35,7 @@ class YPAlbumVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: configuration.wordings.cancel,
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: YPConfig.wordings.cancel,
                                                            style: .plain,
                                                            target: self,
                                                            action: #selector(close))

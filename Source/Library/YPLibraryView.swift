@@ -78,16 +78,6 @@ extension YPLibraryView {
         return xibView
     }
     
-    // MARK: - Mode (Photo/video)
-    
-    func setPhotoMode() {
-        imageCropViewContainer.isVideoMode = false
-    }
-    
-    func setVideoMode() {
-        imageCropViewContainer.isVideoMode = true
-    }
-    
     // MARK: - Player
     
     var player: AVPlayer? {

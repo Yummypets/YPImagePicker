@@ -10,6 +10,9 @@ import Foundation
 import AVFoundation
 import UIKit
 
+/// Typealias for code prettiness
+internal var YPConfig: YPImagePickerConfiguration { return YPImagePickerConfiguration.shared }
+
 public struct YPImagePickerConfiguration {
     public static var shared: YPImagePickerConfiguration = YPImagePickerConfiguration()
     

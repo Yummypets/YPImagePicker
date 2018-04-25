@@ -15,19 +15,17 @@ public class YPVideoVC: UIViewController, YPPermissionCheckable {
     private let videoHelper = YPVideoHelper()
     private let v = YPCameraView(overlayView: nil)
     private var isPreviewSetup = false
-    let configuration: YPImagePickerConfiguration!
     private var viewState = ViewState()
     
     // MARK: - Init
     
     public required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     
-    public required init(configuration: YPImagePickerConfiguration) {
-        self.configuration = configuration
+    public required init() {
         super.init(nibName: nil, bundle: nil)
-        title = configuration.wordings.videoTitle
+        title = YPConfig.wordings.videoTitle
         
-        videoHelper.initialize(withVideoRecordingLimit: configuration.videoRecordingTimeLimit)
+        videoHelper.initialize(withVideoRecordingLimit: YPConfig.videoRecordingTimeLimit)
         
         videoHelper.didCaptureVideo = { [weak self] videoURL in
             self?.didCaptureVideo?(videoURL)
@@ -70,10 +68,10 @@ public class YPVideoVC: UIViewController, YPPermissionCheckable {
     // MARK: - Setup
     
     private func setupButtons() {
-        videoStartImage = YPImagePickerConfiguration.shared.icons.captureVideoImage
-        videoStopImage = YPImagePickerConfiguration.shared.icons.captureVideoOnImage
+        videoStartImage = YPConfig.icons.captureVideoImage
+        videoStopImage = YPConfig.icons.captureVideoOnImage
         v.flashButton.setImage(flashOffImage, for: .normal)
-        v.flipButton.setImage(YPImagePickerConfiguration.shared.icons.loopIcon, for: .normal)
+        v.flipButton.setImage(YPConfig.icons.loopIcon, for: .normal)
         v.shotButton.setImage(videoStartImage, for: .normal)
     }
     

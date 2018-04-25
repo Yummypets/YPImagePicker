@@ -117,6 +117,9 @@ class ViewController: UIViewController {
         // That means than when you create one picker with configuration, than you can create other picker with just let picker = YPImagePicker() and the configuration will be the same as the first picker.
         let picker = YPImagePicker(configuration: config)
         
+        /// Change configuration directly
+//        YPImagePickerConfiguration.shared.wordings.libraryTitle = "Gallery2"
+
         present(picker, animated: true, completion: nil)
     }
 }

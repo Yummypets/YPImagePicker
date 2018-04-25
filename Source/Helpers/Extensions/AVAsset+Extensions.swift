@@ -34,7 +34,7 @@ extension AVAsset {
         }
         
         exportSession.outputURL = destination
-        exportSession.outputFileType = YPImagePickerConfiguration.shared.videoExtension
+        exportSession.outputFileType = YPConfig.videoExtension
         exportSession.shouldOptimizeForNetworkUse = true
         
         if removeOldFile { try FileManager.default.removeFileIfNecessary(at: destination) }

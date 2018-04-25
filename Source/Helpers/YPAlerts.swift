@@ -9,21 +9,21 @@
 import UIKit
 
 struct YPAlert {
-    static func videoTooLongAlert(with config: YPImagePickerConfiguration) -> UIAlertController {
-        let msg = String(format: config.wordings.videoDurationPopup.tooLongMessage, "\(config.videoFromLibraryTimeLimit)")
-        let alert = UIAlertController(title: config.wordings.videoDurationPopup.title,
+    static func videoTooLongAlert() -> UIAlertController {
+        let msg = String(format: YPConfig.wordings.videoDurationPopup.tooLongMessage, "\(YPConfig.videoFromLibraryTimeLimit)")
+        let alert = UIAlertController(title: YPConfig.wordings.videoDurationPopup.title,
                                       message: msg,
                                       preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction(title: config.wordings.ok, style: UIAlertActionStyle.default, handler: nil))
+        alert.addAction(UIAlertAction(title: YPConfig.wordings.ok, style: UIAlertActionStyle.default, handler: nil))
         return alert
     }
     
-    static func videoTooShortAlert(with config: YPImagePickerConfiguration) -> UIAlertController {
-        let msg = String(format: config.wordings.videoDurationPopup.tooShortMessage, "\(config.videoMinimumTimeLimit)")
-        let alert = UIAlertController(title: config.wordings.videoDurationPopup.title,
+    static func videoTooShortAlert() -> UIAlertController {
+        let msg = String(format: YPConfig.wordings.videoDurationPopup.tooShortMessage, "\(YPConfig.videoMinimumTimeLimit)")
+        let alert = UIAlertController(title: YPConfig.wordings.videoDurationPopup.title,
                                       message: msg,
                                       preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction(title: config.wordings.ok, style: UIAlertActionStyle.default, handler: nil))
+        alert.addAction(UIAlertAction(title: YPConfig.wordings.ok, style: UIAlertActionStyle.default, handler: nil))
         return alert
     }
 }

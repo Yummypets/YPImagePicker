@@ -22,7 +22,7 @@ public class YPImagePicker: UINavigationController {
     /// Get a YPImagePicker with the specified configuration.
     public required init(configuration: YPImagePickerConfiguration) {
         YPImagePickerConfiguration.shared = configuration
-        picker = YPPickerVC(configuration: YPImagePickerConfiguration.shared)
+        picker = YPPickerVC()
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -39,14 +39,14 @@ public class YPImagePicker: UINavigationController {
         super.viewDidLoad()
         
         picker.didClose = {
-            YPImagePickerConfiguration.shared.delegate?.imagePickerDidCancel(self)
+            YPConfig.delegate?.imagePickerDidCancel(self)
         }
         viewControllers = [picker]
         setupLoadingView()
         setupNavigationBar()
         
         picker.didSelectItems = { [unowned self] items in
-            let showsFilters = YPImagePickerConfiguration.shared.showsFilters
+            let showsFilters = YPConfig.showsFilters
             
             // Use Fade transition instead of default push animation
             let transition = CATransition()
@@ -71,11 +71,11 @@ public class YPImagePicker: UINavigationController {
                 // TODO: Save new photo ?
                 let completion = { (image: UIImage) in
                     let mediaItem = YPMediaItem.photo(p: YPPhoto(image: image))
-                    YPImagePickerConfiguration.shared.delegate?.imagePicker(self, didSelect: [mediaItem])
+                    YPConfig.delegate?.imagePicker(self, didSelect: [mediaItem])
                 }
                 
                 func showCropVC(photo: YPPhoto, completion: @escaping (_ image: UIImage) -> Void) {
-                    if case let YPCropType.rectangle(ratio) = YPImagePickerConfiguration.shared.showsCrop {
+                    if case let YPCropType.rectangle(ratio) = YPConfig.showsCrop {
                         let cropVC = YPCropVC(image: photo.image, ratio: ratio)
                         cropVC.didFinishCropping = { croppedImage in
                             completion(croppedImage)
@@ -102,11 +102,11 @@ public class YPImagePicker: UINavigationController {
                     let videoFiltersVC = YPVideoFiltersVC.initWith(video: video,
                                                                    isFromSelectionVC: false)
                     videoFiltersVC.saveCallback = { [unowned self] outputVideo in
-                        YPImagePickerConfiguration.shared.delegate?.imagePicker(self, didSelect: [YPMediaItem.video(v: outputVideo)])
+                        YPConfig.delegate?.imagePicker(self, didSelect: [YPMediaItem.video(v: outputVideo)])
                     }
                     self.pushViewController(videoFiltersVC, animated: true)
                 } else {
-                    YPImagePickerConfiguration.shared.delegate?.imagePicker(self, didSelect: [YPMediaItem.video(v: video)])
+                    YPConfig.delegate?.imagePicker(self, didSelect: [YPMediaItem.video(v: video)])
                 }
             }
         }

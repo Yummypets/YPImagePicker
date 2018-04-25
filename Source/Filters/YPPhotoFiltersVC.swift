@@ -10,7 +10,7 @@ import UIKit
 
 open class YPPhotoFiltersVC: UIViewController {
     
-    override open var prefersStatusBarHidden: Bool { return YPImagePickerConfiguration.shared.hidesStatusBar }
+    override open var prefersStatusBarHidden: Bool { return YPConfig.hidesStatusBar }
     
     var v = YPFiltersView()
     
@@ -31,9 +31,9 @@ open class YPPhotoFiltersVC: UIViewController {
         
         self.inputPhoto = inputPhoto
         self.isFromSelectionVC = isFromSelectionVC
-        title = YPImagePickerConfiguration.shared.wordings.filter
+        title = YPConfig.wordings.filter
         
-        for filterDescriptor in YPImagePickerConfiguration.shared.filters {
+        for filterDescriptor in YPConfig.filters {
             filterPreviews.append(YPFilterPreview(filterDescriptor.name))
             filters.append(YPFilter(filterDescriptor.filterName))
         }
@@ -65,8 +65,8 @@ open class YPPhotoFiltersVC: UIViewController {
                                                   scrollPosition: UICollectionViewScrollPosition.bottom)
         
         // Navigation bar setup
-        navigationController?.navigationBar.tintColor = YPImagePickerConfiguration.shared.colors.pickerNavigationBarTextColor
-        let rightBarButtonTitle = isFromSelectionVC ? YPImagePickerConfiguration.shared.wordings.save : YPImagePickerConfiguration.shared.wordings.next
+        navigationController?.navigationBar.tintColor = YPConfig.colors.pickerNavigationBarTextColor
+        let rightBarButtonTitle = isFromSelectionVC ? YPConfig.wordings.save : YPConfig.wordings.next
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: rightBarButtonTitle,
                                                             style: .done,
                                                             target: self,
@@ -78,8 +78,8 @@ open class YPPhotoFiltersVC: UIViewController {
     @objc func save() {
         let outputImage = v.imageView.image!
 
-        if isImageFiltered && YPImagePickerConfiguration.shared.shouldSaveNewPicturesToAlbum {
-            YPPhotoSaver.trySaveImage(outputImage, inAlbumNamed: YPImagePickerConfiguration.shared.albumName)
+        if isImageFiltered && YPConfig.shouldSaveNewPicturesToAlbum {
+            YPPhotoSaver.trySaveImage(outputImage, inAlbumNamed: YPConfig.albumName)
         }
         
         saveCallback?(YPPhoto(image: v.imageView.image!))

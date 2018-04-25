@@ -13,7 +13,7 @@ import AVFoundation
 public class YPVideoView: UIView {
     internal let playerView = UIView()
     internal let playerLayer = AVPlayerLayer()
-    internal let playImageView = UIImageView(image: YPImagePickerConfiguration.shared.icons.playImage)
+    internal let playImageView = UIImageView(image: YPConfig.icons.playImage)
     
     public var player: AVPlayer {
         guard let p = playerLayer.player else {
