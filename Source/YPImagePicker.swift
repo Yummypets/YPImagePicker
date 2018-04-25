@@ -11,6 +11,7 @@ import AVFoundation
 
 public class YPImagePicker: UINavigationController {
     
+    let loadingView = YPLoadingView()
     private let picker: YPPickerVC!
     
     /// Get a YPImagePicker instance with the default configuration.
@@ -29,61 +30,9 @@ public class YPImagePicker: UINavigationController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private let loadingContainerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor(white: 0, alpha: 0.8)
-        return view
-    }()
-    
-    private let activityIndicatorView: UIActivityIndicatorView = {
-        let aiv = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
-        aiv.hidesWhenStopped = true
-        aiv.translatesAutoresizingMaskIntoConstraints = false
-        return aiv
-    }()
-    
-    private let processingTitleLabel: UILabel = {
-        let frame = CGRect(x: 0, y: 0, width: 200, height: 20)
-        let label = UILabel(frame: frame)
-        label.textColor = .white
-        return label
-    }()
-    
-    private func setupActivityIndicator() {
-        self.view.addSubview(loadingContainerView)
-        loadingContainerView.alpha = 0
-        loadingContainerView.frame = self.view.bounds
-        
-        loadingContainerView.addSubview(processingTitleLabel)
-        let labelWidth: CGFloat = 200.0
-        let labelHeight: CGFloat = 20.0
-        let offset: CGFloat = 40.0
-        let frame = CGRect(x: (loadingContainerView.frame.width/2) - offset,
-                           y: (loadingContainerView.frame.height/2) + offset,
-                           width: labelWidth,
-                           height: labelHeight)
-        processingTitleLabel.frame = frame
-        processingTitleLabel.text = YPImagePickerConfiguration.shared.wordings.processing
-        
-        loadingContainerView.addSubview(activityIndicatorView)
-        activityIndicatorView.centerXAnchor.constraint(equalTo: loadingContainerView.centerXAnchor).isActive = true
-        activityIndicatorView.centerYAnchor.constraint(equalTo: loadingContainerView.centerYAnchor).isActive = true
-    }
-    
     private func setupNavigationBar() {
         navigationBar.isTranslucent = false
         YPHelper.changeBackButtonIcon(self)
-    }
-    
-    func showHideActivityIndicator() {
-        
-        if !activityIndicatorView.isAnimating {
-            activityIndicatorView.startAnimating()
-            loadingContainerView.alpha = 1
-        } else {
-            activityIndicatorView.stopAnimating()
-            loadingContainerView.alpha = 0
-        }
     }
     
     override public func viewDidLoad() {
@@ -93,7 +42,7 @@ public class YPImagePicker: UINavigationController {
             YPImagePickerConfiguration.shared.delegate?.imagePickerDidCancel(self)
         }
         viewControllers = [picker]
-        setupActivityIndicator()
+        setupLoadingView()
         setupNavigationBar()
         
         picker.didSelectItems = { [unowned self] items in
@@ -161,6 +110,14 @@ public class YPImagePicker: UINavigationController {
                 }
             }
         }
+    }
+    
+    private func setupLoadingView() {
+        view.sv(
+            loadingView
+        )
+        loadingView.fillContainer()
+        loadingView.alpha = 0
     }
 }
 
