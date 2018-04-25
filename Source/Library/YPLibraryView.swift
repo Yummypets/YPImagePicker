@@ -18,9 +18,9 @@ final class YPLibraryView: UIView {
     @IBOutlet weak var imageCropView: YPImageCropView!
     @IBOutlet weak var imageCropViewContainer: YPImageCropViewContainer!
     @IBOutlet weak var imageCropViewConstraintTop: NSLayoutConstraint!
-    @IBOutlet weak var maxNumberWarningView: UIView!
-    @IBOutlet weak var maxNumberWarningLabel: UILabel!
     
+    let maxNumberWarningView = UIView()
+    let maxNumberWarningLabel = UILabel()
     let line = UIView()
     
     override func awakeFromNib() {
@@ -34,8 +34,35 @@ final class YPLibraryView: UIView {
             imageCropViewContainer,
             |line| ~ 1
         )
-    
+        
         line.backgroundColor = .white
+        
+        setupMaxNumberOfItemsView()
+    }
+    
+    func setupMaxNumberOfItemsView() {
+        
+        // View Hierarchy
+        sv(
+            maxNumberWarningView.sv(
+                maxNumberWarningLabel
+            )
+        )
+        
+        // Layout
+        |maxNumberWarningView|.bottom(0)
+        if #available(iOS 11.0, *) {
+            maxNumberWarningView.Top == safeAreaLayoutGuide.Bottom - 40
+            maxNumberWarningLabel.centerHorizontally().top(11)
+        } else {
+            maxNumberWarningView.height(40)
+            maxNumberWarningLabel.centerInContainer()
+        }
+        
+        // Style
+        maxNumberWarningView.backgroundColor = UIColor(r: 246, g: 248, b: 248)
+        maxNumberWarningLabel.font = UIFont(name: "Helvetica Neue", size: 14)
+        maxNumberWarningView.isHidden = true
     }
 }
 
