@@ -10,6 +10,8 @@ import UIKit
 import Stevia
 import AVFoundation
 
+/// A video view that contains video layer, supports play, pause and other actions.
+/// Supports xib initialization.
 public class YPVideoView: UIView {
     internal let playerView = UIView()
     internal let playerLayer = AVPlayerLayer()
@@ -22,9 +24,14 @@ public class YPVideoView: UIView {
         }
         return p
     }
-
-    override public func awakeFromNib() {
-        super.awakeFromNib()
+    
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
+        setup()
+    }
+    
+    required public init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
         setup()
     }
     
@@ -33,6 +40,12 @@ public class YPVideoView: UIView {
                                                  action: #selector(singleTap))
         singleTapGR.numberOfTapsRequired = 1
         addGestureRecognizer(singleTapGR)
+        
+        // Loop playback
+        NotificationCenter.default.addObserver(self,
+                         selector: #selector(playerItemDidReachEnd(_:)),
+                         name: .AVPlayerItemDidPlayToEndTime,
+                         object: nil)
         
         playImageView.alpha = 0.8
         playerLayer.videoGravity = .resizeAspect
@@ -54,12 +67,31 @@ public class YPVideoView: UIView {
     @objc internal func singleTap() {
         pauseUnpause()
     }
+    
+    @objc public func playerItemDidReachEnd(_ note: Notification) {
+        player.actionAtItemEnd = .none
+        player.seek(to: kCMTimeZero)
+        player.play()
+    }
 }
 
 // MARK: - Video handling
 extension YPVideoView {
-    public func loadVideo(video: YPVideo) {
-        let player = AVPlayer(url: video.url)
+    /// The main load video method
+    public func loadVideo<T>(_ item: T) {
+        var player: AVPlayer
+        
+        switch item.self {
+        case let video as YPVideo:
+            player = AVPlayer(url: video.url)
+        case let url as URL:
+            player = AVPlayer(url: url)
+        case let playerItem as AVPlayerItem:
+            player = AVPlayer(playerItem: playerItem)
+        default:
+            return
+        }
+        
         playerLayer.player = player
     }
     
@@ -94,5 +126,15 @@ extension YPVideoView {
         UIView.animate(withDuration: 0.1) {
             self.playImageView.alpha = show ? 0.8 : 0
         }
+    }
+}
+
+// MARK: - Other API
+extension YPVideoView {
+    /// Removes the observer for AVPlayerItemDidPlayToEndTime. Could be needed to implement own observer
+    public func removeReachEndObserver() {
+        NotificationCenter.default.removeObserver(self,
+                                                  name: .AVPlayerItemDidPlayToEndTime,
+                                                  object: nil)
     }
 }

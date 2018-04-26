@@ -12,12 +12,12 @@ import Photos
 
 final class YPLibraryView: UIView {
     
-    let imageCropViewMinimalVisibleHeight: CGFloat  = 50
+    let assetZoomableViewMinimalVisibleHeight: CGFloat  = 50
     
     @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var imageCropView: YPImageCropView!
-    @IBOutlet weak var imageCropViewContainer: YPImageCropViewContainer!
-    @IBOutlet weak var imageCropViewConstraintTop: NSLayoutConstraint!
+    @IBOutlet weak var assetZoomableView: YPAssetZoomableView!
+    @IBOutlet weak var assetViewContainer: YPAssetViewContainer!
+    @IBOutlet weak var assetViewContainerConstraintTop: NSLayoutConstraint!
     
     let maxNumberWarningView = UIView()
     let maxNumberWarningLabel = UILabel()
@@ -31,7 +31,7 @@ final class YPLibraryView: UIView {
         )
         
         layout(
-            imageCropViewContainer,
+            assetViewContainer,
             |line| ~ 1
         )
         
@@ -78,57 +78,40 @@ extension YPLibraryView {
         return xibView
     }
     
-    // MARK: - Player
-    
-    var player: AVPlayer? {
-        return imageCropViewContainer.playerLayer.player
-    }
-    
-    func pausePlayer() {
-        player?.pause()
-        imageCropViewContainer.showPlayImage(show: false)
-    }
-    
-    func hidePlayer() {
-        imageCropViewContainer.playerLayer.player?.pause()
-        imageCropViewContainer.playerLayer.isHidden = true
-        imageCropViewContainer.showPlayImage(show: false)
-    }
-    
     // MARK: - Grid
     
     func hideGrid() {
-        imageCropViewContainer.grid.alpha = 0
+        assetViewContainer.grid.alpha = 0
     }
     
     // MARK: - Preview
     
     func setPreview(_ image: UIImage) {
-        imageCropView.image = image
+        assetZoomableView.image = image
     }
     
     // MARK: - Loader
     
     func fadeInLoader() {
         UIView.animate(withDuration: 0.2) {
-            self.imageCropViewContainer.spinnerView.alpha = 1
+            self.assetViewContainer.spinnerView.alpha = 1
         }
     }
     
     func hideLoader() {
-        imageCropViewContainer.spinnerView.alpha = 0
+        assetViewContainer.spinnerView.alpha = 0
     }
     
     // MARK: - Crop Control
     
     func refreshCropControl() {
-        imageCropViewContainer.refreshSquareCropButton()
+        assetViewContainer.refreshSquareCropButton()
     }
     
     // MARK: - Crop Rect
     
     func currentCropRect() -> CGRect {
-        guard let cropView = imageCropView else {
+        guard let cropView = assetZoomableView else {
             return CGRect.zero
         }
         let normalizedX = min(1, cropView.contentOffset.x / cropView.contentSize.width)
@@ -141,9 +124,9 @@ extension YPLibraryView {
     // MARK: - Curtain
     
     func refreshImageCurtainAlpha() {
-        let imageCurtainAlpha = abs(imageCropViewConstraintTop.constant)
-            / (imageCropViewContainer.frame.height - imageCropViewMinimalVisibleHeight)
-        imageCropViewContainer.curtain.alpha = imageCurtainAlpha
+        let imageCurtainAlpha = abs(assetViewContainerConstraintTop.constant)
+            / (assetViewContainer.frame.height - assetZoomableViewMinimalVisibleHeight)
+        assetViewContainer.curtain.alpha = imageCurtainAlpha
     }
     
     func cellSize() -> CGSize {

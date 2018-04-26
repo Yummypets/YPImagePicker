@@ -54,10 +54,9 @@ enum YPFlashMode {
 extension YPFlashMode {
     func flashImage() -> UIImage {
         switch self {
-        case .on: return flashOnImage!
-        case .off: return flashOffImage!
-        case .auto: return flashAutoImage!
+        case .on: return YPConfig.icons.flashOnIcon
+        case .off: return YPConfig.icons.flashOffIcon
+        case .auto: return YPConfig.icons.flashAutoIcon
         }
     }
 }
-

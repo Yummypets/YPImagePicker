@@ -11,7 +11,7 @@ import UIKit
 public class PanGestureHelper: NSObject, UIGestureRecognizerDelegate {
     
     var v: YPLibraryView!
-    private let imageCropViewOriginalConstraintTop: CGFloat = 0
+    private let assetViewContainerOriginalConstraintTop: CGFloat = 0
     private var dragDirection = YPDragDirection.up
     private var imaginaryCollectionViewOffsetStartPosY: CGFloat = 0.0
     private var cropBottomY: CGFloat  = 0.0
@@ -24,9 +24,9 @@ public class PanGestureHelper: NSObject, UIGestureRecognizerDelegate {
         set {
             if newValue != isImageShown {
                 self._isImageShown = newValue
-                v.imageCropViewContainer.isShown = newValue
+                v.assetViewContainer.isShown = newValue
                 // Update imageCropContainer
-                v.imageCropView.isScrollEnabled = isImageShown
+                v.assetZoomableView.isScrollEnabled = isImageShown
             }
         }
     }
@@ -36,11 +36,11 @@ public class PanGestureHelper: NSObject, UIGestureRecognizerDelegate {
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(panned(_:)))
         panGesture.delegate = self
         view.addGestureRecognizer(panGesture)
-        v.imageCropViewConstraintTop.constant = 0
+        v.assetViewContainerConstraintTop.constant = 0
     }
     
     func resetToOriginalState() {
-        v.imageCropViewConstraintTop.constant = imageCropViewOriginalConstraintTop
+        v.assetViewContainerConstraintTop.constant = assetViewContainerOriginalConstraintTop
         UIView.animate(withDuration: 0.3,
                        delay: 0.0,
                        options: .curveEaseOut,
@@ -58,7 +58,7 @@ public class PanGestureHelper: NSObject, UIGestureRecognizerDelegate {
         let p = gestureRecognizer.location(ofTouch: 0, in: v)
         // Desactivate pan on image when it is shown.
         if isImageShown {
-            if p.y < v.imageCropView.frame.height {
+            if p.y < v.assetZoomableView.frame.height {
                 return false
             }
         }
@@ -68,23 +68,23 @@ public class PanGestureHelper: NSObject, UIGestureRecognizerDelegate {
     @objc
     func panned(_ sender: UIPanGestureRecognizer) {
         
-        let containerHeight = v.imageCropViewContainer.frame.height
+        let containerHeight = v.assetViewContainer.frame.height
         if sender.state == UIGestureRecognizerState.began {
             let view    = sender.view
             let loc     = sender.location(in: view)
             let subview = view?.hitTest(loc, with: nil)
             
-            if subview == v.imageCropView
-                && v.imageCropViewConstraintTop.constant == imageCropViewOriginalConstraintTop {
+            if subview == v.assetZoomableView
+                && v.assetViewContainerConstraintTop.constant == assetViewContainerOriginalConstraintTop {
                 return
             }
             
             dragStartPos = sender.location(in: v)
-            cropBottomY = v.imageCropViewContainer.frame.origin.y + containerHeight
+            cropBottomY = v.assetViewContainer.frame.origin.y + containerHeight
             
             // Move
             if dragDirection == .stop {
-                dragDirection = (v.imageCropViewConstraintTop.constant == imageCropViewOriginalConstraintTop)
+                dragDirection = (v.assetViewContainerConstraintTop.constant == assetViewContainerOriginalConstraintTop)
                     ? .up
                     : .down
             }
@@ -97,18 +97,18 @@ public class PanGestureHelper: NSObject, UIGestureRecognizerDelegate {
         } else if sender.state == UIGestureRecognizerState.changed {
             let currentPos = sender.location(in: v)
             if dragDirection == .up && currentPos.y < cropBottomY - dragDiff {
-                v.imageCropViewConstraintTop.constant =
-                    max(v.imageCropViewMinimalVisibleHeight - containerHeight,
+                v.assetViewContainerConstraintTop.constant =
+                    max(v.assetZoomableViewMinimalVisibleHeight - containerHeight,
                         currentPos.y + dragDiff - containerHeight)
             } else if dragDirection == .down && currentPos.y > cropBottomY {
-                v.imageCropViewConstraintTop.constant =
-                    min(imageCropViewOriginalConstraintTop, currentPos.y - containerHeight)
+                v.assetViewContainerConstraintTop.constant =
+                    min(assetViewContainerOriginalConstraintTop, currentPos.y - containerHeight)
             } else if dragDirection == .stop && v.collectionView.contentOffset.y < 0 {
                 dragDirection = .scroll
                 imaginaryCollectionViewOffsetStartPosY = currentPos.y
             } else if dragDirection == .scroll {
-                v.imageCropViewConstraintTop.constant =
-                    v.imageCropViewMinimalVisibleHeight - containerHeight
+                v.assetViewContainerConstraintTop.constant =
+                    v.assetZoomableViewMinimalVisibleHeight - containerHeight
                     + currentPos.y - imaginaryCollectionViewOffsetStartPosY
             }
         } else {
@@ -118,10 +118,10 @@ public class PanGestureHelper: NSObject, UIGestureRecognizerDelegate {
             }
             let currentPos = sender.location(in: v)
             if currentPos.y < cropBottomY - dragDiff
-                && v.imageCropViewConstraintTop.constant != imageCropViewOriginalConstraintTop {
+                && v.assetViewContainerConstraintTop.constant != assetViewContainerOriginalConstraintTop {
                 // The largest movement
-                v.imageCropViewConstraintTop.constant =
-                    v.imageCropViewMinimalVisibleHeight - containerHeight
+                v.assetViewContainerConstraintTop.constant =
+                    v.assetZoomableViewMinimalVisibleHeight - containerHeight
                 UIView.animate(withDuration: 0.3,
                                delay: 0.0,
                                options: .curveEaseOut,
@@ -135,7 +135,7 @@ public class PanGestureHelper: NSObject, UIGestureRecognizerDelegate {
         }
         
         // Update isImageShown
-        isImageShown = v.imageCropViewConstraintTop.constant == 0
+        isImageShown = v.assetViewContainerConstraintTop.constant == 0
         
         v.refreshImageCurtainAlpha()
     }

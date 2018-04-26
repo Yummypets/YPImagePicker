@@ -68,11 +68,9 @@ public class YPVideoVC: UIViewController, YPPermissionCheckable {
     // MARK: - Setup
     
     private func setupButtons() {
-        videoStartImage = YPConfig.icons.captureVideoImage
-        videoStopImage = YPConfig.icons.captureVideoOnImage
-        v.flashButton.setImage(flashOffImage, for: .normal)
+        v.flashButton.setImage(YPConfig.icons.flashOffIcon, for: .normal)
         v.flipButton.setImage(YPConfig.icons.loopIcon, for: .normal)
-        v.shotButton.setImage(videoStartImage, for: .normal)
+        v.shotButton.setImage(YPConfig.icons.captureVideoImage, for: .normal)
     }
     
     private func linkButtons() {
@@ -198,15 +196,15 @@ public class YPVideoVC: UIViewController, YPPermissionCheckable {
         func flashImage(for torchMode: FlashMode) -> UIImage {
             switch torchMode {
             case .noFlash: return UIImage()
-            case .on: return flashOnImage!
-            case .off: return flashOffImage!
-            case .auto: return flashAutoImage!
+            case .on: return YPConfig.icons.flashOnIcon
+            case .off: return YPConfig.icons.flashOffIcon
+            case .auto: return YPConfig.icons.flashAutoIcon
             }
         }
         v.flashButton.setImage(flashImage(for: state.flashMode), for: .normal)
         v.flashButton.isEnabled = !state.isRecording
         v.flashButton.isHidden = state.flashMode == .noFlash
-        v.shotButton.setImage(state.isRecording ? videoStopImage : videoStartImage, for: .normal)
+        v.shotButton.setImage(state.isRecording ? YPConfig.icons.captureVideoOnImage : YPConfig.icons.captureVideoImage, for: .normal)
         v.flipButton.isEnabled = !state.isRecording
         v.progressBar.progress = state.progress
         v.timeElapsedLabel.text = YPHelper.formattedStrigFrom(state.timeElapsed)

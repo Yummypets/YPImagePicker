@@ -1,87 +1,87 @@
 //
-//  YPImageCropView.swift
+//  YPAssetZoomableView.swift
 //  YPImgePicker
 //
 //  Created by Sacha Durand Saint Omer on 2015/11/16.
+//  Edited by Nik Kov || nik-kov.com on 2018/04
 //  Copyright © 2015 Yummypets. All rights reserved.
 //
 
 import UIKit
+import AVFoundation
 
-protocol YPImageCropViewDelegate: class {
-    func ypImageCropViewDidLayoutSubviews()
-    func ypImageCropViewscrollViewDidZoom()
-    func ypImageCropViewscrollViewDidEndZooming()
+protocol YPAssetZoomableViewDelegate: class {
+    func ypAssetZoomableViewDidLayoutSubviews()
+    func ypAssetZoomableViewScrollViewDidZoom()
+    func ypAssetZoomableViewScrollViewDidEndZooming()
 }
 
-final class YPImageCropView: UIScrollView, UIScrollViewDelegate {
-    
+final class YPAssetZoomableView: UIScrollView {
+    weak var myDelegate: YPAssetZoomableViewDelegate?
+    var isVideoMode = false
+
     var cropAreaDidChange = {}
-    
-    var onlySquareImages = false {
-        didSet {
+    var imageSize: CGSize?
+    var squaredZoomScale: CGFloat = 1
+    var onlySquareImages = false { didSet {
             bouncesZoom = false
             bounces = false
-        }
-    }
+        }}
+
+    public var imageView = UIImageView()
+    public var image: UIImage! { didSet { didSetImage(image) }}
+    public var videoView = YPVideoView()
+    public var video: AVPlayerItem! { didSet { didSetVideo(video) }}
     
-    var isVideoMode = false {
-        didSet {
-            isUserInteractionEnabled = !isVideoMode
-        }
+    func didSetVideo(_ video: AVPlayerItem) {
+        videoView.frame = frame
+        addSubview(videoView)
+        videoView.loadVideo(video)
     }
-    var squaredZoomScale: CGFloat = 1
-    weak var myDelegate: YPImageCropViewDelegate?
-    var imageView = UIImageView()
-    var imageSize: CGSize?
-    var image: UIImage! = nil {
-        didSet {
-            
-            minimumZoomScale = 1
-            setZoomScale(1.0, animated: false)
-            if image != nil {
-                if !imageView.isDescendant(of: self) {
-                    imageView.alpha = 1.0
-                    addSubview(imageView)
-                }
-            } else {
-                imageView.image = nil
-                return
-            }
-            if isVideoMode {
-                imageView.frame = frame
-                imageView.contentMode = .scaleAspectFit
-                imageView.image = image
-                contentSize = CGSize.zero
-                return
-            }
-            
-            let screenSize: CGFloat = UIScreen.main.bounds.width
-            self.imageView.frame.size.width = screenSize
-            self.imageView.frame.size.height = screenSize
-            
-            var squareZoomScale: CGFloat = 1.0
-            let w = image.size.width
-            let h = image.size.height
-            
-            if w > h { // Landscape
-                squareZoomScale = (1.0 / (w / h))
-                self.imageView.frame.size.width = screenSize
-                self.imageView.frame.size.height = screenSize*squareZoomScale
-                
-            } else if h > w { // Portrait
-                squareZoomScale = (1.0 / (h / w))
-                self.imageView.frame.size.width = screenSize*squareZoomScale
-                self.imageView.frame.size.height = screenSize
-            }
-            
-            self.imageView.center = center
-            
-            self.imageView.contentMode = .scaleAspectFill
-            self.imageView.image = self.image
-            imageView.clipsToBounds = true
-            refreshZoomScale()
+
+    func didSetImage(_ image: UIImage) {
+        minimumZoomScale = 1
+        setZoomScale(1.0, animated: false)
+        
+        if !imageView.isDescendant(of: self) {
+            imageView.alpha = 1.0
+            addSubview(imageView)
         }
+        
+        if isVideoMode {
+            imageView.frame = frame
+            imageView.contentMode = .scaleAspectFit
+            imageView.image = image
+            contentSize = CGSize.zero
+            return
+        }
+        
+        let screenSize: CGFloat = UIScreen.main.bounds.width
+        self.imageView.frame.size.width = screenSize
+        self.imageView.frame.size.height = screenSize
+        
+        var squareZoomScale: CGFloat = 1.0
+        let w = image.size.width
+        let h = image.size.height
+        
+        if w > h { // Landscape
+            squareZoomScale = (1.0 / (w / h))
+            self.imageView.frame.size.width = screenSize
+            self.imageView.frame.size.height = screenSize*squareZoomScale
+            
+        } else if h > w { // Portrait
+            squareZoomScale = (1.0 / (h / w))
+            self.imageView.frame.size.width = screenSize*squareZoomScale
+            self.imageView.frame.size.height = screenSize
+        }
+        
+        self.imageView.center = center
+        
+        self.imageView.contentMode = .scaleAspectFill
+        self.imageView.image = self.image
+        imageView.clipsToBounds = true
+        
+        refreshZoomScale()
     }
     
     func refreshZoomScale() {
@@ -126,16 +126,19 @@ final class YPImageCropView: UIScrollView, UIScrollViewDelegate {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        myDelegate?.ypImageCropViewDidLayoutSubviews()
+        myDelegate?.ypAssetZoomableViewDidLayoutSubviews()
     }
+}
+
+extension YPAssetZoomableView: UIScrollViewDelegate {
     
     // MARK: UIScrollViewDelegate Protocol
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        return imageView
+        return isVideoMode ? videoView : imageView
     }
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
-        myDelegate?.ypImageCropViewscrollViewDidZoom()
+        myDelegate?.ypAssetZoomableViewScrollViewDidZoom()
         let boundsSize = scrollView.bounds.size
         var contentsFrame = imageView.frame
         if contentsFrame.size.width < boundsSize.width {
@@ -153,7 +156,7 @@ final class YPImageCropView: UIScrollView, UIScrollViewDelegate {
     }
     
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
-        myDelegate?.ypImageCropViewscrollViewDidEndZooming()
+        myDelegate?.ypAssetZoomableViewScrollViewDidEndZooming()
         contentSize = CGSize(width: imageView.frame.width + 1, height: imageView.frame.height + 1)
         cropAreaDidChange()
     }
@@ -166,4 +169,3 @@ final class YPImageCropView: UIScrollView, UIScrollViewDelegate {
         cropAreaDidChange()
     }
 }
-

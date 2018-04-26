@@ -12,11 +12,11 @@ import Photos
 extension YPLibraryVC {
     
     func display(photo asset: PHAsset, image: UIImage) {
-        v.imageCropView.imageSize = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
-        v.imageCropView.image = image
-        v.imageCropView.setFitImage(true)
+        v.assetZoomableView.imageSize = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
+        v.assetZoomableView.image = image
+        v.assetZoomableView.setFitImage(true)
         if YPConfig.onlySquareImagesFromLibrary {
-            v.imageCropView.minimumZoomScale = v.imageCropView.squaredZoomScale
+            v.assetZoomableView.minimumZoomScale = v.assetZoomableView.squaredZoomScale
         }
         v.refreshCropControl()
         
@@ -31,20 +31,12 @@ extension YPLibraryVC {
             let selectedAsset = selection[selectedAssetIndex]
             // ZoomScale needs to be set first.
             if let zoomScale = selectedAsset.scrollViewZoomScale {
-                v.imageCropView.zoomScale = zoomScale
+                v.assetZoomableView.zoomScale = zoomScale
             }
             if let contentOffset = selectedAsset.scrollViewContentOffset {
-                v.imageCropView.contentOffset = contentOffset
+                v.assetZoomableView.contentOffset = contentOffset
             }
         }
-    }
-    
-    func play(videoItem: AVPlayerItem) {
-        let player = AVPlayer(playerItem: videoItem)
-        v.imageCropViewContainer.playerLayer.player = player
-        v.imageCropViewContainer.playerLayer.isHidden = false
-        v.imageCropViewContainer.spinnerView.alpha = 0
-        player.play()
     }
     
     func downloadAndSetPreviewFor(video asset: PHAsset) {
@@ -63,7 +55,8 @@ extension YPLibraryVC {
         mediaManager.imageManager?.fetchPlayerItem(for: asset) { playerItem in
             // Prevent long videos to come after user selected another in the meantime.
             if self.latestImageTapped == asset.localIdentifier {
-                self.play(videoItem: playerItem)
+                self.v.assetZoomableView.video = playerItem
+                self.v.hideLoader()
             }
         }
     }

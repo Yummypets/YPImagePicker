@@ -55,11 +55,12 @@ public class YPVideoFiltersVC: UIViewController {
         trimBottomItem.button.addTarget(self, action: #selector(selectTrim), for: .touchUpInside)
         coverBottomItem.button.addTarget(self, action: #selector(selectCover), for: .touchUpInside)
         
-        // Add a notification to repeat playback from the start
+        // Remove the default and add a notification to repeat playback from the start
+        videoView.removeReachEndObserver()
         NotificationCenter.default
             .addObserver(self,
                          selector: #selector(itemDidFinishPlaying(_:)),
-                         name: NSNotification.Name.AVPlayerItemDidPlayToEndTime,
+                         name: .AVPlayerItemDidPlayToEndTime,
                          object: nil)
         
         // Set initial video cover
@@ -85,7 +86,7 @@ public class YPVideoFiltersVC: UIViewController {
         coverThumbSelectorView.delegate = self
         
         selectTrim()
-        videoView.loadVideo(video: inputVideo)
+        videoView.loadVideo(inputVideo)
 
         super.viewDidAppear(animated)
     }
@@ -153,7 +154,7 @@ public class YPVideoFiltersVC: UIViewController {
     func startPlaybackTimeChecker() {
         stopPlaybackTimeChecker()
         playbackTimeCheckerTimer = Timer
-            .scheduledTimer(timeInterval: 0.1, target: self,
+            .scheduledTimer(timeInterval: 0.05, target: self,
                             selector: #selector(onPlaybackTimeChecker),
                             userInfo: nil,
                             repeats: true)

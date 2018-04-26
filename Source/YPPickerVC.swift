@@ -9,12 +9,6 @@
 import Foundation
 import Stevia
 
-var flashOffImage: UIImage?
-var flashOnImage: UIImage?
-var flashAutoImage: UIImage?
-var videoStartImage: UIImage?
-var videoStopImage: UIImage?
-
 public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     
     var shouldHideStatusBar = false
@@ -45,10 +39,6 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     public override func viewDidLoad() {
         super.viewDidLoad()
 
-        flashOnImage = YPConfig.icons.flashOnIcon
-        flashOffImage = YPConfig.icons.flashOffIcon
-        flashAutoImage = YPConfig.icons.flashAutoIcon
-        
         view.backgroundColor = UIColor(r: 247, g: 247, b: 247)
 
         delegate = self
@@ -314,7 +304,6 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
 }
 
 extension YPPickerVC: YPLibraryViewDelegate {
-    
     public func libraryViewStartedLoadingImage() {
         DispatchQueue.main.async {
             YPLoaders.enableActivityIndicator(barButtonItem: &self.navigationItem.rightBarButtonItem)
@@ -343,21 +332,4 @@ extension YPPickerVC: YPLibraryViewDelegate {
         v.header.bottomConstraint?.constant = enabled ? offset : 0
         v.layoutIfNeeded()
     }
-}
-
-public extension UIButton {
-    func setBackgroundColor(_ color: UIColor, forState: UIControlState) {
-        setBackgroundImage(imageWithColor(color), for: forState)
-    }
-}
-
-func imageWithColor(_ color: UIColor) -> UIImage {
-    let rect = CGRect(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
-    UIGraphicsBeginImageContext(rect.size)
-    let context = UIGraphicsGetCurrentContext()
-    context?.setFillColor(color.cgColor)
-    context?.fill(rect)
-    let image = UIGraphicsGetImageFromCurrentImageContext()
-    UIGraphicsEndImageContext()
-    return image ?? UIImage()
 }

@@ -120,4 +120,3 @@ public class YPImagePicker: UINavigationController {
         loadingView.alpha = 0
     }
 }
-
