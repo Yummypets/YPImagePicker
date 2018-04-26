@@ -102,9 +102,9 @@ class YPAssetViewContainer: UIView {
         if onlySquare {
             squareCropButton.isHidden = true
         } else {
-            if let image = assetView?.image {
-                let isShowingSquareImage = image.size.width == image.size.height
-                squareCropButton.isHidden = isShowingSquareImage
+            if let image = assetView?.assetImageView.image {
+                let isImageASquare = image.size.width == image.size.height
+                squareCropButton.isHidden = isImageASquare
             }
         }
     }

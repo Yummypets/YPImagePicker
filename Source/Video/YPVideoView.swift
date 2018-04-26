@@ -57,8 +57,8 @@ public class YPVideoView: UIView {
         )
         
         previewImageView.fillContainer()
-        playImageView.centerInContainer()
         playerView.fillContainer()
+        playImageView.centerInContainer()
         playerView.layer.addSublayer(playerLayer)
     }
     
@@ -114,6 +114,7 @@ extension YPVideoView {
 //                                            forKeyPath: "status",
 //                                            options: .new,
 //                                            context: nil)
+        playerView.alpha = 1
     }
     
     /// Convenience func to pause or unpause video dependely of state

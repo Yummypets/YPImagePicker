@@ -11,14 +11,122 @@ import Photos
 
 extension PHCachingImageManager {
     
-    func fetchUrl(for videoAsset: PHAsset, callback: @escaping (URL) -> Void) {
+    func fetchUrl(for videoAsset: PHAsset, cropRect: CGRect, callback: @escaping (URL) -> Void) {
         let videosOptions = PHVideoRequestOptions()
         videosOptions.isNetworkAccessAllowed = true
-        requestAVAsset(forVideo: videoAsset, options: videosOptions) { v, _, _ in
-            guard let urlAsset = v as? AVURLAsset else {
-                return
+        requestAVAsset(forVideo: videoAsset, options: videosOptions) { asset, _, _ in
+            do {
+                
+                func getTransform(for videoTrack: AVAssetTrack) -> CGAffineTransform {
+                    
+                    let renderSize = CGSize(width: 16 * 1 * 18,
+                                            height: 16 * 1 * 18)
+                    let cropFrame = cropRect
+                    let renderScale = renderSize.width / cropFrame.width
+                    let offset = CGPoint(x: -cropFrame.origin.x, y: -cropFrame.origin.y)
+                    let rotation = atan2(videoTrack.preferredTransform.b, videoTrack.preferredTransform.a)
+                    
+                    var rotationOffset = CGPoint(x: 0, y: 0)
+                    
+                    if videoTrack.preferredTransform.b == -1.0 {
+                        rotationOffset.y = videoTrack.naturalSize.width
+                    } else if videoTrack.preferredTransform.c == -1.0 {
+                        rotationOffset.x = videoTrack.naturalSize.height
+                    } else if videoTrack.preferredTransform.a == -1.0 {
+                        rotationOffset.x = videoTrack.naturalSize.width
+                        rotationOffset.y = videoTrack.naturalSize.height
+                    }
+                    
+                    var transform = CGAffineTransform.identity
+                    transform = transform.scaledBy(x: renderScale, y: renderScale)
+                    transform = transform.translatedBy(x: offset.x + rotationOffset.x, y: offset.y + rotationOffset.y)
+                    transform = transform.rotated(by: rotation)
+                    
+                    print("track size \(videoTrack.naturalSize)")
+                    print("preferred Transform = \(videoTrack.preferredTransform)")
+                    print("rotation angle \(rotation)")
+                    print("rotation offset \(rotationOffset)")
+                    print("actual Transform = \(transform)")
+                    return transform
+                }
+                
+                guard let asset = asset, let videoTrack = asset.tracks(withMediaType: AVMediaType.video).first else {
+                    return
+                }
+                
+                let assetComposition = AVMutableComposition()
+                let trackTimeRange = CMTimeRangeMake(kCMTimeZero, asset.duration)
+                
+                guard let videoCompositionTrack = assetComposition.addMutableTrack(withMediaType: .video,
+                                                                                   preferredTrackID: kCMPersistentTrackID_Invalid) else {
+                                                                                    return
+                }
+                
+                try videoCompositionTrack.insertTimeRange(trackTimeRange, of: videoTrack, at: kCMTimeZero)
+                
+                if let audioTrack = asset.tracks(withMediaType: AVMediaType.audio).first {
+                    let audioCompositionTrack = assetComposition.addMutableTrack(withMediaType: AVMediaType.audio,
+                                                                                 preferredTrackID: kCMPersistentTrackID_Invalid)
+                    try audioCompositionTrack?.insertTimeRange(trackTimeRange, of: audioTrack, at: kCMTimeZero)
+                }
+                
+                //1. Create the instructions
+                let mainInstructions = AVMutableVideoCompositionInstruction()
+                mainInstructions.timeRange = CMTimeRangeMake(kCMTimeZero, asset.duration)
+                
+                //2 add the layer instructions
+                let layerInstructions = AVMutableVideoCompositionLayerInstruction(assetTrack: videoCompositionTrack)
+                
+                let renderSize = CGSize(width: 16 * 1 * 18,
+                                        height: 16 * 1 * 18)
+                let transform = getTransform(for: videoTrack)
+                
+                layerInstructions.setTransform(transform, at: kCMTimeZero)
+                layerInstructions.setOpacity(1.0, at: kCMTimeZero)
+                mainInstructions.layerInstructions = [layerInstructions]
+                
+                //3 Create the main composition and add the instructions
+                
+                let videoComposition = AVMutableVideoComposition()
+                videoComposition.renderSize = renderSize
+                videoComposition.instructions = [mainInstructions]
+                videoComposition.frameDuration = CMTimeMake(1, 30)
+                
+                let url = URL(fileURLWithPath: "\(NSTemporaryDirectory())TrimmedMovie.mp4")
+                try? FileManager.default.removeItem(at: url)
+                
+                let exportSession = AVAssetExportSession(asset: assetComposition, presetName: AVAssetExportPresetHighestQuality)
+                exportSession?.outputFileType = AVFileType.mp4
+                exportSession?.shouldOptimizeForNetworkUse = true
+                exportSession?.videoComposition = videoComposition
+                exportSession?.outputURL = url
+                exportSession?.exportAsynchronously(completionHandler: {
+                    
+                    DispatchQueue.main.async {
+                        
+                        if let url = exportSession?.outputURL, exportSession?.status == .completed {
+                            callback(url)
+                        } else {
+                            let error = exportSession?.error
+                            print("error exporting video \(String(describing: error))")
+                        }
+                    }
+                })
+                
+                
+                
+//                if let (videoComposition, assetComposition) = try asset?.getCropVideoComposition(cropRectFrame: cropRect) {
+//                    let destinationURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingUniquePathComponent(pathExtension: YPConfig.videoExtension.fileExtension)
+//                    try assetComposition.export(to: destinationURL,
+//                                                videoComposition: videoComposition,
+//                                                removeOldFile: false) {
+//                                                    callback(destinationURL)
+//                                                    print("\r 👍\r")
+//                    }
+//                }
+            } catch let error {
+                print("💩 \(error)")
             }
-            callback(urlAsset.url)
         }
     }
     

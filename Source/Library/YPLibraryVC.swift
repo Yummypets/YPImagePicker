@@ -314,7 +314,6 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                             callback: @escaping (_ photo: UIImage) -> Void) {
         delegate?.libraryViewStartedLoadingImage()
         let cropRect = withCropRect ?? DispatchQueue.main.sync { v.currentCropRect() }
-        print(cropRect)
         let ts = targetSize(for: asset, cropRect: cropRect)
         mediaManager.imageManager?.fetchImage(for: asset, cropRect: cropRect, targetSize: ts, callback: callback)
     }
@@ -323,7 +322,16 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                                callback: @escaping (_ videoURL: URL) -> Void) {
         if fitsVideoLengthLimits(asset: asset) == true {
             delegate?.libraryViewStartedLoadingImage()
-            mediaManager.imageManager?.fetchUrl(for: asset, callback: callback)
+            let normalizedCropRect = DispatchQueue.main.sync { v.currentCropRect() }
+            let ts = targetSize(for: asset, cropRect: normalizedCropRect)
+            let xCrop: CGFloat = normalizedCropRect.origin.x * CGFloat(asset.pixelWidth)
+            let yCrop: CGFloat = normalizedCropRect.origin.y * CGFloat(asset.pixelHeight)
+            let resultCropRect = CGRect(x: xCrop,
+                                        y: yCrop,
+                                        width: ts.width,
+                                        height: ts.height)
+            
+            mediaManager.imageManager?.fetchUrl(for: asset, cropRect: resultCropRect, callback: callback)
         }
     }
     
@@ -413,7 +421,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     
     // Reduce image size further if needed libraryTargetImageSize is capped.
     func resizedImageIfNeeded(image: UIImage) -> UIImage {
-                if case let YPLibraryImageSize.cappedTo(size: capped) = YPConfig.libraryTargetImageSize {
+        if case let YPLibraryImageSize.cappedTo(size: capped) = YPConfig.libraryTargetImageSize {
             let cappedWidth = min(image.size.width, capped)
             let cappedHeight = min(image.size.height, capped)
             let cappedSize = CGSize(width: cappedWidth, height: cappedHeight)

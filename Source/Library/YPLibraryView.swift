@@ -106,6 +106,7 @@ extension YPLibraryView {
         let normalizedY = min(1, cropView.contentOffset.y / cropView.contentSize.height)
         let normalizedWidth = min(1, cropView.frame.width / cropView.contentSize.width)
         let normalizedHeight = min(1, cropView.frame.height / cropView.contentSize.height)
+        print("\r👉 CROP RECT: \(CGRect(x: normalizedX, y: normalizedY, width: normalizedWidth, height: normalizedHeight))\r")
         return CGRect(x: normalizedX, y: normalizedY, width: normalizedWidth, height: normalizedHeight)
     }
     
