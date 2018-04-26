@@ -107,6 +107,9 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         }
         
         updateMode(with: currentController)
+        
+        YPHelper.changeBackButtonIcon(self)
+        YPHelper.changeBackButtonTitle(self)
     }
     
     public override func viewWillAppear(_ animated: Bool) {
@@ -207,7 +210,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         
         let label = UILabel()
         label.text = aTitle
-        label.textColor = YPConfig.colors.pickerNavigationBarTextColor
+        label.textColor = YPConfig.colors.navigationBarTextColor
         
         if let navBarTitleFont = UINavigationBar.appearance().titleTextAttributes?[.font] as? UIFont {
             // Use custom font if set by user.
@@ -247,7 +250,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
                                                            style: .plain,
                                                            target: self,
                                                            action: #selector(close))
-        navigationItem.leftBarButtonItem?.tintColor = YPConfig.colors.pickerNavigationBarTextColor
+        navigationItem.leftBarButtonItem?.tintColor = YPConfig.colors.navigationBarTextColor
         
         switch mode {
         case .library:
@@ -256,7 +259,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
                                                                 style: .plain,
                                                                 target: self,
                                                                 action: #selector(done))
-            navigationItem.rightBarButtonItem?.tintColor = YPConfig.colors.pickerNavigationBarTextColor
+            navigationItem.rightBarButtonItem?.tintColor = YPConfig.colors.navigationBarTextColor
             navigationItem.rightBarButtonItem?.isEnabled = true
         case .camera:
             navigationItem.titleView = nil

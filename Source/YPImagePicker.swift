@@ -30,11 +30,6 @@ public class YPImagePicker: UINavigationController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func setupNavigationBar() {
-        navigationBar.isTranslucent = false
-        YPHelper.changeBackButtonIcon(self)
-    }
-    
     override public func viewDidLoad() {
         super.viewDidLoad()
         
@@ -43,8 +38,8 @@ public class YPImagePicker: UINavigationController {
         }
         viewControllers = [picker]
         setupLoadingView()
-        setupNavigationBar()
-        
+        navigationBar.isTranslucent = false
+
         picker.didSelectItems = { [unowned self] items in
             let showsFilters = YPConfig.showsFilters
             

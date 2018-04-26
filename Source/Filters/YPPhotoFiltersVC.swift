@@ -31,7 +31,6 @@ open class YPPhotoFiltersVC: UIViewController {
         
         self.inputPhoto = inputPhoto
         self.isFromSelectionVC = isFromSelectionVC
-        title = YPConfig.wordings.filter
         
         for filterDescriptor in YPConfig.filters {
             filterPreviews.append(YPFilterPreview(filterDescriptor.name))
@@ -55,6 +54,7 @@ open class YPPhotoFiltersVC: UIViewController {
     
     override open func viewDidLoad() {
         super.viewDidLoad()
+        
         v.imageView.image = inputPhoto.image
         thumbImage = thumbFromImage(inputPhoto.image)
         v.collectionView.register(YPFilterCollectionViewCell.self, forCellWithReuseIdentifier: "FilterCell")
@@ -65,10 +65,11 @@ open class YPPhotoFiltersVC: UIViewController {
                                                   scrollPosition: UICollectionViewScrollPosition.bottom)
         
         // Navigation bar setup
-        navigationController?.navigationBar.tintColor = YPConfig.colors.pickerNavigationBarTextColor
+        title = YPConfig.wordings.filter
+        navigationController?.navigationBar.tintColor = YPConfig.colors.navigationBarTextColor
         let rightBarButtonTitle = isFromSelectionVC ? YPConfig.wordings.save : YPConfig.wordings.next
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: rightBarButtonTitle,
-                                                            style: .done,
+                                                            style: .plain,
                                                             target: self,
                                                             action: #selector(save))
         YPHelper.changeBackButtonIcon(self)

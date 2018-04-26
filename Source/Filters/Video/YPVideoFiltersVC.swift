@@ -69,10 +69,11 @@ public class YPVideoFiltersVC: UIViewController {
         didChangeThumbPosition(CMTime(seconds: 1, preferredTimescale: 1))
         
         // Navigation bar setup
-        navigationController?.navigationBar.tintColor = YPConfig.colors.pickerNavigationBarTextColor
+        title = YPConfig.wordings.filter
+        navigationController?.navigationBar.tintColor = YPConfig.colors.navigationBarTextColor
         let rightBarButtonTitle = isFromSelectionVC ? YPConfig.wordings.save : YPConfig.wordings.next
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: rightBarButtonTitle,
-                                                            style: .done,
+                                                            style: .plain,
                                                             target: self,
                                                             action: #selector(save))
         YPHelper.changeBackButtonTitle(self)

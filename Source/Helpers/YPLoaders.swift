@@ -11,6 +11,7 @@ import UIKit
 struct YPLoaders {
     public static func enableActivityIndicator(barButtonItem: inout UIBarButtonItem?) {
         let spinner = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
+        spinner.color = YPConfig.colors.navigationBarActivityIndicatorColor
         barButtonItem = UIBarButtonItem(customView: spinner)
         spinner.startAnimating()
     }
@@ -23,6 +24,6 @@ struct YPLoaders {
                                         style: .plain,
                                         target: target,
                                         action: action)
+        barButtonItem?.tintColor = YPConfig.colors.navigationBarTextColor
     }
 }
-
