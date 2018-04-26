@@ -48,9 +48,11 @@ class YPFilterCollectionViewCell: UICollectionViewCell {
         name.textAlignment = .center
         imageView.contentMode = .scaleAspectFill
         
-        imageView.layer.shadowColor = UIColor(r: 46, g: 43, b: 37).cgColor
-        imageView.layer.shadowOpacity = 0.2
-        imageView.layer.shadowOffset = CGSize(width: 4, height: 7)
-        imageView.layer.shadowRadius = 5
+        self.clipsToBounds = false
+        self.layer.shadowColor = UIColor(r: 46, g: 43, b: 37).cgColor
+        self.layer.shadowOpacity = 0.2
+        self.layer.shadowOffset = CGSize(width: 4, height: 7)
+        self.layer.shadowRadius = 5
+        self.layer.backgroundColor = UIColor.clear.cgColor
     }
 }

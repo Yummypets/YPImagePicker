@@ -19,7 +19,7 @@ class YPAssetViewContainer: UIView {
     public let spinnerView = UIView()
     public let squareCropButton = UIButton()
     public let multipleSelectionButton = UIButton()
-    public var onlySquareImages = false
+    public var onlySquare = YPConfig.onlySquareFromLibrary
     public var isShown = true
     
     private let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
@@ -45,8 +45,10 @@ class YPAssetViewContainer: UIView {
         let touchDownGR = UILongPressGestureRecognizer(target: self,
                                                        action: #selector(handleTouchDown))
         touchDownGR.minimumPressDuration = 0
-        addGestureRecognizer(touchDownGR)
         touchDownGR.delegate = self
+        addGestureRecognizer(touchDownGR)
+        
+        // TODO: Add tap gesture to play/pause. Add double tap gesture to square/unsquare
         
         sv(
             spinnerView.sv(
@@ -64,7 +66,7 @@ class YPAssetViewContainer: UIView {
         curtain.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         curtain.alpha = 0
         
-        if !onlySquareImages {
+        if !onlySquare {
             // Crop Button
             squareCropButton.setImage(YPConfig.icons.cropIcon, for: .normal)
             sv(squareCropButton)
@@ -97,7 +99,7 @@ class YPAssetViewContainer: UIView {
     }
     
     public func refreshSquareCropButton() {
-        if onlySquareImages || isMultipleSelection {
+        if onlySquare {
             squareCropButton.isHidden = true
         } else {
             if let image = assetView?.image {
@@ -120,7 +122,7 @@ class YPAssetViewContainer: UIView {
 // MARK: - ZoomableViewDelegate
 extension YPAssetViewContainer: YPAssetZoomableViewDelegate {
     public func ypAssetZoomableViewDidLayoutSubviews() {
-        let newFrame = assetView!.imageView.convert(assetView!.imageView.bounds, to: self)
+        let newFrame = assetView!.assetImageView.convert(assetView!.assetImageView.bounds, to: self)
         grid.frame = frame.intersection(newFrame)
         grid.layoutIfNeeded()
     }

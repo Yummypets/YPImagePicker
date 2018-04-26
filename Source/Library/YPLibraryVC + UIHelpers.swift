@@ -12,13 +12,12 @@ import Photos
 extension YPLibraryVC {
     
     func display(photo asset: PHAsset, image: UIImage) {
-        v.assetZoomableView.imageSize = CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
         v.assetZoomableView.image = image
         v.assetZoomableView.setFitImage(true)
-        if YPConfig.onlySquareImagesFromLibrary {
+        if YPConfig.onlySquareFromLibrary {
             v.assetZoomableView.minimumZoomScale = v.assetZoomableView.squaredZoomScale
         }
-        v.refreshCropControl()
+        v.assetViewContainer.refreshSquareCropButton()
         
         // Re-apply correct scrollview settings if image has already been adjusted in
         // multiple selection mode so that user can see where they left off.
@@ -35,28 +34,6 @@ extension YPLibraryVC {
             }
             if let contentOffset = selectedAsset.scrollViewContentOffset {
                 v.assetZoomableView.contentOffset = contentOffset
-            }
-        }
-    }
-    
-    func downloadAndSetPreviewFor(video asset: PHAsset) {
-        mediaManager.imageManager?.fetchPreviewFor(video: asset) { preview in
-            // Prevent long images to come after user selected
-            // another in the meantime.
-            if self.latestImageTapped == asset.localIdentifier {
-                DispatchQueue.main.async {
-                    self.v.setPreview(preview)
-                }
-            }
-        }
-    }
-    
-    func downloadAndPlay(video asset: PHAsset) {
-        mediaManager.imageManager?.fetchPlayerItem(for: asset) { playerItem in
-            // Prevent long videos to come after user selected another in the meantime.
-            if self.latestImageTapped == asset.localIdentifier {
-                self.v.assetZoomableView.video = playerItem
-                self.v.hideLoader()
             }
         }
     }

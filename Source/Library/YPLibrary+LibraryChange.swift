@@ -10,7 +10,6 @@ import UIKit
 import Photos
 
 extension YPLibraryVC: PHPhotoLibraryChangeObserver {
-    
     func registerForLibraryChanges() {
         PHPhotoLibrary.shared().register(self)
     }

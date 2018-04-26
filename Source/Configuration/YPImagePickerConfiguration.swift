@@ -30,8 +30,8 @@ public struct YPImagePickerConfiguration {
     /// Use this property to modify the default colors provided.
     public var colors = YPColors()
     
-    /// Set this to true if you want to force the  library output to be a squared image. Defaults to false
-    public var onlySquareImagesFromLibrary = false
+    /// Set this to true if you want to force the library output to be a squared image. Defaults to false
+    public var onlySquareFromLibrary = false
     
     /// Set this to true if you want to force the camera output to be a squared image. Defaults to true
     public var onlySquareImagesFromCamera = true

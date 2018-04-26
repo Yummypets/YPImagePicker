@@ -84,12 +84,6 @@ extension YPLibraryView {
         assetViewContainer.grid.alpha = 0
     }
     
-    // MARK: - Preview
-    
-    func setPreview(_ image: UIImage) {
-        assetZoomableView.image = image
-    }
-    
     // MARK: - Loader
     
     func fadeInLoader() {
@@ -100,12 +94,6 @@ extension YPLibraryView {
     
     func hideLoader() {
         assetViewContainer.spinnerView.alpha = 0
-    }
-    
-    // MARK: - Crop Control
-    
-    func refreshCropControl() {
-        assetViewContainer.refreshSquareCropButton()
     }
     
     // MARK: - Crop Rect

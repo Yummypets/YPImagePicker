@@ -8,7 +8,7 @@
 //
 
 import UIKit
-import AVFoundation
+import Photos
 
 protocol YPAssetZoomableViewDelegate: class {
     func ypAssetZoomableViewDidLayoutSubviews()
@@ -17,48 +17,71 @@ protocol YPAssetZoomableViewDelegate: class {
 }
 
 final class YPAssetZoomableView: UIScrollView {
-    weak var myDelegate: YPAssetZoomableViewDelegate?
-    var isVideoMode = false
-
-    var cropAreaDidChange = {}
-    var imageSize: CGSize?
-    var squaredZoomScale: CGFloat = 1
-    var onlySquareImages = false { didSet {
-            bouncesZoom = false
-            bounces = false
-        }}
-
-    public var imageView = UIImageView()
+    public weak var myDelegate: YPAssetZoomableViewDelegate?
+    public var cropAreaDidChange = {}
+    public var squaredZoomScale: CGFloat = 1
+    public var isVideoMode = false
+    public var photoImageView = UIImageView()
     public var image: UIImage! { didSet { didSetImage(image) }}
     public var videoView = YPVideoView()
-    public var video: AVPlayerItem! { didSet { didSetVideo(video) }}
     
-    func didSetVideo(_ video: AVPlayerItem) {
-        videoView.frame = frame
-        addSubview(videoView)
-        videoView.loadVideo(video)
+    // Image view of the asset for convenience. Can be video preview image view or photo image view.
+    public var assetImageView: UIImageView {
+        return isVideoMode ? videoView.previewImageView : photoImageView
     }
 
-    func didSetImage(_ image: UIImage) {
+    public func setVideo(video: PHAsset,
+                  mediaManager: LibraryMediaManager,
+                  completion: @escaping () -> Void) {
+        isVideoMode = true
+        photoImageView.removeFromSuperview()
+        
         minimumZoomScale = 1
         setZoomScale(1.0, animated: false)
         
-        if !imageView.isDescendant(of: self) {
-            imageView.alpha = 1.0
-            addSubview(imageView)
+        if !videoView.isDescendant(of: self) {
+            addSubview(videoView)
+        }
+     
+        mediaManager.imageManager?.fetchPreviewFor(video: video) { preview in
+            self.videoView.setPreviewImage(preview)
+            self.setAssetFrame()
+            self.videoView.center = self.center
+            completion()
+        }
+        mediaManager.imageManager?.fetchPlayerItem(for: video) { playerItem in
+            self.videoView.loadVideo(playerItem)
+            self.videoView.play()
+        }
+    }
+    
+    fileprivate func didSetImage(_ image: UIImage) {
+        isVideoMode = false
+        videoView.removeFromSuperview()
+        videoView.deallocate()
+        
+        minimumZoomScale = 1
+        setZoomScale(1.0, animated: false)
+        
+        if !photoImageView.isDescendant(of: self) {
+            addSubview(photoImageView)
         }
         
-        if isVideoMode {
-            imageView.frame = frame
-            imageView.contentMode = .scaleAspectFit
-            imageView.image = image
-            contentSize = CGSize.zero
-            return
-        }
+        self.photoImageView.center = center
+        self.photoImageView.contentMode = .scaleAspectFill
+        self.photoImageView.image = self.image
+        photoImageView.clipsToBounds = true
+        
+        setAssetFrame()
+    }
+    
+    fileprivate func setAssetFrame() {
+        let view = isVideoMode ? videoView : photoImageView
+        let image: UIImage = assetImageView.image!
         
         let screenSize: CGFloat = UIScreen.main.bounds.width
-        self.imageView.frame.size.width = screenSize
-        self.imageView.frame.size.height = screenSize
+        view.frame.size.width = screenSize
+        view.frame.size.height = screenSize
         
         var squareZoomScale: CGFloat = 1.0
         let w = image.size.width
@@ -66,25 +89,21 @@ final class YPAssetZoomableView: UIScrollView {
         
         if w > h { // Landscape
             squareZoomScale = (1.0 / (w / h))
-            self.imageView.frame.size.width = screenSize
-            self.imageView.frame.size.height = screenSize*squareZoomScale
+            view.frame.size.width = screenSize
+            view.frame.size.height = screenSize * squareZoomScale
             
         } else if h > w { // Portrait
             squareZoomScale = (1.0 / (h / w))
-            self.imageView.frame.size.width = screenSize*squareZoomScale
-            self.imageView.frame.size.height = screenSize
+            view.frame.size.width = screenSize * squareZoomScale
+            view.frame.size.height = screenSize
         }
-        
-        self.imageView.center = center
-        
-        self.imageView.contentMode = .scaleAspectFill
-        self.imageView.image = self.image
-        imageView.clipsToBounds = true
         
         refreshZoomScale()
     }
     
     func refreshZoomScale() {
+        let image = isVideoMode ? videoView.previewImageView.image! : photoImageView.image!
+        
         var squareZoomScale: CGFloat = 1.0
         let w = image.size.width
         let h = image.size.height
@@ -94,12 +113,11 @@ final class YPAssetZoomableView: UIScrollView {
         } else if h > w { // Portrait
             squareZoomScale = (h / w)
         }
+        
         squaredZoomScale = squareZoomScale
     }
     
     func setFitImage(_ fit: Bool, animated isAnimated: Bool = false) {
-        // uncomment if need animation
-//        let animated = isAnimated ?? !onlySquareImages
         refreshZoomScale()
         if fit {
             setZoomScale(squaredZoomScale, animated: isAnimated)
@@ -112,8 +130,8 @@ final class YPAssetZoomableView: UIScrollView {
         super.init(coder: aDecoder)!
         frame.size      = CGSize.zero
         clipsToBounds   = true
-        imageView.alpha = 0.0
-        imageView.frame = CGRect(origin: CGPoint.zero, size: CGSize.zero)
+        photoImageView.frame = CGRect(origin: CGPoint.zero, size: CGSize.zero)
+        videoView.frame = CGRect(origin: CGPoint.zero, size: CGSize.zero)
         maximumZoomScale = 6.0
         minimumZoomScale = 1
         showsHorizontalScrollIndicator = false
@@ -122,6 +140,11 @@ final class YPAssetZoomableView: UIScrollView {
         alwaysBounceHorizontal = true
         alwaysBounceVertical = true
         isScrollEnabled = true
+        
+        if YPConfig.onlySquareFromLibrary {
+            bouncesZoom = false
+            bounces = false
+        }
     }
     
     override func layoutSubviews() {
@@ -130,17 +153,17 @@ final class YPAssetZoomableView: UIScrollView {
     }
 }
 
+// MARK: UIScrollViewDelegate Protocol
 extension YPAssetZoomableView: UIScrollViewDelegate {
-    
-    // MARK: UIScrollViewDelegate Protocol
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        return isVideoMode ? videoView : imageView
+        return isVideoMode ? videoView : photoImageView
     }
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         myDelegate?.ypAssetZoomableViewScrollViewDidZoom()
         let boundsSize = scrollView.bounds.size
-        var contentsFrame = imageView.frame
+        var contentsFrame = isVideoMode ? videoView.frame : photoImageView.frame
+        
         if contentsFrame.size.width < boundsSize.width {
             contentsFrame.origin.x = (boundsSize.width - contentsFrame.size.width) / 2.0
         } else {
@@ -152,12 +175,19 @@ extension YPAssetZoomableView: UIScrollViewDelegate {
         } else {
             contentsFrame.origin.y = 0.0
         }
-        imageView.frame = contentsFrame
+        
+        if isVideoMode {
+            videoView.frame = contentsFrame
+        } else {
+            photoImageView.frame = contentsFrame
+        }
     }
     
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
+        guard let view = view, view == photoImageView || view == videoView else { return }
+        
         myDelegate?.ypAssetZoomableViewScrollViewDidEndZooming()
-        contentSize = CGSize(width: imageView.frame.width + 1, height: imageView.frame.height + 1)
+        contentSize = CGSize(width: view.frame.width + 1, height: view.frame.height + 1)
         cropAreaDidChange()
     }
     

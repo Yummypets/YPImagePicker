@@ -53,9 +53,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         registerForTapOnPreview()
         refreshMediaRequest()
         
-        v.assetViewContainer.onlySquareImages = YPConfig.onlySquareImagesFromLibrary
         v.assetViewContainer.multipleSelectionButton.isHidden = !(YPConfig.maxNumberOfItems > 1)
-        v.assetZoomableView.onlySquareImages = YPConfig.onlySquareImagesFromLibrary
         v.maxNumberWarningLabel.text = String(format: YPConfig.wordings.warningMaxItemsLimit, YPConfig.maxNumberOfItems)
     }
     
@@ -258,9 +256,6 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         
         switch asset.mediaType {
         case .image:
-            v.assetZoomableView.isVideoMode = false
-            self.delegate?.libraryViewFinishedLoadingImage()
-            self.v.hideLoader()
             imageLoadingTimer = Timer(timeInterval: 0.3, target: self,
                                       selector: #selector(tick),
                                       userInfo: nil,
@@ -274,17 +269,18 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                         self.imageLoadingTimer?.invalidate()
                         self.imageLoadingTimer = nil
                         self.delegate?.libraryViewFinishedLoadingImage()
-                        self.v.hideLoader()
                     }
                     self.display(photo: asset, image: image)
+                    self.v.hideLoader()
+                    self.v.hideGrid()
                 }
             }
         case .video:
-            v.assetZoomableView.isVideoMode = true
-            v.hideGrid()
-            v.refreshCropControl()
-            downloadAndSetPreviewFor(video: asset)
-            downloadAndPlay(video: asset)
+            v.assetZoomableView.setVideo(video: asset, mediaManager: mediaManager) {
+                self.v.hideLoader()
+                self.v.hideGrid()
+            }
+            v.assetViewContainer.refreshSquareCropButton()
         case .audio, .unknown:
             ()
         }

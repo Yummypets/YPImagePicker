@@ -16,13 +16,14 @@ public class YPVideoView: UIView {
     internal let playerView = UIView()
     internal let playerLayer = AVPlayerLayer()
     internal let playImageView = UIImageView(image: YPConfig.icons.playImage)
+    internal var previewImageView = UIImageView()
     
     public var player: AVPlayer {
-        guard let p = playerLayer.player else {
-            print("⚠️ YPVideoView >>> Problems with AVPlayer. Must not see this.")
+        guard playerLayer.player != nil else {
+//            print("⚠️ YPVideoView >>> Problems with AVPlayer. Must not see this.")
             return AVPlayer()
         }
-        return p
+        return playerLayer.player!
     }
     
     public override init(frame: CGRect) {
@@ -42,18 +43,20 @@ public class YPVideoView: UIView {
         addGestureRecognizer(singleTapGR)
         
         // Loop playback
-        NotificationCenter.default.addObserver(self,
-                         selector: #selector(playerItemDidReachEnd(_:)),
-                         name: .AVPlayerItemDidPlayToEndTime,
-                         object: nil)
-        
+        addReachEndObserver()
+    
+        playerView.alpha = 0
         playImageView.alpha = 0.8
         playerLayer.videoGravity = .resizeAspect
+        previewImageView.contentMode = .scaleAspectFit
         
         sv(
+            previewImageView,
             playerView,
             playImageView
         )
+        
+        previewImageView.fillContainer()
         playImageView.centerInContainer()
         playerView.fillContainer()
         playerView.layer.addSublayer(playerLayer)
@@ -62,6 +65,7 @@ public class YPVideoView: UIView {
     override public func layoutSubviews() {
         super.layoutSubviews()
         playerLayer.frame = playerView.frame
+        previewImageView.frame = playerView.frame
     }
     
     @objc internal func singleTap() {
@@ -73,6 +77,19 @@ public class YPVideoView: UIView {
         player.seek(to: kCMTimeZero)
         player.play()
     }
+    
+//    public override func observeValue(forKeyPath keyPath: String?,
+//                                      of object: Any?,
+//                                      change: [NSKeyValueChangeKey : Any]?,
+//                                      context: UnsafeMutableRawPointer?) {
+//        if object is AVPlayerItem && (keyPath == "status") {
+//            if player.currentItem!.status == .readyToPlay {
+//                previewImageView.alpha = 0
+//                playerView.alpha = 1
+//                player.currentItem!.removeObserver(self, forKeyPath: "status")
+//            }
+//        }
+//    }
 }
 
 // MARK: - Video handling
@@ -93,6 +110,10 @@ extension YPVideoView {
         }
         
         playerLayer.player = player
+//        self.player.currentItem!.addObserver(self,
+//                                            forKeyPath: "status",
+//                                            options: .new,
+//                                            context: nil)
     }
     
     /// Convenience func to pause or unpause video dependely of state
@@ -108,6 +129,7 @@ extension YPVideoView {
     public func play() {
         player.play()
         showPlayImage(show: false)
+        addReachEndObserver()
     }
     
     public func pause() {
@@ -119,6 +141,18 @@ extension YPVideoView {
         player.pause()
         player.seek(to: kCMTimeZero)
         showPlayImage(show: true)
+        removeReachEndObserver()
+    }
+    
+    public func deallocate() {
+        playerLayer.player = nil
+    }
+}
+
+// MARK: - Other API
+extension YPVideoView {
+    public func setPreviewImage(_ image: UIImage) {
+        previewImageView.image = image
     }
     
     /// Shows or hide the play image over the view.
@@ -127,10 +161,14 @@ extension YPVideoView {
             self.playImageView.alpha = show ? 0.8 : 0
         }
     }
-}
-
-// MARK: - Other API
-extension YPVideoView {
+    
+    public func addReachEndObserver() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(playerItemDidReachEnd(_:)),
+                                               name: .AVPlayerItemDidPlayToEndTime,
+                                               object: nil)
+    }
+    
     /// Removes the observer for AVPlayerItemDidPlayToEndTime. Could be needed to implement own observer
     public func removeReachEndObserver() {
         NotificationCenter.default.removeObserver(self,
