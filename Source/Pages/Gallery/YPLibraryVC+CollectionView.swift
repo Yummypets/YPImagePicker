@@ -124,11 +124,8 @@ extension YPLibraryVC: UICollectionViewDelegate {
     }
     
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
         var previouslySelectedIndexPath: IndexPath?
-        if let currentlySelectedIndex = currentlySelectedIndex {
-            previouslySelectedIndexPath = IndexPath(row: currentlySelectedIndex, section: 0)
-        }
+        previouslySelectedIndexPath = IndexPath(row: currentlySelectedIndex, section: 0)
         
         // If this is the only selected cell, do not deselect.
         if selection.count == 1 && selection.first?.index == indexPath.row {

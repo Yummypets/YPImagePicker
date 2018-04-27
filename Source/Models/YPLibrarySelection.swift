@@ -15,7 +15,7 @@ struct YPLibrarySelection {
     var scrollViewZoomScale: CGFloat?
     
     init(index: Int,
-         cropRect:CGRect? = nil,
+         cropRect: CGRect? = nil,
          scrollViewContentOffset: CGPoint? = nil,
          scrollViewZoomScale: CGFloat? = nil) {
         self.index = index

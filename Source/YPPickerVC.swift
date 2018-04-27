@@ -308,23 +308,21 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
 }
 
 extension YPPickerVC: YPLibraryViewDelegate {
-    public func libraryViewStartedLoadingImage() {
+    public func libraryViewStartedLoading() {
         DispatchQueue.main.async {
+            self.libraryVC?.v.fadeInLoader()
             YPLoaders.enableActivityIndicator(barButtonItem: &self.navigationItem.rightBarButtonItem)
         }
     }
     
-    public func libraryViewFinishedLoadingImage() {
+    public func libraryViewFinishedLoading() {
         DispatchQueue.main.async {
+            self.libraryVC?.v.hideLoader()
             YPLoaders.disableActivityIndicator(barButtonItem: &self.navigationItem.rightBarButtonItem,
                                                title: YPConfig.wordings.next,
                                                target: self,
                                                action: #selector(self.done))
         }
-    }
-    
-    public func libraryViewCameraRollUnauthorized() {
-        
     }
     
     public func libraryViewDidToggleMultipleSelection(enabled: Bool) {

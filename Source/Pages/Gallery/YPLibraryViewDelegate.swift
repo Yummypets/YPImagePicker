@@ -10,8 +10,7 @@ import Foundation
 
 @objc
 public protocol YPLibraryViewDelegate: class {
-    func libraryViewCameraRollUnauthorized()
-    func libraryViewStartedLoadingImage()
-    func libraryViewFinishedLoadingImage()
+    func libraryViewStartedLoading()
+    func libraryViewFinishedLoading()
     func libraryViewDidToggleMultipleSelection(enabled: Bool)
 }

@@ -13,7 +13,7 @@ import AVFoundation
 
 /// The container for asset (video or image). It containts the YPGridView and YPAssetZoomableView.
 class YPAssetViewContainer: UIView {
-    public var assetView: YPAssetZoomableView?
+    public var zoomableView: YPAssetZoomableView?
     public let grid = YPGridView()
     public let curtain = UIView()
     public let spinnerView = UIView()
@@ -35,8 +35,8 @@ class YPAssetViewContainer: UIView {
         
         for sv in subviews {
             if let cv = sv as? YPAssetZoomableView {
-                assetView = cv
-                assetView?.myDelegate = self
+                zoomableView = cv
+                zoomableView?.myDelegate = self
             }
         }
         
@@ -72,7 +72,7 @@ class YPAssetViewContainer: UIView {
             sv(squareCropButton)
             squareCropButton.size(42)
             |-15-squareCropButton
-            squareCropButton.Bottom == assetView!.Bottom - 15
+            squareCropButton.Bottom == zoomableView!.Bottom - 15
         }
         
         // Multiple selection button
@@ -80,29 +80,29 @@ class YPAssetViewContainer: UIView {
         multipleSelectionButton.size(42)
         multipleSelectionButton-15-|
         multipleSelectionButton.setImage(YPConfig.icons.multipleSelectionOffIcon, for: .normal)
-        multipleSelectionButton.Bottom == assetView!.Bottom - 15
+        multipleSelectionButton.Bottom == zoomableView!.Bottom - 15
         
     }
     
     // MARK: - Square button
 
     @objc public func squareCropButtonTapped() {
-        if let cropView = assetView {
-            let z = cropView.zoomScale
-            if z >= 1 && z < cropView.squaredZoomScale {
+        if let zoomableView = zoomableView {
+            let z = zoomableView.zoomScale
+            if z >= 1 && z < zoomableView.squaredZoomScale {
                 shouldCropToSquare = true
             } else {
                 shouldCropToSquare = false
             }
         }
-        assetView?.setFitImage(shouldCropToSquare, animated: true)
+        zoomableView?.fitImage(shouldCropToSquare, animated: true)
     }
     
     public func refreshSquareCropButton() {
         if onlySquare {
             squareCropButton.isHidden = true
         } else {
-            if let image = assetView?.assetImageView.image {
+            if let image = zoomableView?.assetImageView.image {
                 let isImageASquare = image.size.width == image.size.height
                 squareCropButton.isHidden = isImageASquare
             }
@@ -121,8 +121,8 @@ class YPAssetViewContainer: UIView {
 
 // MARK: - ZoomableViewDelegate
 extension YPAssetViewContainer: YPAssetZoomableViewDelegate {
-    public func ypAssetZoomableViewDidLayoutSubviews() {
-        let newFrame = assetView!.assetImageView.convert(assetView!.assetImageView.bounds, to: self)
+    public func ypAssetZoomableViewDidLayoutSubviews(_ zoomableView: YPAssetZoomableView) {
+        let newFrame = zoomableView.assetImageView.convert(zoomableView.assetImageView.bounds, to: self)
         grid.frame = frame.intersection(newFrame)
         grid.layoutIfNeeded()
     }

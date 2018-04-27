@@ -11,7 +11,7 @@ import UIKit
 import Photos
 
 protocol YPAssetZoomableViewDelegate: class {
-    func ypAssetZoomableViewDidLayoutSubviews()
+    func ypAssetZoomableViewDidLayoutSubviews(_ zoomableView: YPAssetZoomableView)
     func ypAssetZoomableViewScrollViewDidZoom()
     func ypAssetZoomableViewScrollViewDidEndZooming()
 }
@@ -22,7 +22,6 @@ final class YPAssetZoomableView: UIScrollView {
     public var squaredZoomScale: CGFloat = 1
     public var isVideoMode = false
     public var photoImageView = UIImageView()
-    public var image: UIImage! { didSet { didSetImage(image) }}
     public var videoView = YPVideoView()
     
     // Image view of the asset for convenience. Can be video preview image view or photo image view.
@@ -30,78 +29,118 @@ final class YPAssetZoomableView: UIScrollView {
         return isVideoMode ? videoView.previewImageView : photoImageView
     }
 
-    public func setVideo(video: PHAsset,
+    /// Set zoom scale to fit the image to square or show the full image
+    //
+    /// - Parameters:
+    ///   - fit: If true - zoom to show squared. If false - show full.
+    public func fitImage(_ fit: Bool, animated isAnimated: Bool = false) {
+        calculateSquaredZoomScale()
+        if fit {
+            setZoomScale(squaredZoomScale, animated: isAnimated)
+        } else {
+            setZoomScale(1, animated: isAnimated)
+        }
+    }
+    
+    /// Re-apply correct scrollview settings if image has already been adjusted in
+    /// multiple selection mode so that user can see where they left off.
+    public func applyStoredCropPosition(_ scp: YPLibrarySelection) {
+        // ZoomScale needs to be set first.
+        if let zoomScale = scp.scrollViewZoomScale {
+            setZoomScale(zoomScale, animated: false)
+        }
+        if let contentOffset = scp.scrollViewContentOffset {
+            setContentOffset(contentOffset, animated: false)
+        }
+    }
+    
+    public func setVideo(_ video: PHAsset,
                   mediaManager: LibraryMediaManager,
                   completion: @escaping () -> Void) {
-        isVideoMode = true
-        photoImageView.removeFromSuperview()
-        
-        minimumZoomScale = 1
-        setZoomScale(1.0, animated: false)
-        
-        if !videoView.isDescendant(of: self) {
-            addSubview(videoView)
-        }
-     
-        mediaManager.imageManager?.fetchPreviewFor(video: video) { preview in
+        mediaManager.imageManager?.fetchPreviewFor(video: video) { [unowned self] preview in
+            self.isVideoMode = true
+            self.photoImageView.removeFromSuperview()
+            
+            if self.videoView.isDescendant(of: self) == false {
+                self.addSubview(self.videoView)
+            }
+            
             self.videoView.setPreviewImage(preview)
-            self.setAssetFrame()
-            self.videoView.center = self.center
+            
+            self.setAssetFrame(for: self.videoView, with: preview)
+            
+            // Fit video view if only squared
+            if YPConfig.onlySquareFromLibrary {
+                self.fitImage(true)
+            }
+            
             completion()
         }
-        mediaManager.imageManager?.fetchPlayerItem(for: video) { playerItem in
-            self.videoView.loadVideo(playerItem)
-            self.videoView.play()
+//        mediaManager.imageManager?.fetchPlayerItem(for: video) { playerItem in
+//            self.videoView.loadVideo(playerItem)
+//            self.videoView.play()
+//        }
+    }
+    
+    public func setImage(_ photo: PHAsset,
+                         mediaManager: LibraryMediaManager,
+                         storedCropPosition: YPLibrarySelection?,
+                         completion: @escaping () -> Void) {
+        mediaManager.imageManager?.fetch(photo: photo) { [unowned self] image, isFromCloud in
+            self.isVideoMode = false
+            self.videoView.removeFromSuperview()
+            self.videoView.deallocate()
+            
+            if self.photoImageView.isDescendant(of: self) == false {
+                self.addSubview(self.photoImageView)
+            }
+            
+            self.setZoomScale(1, animated: false)
+            
+            self.photoImageView.image = image
+            self.photoImageView.contentMode = .scaleAspectFill
+            self.photoImageView.clipsToBounds = true
+            
+            self.setAssetFrame(for: self.photoImageView, with: image)
+            
+            // Fit image if only squared
+            if YPConfig.onlySquareFromLibrary {
+                self.fitImage(true)
+            }
+            
+            // Stored crop position in multiple selection
+            if let scp = storedCropPosition {
+                self.applyStoredCropPosition(scp)
+            }
+
+            completion()
         }
     }
     
-    fileprivate func didSetImage(_ image: UIImage) {
-        isVideoMode = false
-        videoView.removeFromSuperview()
-        videoView.deallocate()
-        
-        minimumZoomScale = 1
-        setZoomScale(1.0, animated: false)
-        
-        if !photoImageView.isDescendant(of: self) {
-            addSubview(photoImageView)
-        }
-        
-        self.photoImageView.center = center
-        self.photoImageView.contentMode = .scaleAspectFill
-        self.photoImageView.image = self.image
-        photoImageView.clipsToBounds = true
-        
-        setAssetFrame()
-    }
-    
-    fileprivate func setAssetFrame() {
-        let view = isVideoMode ? videoView : photoImageView
-        let image: UIImage = assetImageView.image!
-        
-        let screenSize: CGFloat = UIScreen.main.bounds.width
-        view.frame.size.width = screenSize
-        view.frame.size.height = screenSize
-        
+    fileprivate func setAssetFrame(`for` view: UIView, with image: UIImage) {
+        let screenWidth: CGFloat = UIScreen.main.bounds.width
         var squareZoomScale: CGFloat = 1.0
         let w = image.size.width
         let h = image.size.height
         
         if w > h { // Landscape
             squareZoomScale = (1.0 / (w / h))
-            view.frame.size.width = screenSize
-            view.frame.size.height = screenSize * squareZoomScale
-            
+            view.frame.size.width = screenWidth
+            view.frame.size.height = screenWidth * squareZoomScale
         } else if h > w { // Portrait
             squareZoomScale = (1.0 / (h / w))
-            view.frame.size.width = screenSize * squareZoomScale
-            view.frame.size.height = screenSize
+            view.frame.size.width = screenWidth * squareZoomScale
+            view.frame.size.height = screenWidth
+        } else { // Square
+            view.frame.size.width = screenWidth
+            view.frame.size.height = screenWidth
         }
         
-        refreshZoomScale()
+        view.center = center
     }
     
-    func refreshZoomScale() {
+    /// Calculate zoom scale which will fit the image to square
+    fileprivate func calculateSquaredZoomScale() {
         let image = isVideoMode ? videoView.previewImageView.image! : photoImageView.image!
         
         var squareZoomScale: CGFloat = 1.0
@@ -115,15 +154,6 @@ final class YPAssetZoomableView: UIScrollView {
         }
         
         squaredZoomScale = squareZoomScale
-    }
-    
-    func setFitImage(_ fit: Bool, animated isAnimated: Bool = false) {
-        refreshZoomScale()
-        if fit {
-            setZoomScale(squaredZoomScale, animated: isAnimated)
-        } else {
-            setZoomScale(1, animated: isAnimated)
-        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -140,16 +170,11 @@ final class YPAssetZoomableView: UIScrollView {
         alwaysBounceHorizontal = true
         alwaysBounceVertical = true
         isScrollEnabled = true
-        
-        if YPConfig.onlySquareFromLibrary {
-            bouncesZoom = false
-            bounces = false
-        }
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        myDelegate?.ypAssetZoomableViewDidLayoutSubviews()
+        myDelegate?.ypAssetZoomableViewDidLayoutSubviews(self)
     }
 }
 
@@ -161,6 +186,7 @@ extension YPAssetZoomableView: UIScrollViewDelegate {
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         myDelegate?.ypAssetZoomableViewScrollViewDidZoom()
+        
         let boundsSize = scrollView.bounds.size
         var contentsFrame = isVideoMode ? videoView.frame : photoImageView.frame
         
@@ -186,8 +212,12 @@ extension YPAssetZoomableView: UIScrollViewDelegate {
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
         guard let view = view, view == photoImageView || view == videoView else { return }
         
+        // prevent to zoom out
+        if YPConfig.onlySquareFromLibrary && scale < squaredZoomScale {
+            self.fitImage(true, animated: true)
+        }
+        
         myDelegate?.ypAssetZoomableViewScrollViewDidEndZooming()
-        contentSize = CGSize(width: view.frame.width + 1, height: view.frame.height + 1)
         cropAreaDidChange()
     }
     

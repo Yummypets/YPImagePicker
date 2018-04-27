@@ -28,7 +28,6 @@ class LibraryMediaManager {
     }
     
     func updateCachedAssets(in collectionView: UICollectionView) {
-        
         let size = UIScreen.main.bounds.width/4 * UIScreen.main.scale
         let cellSize = CGSize(width: size, height: size)
         

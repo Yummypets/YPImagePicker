@@ -169,7 +169,9 @@ extension PHCachingImageManager {
         let ts = CGSize(width: screenWidth, height: screenWidth)
         requestImage(for: asset, targetSize: ts, contentMode: .aspectFill, options: options) { image, _ in
             if let image = image {
-                callback(image)
+                DispatchQueue.main.async {
+                    callback(image)
+                }
             }
         }
     }
@@ -187,10 +189,12 @@ extension PHCachingImageManager {
         })
     }
     
+    /// This method return two images in the callback. First is with low resolution, second with high. So the callback fires twice. But with isSynchronous = true there is only one high resolution image.
     // Bool = isFromCloud
     func fetch(photo asset: PHAsset, callback: @escaping (UIImage, Bool) -> Void) {
         let options = PHImageRequestOptions()
         options.isNetworkAccessAllowed = true
+        options.isSynchronous = true
         requestImage(for: asset,
                      targetSize: CGSize(width: asset.pixelWidth, height: asset.pixelHeight),
                      contentMode: .aspectFill,
