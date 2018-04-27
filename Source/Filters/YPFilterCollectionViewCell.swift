@@ -46,7 +46,9 @@ class YPFilterCollectionViewCell: UICollectionViewCell {
         name.font = .systemFont(ofSize: 11, weight: UIFont.Weight.regular)
         name.textColor = UIColor(r: 154, g: 154, b: 154)
         name.textAlignment = .center
+        
         imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
         
         self.clipsToBounds = false
         self.layer.shadowColor = UIColor(r: 46, g: 43, b: 37).cgColor

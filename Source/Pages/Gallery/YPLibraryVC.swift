@@ -71,25 +71,9 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         // them when user selects a previously selected item.
         v.assetZoomableView.cropAreaDidChange = { [unowned self] in
             if self.multipleSelectionEnabled {
-                self.updateSelectedAssetCropInfos()
+                self.updateCropInfo()
             }
         }
-    }
-    
-    internal func updateSelectedAssetCropInfos() {
-        guard let selectedAssetIndex = selection.index(where: { $0.index == currentlySelectedIndex }) else {
-            return
-        }
-        
-        // Fill new values
-        var selectedAsset = selection[selectedAssetIndex]
-        selectedAsset.scrollViewContentOffset = v.assetZoomableView.contentOffset
-        selectedAsset.scrollViewZoomScale = v.assetZoomableView.zoomScale
-        selectedAsset.cropRect = v.currentCropRect()
-        
-        // Replace
-        selection.remove(at: selectedAssetIndex)
-        selection.insert(selectedAsset, at: selectedAssetIndex)
     }
     
     public override func viewDidAppear(_ animated: Bool) {
@@ -254,18 +238,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         DispatchQueue.global(qos: .userInitiated).async {
             switch asset.mediaType {
             case .image:
-                // Fetch stored crop position
-                var storedCropPosition: YPLibrarySelection? = nil
-                if self.multipleSelectionEnabled,
-                    self.selection.contains(where: { $0.index == self.currentlySelectedIndex }) {
-                    guard let selectedAssetIndex = self.selection.index(where: { $0.index == self.currentlySelectedIndex }) else {
-                        return
-                    }
-                    
-                    storedCropPosition = self.selection[selectedAssetIndex]
-                }
-                
-                self.v.assetZoomableView.setImage(asset, mediaManager: self.mediaManager, storedCropPosition: storedCropPosition) {
+                self.v.assetZoomableView.setImage(asset, mediaManager: self.mediaManager, storedCropPosition: self.fetchStoredCrop()) {
                     self.v.hideLoader()
                     self.v.hideGrid()
                     self.delegate?.libraryViewFinishedLoading()
@@ -303,6 +276,43 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         }
         
         return true
+    }
+    
+    // MARK: - Stored Crop Position
+    
+    internal func updateCropInfo(shouldUpdateOnlyIfNil: Bool = false) {
+        guard let selectedAssetIndex = selection.index(where: { $0.index == currentlySelectedIndex }) else {
+            return
+        }
+        
+        if shouldUpdateOnlyIfNil && selection[selectedAssetIndex].scrollViewContentOffset != nil {
+            return
+        }
+        
+        // Fill new values
+        var selectedAsset = selection[selectedAssetIndex]
+        selectedAsset.scrollViewContentOffset = v.assetZoomableView.contentOffset
+        selectedAsset.scrollViewZoomScale = v.assetZoomableView.zoomScale
+        selectedAsset.cropRect = v.currentCropRect()
+        
+        // Replace
+        selection.remove(at: selectedAssetIndex)
+        selection.insert(selectedAsset, at: selectedAssetIndex)
+    }
+    
+    internal func fetchStoredCrop() -> YPLibrarySelection? {
+        if self.multipleSelectionEnabled,
+            self.selection.contains(where: { $0.index == self.currentlySelectedIndex }) {
+            guard let selectedAssetIndex = self.selection.index(where: { $0.index == self.currentlySelectedIndex }) else {
+                return nil
+            }
+            return self.selection[selectedAssetIndex]
+        }
+        return nil
+    }
+    
+    internal func hasStoredCrop(index: Int) -> Bool {
+        return self.selection.contains(where: { $0.index == index })
     }
     
     // MARK: - Fetching Media
@@ -344,7 +354,6 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                     return (self.mediaManager.fetchResult[$0.index], $0.cropRect)
                 }
                 
-                
                 // Check video length
                 for asset in selectedAssets {
                     if self.fitsVideoLengthLimits(asset: asset.asset) == false {
@@ -383,6 +392,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                 
                 asyncGroup.notify(queue: .main) {
                     multipleItemsCallback(resultMediaItems)
+                    self.delegate?.libraryViewFinishedLoading()
                 }
         } else {
                 let asset = self.mediaManager.selectedAsset!

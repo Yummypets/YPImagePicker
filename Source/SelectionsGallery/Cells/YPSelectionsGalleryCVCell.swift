@@ -19,8 +19,9 @@ public class YPSelectionsGalleryCVCell: UICollectionViewCell {
         self.layer.shadowOpacity = 0.2
         self.layer.shadowOffset = CGSize(width: 4, height: 7)
         self.layer.shadowRadius = 5
-        self.layer.masksToBounds = false
         self.layer.backgroundColor = UIColor.clear.cgColor
+        
+        imageV.clipsToBounds = true
     }
 }
 

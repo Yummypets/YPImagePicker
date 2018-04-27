@@ -45,9 +45,11 @@ extension YPLibraryVC {
         }
     }
     
+    // MARK: - Library collection view cell managing
+    
     /// Removes cell from selection
     func deselect(indexPath: IndexPath) {
-        if let positionIndex = selection.index(where:  { $0.index == indexPath.row }) {
+        if let positionIndex = selection.index(where: { $0.index == indexPath.row }) {
             selection.remove(at: positionIndex)
             // Refresh the numbers
             
@@ -64,6 +66,10 @@ extension YPLibraryVC {
         checkLimit()
     }
     
+    func isInSelectionPull(indexPath: IndexPath) -> Bool {
+        return selection.contains(where: { $0.index == indexPath.row })
+    }
+    
     /// Checks if there can be selected more items. If no - present warning.
     func checkLimit() {
         v.maxNumberWarningView.isHidden = !isLimitExceeded || multipleSelectionEnabled == false
@@ -71,11 +77,6 @@ extension YPLibraryVC {
 }
 
 extension YPLibraryVC: UICollectionViewDataSource {
-    
-    public func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-    
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return mediaManager.fetchResult.count
     }
@@ -124,9 +125,9 @@ extension YPLibraryVC: UICollectionViewDelegate {
     }
     
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        var previouslySelectedIndexPath: IndexPath?
-        previouslySelectedIndexPath = IndexPath(row: currentlySelectedIndex, section: 0)
-        
+        let previouslySelectedIndexPath = IndexPath(row: currentlySelectedIndex, section: 0)
+        currentlySelectedIndex = indexPath.row
+
         // If this is the only selected cell, do not deselect.
         if selection.count == 1 && selection.first?.index == indexPath.row {
             return
@@ -142,10 +143,10 @@ extension YPLibraryVC: UICollectionViewDelegate {
         v.refreshImageCurtainAlpha()
 
         if multipleSelectionEnabled {
-            updateSelectedAssetCropInfos()
+            self.updateCropInfo(shouldUpdateOnlyIfNil: true)
             
-            let cellIsInTheSelectionPool = selection.contains(where: { $0.index == indexPath.row })
-            let cellIsCurrentlySelected = indexPath.row == currentlySelectedIndex
+            let cellIsInTheSelectionPool = isInSelectionPull(indexPath: indexPath)
+            let cellIsCurrentlySelected = previouslySelectedIndexPath.row == currentlySelectedIndex
             
             if cellIsInTheSelectionPool {
                 if cellIsCurrentlySelected {
@@ -163,12 +164,8 @@ extension YPLibraryVC: UICollectionViewDelegate {
             }
         }
         
-        currentlySelectedIndex = indexPath.row
         collectionView.reloadItems(at: [indexPath])
-        
-        if let previouslySelectedIndexPath = previouslySelectedIndexPath {
-            collectionView.reloadItems(at: [previouslySelectedIndexPath])
-        }
+        collectionView.reloadItems(at: [previouslySelectedIndexPath])
     }
 }
 

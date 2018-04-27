@@ -164,7 +164,7 @@ extension PHCachingImageManager {
     func fetchPreviewFor(video asset: PHAsset, callback: @escaping (UIImage) -> Void) {
         let options = PHImageRequestOptions()
         options.isNetworkAccessAllowed = true
-        options.deliveryMode = .opportunistic
+        options.isSynchronous = true
         let screenWidth = UIScreen.main.bounds.width
         let ts = CGSize(width: screenWidth, height: screenWidth)
         requestImage(for: asset, targetSize: ts, contentMode: .aspectFill, options: options) { image, _ in

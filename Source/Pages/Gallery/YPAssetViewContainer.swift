@@ -123,8 +123,17 @@ class YPAssetViewContainer: UIView {
 extension YPAssetViewContainer: YPAssetZoomableViewDelegate {
     public func ypAssetZoomableViewDidLayoutSubviews(_ zoomableView: YPAssetZoomableView) {
         let newFrame = zoomableView.assetImageView.convert(zoomableView.assetImageView.bounds, to: self)
+        
+        // update grid position
         grid.frame = frame.intersection(newFrame)
         grid.layoutIfNeeded()
+        
+        // update play image position
+//        zoomableView.videoView.playImageView.frame = CGRect(x: zoomableView.bounds.size.width / 3,
+//                                                            y: zoomableView.bounds.size.height / 3,
+//                                                            width: zoomableView.bounds.size.width / 4,
+//                                                            height: zoomableView.bounds.size.height / 4)
+//        zoomableView.videoView.playImageView.layoutIfNeeded()
     }
     
     public func ypAssetZoomableViewScrollViewDidZoom() {

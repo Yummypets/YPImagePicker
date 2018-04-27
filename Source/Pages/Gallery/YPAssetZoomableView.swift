@@ -65,6 +65,8 @@ final class YPAssetZoomableView: UIScrollView {
                 self.addSubview(self.videoView)
             }
             
+            self.setZoomScale(1, animated: false)
+            
             self.videoView.setPreviewImage(preview)
             
             self.setAssetFrame(for: self.videoView, with: preview)
@@ -76,10 +78,10 @@ final class YPAssetZoomableView: UIScrollView {
             
             completion()
         }
-//        mediaManager.imageManager?.fetchPlayerItem(for: video) { playerItem in
-//            self.videoView.loadVideo(playerItem)
-//            self.videoView.play()
-//        }
+        mediaManager.imageManager?.fetchPlayerItem(for: video) { playerItem in
+            self.videoView.loadVideo(playerItem)
+            self.videoView.play()
+        }
     }
     
     public func setImage(_ photo: PHAsset,

@@ -19,6 +19,7 @@ struct YPLibrarySelection {
          scrollViewContentOffset: CGPoint? = nil,
          scrollViewZoomScale: CGFloat? = nil) {
         self.index = index
+        self.cropRect = cropRect
         self.scrollViewContentOffset = scrollViewContentOffset
         self.scrollViewZoomScale = scrollViewZoomScale
     }
