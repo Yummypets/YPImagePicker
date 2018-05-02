@@ -10,7 +10,8 @@ import UIKit
 import Photos
 import PryntTrimmerView
 
-public class YPVideoFiltersVC: UIViewController {
+public class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
+    
     @IBOutlet weak var trimBottomItem: YPMenuItem!
     @IBOutlet weak var coverBottomItem: YPMenuItem!
     
@@ -21,12 +22,14 @@ public class YPVideoFiltersVC: UIViewController {
     @IBOutlet weak var coverThumbSelectorView: ThumbSelectorView!
 
     public var inputVideo: YPVideo!
-    public var saveCallback: ((_ resultVideo: YPVideo) -> Void)?
     public var inputAsset: AVAsset { return AVAsset(url: inputVideo.url) }
     
     private var playbackTimeCheckerTimer: Timer?
     private var imageGenerator: AVAssetImageGenerator?
     private var isFromSelectionVC = false
+    
+    var didSave: ((YPMediaItem) -> Void)?
+    var didCancel: (() -> Void)?
 
     /// Designated initializer
     public class func initWith(video: YPVideo,
@@ -71,6 +74,12 @@ public class YPVideoFiltersVC: UIViewController {
         // Navigation bar setup
         title = YPConfig.wordings.filter
         navigationController?.navigationBar.tintColor = YPConfig.colors.navigationBarTextColor
+        if isFromSelectionVC {
+            navigationItem.leftBarButtonItem = UIBarButtonItem(title: YPConfig.wordings.cancel,
+                                                               style: .plain,
+                                                               target: self,
+                                                               action: #selector(cancel))
+        }
         let rightBarButtonTitle = isFromSelectionVC ? YPConfig.wordings.save : YPConfig.wordings.next
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: rightBarButtonTitle,
                                                             style: .plain,
@@ -92,8 +101,14 @@ public class YPVideoFiltersVC: UIViewController {
         super.viewDidAppear(animated)
     }
     
-    @objc public func save() {
-        guard let saveCallback = saveCallback else { return print("Don't have saveCallback") }
+    @objc
+    func cancel() {
+        didCancel?()
+    }
+    
+    @objc
+    public func save() {
+        guard let didSave = didSave else { return print("Don't have saveCallback") }
         YPLoaders.enableActivityIndicator(barButtonItem: &self.navigationItem.rightBarButtonItem)
 
         do {
@@ -111,7 +126,7 @@ public class YPVideoFiltersVC: UIViewController {
                 DispatchQueue.main.async {
                     let resultVideo = YPVideo(thumbnail: weakSelf.coverImageView.image!,
                                               videoURL: destinationURL)
-                    saveCallback(resultVideo)
+                    didSave(YPMediaItem.video(v: resultVideo))
                 }
             }
         } catch let error {
