@@ -143,7 +143,6 @@ extension YPLibraryVC: UICollectionViewDelegate {
         v.refreshImageCurtainAlpha()
 
         if multipleSelectionEnabled {
-            self.updateCropInfo(shouldUpdateOnlyIfNil: true)
             
             let cellIsInTheSelectionPool = isInSelectionPull(indexPath: indexPath)
             let cellIsCurrentlySelected = previouslySelectedIndexPath.row == currentlySelectedIndex
