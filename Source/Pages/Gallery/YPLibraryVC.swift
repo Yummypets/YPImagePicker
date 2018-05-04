@@ -87,6 +87,11 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
             .addTarget(self,
                        action: #selector(multipleSelectionButtonTapped),
                        for: .touchUpInside)
+        
+        // Forces assetZoomableView to have a contentSize.
+        // otherwise 0 in first selection triggering the bug :
+        // "invalid image size 0x0"
+        v.assetZoomableView.setZoomScale(1, animated: false)
     }
     
     public override func viewWillDisappear(_ animated: Bool) {
