@@ -88,7 +88,9 @@ extension YPSelectionsGalleryVC: UICollectionViewDelegate {
             self.dismiss(animated: true, completion: nil)
         }
         if let mediaFilterVC = mediaFilterVC as? UIViewController {
-            present(UINavigationController(rootViewController: mediaFilterVC), animated: true, completion: nil)
+            let navVC = UINavigationController(rootViewController: mediaFilterVC)
+            navVC.navigationBar.isTranslucent = false
+            present(navVC, animated: true, completion: nil)
         }
     }
 }
