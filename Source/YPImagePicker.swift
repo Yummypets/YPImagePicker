@@ -85,8 +85,10 @@ public class YPImagePicker: UINavigationController {
                     let filterVC = YPPhotoFiltersVC(inputPhoto: photo,
                                                     isFromSelectionVC: false)
                     // Show filters and then crop
-                    filterVC.saveCallback = { outputPhoto in
-                        showCropVC(photo: outputPhoto, completion: completion)
+                    filterVC.didSave = { outputMedia in
+                        if case let YPMediaItem.photo(outputPhoto) = outputMedia {
+                            showCropVC(photo: outputPhoto, completion: completion)
+                        }
                     }
                     self.pushViewController(filterVC, animated: false)
                 } else {
@@ -96,8 +98,8 @@ public class YPImagePicker: UINavigationController {
                 if showsFilters {
                     let videoFiltersVC = YPVideoFiltersVC.initWith(video: video,
                                                                    isFromSelectionVC: false)
-                    videoFiltersVC.saveCallback = { [unowned self] outputVideo in
-                        YPConfig.delegate?.imagePicker(self, didSelect: [YPMediaItem.video(v: outputVideo)])
+                    videoFiltersVC.didSave = { [unowned self] outputMedia in
+                        YPConfig.delegate?.imagePicker(self, didSelect: [outputMedia])
                     }
                     self.pushViewController(videoFiltersVC, animated: true)
                 } else {

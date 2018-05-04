@@ -8,7 +8,12 @@
 
 import UIKit
 
-open class YPPhotoFiltersVC: UIViewController {
+protocol IsMediaFilterVC: class {
+    var didSave: ((YPMediaItem) -> Void)? { get set }
+    var didCancel: (() -> Void)? { get set }
+}
+
+open class YPPhotoFiltersVC: UIViewController, IsMediaFilterVC {
     
     override open var prefersStatusBarHidden: Bool { return YPConfig.hidesStatusBar }
     
@@ -20,9 +25,11 @@ open class YPPhotoFiltersVC: UIViewController {
     var inputPhoto: YPPhoto!
     var thumbImage = UIImage()
     
-    var saveCallback: ((YPPhoto) -> Void)?
     var isImageFiltered = false
-    public var isFromSelectionVC = false
+    private var isFromSelectionVC = false
+    
+    var didSave: ((YPMediaItem) -> Void)?
+    var didCancel: (() -> Void)?
     
     override open func loadView() { view = v }
     
@@ -67,6 +74,12 @@ open class YPPhotoFiltersVC: UIViewController {
         // Navigation bar setup
         title = YPConfig.wordings.filter
         navigationController?.navigationBar.tintColor = YPConfig.colors.navigationBarTextColor
+        if isFromSelectionVC {
+            navigationItem.leftBarButtonItem = UIBarButtonItem(title: YPConfig.wordings.cancel,
+                                                                style: .plain,
+                                                                target: self,
+                                                                action: #selector(cancel))
+        }
         let rightBarButtonTitle = isFromSelectionVC ? YPConfig.wordings.save : YPConfig.wordings.next
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: rightBarButtonTitle,
                                                             style: .plain,
@@ -76,14 +89,20 @@ open class YPPhotoFiltersVC: UIViewController {
         YPHelper.changeBackButtonTitle(self)
     }
     
-    @objc func save() {
+    @objc
+    func cancel() {
+        didCancel?()
+    }
+    
+    @objc
+    func save() {
         let outputImage = v.imageView.image!
 
         if isImageFiltered && YPConfig.shouldSaveNewPicturesToAlbum {
             YPPhotoSaver.trySaveImage(outputImage, inAlbumNamed: YPConfig.albumName)
         }
-        
-        saveCallback?(YPPhoto(image: v.imageView.image!))
+        let photo = YPPhoto(image: v.imageView.image!)
+        didSave?(YPMediaItem.photo(p: photo))
     }
 }
 
