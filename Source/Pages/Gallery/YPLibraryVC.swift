@@ -250,7 +250,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                     self.v.assetViewContainer.refreshSquareCropButton()
                 }
             case .video:
-                self.v.assetZoomableView.setVideo(asset, mediaManager: self.mediaManager) {
+                self.v.assetZoomableView.setVideo(asset, mediaManager: self.mediaManager, storedCropPosition: self.fetchStoredCrop()) {
                     self.v.hideLoader()
                     self.v.hideGrid()
                     self.delegate?.libraryViewFinishedLoading()

@@ -56,6 +56,7 @@ final class YPAssetZoomableView: UIScrollView {
     
     public func setVideo(_ video: PHAsset,
                   mediaManager: LibraryMediaManager,
+                  storedCropPosition: YPLibrarySelection?,
                   completion: @escaping () -> Void) {
         mediaManager.imageManager?.fetchPreviewFor(video: video) { [unowned self] preview in
             self.isVideoMode = true
@@ -74,6 +75,11 @@ final class YPAssetZoomableView: UIScrollView {
             // Fit video view if only squared
             if YPConfig.onlySquareFromLibrary {
                 self.fitImage(true)
+            }
+            
+            // Stored crop position in multiple selection
+            if let scp = storedCropPosition {
+                self.applyStoredCropPosition(scp)
             }
             
             completion()
