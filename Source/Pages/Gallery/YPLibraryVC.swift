@@ -327,10 +327,11 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     }
     
     private func fetchVideoURL(for asset: PHAsset,
+                               withCropRect: CGRect? = nil,
                                callback: @escaping (_ videoURL: URL) -> Void) {
         if fitsVideoLengthLimits(asset: asset) == true {
             delegate?.libraryViewStartedLoading()
-            let normalizedCropRect = DispatchQueue.main.sync { v.currentCropRect() }
+            let normalizedCropRect = withCropRect ?? DispatchQueue.main.sync { v.currentCropRect() }
             let ts = targetSize(for: asset, cropRect: normalizedCropRect)
             let xCrop: CGFloat = normalizedCropRect.origin.x * CGFloat(asset.pixelWidth)
             let yCrop: CGFloat = normalizedCropRect.origin.y * CGFloat(asset.pixelHeight)
@@ -378,13 +379,13 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                         }
                         
                     case .video:
-                        self.fetchVideoURL(for: asset.asset, callback: { videoURL in
+                        self.fetchVideoURL(for: asset.asset, withCropRect: asset.cropRect) { videoURL in
                             createVideoItem(videoURL: videoURL,
                                             completion: { video in
                                                 resultMediaItems.append(YPMediaItem.video(v: video))
                                                 asyncGroup.leave()
                             })
-                        })
+                        }
                     default:
                         break
                     }
