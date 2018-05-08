@@ -144,21 +144,8 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
     }
     
     func refreshMediaRequest() {
-        
-        // Sorting condition
-        let options = PHFetchOptions()
-        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
 
-        switch (configuration.showsPhotosInLibrary, configuration.showsVideoInLibrary) {
-        case (true, true):
-            options.predicate = NSPredicate(format: "mediaType = %d || mediaType = %d",
-                                            PHAssetMediaType.image.rawValue, PHAssetMediaType.video.rawValue)
-        case (true, false):
-            options.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
-        case (false, true):
-            options.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.video.rawValue)
-        case (false, false): break // Show everything 🤔 perhaps an assertionFailure?
-        }
+        let options = buildPHFetchOptions()
 
         if let collection = mediaManager.collection {
             mediaManager.fetchResult = PHAsset.fetchAssets(in: collection, options: options)
@@ -174,6 +161,26 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
                                              scrollPosition: UICollectionViewScrollPosition())
         }
         scrollToTop()
+    }
+
+    func buildPHFetchOptions() -> PHFetchOptions {
+        // Sorting condition
+        let options = PHFetchOptions()
+        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+
+        // Create predicate based on configuration showPhotosInLibrary and showsVideoInLibrary
+        switch (configuration.showsPhotosInLibrary, configuration.showsVideoInLibrary) {
+        case (true, true):
+            options.predicate = NSPredicate(format: "mediaType = %d || mediaType = %d",
+                                            PHAssetMediaType.image.rawValue, PHAssetMediaType.video.rawValue)
+        case (true, false):
+            options.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
+        case (false, true):
+            options.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.video.rawValue)
+        case (false, false): break // Show everything 🤔 perhaps an assertionFailure?
+        }
+
+        return options
     }
     
     func scrollToTop() {
