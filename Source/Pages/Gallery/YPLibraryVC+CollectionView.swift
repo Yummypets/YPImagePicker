@@ -18,31 +18,38 @@ extension YPLibraryVC {
         
         // Long press on cell to enable multiple selection
         let longPressGR = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(longPressGR:)))
-        longPressGR.minimumPressDuration = 0.3
-        longPressGR.delaysTouchesBegan = true
+        longPressGR.minimumPressDuration = 0.5
         v.collectionView.addGestureRecognizer(longPressGR)
     }
     
     /// When tapping on the cell with long press, clear all previously selected cells.
     @objc func handleLongPress(longPressGR: UILongPressGestureRecognizer) {
-        if longPressGR.state != .ended {
+        if multipleSelectionEnabled {
             return
         }
         
-        if multipleSelectionEnabled == true {
-            return
+        if longPressGR.state == .began {
+            let point = longPressGR.location(in: v.collectionView)
+            guard let indexPath = v.collectionView.indexPathForItem(at: point) else {
+                return
+            }
+            startMultipleSelection(at: indexPath)
         }
+    }
+    
+    func startMultipleSelection(at indexPath: IndexPath) {
+        currentlySelectedIndex = indexPath.row
+        multipleSelectionButtonTapped()
         
-        selection.removeAll()
+        // Update preview.
+        changeAsset(mediaManager.fetchResult[indexPath.row])
         
-        let point = longPressGR.location(in: v.collectionView)
-        let indexPath = v.collectionView.indexPathForItem(at: point)
-        
-        if let indexPath = indexPath {
-            currentlySelectedIndex = indexPath.row
-            multipleSelectionButtonTapped()
-            v.collectionView.reloadData()
+        // Bring preview down and keep selected cell visible.
+        panGestureHelper.resetToOriginalState()
+        if !panGestureHelper.isImageShown {
+            v.collectionView.scrollToItem(at: indexPath, at: .top, animated: true)
         }
+        v.refreshImageCurtainAlpha()
     }
     
     // MARK: - Library collection view cell managing
