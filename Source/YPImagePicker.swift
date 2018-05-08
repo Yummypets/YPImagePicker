@@ -63,21 +63,26 @@ public class YPImagePicker: UINavigationController {
             
             switch item {
             case .photo(let photo):
-                // TODO: Save new photo ?
-                let completion = { (image: UIImage) in
-                    let mediaItem = YPMediaItem.photo(p: YPPhoto(image: image))
+                
+                let completion = { (photo: YPPhoto) in
+                    let mediaItem = YPMediaItem.photo(p: photo)
+                    // Save new image to the photo album.
+                    if YPConfig.shouldSaveNewPicturesToAlbum, let modifiedImage = photo.modifiedImage {
+                        YPPhotoSaver.trySaveImage(modifiedImage, inAlbumNamed: YPConfig.albumName)
+                    }
                     YPConfig.delegate?.imagePicker(self, didSelect: [mediaItem])
                 }
                 
-                func showCropVC(photo: YPPhoto, completion: @escaping (_ image: UIImage) -> Void) {
+                func showCropVC(photo: YPPhoto, completion: @escaping (_ aphoto: YPPhoto) -> Void) {
                     if case let YPCropType.rectangle(ratio) = YPConfig.showsCrop {
                         let cropVC = YPCropVC(image: photo.image, ratio: ratio)
                         cropVC.didFinishCropping = { croppedImage in
-                            completion(croppedImage)
+                            photo.modifiedImage = croppedImage
+                            completion(photo)
                         }
                         self.pushViewController(cropVC, animated: true)
                     } else {
-                        completion(photo.image)
+                        completion(photo)
                     }
                 }
                 
