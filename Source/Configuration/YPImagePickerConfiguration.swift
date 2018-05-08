@@ -33,6 +33,9 @@ public struct YPImagePickerConfiguration {
     /// Enables videos within the library and video taking. Defaults to false
     @available(*, unavailable, renamed:"showsVideoInLibrary")
     public var showsVideo = false
+
+    /// Disables photos within the library. Defaults to true
+    public var showsPhotosInLibrary = false
     
     /// Enables videos within the library. Defaults to false
     public var showsVideoInLibrary = false

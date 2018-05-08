@@ -148,16 +148,22 @@ public class YPLibraryVC: UIViewController, PermissionCheckable {
         // Sorting condition
         let options = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-        
-        if let collection = self.mediaManager.collection {
-            if !configuration.showsVideoInLibrary {
-                options.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
-            }
+
+        switch (configuration.showsPhotosInLibrary, configuration.showsVideoInLibrary) {
+        case (true, true):
+            options.predicate = NSPredicate(format: "mediaType = %d || mediaType = %d",
+                                            PHAssetMediaType.image.rawValue, PHAssetMediaType.video.rawValue)
+        case (true, false):
+            options.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
+        case (false, true):
+            options.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.video.rawValue)
+        case (false, false): break // Show everything 🤔 perhaps an assertionFailure?
+        }
+
+        if let collection = mediaManager.collection {
             mediaManager.fetchResult = PHAsset.fetchAssets(in: collection, options: options)
         } else {
-            mediaManager.fetchResult = configuration.showsVideoInLibrary
-                ? PHAsset.fetchAssets(with: options)
-                : PHAsset.fetchAssets(with: PHAssetMediaType.image, options: options)
+            mediaManager.fetchResult = PHAsset.fetchAssets(with: options)
         }
         
         if mediaManager.fetchResult.count > 0 {
