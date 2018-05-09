@@ -1,0 +1,4 @@
+framework module YPImagePicker {
+    header "YPImagePicker-Swift.h"
+    requires objc
+}
