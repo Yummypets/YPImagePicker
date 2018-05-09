@@ -111,8 +111,6 @@ class ViewController: UIViewController {
         
         config.maxNumberOfItems = 5
         
-        config.delegate = self
-        
         // Here we use a per picker configuration. Configuration is always shared.
         // That means than when you create one picker with configuration, than you can create other picker with just
         // let picker = YPImagePicker() and the configuration will be the same as the first picker.
@@ -121,25 +119,24 @@ class ViewController: UIViewController {
         /// Change configuration directly
 //        YPImagePickerConfiguration.shared.wordings.libraryTitle = "Gallery2"
 
+        
+        picker.didCancel = {
+            print("did cancel")
+        }
+        picker.didSelectItems = { [unowned picker] items in
+            picker.dismiss(animated: true, completion: nil)
+            _ = items.map { print("🧀 \($0)") }
+            if let firstItem = items.first {
+                switch firstItem {
+                case .photo(let photo):
+                    self.imageView.image = photo.image
+                case .video(let video):
+                    self.imageView.image = video.thumbnail
+                }
+            }
+        }
+        
         present(picker, animated: true, completion: nil)
     }
 }
 
-extension ViewController: YPImagePickerDelegate {
-    func imagePicker(_ imagePicker: YPImagePicker, didSelect items: [YPMediaItem]) {
-        imagePicker.dismiss(animated: true, completion: nil)
-        
-        _ = items.map { print("🧀 \($0)") }
-        
-        if let firstItem = items.first {
-            switch firstItem {
-            case .photo(let photo):
-                self.imageView.image = photo.image
-            case .video(let video):
-                self.imageView.image = video.thumbnail
-            }
-        }
-    }
-    
-    func imagePickerDidCancel(_ imagePicker: YPImagePicker) {}
-}

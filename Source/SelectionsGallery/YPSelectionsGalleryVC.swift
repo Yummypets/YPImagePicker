@@ -12,20 +12,19 @@ import UIKit
 
 public class YPSelectionsGalleryVC: UIViewController {
     
+    public var didFinishWithItems: (([YPMediaItem]) -> Void)?
+    
     /// Designated initializer
-    public class func initWith(items: [YPMediaItem],
-                               imagePicker: YPImagePicker) -> YPSelectionsGalleryVC {
+    public class func initWith(items: [YPMediaItem]) -> YPSelectionsGalleryVC {
         let vc = YPSelectionsGalleryVC(nibName: "YPSelectionsGalleryVC",
                                        bundle: Bundle(for: YPSelectionsGalleryVC.self))
         vc.items = items
-        vc.imagePicker = imagePicker
         return vc
     }
 
     @IBOutlet weak var collectionV: UICollectionView!
 
     public var items: [YPMediaItem] = []
-    public var imagePicker: YPImagePicker!
 
     override public func viewDidLoad() {
         super.viewDidLoad()
@@ -54,7 +53,7 @@ public class YPSelectionsGalleryVC: UIViewController {
                 }
             }
         }
-        YPConfig.delegate?.imagePicker(imagePicker, didSelect: items)
+        didFinishWithItems?(items)
     }
 }
 

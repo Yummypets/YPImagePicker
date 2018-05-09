@@ -18,10 +18,6 @@ public struct YPImagePickerConfiguration {
     
     public init() {}
     
-    /// The delegate needs to get selected photo and video. It's duplicate a callback functional,
-    /// but the callback doesn't support multiple selection.
-    public weak var delegate: YPImagePickerDelegate?
-    
     /// Use this property to modify the default wordings provided.
     public var wordings = YPWordings()
     

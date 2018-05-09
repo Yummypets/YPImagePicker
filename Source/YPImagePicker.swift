@@ -11,6 +11,9 @@ import AVFoundation
 
 public class YPImagePicker: UINavigationController {
     
+    public var didSelectItems: (([YPMediaItem]) -> Void)?
+    public var didCancel: (() -> Void)?
+    
     let loadingView = YPLoadingView()
     private let picker: YPPickerVC!
     
@@ -32,10 +35,7 @@ public class YPImagePicker: UINavigationController {
     
     override public func viewDidLoad() {
         super.viewDidLoad()
-        
-        picker.didClose = {
-            YPConfig.delegate?.imagePickerDidCancel(self)
-        }
+        picker.didClose = didCancel
         viewControllers = [picker]
         setupLoadingView()
         navigationBar.isTranslucent = false
@@ -52,8 +52,8 @@ public class YPImagePicker: UINavigationController {
             
             // Multiple items flow
             if items.count > 1 {
-                let selectionsGalleryVC = YPSelectionsGalleryVC.initWith(items: items,
-                                                                         imagePicker: self)
+                let selectionsGalleryVC = YPSelectionsGalleryVC.initWith(items: items)
+                selectionsGalleryVC.didFinishWithItems = self.didSelectItems
                 self.pushViewController(selectionsGalleryVC, animated: true)
                 return
             }
@@ -70,7 +70,7 @@ public class YPImagePicker: UINavigationController {
                     if YPConfig.shouldSaveNewPicturesToAlbum, let modifiedImage = photo.modifiedImage {
                         YPPhotoSaver.trySaveImage(modifiedImage, inAlbumNamed: YPConfig.albumName)
                     }
-                    YPConfig.delegate?.imagePicker(self, didSelect: [mediaItem])
+                    self.didSelectItems?([mediaItem])
                 }
                 
                 func showCropVC(photo: YPMediaPhoto, completion: @escaping (_ aphoto: YPMediaPhoto) -> Void) {
@@ -104,11 +104,11 @@ public class YPImagePicker: UINavigationController {
                     let videoFiltersVC = YPVideoFiltersVC.initWith(video: video,
                                                                    isFromSelectionVC: false)
                     videoFiltersVC.didSave = { [unowned self] outputMedia in
-                        YPConfig.delegate?.imagePicker(self, didSelect: [outputMedia])
+                        self.didSelectItems?([outputMedia])
                     }
                     self.pushViewController(videoFiltersVC, animated: true)
                 } else {
-                    YPConfig.delegate?.imagePicker(self, didSelect: [YPMediaItem.video(v: video)])
+                    self.didSelectItems?([YPMediaItem.video(v: video)])
                 }
             }
         }
