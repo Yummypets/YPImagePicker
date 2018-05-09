@@ -120,9 +120,23 @@ class ViewController: UIViewController {
 //        YPImagePickerConfiguration.shared.wordings.libraryTitle = "Gallery2"
 
         
-        picker.didCancel = {
-            print("did cancel")
+        picker.didSelectImage = { [unowned picker] img in
+            // image picked
+            print(img.size)
+            self.imageView.image = img
+            picker.dismiss(animated: true, completion: nil)
         }
+        picker.didSelectVideo = { videoData, videoThumbnailImage, videoURL in
+            // video picked
+            print(videoData)
+            print(videoURL)
+            self.imageView.image = videoThumbnailImage
+            picker.dismiss(animated: true, completion: nil)
+        }
+        picker.didCancel = {
+            print("Did Cancel")
+        }
+        
         picker.didSelectItems = { [unowned picker] items in
             picker.dismiss(animated: true, completion: nil)
             _ = items.map { print("🧀 \($0)") }

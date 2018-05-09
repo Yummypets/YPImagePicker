@@ -11,8 +11,27 @@ import AVFoundation
 
 public class YPImagePicker: UINavigationController {
     
+    public var didSelectImage: ((UIImage) -> Void)?
+    public var didSelectVideo: ((Data, UIImage, URL) -> Void)?
     public var didSelectItems: (([YPMediaItem]) -> Void)?
     public var didCancel: (() -> Void)?
+    
+    // This nifty little trick enables us to call the single version of the callbacks.
+    // This keeps the backwards compatibility keeps the api as simple as possible.
+    // Multiple selection becomes available as an opt-in.
+    private func didSelect(items: [YPMediaItem]) -> Void {
+        if items.count == 1 {
+            if let didSelectImage = didSelectImage, let first = items.first, case let .photo(pickedPhoto) = first {
+                didSelectImage(pickedPhoto.image)
+            } else if let didSelectVideo = didSelectVideo, let first = items.first, case let .video(pickedVideo) = first {
+                pickedVideo.fetchData { videoData in
+                    didSelectVideo(videoData, pickedVideo.thumbnail, pickedVideo.url)
+                }
+            }
+        } else {
+            didSelectItems?(items)
+        }
+    }
     
     let loadingView = YPLoadingView()
     private let picker: YPPickerVC!
@@ -53,7 +72,9 @@ public class YPImagePicker: UINavigationController {
             // Multiple items flow
             if items.count > 1 {
                 let selectionsGalleryVC = YPSelectionsGalleryVC.initWith(items: items)
-                selectionsGalleryVC.didFinishWithItems = self.didSelectItems
+                selectionsGalleryVC.didFinishWithItems = { items in
+                    self.didSelect(items: items)
+                }
                 self.pushViewController(selectionsGalleryVC, animated: true)
                 return
             }
@@ -70,7 +91,7 @@ public class YPImagePicker: UINavigationController {
                     if YPConfig.shouldSaveNewPicturesToAlbum, let modifiedImage = photo.modifiedImage {
                         YPPhotoSaver.trySaveImage(modifiedImage, inAlbumNamed: YPConfig.albumName)
                     }
-                    self.didSelectItems?([mediaItem])
+                    self.didSelect(items: [mediaItem])
                 }
                 
                 func showCropVC(photo: YPMediaPhoto, completion: @escaping (_ aphoto: YPMediaPhoto) -> Void) {
@@ -104,11 +125,11 @@ public class YPImagePicker: UINavigationController {
                     let videoFiltersVC = YPVideoFiltersVC.initWith(video: video,
                                                                    isFromSelectionVC: false)
                     videoFiltersVC.didSave = { [unowned self] outputMedia in
-                        self.didSelectItems?([outputMedia])
+                        self.didSelect(items: [outputMedia])
                     }
                     self.pushViewController(videoFiltersVC, animated: true)
                 } else {
-                    self.didSelectItems?([YPMediaItem.video(v: video)])
+                    self.didSelect(items: [YPMediaItem.video(v: video)])
                 }
             }
         }
