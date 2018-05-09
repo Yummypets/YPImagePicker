@@ -42,7 +42,16 @@ public class YPSelectionsGalleryVC: UIViewController {
         YPHelper.changeBackButtonTitle(self)
     }
 
-    @objc private func done() {
+    @objc
+    private func done() {
+        // Save new images to the photo album.
+        if YPConfig.shouldSaveNewPicturesToAlbum {
+            for m in items {
+                if case let .photo(p) = m, let modifiedImage = p.modifiedImage {
+                    YPPhotoSaver.trySaveImage(modifiedImage, inAlbumNamed: YPConfig.albumName)
+                }
+            }
+        }
         YPConfig.delegate?.imagePicker(imagePicker, didSelect: items)
     }
 }
@@ -55,7 +64,6 @@ extension YPSelectionsGalleryVC: UICollectionViewDataSource {
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "item", for: indexPath) as! YPSelectionsGalleryCVCell
-        
         let item = items[indexPath.row]
         switch item {
         case .photo(let photo):
@@ -63,7 +71,6 @@ extension YPSelectionsGalleryVC: UICollectionViewDataSource {
         case .video(let video):
             cell.imageV.image = video.thumbnail
         }
-        
         return cell
     }
 }

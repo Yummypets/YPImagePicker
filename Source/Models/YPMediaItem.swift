@@ -10,12 +10,15 @@ import UIKit
 import Foundation
 import AVFoundation
 
-public struct YPPhoto {
-    public let image: UIImage
+public class YPPhoto {
+    public var image: UIImage { return modifiedImage ?? originalImage }
+    public let originalImage: UIImage
+    public var modifiedImage: UIImage?
     public let fromCamera: Bool
     
     init(image: UIImage, fromCamera: Bool = false) {
-        self.image = image
+        self.originalImage = image
+        self.modifiedImage = nil
         self.fromCamera = fromCamera
     }
 }
