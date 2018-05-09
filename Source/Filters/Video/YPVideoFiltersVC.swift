@@ -219,8 +219,8 @@ extension YPVideoFiltersVC: TrimmerViewDelegate {
 // MARK: - ThumbSelectorViewDelegate
 extension YPVideoFiltersVC: ThumbSelectorViewDelegate {
     public func didChangeThumbPosition(_ imageTime: CMTime) {
-        let imageRef = try! imageGenerator?.copyCGImage(at: imageTime, actualTime: nil)
-        if let imageRef = imageRef {
+        if let imageGenerator = imageGenerator,
+            let imageRef = try? imageGenerator.copyCGImage(at: imageTime, actualTime: nil) {
             coverImageView.image = UIImage(cgImage: imageRef)
         }
     }

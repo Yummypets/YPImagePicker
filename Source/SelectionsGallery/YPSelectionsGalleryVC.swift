@@ -63,7 +63,9 @@ extension YPSelectionsGalleryVC: UICollectionViewDataSource {
     }
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "item", for: indexPath) as! YPSelectionsGalleryCVCell
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "item", for: indexPath) as? YPSelectionsGalleryCVCell else {
+            return UICollectionViewCell()
+        }
         let item = items[indexPath.row]
         switch item {
         case .photo(let photo):

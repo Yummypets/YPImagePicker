@@ -114,7 +114,8 @@ class ViewController: UIViewController {
         config.delegate = self
         
         // Here we use a per picker configuration. Configuration is always shared.
-        // That means than when you create one picker with configuration, than you can create other picker with just let picker = YPImagePicker() and the configuration will be the same as the first picker.
+        // That means than when you create one picker with configuration, than you can create other picker with just
+        // let picker = YPImagePicker() and the configuration will be the same as the first picker.
         let picker = YPImagePicker(configuration: config)
         
         /// Change configuration directly
