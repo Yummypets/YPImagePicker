@@ -55,9 +55,9 @@ final class YPAssetZoomableView: UIScrollView {
     }
     
     public func setVideo(_ video: PHAsset,
-                  mediaManager: LibraryMediaManager,
-                  storedCropPosition: YPLibrarySelection?,
-                  completion: @escaping () -> Void) {
+                         mediaManager: LibraryMediaManager,
+                         storedCropPosition: YPLibrarySelection?,
+                         completion: @escaping () -> Void) {
         mediaManager.imageManager?.fetchPreviewFor(video: video) { [unowned self] preview in
             self.isVideoMode = true
             self.photoImageView.removeFromSuperview()
@@ -94,7 +94,7 @@ final class YPAssetZoomableView: UIScrollView {
                          mediaManager: LibraryMediaManager,
                          storedCropPosition: YPLibrarySelection?,
                          completion: @escaping () -> Void) {
-        mediaManager.imageManager?.fetch(photo: photo) { [unowned self] image, isFromCloud in
+        mediaManager.imageManager?.fetch(photo: photo) { [unowned self] image, _ in
             self.isVideoMode = false
             self.videoView.removeFromSuperview()
             self.videoView.deallocate()

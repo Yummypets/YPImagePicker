@@ -63,7 +63,7 @@ class ViewController: UIViewController {
 //        config.filters = [YPFilterDescriptor(name: "Normal", filterName: ""),
 //                          YPFilterDescriptor(name: "Mono", filterName: "CIPhotoEffectMono")]
         config.filters.remove(at: 1)
-        config.filters.insert(YPFilterDescriptor(name: "Blur" , filterName: "CIBoxBlur"), at: 1)
+        config.filters.insert(YPFilterDescriptor(name: "Blur", filterName: "CIBoxBlur"), at: 1)
 //
 //        /// Enables you to opt out from saving new (or old but filtered) images to the
 //        /// user's photo library. Defaults to true.

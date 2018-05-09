@@ -130,7 +130,7 @@ extension YPPhotoFiltersVC: UICollectionViewDataSource {
     }
     
     public func collectionView(_ collectionView: UICollectionView,
-                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+                               cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let filterPreview = filterPreviews[indexPath.row]
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FilterCell",
                                                          for: indexPath) as? YPFilterCollectionViewCell {

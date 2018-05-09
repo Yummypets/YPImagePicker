@@ -16,8 +16,7 @@ extension FileManager {
         
         do {
             try removeItem(at: url)
-        }
-        catch let error {
+        } catch let error {
             throw YPTrimError("Couldn't remove existing destination file: \(error)")
         }
     }

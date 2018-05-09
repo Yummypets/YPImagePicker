@@ -24,14 +24,18 @@ internal func imageFromBundle(_ named: String) -> UIImage {
 struct YPHelper {
     static func changeBackButtonIcon(_ controller: UIViewController) {
         if YPConfig.icons.shouldChangeDefaultBackButtonIcon {
-            controller.navigationController?.navigationBar.backIndicatorImage = YPConfig.icons.backButtonIcon
-            controller.navigationController?.navigationBar.backIndicatorTransitionMaskImage = YPConfig.icons.backButtonIcon
+            let backButtonIcon = YPConfig.icons.backButtonIcon
+            controller.navigationController?.navigationBar.backIndicatorImage = backButtonIcon
+            controller.navigationController?.navigationBar.backIndicatorTransitionMaskImage = backButtonIcon
         }
     }
     
     static func changeBackButtonTitle(_ controller: UIViewController) {
         if YPConfig.icons.hideBackButtonTitle {
-            controller.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.plain, target: nil, action: nil)
+            controller.navigationItem.backBarButtonItem = UIBarButtonItem(title: "",
+                                                                          style: .plain,
+                                                                          target: nil,
+                                                                          action: nil)
         }
     }
     

@@ -57,16 +57,18 @@ extension PHCachingImageManager {
                 let assetComposition = AVMutableComposition()
                 let trackTimeRange = CMTimeRangeMake(kCMTimeZero, asset.duration)
                 
-                guard let videoCompositionTrack = assetComposition.addMutableTrack(withMediaType: .video,
-                                                                                   preferredTrackID: kCMPersistentTrackID_Invalid) else {
-                                                                                    return
+                guard let videoCompositionTrack = assetComposition
+                    .addMutableTrack(withMediaType: .video,
+                                     preferredTrackID: kCMPersistentTrackID_Invalid) else {
+                                        return
                 }
                 
                 try videoCompositionTrack.insertTimeRange(trackTimeRange, of: videoTrack, at: kCMTimeZero)
                 
                 if let audioTrack = asset.tracks(withMediaType: AVMediaType.audio).first {
-                    let audioCompositionTrack = assetComposition.addMutableTrack(withMediaType: AVMediaType.audio,
-                                                                                 preferredTrackID: kCMPersistentTrackID_Invalid)
+                    let audioCompositionTrack = assetComposition
+                        .addMutableTrack(withMediaType: AVMediaType.audio,
+                                         preferredTrackID: kCMPersistentTrackID_Invalid)
                     try audioCompositionTrack?.insertTimeRange(trackTimeRange, of: audioTrack, at: kCMTimeZero)
                 }
                 
@@ -95,7 +97,8 @@ extension PHCachingImageManager {
                 let url = URL(fileURLWithPath: "\(NSTemporaryDirectory())TrimmedMovie.mp4")
                 try? FileManager.default.removeItem(at: url)
                 
-                let exportSession = AVAssetExportSession(asset: assetComposition, presetName: AVAssetExportPresetHighestQuality)
+                let exportSession = AVAssetExportSession(asset: assetComposition,
+                                                         presetName: AVAssetExportPresetHighestQuality)
                 exportSession?.outputFileType = AVFileType.mp4
                 exportSession?.shouldOptimizeForNetworkUse = true
                 exportSession?.videoComposition = videoComposition
@@ -103,7 +106,6 @@ extension PHCachingImageManager {
                 exportSession?.exportAsynchronously(completionHandler: {
                     
                     DispatchQueue.main.async {
-                        
                         if let url = exportSession?.outputURL, exportSession?.status == .completed {
                             callback(url)
                         } else {
@@ -112,8 +114,6 @@ extension PHCachingImageManager {
                         }
                     }
                 })
-                
-                
                 
 //                if let (videoComposition, assetComposition) = try asset?.getCropVideoComposition(cropRectFrame: cropRect) {
 //                    let destinationURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingUniquePathComponent(pathExtension: YPConfig.videoExtension.fileExtension)
@@ -143,8 +143,8 @@ extension PHCachingImageManager {
         let options = photoImageRequestOptions()
     
         // Fetch Highiest quality image possible.
-        requestImageData(for: asset, options: options) { (data, string, orientation, info) in
-            if let data = data , let image = UIImage(data: data)?.resetOrientation() {
+        requestImageData(for: asset, options: options) { data, _, _, _ in
+            if let data = data, let image = UIImage(data: data)?.resetOrientation() {
             
                 // Crop the high quality image manually.
                 let xCrop: CGFloat = cropRect.origin.x * CGFloat(asset.pixelWidth)
@@ -189,8 +189,8 @@ extension PHCachingImageManager {
         })
     }
     
-    /// This method return two images in the callback. First is with low resolution,
-    /// second with high. So the callback fires twice. But with isSynchronous = true there is only one high resolution image.
+    /// This method return two images in the callback. First is with low resolution, second with high.
+    /// So the callback fires twice. But with isSynchronous = true there is only one high resolution image.
     /// Bool = isFromCloud
     func fetch(photo asset: PHAsset, callback: @escaping (UIImage, Bool) -> Void) {
         let options = PHImageRequestOptions()

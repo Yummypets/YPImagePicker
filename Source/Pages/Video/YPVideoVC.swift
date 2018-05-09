@@ -204,7 +204,8 @@ public class YPVideoVC: UIViewController, YPPermissionCheckable {
         v.flashButton.setImage(flashImage(for: state.flashMode), for: .normal)
         v.flashButton.isEnabled = !state.isRecording
         v.flashButton.isHidden = state.flashMode == .noFlash
-        v.shotButton.setImage(state.isRecording ? YPConfig.icons.captureVideoOnImage : YPConfig.icons.captureVideoImage, for: .normal)
+        v.shotButton.setImage(state.isRecording ? YPConfig.icons.captureVideoOnImage : YPConfig.icons.captureVideoImage,
+                              for: .normal)
         v.flipButton.isEnabled = !state.isRecording
         v.progressBar.progress = state.progress
         v.timeElapsedLabel.text = YPHelper.formattedStrigFrom(state.timeElapsed)

@@ -243,14 +243,18 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         DispatchQueue.global(qos: .userInitiated).async {
             switch asset.mediaType {
             case .image:
-                self.v.assetZoomableView.setImage(asset, mediaManager: self.mediaManager, storedCropPosition: self.fetchStoredCrop()) {
+                self.v.assetZoomableView.setImage(asset,
+                                                  mediaManager: self.mediaManager,
+                                                  storedCropPosition: self.fetchStoredCrop()) {
                     self.v.hideLoader()
                     self.v.hideGrid()
                     self.delegate?.libraryViewFinishedLoading()
                     self.v.assetViewContainer.refreshSquareCropButton()
                 }
             case .video:
-                self.v.assetZoomableView.setVideo(asset, mediaManager: self.mediaManager, storedCropPosition: self.fetchStoredCrop()) {
+                self.v.assetZoomableView.setVideo(asset,
+                                                  mediaManager: self.mediaManager,
+                                                  storedCropPosition: self.fetchStoredCrop()) {
                     self.v.hideLoader()
                     self.v.hideGrid()
                     self.delegate?.libraryViewFinishedLoading()
@@ -308,7 +312,8 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     internal func fetchStoredCrop() -> YPLibrarySelection? {
         if self.multipleSelectionEnabled,
             self.selection.contains(where: { $0.index == self.currentlySelectedIndex }) {
-            guard let selectedAssetIndex = self.selection.index(where: { $0.index == self.currentlySelectedIndex }) else {
+            guard let selectedAssetIndex = self.selection
+                .index(where: { $0.index == self.currentlySelectedIndex }) else {
                 return nil
             }
             return self.selection[selectedAssetIndex]

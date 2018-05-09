@@ -23,7 +23,6 @@ class YPCameraView: UIView, UIGestureRecognizerDelegate {
     convenience init(overlayView: UIView? = nil) {
         self.init(frame: .zero)
         
-        
         if let overlayView = overlayView {
             // View Hierarchy
             sv(

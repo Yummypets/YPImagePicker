@@ -75,7 +75,7 @@ class PostiOS10PhotoCapture: NSObject, YPPhotoCapture, AVCapturePhotoCaptureDele
     // MARK: - Flash
     
     func tryToggleFlash() {
-        //        if device.hasFlash device.isFlashAvailable //TODO test these
+        // if device.hasFlash device.isFlashAvailable //TODO test these
         switch currentFlashMode {
         case .auto:
             currentFlashMode = .on
@@ -111,10 +111,10 @@ class PostiOS10PhotoCapture: NSObject, YPPhotoCapture, AVCapturePhotoCaptureDele
                      bracketSettings: AVCaptureBracketedStillImageSettings?,
                      error: Error?) {
         guard let buffer = photoSampleBuffer else { return }
-        if let data = AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer: buffer,
-                                                                       previewPhotoSampleBuffer: previewPhotoSampleBuffer) {
+        if let data = AVCapturePhotoOutput
+            .jpegPhotoDataRepresentation(forJPEGSampleBuffer: buffer,
+                                         previewPhotoSampleBuffer: previewPhotoSampleBuffer) {
             block?(data)
         }
     }
 }
-

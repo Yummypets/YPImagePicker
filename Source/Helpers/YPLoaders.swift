@@ -17,9 +17,9 @@ struct YPLoaders {
     }
     
     public static func disableActivityIndicator(barButtonItem: inout UIBarButtonItem?,
-                                         title: String,
-                                         target: Any,
-                                         action: Selector) {
+                                                title: String,
+                                                target: Any,
+                                                action: Selector) {
         barButtonItem = UIBarButtonItem(title: title,
                                         style: .plain,
                                         target: target,

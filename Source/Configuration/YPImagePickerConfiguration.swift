@@ -18,7 +18,8 @@ public struct YPImagePickerConfiguration {
     
     public init() {}
     
-    /// The delegate needs to get selected photo and video. It's duplicate a callback functional, but the callback doesn't support multiple selection.
+    /// The delegate needs to get selected photo and video. It's duplicate a callback functional,
+    /// but the callback doesn't support multiple selection.
     public weak var delegate: YPImagePickerDelegate?
     
     /// Use this property to modify the default wordings provided.
@@ -86,7 +87,8 @@ public struct YPImagePickerConfiguration {
     /// The maximum duration allowed for the trimming. Change it before setting the asset, as the asset preview
     public var trimmerMaxDuration: Double = 60.0
     
-    /// The minimum duration allowed for the trimming. The handles won't pan further if the minimum duration is attained.
+    /// The minimum duration allowed for the trimming.
+    /// The handles won't pan further if the minimum duration is attained.
     public var trimmerMinDuration: Double = 3.0
 
     /// Adds a Crop step in the photo taking process, after filters.  Defaults to .none

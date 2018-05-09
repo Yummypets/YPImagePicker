@@ -14,8 +14,9 @@ public class YPSelectionsGalleryVC: UIViewController {
     
     /// Designated initializer
     public class func initWith(items: [YPMediaItem],
-                        imagePicker: YPImagePicker) -> YPSelectionsGalleryVC {
-        let vc = YPSelectionsGalleryVC(nibName: "YPSelectionsGalleryVC", bundle: Bundle(for: YPSelectionsGalleryVC.self))
+                               imagePicker: YPImagePicker) -> YPSelectionsGalleryVC {
+        let vc = YPSelectionsGalleryVC(nibName: "YPSelectionsGalleryVC",
+                                       bundle: Bundle(for: YPSelectionsGalleryVC.self))
         vc.items = items
         vc.imagePicker = imagePicker
         return vc
@@ -31,7 +32,8 @@ public class YPSelectionsGalleryVC: UIViewController {
 
         // Register collection view cell
         let bundle = Bundle(for: YPSelectionsGalleryVC.self)
-        collectionV.register(UINib(nibName: "YPSelectionsGalleryCVCell", bundle: bundle), forCellWithReuseIdentifier: "item")
+        collectionV.register(UINib(nibName: "YPSelectionsGalleryCVCell",
+                                   bundle: bundle), forCellWithReuseIdentifier: "item")
         
         // Setup navigation bar
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: YPConfig.wordings.next,
@@ -62,8 +64,10 @@ extension YPSelectionsGalleryVC: UICollectionViewDataSource {
         return items.count
     }
     
-    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "item", for: indexPath) as? YPSelectionsGalleryCVCell else {
+    public func collectionView(_ collectionView: UICollectionView,
+                               cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "item",
+                                                            for: indexPath) as? YPSelectionsGalleryCVCell else {
             return UICollectionViewCell()
         }
         let item = items[indexPath.row]
@@ -105,7 +109,9 @@ extension YPSelectionsGalleryVC: UICollectionViewDelegate {
 }
 
 extension YPSelectionsGalleryVC: UICollectionViewDelegateFlowLayout {
-    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    public func collectionView(_ collectionView: UICollectionView,
+                               layout collectionViewLayout: UICollectionViewLayout,
+                               sizeForItemAt indexPath: IndexPath) -> CGSize {
         let sideSize = collectionView.frame.size.height - 30
         return CGSize(width: sideSize, height: sideSize)
     }

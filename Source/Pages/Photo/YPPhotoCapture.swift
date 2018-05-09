@@ -25,7 +25,6 @@ protocol YPPhotoCapture: class {
     var videoLayer: AVCaptureVideoPreviewLayer! { get set }
     var device: AVCaptureDevice? { get }
     
-    
     // Used by Default extension
     var previewView: UIView! { get set }
     func startCamera()

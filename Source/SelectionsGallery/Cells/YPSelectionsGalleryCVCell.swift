@@ -24,4 +24,3 @@ public class YPSelectionsGalleryCVCell: UICollectionViewCell {
         imageV.clipsToBounds = true
     }
 }
-

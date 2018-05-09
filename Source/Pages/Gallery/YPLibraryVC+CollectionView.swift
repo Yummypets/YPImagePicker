@@ -184,4 +184,3 @@ extension YPLibraryVC: UICollectionViewDelegateFlowLayout {
         return CGSize(width: width, height: width)
     }
 }
-

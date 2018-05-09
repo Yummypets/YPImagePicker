@@ -18,7 +18,8 @@ extension AVAsset {
         
         do {
             for track in tracks {
-                let compositionTrack = composition.addMutableTrack(withMediaType: track.mediaType, preferredTrackID: track.trackID)
+                let compositionTrack = composition.addMutableTrack(withMediaType: track.mediaType,
+                                                                   preferredTrackID: track.trackID)
                 try compositionTrack?.insertTimeRange(timeRange, of: track, at: kCMTimeZero)
             }
         } catch let error {
@@ -69,7 +70,8 @@ extension AVAsset {
         do {
             for track in tracks {
                 // Fill audio and vide tracks
-                let compositionTrack = assetComposition.addMutableTrack(withMediaType: track.mediaType, preferredTrackID: track.trackID)
+                let compositionTrack = assetComposition.addMutableTrack(withMediaType: track.mediaType,
+                                                                        preferredTrackID: track.trackID)
                 try compositionTrack?.insertTimeRange(timeRange, of: track, at: kCMTimeZero)
                 // Store a video track
                 if track.mediaType == .video { videoTrack = track }
@@ -78,7 +80,6 @@ extension AVAsset {
             guard let videoTrack = videoTrack else {
                 throw YPTrimError("Don't have video track", underlyingError: nil)
             }
-            
             
             let layerInstructions = AVMutableVideoCompositionLayerInstruction(assetTrack: videoTrack)
             layerInstructions.setTransform(getTransform(for: videoTrack), at: kCMTimeZero)
@@ -89,7 +90,8 @@ extension AVAsset {
             
             //3 Add instructions to the video composition
             videoComposition.renderSize = CGSize(width: 100, height: 100)
-//            videoComposition.renderSize = CGSize(width: videoTrack.naturalSize.height, height: videoTrack.naturalSize.height)
+//            videoComposition.renderSize = CGSize(width: videoTrack.naturalSize.height,
+//                                                 height: videoTrack.naturalSize.height)
             videoComposition.instructions = [videoCompositionInstructions]
             videoComposition.frameDuration = CMTimeMake(1, Int32(videoTrack.nominalFrameRate))
             
