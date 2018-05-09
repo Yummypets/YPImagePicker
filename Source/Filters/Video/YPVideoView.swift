@@ -99,7 +99,7 @@ extension YPVideoView {
         var player: AVPlayer
         
         switch item.self {
-        case let video as YPVideo:
+        case let video as YPMediaVideo:
             player = AVPlayer(url: video.url)
         case let url as URL:
             player = AVPlayer(url: url)

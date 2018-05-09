@@ -14,9 +14,9 @@ import AVFoundation
 
 public func createVideoItem(videoURL: URL,
                             activityIdicatorClosure: ((_ show: Bool) -> Void)? = nil,
-                            completion: @escaping (_ video: YPVideo) -> Void) {
+                            completion: @escaping (_ video: YPMediaVideo) -> Void) {
     
-    let videoItem = YPVideo(thumbnail: thumbnailFromVideoPath(videoURL),
+    let videoItem = YPMediaVideo(thumbnail: thumbnailFromVideoPath(videoURL),
                             videoURL: videoURL)
     
     activityIdicatorClosure?(true)

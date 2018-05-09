@@ -53,7 +53,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         if YPConfig.screens.contains(.photo) {
             cameraVC = YPCameraVC()
             cameraVC?.didCapturePhoto = { [unowned self] img in
-                self.didSelectItems?([YPMediaItem.photo(p: YPPhoto(image: img,
+                self.didSelectItems?([YPMediaItem.photo(p: YPMediaPhoto(image: img,
                                                                    fromCamera: true))])
             }
         }
@@ -63,7 +63,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
             videoVC = YPVideoVC()
             videoVC?.didCaptureVideo = { [unowned self] videoURL in
                 self.didSelectItems?([YPMediaItem
-                    .video(v: YPVideo(thumbnail: thumbnailFromVideoPath(videoURL),
+                    .video(v: YPMediaVideo(thumbnail: thumbnailFromVideoPath(videoURL),
                                       videoURL: videoURL,
                                       fromCamera: true))])
             }
@@ -288,10 +288,10 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
             libraryVC.doAfterPermissionCheck { [weak self] in
                 libraryVC.selectedMedia(photoCallback: { img in
                     self?.didSelectItems?([YPMediaItem
-                        .photo(p: YPPhoto(image: img))])
+                        .photo(p: YPMediaPhoto(image: img))])
                 }, videoCallback: { videoURL in
                     self?.didSelectItems?([YPMediaItem
-                        .video(v: YPVideo(thumbnail: thumbnailFromVideoPath(videoURL),
+                        .video(v: YPMediaVideo(thumbnail: thumbnailFromVideoPath(videoURL),
                                           videoURL: videoURL))])
                 }, multipleItemsCallback: { items in
                     self?.didSelectItems?(items)

@@ -23,7 +23,7 @@ open class YPPhotoFiltersVC: UIViewController, IsMediaFilterVC, UIGestureRecogni
     var filters = [YPFilter]()
     var selectedFilter: YPFilter?
     
-    var inputPhoto: YPPhoto!
+    var inputPhoto: YPMediaPhoto!
     var filteredImage: UIImage?
     var thumbImage = UIImage()
     
@@ -34,7 +34,7 @@ open class YPPhotoFiltersVC: UIViewController, IsMediaFilterVC, UIGestureRecogni
     
     override open func loadView() { view = v }
     
-    required public init(inputPhoto: YPPhoto, isFromSelectionVC: Bool) {
+    required public init(inputPhoto: YPMediaPhoto, isFromSelectionVC: Bool) {
         super.init(nibName: nil, bundle: nil)
         
         self.inputPhoto = inputPhoto

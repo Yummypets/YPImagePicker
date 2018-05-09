@@ -10,7 +10,7 @@ import UIKit
 import Foundation
 import AVFoundation
 
-public class YPPhoto {
+public class YPMediaPhoto {
     public var image: UIImage { return modifiedImage ?? originalImage }
     public let originalImage: UIImage
     public var modifiedImage: UIImage?
@@ -23,7 +23,7 @@ public class YPPhoto {
     }
 }
 
-public class YPVideo {
+public class YPMediaVideo {
     public var thumbnail: UIImage
     public var url: URL
     public let fromCamera: Bool
@@ -36,13 +36,13 @@ public class YPVideo {
 }
 
 public enum YPMediaItem {
-    case photo(p: YPPhoto)
-    case video(v: YPVideo)
+    case photo(p: YPMediaPhoto)
+    case video(v: YPMediaVideo)
 }
 
 // MARK: - Compression
 
-extension YPVideo {
+extension YPMediaVideo {
     /// Fetches a video data with selected compression in YPImagePickerConfiguration
     func fetchData(completion: (_ videoData: Data) -> Void) {
         // TODO: place here a compression code. Use YPConfig.videoCompression

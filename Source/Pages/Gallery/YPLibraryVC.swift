@@ -383,7 +383,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                     case .image:
                         self.fetchImage(for: asset.asset, withCropRect: asset.cropRect) { image in
                             let resizedImage = self.resizedImageIfNeeded(image: image)
-                            let photo = YPPhoto(image: resizedImage)
+                            let photo = YPMediaPhoto(image: resizedImage)
                             resultMediaItems.append(YPMediaItem.photo(p: photo))
                             asyncGroup.leave()
                         }

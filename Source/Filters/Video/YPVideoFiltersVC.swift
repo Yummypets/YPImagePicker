@@ -21,7 +21,7 @@ public class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
     @IBOutlet weak var coverImageView: UIImageView!
     @IBOutlet weak var coverThumbSelectorView: ThumbSelectorView!
 
-    public var inputVideo: YPVideo!
+    public var inputVideo: YPMediaVideo!
     public var inputAsset: AVAsset { return AVAsset(url: inputVideo.url) }
     
     private var playbackTimeCheckerTimer: Timer?
@@ -32,7 +32,7 @@ public class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
     var didCancel: (() -> Void)?
 
     /// Designated initializer
-    public class func initWith(video: YPVideo,
+    public class func initWith(video: YPMediaVideo,
                                isFromSelectionVC: Bool) -> YPVideoFiltersVC {
         let vc = YPVideoFiltersVC(nibName: "YPVideoFiltersVC", bundle: Bundle(for: YPVideoFiltersVC.self))
         vc.inputVideo = video
@@ -126,7 +126,7 @@ public class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
                 guard let weakSelf = self else { return }
                 
                 DispatchQueue.main.async {
-                    let resultVideo = YPVideo(thumbnail: weakSelf.coverImageView.image!,
+                    let resultVideo = YPMediaVideo(thumbnail: weakSelf.coverImageView.image!,
                                               videoURL: destinationURL)
                     didSave(YPMediaItem.video(v: resultVideo))
                 }
