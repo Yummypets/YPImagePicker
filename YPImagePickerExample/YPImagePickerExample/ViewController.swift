@@ -119,26 +119,40 @@ class ViewController: UIViewController {
         /// Change configuration directly
 //        YPImagePickerConfiguration.shared.wordings.libraryTitle = "Gallery2"
 
+    
+//        picker.didSelectImage = { [unowned picker] img in
+//            // image picked
+//            print(img.size)
+//            self.imageView.image = img
+//            picker.dismiss(animated: true, completion: nil)
+//        }
+//        picker.didSelectVideo = { videoData, videoThumbnailImage, videoURL in
+//            // video picked
+//            print(videoData)
+//            print(videoURL)
+//            self.imageView.image = videoThumbnailImage
+//            picker.dismiss(animated: true, completion: nil)
+//        }
+//        picker.didCancel = {
+//            print("Did Cancel")
+//        }
         
-        picker.didSelectImage = { [unowned picker] img in
-            // image picked
-            print(img.size)
-            self.imageView.image = img
+
+        
+        // Single Photo implementation.
+        picker.didFinishPicking { items, cancelled in
+            self.imageView.image = items.singlePhoto?.image
             picker.dismiss(animated: true, completion: nil)
-        }
-        picker.didSelectVideo = { videoData, videoThumbnailImage, videoURL in
-            // video picked
-            print(videoData)
-            print(videoURL)
-            self.imageView.image = videoThumbnailImage
-            picker.dismiss(animated: true, completion: nil)
-        }
-        picker.didCancel = {
-            print("Did Cancel")
         }
         
-        picker.didSelectItems = { [unowned picker] items in
+        // Single Video implementation.
+        picker.didFinishPicking { items, cancelled in
+            self.imageView.image = items.singleVideo?.thumbnail
             picker.dismiss(animated: true, completion: nil)
+        }
+        
+        // Multiple implementation
+        picker.didFinishPicking { items, cancelled in
             _ = items.map { print("🧀 \($0)") }
             if let firstItem = items.first {
                 switch firstItem {
@@ -148,6 +162,7 @@ class ViewController: UIViewController {
                     self.imageView.image = video.thumbnail
                 }
             }
+            picker.dismiss(animated: true, completion: nil)
         }
         
         present(picker, animated: true, completion: nil)
