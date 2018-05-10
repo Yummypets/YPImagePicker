@@ -41,7 +41,7 @@ class ViewController: UIViewController {
         // Uncomment and play around with the configuration 👨‍🔬 🚀
 
 //        /// Set this to true if you want to force the  library output to be a squared image. Defaults to false
-//        config.onlySquareFromLibrary = true
+        config.onlySquareFromLibrary = true
 //
 //        /// Set this to true if you want to force the camera output to be a squared image. Defaults to true
 //        config.onlySquareImagesFromCamera = false

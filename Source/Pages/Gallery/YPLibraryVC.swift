@@ -91,7 +91,9 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         // Forces assetZoomableView to have a contentSize.
         // otherwise 0 in first selection triggering the bug :
         // "invalid image size 0x0"
-        v.assetZoomableView.setZoomScale(1, animated: false)
+        // Also fits the first element to the square if the onlySquareFromLibrary = true
+        // and first element is a video
+        v.assetZoomableView.fitImage(true)
     }
     
     public override func viewWillDisappear(_ animated: Bool) {
