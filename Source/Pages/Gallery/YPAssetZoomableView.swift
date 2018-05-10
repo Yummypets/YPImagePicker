@@ -96,6 +96,7 @@ final class YPAssetZoomableView: UIScrollView {
                          completion: @escaping () -> Void) {
         mediaManager.imageManager?.fetch(photo: photo) { [unowned self] image, _ in
             self.isVideoMode = false
+            self.videoView.showPlayImage(show: false)
             self.videoView.removeFromSuperview()
             self.videoView.deallocate()
             

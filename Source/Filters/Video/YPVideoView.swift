@@ -20,7 +20,6 @@ public class YPVideoView: UIView {
     
     public var player: AVPlayer {
         guard playerLayer.player != nil else {
-//            print("⚠️ YPVideoView >>> Problems with AVPlayer. Must not see this.")
             return AVPlayer()
         }
         return playerLayer.player!
@@ -77,19 +76,6 @@ public class YPVideoView: UIView {
         player.seek(to: kCMTimeZero)
         player.play()
     }
-    
-//    public override func observeValue(forKeyPath keyPath: String?,
-//                                      of object: Any?,
-//                                      change: [NSKeyValueChangeKey : Any]?,
-//                                      context: UnsafeMutableRawPointer?) {
-//        if object is AVPlayerItem && (keyPath == "status") {
-//            if player.currentItem!.status == .readyToPlay {
-//                previewImageView.alpha = 0
-//                playerView.alpha = 1
-//                player.currentItem!.removeObserver(self, forKeyPath: "status")
-//            }
-//        }
-//    }
 }
 
 // MARK: - Video handling
@@ -110,10 +96,6 @@ extension YPVideoView {
         }
         
         playerLayer.player = player
-//        self.player.currentItem!.addObserver(self,
-//                                            forKeyPath: "status",
-//                                            options: .new,
-//                                            context: nil)
         playerView.alpha = 1
     }
     
