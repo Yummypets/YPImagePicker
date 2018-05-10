@@ -101,13 +101,12 @@ public class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
         super.viewDidAppear(animated)
     }
     
-    @objc
-    func cancel() {
-        didCancel?()
+    public override func viewDidDisappear(_ animated: Bool) {
+        stopPlaybackTimeChecker()
+        super.viewDidDisappear(animated)
     }
     
-    @objc
-    public func save() {
+    @objc public func save() {
         guard let didSave = didSave else { return print("Don't have saveCallback") }
         YPLoaders.enableActivityIndicator(barButtonItem: &self.navigationItem.rightBarButtonItem)
 
@@ -134,6 +133,10 @@ public class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
         } catch let error {
             print("💩 \(error)")
         }
+    }
+    
+    @objc func cancel() {
+        didCancel?()
     }
     
     // MARK: Bottom buttons
@@ -213,8 +216,8 @@ extension YPVideoFiltersVC: TrimmerViewDelegate {
         stopPlaybackTimeChecker()
         videoView.pause()
         videoView.player.seek(to: playerTime, toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero)
-        let duration = (trimmerView.endTime! - trimmerView.startTime!).seconds
-        print(duration)
+//        let duration = (trimmerView.endTime! - trimmerView.startTime!).seconds
+//        print(duration)
     }
 }
 
