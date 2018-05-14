@@ -101,9 +101,10 @@ public class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
         super.viewDidAppear(animated)
     }
     
-    public override func viewDidDisappear(_ animated: Bool) {
+    public override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
         stopPlaybackTimeChecker()
-        super.viewDidDisappear(animated)
+        videoView.stop()
     }
     
     @objc public func save() {
