@@ -18,5 +18,5 @@
 "YPImagePickerVideo" = "فيديو";
 "YPImagePickerVideoDurationTitle" = "مدة الفيديو";
 "YPImagePickerVideoTooLong" = "ثانية %@ اختار فيديو بمدة اقل من ";
-"YPImagePickerVideoTooShort" = "The video must not be shorter than %@ seconds";
+"YPImagePickerVideoTooShort" = "The video must be at least %@ seconds";
 "YPImagePickerWarningItemsLimit" = "The limit is %d photos or videos";
