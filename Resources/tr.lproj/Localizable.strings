@@ -1,8 +1,8 @@
-"YPImagePickerAlbums" = "Albums";
-"YPImagePickerCancel" = "Cancel";
-"YPImagePickerCover" = "Cover";
+"YPImagePickerAlbums" = "Albümler";
+"YPImagePickerCancel" = "İptal";
+"YPImagePickerCover" = "Kapak";
 "YPImagePickerCrop" = "Crop";
-"YPImagePickerDone" = "Done";
+"YPImagePickerDone" = "Bitti";
 "YPImagePickerFilter" = "Filtrele";
 "YPImagePickerLibrary" = "Kütüphane";
 "YPImagePickerNext" = "İleri";
@@ -14,9 +14,9 @@
 "YPImagePickerPhoto" = "Fotoğraf";
 "YPImagePickerProcessing" = "Processing..";
 "YPImagePickerSave" = "Save";
-"YPImagePickerTrim" = "Trim";
-"YPImagePickerVideo" = "Video";
+"YPImagePickerTrim" = "Kes";
+"YPImagePickerVideo" = "Video"; //ignore-same-translation-warning
 "YPImagePickerVideoDurationTitle" = "Video uzunluğu";
 "YPImagePickerVideoTooLong" = "%@ saniyeden daha kısa bir video seç";
-"YPImagePickerVideoTooShort" = "The video must not be shorter than %@ seconds";
-"YPImagePickerWarningItemsLimit" = "The limit is %d photos or videos";
+"YPImagePickerVideoTooShort" = "Videolar en az %@ saniye uzunluğunda olmalıdır";
+"YPImagePickerWarningItemsLimit" = "Sınır %d fotoğraf veya videodur";
