@@ -125,6 +125,7 @@
 		99A3C90F20319227008D7E23 /* YPCropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPCropView.swift; sourceTree = "<group>"; };
 		99A3C91120319231008D7E23 /* YPCropVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPCropVC.swift; sourceTree = "<group>"; };
 		99B8C4C2208F8EE900127119 /* YPLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPLoadingView.swift; sourceTree = "<group>"; };
+		99BEB97A20A9DE5F00FFEB55 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
 		99C6D6981F1FB5C100711DB2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		99C6D69A1F1FB5C100711DB2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		99C6D69B1F1FB5C100711DB2 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -516,6 +517,7 @@
 				"pt-BR",
 				tr,
 				ar,
+				it,
 			);
 			mainGroup = 52412A891CA6114A0073C4BE;
 			productRefGroup = 52412A941CA6114A0073C4BE /* Products */;
@@ -659,6 +661,7 @@
 				7157B4CA206FD7270004EF6C /* pt-BR */,
 				3B0E1B962070669B0048E95B /* tr */,
 				A7FD716620755C2D0044A8E8 /* ar */,
+				99BEB97A20A9DE5F00FFEB55 /* it */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
