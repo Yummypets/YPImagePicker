@@ -72,7 +72,7 @@ public class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
         didChangeThumbPosition(CMTime(seconds: 1, preferredTimescale: 1))
         
         // Navigation bar setup
-        title = YPConfig.wordings.filter
+        title = YPConfig.wordings.trim
         navigationController?.navigationBar.tintColor = YPConfig.colors.navigationBarTextColor
         if isFromSelectionVC {
             navigationItem.leftBarButtonItem = UIBarButtonItem(title: YPConfig.wordings.cancel,
