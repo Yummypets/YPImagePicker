@@ -1,26 +1,22 @@
-/* 
-  Localizable.strings
-  YPImagePicker
-
-  Created by Sacha Durand Saint Omer on 02/11/16.
-  Copyright © 2016 Yummypets. All rights reserved.
-*/
-
-"YPImagePickerLibrary" = "Bibliotheek";
-"YPImagePickerPhoto" = "Foto";
-"YPImagePickerVideo" = "Video";
-"YPImagePickerNext" = "Volgende";
+"YPImagePickerAlbums" = "Albums";
+"YPImagePickerCancel" = "Cancel";
+"YPImagePickerCover" = "Cover";
+"YPImagePickerCrop" = "Crop";
+"YPImagePickerDone" = "Done";
 "YPImagePickerFilter" = "Filter";
-"YPImagePickerVideoDurationTitle" = "Video lengte";
-"YPImagePickerVideoTooLong" = "Selecteer een video korter dan %@ seconden";
-"YPImagePickerPermissionDeniedPopupTitle" = "Toestemming geweigerd";
-"YPImagePickerPermissionDeniedPopupMessage" = "Verleen alstublieft toestemming";
+"YPImagePickerLibrary" = "Bibliotheek";
+"YPImagePickerNext" = "Volgende";
+"YPImagePickerOk" = "Ok";
 "YPImagePickerPermissionDeniedPopupCancel" = "Annuleer";
 "YPImagePickerPermissionDeniedPopupGrantPermission" = "Verleen toestemming";
-
-"YPImagePickerOk" = "";
-"YPImagePickerCancel" = "";
-"YPImagePickerProcessing" = "..";
-"YPImagePickerAlbums" = "";
-"YPImagePickerWarningItemsLimit" = " %d ";
-"YPImagePickerVideoTooShort" = " %@ ";
+"YPImagePickerPermissionDeniedPopupMessage" = "Verleen alstublieft toestemming";
+"YPImagePickerPermissionDeniedPopupTitle" = "Toestemming geweigerd";
+"YPImagePickerPhoto" = "Foto";
+"YPImagePickerProcessing" = "Processing..";
+"YPImagePickerSave" = "Save";
+"YPImagePickerTrim" = "Trim";
+"YPImagePickerVideo" = "Video";
+"YPImagePickerVideoDurationTitle" = "Video lengte";
+"YPImagePickerVideoTooLong" = "Selecteer een video korter dan %@ seconden";
+"YPImagePickerVideoTooShort" = "The video must not be shorter than %@ seconds";
+"YPImagePickerWarningItemsLimit" = "The limit is %d photos or videos";
