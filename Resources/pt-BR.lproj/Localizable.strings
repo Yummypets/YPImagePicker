@@ -1,8 +1,8 @@
-"YPImagePickerAlbums" = "Albums";
-"YPImagePickerCancel" = "Cancel";
-"YPImagePickerCover" = "Cover";
-"YPImagePickerCrop" = "Crop";
-"YPImagePickerDone" = "Done";
+"YPImagePickerAlbums" = "Álbuns";
+"YPImagePickerCancel" = "Cancelar";
+"YPImagePickerCover" = "Capa";
+"YPImagePickerCrop" = "Redimensionar";
+"YPImagePickerDone" = "Concluir";
 "YPImagePickerFilter" = "Filtro";
 "YPImagePickerLibrary" = "Biblioteca";
 "YPImagePickerNext" = "Avançar";
@@ -14,9 +14,9 @@
 "YPImagePickerPhoto" = "Foto";
 "YPImagePickerProcessing" = "Processing..";
 "YPImagePickerSave" = "Save";
-"YPImagePickerTrim" = "Trim";
+"YPImagePickerTrim" = "Cortar";
 "YPImagePickerVideo" = "Vídeo";
 "YPImagePickerVideoDurationTitle" = "Duração do vídeo";
 "YPImagePickerVideoTooLong" = "Escolha um vídeo menor que %@ segundos";
-"YPImagePickerVideoTooShort" = "The video must not be shorter than %@ seconds";
-"YPImagePickerWarningItemsLimit" = "The limit is %d photos or videos";
+"YPImagePickerVideoTooShort" = "O vídeo deve ter no mínimo %@ segundos de duração";
+"YPImagePickerWarningItemsLimit" = "O limite é de %d fotos ou vídeos";
