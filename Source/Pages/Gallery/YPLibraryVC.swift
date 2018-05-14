@@ -37,9 +37,16 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     
     func setAlbum(_ album: YPAlbum) {
         mediaManager.collection = album.collection
-        
-        // Reset Selection
+        resetMultipleSelection()
+    }
+    
+    private func resetMultipleSelection() {
         selection.removeAll()
+        currentlySelectedIndex = 0
+        multipleSelectionEnabled = false
+        v.assetViewContainer.setMultipleSelectionMode(on: false)
+        delegate?.libraryViewDidToggleMultipleSelection(enabled: false)
+        checkLimit()
     }
     
     func initialize() {
