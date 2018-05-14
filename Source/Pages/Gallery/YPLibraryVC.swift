@@ -37,6 +37,9 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     
     func setAlbum(_ album: YPAlbum) {
         mediaManager.collection = album.collection
+        
+        // Reset Selection
+        selection.removeAll()
     }
     
     func initialize() {
