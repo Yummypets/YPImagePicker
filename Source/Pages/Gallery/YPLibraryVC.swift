@@ -99,11 +99,9 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                        for: .touchUpInside)
         
         // Forces assetZoomableView to have a contentSize.
-        // otherwise 0 in first selection triggering the bug :
-        // "invalid image size 0x0"
+        // otherwise 0 in first selection triggering the bug : "invalid image size 0x0"
         // Also fits the first element to the square if the onlySquareFromLibrary = true
-        // and first element is a video
-        if !YPConfig.onlySquareFromLibrary {
+        if !YPConfig.onlySquareFromLibrary && v.assetZoomableView.contentSize == CGSize(width: 0, height: 0) {
             v.assetZoomableView.setZoomScale(1, animated: false)
         }
     }
@@ -363,7 +361,6 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                                         y: yCrop,
                                         width: ts.width,
                                         height: ts.height)
-            
             mediaManager.imageManager?.fetchUrl(for: asset, cropRect: resultCropRect, callback: callback)
         }
     }
