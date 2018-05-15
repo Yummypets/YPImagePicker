@@ -17,10 +17,8 @@ extension PHCachingImageManager {
         requestAVAsset(forVideo: videoAsset, options: videosOptions) { asset, _, _ in
             do {
                 
-                func getTransform(for videoTrack: AVAssetTrack) -> CGAffineTransform {
-                    
-                    let renderSize = CGSize(width: 16 * 1 * 18,
-                                            height: 16 * 1 * 18)
+                func getTransform(for videoTrack: AVAssetTrack, with renderSize: CGSize) -> CGAffineTransform {
+                
                     let cropFrame = cropRect
                     let renderScale = renderSize.width / cropFrame.width
                     let offset = CGPoint(x: -cropFrame.origin.x, y: -cropFrame.origin.y)
@@ -79,9 +77,8 @@ extension PHCachingImageManager {
                 //2 add the layer instructions
                 let layerInstructions = AVMutableVideoCompositionLayerInstruction(assetTrack: videoCompositionTrack)
                 
-                let renderSize = CGSize(width: 16 * 1 * 18,
-                                        height: 16 * 1 * 18)
-                let transform = getTransform(for: videoTrack)
+                let renderSize = cropRect.size
+                let transform = getTransform(for: videoTrack, with: renderSize)
                 
                 layerInstructions.setTransform(transform, at: kCMTimeZero)
                 layerInstructions.setOpacity(1.0, at: kCMTimeZero)
