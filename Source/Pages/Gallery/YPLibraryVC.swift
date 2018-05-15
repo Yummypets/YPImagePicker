@@ -103,7 +103,9 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         // "invalid image size 0x0"
         // Also fits the first element to the square if the onlySquareFromLibrary = true
         // and first element is a video
-        v.assetZoomableView.fitImage(true)
+        if !YPConfig.onlySquareFromLibrary {
+            v.assetZoomableView.setZoomScale(1, animated: false)
+        }
     }
     
     public override func viewWillDisappear(_ animated: Bool) {
