@@ -111,16 +111,6 @@ extension PHCachingImageManager {
                         }
                     }
                 })
-                
-//                if let (videoComposition, assetComposition) = try asset?.getCropVideoComposition(cropRectFrame: cropRect) {
-//                    let destinationURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingUniquePathComponent(pathExtension: YPConfig.videoExtension.fileExtension)
-//                    try assetComposition.export(to: destinationURL,
-//                                                videoComposition: videoComposition,
-//                                                removeOldFile: false) {
-//                                                    callback(destinationURL)
-//                                                    print("\r 👍\r")
-//                    }
-//                }
             } catch let error {
                 print("💩 \(error)")
             }
