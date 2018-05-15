@@ -40,11 +40,11 @@ extension PHCachingImageManager {
                     transform = transform.translatedBy(x: offset.x + rotationOffset.x, y: offset.y + rotationOffset.y)
                     transform = transform.rotated(by: rotation)
                     
-                    print("track size \(videoTrack.naturalSize)")
-                    print("preferred Transform = \(videoTrack.preferredTransform)")
-                    print("rotation angle \(rotation)")
-                    print("rotation offset \(rotationOffset)")
-                    print("actual Transform = \(transform)")
+//                    print("track size \(videoTrack.naturalSize)")
+//                    print("preferred Transform = \(videoTrack.preferredTransform)")
+//                    print("rotation angle \(rotation)")
+//                    print("rotation offset \(rotationOffset)")
+//                    print("actual Transform = \(transform)")
                     return transform
                 }
                 

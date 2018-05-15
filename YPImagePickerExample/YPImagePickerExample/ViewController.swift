@@ -118,26 +118,6 @@ class ViewController: UIViewController {
         
         /// Change configuration directly
 //        YPImagePickerConfiguration.shared.wordings.libraryTitle = "Gallery2"
-
-    
-//        picker.didSelectImage = { [unowned picker] img in
-//            // image picked
-//            print(img.size)
-//            self.imageView.image = img
-//            picker.dismiss(animated: true, completion: nil)
-//        }
-//        picker.didSelectVideo = { videoData, videoThumbnailImage, videoURL in
-//            // video picked
-//            print(videoData)
-//            print(videoURL)
-//            self.imageView.image = videoThumbnailImage
-//            picker.dismiss(animated: true, completion: nil)
-//        }
-//        picker.didCancel = {
-//            print("Did Cancel")
-//        }
-        
-
         
         // Single Photo implementation.
         picker.didFinishPicking { items, cancelled in

@@ -217,8 +217,6 @@ extension YPVideoFiltersVC: TrimmerViewDelegate {
         stopPlaybackTimeChecker()
         videoView.pause()
         videoView.player.seek(to: playerTime, toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero)
-//        let duration = (trimmerView.endTime! - trimmerView.startTime!).seconds
-//        print(duration)
     }
 }
 
