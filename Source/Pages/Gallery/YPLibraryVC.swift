@@ -455,14 +455,33 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     // Reduce image size further if needed libraryTargetImageSize is capped.
     func resizedImageIfNeeded(image: UIImage) -> UIImage {
         if case let YPLibraryImageSize.cappedTo(size: capped) = YPConfig.libraryTargetImageSize {
-            let cappedWidth = min(image.size.width, capped)
-            let cappedHeight = min(image.size.height, capped)
-            let cappedSize = CGSize(width: cappedWidth, height: cappedHeight)
-            if let resizedImage = image.resized(to: cappedSize) {
+            let size = cappedSize(for: image.size, cappedAt: capped)
+            if let resizedImage = image.resized(to: size) {
                 return resizedImage
             }
         }
         return image
+    }
+    
+    private func cappedSize(for size: CGSize, cappedAt: CGFloat) -> CGSize {
+        var cappedWidth: CGFloat = 0
+        var cappedHeight: CGFloat = 0
+        if size.width > size.height {
+            // Landscape
+            let heightRatio = size.height / size.width
+            cappedWidth = min(size.width, cappedAt)
+            cappedHeight = cappedWidth * heightRatio
+        } else if size.height > size.width {
+            // Portrait
+            let widthRatio = size.width / size.height
+            cappedHeight = min(size.height, cappedAt)
+            cappedWidth = cappedHeight * widthRatio
+        } else {
+            // Squared
+            cappedWidth = min(size.width, cappedAt)
+            cappedHeight = min(size.height, cappedAt)
+        }
+        return CGSize(width: cappedWidth, height: cappedHeight)
     }
     
     // MARK: - Player
