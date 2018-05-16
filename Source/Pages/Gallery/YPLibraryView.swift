@@ -73,7 +73,6 @@ final class YPLibraryView: UIView {
             progressView
         )
         
-        progressView.height(10)
         progressView.Top == line.Top
         progressView.Width == line.Width
         progressView.progressViewStyle = .bar
@@ -117,6 +116,7 @@ extension YPLibraryView {
     func updateProgress(_ progress: Float) {
         progressView.isHidden = progress > 0.99 || progress == 0
         progressView.progress = progress
+        UIView.animate(withDuration: 1, animations: progressView.layoutIfNeeded)
     }
     
     // MARK: - Crop Rect
