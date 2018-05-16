@@ -24,7 +24,7 @@ extension YPLibraryVC {
     
     /// When tapping on the cell with long press, clear all previously selected cells.
     @objc func handleLongPress(longPressGR: UILongPressGestureRecognizer) {
-        if multipleSelectionEnabled || isProcessing {
+        if multipleSelectionEnabled || isProcessing || YPConfig.maxNumberOfItems <= 1 {
             return
         }
         
