@@ -74,7 +74,6 @@ open class YPPhotoFiltersVC: UIViewController, IsMediaFilterVC, UIGestureRecogni
         
         // Navigation bar setup
         title = YPConfig.wordings.filter
-        navigationController?.navigationBar.tintColor = YPConfig.colors.navigationBarTextColor
         if isFromSelectionVC {
             navigationItem.leftBarButtonItem = UIBarButtonItem(title: YPConfig.wordings.cancel,
                                                                 style: .plain,
