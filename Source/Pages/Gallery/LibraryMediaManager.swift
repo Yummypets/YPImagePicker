@@ -145,6 +145,7 @@ class LibraryMediaManager {
             
             if (exportSession.progress > 0.99) {
                 sender.invalidate()
+                v?.updateProgress(0)
                 self.exportTimer = nil
             }
         }
