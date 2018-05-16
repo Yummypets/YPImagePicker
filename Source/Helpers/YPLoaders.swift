@@ -9,21 +9,11 @@
 import UIKit
 
 struct YPLoaders {
-    public static func enableActivityIndicator(barButtonItem: inout UIBarButtonItem?) {
-        let spinner = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
+
+    static var defaultLoader: UIBarButtonItem {
+        let spinner = UIActivityIndicatorView(activityIndicatorStyle: .gray)
         spinner.color = YPConfig.colors.navigationBarActivityIndicatorColor
-        barButtonItem = UIBarButtonItem(customView: spinner)
         spinner.startAnimating()
-    }
-    
-    public static func disableActivityIndicator(barButtonItem: inout UIBarButtonItem?,
-                                                title: String,
-                                                target: Any,
-                                                action: Selector) {
-        barButtonItem = UIBarButtonItem(title: title,
-                                        style: .plain,
-                                        target: target,
-                                        action: action)
-        barButtonItem?.tintColor = YPConfig.colors.navigationBarTextColor
+        return UIBarButtonItem(customView: spinner)
     }
 }

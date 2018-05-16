@@ -9,14 +9,16 @@
 import UIKit
 
 public struct YPColors {
-    /// A color for navigation bar text
-    public var navigationBarTextColor = UIColor.black
     
+    public var tintColor = UIColor.red
+        
     /// A color for navigation bar spinner
-    public var navigationBarActivityIndicatorColor = UIColor.black
+    /// Default is nil, which is default iOS gray UIActivityIndicator
+    public var navigationBarActivityIndicatorColor: UIColor?
     
     /// A color for circle for selected items in multiple selection
-    public var multipleItemsSelectedCircleColor: UIColor = UIColor.blue
+    /// Default is nil, which takes tintColor.
+    public var multipleItemsSelectedCircleColor: UIColor?
     
     // Trimmer
     /// The color of the main border of the view

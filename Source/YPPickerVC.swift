@@ -210,14 +210,17 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         
         let label = UILabel()
         label.text = aTitle
-        label.textColor = YPConfig.colors.navigationBarTextColor
-        
+        // Use standard font by default.
+        label.font = UIFont.boldSystemFont(ofSize: 17)
+
+        // Use custom font if set by user.
         if let navBarTitleFont = UINavigationBar.appearance().titleTextAttributes?[.font] as? UIFont {
             // Use custom font if set by user.
             label.font = navBarTitleFont
-        } else {
-            // Use standard font by default.
-            label.font = UIFont.boldSystemFont(ofSize: 17)
+        }
+        // Use custom textColor if set by user.
+        if let navBarTitleColor = UINavigationBar.appearance().titleTextAttributes?[.foregroundColor] as? UIColor {
+            label.textColor = navBarTitleColor
         }
         
         let arrow = UIImageView()
@@ -250,17 +253,15 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
                                                            style: .plain,
                                                            target: self,
                                                            action: #selector(close))
-        navigationItem.leftBarButtonItem?.tintColor = YPConfig.colors.navigationBarTextColor
         
         switch mode {
         case .library:
             setTitleViewWithTitle(aTitle: libraryVC?.title ?? "")
             navigationItem.rightBarButtonItem = UIBarButtonItem(title: YPConfig.wordings.next,
-                                                                style: .plain,
+                                                                style: .done,
                                                                 target: self,
                                                                 action: #selector(done))
-            navigationItem.rightBarButtonItem?.tintColor = YPConfig.colors.navigationBarTextColor
-            navigationItem.rightBarButtonItem?.isEnabled = true
+            navigationItem.rightBarButtonItem?.tintColor = YPConfig.colors.tintColor
         case .camera:
             navigationItem.titleView = nil
             title = cameraVC?.title
@@ -308,11 +309,12 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
 }
 
 extension YPPickerVC: YPLibraryViewDelegate {
+    
     public func libraryViewStartedLoading() {
         libraryVC?.isProcessing = true
         DispatchQueue.main.async {
             self.libraryVC?.v.fadeInLoader()
-            YPLoaders.enableActivityIndicator(barButtonItem: &self.navigationItem.rightBarButtonItem)
+            self.navigationItem.rightBarButtonItem = YPLoaders.defaultLoader
         }
     }
     
@@ -320,10 +322,7 @@ extension YPPickerVC: YPLibraryViewDelegate {
         libraryVC?.isProcessing = false
         DispatchQueue.main.async {
             self.libraryVC?.v.hideLoader()
-            YPLoaders.disableActivityIndicator(barButtonItem: &self.navigationItem.rightBarButtonItem,
-                                               title: YPConfig.wordings.next,
-                                               target: self,
-                                               action: #selector(self.done))
+            self.updateUI()
         }
     }
     
