@@ -10,7 +10,7 @@ import UIKit
 
 public struct YPColors {
     
-    public var tintColor = UIColor.red
+    public var tintColor = UIColor(r: 10, g: 120, b: 254)
         
     /// A color for navigation bar spinner
     /// Default is nil, which is default iOS gray UIActivityIndicator
