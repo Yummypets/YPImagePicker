@@ -83,8 +83,7 @@ public class YPImagePicker: UINavigationController {
             
             // Multiple items flow
             if items.count > 1 {
-                let selectionsGalleryVC = YPSelectionsGalleryVC.initWith(items: items)
-                selectionsGalleryVC.didFinishWithItems = { items in
+                let selectionsGalleryVC = YPSelectionsGalleryVC.initWith(items: items) { gallery, items in
                     self.didSelect(items: items)
                 }
                 self.pushViewController(selectionsGalleryVC, animated: true)

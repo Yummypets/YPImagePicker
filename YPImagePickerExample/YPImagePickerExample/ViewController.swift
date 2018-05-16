@@ -11,25 +11,46 @@ import YPImagePicker
 import AVFoundation
 
 class ViewController: UIViewController {
+    var selectedItems = [YPMediaItem]()
     
-    let imageView = UIImageView()
+    let selectedImageV = UIImageView()
+    let pickButton = UIButton()
+    let resultsButton = UIButton()
     
-    let button = UIButton()
-
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         self.view.backgroundColor = .white
         
-        imageView.contentMode = .scaleAspectFit
-        view.addSubview(imageView)
-        imageView.frame = view.frame
+        selectedImageV.contentMode = .scaleAspectFit
+        selectedImageV.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.45)
+        view.addSubview(selectedImageV)
         
-        button.setTitle("Pick", for: .normal)
-        button.setTitleColor(.black, for: .normal)
-        button.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
-        view.addSubview(button)
-        button.center = view.center
-        button.addTarget(self, action: #selector(showPicker), for: .touchUpInside)
+        pickButton.setTitle("Pick", for: .normal)
+        pickButton.setTitleColor(.black, for: .normal)
+        pickButton.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
+        pickButton.addTarget(self, action: #selector(showPicker), for: .touchUpInside)
+        view.addSubview(pickButton)
+        pickButton.center = view.center
+        
+        resultsButton.setTitle("Show selected", for: .normal)
+        resultsButton.setTitleColor(.black, for: .normal)
+        resultsButton.frame = CGRect(x: 0, y: UIScreen.main.bounds.height - 100, width: UIScreen.main.bounds.width, height: 100)
+        resultsButton.addTarget(self, action: #selector(showResults), for: .touchUpInside)
+        view.addSubview(resultsButton)
+    }
+    
+    @objc
+    func showResults() {
+        if selectedItems.count > 0 {
+            let gallery = YPSelectionsGalleryVC.initWith(items: selectedItems) { g, _ in
+                g.dismiss(animated: true, completion: nil)
+            }
+            let navC = UINavigationController(rootViewController: gallery)
+            self.present(navC, animated: true, completion: nil)
+        } else {
+            print("No items selected yet.")
+        }
     }
     
     @objc
@@ -67,7 +88,7 @@ class ViewController: UIViewController {
 //
 //        /// Enables you to opt out from saving new (or old but filtered) images to the
 //        /// user's photo library. Defaults to true.
-//        config.shouldSaveNewPicturesToAlbum = false
+        config.shouldSaveNewPicturesToAlbum = false
 //
 //        /// Choose the videoCompression.  Defaults to AVAssetExportPresetHighestQuality
 //        config.videoCompression = AVAssetExportPreset640x480
@@ -121,25 +142,29 @@ class ViewController: UIViewController {
 
         // Single Photo implementation.
         picker.didFinishPicking { items, cancelled in
-            self.imageView.image = items.singlePhoto?.image
+            self.selectedItems = items
+            self.selectedImageV.image = items.singlePhoto?.image
             picker.dismiss(animated: true, completion: nil)
         }
         
         // Single Video implementation.
         picker.didFinishPicking { items, cancelled in
-            self.imageView.image = items.singleVideo?.thumbnail
+            self.selectedItems = items
+            self.selectedImageV.image = items.singleVideo?.thumbnail
             picker.dismiss(animated: true, completion: nil)
         }
         
         // Multiple implementation
         picker.didFinishPicking { items, cancelled in
             _ = items.map { print("🧀 \($0)") }
+            
+            self.selectedItems = items
             if let firstItem = items.first {
                 switch firstItem {
                 case .photo(let photo):
-                    self.imageView.image = photo.image
+                    self.selectedImageV.image = photo.image
                 case .video(let video):
-                    self.imageView.image = video.thumbnail
+                    self.selectedImageV.image = video.thumbnail
                 }
             }
             picker.dismiss(animated: true, completion: nil)
