@@ -150,7 +150,9 @@ final class YPAssetZoomableView: UIScrollView {
     
     /// Calculate zoom scale which will fit the image to square
     fileprivate func calculateSquaredZoomScale() {
-        let image = isVideoMode ? videoView.previewImageView.image! : photoImageView.image!
+        guard let image = isVideoMode ? videoView.previewImageView.image : photoImageView.image else {
+            print("YPAssetZoomableView >>> No image"); return
+        }
         
         var squareZoomScale: CGFloat = 1.0
         let w = image.size.width

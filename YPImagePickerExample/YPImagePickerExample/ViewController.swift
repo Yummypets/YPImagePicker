@@ -118,7 +118,7 @@ class ViewController: UIViewController {
         
         /// Change configuration directly
 //        YPImagePickerConfiguration.shared.wordings.libraryTitle = "Gallery2"
-        
+
         // Single Photo implementation.
         picker.didFinishPicking { items, cancelled in
             self.imageView.image = items.singlePhoto?.image

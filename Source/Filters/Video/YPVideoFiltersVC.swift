@@ -41,6 +41,8 @@ public class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
         return vc
     }
     
+    // MARK: - Live cycle
+
     override public func viewDidLoad() {
         super.viewDidLoad()
 
@@ -107,6 +109,8 @@ public class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
         videoView.stop()
     }
     
+    // MARK: - Top buttons
+
     @objc public func save() {
         guard let didSave = didSave else { return print("Don't have saveCallback") }
         YPLoaders.enableActivityIndicator(barButtonItem: &self.navigationItem.rightBarButtonItem)
@@ -140,7 +144,7 @@ public class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
         didCancel?()
     }
     
-    // MARK: Bottom buttons
+    // MARK: - Bottom buttons
 
     @objc public func selectTrim() {
         trimBottomItem.select()
@@ -165,7 +169,25 @@ public class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
         videoView.stop()
     }
     
-    // MARK: Trimmer playback
+    // MARK: - Various Methods
+
+    // Updates the bounds of the cover picker if the video is trimmed
+    // TODO: Now the trimmer framework doesn't support an easy way to do this. Need to rethink a flow or search other ways.
+    func updateCoverPickerBounds() {
+        if let startTime = trimmerView.startTime,
+            let endTime = trimmerView.endTime {
+            if let selectedCoverTime = coverThumbSelectorView.selectedTime {
+                let range = CMTimeRange(start: startTime, end: endTime)
+                if !range.containsTime(selectedCoverTime) {
+                    // If the selected before cover range is not in new trimeed range, than reset the cover to start time of the trimmed video
+                }
+            } else {
+                // If none cover time selected yet, than set the cover to the start time of the trimmed video
+            }
+        }
+    }
+    
+    // MARK: - Trimmer playback
     
     @objc func itemDidFinishPlaying(_ notification: Notification) {
         if let startTime = trimmerView.startTime {
@@ -211,6 +233,7 @@ extension YPVideoFiltersVC: TrimmerViewDelegate {
         videoView.player.seek(to: playerTime, toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero)
         videoView.play()
         startPlaybackTimeChecker()
+        updateCoverPickerBounds()
     }
     
     public func didChangePositionBar(_ playerTime: CMTime) {

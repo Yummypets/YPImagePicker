@@ -15,16 +15,13 @@ public class YPImagePicker: UINavigationController {
     public var didSelectImage: ((UIImage) -> Void)?
     @available(*, deprecated, message: "Use didFinishPicking callback instead")
     public var didSelectVideo: ((Data, UIImage, URL) -> Void)?
-    
     @available(*, deprecated, message: "Use didFinishPicking callback instead")
     public var didCancel: (() -> Void)?
-    
     
     private var _didFinishPicking: (([YPMediaItem], Bool) -> Void)?
     public func didFinishPicking(completion: @escaping (_ items: [YPMediaItem], _ cancelled: Bool) -> Void) {
         _didFinishPicking = completion
     }
-    
     
     // This nifty little trick enables us to call the single version of the callbacks.
     // This keeps the backwards compatibility keeps the api as simple as possible.
@@ -99,7 +96,6 @@ public class YPImagePicker: UINavigationController {
             
             switch item {
             case .photo(let photo):
-                
                 let completion = { (photo: YPMediaPhoto) in
                     let mediaItem = YPMediaItem.photo(p: photo)
                     // Save new image to the photo album.
