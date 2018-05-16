@@ -36,9 +36,11 @@ public class YPSelectionsGalleryVC: UIViewController {
         
         // Setup navigation bar
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: YPConfig.wordings.next,
-                                                            style: .plain,
+                                                            style: .done,
                                                             target: self,
                                                             action: #selector(done))
+        navigationItem.rightBarButtonItem?.tintColor = YPConfig.colors.tintColor
+        
         YPHelper.changeBackButtonIcon(self)
         YPHelper.changeBackButtonTitle(self)
     }

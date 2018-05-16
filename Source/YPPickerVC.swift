@@ -256,11 +256,10 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         case .library:
             setTitleViewWithTitle(aTitle: libraryVC?.title ?? "")
             navigationItem.rightBarButtonItem = UIBarButtonItem(title: YPConfig.wordings.next,
-                                                                style: .plain,
+                                                                style: .done,
                                                                 target: self,
                                                                 action: #selector(done))
-            navigationItem.rightBarButtonItem?.tintColor = YPConfig.colors.navigationBarTextColor
-            navigationItem.rightBarButtonItem?.isEnabled = true
+            navigationItem.rightBarButtonItem?.tintColor = YPConfig.colors.tintColor
         case .camera:
             navigationItem.titleView = nil
             title = cameraVC?.title
@@ -308,20 +307,18 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
 }
 
 extension YPPickerVC: YPLibraryViewDelegate {
+    
     public func libraryViewStartedLoading() {
         DispatchQueue.main.async {
             self.libraryVC?.v.fadeInLoader()
-            YPLoaders.enableActivityIndicator(barButtonItem: &self.navigationItem.rightBarButtonItem)
+            self.navigationItem.rightBarButtonItem = YPLoaders.defaultLoader
         }
     }
     
     public func libraryViewFinishedLoading() {
         DispatchQueue.main.async {
             self.libraryVC?.v.hideLoader()
-            YPLoaders.disableActivityIndicator(barButtonItem: &self.navigationItem.rightBarButtonItem,
-                                               title: YPConfig.wordings.next,
-                                               target: self,
-                                               action: #selector(self.done))
+            self.updateUI()
         }
     }
     

@@ -82,9 +82,11 @@ public class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
         }
         let rightBarButtonTitle = isFromSelectionVC ? YPConfig.wordings.done : YPConfig.wordings.next
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: rightBarButtonTitle,
-                                                            style: .plain,
+                                                            style: .done,
                                                             target: self,
                                                             action: #selector(save))
+        navigationItem.rightBarButtonItem?.tintColor = YPConfig.colors.tintColor
+        
         YPHelper.changeBackButtonTitle(self)
     }
     
@@ -109,7 +111,7 @@ public class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
     
     @objc public func save() {
         guard let didSave = didSave else { return print("Don't have saveCallback") }
-        YPLoaders.enableActivityIndicator(barButtonItem: &self.navigationItem.rightBarButtonItem)
+        navigationItem.rightBarButtonItem = YPLoaders.defaultLoader
 
         do {
             let asset = AVURLAsset(url: inputVideo.url)

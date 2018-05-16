@@ -83,9 +83,11 @@ open class YPPhotoFiltersVC: UIViewController, IsMediaFilterVC, UIGestureRecogni
         }
         let rightBarButtonTitle = isFromSelectionVC ? YPConfig.wordings.done : YPConfig.wordings.next
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: rightBarButtonTitle,
-                                                            style: .plain,
+                                                            style: .done,
                                                             target: self,
                                                             action: #selector(save))
+        navigationItem.rightBarButtonItem?.tintColor = YPConfig.colors.tintColor
+        
         YPHelper.changeBackButtonIcon(self)
         YPHelper.changeBackButtonTitle(self)
         
