@@ -8,14 +8,14 @@
   "tvOS" : [
     {
       "name" : "Stevia",
-      "hash" : "bb85ef155ea7445f36b9214d60aa27fb9c490872c517f4713077f992e20ed589"
+      "hash" : "cf528c8332699918cc2cfccbf47bed6c2eb0e8661b73477d133396651c3247d6"
     }
   ],
-  "commitish" : "4.2.0",
+  "commitish" : "4.3.0",
   "iOS" : [
     {
       "name" : "Stevia",
-      "hash" : "5ba4b93d419655c2b6a2d103e2f7224702509107a7301208ddc06f0d0460fb42"
+      "hash" : "21c4beba1de518dae20c4d880fe70aaa9895361f4cd89617a0b5b2088400c56b"
     }
   ]
 }

@@ -1,22 +1,22 @@
-/* 
-  Localizable.strings
-  YPImagePicker
-
-  Created by Sacha Durand Saint Omer on 02/11/16.
-  Copyright © 2016 Yummypets. All rights reserved.
-*/
-
+"YPImagePickerAlbums" = "Alben";
+"YPImagePickerCancel" = "Abbrechen";
+"YPImagePickerCover" = "Titelbild";
+"YPImagePickerCrop" = "Crop";
+"YPImagePickerDone" = "Fertig";
+"YPImagePickerFilter" = "Filter"; //ignore-same-translation-warning
 "YPImagePickerLibrary" = "Bibliothek";
-"YPImagePickerPhoto" = "Foto";
-"YPImagePickerVideo" = "Video";
 "YPImagePickerNext" = "Weiter";
-"YPImagePickerFilter" = "Filter";
-"YPImagePickerVideoTooLongTitle" = "Videolänge";
-"YPImagePickerVideoTooLongDetail" = "Die Videolänge darf %@ Sekunden nicht überschreiten.";
-"YPImagePickerPermissionDeniedPopupTitle" = "Fehlende Berechtigung";
-"YPImagePickerPermissionDeniedPopupMessage" = "Bitte Zugriff erlauben";
+"YPImagePickerOk" = "Ok";
 "YPImagePickerPermissionDeniedPopupCancel" = "Abbrechen";
 "YPImagePickerPermissionDeniedPopupGrantPermission" = "Zugriff erlauben";
-
-
-
+"YPImagePickerPermissionDeniedPopupMessage" = "Bitte Zugriff erlauben";
+"YPImagePickerPermissionDeniedPopupTitle" = "Fehlende Berechtigung";
+"YPImagePickerPhoto" = "Foto";
+"YPImagePickerProcessing" = "Processing..";
+"YPImagePickerSave" = "Save";
+"YPImagePickerTrim" = "Kürzen";
+"YPImagePickerVideo" = "Video"; //ignore-same-translation-warning
+"YPImagePickerVideoDurationTitle" = "Videolänge";
+"YPImagePickerVideoTooLong" = "Die Videolänge darf %@ Sekunden nicht überschreiten.";
+"YPImagePickerVideoTooShort" = "Video muss mindestens %@ Sekunden lang sein";
+"YPImagePickerWarningItemsLimit" = "Die Obergrenze liegt bei %d Fotos oder Videos";

@@ -164,11 +164,11 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 #endif
 #if __has_feature(modules)
 @import AVFoundation;
+@import Foundation;
 @import Photos;
 @import ObjectiveC;
 @import UIKit;
 @import CoreGraphics;
-@import Foundation;
 #endif
 
 #pragma clang diagnostic ignored "-Wproperty-attribute-mismatch"
@@ -185,6 +185,12 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 # pragma clang attribute push(__attribute__((external_source_symbol(language="Swift", defined_in="YPImagePicker",generated_declaration))), apply_to=any(function,enum,objc_interface,objc_category,objc_protocol))
 # pragma pop_macro("any")
 #endif
+
+
+
+
+
+
 
 
 
@@ -215,6 +221,8 @@ SWIFT_CLASS("_TtC13YPImagePicker16PanGestureHelper")
 
 
 
+
+
 @class UIScrollView;
 @class NSBundle;
 @class NSCoder;
@@ -232,14 +240,13 @@ SWIFT_CLASS("_TtC13YPImagePicker13YPBottomPager")
 SWIFT_CLASS("_TtC13YPImagePicker10YPCameraVC")
 @interface YPCameraVC : UIViewController <UIGestureRecognizerDelegate>
 - (void)loadView;
+- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 - (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
 - (void)viewDidLoad;
 - (void)viewWillAppear:(BOOL)animated;
 - (void)viewDidAppear:(BOOL)animated;
 - (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil SWIFT_UNAVAILABLE;
 @end
-
-
 
 
 SWIFT_CLASS("_TtC13YPImagePicker13YPImagePicker")
@@ -256,8 +263,10 @@ SWIFT_CLASS("_TtC13YPImagePicker13YPImagePicker")
 
 SWIFT_CLASS("_TtC13YPImagePicker11YPLibraryVC")
 @interface YPLibraryVC : UIViewController
+- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 - (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
 - (void)loadView;
+- (void)viewDidLoad;
 - (void)viewDidAppear:(BOOL)animated;
 - (void)viewWillDisappear:(BOOL)animated;
 - (void)scrollViewDidScroll:(UIScrollView * _Nonnull)scrollView;
@@ -265,6 +274,9 @@ SWIFT_CLASS("_TtC13YPImagePicker11YPLibraryVC")
 @end
 
 
+@interface YPLibraryVC (SWIFT_EXTENSION(YPImagePicker)) <UICollectionViewDataSource>
+- (NSInteger)collectionView:(UICollectionView * _Nonnull)collectionView numberOfItemsInSection:(NSInteger)section SWIFT_WARN_UNUSED_RESULT;
+@end
 
 @class UICollectionViewLayout;
 
@@ -276,12 +288,6 @@ SWIFT_CLASS("_TtC13YPImagePicker11YPLibraryVC")
 
 @interface YPLibraryVC (SWIFT_EXTENSION(YPImagePicker)) <PHPhotoLibraryChangeObserver>
 - (void)photoLibraryDidChange:(PHChange * _Nonnull)changeInstance;
-@end
-
-
-@interface YPLibraryVC (SWIFT_EXTENSION(YPImagePicker)) <UICollectionViewDataSource>
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView * _Nonnull)collectionView SWIFT_WARN_UNUSED_RESULT;
-- (NSInteger)collectionView:(UICollectionView * _Nonnull)collectionView numberOfItemsInSection:(NSInteger)section SWIFT_WARN_UNUSED_RESULT;
 @end
 
 @class UICollectionViewCell;
@@ -296,39 +302,122 @@ SWIFT_CLASS("_TtC13YPImagePicker11YPLibraryVC")
 
 SWIFT_PROTOCOL("_TtP13YPImagePicker21YPLibraryViewDelegate_")
 @protocol YPLibraryViewDelegate
-- (void)libraryViewCameraRollUnauthorized;
-- (void)libraryViewStartedLoadingImage;
-- (void)libraryViewFinishedLoadingImage;
+- (void)libraryViewStartedLoading;
+- (void)libraryViewFinishedLoading;
+- (void)libraryViewDidToggleMultipleSelectionWithEnabled:(BOOL)enabled;
+@end
+
+
+SWIFT_CLASS("_TtC13YPImagePicker16YPPhotoFiltersVC")
+@interface YPPhotoFiltersVC : UIViewController <UIGestureRecognizerDelegate>
+@property (nonatomic, readonly) BOOL prefersStatusBarHidden;
+- (void)loadView;
+- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
+- (void)viewDidLoad;
+- (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil SWIFT_UNAVAILABLE;
+@end
+
+
+@interface YPPhotoFiltersVC (SWIFT_EXTENSION(YPImagePicker)) <UICollectionViewDelegate>
+- (void)collectionView:(UICollectionView * _Nonnull)collectionView didSelectItemAtIndexPath:(NSIndexPath * _Nonnull)indexPath;
+@end
+
+
+@interface YPPhotoFiltersVC (SWIFT_EXTENSION(YPImagePicker)) <UICollectionViewDataSource>
+- (NSInteger)collectionView:(UICollectionView * _Nonnull)collectionView numberOfItemsInSection:(NSInteger)section SWIFT_WARN_UNUSED_RESULT;
+- (UICollectionViewCell * _Nonnull)collectionView:(UICollectionView * _Nonnull)collectionView cellForItemAtIndexPath:(NSIndexPath * _Nonnull)indexPath SWIFT_WARN_UNUSED_RESULT;
 @end
 
 
 SWIFT_CLASS("_TtC13YPImagePicker10YPPickerVC")
 @interface YPPickerVC : YPBottomPager
-- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
 @property (nonatomic, readonly) BOOL prefersStatusBarHidden;
 - (void)viewDidLoad;
 - (void)viewWillAppear:(BOOL)animated;
 - (void)viewDidAppear:(BOOL)animated;
 - (void)viewWillDisappear:(BOOL)animated;
-- (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil SWIFT_UNAVAILABLE;
+- (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil OBJC_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
 @end
 
 
 @interface YPPickerVC (SWIFT_EXTENSION(YPImagePicker)) <YPLibraryViewDelegate>
-- (void)libraryViewStartedLoadingImage;
-- (void)libraryViewFinishedLoadingImage;
-- (void)libraryViewCameraRollUnauthorized;
+- (void)libraryViewStartedLoading;
+- (void)libraryViewFinishedLoading;
+- (void)libraryViewDidToggleMultipleSelectionWithEnabled:(BOOL)enabled;
 @end
+
+
+SWIFT_CLASS("_TtC13YPImagePicker25YPSelectionsGalleryCVCell")
+@interface YPSelectionsGalleryCVCell : UICollectionViewCell
+- (void)awakeFromNib;
+- (nonnull instancetype)initWithFrame:(CGRect)frame OBJC_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
+@end
+
+
+SWIFT_CLASS("_TtC13YPImagePicker21YPSelectionsGalleryVC")
+@interface YPSelectionsGalleryVC : UIViewController
+- (void)viewDidLoad;
+- (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil OBJC_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
+@end
+
+
+@interface YPSelectionsGalleryVC (SWIFT_EXTENSION(YPImagePicker)) <UICollectionViewDelegateFlowLayout>
+- (CGSize)collectionView:(UICollectionView * _Nonnull)collectionView layout:(UICollectionViewLayout * _Nonnull)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath * _Nonnull)indexPath SWIFT_WARN_UNUSED_RESULT;
+@end
+
+
+@interface YPSelectionsGalleryVC (SWIFT_EXTENSION(YPImagePicker)) <UICollectionViewDelegate>
+- (void)collectionView:(UICollectionView * _Nonnull)collectionView didSelectItemAtIndexPath:(NSIndexPath * _Nonnull)indexPath;
+@end
+
+
+@interface YPSelectionsGalleryVC (SWIFT_EXTENSION(YPImagePicker)) <UICollectionViewDataSource>
+- (NSInteger)collectionView:(UICollectionView * _Nonnull)collectionView numberOfItemsInSection:(NSInteger)section SWIFT_WARN_UNUSED_RESULT;
+- (UICollectionViewCell * _Nonnull)collectionView:(UICollectionView * _Nonnull)collectionView cellForItemAtIndexPath:(NSIndexPath * _Nonnull)indexPath SWIFT_WARN_UNUSED_RESULT;
+@end
+
+
+SWIFT_CLASS("_TtC13YPImagePicker16YPVideoFiltersVC")
+@interface YPVideoFiltersVC : UIViewController
+- (void)viewDidLoad;
+- (void)viewDidAppear:(BOOL)animated;
+- (void)save;
+- (void)selectTrim;
+- (void)selectCover;
+- (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil OBJC_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
+@end
+
+
+
+
 
 
 SWIFT_CLASS("_TtC13YPImagePicker9YPVideoVC")
 @interface YPVideoVC : UIViewController
 - (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 - (void)loadView;
 - (void)viewDidLoad;
 - (void)viewDidAppear:(BOOL)animated;
 - (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil SWIFT_UNAVAILABLE;
 @end
+
+
+/// A video view that contains video layer, supports play, pause and other actions.
+/// Supports xib initialization.
+SWIFT_CLASS("_TtC13YPImagePicker11YPVideoView")
+@interface YPVideoView : UIView
+- (nonnull instancetype)initWithFrame:(CGRect)frame OBJC_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
+- (void)layoutSubviews;
+- (void)playerItemDidReachEnd:(NSNotification * _Nonnull)note;
+@end
+
+
 
 
 

@@ -1,25 +1,22 @@
-/* 
-  Localizable.strings
-  YPImagePicker
-
-  Created by Sacha Durand Saint Omer on 02/11/16.
-  Copyright © 2016 Yummypets. All rights reserved.
-*/
-
-"YPImagePickerLibrary" = "Kütüphane";
-"YPImagePickerPhoto" = "Fotoğraf";
-"YPImagePickerVideo" = "Video";
-"YPImagePickerNext" = "İleri";
+"YPImagePickerAlbums" = "Albümler";
+"YPImagePickerCancel" = "İptal";
+"YPImagePickerCover" = "Kapak";
+"YPImagePickerCrop" = "Crop";
+"YPImagePickerDone" = "Bitti";
 "YPImagePickerFilter" = "Filtrele";
-"YPImagePickerVideoTooLongTitle" = "Video uzunluğu";
-"YPImagePickerVideoTooLongDetail" = "%@ saniyeden daha kısa bir video seç.";
-"YPImagePickerPermissionDeniedPopupTitle" = "Erişim izni reddedildi";
-"YPImagePickerPermissionDeniedPopupMessage" = "Lütfen erişime izin ver";
+"YPImagePickerLibrary" = "Kütüphane";
+"YPImagePickerNext" = "İleri";
+"YPImagePickerOk" = "Ok";
 "YPImagePickerPermissionDeniedPopupCancel" = "İptal";
 "YPImagePickerPermissionDeniedPopupGrantPermission" = "Erişime İzin Ver";
-
-
-
-
-
-
+"YPImagePickerPermissionDeniedPopupMessage" = "Lütfen erişime izin ver";
+"YPImagePickerPermissionDeniedPopupTitle" = "Erişim izni reddedildi";
+"YPImagePickerPhoto" = "Fotoğraf";
+"YPImagePickerProcessing" = "Processing..";
+"YPImagePickerSave" = "Save";
+"YPImagePickerTrim" = "Kes";
+"YPImagePickerVideo" = "Video"; //ignore-same-translation-warning
+"YPImagePickerVideoDurationTitle" = "Video uzunluğu";
+"YPImagePickerVideoTooLong" = "%@ saniyeden daha kısa bir video seç";
+"YPImagePickerVideoTooShort" = "Videolar en az %@ saniye uzunluğunda olmalıdır";
+"YPImagePickerWarningItemsLimit" = "Sınır %d fotoğraf veya videodur";

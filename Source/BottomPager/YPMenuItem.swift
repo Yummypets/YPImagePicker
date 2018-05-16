@@ -11,22 +11,35 @@ import Stevia
 
 final class YPMenuItem: UIView {
     
-    var text = UILabel()
+    var textLabel = UILabel()
     var button = UIButton()
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        setup()
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setup()
+    }
     
     convenience init() {
         self.init(frame: .zero)
+    }
+    
+    func setup() {
         backgroundColor = .clear
         
         sv(
-            text,
+            textLabel,
             button
         )
         
-        text.centerInContainer()
+        textLabel.centerInContainer()
         button.fillContainer()
         
-        text.style { l in
+        textLabel.style { l in
             l.textAlignment = .center
             l.font = UIFont.systemFont(ofSize: 17, weight: UIFont.Weight.medium)
             l.textColor = self.unselectedColor()
@@ -42,10 +55,10 @@ final class YPMenuItem: UIView {
     }
     
     func select() {
-        text.textColor = selectedColor()
+        textLabel.textColor = selectedColor()
     }
     
-    func unselect() {
-        text.textColor = unselectedColor()
+    func deselect() {
+        textLabel.textColor = unselectedColor()
     }
 }

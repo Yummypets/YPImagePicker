@@ -10,18 +10,29 @@ import Foundation
 import AVFoundation
 import UIKit
 
+/// Typealias for code prettiness
+internal var YPConfig: YPImagePickerConfiguration { return YPImagePickerConfiguration.shared }
+
 public struct YPImagePickerConfiguration {
+    public static var shared: YPImagePickerConfiguration = YPImagePickerConfiguration()
+    
     public init() {}
     
     /// Use this property to modify the default wordings provided.
     public var wordings = YPWordings()
     
-    /// Set this to true if you want to force the output to be a squared image. Defaults to false
-    @available(*, unavailable, renamed:"onlySquareImagesFromLibrary")
-    public var onlySquareImages = false
+    /// Use this property to modify the default icons provided.
+    public var icons = YPIcons()
     
-    /// Set this to true if you want to force the  library output to be a squared image. Defaults to false
+    /// Use this property to modify the default colors provided.
+    public var colors = YPColors()
+    
+    /// Set this to true if you want to force the library output to be a squared image. Defaults to false
+    @available(*, obsoleted: 3.0.0, renamed: "onlySquareFromLibrary")
     public var onlySquareImagesFromLibrary = false
+    
+    /// Set this to true if you want to force the library output to be a squared image. Defaults to false
+    public var onlySquareFromLibrary = false
     
     /// Set this to true if you want to force the camera output to be a squared image. Defaults to true
     public var onlySquareImagesFromCamera = true
@@ -29,10 +40,6 @@ public struct YPImagePickerConfiguration {
     /// Ex: cappedTo:1024 will make sure images from the library will be
     /// resized to fit in a 1024x1024 box. Defaults to original image size.
     public var libraryTargetImageSize = YPLibraryImageSize.original
-    
-    /// Enables videos within the library and video taking. Defaults to false
-    @available(*, unavailable, renamed:"showsVideoInLibrary")
-    public var showsVideo = false
     
     /// Enables videos within the library. Defaults to false
     public var showsVideoInLibrary = false
@@ -50,6 +57,9 @@ public struct YPImagePickerConfiguration {
     /// Choose the videoCompression.  Defaults to AVAssetExportPresetHighestQuality
     public var videoCompression: String = AVAssetExportPresetHighestQuality
     
+    /// Choose the result video extension if you trim or compress a video. Defaults to mov.
+    public var videoExtension: AVFileType = .mov
+    
     /// Defines the name of the album when saving pictures in the user's photo library.
     /// In general that would be your App name. Defaults to "DefaultYPImagePickerAlbumName"
     public var albumName = "DefaultYPImagePickerAlbumName"
@@ -64,14 +74,28 @@ public struct YPImagePickerConfiguration {
     
     /// Defines the time limit for recording videos.
     /// Default is 30 seconds.
-    public var videoRecordingTimeLimit: TimeInterval = 30.0
+    public var videoRecordingTimeLimit: TimeInterval = 60.0
     
     /// Defines the time limit for videos from the library.
     /// Defaults to 60 seconds.
     public var videoFromLibraryTimeLimit: TimeInterval = 60.0
     
+    /// Defines the minimum time for the video
+    /// Defaults to 3 seconds.
+    public var videoMinimumTimeLimit: TimeInterval = 3.0
+    
+    /// The maximum duration allowed for the trimming. Change it before setting the asset, as the asset preview
+    public var trimmerMaxDuration: Double = 60.0
+    
+    /// The minimum duration allowed for the trimming.
+    /// The handles won't pan further if the minimum duration is attained.
+    public var trimmerMinDuration: Double = 3.0
+
     /// Adds a Crop step in the photo taking process, after filters.  Defaults to .none
     public var showsCrop: YPCropType = .none
+    
+    /// Anything superior than 1 will enable the multiple selection feature.
+    public var maxNumberOfItems = 1
 
     /// Adds a Overlay View to the camera
     public var overlayView = UIView()

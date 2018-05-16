@@ -1,22 +1,22 @@
-/* 
-  Localizable.strings
-  YPImagePicker
-
-  Created by Sacha Durand Saint Omer on 02/11/16.
-  Copyright © 2016 Yummypets. All rights reserved.
-*/
-
-"YPImagePickerLibrary" = "المكتبة";
-"YPImagePickerPhoto" = "صورة";
-"YPImagePickerVideo" = "فيديو";
-"YPImagePickerNext" = "التالي";
+"YPImagePickerAlbums" = "Albums";
+"YPImagePickerCancel" = "Cancel";
+"YPImagePickerCover" = "Cover";
+"YPImagePickerCrop" = "Crop";
+"YPImagePickerDone" = "Done";
 "YPImagePickerFilter" = "فلتر";
-"YPImagePickerVideoTooLongTitle" = "مدة الفيديو";
-"YPImagePickerVideoTooLongDetail" = "ثانية %@ اختار فيديو بمدة اقل من ";
-"YPImagePickerPermissionDeniedPopupTitle" = "الطلب مرفوض";
-"YPImagePickerPermissionDeniedPopupMessage" = "يرجى السماح بالوصول";
+"YPImagePickerLibrary" = "المكتبة";
+"YPImagePickerNext" = "التالي";
+"YPImagePickerOk" = "Ok";
 "YPImagePickerPermissionDeniedPopupCancel" = "إلغاء";
 "YPImagePickerPermissionDeniedPopupGrantPermission" = "السماح بالوصول";
-
-
-
+"YPImagePickerPermissionDeniedPopupMessage" = "يرجى السماح بالوصول";
+"YPImagePickerPermissionDeniedPopupTitle" = "الطلب مرفوض";
+"YPImagePickerPhoto" = "صورة";
+"YPImagePickerProcessing" = "Processing..";
+"YPImagePickerSave" = "Save";
+"YPImagePickerTrim" = "Trim";
+"YPImagePickerVideo" = "فيديو";
+"YPImagePickerVideoDurationTitle" = "مدة الفيديو";
+"YPImagePickerVideoTooLong" = "ثانية %@ اختار فيديو بمدة اقل من ";
+"YPImagePickerVideoTooShort" = "The video must be at least %@ seconds";
+"YPImagePickerWarningItemsLimit" = "The limit is %d photos or videos";
