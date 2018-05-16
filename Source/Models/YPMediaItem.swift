@@ -50,3 +50,21 @@ public extension YPMediaVideo {
         completion(Data())
     }
 }
+
+// MARK: - Easy access
+
+public extension Array where Element == YPMediaItem {
+    public var singlePhoto: YPMediaPhoto? {
+        if let f = first, case let .photo(p) = f {
+            return p
+        }
+        return nil
+    }
+    
+    public var singleVideo: YPMediaVideo? {
+        if let f = first, case let .video(v) = f {
+            return v
+        }
+        return nil
+    }
+}

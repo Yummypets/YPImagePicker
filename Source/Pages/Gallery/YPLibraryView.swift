@@ -102,8 +102,8 @@ extension YPLibraryView {
         guard let cropView = assetZoomableView else {
             return CGRect.zero
         }
-        let normalizedX = min(1, cropView.contentOffset.x / cropView.contentSize.width)
-        let normalizedY = min(1, cropView.contentOffset.y / cropView.contentSize.height)
+        let normalizedX = min(1, cropView.contentOffset.x &/ cropView.contentSize.width)
+        let normalizedY = min(1, cropView.contentOffset.y &/ cropView.contentSize.height)
         let normalizedWidth = min(1, cropView.frame.width / cropView.contentSize.width)
         let normalizedHeight = min(1, cropView.frame.height / cropView.contentSize.height)
         return CGRect(x: normalizedX, y: normalizedY, width: normalizedWidth, height: normalizedHeight)

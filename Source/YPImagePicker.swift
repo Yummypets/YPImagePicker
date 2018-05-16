@@ -93,7 +93,6 @@ public class YPImagePicker: UINavigationController {
             
             // One item flow
             let item = items.first!
-            
             switch item {
             case .photo(let photo):
                 let completion = { (photo: YPMediaPhoto) in
@@ -152,22 +151,5 @@ public class YPImagePicker: UINavigationController {
         )
         loadingView.fillContainer()
         loadingView.alpha = 0
-    }
-}
-
-public extension Array where Element == YPMediaItem {
-    
-    public var singlePhoto: YPMediaPhoto? {
-        if let f = first, case let .photo(p) = f {
-            return p
-        }
-        return nil
-    }
-    
-    public var singleVideo: YPMediaVideo? {
-        if let f = first, case let .video(v) = f {
-            return v
-        }
-        return nil
     }
 }
