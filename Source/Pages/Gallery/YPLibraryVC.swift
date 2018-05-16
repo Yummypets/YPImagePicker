@@ -208,21 +208,14 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     
     func refreshMediaRequest() {
         
-        // Sorting condition
-        let options = PHFetchOptions()
-        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+        let options = buildPHFetchOptions()
         
-        if let collection = self.mediaManager.collection {
-            if !YPConfig.showsVideoInLibrary {
-                options.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
-            }
+        if let collection = mediaManager.collection {
             mediaManager.fetchResult = PHAsset.fetchAssets(in: collection, options: options)
         } else {
-            mediaManager.fetchResult = YPConfig.showsVideoInLibrary
-                ? PHAsset.fetchAssets(with: options)
-                : PHAsset.fetchAssets(with: PHAssetMediaType.image, options: options)
+            mediaManager.fetchResult = PHAsset.fetchAssets(with: options)
         }
-        
+                
         if mediaManager.fetchResult.count > 0 {
             changeAsset(mediaManager.fetchResult[0])
             v.collectionView.reloadData()
@@ -231,6 +224,26 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                                              scrollPosition: UICollectionViewScrollPosition())
         }
         scrollToTop()
+    }
+    
+    func buildPHFetchOptions() -> PHFetchOptions {
+        // Sorting condition
+        let options = PHFetchOptions()
+        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+        
+        // Create predicate based on configuration showPhotosInLibrary and showsVideoInLibrary
+        switch (YPConfig.showsPhotosInLibrary, YPConfig.showsVideoInLibrary) {
+        case (true, true):
+            options.predicate = NSPredicate(format: "mediaType = %d || mediaType = %d",
+                                            PHAssetMediaType.image.rawValue, PHAssetMediaType.video.rawValue)
+        case (true, false):
+            options.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
+        case (false, true):
+            options.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.video.rawValue)
+        case (false, false): break // Show everything 🤔 perhaps an assertionFailure?
+        }
+        
+        return options
     }
     
     func scrollToTop() {
@@ -501,3 +514,4 @@ extension UIImage {
         return UIGraphicsGetImageFromCurrentImageContext()
     }
 }
+
