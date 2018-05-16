@@ -24,7 +24,7 @@ extension YPLibraryVC {
     
     /// When tapping on the cell with long press, clear all previously selected cells.
     @objc func handleLongPress(longPressGR: UILongPressGestureRecognizer) {
-        if multipleSelectionEnabled {
+        if multipleSelectionEnabled || isProcessing {
             return
         }
         
@@ -172,6 +172,14 @@ extension YPLibraryVC: UICollectionViewDelegate {
         
         collectionView.reloadItems(at: [indexPath])
         collectionView.reloadItems(at: [previouslySelectedIndexPath])
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+        return isProcessing == false
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, shouldDeselectItemAt indexPath: IndexPath) -> Bool {
+        return isProcessing == false
     }
 }
 

@@ -309,6 +309,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
 
 extension YPPickerVC: YPLibraryViewDelegate {
     public func libraryViewStartedLoading() {
+        libraryVC?.isProcessing = true
         DispatchQueue.main.async {
             self.libraryVC?.v.fadeInLoader()
             YPLoaders.enableActivityIndicator(barButtonItem: &self.navigationItem.rightBarButtonItem)
@@ -316,6 +317,7 @@ extension YPPickerVC: YPLibraryViewDelegate {
     }
     
     public func libraryViewFinishedLoading() {
+        libraryVC?.isProcessing = false
         DispatchQueue.main.async {
             self.libraryVC?.v.hideLoader()
             YPLoaders.disableActivityIndicator(barButtonItem: &self.navigationItem.rightBarButtonItem,

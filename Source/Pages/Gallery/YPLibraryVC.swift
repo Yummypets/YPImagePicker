@@ -11,17 +11,15 @@ import Photos
 
 public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     
-    weak var delegate: YPLibraryViewDelegate?
-    
-    private var initialized = false
-    
-    var multipleSelectionEnabled = false
+    internal weak var delegate: YPLibraryViewDelegate?
+    internal var v: YPLibraryView!
+    internal var isProcessing = false // true if video or image is in processing state
+    internal var multipleSelectionEnabled = false
+    internal var initialized = false
     internal var selection = [YPLibrarySelection]()
     internal var currentlySelectedIndex: Int = 0
     internal let mediaManager = LibraryMediaManager()
     internal var latestImageTapped = ""
-    var v: YPLibraryView!
-    
     internal let panGestureHelper = PanGestureHelper()
 
     // MARK: - Init
@@ -51,7 +49,8 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     
     func initialize() {
         mediaManager.initialize()
-    
+        mediaManager.v = v
+
         if mediaManager.fetchResult != nil {
             return
         }
@@ -361,11 +360,11 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                                         y: yCrop,
                                         width: ts.width,
                                         height: ts.height)
-            mediaManager.imageManager?.fetchUrlAndCrop(for: asset, cropRect: resultCropRect, callback: callback)
+            mediaManager.fetchVideoUrlAndCrop(for: asset, cropRect: resultCropRect, callback: callback)
         }
     }
     
-    public func selectedMedia(photoCallback:@escaping (_ photo: UIImage) -> Void,
+    public func selectedMedia(photoCallback: @escaping (_ photo: UIImage) -> Void,
                               videoCallback: @escaping (_ videoURL: URL) -> Void,
                               multipleItemsCallback: @escaping (_ items: [YPMediaItem]) -> Void) {
         DispatchQueue.global(qos: .userInitiated).async {
