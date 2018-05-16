@@ -37,7 +37,7 @@ struct YPFilter {
         return UIImage()
     }
     
-    func filterSharedContext() -> CIContext {
+    fileprivate func filterSharedContext() -> CIContext {
         if _filterSharedContext == nil {
             if let context = EAGLContext(api: .openGLES2) {
                 _filterSharedContext = CIContext(eaglContext: context)

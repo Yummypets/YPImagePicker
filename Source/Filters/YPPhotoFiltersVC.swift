@@ -47,8 +47,9 @@ open class YPPhotoFiltersVC: UIViewController, IsMediaFilterVC, UIGestureRecogni
     }
     
     func thumbFromImage(_ img: UIImage) -> UIImage {
-        let width: CGFloat = img.size.width / 5
-        let height: CGFloat = img.size.height / 5
+        let k = img.size.height / 160 // 160 is a height of the collection view
+        let width: CGFloat = img.size.width / k
+        let height: CGFloat = img.size.height / k
         UIGraphicsBeginImageContext(CGSize(width: width, height: height))
         img.draw(in: CGRect(x: 0, y: 0, width: width, height: height))
         let smallImage = UIGraphicsGetImageFromCurrentImageContext()
@@ -124,7 +125,6 @@ open class YPPhotoFiltersVC: UIViewController, IsMediaFilterVC, UIGestureRecogni
 }
 
 extension YPPhotoFiltersVC: UICollectionViewDataSource {
-    
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return filterPreviews.count
     }
@@ -150,7 +150,7 @@ extension YPPhotoFiltersVC: UICollectionViewDataSource {
 }
 
 extension YPPhotoFiltersVC: UICollectionViewDelegate {
-    
+    // TODO: If the image is very big (>3 mb) than the filtering spent much time. In instagram it's instant. I think the make big previews instantly.
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         selectedFilter = filters[indexPath.row]
         DispatchQueue.global(qos: .userInitiated).async {
