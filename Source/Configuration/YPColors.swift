@@ -30,9 +30,11 @@ public struct YPColors {
     
     // Cover selector
     /// The color of the cover selector border
-    public var coverSelectorColor: UIColor = UIColor.white
+    public var coverSelectorBorderColor: UIColor = UIColor.white
     
     // Progress bar
+    /// The color for the progress bar when processing video or images. The all track color.
     public var progressBarTrackColor: UIColor = UIColor.white
-    public var progressBarCompletedColor: UIColor = UIColor.black
+    /// The color of completed track for the progress bar
+    public var progressBarCompletedColor: UIColor?
 }

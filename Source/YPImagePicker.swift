@@ -145,6 +145,10 @@ public class YPImagePicker: UINavigationController {
         }
     }
     
+    deinit {
+        print("Picker deinited 👍")
+    }
+    
     private func setupLoadingView() {
         view.sv(
             loadingView
