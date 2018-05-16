@@ -313,6 +313,7 @@ extension YPPickerVC: YPLibraryViewDelegate {
     public func libraryViewStartedLoading() {
         libraryVC?.isProcessing = true
         DispatchQueue.main.async {
+            self.v.scrollView.isScrollEnabled = false
             self.libraryVC?.v.fadeInLoader()
             self.navigationItem.rightBarButtonItem = YPLoaders.defaultLoader
         }
@@ -321,6 +322,7 @@ extension YPPickerVC: YPLibraryViewDelegate {
     public func libraryViewFinishedLoading() {
         libraryVC?.isProcessing = false
         DispatchQueue.main.async {
+            self.v.scrollView.isScrollEnabled = true
             self.libraryVC?.v.hideLoader()
             self.updateUI()
         }
