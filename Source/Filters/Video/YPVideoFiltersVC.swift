@@ -147,6 +147,8 @@ public class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
     // MARK: - Bottom buttons
 
     @objc public func selectTrim() {
+        title = YPConfig.wordings.trim
+        
         trimBottomItem.select()
         coverBottomItem.deselect()
 
@@ -157,6 +159,8 @@ public class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
     }
     
     @objc public func selectCover() {
+        title = YPConfig.wordings.cover
+        
         trimBottomItem.deselect()
         coverBottomItem.select()
         

@@ -339,7 +339,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     
     // MARK: - Fetching Media
     
-    private func fetchImage(for asset: PHAsset,
+    private func fetchImageAndCrop(for asset: PHAsset,
                             withCropRect: CGRect? = nil,
                             callback: @escaping (_ photo: UIImage) -> Void) {
         delegate?.libraryViewStartedLoading()
@@ -348,7 +348,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         mediaManager.imageManager?.fetchImage(for: asset, cropRect: cropRect, targetSize: ts, callback: callback)
     }
     
-    private func fetchVideoURL(for asset: PHAsset,
+    private func checkVideoLengthAndCrop(for asset: PHAsset,
                                withCropRect: CGRect? = nil,
                                callback: @escaping (_ videoURL: URL) -> Void) {
         if fitsVideoLengthLimits(asset: asset) == true {
@@ -361,7 +361,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                                         y: yCrop,
                                         width: ts.width,
                                         height: ts.height)
-            mediaManager.imageManager?.fetchUrl(for: asset, cropRect: resultCropRect, callback: callback)
+            mediaManager.imageManager?.fetchUrlAndCrop(for: asset, cropRect: resultCropRect, callback: callback)
         }
     }
     
@@ -392,7 +392,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                     
                     switch asset.asset.mediaType {
                     case .image:
-                        self.fetchImage(for: asset.asset, withCropRect: asset.cropRect) { image in
+                        self.fetchImageAndCrop(for: asset.asset, withCropRect: asset.cropRect) { image in
                             let resizedImage = self.resizedImageIfNeeded(image: image)
                             let photo = YPMediaPhoto(image: resizedImage)
                             resultMediaItems.append(YPMediaItem.photo(p: photo))
@@ -400,12 +400,11 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                         }
                         
                     case .video:
-                        self.fetchVideoURL(for: asset.asset, withCropRect: asset.cropRect) { videoURL in
-                            createVideoItem(videoURL: videoURL,
-                                            completion: { video in
-                                                resultMediaItems.append(YPMediaItem.video(v: video))
-                                                asyncGroup.leave()
-                            })
+                        self.checkVideoLengthAndCrop(for: asset.asset, withCropRect: asset.cropRect) { videoURL in
+                            let videoItem = YPMediaVideo(thumbnail: thumbnailFromVideoPath(videoURL),
+                                                         videoURL: videoURL)
+                            resultMediaItems.append(YPMediaItem.video(v: videoItem))
+                            asyncGroup.leave()
                         }
                     default:
                         break
@@ -420,14 +419,14 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                 let asset = self.mediaManager.selectedAsset!
                 switch asset.mediaType {
                 case .video:
-                    self.fetchVideoURL(for: asset, callback: { videoURL in
+                    self.checkVideoLengthAndCrop(for: asset, callback: { videoURL in
                         DispatchQueue.main.async {
                             self.delegate?.libraryViewFinishedLoading()
                             videoCallback(videoURL)
                         }
                     })
                 case .image:
-                    self.fetchImage(for: asset) { image in
+                    self.fetchImageAndCrop(for: asset) { image in
                         DispatchQueue.main.async {
                             self.delegate?.libraryViewFinishedLoading()
                             let resizedImage = self.resizedImageIfNeeded(image: image)

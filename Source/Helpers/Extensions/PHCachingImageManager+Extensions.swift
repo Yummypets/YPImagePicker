@@ -11,97 +11,59 @@ import Photos
 
 extension PHCachingImageManager {
     
-    func fetchUrl(for videoAsset: PHAsset, cropRect: CGRect, callback: @escaping (URL) -> Void) {
+    func fetchUrlAndCrop(for videoAsset: PHAsset, cropRect: CGRect, callback: @escaping (URL) -> Void) {
         let videosOptions = PHVideoRequestOptions()
         videosOptions.isNetworkAccessAllowed = true
         requestAVAsset(forVideo: videoAsset, options: videosOptions) { asset, _, _ in
             do {
-                
-                func getTransform(for videoTrack: AVAssetTrack, with renderSize: CGSize) -> CGAffineTransform {
-                
-                    let cropFrame = cropRect
-                    let renderScale = renderSize.width / cropFrame.width
-                    let offset = CGPoint(x: -cropFrame.origin.x, y: -cropFrame.origin.y)
-                    let rotation = atan2(videoTrack.preferredTransform.b, videoTrack.preferredTransform.a)
-                    
-                    var rotationOffset = CGPoint(x: 0, y: 0)
-                    
-                    if videoTrack.preferredTransform.b == -1.0 {
-                        rotationOffset.y = videoTrack.naturalSize.width
-                    } else if videoTrack.preferredTransform.c == -1.0 {
-                        rotationOffset.x = videoTrack.naturalSize.height
-                    } else if videoTrack.preferredTransform.a == -1.0 {
-                        rotationOffset.x = videoTrack.naturalSize.width
-                        rotationOffset.y = videoTrack.naturalSize.height
-                    }
-                    
-                    var transform = CGAffineTransform.identity
-                    transform = transform.scaledBy(x: renderScale, y: renderScale)
-                    transform = transform.translatedBy(x: offset.x + rotationOffset.x, y: offset.y + rotationOffset.y)
-                    transform = transform.rotated(by: rotation)
-                    
-//                    print("track size \(videoTrack.naturalSize)")
-//                    print("preferred Transform = \(videoTrack.preferredTransform)")
-//                    print("rotation angle \(rotation)")
-//                    print("rotation offset \(rotationOffset)")
-//                    print("actual Transform = \(transform)")
-                    return transform
-                }
-                
-                guard let asset = asset, let videoTrack = asset.tracks(withMediaType: AVMediaType.video).first else {
-                    return
-                }
+                guard let asset = asset else { print("⚠️ PHCachingImageManager >>> Don't have the asset"); return }
                 
                 let assetComposition = AVMutableComposition()
                 let trackTimeRange = CMTimeRangeMake(kCMTimeZero, asset.duration)
                 
-                guard let videoCompositionTrack = assetComposition
-                    .addMutableTrack(withMediaType: .video,
-                                     preferredTrackID: kCMPersistentTrackID_Invalid) else {
-                                        return
-                }
+                // 1. Inserting audio and video tracks in composition
+                
+                guard let videoTrack = asset.tracks(withMediaType: AVMediaType.video).first,
+                    let videoCompositionTrack = assetComposition.addMutableTrack(withMediaType: .video, preferredTrackID: kCMPersistentTrackID_Invalid) else { print("⚠️ PHCachingImageManager >>> Problems with video track"); return }
+                guard let audioTrack = asset.tracks(withMediaType: AVMediaType.audio).first,
+                    let audioCompositionTrack = assetComposition.addMutableTrack(withMediaType: AVMediaType.audio, preferredTrackID: kCMPersistentTrackID_Invalid) else { print("⚠️ PHCachingImageManager >>> Problems with audio track"); return }
                 
                 try videoCompositionTrack.insertTimeRange(trackTimeRange, of: videoTrack, at: kCMTimeZero)
+                try audioCompositionTrack.insertTimeRange(trackTimeRange, of: audioTrack, at: kCMTimeZero)
+
                 
-                if let audioTrack = asset.tracks(withMediaType: AVMediaType.audio).first {
-                    let audioCompositionTrack = assetComposition
-                        .addMutableTrack(withMediaType: AVMediaType.audio,
-                                         preferredTrackID: kCMPersistentTrackID_Invalid)
-                    try audioCompositionTrack?.insertTimeRange(trackTimeRange, of: audioTrack, at: kCMTimeZero)
-                }
+                // 2. Create the instructions
                 
-                //1. Create the instructions
                 let mainInstructions = AVMutableVideoCompositionInstruction()
-                mainInstructions.timeRange = CMTimeRangeMake(kCMTimeZero, asset.duration)
+                mainInstructions.timeRange = trackTimeRange
                 
-                //2 add the layer instructions
+                // 3. Adding the layer instructions. Transforming
+                
                 let layerInstructions = AVMutableVideoCompositionLayerInstruction(assetTrack: videoCompositionTrack)
-                
-                let renderSize = cropRect.size
-                let transform = getTransform(for: videoTrack, with: renderSize)
-                
-                layerInstructions.setTransform(transform, at: kCMTimeZero)
+                layerInstructions.setTransform(videoTrack.getTransform(cropRect: cropRect), at: kCMTimeZero)
                 layerInstructions.setOpacity(1.0, at: kCMTimeZero)
                 mainInstructions.layerInstructions = [layerInstructions]
                 
-                //3 Create the main composition and add the instructions
+                // 4. Create the main composition and add the instructions
                 
                 let videoComposition = AVMutableVideoComposition()
-                videoComposition.renderSize = renderSize
+                videoComposition.renderSize = cropRect.size
                 videoComposition.instructions = [mainInstructions]
-                videoComposition.frameDuration = CMTimeMake(1, 30)
+                videoComposition.frameDuration = CMTimeMake(1, 30);
                 
-                let url = URL(fileURLWithPath: "\(NSTemporaryDirectory())TrimmedMovie.mp4")
-                try? FileManager.default.removeItem(at: url)
+                // 5. Configuring export session
                 
                 let exportSession = AVAssetExportSession(asset: assetComposition,
-                                                         presetName: AVAssetExportPresetHighestQuality)
-                exportSession?.outputFileType = AVFileType.mp4
+                                                         presetName: YPConfig.videoCompression)
+                exportSession?.outputFileType = YPConfig.videoExtension
                 exportSession?.shouldOptimizeForNetworkUse = true
                 exportSession?.videoComposition = videoComposition
-                exportSession?.outputURL = url
+                exportSession?.outputURL = URL(fileURLWithPath: NSTemporaryDirectory())
+                    .appendingUniquePathComponent(pathExtension: YPConfig.videoExtension.fileExtension)
+                
+                // 6. Exporting
+                
                 exportSession?.exportAsynchronously(completionHandler: {
-                    
                     DispatchQueue.main.async {
                         if let url = exportSession?.outputURL, exportSession?.status == .completed {
                             callback(url)
@@ -111,8 +73,9 @@ extension PHCachingImageManager {
                         }
                     }
                 })
+                
             } catch let error {
-                print("💩 \(error)")
+                print("⚠️ PHCachingImageManager >>> \(error)")
             }
         }
     }
