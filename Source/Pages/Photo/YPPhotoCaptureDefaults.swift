@@ -23,9 +23,7 @@ extension YPPhotoCapture {
     private func setupCaptureSession() {
         session.beginConfiguration()
         session.sessionPreset = .photo
-        let cameraPosition: AVCaptureDevice.Position = .back
-        
-        //TODO self.configuration.usesFrontCamera ? .front : .back
+        let cameraPosition: AVCaptureDevice.Position = YPConfig.usesFrontCamera ? .front : .back
         let aDevice = deviceForPosition(cameraPosition)
         if let d = aDevice {
             deviceInput = try? AVCaptureDeviceInput(device: d)
