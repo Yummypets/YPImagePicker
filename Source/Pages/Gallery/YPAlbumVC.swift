@@ -84,7 +84,7 @@ extension YPAlbumVC: UITableViewDataSource {
             cell.thumbnail.backgroundColor = .gray
             cell.thumbnail.image = album.thumbnail
             cell.title.text = album.title
-            cell.numberOfPhotos.text = "\(album.numberOfPhotos)"
+            cell.numberOfItems.text = "\(album.numberOfItems)"
             return cell
         }
         return UITableViewCell()

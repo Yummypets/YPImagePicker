@@ -12,6 +12,6 @@ import Photos
 struct YPAlbum {
     var thumbnail: UIImage?
     var title: String = ""
-    var numberOfPhotos: Int = 0
+    var numberOfItems: Int = 0
     var collection: PHAssetCollection?
 }

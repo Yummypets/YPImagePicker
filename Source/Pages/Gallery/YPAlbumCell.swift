@@ -13,7 +13,7 @@ class YPAlbumCell: UITableViewCell {
     
     let thumbnail = UIImageView()
     let title = UILabel()
-    let numberOfPhotos = UILabel()
+    let numberOfItems = UILabel()
     
     required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     
@@ -23,7 +23,7 @@ class YPAlbumCell: UITableViewCell {
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.addArrangedSubview(title)
-        stackView.addArrangedSubview(numberOfPhotos)
+        stackView.addArrangedSubview(numberOfItems)
         
         sv(
             thumbnail,
@@ -42,6 +42,6 @@ class YPAlbumCell: UITableViewCell {
         thumbnail.clipsToBounds = true
         
         title.font = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.regular)
-        numberOfPhotos.font = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.regular)
+        numberOfItems.font = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.regular)
     }
 }

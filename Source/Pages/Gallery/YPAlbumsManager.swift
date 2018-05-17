@@ -28,17 +28,19 @@ class YPAlbumsManager {
         
         var albums = [YPAlbum]()
         let options = PHFetchOptions()
-                
-        let smartAlbumsResult = PHAssetCollection
-            .fetchAssetCollections(with: .smartAlbum, subtype: .any, options: options)
-        let albumsResult = PHAssetCollection
-            .fetchAssetCollections(with: .album, subtype: .any, options: options) //(synced only?)
+        
+        let smartAlbumsResult = PHAssetCollection.fetchAssetCollections(with: .smartAlbum,
+                                                                        subtype: .any,
+                                                                        options: options)
+        let albumsResult = PHAssetCollection.fetchAssetCollections(with: .album,
+                                                                   subtype: .any,
+                                                                   options: options)
         for result in [smartAlbumsResult, albumsResult] {
             result.enumerateObjects({ assetCollection, _, _ in
                 var album = YPAlbum()
                 album.title = assetCollection.localizedTitle ?? ""
-                album.numberOfPhotos = self.mediaCountFor(collection: assetCollection)
-                if album.numberOfPhotos > 0 {
+                album.numberOfItems = self.mediaCountFor(collection: assetCollection)
+                if album.numberOfItems > 0 {
                     let r = PHAsset.fetchKeyAssets(in: assetCollection, options: nil)
                     if let first = r?.firstObject {
                         let targetSize = CGSize(width: 78*2, height: 78*2)
@@ -73,6 +75,10 @@ class YPAlbumsManager {
         let options = PHFetchOptions()
         if noVideos {
             options.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
+        }
+        
+        if YPConfig.showsPhotosInLibrary == false {
+            options.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.video.rawValue)
         }
         let result = PHAsset.fetchAssets(in: collection, options: options)
         return result.count
