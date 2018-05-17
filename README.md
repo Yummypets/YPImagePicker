@@ -90,11 +90,14 @@ you'll need to ad these `plist entries` :
 
 ```swift
 var config = YPImagePickerConfiguration()
-config.onlySquareImagesFromLibrary = false
+config.libraryMediaType = .photoAndVideo
+config.onlySquareFromLibrary = false
 config.onlySquareImagesFromCamera = true
 config.libraryTargetImageSize = .original
 config.usesFrontCamera = true
 config.showsFilters = true
+config.filters = [YPFilterDescriptor(name: "Normal", filterName: ""),
+                  YPFilterDescriptor(name: "Mono", filterName: "CIPhotoEffectMono")]
 config.shouldSaveNewPicturesToAlbum = true
 config.videoCompression = AVAssetExportPresetHighestQuality
 config.albumName = "MyGreatAppName"
@@ -106,6 +109,7 @@ config.showsCrop = .rectangle(ratio: (16/9))
 config.wordings.libraryTitle = "Gallery"
 config.hidesStatusBar = false
 config.overlayView = myOverlayView
+config.maxNumberOfItems = 5
 
 // Build a picker with your configuration
 let picker = YPImagePicker(configuration: config)
@@ -115,7 +119,7 @@ let picker = YPImagePicker(configuration: config)
 
 ```swift
 // Set the default configuration for all pickers
-YPImagePicker.setDefaultConfiguration(config)
+YPImagePickerConfiguration.shared = config
 
 // And then use the default configuration like so:
 let picker = YPImagePicker()
@@ -123,28 +127,78 @@ let picker = YPImagePicker()
 
 ## Usage
 
-`import YPImagePicker` then use the following:
+First things first `import YPImagePicker`.  
 
+The picker only has one callback `didFinishPicking` enabling you to handle all the cases. Let's see some typical use cases 🤓
+
+### Single Photo
 ```swift
 let picker = YPImagePicker()
-
-// unowned is Mandatory since it would create a retain cycle otherwise :)
-picker.didSelectImage = { [unowned picker] img in
-    // image picked
-    print(img.size)
-    self.imageView.image = img
+picker.didFinishPicking { items, _ in
+    if let photo = items.singlePhoto {
+        print(photo.fromCamera) // Image source (camera or library)
+        print(photo.image) // Final image selected by the user
+        print(photo.originalImage) // original image selected by the user, unfiltered
+        print(photo.modifiedImage) // Transformed image, can be nil
+    }
     picker.dismiss(animated: true, completion: nil)
-}
-picker.didSelectVideo = { videoData, videoThumbnailImage in
-    // video picked
-    self.imageView.image = videoThumbnailImage
-    picker.dismiss(animated: true, completion: nil)
-}
-picker.didCancel = {
-  print("Did Cancel")
 }
 present(picker, animated: true, completion: nil)
 ```
+
+### Single video
+```swift
+// Here we configure the picker to only show videos, no photos.
+var config = YPImagePickerConfiguration()
+config.screens = [.library, .video]
+config.libraryMediaType = .video
+
+let picker = YPImagePicker(configuration: config)
+picker.didFinishPicking { items, _ in
+    if let video = items.singleVideo {
+        print(video.fromCamera)
+        print(video.thumbnail)
+        print(video.url)
+    }
+    picker.dismiss(animated: true, completion: nil)
+}
+present(picker, animated: true, completion: nil)
+```
+
+As you can see `singlePhoto` and `singleVideo` helpers are here to help you handle single media which are very common, while using the same callback for all your use-cases \o/
+
+### Multiple selection
+To enable multiple selection make sure to set `maxNumberOfItems` in the configuration like so:
+```swift
+var config = YPImagePickerConfiguration()
+config.maxNumberOfItems = 3
+let picker = YPImagePicker(configuration: config)
+```
+Then you can handle multiple selection in the same callback you know and love :
+```swift
+picker.didFinishPicking { items, cancelled in
+    for item in items {
+        switch item {
+        case .photo(let photo):
+            print(photo)
+        case .video(let video):
+            print(video)
+        }
+    }
+    picker.dismiss(animated: true, completion: nil)
+}
+```
+
+### Handle Cancel event (if needed)
+```swift
+picker.didFinishPicking { items, cancelled in
+    if cancelled {
+        print("Picker was canceled")
+    }
+    picker.dismiss(animated: true, completion: nil)
+}
+```
+That's it !
 
 ## Languages
 Supported languages out of the box:
@@ -155,6 +209,9 @@ Supported languages out of the box:
 - Dutch
 - Brazilian
 - Turkish
+- Arabic
+- German
+- Italian
 
 If your language is not supported, you can still customize the wordings via the `configuration.wordings` api:
 
