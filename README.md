@@ -289,6 +289,9 @@ Original Fusuma author is [ytakz](http://ytakzk.me)
 [Didar1994](https://github.com/Didar1994),
 [relaxsus](https://github.com/relaxsus)
 
+## Dependency
+YPImagePicker relies on [prynt/PryntTrimmerView](https://github.com/prynt/PryntTrimmerView) for provide video trimming and cover features. Big thanks to @HHK1 for making this open source :)
+
 ## License
 YPImagePicker is released under the MIT license.  
 See [LICENSE](LICENSE) for details.
