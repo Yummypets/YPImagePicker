@@ -45,7 +45,8 @@ public func createVideoItem(videoURL: URL,
                     }
                 default:
                     DispatchQueue.main.async {
-                        print("⚠️ createVideoItem >>> Error in creating the video item. Export status: \(exportSession!.status)")
+                        print("⚠️ createVideoItem >>> Error in creating the video item."
+                            + "Export status: \(exportSession!.status)")
                         activityIdicatorClosure?(false)
                         completion(videoItem)
                     }

@@ -78,13 +78,23 @@ class LibraryMediaManager {
                 // 1. Inserting audio and video tracks in composition
                 
                 guard let videoTrack = asset.tracks(withMediaType: AVMediaType.video).first,
-                    let videoCompositionTrack = assetComposition.addMutableTrack(withMediaType: .video, preferredTrackID: kCMPersistentTrackID_Invalid) else { print("⚠️ PHCachingImageManager >>> Problems with video track"); return }
+                    let videoCompositionTrack = assetComposition
+                        .addMutableTrack(withMediaType: .video,
+                                         preferredTrackID: kCMPersistentTrackID_Invalid) else {
+                                            print("⚠️ PHCachingImageManager >>> Problems with video track")
+                                            return
+                                            
+                }
                 guard let audioTrack = asset.tracks(withMediaType: AVMediaType.audio).first,
-                    let audioCompositionTrack = assetComposition.addMutableTrack(withMediaType: AVMediaType.audio, preferredTrackID: kCMPersistentTrackID_Invalid) else { print("⚠️ PHCachingImageManager >>> Problems with audio track"); return }
+                    let audioCompositionTrack = assetComposition
+                        .addMutableTrack(withMediaType: AVMediaType.audio,
+                                         preferredTrackID: kCMPersistentTrackID_Invalid) else {
+                                            print("⚠️ PHCachingImageManager >>> Problems with audio track")
+                                            return
+                }
                 
                 try videoCompositionTrack.insertTimeRange(trackTimeRange, of: videoTrack, at: kCMTimeZero)
                 try audioCompositionTrack.insertTimeRange(trackTimeRange, of: audioTrack, at: kCMTimeZero)
-                
                 
                 // 2. Create the instructions
                 
@@ -103,7 +113,7 @@ class LibraryMediaManager {
                 let videoComposition = AVMutableVideoComposition()
                 videoComposition.renderSize = cropRect.size
                 videoComposition.instructions = [mainInstructions]
-                videoComposition.frameDuration = CMTimeMake(1, 30);
+                videoComposition.frameDuration = CMTimeMake(1, 30)
                 
                 // 5. Configuring export session
                 
@@ -118,7 +128,11 @@ class LibraryMediaManager {
                 // 6. Exporting
                 
                 DispatchQueue.main.async {
-                self.exportTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(self.onTickExportTimer), userInfo: exportSession, repeats: true)
+                self.exportTimer = Timer.scheduledTimer(timeInterval: 0.1,
+                                                        target: self,
+                                                        selector: #selector(self.onTickExportTimer),
+                                                        userInfo: exportSession,
+                                                        repeats: true)
                 }
                 
                 exportSession?.exportAsynchronously(completionHandler: {
@@ -143,7 +157,7 @@ class LibraryMediaManager {
                 v.updateProgress(exportSession.progress)
             }
             
-            if (exportSession.progress > 0.99) {
+            if exportSession.progress > 0.99 {
                 sender.invalidate()
                 v?.updateProgress(0)
                 self.exportTimer = nil

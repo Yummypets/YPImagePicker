@@ -177,14 +177,16 @@ public class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
     // MARK: - Various Methods
 
     // Updates the bounds of the cover picker if the video is trimmed
-    // TODO: Now the trimmer framework doesn't support an easy way to do this. Need to rethink a flow or search other ways.
+    // TODO: Now the trimmer framework doesn't support an easy way to do this.
+    // Need to rethink a flow or search other ways.
     func updateCoverPickerBounds() {
         if let startTime = trimmerView.startTime,
             let endTime = trimmerView.endTime {
             if let selectedCoverTime = coverThumbSelectorView.selectedTime {
                 let range = CMTimeRange(start: startTime, end: endTime)
                 if !range.containsTime(selectedCoverTime) {
-                    // If the selected before cover range is not in new trimeed range, than reset the cover to start time of the trimmed video
+                    // If the selected before cover range is not in new trimeed range,
+                    // than reset the cover to start time of the trimmed video
                 }
             } else {
                 // If none cover time selected yet, than set the cover to the start time of the trimmed video

@@ -18,7 +18,8 @@ public class YPSelectionsGalleryVC: UIViewController {
 
     /// Designated initializer
     public class func initWith(items: [YPMediaItem],
-                               didFinishHandler: @escaping ((_ gallery: YPSelectionsGalleryVC, _ items: [YPMediaItem]) -> Void)) -> YPSelectionsGalleryVC {
+                               didFinishHandler:
+        @escaping ((_ gallery: YPSelectionsGalleryVC, _ items: [YPMediaItem]) -> Void)) -> YPSelectionsGalleryVC {
         let vc = YPSelectionsGalleryVC(nibName: "YPSelectionsGalleryVC",
                                        bundle: Bundle(for: YPSelectionsGalleryVC.self))
         vc.items = items

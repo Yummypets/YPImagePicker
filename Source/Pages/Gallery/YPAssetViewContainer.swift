@@ -129,7 +129,8 @@ extension YPAssetViewContainer: YPAssetZoomableViewDelegate {
         grid.frame = frame.intersection(newFrame)
         grid.layoutIfNeeded()
         
-        // Update play imageView position - bringing the playImageView from the videoView to assetViewContainer, but the controll for appearing it still in videoView.
+        // Update play imageView position - bringing the playImageView from the videoView to assetViewContainer,
+        // but the controll for appearing it still in videoView.
         if zoomableView.videoView.playImageView.isDescendant(of: self) == false {
             self.addSubview(zoomableView.videoView.playImageView)
             zoomableView.videoView.playImageView.centerInContainer()

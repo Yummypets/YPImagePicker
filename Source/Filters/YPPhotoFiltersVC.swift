@@ -151,7 +151,8 @@ extension YPPhotoFiltersVC: UICollectionViewDataSource {
 }
 
 extension YPPhotoFiltersVC: UICollectionViewDelegate {
-    // TODO: If the image is very big (>3 mb) than the filtering spent much time. In instagram it's instant. I think the make big previews instantly.
+    // TODO: If the image is very big (>3 mb) than the filtering spent much time. In instagram it's instant.
+    // I think the make big previews instantly.
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         selectedFilter = filters[indexPath.row]
         DispatchQueue.global(qos: .userInitiated).async {

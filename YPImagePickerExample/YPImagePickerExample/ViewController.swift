@@ -23,7 +23,10 @@ class ViewController: UIViewController {
         self.view.backgroundColor = .white
 
         selectedImageV.contentMode = .scaleAspectFit
-        selectedImageV.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.45)
+        selectedImageV.frame = CGRect(x: 0,
+                                      y: 0,
+                                      width: UIScreen.main.bounds.width,
+                                      height: UIScreen.main.bounds.height * 0.45)
         view.addSubview(selectedImageV)
 
         pickButton.setTitle("Pick", for: .normal)
@@ -35,7 +38,10 @@ class ViewController: UIViewController {
 
         resultsButton.setTitle("Show selected", for: .normal)
         resultsButton.setTitleColor(.black, for: .normal)
-        resultsButton.frame = CGRect(x: 0, y: UIScreen.main.bounds.height - 100, width: UIScreen.main.bounds.width, height: 100)
+        resultsButton.frame = CGRect(x: 0,
+                                     y: UIScreen.main.bounds.height - 100,
+                                     width: UIScreen.main.bounds.width,
+                                     height: 100)
         resultsButton.addTarget(self, action: #selector(showResults), for: .touchUpInside)
         view.addSubview(resultsButton)
     }
@@ -141,14 +147,14 @@ class ViewController: UIViewController {
 //        YPImagePickerConfiguration.shared.wordings.libraryTitle = "Gallery2"
 
         // Single Photo implementation.
-        picker.didFinishPicking { items, cancelled in
+        picker.didFinishPicking { items, _ in
             self.selectedItems = items
             self.selectedImageV.image = items.singlePhoto?.image
             picker.dismiss(animated: true, completion: nil)
         }
 
         // Single Video implementation.
-        picker.didFinishPicking { items, cancelled in
+        picker.didFinishPicking { items, _ in
             self.selectedItems = items
             self.selectedImageV.image = items.singleVideo?.thumbnail
             picker.dismiss(animated: true, completion: nil)
@@ -156,6 +162,10 @@ class ViewController: UIViewController {
 
         // Multiple implementation
         picker.didFinishPicking { items, cancelled in
+            
+            if cancelled {
+                print("Picker was canceled")
+            }
             _ = items.map { print("🧀 \($0)") }
 
             self.selectedItems = items

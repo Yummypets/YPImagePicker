@@ -340,8 +340,8 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     // MARK: - Fetching Media
     
     private func fetchImageAndCrop(for asset: PHAsset,
-                            withCropRect: CGRect? = nil,
-                            callback: @escaping (_ photo: UIImage) -> Void) {
+                                   withCropRect: CGRect? = nil,
+                                   callback: @escaping (_ photo: UIImage) -> Void) {
         delegate?.libraryViewStartedLoading()
         let cropRect = withCropRect ?? DispatchQueue.main.sync { v.currentCropRect() }
         let ts = targetSize(for: asset, cropRect: cropRect)
@@ -349,8 +349,8 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     }
     
     private func checkVideoLengthAndCrop(for asset: PHAsset,
-                               withCropRect: CGRect? = nil,
-                               callback: @escaping (_ videoURL: URL) -> Void) {
+                                         withCropRect: CGRect? = nil,
+                                         callback: @escaping (_ videoURL: URL) -> Void) {
         if fitsVideoLengthLimits(asset: asset) == true {
             delegate?.libraryViewStartedLoading()
             let normalizedCropRect = withCropRect ?? DispatchQueue.main.sync { v.currentCropRect() }
@@ -502,4 +502,3 @@ extension UIImage {
         return UIGraphicsGetImageFromCurrentImageContext()
     }
 }
-

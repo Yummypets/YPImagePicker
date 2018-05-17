@@ -26,11 +26,13 @@ public class YPImagePicker: UINavigationController {
     // This nifty little trick enables us to call the single version of the callbacks.
     // This keeps the backwards compatibility keeps the api as simple as possible.
     // Multiple selection becomes available as an opt-in.
-    private func didSelect(items: [YPMediaItem]) -> Void {
+    private func didSelect(items: [YPMediaItem]) {
         if items.count == 1 {
-            if let didSelectImage = didSelectImage, let first = items.first, case let .photo(pickedPhoto) = first {
+            if let didSelectImage = didSelectImage, let first = items.first,
+                case let .photo(pickedPhoto) = first {
                 didSelectImage(pickedPhoto.image)
-            } else if let didSelectVideo = didSelectVideo, let first = items.first, case let .video(pickedVideo) = first {
+            } else if let didSelectVideo = didSelectVideo, let first = items.first,
+                case let .video(pickedVideo) = first {
                 pickedVideo.fetchData { videoData in
                     didSelectVideo(videoData, pickedVideo.thumbnail, pickedVideo.url)
                 }
@@ -144,7 +146,7 @@ public class YPImagePicker: UINavigationController {
         }
         
         // If user has not customized the Nav Bar tintColor, then use black.
-        if UINavigationBar.appearance().tintColor == nil  {
+        if UINavigationBar.appearance().tintColor == nil {
             UINavigationBar.appearance().tintColor  = .black
         }
     }
