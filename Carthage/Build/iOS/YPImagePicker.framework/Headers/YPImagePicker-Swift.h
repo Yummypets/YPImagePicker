@@ -202,6 +202,8 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 
 
 
+
+
 @class UIGestureRecognizer;
 
 SWIFT_CLASS("_TtC13YPImagePicker16PanGestureHelper")
@@ -295,6 +297,8 @@ SWIFT_CLASS("_TtC13YPImagePicker11YPLibraryVC")
 @interface YPLibraryVC (SWIFT_EXTENSION(YPImagePicker)) <UICollectionViewDelegate>
 - (UICollectionViewCell * _Nonnull)collectionView:(UICollectionView * _Nonnull)collectionView cellForItemAtIndexPath:(NSIndexPath * _Nonnull)indexPath SWIFT_WARN_UNUSED_RESULT;
 - (void)collectionView:(UICollectionView * _Nonnull)collectionView didSelectItemAtIndexPath:(NSIndexPath * _Nonnull)indexPath;
+- (BOOL)collectionView:(UICollectionView * _Nonnull)collectionView shouldSelectItemAtIndexPath:(NSIndexPath * _Nonnull)indexPath SWIFT_WARN_UNUSED_RESULT;
+- (BOOL)collectionView:(UICollectionView * _Nonnull)collectionView shouldDeselectItemAtIndexPath:(NSIndexPath * _Nonnull)indexPath SWIFT_WARN_UNUSED_RESULT;
 @end
 
 
@@ -384,6 +388,7 @@ SWIFT_CLASS("_TtC13YPImagePicker16YPVideoFiltersVC")
 @interface YPVideoFiltersVC : UIViewController
 - (void)viewDidLoad;
 - (void)viewDidAppear:(BOOL)animated;
+- (void)viewWillDisappear:(BOOL)animated;
 - (void)save;
 - (void)selectTrim;
 - (void)selectCover;
