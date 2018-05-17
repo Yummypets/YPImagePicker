@@ -230,19 +230,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         // Sorting condition
         let options = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-        
-        // Create predicate based on configuration showPhotosInLibrary and showsVideoInLibrary
-        switch (YPConfig.showsPhotosInLibrary, YPConfig.showsVideoInLibrary) {
-        case (true, true):
-            options.predicate = NSPredicate(format: "mediaType = %d || mediaType = %d",
-                                            PHAssetMediaType.image.rawValue, PHAssetMediaType.video.rawValue)
-        case (true, false):
-            options.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
-        case (false, true):
-            options.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.video.rawValue)
-        case (false, false): break // Show everything 🤔 perhaps an assertionFailure?
-        }
-        
+        options.predicate = YPConfig.libraryMediaType.predicate()
         return options
     }
     

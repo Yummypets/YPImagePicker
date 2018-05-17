@@ -40,12 +40,13 @@ public struct YPImagePickerConfiguration {
     /// Ex: cappedTo:1024 will make sure images from the library will be
     /// resized to fit in a 1024x1024 box. Defaults to original image size.
     public var libraryTargetImageSize = YPLibraryImageSize.original
-
-    /// Disables photos within the library. Defaults to true
-    public var showsPhotosInLibrary = true
     
     /// Enables videos within the library. Defaults to false
+    @available(*, obsoleted: 3.0.0, renamed: "libraryMediaType")
     public var showsVideoInLibrary = false
+    
+    /// Choose what media types are available in the library. Defaults to `.photo`
+    public var libraryMediaType = YPlibraryMediaType.photo
     
     /// Enables selecting the front camera by default, useful for avatars. Defaults to false
     public var usesFrontCamera = false
@@ -119,4 +120,10 @@ public struct YPImagePickerConfiguration {
         YPFilterDescriptor(name: "Instant", filterName: "CIPhotoEffectInstant"),
         YPFilterDescriptor(name: "Sepia", filterName: "CISepiaTone")
     ]
+}
+
+public enum YPlibraryMediaType {
+    case photo
+    case video
+    case photoAndVideo
 }

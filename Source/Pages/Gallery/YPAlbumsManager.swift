@@ -19,8 +19,6 @@ class YPAlbumsManager {
     
     private var cachedAlbums: [YPAlbum]?
     
-    var noVideos = false
-    
     func fetchAlbums() -> [YPAlbum] {
         if let cachedAlbums = cachedAlbums {
             return cachedAlbums
@@ -56,7 +54,8 @@ class YPAlbumsManager {
                         })
                     }
                     album.collection = assetCollection
-                    if self.noVideos {
+                    
+                    if YPConfig.libraryMediaType == .photo {
                         if !(assetCollection.assetCollectionSubtype == .smartAlbumSlomoVideos
                             || assetCollection.assetCollectionSubtype == .smartAlbumVideos) {
                             albums.append(album)
@@ -73,14 +72,26 @@ class YPAlbumsManager {
     
     func mediaCountFor(collection: PHAssetCollection) -> Int {
         let options = PHFetchOptions()
-        if noVideos {
-            options.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
-        }
-        
-        if YPConfig.showsPhotosInLibrary == false {
-            options.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.video.rawValue)
-        }
+        options.predicate = YPConfig.libraryMediaType.predicate()
         let result = PHAsset.fetchAssets(in: collection, options: options)
         return result.count
+    }
+    
+}
+
+extension YPlibraryMediaType {
+    func predicate() -> NSPredicate {
+        switch self {
+        case .photo:
+            return NSPredicate(format: "mediaType = %d",
+                               PHAssetMediaType.image.rawValue)
+        case .video:
+            return NSPredicate(format: "mediaType = %d",
+                               PHAssetMediaType.video.rawValue)
+        case .photoAndVideo:
+            return NSPredicate(format: "mediaType = %d || mediaType = %d",
+                               PHAssetMediaType.image.rawValue,
+                               PHAssetMediaType.video.rawValue)
+        }
     }
 }
