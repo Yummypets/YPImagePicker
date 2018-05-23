@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import Photos
 
 internal func ypLocalized(_ str: String) -> String {
     return NSLocalizedString(str,
@@ -64,5 +65,28 @@ struct YPHelper {
         let seconds = interval % 60
         let minutes = (interval / 60) % 60
         return String(format: "%02d:%02d", minutes, seconds)
+    }
+    
+    public static func unwrapImageMetaAssets(asset : PHAsset) -> [String : Any]?{
+        let imageRequestOptions = PHImageRequestOptions()
+        imageRequestOptions.isSynchronous = true
+        
+        var returnValue = [String : Any]()
+        
+        PHImageManager.default().requestImageData(for: asset, options: imageRequestOptions) { (data, dataUTI, orientation, info) in
+            
+            returnValue = self.metadataForImageData(data: data!)
+        }
+        
+        return returnValue
+    }
+    
+    private static func metadataForImageData(data : Data) -> [String : Any]{
+        let imageSource = CGImageSourceCreateWithData(data as CFData, nil)
+        
+        let imageProperties = CGImageSourceCopyPropertiesAtIndex(imageSource!, 0, nil)
+        
+        return imageProperties! as! [String : Any]
+        
     }
 }

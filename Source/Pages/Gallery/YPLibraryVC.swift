@@ -365,7 +365,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         }
     }
     
-    public func selectedMedia(photoCallback: @escaping (_ photo: UIImage) -> Void,
+    public func selectedMedia(photoCallback: @escaping (_ photo: UIImage, _ exifMeta : [String : Any]?) -> Void,
                               videoCallback: @escaping (_ videoURL: URL) -> Void,
                               multipleItemsCallback: @escaping (_ items: [YPMediaItem]) -> Void) {
         DispatchQueue.global(qos: .userInitiated).async {
@@ -394,7 +394,9 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                     case .image:
                         self.fetchImageAndCrop(for: asset.asset, withCropRect: asset.cropRect) { image in
                             let resizedImage = self.resizedImageIfNeeded(image: image)
-                            let photo = YPMediaPhoto(image: resizedImage)
+                            let exifMeta = YPHelper.unwrapImageMetaAssets(asset: asset.asset)
+                            let photo = YPMediaPhoto(image: resizedImage, exifMeta: exifMeta)
+                            
                             resultMediaItems.append(YPMediaItem.photo(p: photo))
                             asyncGroup.leave()
                         }
@@ -430,7 +432,9 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                         DispatchQueue.main.async {
                             self.delegate?.libraryViewFinishedLoading()
                             let resizedImage = self.resizedImageIfNeeded(image: image)
-                            photoCallback(resizedImage)
+                            let exifMeta = YPHelper.unwrapImageMetaAssets(asset: asset)
+                            
+                            photoCallback(resizedImage, exifMeta)
                         }
                     }
                 case .audio, .unknown:
