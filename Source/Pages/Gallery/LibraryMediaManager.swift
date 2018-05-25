@@ -118,12 +118,12 @@ class LibraryMediaManager {
                 // 5. Configuring export session
                 
                 let exportSession = AVAssetExportSession(asset: assetComposition,
-                                                         presetName: YPConfig.videoCompression)
-                exportSession?.outputFileType = YPConfig.videoExtension
+                                                         presetName: YPConfig.video.compression)
+                exportSession?.outputFileType = YPConfig.video.fileType
                 exportSession?.shouldOptimizeForNetworkUse = true
                 exportSession?.videoComposition = videoComposition
                 exportSession?.outputURL = URL(fileURLWithPath: NSTemporaryDirectory())
-                    .appendingUniquePathComponent(pathExtension: YPConfig.videoExtension.fileExtension)
+                    .appendingUniquePathComponent(pathExtension: YPConfig.video.fileType.fileExtension)
                 
                 // 6. Exporting
                 

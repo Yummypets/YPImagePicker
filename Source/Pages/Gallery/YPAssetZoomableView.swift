@@ -73,7 +73,7 @@ final class YPAssetZoomableView: UIScrollView {
             self.setAssetFrame(for: self.videoView, with: preview)
             
             // Fit video view if only squared
-            if YPConfig.onlySquareFromLibrary {
+            if YPConfig.library.onlySquare {
                 self.fitImage(true)
             }
             
@@ -113,7 +113,7 @@ final class YPAssetZoomableView: UIScrollView {
             self.setAssetFrame(for: self.photoImageView, with: image)
             
             // Fit image if only squared
-            if YPConfig.onlySquareFromLibrary {
+            if YPConfig.library.onlySquare {
                 self.fitImage(true)
             }
             
@@ -224,7 +224,7 @@ extension YPAssetZoomableView: UIScrollViewDelegate {
         guard let view = view, view == photoImageView || view == videoView else { return }
         
         // prevent to zoom out
-        if YPConfig.onlySquareFromLibrary && scale < squaredZoomScale {
+        if YPConfig.library.onlySquare && scale < squaredZoomScale {
             self.fitImage(true, animated: true)
         }
         
