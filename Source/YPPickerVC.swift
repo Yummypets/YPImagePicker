@@ -274,9 +274,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     
     @objc
     func close() {
-        dismiss(animated: true) {
-            self.didClose?()
-        }
+        self.didClose?()
     }
     
     // When pressing "Next"
