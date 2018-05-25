@@ -1,5 +1,5 @@
 //
-//  YPAlerts.swift
+//  YPAlert.swift
 //  YPImagePicker
 //
 //  Created by Sacha DSO on 26/01/2018.
@@ -8,15 +8,24 @@
 
 import UIKit
 
-struct YPAlerts {
-    
-    static func videoTooLongAlert(with config: YPImagePickerConfiguration ) -> UIAlertController {
-        let str = config.wordings.videoTooLongDetail
-        let msg = String(format: str, "\(config.videoFromLibraryTimeLimit)")
-        let alert = UIAlertController(title: config.wordings.videoTooLongTitle,
+struct YPAlert {
+    static func videoTooLongAlert() -> UIAlertController {
+        let msg = String(format: YPConfig.wordings.videoDurationPopup.tooLongMessage,
+                         "\(YPConfig.video.libraryTimeLimit)")
+        let alert = UIAlertController(title: YPConfig.wordings.videoDurationPopup.title,
                                       message: msg,
-                                      preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
+                                      preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: YPConfig.wordings.ok, style: UIAlertActionStyle.default, handler: nil))
+        return alert
+    }
+    
+    static func videoTooShortAlert() -> UIAlertController {
+        let msg = String(format: YPConfig.wordings.videoDurationPopup.tooShortMessage,
+                         "\(YPConfig.video.minimumTimeLimit)")
+        let alert = UIAlertController(title: YPConfig.wordings.videoDurationPopup.title,
+                                      message: msg,
+                                      preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: YPConfig.wordings.ok, style: UIAlertActionStyle.default, handler: nil))
         return alert
     }
 }

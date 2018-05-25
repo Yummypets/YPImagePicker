@@ -13,6 +13,7 @@
 		99428A141E7BE02400B765A9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 99428A121E7BE02400B765A9 /* LaunchScreen.storyboard */; };
 		99428A271E7BE1D600B765A9 /* YPImagePicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 99428A201E7BE04000B765A9 /* YPImagePicker.framework */; };
 		99428A281E7BE1D600B765A9 /* YPImagePicker.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 99428A201E7BE04000B765A9 /* YPImagePicker.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		997127C1208F45B30089272B /* PryntTrimmerView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 997127C0208F45B30089272B /* PryntTrimmerView.framework */; };
 		997A4CD21F4C3DC0009C3703 /* Stevia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 997A4CD11F4C3DC0009C3703 /* Stevia.framework */; };
 		99A052A61F20DF21005600B3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 99A052A81F20DF21005600B3 /* Localizable.strings */; };
 /* End PBXBuildFile section */
@@ -56,6 +57,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3B0E1B9D207069630048E95B /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		71524A8C206FD954002F3162 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		991C0E5520567E1300764131 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		99428A061E7BE02400B765A9 /* YPImagePickerExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YPImagePickerExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -65,11 +67,14 @@
 		99428A131E7BE02400B765A9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		99428A151E7BE02400B765A9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		99428A1B1E7BE04000B765A9 /* YPImagePicker.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = YPImagePicker.xcodeproj; path = ../YPImagePicker.xcodeproj; sourceTree = "<group>"; };
-		99428A241E7BE17800B765A9 /* Stevia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Stevia.framework; path = Carthage/Build/iOS/Stevia.framework; sourceTree = "<group>"; };
+		997127C0208F45B30089272B /* PryntTrimmerView.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PryntTrimmerView.framework; path = ../Carthage/Build/iOS/PryntTrimmerView.framework; sourceTree = "<group>"; };
 		997A4CD11F4C3DC0009C3703 /* Stevia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Stevia.framework; path = ../Carthage/Build/iOS/Stevia.framework; sourceTree = "<group>"; };
+		998D452620AC8DFA007F8699 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		99A052A91F20DF24005600B3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		99A052AA1F20DF39005600B3 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		99A052AB1F20DF54005600B3 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		99BEB97B20A9DE5F00FFEB55 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
+		A7B961E020755CF500216346 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
 		EB11EE9A2057C58600A19365 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -78,6 +83,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				997127C1208F45B30089272B /* PryntTrimmerView.framework in Frameworks */,
 				997A4CD21F4C3DC0009C3703 /* Stevia.framework in Frameworks */,
 				99428A271E7BE1D600B765A9 /* YPImagePicker.framework in Frameworks */,
 			);
@@ -128,8 +134,8 @@
 		99428A231E7BE17800B765A9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				997127C0208F45B30089272B /* PryntTrimmerView.framework */,
 				997A4CD11F4C3DC0009C3703 /* Stevia.framework */,
-				99428A241E7BE17800B765A9 /* Stevia.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -144,8 +150,9 @@
 				99428A021E7BE02400B765A9 /* Sources */,
 				99428A031E7BE02400B765A9 /* Frameworks */,
 				99428A041E7BE02400B765A9 /* Resources */,
-				99428A261E7BE18700B765A9 /* ShellScript */,
+				99428A261E7BE18700B765A9 /* Carthage */,
 				99428A2B1E7BE1D600B765A9 /* Embed Frameworks */,
+				99BEB97920A9BD1300FFEB55 /* Localizations Sanitizer */,
 			);
 			buildRules = (
 			);
@@ -165,7 +172,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0820;
-				LastUpgradeCheck = 0900;
+				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = Octopepper;
 				TargetAttributes = {
 					99428A051E7BE02400B765A9 = {
@@ -187,6 +194,10 @@
 				nl,
 				ru,
 				"pt-BR",
+				tr,
+				ar,
+				it,
+				de,
 			);
 			mainGroup = 994289FD1E7BE02400B765A9;
 			productRefGroup = 99428A071E7BE02400B765A9 /* Products */;
@@ -228,19 +239,35 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		99428A261E7BE18700B765A9 /* ShellScript */ = {
+		99428A261E7BE18700B765A9 /* Carthage */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 				"$(SRCROOT)/../Carthage/Build/iOS/Stevia.framework",
+				"$(SRCROOT)/../Carthage/Build/iOS/PryntTrimmerView.framework",
 			);
+			name = Carthage;
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
+		99BEB97920A9BD1300FFEB55 /* Localizations Sanitizer */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Localizations Sanitizer";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "${SRCROOT}/Localize.swift";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -287,6 +314,10 @@
 				991C0E5520567E1300764131 /* nl */,
 				EB11EE9A2057C58600A19365 /* ru */,
 				71524A8C206FD954002F3162 /* pt-BR */,
+				3B0E1B9D207069630048E95B /* tr */,
+				A7B961E020755CF500216346 /* ar */,
+				99BEB97B20A9DE5F00FFEB55 /* it */,
+				998D452620AC8DFA007F8699 /* de */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -308,6 +339,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -315,6 +347,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -365,6 +398,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -372,6 +406,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -410,11 +445,12 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/../Carthage/Build/iOS",
+					"$(PROJECT_DIR)/../Resources\"",
 				);
 				INFOPLIST_FILE = YPImagePickerExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.octopepper.YPImagePickerExample;
+				PRODUCT_BUNDLE_IDENTIFIER = test.YPImagePickerExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 			};
@@ -429,11 +465,12 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/../Carthage/Build/iOS",
+					"$(PROJECT_DIR)/../Resources\"",
 				);
 				INFOPLIST_FILE = YPImagePickerExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.octopepper.YPImagePickerExample;
+				PRODUCT_BUNDLE_IDENTIFIER = test.YPImagePickerExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 			};

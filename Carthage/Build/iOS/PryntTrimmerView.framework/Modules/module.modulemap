@@ -1,0 +1,11 @@
+framework module PryntTrimmerView {
+  umbrella header "PryntTrimmerView-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module PryntTrimmerView.Swift {
+    header "PryntTrimmerView-Swift.h"
+    requires objc
+}
