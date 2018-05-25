@@ -46,7 +46,7 @@ extension AVAsset {
         }
         
         exportSession.outputURL = destination
-        exportSession.outputFileType = YPConfig.videoExtension
+        exportSession.outputFileType = YPConfig.video.fileType
         exportSession.shouldOptimizeForNetworkUse = true
         exportSession.videoComposition = videoComposition
         

@@ -25,7 +25,7 @@ public class YPVideoVC: UIViewController, YPPermissionCheckable {
         super.init(nibName: nil, bundle: nil)
         title = YPConfig.wordings.videoTitle
         
-        videoHelper.initialize(withVideoRecordingLimit: YPConfig.videoRecordingTimeLimit)
+        videoHelper.initialize(withVideoRecordingLimit: YPConfig.video.recordingTimeLimit)
         
         videoHelper.didCaptureVideo = { [weak self] videoURL in
             self?.didCaptureVideo?(videoURL)

@@ -61,8 +61,8 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         registerForTapOnPreview()
         refreshMediaRequest()
         
-        v.assetViewContainer.multipleSelectionButton.isHidden = !(YPConfig.maxNumberOfItems > 1)
-        v.maxNumberWarningLabel.text = String(format: YPConfig.wordings.warningMaxItemsLimit, YPConfig.maxNumberOfItems)
+        v.assetViewContainer.multipleSelectionButton.isHidden = !(YPConfig.library.maxNumberOfItems > 1)
+        v.maxNumberWarningLabel.text = String(format: YPConfig.wordings.warningMaxItemsLimit, YPConfig.library.maxNumberOfItems)
     }
     
     // MARK: - View Lifecycle
@@ -100,7 +100,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         // Forces assetZoomableView to have a contentSize.
         // otherwise 0 in first selection triggering the bug : "invalid image size 0x0"
         // Also fits the first element to the square if the onlySquareFromLibrary = true
-        if !YPConfig.onlySquareFromLibrary && v.assetZoomableView.contentSize == CGSize(width: 0, height: 0) {
+        if !YPConfig.library.onlySquare && v.assetZoomableView.contentSize == CGSize(width: 0, height: 0) {
             v.assetZoomableView.setZoomScale(1, animated: false)
         }
     }
@@ -230,7 +230,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         // Sorting condition
         let options = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-        options.predicate = YPConfig.libraryMediaType.predicate()
+        options.predicate = YPConfig.library.mediaType.predicate()
         return options
     }
     
@@ -285,8 +285,8 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
             return true
         }
         
-        let tooLong = asset.duration > YPConfig.videoFromLibraryTimeLimit
-        let tooShort = asset.duration < YPConfig.videoMinimumTimeLimit
+        let tooLong = asset.duration > YPConfig.video.libraryTimeLimit
+        let tooShort = asset.duration < YPConfig.video.minimumTimeLimit
         
         if tooLong || tooShort {
             DispatchQueue.main.async {
@@ -450,7 +450,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     
     // Reduce image size further if needed libraryTargetImageSize is capped.
     func resizedImageIfNeeded(image: UIImage) -> UIImage {
-        if case let YPLibraryImageSize.cappedTo(size: capped) = YPConfig.libraryTargetImageSize {
+        if case let YPLibraryImageSize.cappedTo(size: capped) = YPConfig.library.targetImageSize {
             let size = cappedSize(for: image.size, cappedAt: capped)
             if let resizedImage = image.resized(to: size) {
                 return resizedImage

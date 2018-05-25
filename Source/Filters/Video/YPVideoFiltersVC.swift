@@ -49,8 +49,8 @@ public class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
         trimmerView.mainColor = YPConfig.colors.trimmerMainColor
         trimmerView.handleColor = YPConfig.colors.trimmerHandleColor
         trimmerView.positionBarColor = YPConfig.colors.positionLineColor
-        trimmerView.maxDuration = YPConfig.trimmerMaxDuration
-        trimmerView.minDuration = YPConfig.trimmerMinDuration
+        trimmerView.maxDuration = YPConfig.video.trimmerMaxDuration
+        trimmerView.minDuration = YPConfig.video.trimmerMinDuration
         
         coverThumbSelectorView.thumbBorderColor = YPConfig.colors.coverSelectorBorderColor
         
@@ -125,7 +125,7 @@ public class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
             // Looks like file:///private/var/mobile/Containers/Data/Application
             // /FAD486B4-784D-4397-B00C-AD0EFFB45F52/tmp/8A2B410A-BD34-4E3F-8CB5-A548A946C1F1.mov
             let destinationURL = URL(fileURLWithPath: NSTemporaryDirectory())
-                .appendingUniquePathComponent(pathExtension: YPConfig.videoExtension.fileExtension)
+                .appendingUniquePathComponent(pathExtension: YPConfig.video.fileType.fileExtension)
             
             try trimmedAsset.export(to: destinationURL) { [weak self] in
                 guard let weakSelf = self else { return }

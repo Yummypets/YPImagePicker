@@ -55,7 +55,7 @@ class YPAlbumsManager {
                     }
                     album.collection = assetCollection
                     
-                    if YPConfig.libraryMediaType == .photo {
+                    if YPConfig.library.mediaType == .photo {
                         if !(assetCollection.assetCollectionSubtype == .smartAlbumSlomoVideos
                             || assetCollection.assetCollectionSubtype == .smartAlbumVideos) {
                             albums.append(album)
@@ -72,7 +72,7 @@ class YPAlbumsManager {
     
     func mediaCountFor(collection: PHAssetCollection) -> Int {
         let options = PHFetchOptions()
-        options.predicate = YPConfig.libraryMediaType.predicate()
+        options.predicate = YPConfig.library.mediaType.predicate()
         let result = PHAsset.fetchAssets(in: collection, options: options)
         return result.count
     }

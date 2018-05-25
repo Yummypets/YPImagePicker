@@ -19,7 +19,7 @@ class YPAssetViewContainer: UIView {
     public let spinnerView = UIView()
     public let squareCropButton = UIButton()
     public let multipleSelectionButton = UIButton()
-    public var onlySquare = YPConfig.onlySquareFromLibrary
+    public var onlySquare = YPConfig.library.onlySquare
     public var isShown = true
     
     private let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)

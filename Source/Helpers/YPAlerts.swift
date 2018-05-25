@@ -11,7 +11,7 @@ import UIKit
 struct YPAlert {
     static func videoTooLongAlert() -> UIAlertController {
         let msg = String(format: YPConfig.wordings.videoDurationPopup.tooLongMessage,
-                         "\(YPConfig.videoFromLibraryTimeLimit)")
+                         "\(YPConfig.video.libraryTimeLimit)")
         let alert = UIAlertController(title: YPConfig.wordings.videoDurationPopup.title,
                                       message: msg,
                                       preferredStyle: .actionSheet)
@@ -21,7 +21,7 @@ struct YPAlert {
     
     static func videoTooShortAlert() -> UIAlertController {
         let msg = String(format: YPConfig.wordings.videoDurationPopup.tooShortMessage,
-                         "\(YPConfig.videoMinimumTimeLimit)")
+                         "\(YPConfig.video.minimumTimeLimit)")
         let alert = UIAlertController(title: YPConfig.wordings.videoDurationPopup.title,
                                       message: msg,
                                       preferredStyle: .actionSheet)
