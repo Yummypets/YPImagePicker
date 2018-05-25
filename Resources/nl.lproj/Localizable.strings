@@ -6,14 +6,14 @@
 "YPImagePickerFilter" = "Filter"; //ignore-same-translation-warning
 "YPImagePickerLibrary" = "Bibliotheek";
 "YPImagePickerNext" = "Volgende";
-"YPImagePickerOk" = "Ok";
+"YPImagePickerOk" = "Gereed";
 "YPImagePickerPermissionDeniedPopupCancel" = "Annuleer";
 "YPImagePickerPermissionDeniedPopupGrantPermission" = "Verleen toestemming";
 "YPImagePickerPermissionDeniedPopupMessage" = "Verleen alstublieft toestemming";
 "YPImagePickerPermissionDeniedPopupTitle" = "Toestemming geweigerd";
 "YPImagePickerPhoto" = "Foto";
 "YPImagePickerProcessing" = "Processing..";
-"YPImagePickerSave" = "Save";
+"YPImagePickerSave" = "Bewaar";
 "YPImagePickerTrim" = "Inkorten";
 "YPImagePickerVideo" = "Video"; //ignore-same-translation-warning
 "YPImagePickerVideoDurationTitle" = "Video lengte";
