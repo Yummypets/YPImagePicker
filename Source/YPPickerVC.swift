@@ -21,13 +21,13 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     /// Private callbacks to YPImagePicker
     public var didClose:(() -> Void)?
     public var didSelectItems: (([YPMediaItem]) -> Void)?
-
+    
     enum Mode {
         case library
         case camera
         case video
     }
-
+    
     private var libraryVC: YPLibraryVC?
     private var cameraVC: YPCameraVC?
     private var videoVC: YPVideoVC?
@@ -38,9 +38,9 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         view.backgroundColor = UIColor(r: 247, g: 247, b: 247)
-
+        
         delegate = self
         
         // Library
@@ -54,7 +54,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
             cameraVC = YPCameraVC()
             cameraVC?.didCapturePhoto = { [unowned self] img in
                 self.didSelectItems?([YPMediaItem.photo(p: YPMediaPhoto(image: img,
-                                                                   fromCamera: true))])
+                                                                        fromCamera: true))])
             }
         }
         
@@ -64,11 +64,11 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
             videoVC?.didCaptureVideo = { [unowned self] videoURL in
                 self.didSelectItems?([YPMediaItem
                     .video(v: YPMediaVideo(thumbnail: thumbnailFromVideoPath(videoURL),
-                                      videoURL: videoURL,
-                                      fromCamera: true))])
+                                           videoURL: videoURL,
+                                           fromCamera: true))])
             }
         }
-    
+        
         // Show screens
         var vcs = [UIViewController]()
         for screen in YPConfig.screens {
@@ -88,7 +88,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
             }
         }
         controllers = vcs
-      
+        
         // Select good mode
         if YPConfig.screens.contains(YPConfig.startOnScreen) {
             switch YPConfig.startOnScreen {
@@ -192,7 +192,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     func navBarTapped() {
         let vc = YPAlbumVC()
         let navVC = UINavigationController(rootViewController: vc)
-
+        
         vc.didSelectAlbum = { [weak self] album in
             self?.libraryVC?.setAlbum(album)
             self?.libraryVC?.title = album.title
@@ -211,7 +211,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         label.text = aTitle
         // Use standard font by default.
         label.font = UIFont.boldSystemFont(ofSize: 17)
-
+        
         // Use custom font if set by user.
         if let navBarTitleFont = UINavigationBar.appearance().titleTextAttributes?[.font] as? UIFont {
             // Use custom font if set by user.
@@ -284,13 +284,13 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         
         if mode == .library {
             libraryVC.doAfterPermissionCheck { [weak self] in
-                libraryVC.selectedMedia(photoCallback: { img in
+                libraryVC.selectedMedia(photoCallback: { img, exifMeta in
                     self?.didSelectItems?([YPMediaItem
-                        .photo(p: YPMediaPhoto(image: img))])
+                        .photo(p: YPMediaPhoto(image: img, exifMeta: exifMeta))])
                 }, videoCallback: { videoURL in
                     self?.didSelectItems?([YPMediaItem
                         .video(v: YPMediaVideo(thumbnail: thumbnailFromVideoPath(videoURL),
-                                          videoURL: videoURL))])
+                                               videoURL: videoURL))])
                 }, multipleItemsCallback: { items in
                     self?.didSelectItems?(items)
                 })
