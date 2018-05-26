@@ -12,8 +12,8 @@
 "YPImagePickerPermissionDeniedPopupMessage" = "Por favor, permita o acesso";
 "YPImagePickerPermissionDeniedPopupTitle" = "Permissão negada";
 "YPImagePickerPhoto" = "Foto";
-"YPImagePickerProcessing" = "Processing..";
-"YPImagePickerSave" = "Save";
+"YPImagePickerProcessing" = "Processando..";
+"YPImagePickerSave" = "Salvar";
 "YPImagePickerTrim" = "Cortar";
 "YPImagePickerVideo" = "Vídeo";
 "YPImagePickerVideoDurationTitle" = "Duração do vídeo";
