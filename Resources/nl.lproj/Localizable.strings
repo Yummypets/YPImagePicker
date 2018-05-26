@@ -1,7 +1,7 @@
 "YPImagePickerAlbums" = "Albums"; //ignore-same-translation-warning
 "YPImagePickerCancel" = "Annuleer";
 "YPImagePickerCover" = "Omslag";
-"YPImagePickerCrop" = "Crop";
+"YPImagePickerCrop" = "Bijsnijden";
 "YPImagePickerDone" = "Klaar";
 "YPImagePickerFilter" = "Filter"; //ignore-same-translation-warning
 "YPImagePickerLibrary" = "Bibliotheek";
@@ -12,7 +12,7 @@
 "YPImagePickerPermissionDeniedPopupMessage" = "Verleen alstublieft toestemming";
 "YPImagePickerPermissionDeniedPopupTitle" = "Toestemming geweigerd";
 "YPImagePickerPhoto" = "Foto";
-"YPImagePickerProcessing" = "Processing..";
+"YPImagePickerProcessing" = "Verwerken...";
 "YPImagePickerSave" = "Bewaar";
 "YPImagePickerTrim" = "Inkorten";
 "YPImagePickerVideo" = "Video"; //ignore-same-translation-warning
