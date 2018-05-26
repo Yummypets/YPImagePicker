@@ -341,7 +341,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     
     private func fetchImageAndCrop(for asset: PHAsset,
                                    withCropRect: CGRect? = nil,
-                                   callback: @escaping (_ photo: UIImage) -> Void) {
+                                   callback: @escaping (_ photo: UIImage, _ exif: [String : Any]) -> Void) {
         delegate?.libraryViewStartedLoading()
         let cropRect = withCropRect ?? DispatchQueue.main.sync { v.currentCropRect() }
         let ts = targetSize(for: asset, cropRect: cropRect)
@@ -365,7 +365,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         }
     }
     
-    public func selectedMedia(photoCallback: @escaping (_ photo: UIImage) -> Void,
+    public func selectedMedia(photoCallback: @escaping (_ photo: UIImage, _ exifMeta : [String : Any]?) -> Void,
                               videoCallback: @escaping (_ videoURL: URL) -> Void,
                               multipleItemsCallback: @escaping (_ items: [YPMediaItem]) -> Void) {
         DispatchQueue.global(qos: .userInitiated).async {
@@ -392,9 +392,9 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                     
                     switch asset.asset.mediaType {
                     case .image:
-                        self.fetchImageAndCrop(for: asset.asset, withCropRect: asset.cropRect) { image in
+                        self.fetchImageAndCrop(for: asset.asset, withCropRect: asset.cropRect) { image, exifMeta in
                             let resizedImage = self.resizedImageIfNeeded(image: image)
-                            let photo = YPMediaPhoto(image: resizedImage)
+                            let photo = YPMediaPhoto(image: resizedImage, exifMeta: exifMeta)
                             resultMediaItems.append(YPMediaItem.photo(p: photo))
                             asyncGroup.leave()
                         }
@@ -426,11 +426,11 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                         }
                     })
                 case .image:
-                    self.fetchImageAndCrop(for: asset) { image in
+                    self.fetchImageAndCrop(for: asset) { image, exifMeta in
                         DispatchQueue.main.async {
                             self.delegate?.libraryViewFinishedLoading()
                             let resizedImage = self.resizedImageIfNeeded(image: image)
-                            photoCallback(resizedImage)
+                            photoCallback(resizedImage, exifMeta)
                         }
                     }
                 case .audio, .unknown:

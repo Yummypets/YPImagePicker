@@ -1,7 +1,7 @@
 "YPImagePickerAlbums" = "Albümler";
 "YPImagePickerCancel" = "İptal";
 "YPImagePickerCover" = "Kapak";
-"YPImagePickerCrop" = "Crop";
+"YPImagePickerCrop" = "Kırp";
 "YPImagePickerDone" = "Bitti";
 "YPImagePickerFilter" = "Filtrele";
 "YPImagePickerLibrary" = "Kütüphane";
@@ -12,8 +12,8 @@
 "YPImagePickerPermissionDeniedPopupMessage" = "Lütfen erişime izin ver";
 "YPImagePickerPermissionDeniedPopupTitle" = "Erişim izni reddedildi";
 "YPImagePickerPhoto" = "Fotoğraf";
-"YPImagePickerProcessing" = "Processing..";
-"YPImagePickerSave" = "Save";
+"YPImagePickerProcessing" = "İşleniyor..";
+"YPImagePickerSave" = "Kaydet";
 "YPImagePickerTrim" = "Kes";
 "YPImagePickerVideo" = "Video"; //ignore-same-translation-warning
 "YPImagePickerVideoDurationTitle" = "Video uzunluğu";

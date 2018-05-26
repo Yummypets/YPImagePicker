@@ -29,7 +29,7 @@ Here are the improvements we added :
 - Filters
 - Videos in the library
 - Both Square and non-square images
-- Permission managenent
+- Permission management
 - Pan between tabs which feels smoother
 - Improve Overall Code Quality
 - Simplify API
@@ -140,6 +140,7 @@ picker.didFinishPicking { items, _ in
         print(photo.image) // Final image selected by the user
         print(photo.originalImage) // original image selected by the user, unfiltered
         print(photo.modifiedImage) // Transformed image, can be nil
+        print(photo.exifMeta) // Print exif meta data of original image.
     }
     picker.dismiss(animated: true, completion: nil)
 }
@@ -212,6 +213,7 @@ Supported languages out of the box:
 - Arabic
 - German
 - Italian
+- Japanese
 
 If your language is not supported, you can still customize the wordings via the `configuration.wordings` api:
 

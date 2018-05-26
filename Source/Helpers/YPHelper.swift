@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import Photos
 
 internal func ypLocalized(_ str: String) -> String {
     return NSLocalizedString(str,
