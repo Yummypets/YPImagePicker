@@ -29,7 +29,7 @@ Here are the improvements we added :
 - Filters
 - Videos in the library
 - Both Square and non-square images
-- Permission managenent
+- Permission management
 - Pan between tabs which feels smoother
 - Improve Overall Code Quality
 - Simplify API
@@ -212,6 +212,7 @@ Supported languages out of the box:
 - Arabic
 - German
 - Italian
+- Japanese
 
 If your language is not supported, you can still customize the wordings via the `configuration.wordings` api:
 
