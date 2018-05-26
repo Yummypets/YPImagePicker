@@ -393,8 +393,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                     switch asset.asset.mediaType {
                     case .image:
                         self.fetchImageAndCrop(for: asset.asset, withCropRect: asset.cropRect) { image, exifMeta in
-                            let resizedImage = self.resizedImageIfNeeded(image: image)
-                            let photo = YPMediaPhoto(image: resizedImage, exifMeta: exifMeta)
+                            let photo = YPMediaPhoto(image: image.resizedImageIfNeeded(), exifMeta: exifMeta)
                             resultMediaItems.append(YPMediaItem.photo(p: photo))
                             asyncGroup.leave()
                         }
@@ -429,8 +428,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                     self.fetchImageAndCrop(for: asset) { image, exifMeta in
                         DispatchQueue.main.async {
                             self.delegate?.libraryViewFinishedLoading()
-                            let resizedImage = self.resizedImageIfNeeded(image: image)
-                            photoCallback(resizedImage, exifMeta)
+                            photoCallback(image.resizedImageIfNeeded(), exifMeta)
                         }
                     }
                 case .audio, .unknown:
@@ -446,38 +444,6 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         let width = floor(CGFloat(asset.pixelWidth) * cropRect.width)
         let height = floor(CGFloat(asset.pixelHeight) * cropRect.height)
         return CGSize(width: width, height: height)
-    }
-    
-    // Reduce image size further if needed libraryTargetImageSize is capped.
-    func resizedImageIfNeeded(image: UIImage) -> UIImage {
-        if case let YPLibraryImageSize.cappedTo(size: capped) = YPConfig.library.targetImageSize {
-            let size = cappedSize(for: image.size, cappedAt: capped)
-            if let resizedImage = image.resized(to: size) {
-                return resizedImage
-            }
-        }
-        return image
-    }
-    
-    private func cappedSize(for size: CGSize, cappedAt: CGFloat) -> CGSize {
-        var cappedWidth: CGFloat = 0
-        var cappedHeight: CGFloat = 0
-        if size.width > size.height {
-            // Landscape
-            let heightRatio = size.height / size.width
-            cappedWidth = min(size.width, cappedAt)
-            cappedHeight = cappedWidth * heightRatio
-        } else if size.height > size.width {
-            // Portrait
-            let widthRatio = size.width / size.height
-            cappedHeight = min(size.height, cappedAt)
-            cappedWidth = cappedHeight * widthRatio
-        } else {
-            // Squared
-            cappedWidth = min(size.width, cappedAt)
-            cappedHeight = min(size.height, cappedAt)
-        }
-        return CGSize(width: cappedWidth, height: cappedHeight)
     }
     
     // MARK: - Player
