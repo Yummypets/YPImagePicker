@@ -99,7 +99,6 @@ class ViewController: UIViewController {
 //        /// Choose the videoCompression.  Defaults to AVAssetExportPresetHighestQuality
         config.video.fileType = .m4a
         
-        
 //
 //        /// Defines the name of the album when saving pictures in the user's photo library.
 //        /// In general that would be your App name. Defaults to "DefaultYPImagePickerAlbumName"
@@ -139,6 +138,9 @@ class ViewController: UIViewController {
         config.hidesStatusBar = false
 
         config.library.maxNumberOfItems = 5
+        
+        /// Skip selection gallery after multiple selections
+        // config.library.skipSelectionsGallery = true
 
         // Here we use a per picker configuration. Configuration is always shared.
         // That means than when you create one picker with configuration, than you can create other picker with just
