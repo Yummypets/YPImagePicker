@@ -140,8 +140,8 @@ public struct YPConfigLibrary {
     /// Anything superior than 1 will enable the multiple selection feature.
     public var maxNumberOfItems = 1
     
-    /// Adds a selection gallery after multiple selections.
-    public var showsSelectionGallery = true
+    /// Allow to skip the selections gallery when selecting the multiple media items.
+    public var skipSelectionsGallery = false
 }
 
 /// Encapsulates video specific settings.
