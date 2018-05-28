@@ -41,6 +41,9 @@ public struct YPImagePickerConfiguration {
     
     /// Adds a Filter step in the photo taking process.  Defaults to true
     public var showsFilters = true
+        
+    /// Allow to skip the selections gallery when selecting the multiple media items. Defaults to false.
+    public var skipSelectionsGallery = false
     
     /// Enables you to opt out from saving new (or old but filtered) images to the
     /// user's photo library. Defaults to true.
@@ -139,9 +142,6 @@ public struct YPConfigLibrary {
     
     /// Anything superior than 1 will enable the multiple selection feature.
     public var maxNumberOfItems = 1
-    
-    /// Allow to skip the selections gallery when selecting the multiple media items.
-    public var skipSelectionsGallery = false
 }
 
 /// Encapsulates video specific settings.
