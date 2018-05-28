@@ -140,7 +140,7 @@ class ViewController: UIViewController {
         config.library.maxNumberOfItems = 5
         
         /// Skip selection gallery after multiple selections
-        // config.library.skipSelectionsGallery = true
+        // config.skipSelectionsGallery = true
 
         // Here we use a per picker configuration. Configuration is always shared.
         // That means than when you create one picker with configuration, than you can create other picker with just
