@@ -81,14 +81,7 @@ public class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
                                                                target: self,
                                                                action: #selector(cancel))
         }
-        let rightBarButtonTitle = isFromSelectionVC ? YPConfig.wordings.done : YPConfig.wordings.next
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: rightBarButtonTitle,
-                                                            style: .done,
-                                                            target: self,
-                                                            action: #selector(save))
-        navigationItem.rightBarButtonItem?.tintColor = YPConfig.colors.tintColor
-        
-        YPHelper.changeBackButtonTitle(self)
+        setupRightBarButtonItem()
     }
     
     override public func viewDidAppear(_ animated: Bool) {
@@ -110,6 +103,15 @@ public class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
         videoView.stop()
     }
     
+    func setupRightBarButtonItem() {
+        let rightBarButtonTitle = isFromSelectionVC ? YPConfig.wordings.done : YPConfig.wordings.next
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: rightBarButtonTitle,
+                                                            style: .done,
+                                                            target: self,
+                                                            action: #selector(save))
+        navigationItem.rightBarButtonItem?.tintColor = YPConfig.colors.tintColor
+    }
+    
     // MARK: - Top buttons
 
     @objc public func save() {
@@ -128,12 +130,13 @@ public class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
                 .appendingUniquePathComponent(pathExtension: YPConfig.video.fileType.fileExtension)
             
             try trimmedAsset.export(to: destinationURL) { [weak self] in
-                guard let weakSelf = self else { return }
+                guard let strongSelf = self else { return }
                 
                 DispatchQueue.main.async {
-                    let resultVideo = YPMediaVideo(thumbnail: weakSelf.coverImageView.image!,
+                    let resultVideo = YPMediaVideo(thumbnail: strongSelf.coverImageView.image!,
                                               videoURL: destinationURL)
                     didSave(YPMediaItem.video(v: resultVideo))
+                    strongSelf.setupRightBarButtonItem()
                 }
             }
         } catch let error {
