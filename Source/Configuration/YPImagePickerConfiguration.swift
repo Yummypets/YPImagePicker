@@ -61,6 +61,10 @@ public struct YPImagePickerConfiguration {
     /// Adds a Crop step in the photo taking process, after filters.  Defaults to .none
     public var showsCrop: YPCropType = .none
     
+    /// Ex: cappedTo:1024 will make sure images from the library or the camera will be
+    /// resized to fit in a 1024x1024 box. Defaults to original image size.
+    public var targetImageSize = YPImageSize.original
+    
     /// Adds a Overlay View to the camera
     public var overlayView = UIView()
     
@@ -111,7 +115,7 @@ public struct YPImagePickerConfiguration {
     public var onlySquareFromLibrary = false
     
     @available(*, obsoleted: 3.0.0, renamed: "library.targetImageSize")
-    public var libraryTargetImageSize = YPLibraryImageSize.original
+    public var libraryTargetImageSize = YPImageSize.original
     
     @available(*, obsoleted: 3.0.0, renamed: "library.mediaType")
     public var showsVideoInLibrary = false
@@ -129,10 +133,6 @@ public struct YPConfigLibrary {
     
     /// Set this to true if you want to force the library output to be a squared image. Defaults to false
     public var onlySquare = false
-    
-    /// Ex: cappedTo:1024 will make sure images from the library will be
-    /// resized to fit in a 1024x1024 box. Defaults to original image size.
-    public var targetImageSize = YPLibraryImageSize.original
     
     /// Choose what media types are available in the library. Defaults to `.photo`
     public var mediaType = YPlibraryMediaType.photo

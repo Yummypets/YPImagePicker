@@ -1,5 +1,5 @@
 //
-//  YPLibraryImageSize.swift
+//  YPImageSize.swift
 //  YPImagePicker
 //
 //  Created by Sacha DSO on 24/01/2018.
@@ -9,7 +9,7 @@
 import Foundation
 import AVFoundation
 
-public enum YPLibraryImageSize {
+public enum YPImageSize {
     case original
     case cappedTo(size: CGFloat)
 }

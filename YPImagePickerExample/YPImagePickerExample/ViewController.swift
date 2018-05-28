@@ -73,9 +73,9 @@ class ViewController: UIViewController {
 //        /// Set this to true if you want to force the camera output to be a squared image. Defaults to true
 //        config.onlySquareImagesFromCamera = false
 //
-//        /// Ex: cappedTo:1024 will make sure images from the library will be
+//        /// Ex: cappedTo:1024 will make sure images from the library or the camera will be
 //        /// resized to fit in a 1024x1024 box. Defaults to original image size.
-//        config.library.targetImageSize = .cappedTo(size: 1024)
+//        config.targetImageSize = .cappedTo(size: 1024)
 //
 //        /// Choose what media types are available in the library. Defaults to `.photo`
         config.library.mediaType = .photoAndVideo
