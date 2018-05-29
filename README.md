@@ -2,8 +2,7 @@
 
 ## YPImagePicker
 
-YPImagePicker is an instagram-like photo/video picker for iOS written in pure Swift.
-It comes with adjustable square crop and filters.
+YPImagePicker is an instagram-like photo/video picker for iOS written in pure Swift. It is feature-rich and highly customizable to match your App's requirements.
 
 [![Version](https://img.shields.io/cocoapods/v/YPImagePicker.svg?style=flat)](http://cocoapods.org/pods/YPImagePicker)
 [![Platform](https://img.shields.io/cocoapods/p/YPImagePicker.svg?style=flat)](http://cocoapods.org/pods/YPImagePicker)
@@ -14,34 +13,23 @@ It comes with adjustable square crop and filters.
 Give it a quick try :
 `pod repo update` then `pod try YPImagePicker`
 
-🌅 Library - 📷 Photo - 🎥 Video - ✂️ Crop - ⚡️ Flash - 🖼 Filters
-
 <img src="https://raw.githubusercontent.com/Yummypets/YPImagePicker/master/Images/library.PNG" width="200px" > <img src="https://raw.githubusercontent.com/Yummypets/YPImagePicker/master/Images/photo.PNG" width="200px" > <img src="https://raw.githubusercontent.com/Yummypets/YPImagePicker/master/Images/video.PNG" width="200px" > <img src="https://raw.githubusercontent.com/Yummypets/YPImagePicker/master/Images/filters.PNG" width="200px" >
 
 Those features are available just with a few lines of code!
 
-## Improvements
-YPImagePicker was built from the great Fusuma library.
+## Notable Features
 
-Here are the improvements we added :
-
-- Albums
-- Filters
-- Videos in the library
-- Both Square and non-square images
-- Permission management
-- Pan between tabs which feels smoother
-- Improve Overall Code Quality
-- Simplify API
-- Replaces icons with lighter Text
-- Preselect Front camera (e.g for avatars)
-- Replaces Delegate based with callbacks based api
-- Uses Native Navigation bar over custom View (gotta be a good UIKit citizen)
-- Faster library load
-- Hidden status bar for a more immersive XP
-- Flash Auto mode
-- Video Torch Mode
-- iPhone X support
+🌅 Library  
+📷 Photo  
+🎥 Video  
+✂️ Crop  
+⚡️ Flash  
+🖼 Filters  
+📁 Albums  
+🔢 Multiple Selection  
+📏 Video Trimming & Cover selection  
+📐 Output image size  
+And many more...
 
 ## Installation
 
@@ -227,7 +215,7 @@ Better yet you can submit an issue or pull request with your `Localizable.string
 ## Original Project & Author
 
 This project has been first inspired by [Fusuma](https://github.com/ytakzk/Fusuma)
-Considering the big code and design changes, this moved form a fork to a standalone separate repo, also for discoverability purposes.
+Considering the big code, design changes and all the additional features added along the way, this moved form a fork to a standalone separate repo, also for discoverability purposes.
 Original Fusuma author is [ytakz](http://ytakzk.me)
 
 ## Core Team
@@ -306,4 +294,4 @@ See [LICENSE](LICENSE) for details.
 ## Swift Version
 
 - Swift 3 -> version [**1.2.1**](https://github.com/Yummypets/YPImagePicker/releases/tag/1.2.1)
-- Swift 4 -> version [**2.7.3**](https://github.com/Yummypets/YPImagePicker/releases/tag/2.8.1)
+- Swift 4.1 -> version [**3.1.0**](https://github.com/Yummypets/YPImagePicker/releases/tag/3.1.0)
