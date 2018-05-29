@@ -247,6 +247,10 @@ Original Fusuma author is [ytakz](http://ytakzk.me)
 [Emil](https://github.com/heitara),
 [Rafael Damasceno](https://github.com/DamascenoRafael),
 [cenkingunlugu](https://github.com/https://github.com/cenkingunlugu)
+[heitara](https://github.com/heitara)
+[portellaa](https://github.com/portellaa)
+[Romixery](https://github.com/romixery)
+[shotat](https://github.com/shotat)
 
 ## They helped us one way or another 👏
 [userdar](https://github.com/userdar),
@@ -290,6 +294,7 @@ Original Fusuma author is [ytakz](http://ytakzk.me)
 [devender54321](https://github.com/devender54321),
 [Didar1994](https://github.com/Didar1994),
 [relaxsus](https://github.com/relaxsus)
+[restoflash](https://github.com/restoflash)
 
 ## Dependency
 YPImagePicker relies on [prynt/PryntTrimmerView](https://github.com/prynt/PryntTrimmerView) for provide video trimming and cover features. Big thanks to @HHK1 for making this open source :)
