@@ -190,18 +190,7 @@ picker.didFinishPicking { items, cancelled in
 That's it !
 
 ## Languages
-Supported languages out of the box:
-- English
-- Spanish
-- French
-- Russian
-- Dutch
-- Brazilian
-- Turkish
-- Arabic
-- German
-- Italian
-- Japanese
+🇺🇸 English, 🇪🇸 Spanish, 🇫🇷 French 🇷🇺 Russian, 🇳🇱 Dutch, 🇧🇷 Brazilian, 🇹🇷 Turkish,  Arabic, 🇩🇪 German, 🇮🇹 Italian, 🇯🇵 Japanese
 
 If your language is not supported, you can still customize the wordings via the `configuration.wordings` api:
 
