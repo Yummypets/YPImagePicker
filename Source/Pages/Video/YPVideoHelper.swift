@@ -20,7 +20,7 @@ class YPVideoHelper: NSObject {
     private var timer = Timer()
     private var dateVideoStarted = Date()
     private let sessionQueue = DispatchQueue(label: "YPVideoVCSerialQueue")
-    private var videoInput: AVCaptureDeviceInput!
+    private var videoInput: AVCaptureDeviceInput?
     private var videoOutput = AVCaptureMovieFileOutput()
     private var videoRecordingTimeLimit: TimeInterval = 0
     
@@ -57,9 +57,15 @@ class YPVideoHelper: NSObject {
         sessionQueue.async { [unowned self] in
             self.session.beginConfiguration()
             self.session.resetInputs()
-            self.videoInput = flippedDeviceInputForInput(self.videoInput)
-            if self.session.canAddInput(self.videoInput) {
-                self.session.addInput(self.videoInput)
+            
+            if let videoInput = self.videoInput {
+                self.videoInput = flippedDeviceInputForInput(videoInput)
+            }
+            
+            if let videoInput = self.videoInput {
+                if self.session.canAddInput(videoInput) {
+                    self.session.addInput(videoInput)
+                }
             }
             
             // Re Add audio recording
