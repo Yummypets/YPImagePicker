@@ -151,21 +151,21 @@ class ViewController: UIViewController {
 //        YPImagePickerConfiguration.shared.wordings.libraryTitle = "Gallery2"
 
         // Single Photo implementation.
-        picker.didFinishPicking { items, _ in
+        picker.didFinishPicking { [unowned picker] items, _ in
             self.selectedItems = items
             self.selectedImageV.image = items.singlePhoto?.image
             picker.dismiss(animated: true, completion: nil)
         }
 
         // Single Video implementation.
-        picker.didFinishPicking { items, _ in
+        picker.didFinishPicking { [unowned picker] items, _ in
             self.selectedItems = items
             self.selectedImageV.image = items.singleVideo?.thumbnail
             picker.dismiss(animated: true, completion: nil)
         }
 
         // Multiple implementation
-        picker.didFinishPicking { items, cancelled in
+        picker.didFinishPicking { [unowned picker] items, cancelled in
             
             if cancelled {
                 print("Picker was canceled")

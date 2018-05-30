@@ -122,7 +122,7 @@ The picker only has one callback `didFinishPicking` enabling you to handle all t
 ### Single Photo
 ```swift
 let picker = YPImagePicker()
-picker.didFinishPicking { items, _ in
+picker.didFinishPicking { [unowned picker] items, _ in
     if let photo = items.singlePhoto {
         print(photo.fromCamera) // Image source (camera or library)
         print(photo.image) // Final image selected by the user
@@ -143,7 +143,7 @@ config.screens = [.library, .video]
 config.libraryMediaType = .video
 
 let picker = YPImagePicker(configuration: config)
-picker.didFinishPicking { items, _ in
+picker.didFinishPicking { [unowned picker] items, _ in
     if let video = items.singleVideo {
         print(video.fromCamera)
         print(video.thumbnail)
@@ -165,7 +165,7 @@ let picker = YPImagePicker(configuration: config)
 ```
 Then you can handle multiple selection in the same callback you know and love :
 ```swift
-picker.didFinishPicking { items, cancelled in
+picker.didFinishPicking { [unowned picker] items, cancelled in
     for item in items {
         switch item {
         case .photo(let photo):
@@ -180,7 +180,7 @@ picker.didFinishPicking { items, cancelled in
 
 ### Handle Cancel event (if needed)
 ```swift
-picker.didFinishPicking { items, cancelled in
+picker.didFinishPicking { [unowned picker] items, cancelled in
     if cancelled {
         print("Picker was canceled")
     }
