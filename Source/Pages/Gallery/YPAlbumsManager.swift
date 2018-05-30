@@ -11,12 +11,6 @@ import Photos
 
 class YPAlbumsManager {
     
-    private static let instance = YPAlbumsManager()
-    
-    class var `default`: YPAlbumsManager {
-        return instance
-    }
-    
     private var cachedAlbums: [YPAlbum]?
     
     func fetchAlbums() -> [YPAlbum] {

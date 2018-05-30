@@ -11,6 +11,7 @@ import Stevia
 
 public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     
+    let albumsManager = YPAlbumsManager()
     var shouldHideStatusBar = false
     var initialStatusBarHidden = false
     
@@ -190,7 +191,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     
     @objc
     func navBarTapped() {
-        let vc = YPAlbumVC()
+        let vc = YPAlbumVC(albumsManager: albumsManager)
         let navVC = UINavigationController(rootViewController: vc)
         
         vc.didSelectAlbum = { [weak self] album in
