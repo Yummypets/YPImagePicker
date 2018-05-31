@@ -66,67 +66,66 @@ class ViewController: UIViewController {
         // Configuration
         var config = YPImagePickerConfiguration()
 
-        // Uncomment and play around with the configuration 👨‍🔬 🚀
+//         Uncomment and play around with the configuration 👨‍🔬 🚀
 
-//        /// Set this to true if you want to force the  library output to be a squared image. Defaults to false
+        /// Set this to true if you want to force the  library output to be a squared image. Defaults to false
 //        config.library.onlySquare = true
-//
-//        /// Set this to true if you want to force the camera output to be a squared image. Defaults to true
+
+        /// Set this to true if you want to force the camera output to be a squared image. Defaults to true
 //        config.onlySquareImagesFromCamera = false
-//
-//        /// Ex: cappedTo:1024 will make sure images from the library or the camera will be
-//        /// resized to fit in a 1024x1024 box. Defaults to original image size.
+
+        /// Ex: cappedTo:1024 will make sure images from the library or the camera will be
+        /// resized to fit in a 1024x1024 box. Defaults to original image size.
 //        config.targetImageSize = .cappedTo(size: 1024)
-//
-//        /// Choose what media types are available in the library. Defaults to `.photo`
+
+        /// Choose what media types are available in the library. Defaults to `.photo`
         config.library.mediaType = .photoAndVideo
-//
-//        /// Enables selecting the front camera by default, useful for avatars. Defaults to false
+
+        /// Enables selecting the front camera by default, useful for avatars. Defaults to false
 //        config.usesFrontCamera = true
-//
-//        /// Adds a Filter step in the photo taking process. Defaults to true
+
+        /// Adds a Filter step in the photo taking process. Defaults to true
 //        config.showsFilters = false
 
         /// Manage filters by yourself
-//        config.filters = [YPFilterDescriptor(name: "Normal", filterName: ""),
-//                          YPFilterDescriptor(name: "Mono", filterName: "CIPhotoEffectMono")]
+        config.filters = [YPFilterDescriptor(name: "Normal", filterName: ""),
+                          YPFilterDescriptor(name: "Mono", filterName: "CIPhotoEffectMono")]
         config.filters.remove(at: 1)
         config.filters.insert(YPFilterDescriptor(name: "Blur", filterName: "CIBoxBlur"), at: 1)
-//
-//        /// Enables you to opt out from saving new (or old but filtered) images to the
-//        /// user's photo library. Defaults to true.
+
+        /// Enables you to opt out from saving new (or old but filtered) images to the
+        /// user's photo library. Defaults to true.
         config.shouldSaveNewPicturesToAlbum = false
-//
-//        /// Choose the videoCompression.  Defaults to AVAssetExportPresetHighestQuality
-//        config.video.fileType = .m4a
+
+        /// Choose the videoCompression. Defaults to AVAssetExportPresetHighestQuality
+        config.video.compression = AVAssetExportPresetMediumQuality
         
-//
-//        /// Defines the name of the album when saving pictures in the user's photo library.
-//        /// In general that would be your App name. Defaults to "DefaultYPImagePickerAlbumName"
+        /// Defines the name of the album when saving pictures in the user's photo library.
+        /// In general that would be your App name. Defaults to "DefaultYPImagePickerAlbumName"
 //        config.albumName = "ThisIsMyAlbum"
-//
-//        /// Defines which screen is shown at launch. Video mode will only work if `showsVideo = true`.
-//        /// Default value is `.photo`
+
+        /// Defines which screen is shown at launch. Video mode will only work if `showsVideo = true`.
+        /// Default value is `.photo`
         config.startOnScreen = .library
-//
-//        /// Defines which screens are shown at launch, and their order.
-//        /// Default value is `[.library, .photo]`
+
+        /// Defines which screens are shown at launch, and their order.
+        /// Default value is `[.library, .photo]`
         config.screens = [.library, .photo, .video]
 
-//
-//        /// Defines the time limit for recording videos.
-//        /// Default is 30 seconds.
+
+        /// Defines the time limit for recording videos.
+        /// Default is 30 seconds.
 //        config.video.recordingTimeLimit = 5.0
-//
-//        /// Defines the time limit for videos from the library.
-//        /// Defaults to 60 seconds.
+
+        /// Defines the time limit for videos from the library.
+        /// Defaults to 60 seconds.
         config.video.libraryTimeLimit = 500.0
-//
-//        /// Adds a Crop step in the photo taking process, after filters. Defaults to .none
+
+        /// Adds a Crop step in the photo taking process, after filters. Defaults to .none
         config.showsCrop = .rectangle(ratio: (16/9))
-//
-//        /// Defines the overlay view for the camera.
-//        /// Defaults to UIView().
+
+        /// Defines the overlay view for the camera.
+        /// Defaults to UIView().
 //        let overlayView = UIView()
 //        overlayView.backgroundColor = .red
 //        overlayView.alpha = 0.3
