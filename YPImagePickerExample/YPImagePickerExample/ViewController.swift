@@ -9,6 +9,7 @@
 import UIKit
 import YPImagePicker
 import AVFoundation
+import AVKit
 
 class ViewController: UIViewController {
     var selectedItems = [YPMediaItem]()
@@ -97,7 +98,7 @@ class ViewController: UIViewController {
         config.shouldSaveNewPicturesToAlbum = false
 //
 //        /// Choose the videoCompression.  Defaults to AVAssetExportPresetHighestQuality
-        config.video.fileType = .m4a
+//        config.video.fileType = .m4a
         
 //
 //        /// Defines the name of the album when saving pictures in the user's photo library.
@@ -158,31 +159,42 @@ class ViewController: UIViewController {
         }
 
         // Single Video implementation.
-        picker.didFinishPicking { [unowned picker] items, _ in
-            self.selectedItems = items
-            self.selectedImageV.image = items.singleVideo?.thumbnail
-            picker.dismiss(animated: true, completion: nil)
-        }
+        
+//        picker.didFinishPicking { [unowned picker] items, _ in
+//            self.selectedItems = items
+//            self.selectedImageV.image = items.singleVideo?.thumbnail
+//
+//
+//            let assetURL = items.singleVideo!.url
+//            let playerVC = AVPlayerViewController()
+//            let player = AVPlayer(playerItem: AVPlayerItem(url:assetURL))
+//            playerVC.player = player
+//
+//            picker.dismiss(animated: true, completion: { [weak self] in
+//                self?.present(playerVC, animated: true, completion: nil)
+//            })
+//        }
 
         // Multiple implementation
-        picker.didFinishPicking { [unowned picker] items, cancelled in
-            
-            if cancelled {
-                print("Picker was canceled")
-            }
-            _ = items.map { print("🧀 \($0)") }
-
-            self.selectedItems = items
-            if let firstItem = items.first {
-                switch firstItem {
-                case .photo(let photo):
-                    self.selectedImageV.image = photo.image
-                case .video(let video):
-                    self.selectedImageV.image = video.thumbnail
-                }
-            }
-            picker.dismiss(animated: true, completion: nil)
-        }
+        
+//        picker.didFinishPicking { [unowned picker] items, cancelled in
+//
+//            if cancelled {
+//                print("Picker was canceled")
+//            }
+//            _ = items.map { print("🧀 \($0)") }
+//
+//            self.selectedItems = items
+//            if let firstItem = items.first {
+//                switch firstItem {
+//                case .photo(let photo):
+//                    self.selectedImageV.image = photo.image
+//                case .video(let video):
+//                    self.selectedImageV.image = video.thumbnail
+//                }
+//            }
+//            picker.dismiss(animated: true, completion: nil)
+//        }
 
         present(picker, animated: true, completion: nil)
     }
