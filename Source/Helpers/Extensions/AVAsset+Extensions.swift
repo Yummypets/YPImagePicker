@@ -13,9 +13,7 @@ import AVFoundation
 extension AVAsset {
     func assetByTrimming(startTime: CMTime, endTime: CMTime) throws -> AVAsset {
         let timeRange = CMTimeRangeFromTimeToTime(startTime, endTime)
-        
         let composition = AVMutableComposition()
-        
         do {
             for track in tracks {
                 let compositionTrack = composition.addMutableTrack(withMediaType: track.mediaType,
@@ -26,6 +24,12 @@ extension AVAsset {
             throw YPTrimError("Error during composition", underlyingError: error)
         }
         
+        // Reaply correct transform to keep original orientation.
+        if let videoTrack = self.tracks(withMediaType: .video).last,
+            let compositionTrack = composition.tracks(withMediaType: .video).last {
+            compositionTrack.preferredTransform = videoTrack.preferredTransform
+        }
+
         return composition
     }
     
