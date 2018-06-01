@@ -441,8 +441,11 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     // MARK: - TargetSize
     
     private func targetSize(for asset: PHAsset, cropRect: CGRect) -> CGSize {
-        let width = floor(CGFloat(asset.pixelWidth) * cropRect.width)
-        let height = floor(CGFloat(asset.pixelHeight) * cropRect.height)
+        var width = (CGFloat(asset.pixelWidth) * cropRect.width).rounded(.toNearestOrEven)
+        var height = (CGFloat(asset.pixelHeight) * cropRect.height).rounded(.toNearestOrEven)
+        // round to lowest even number
+        width = (width.truncatingRemainder(dividingBy: 2) == 0) ? width : width - 1
+        height = (height.truncatingRemainder(dividingBy: 2) == 0) ? height : height - 1
         return CGSize(width: width, height: height)
     }
     
