@@ -97,7 +97,7 @@ config.showsCrop = .rectangle(ratio: (16/9))
 config.wordings.libraryTitle = "Gallery"
 config.hidesStatusBar = false
 config.overlayView = myOverlayView
-config.maxNumberOfItems = 5
+config.library.maxNumberOfItems = 5
 
 // Build a picker with your configuration
 let picker = YPImagePicker(configuration: config)
@@ -157,10 +157,10 @@ present(picker, animated: true, completion: nil)
 As you can see `singlePhoto` and `singleVideo` helpers are here to help you handle single media which are very common, while using the same callback for all your use-cases \o/
 
 ### Multiple selection
-To enable multiple selection make sure to set `maxNumberOfItems` in the configuration like so:
+To enable multiple selection make sure to set `library.maxNumberOfItems` in the configuration like so:
 ```swift
 var config = YPImagePickerConfiguration()
-config.maxNumberOfItems = 3
+config.library.maxNumberOfItems = 3
 let picker = YPImagePicker(configuration: config)
 ```
 Then you can handle multiple selection in the same callback you know and love :
