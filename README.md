@@ -1,3 +1,5 @@
+<h1 align="center"> <br><img src="Images/logo/logotype_horizontal.png?raw=true" alt="ypimagepicker" width="512"> <br>
+
 <img src="https://raw.githubusercontent.com/Yummypets/YPImagePicker/master/Images/visual.jpg" width="400px" >
 
 ## YPImagePicker
