@@ -231,6 +231,8 @@ Original Fusuma author is [ytakz](http://ytakzk.me)
 [Romixery](https://github.com/romixery)
 [shotat](https://github.com/shotat)
 
+Special thanks to [ihtiht](https://github.com/ihtiht) for the cool looking logo!
+
 ## They helped us one way or another 👏
 [userdar](https://github.com/userdar),
 [Evgeniy](https://github.com/Ewg777),
