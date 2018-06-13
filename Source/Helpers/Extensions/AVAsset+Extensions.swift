@@ -45,7 +45,7 @@ extension AVAsset {
                 videoComposition: AVVideoComposition? = nil,
                 removeOldFile: Bool = false,
                 completion: @escaping () -> Void) throws {
-        guard let exportSession = AVAssetExportSession(asset: self, presetName: AVAssetExportPresetPassthrough) else {
+        guard let exportSession = AVAssetExportSession(asset: self, presetName: YPConfig.video.compression) else {
             throw YPTrimError("Could not create an export session")
         }
         
