@@ -42,8 +42,6 @@ public class YPSelectionsGalleryVC: UIViewController {
         
         YPHelper.changeBackButtonIcon(self)
         YPHelper.changeBackButtonTitle(self)
-        
-        collectionV.isPagingEnabled = true
     }
 
     @objc
