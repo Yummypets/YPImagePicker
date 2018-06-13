@@ -148,6 +148,27 @@ class ExampleViewController: UIViewController {
 
         /* Change configuration directly */
         // YPImagePickerConfiguration.shared.wordings.libraryTitle = "Gallery2"
+        
+
+        /* Multiple media implementation */
+        picker.didFinishPicking { [unowned picker] items, cancelled in
+            
+            if cancelled {
+                print("Picker was canceled")
+            }
+            _ = items.map { print("🧀 \($0)") }
+            
+            self.selectedItems = items
+            if let firstItem = items.first {
+                switch firstItem {
+                case .photo(let photo):
+                    self.selectedImageV.image = photo.image
+                case .video(let video):
+                    self.selectedImageV.image = video.thumbnail
+                }
+            }
+            picker.dismiss(animated: true, completion: nil)
+        }
 
         /* Single Photo implementation. */
         // picker.didFinishPicking { [unowned picker] items, _ in
@@ -157,42 +178,22 @@ class ExampleViewController: UIViewController {
         // }
 
         /* Single Video implementation. */
-        picker.didFinishPicking { [unowned picker] items, cancelled in
-            if cancelled { picker.dismiss(animated: true, completion: nil); return }
-            
-            self.selectedItems = items
-            self.selectedImageV.image = items.singleVideo?.thumbnail
-
-            let assetURL = items.singleVideo!.url
-            let playerVC = AVPlayerViewController()
-            let player = AVPlayer(playerItem: AVPlayerItem(url:assetURL))
-            playerVC.player = player
-            
-            picker.dismiss(animated: true, completion: { [weak self] in
-                self?.present(playerVC, animated: true, completion: nil)
-                print("😀 \(String(describing: self?.resolutionForLocalVideo(url: assetURL)!))")
-            })
-        }
-
-        /* Multiple implementation */
-        // picker.didFinishPicking { [unowned picker] items, cancelled in
+        //picker.didFinishPicking { [unowned picker] items, cancelled in
+        //    if cancelled { picker.dismiss(animated: true, completion: nil); return }
         //
-        //     if cancelled {
-        //         print("Picker was canceled")
-        //     }
-        //     _ = items.map { print("🧀 \($0)") }
+        //    self.selectedItems = items
+        //    self.selectedImageV.image = items.singleVideo?.thumbnail
         //
-        //     self.selectedItems = items
-        //     if let firstItem = items.first {
-        //         switch firstItem {
-        //         case .photo(let photo):
-        //             self.selectedImageV.image = photo.image
-        //         case .video(let video):
-        //             self.selectedImageV.image = video.thumbnail
-        //         }
-        //     }
-        //     picker.dismiss(animated: true, completion: nil)
-        // }
+        //    let assetURL = items.singleVideo!.url
+        //    let playerVC = AVPlayerViewController()
+        //    let player = AVPlayer(playerItem: AVPlayerItem(url:assetURL))
+        //    playerVC.player = player
+        //
+        //    picker.dismiss(animated: true, completion: { [weak self] in
+        //        self?.present(playerVC, animated: true, completion: nil)
+        //        print("😀 \(String(describing: self?.resolutionForLocalVideo(url: assetURL)!))")
+        //    })
+        //}
 
         present(picker, animated: true, completion: nil)
     }
