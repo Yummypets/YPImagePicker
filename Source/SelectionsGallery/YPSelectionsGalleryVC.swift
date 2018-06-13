@@ -31,9 +31,7 @@ public class YPSelectionsGalleryVC: UIViewController {
         super.viewDidLoad()
 
         // Register collection view cell
-        let bundle = Bundle(for: YPSelectionsGalleryVC.self)
-        collectionV.register(UINib(nibName: "YPSelectionsGalleryCVCell",
-                                   bundle: bundle), forCellWithReuseIdentifier: "item")
+        collectionV.register(YPSelectionsGalleryCell.self, forCellWithReuseIdentifier: "item")
         
         // Setup navigation bar
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: YPConfig.wordings.next,
@@ -44,6 +42,8 @@ public class YPSelectionsGalleryVC: UIViewController {
         
         YPHelper.changeBackButtonIcon(self)
         YPHelper.changeBackButtonTitle(self)
+        
+        collectionV.isPagingEnabled = true
     }
 
     @objc
@@ -69,15 +69,15 @@ extension YPSelectionsGalleryVC: UICollectionViewDataSource {
     public func collectionView(_ collectionView: UICollectionView,
                                cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "item",
-                                                            for: indexPath) as? YPSelectionsGalleryCVCell else {
+                                                            for: indexPath) as? YPSelectionsGalleryCell else {
             return UICollectionViewCell()
         }
         let item = items[indexPath.row]
         switch item {
         case .photo(let photo):
-            cell.imageV.image = photo.image
+            cell.imageView.image = photo.image
         case .video(let video):
-            cell.imageV.image = video.thumbnail
+            cell.imageView.image = video.thumbnail
         }
         return cell
     }
