@@ -20,7 +20,9 @@ public class YPSelectionsGalleryCell: UICollectionViewCell {
         )
         
         imageView.fillContainer()
-
+        
+        imageView.clipsToBounds = true
+        imageView.contentMode = .scaleAspectFill
         layer.shadowColor = UIColor(r: 46, g: 43, b: 37).cgColor
         layer.shadowOpacity = 0.2
         layer.shadowOffset = CGSize(width: 4, height: 7)
