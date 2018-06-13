@@ -155,6 +155,8 @@ class ExampleViewController: UIViewController {
             
             if cancelled {
                 print("Picker was canceled")
+                picker.dismiss(animated: true, completion: nil)
+                return
             }
             _ = items.map { print("🧀 \($0)") }
             
@@ -163,11 +165,21 @@ class ExampleViewController: UIViewController {
                 switch firstItem {
                 case .photo(let photo):
                     self.selectedImageV.image = photo.image
+                    picker.dismiss(animated: true, completion: nil)
                 case .video(let video):
                     self.selectedImageV.image = video.thumbnail
+                    
+                    let assetURL = video.url
+                    let playerVC = AVPlayerViewController()
+                    let player = AVPlayer(playerItem: AVPlayerItem(url:assetURL))
+                    playerVC.player = player
+                
+                    picker.dismiss(animated: true, completion: { [weak self] in
+                        self?.present(playerVC, animated: true, completion: nil)
+                        print("😀 \(String(describing: self?.resolutionForLocalVideo(url: assetURL)!))")
+                    })
                 }
             }
-            picker.dismiss(animated: true, completion: nil)
         }
 
         /* Single Photo implementation. */
