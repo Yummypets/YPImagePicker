@@ -114,7 +114,7 @@ public struct YPImagePickerConfiguration {
     @available(*, obsoleted: 3.0.0, renamed: "library.onlySquare")
     public var onlySquareFromLibrary = false
     
-    @available(*, obsoleted: 3.0.0, renamed: "library.targetImageSize")
+    @available(*, obsoleted: 3.0.0, renamed: "targetImageSize")
     public var libraryTargetImageSize = YPImageSize.original
     
     @available(*, obsoleted: 3.0.0, renamed: "library.mediaType")
