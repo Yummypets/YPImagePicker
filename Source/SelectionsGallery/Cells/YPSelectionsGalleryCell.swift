@@ -33,4 +33,22 @@ public class YPSelectionsGalleryCell: UICollectionViewCell {
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    
+    public override var isHighlighted: Bool {
+        didSet {
+            UIView.animate(withDuration: 0.5,
+                           delay: 0,
+                           usingSpringWithDamping: 0.5,
+                           initialSpringVelocity: 0,
+                           options: .curveEaseInOut,
+                           animations: {
+            if self.isHighlighted {
+                self.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+            } else {
+                self.transform = .identity
+            }
+                }, completion: nil)
+        }
+    }
 }
