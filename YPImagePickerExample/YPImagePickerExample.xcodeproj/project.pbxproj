@@ -151,7 +151,6 @@
 				99428A021E7BE02400B765A9 /* Sources */,
 				99428A031E7BE02400B765A9 /* Frameworks */,
 				99428A041E7BE02400B765A9 /* Resources */,
-				99428A261E7BE18700B765A9 /* Carthage */,
 				99428A2B1E7BE1D600B765A9 /* Embed Frameworks */,
 				99BEB97920A9BD1300FFEB55 /* Localizations Sanitizer */,
 			);
@@ -241,22 +240,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		99428A261E7BE18700B765A9 /* Carthage */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/../Carthage/Build/iOS/Stevia.framework",
-				"$(SRCROOT)/../Carthage/Build/iOS/PryntTrimmerView.framework",
-			);
-			name = Carthage;
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks";
-		};
 		99BEB97920A9BD1300FFEB55 /* Localizations Sanitizer */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
