@@ -16,6 +16,8 @@
 		997127C1208F45B30089272B /* PryntTrimmerView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 997127C0208F45B30089272B /* PryntTrimmerView.framework */; };
 		997A4CD21F4C3DC0009C3703 /* Stevia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 997A4CD11F4C3DC0009C3703 /* Stevia.framework */; };
 		99A052A61F20DF21005600B3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 99A052A81F20DF21005600B3 /* Localizable.strings */; };
+		99CD962120D173EB009F5084 /* PryntTrimmerView.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 997127C0208F45B30089272B /* PryntTrimmerView.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		99CD962220D173FE009F5084 /* Stevia.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 997A4CD11F4C3DC0009C3703 /* Stevia.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +51,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				99CD962220D173FE009F5084 /* Stevia.framework in Embed Frameworks */,
+				99CD962120D173EB009F5084 /* PryntTrimmerView.framework in Embed Frameworks */,
 				99428A281E7BE1D600B765A9 /* YPImagePicker.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
