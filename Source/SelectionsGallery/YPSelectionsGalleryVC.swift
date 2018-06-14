@@ -8,30 +8,33 @@
 
 import UIKit
 
-// TODO: Add paging to collection view
-
 public class YPSelectionsGalleryVC: UIViewController {
-    @IBOutlet weak var collectionV: UICollectionView!
-
+    
     public var items: [YPMediaItem] = []
     public var didFinishHandler: ((_ gallery: YPSelectionsGalleryVC, _ items: [YPMediaItem]) -> Void)?
+    
+    var v = YPSelectionsGalleryView()
+    public override func loadView() { view = v }
 
-    /// Designated initializer
-    public class func initWith(items: [YPMediaItem],
-                               didFinishHandler:
-        @escaping ((_ gallery: YPSelectionsGalleryVC, _ items: [YPMediaItem]) -> Void)) -> YPSelectionsGalleryVC {
-        let vc = YPSelectionsGalleryVC(nibName: "YPSelectionsGalleryVC",
-                                       bundle: Bundle(for: YPSelectionsGalleryVC.self))
-        vc.items = items
-        vc.didFinishHandler = didFinishHandler
-        return vc
+    public required init(items: [YPMediaItem],
+                         didFinishHandler:
+        @escaping ((_ gallery: YPSelectionsGalleryVC, _ items: [YPMediaItem]) -> Void)) {
+        super.init(nibName: nil, bundle: nil)
+        self.items = items
+        self.didFinishHandler = didFinishHandler
     }
-
+    
+    public required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override public func viewDidLoad() {
         super.viewDidLoad()
 
         // Register collection view cell
-        collectionV.register(YPSelectionsGalleryCell.self, forCellWithReuseIdentifier: "item")
+        v.collectionView.register(YPSelectionsGalleryCell.self, forCellWithReuseIdentifier: "item")
+        v.collectionView.dataSource = self
+        v.collectionView.delegate = self
         
         // Setup navigation bar
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: YPConfig.wordings.next,
@@ -105,14 +108,5 @@ extension YPSelectionsGalleryVC: UICollectionViewDelegate {
             navVC.navigationBar.isTranslucent = false
             present(navVC, animated: true, completion: nil)
         }
-    }
-}
-
-extension YPSelectionsGalleryVC: UICollectionViewDelegateFlowLayout {
-    public func collectionView(_ collectionView: UICollectionView,
-                               layout collectionViewLayout: UICollectionViewLayout,
-                               sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let sideSize = collectionView.frame.size.height - 30
-        return CGSize(width: sideSize, height: sideSize)
     }
 }

@@ -50,7 +50,7 @@ class ExampleViewController: UIViewController {
     @objc
     func showResults() {
         if selectedItems.count > 0 {
-            let gallery = YPSelectionsGalleryVC.initWith(items: selectedItems) { g, _ in
+            let gallery = YPSelectionsGalleryVC(items: selectedItems) { g, _ in
                 g.dismiss(animated: true, completion: nil)
             }
             let navC = UINavigationController(rootViewController: gallery)

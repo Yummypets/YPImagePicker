@@ -57,6 +57,7 @@
 		99C6D6CF1F1FB5C100711DB2 /* YPPickerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6B51F1FB5C100711DB2 /* YPPickerVC.swift */; };
 		99C6D6D01F1FB5C100711DB2 /* YPVideoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6B71F1FB5C100711DB2 /* YPVideoVC.swift */; };
 		99C6D6D11F1FB5C100711DB2 /* YPImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6B81F1FB5C100711DB2 /* YPImagePicker.swift */; };
+		99CD962720D179FD009F5084 /* YPSelectionsGalleryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CD962620D179FD009F5084 /* YPSelectionsGalleryView.swift */; };
 		99CF6D1B201B6A5C00487F77 /* UICollectionView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CF6D1A201B6A5C00487F77 /* UICollectionView+Extensions.swift */; };
 		99CF6D1D201B6ABA00487F77 /* IndexSet+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CF6D1C201B6ABA00487F77 /* IndexSet+Extensions.swift */; };
 		99CF6D1F201B6B9E00487F77 /* CGRect+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CF6D1E201B6B9E00487F77 /* CGRect+Extensions.swift */; };
@@ -79,7 +80,6 @@
 		EB473E25208E1DCA00D16105 /* AVCaptureSession+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB473E24208E1DCA00D16105 /* AVCaptureSession+Extensions.swift */; };
 		EB473E2B208E1ECB00D16105 /* AVCaptureDevice+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB473E2A208E1ECB00D16105 /* AVCaptureDevice+Extensions.swift */; };
 		EB584BFB207B870F00265B38 /* YPSelectionsGalleryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB584BF9207B870F00265B38 /* YPSelectionsGalleryVC.swift */; };
-		EB584BFC207B870F00265B38 /* YPSelectionsGalleryVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB584BFA207B870F00265B38 /* YPSelectionsGalleryVC.xib */; };
 		EB584BFF207B883A00265B38 /* YPSelectionsGalleryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB584BFD207B883A00265B38 /* YPSelectionsGalleryCell.swift */; };
 		EB584C03207B990200265B38 /* AVFoundation+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB584C02207B990200265B38 /* AVFoundation+Extensions.swift */; };
 		EB59F452208766B800811B7B /* YPVideoFiltersVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB59F450208766B800811B7B /* YPVideoFiltersVC.swift */; };
@@ -154,6 +154,7 @@
 		99C6D6B51F1FB5C100711DB2 /* YPPickerVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPPickerVC.swift; sourceTree = "<group>"; };
 		99C6D6B71F1FB5C100711DB2 /* YPVideoVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPVideoVC.swift; sourceTree = "<group>"; };
 		99C6D6B81F1FB5C100711DB2 /* YPImagePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPImagePicker.swift; sourceTree = "<group>"; };
+		99CD962620D179FD009F5084 /* YPSelectionsGalleryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPSelectionsGalleryView.swift; sourceTree = "<group>"; };
 		99CF6D1A201B6A5C00487F77 /* UICollectionView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+Extensions.swift"; sourceTree = "<group>"; };
 		99CF6D1C201B6ABA00487F77 /* IndexSet+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "IndexSet+Extensions.swift"; sourceTree = "<group>"; };
 		99CF6D1E201B6B9E00487F77 /* CGRect+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGRect+Extensions.swift"; sourceTree = "<group>"; };
@@ -179,7 +180,6 @@
 		EB473E24208E1DCA00D16105 /* AVCaptureSession+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVCaptureSession+Extensions.swift"; sourceTree = "<group>"; };
 		EB473E2A208E1ECB00D16105 /* AVCaptureDevice+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVCaptureDevice+Extensions.swift"; sourceTree = "<group>"; };
 		EB584BF9207B870F00265B38 /* YPSelectionsGalleryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPSelectionsGalleryVC.swift; sourceTree = "<group>"; };
-		EB584BFA207B870F00265B38 /* YPSelectionsGalleryVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = YPSelectionsGalleryVC.xib; sourceTree = "<group>"; };
 		EB584BFD207B883A00265B38 /* YPSelectionsGalleryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPSelectionsGalleryCell.swift; sourceTree = "<group>"; };
 		EB584C02207B990200265B38 /* AVFoundation+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVFoundation+Extensions.swift"; sourceTree = "<group>"; };
 		EB59F450208766B800811B7B /* YPVideoFiltersVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPVideoFiltersVC.swift; sourceTree = "<group>"; };
@@ -410,14 +410,6 @@
 			name = Photo;
 			sourceTree = "<group>";
 		};
-		EB584C01207B897100265B38 /* Cells */ = {
-			isa = PBXGroup;
-			children = (
-				EB584BFD207B883A00265B38 /* YPSelectionsGalleryCell.swift */,
-			);
-			path = Cells;
-			sourceTree = "<group>";
-		};
 		EB59F44D2087665500811B7B /* Video */ = {
 			isa = PBXGroup;
 			children = (
@@ -441,9 +433,9 @@
 		EBD2B639207B7B1100E711C2 /* SelectionsGallery */ = {
 			isa = PBXGroup;
 			children = (
-				EB584C01207B897100265B38 /* Cells */,
 				EB584BF9207B870F00265B38 /* YPSelectionsGalleryVC.swift */,
-				EB584BFA207B870F00265B38 /* YPSelectionsGalleryVC.xib */,
+				99CD962620D179FD009F5084 /* YPSelectionsGalleryView.swift */,
+				EB584BFD207B883A00265B38 /* YPSelectionsGalleryCell.swift */,
 			);
 			path = SelectionsGallery;
 			sourceTree = "<group>";
@@ -544,7 +536,6 @@
 				99C6D6B91F1FB5C100711DB2 /* Assets.xcassets in Resources */,
 				99C6D6BD1F1FB5C100711DB2 /* YPLibraryView.xib in Resources */,
 				EB59F453208766B800811B7B /* YPVideoFiltersVC.xib in Resources */,
-				EB584BFC207B870F00265B38 /* YPSelectionsGalleryVC.xib in Resources */,
 				99C6D6BA1F1FB5C100711DB2 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -642,6 +633,7 @@
 				99C6D6CF1F1FB5C100711DB2 /* YPPickerVC.swift in Sources */,
 				EB94F28E208E3A140049F523 /* YPLoaders.swift in Sources */,
 				99CF6D29201B900400487F77 /* LibraryMediaManager.swift in Sources */,
+				99CD962720D179FD009F5084 /* YPSelectionsGalleryView.swift in Sources */,
 				99C6D6BE1F1FB5C100711DB2 /* YPLibraryViewCell.swift in Sources */,
 				99C6D6C41F1FB5C100711DB2 /* YPFilter.swift in Sources */,
 				99C6D6C91F1FB5C100711DB2 /* YPBottomPager.swift in Sources */,
