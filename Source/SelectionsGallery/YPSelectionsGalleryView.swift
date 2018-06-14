@@ -11,24 +11,11 @@ import Stevia
 
 class YPSelectionsGalleryView: UIView {
     
-    var collectionView: UICollectionView!
+    let collectionView = UICollectionView(frame: .zero, collectionViewLayout: YPGalleryCollectionViewFlowLayout())
     
     convenience init() {
         self.init(frame: .zero)
     
-        // Setup CollectionView Layout
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.scrollDirection = .horizontal
-        let sideMargin: CGFloat = 24
-        let spacing: CGFloat = 12
-        let overlapppingNextPhoto: CGFloat = 37
-        flowLayout.minimumLineSpacing = spacing
-        flowLayout.minimumInteritemSpacing = spacing
-        let size = UIScreen.main.bounds.width - (sideMargin + overlapppingNextPhoto)
-        flowLayout.itemSize = CGSize(width: size, height: size)
-        flowLayout.sectionInset = UIEdgeInsets(top: 0, left: sideMargin, bottom: 0, right: sideMargin)
-        collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        
         sv(
             collectionView
         )
@@ -47,5 +34,52 @@ class YPSelectionsGalleryView: UIView {
         backgroundColor = UIColor(r: 247, g: 247, b: 247)
         collectionView.backgroundColor = .clear
         collectionView.showsHorizontalScrollIndicator = false
+    }
+}
+
+class YPGalleryCollectionViewFlowLayout: UICollectionViewFlowLayout {
+    
+    override init() {
+        super.init()
+        scrollDirection = .horizontal
+        let sideMargin: CGFloat = 24
+        let spacing: CGFloat = 12
+        let overlapppingNextPhoto: CGFloat = 37
+        minimumLineSpacing = spacing
+        minimumInteritemSpacing = spacing
+        let size = UIScreen.main.bounds.width - (sideMargin + overlapppingNextPhoto)
+        itemSize = CGSize(width: size, height: size)
+        sectionInset = UIEdgeInsets(top: 0, left: sideMargin, bottom: 0, right: sideMargin)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // This makes so that Scrolling the collection view always stops with a centered image.
+    // This is heavily inpired form :
+    // https://stackoverflow.com/questions/13492037/targetcontentoffsetforproposedcontentoffsetwithscrollingvelocity-without-subcla
+    override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint, withScrollingVelocity velocity: CGPoint) -> CGPoint {
+        
+        let spacing: CGFloat = 12
+        let overlapppingNextPhoto: CGFloat = 37
+        var offsetAdjustment = CGFloat.greatestFiniteMagnitude// MAXFLOAT
+        let horizontalOffset = proposedContentOffset.x + spacing + overlapppingNextPhoto/2 // + 5
+        
+        guard let collectionView = collectionView else {
+            return proposedContentOffset
+        }
+        let targetRect = CGRect(x: proposedContentOffset.x, y: 0, width: collectionView.bounds.size.width, height: collectionView.bounds.size.height)
+        guard let array = super.layoutAttributesForElements(in: targetRect) else {
+            return proposedContentOffset
+        }
+        
+        for layoutAttributes in array {
+            let itemOffset = layoutAttributes.frame.origin.x
+            if abs(itemOffset - horizontalOffset) < abs(offsetAdjustment) {
+                offsetAdjustment = itemOffset - horizontalOffset
+            }
+        }
+        return CGPoint(x: proposedContentOffset.x + offsetAdjustment, y: proposedContentOffset.y)
     }
 }
