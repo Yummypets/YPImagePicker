@@ -18,6 +18,9 @@ public struct YPImagePickerConfiguration {
     
     public init() {}
     
+    /// Scroll to change modes, defaults to true
+    public var isScrollToChangeModesEnabled = true
+    
     // Library configuration
     public var library = YPConfigLibrary()
     
