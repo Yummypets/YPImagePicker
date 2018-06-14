@@ -12,6 +12,7 @@ public class YPSelectionsGalleryVC: UIViewController {
     
     public var items: [YPMediaItem] = []
     public var didFinishHandler: ((_ gallery: YPSelectionsGalleryVC, _ items: [YPMediaItem]) -> Void)?
+    private var lastContentOffsetX: CGFloat = 0
     
     var v = YPSelectionsGalleryView()
     public override func loadView() { view = v }
@@ -108,5 +109,16 @@ extension YPSelectionsGalleryVC: UICollectionViewDelegate {
             navVC.navigationBar.isTranslucent = false
             present(navVC, animated: true, completion: nil)
         }
+    }
+    
+    // Set "paging" behaviour when scrolling backwards.
+    // This works by having `targetContentOffset(forProposedContentOffset: withScrollingVelocity` overriden
+    // in the collection view Flow subclass & using UIScrollViewDecelerationRateFast
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let isScrollingBackwards = scrollView.contentOffset.x < lastContentOffsetX
+        scrollView.decelerationRate = isScrollingBackwards
+            ? UIScrollViewDecelerationRateFast
+            : UIScrollViewDecelerationRateNormal
+        lastContentOffsetX = scrollView.contentOffset.x
     }
 }
