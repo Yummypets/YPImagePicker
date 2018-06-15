@@ -205,6 +205,30 @@ config.wordings.next = "OK"
 ```
 Better yet you can submit an issue or pull request with your `Localizable.strings` file to add a new language !
 
+## UI Customization
+We tried to keep things as native as possible, so this is done mostly through native Apis.
+
+### Navigation bar color
+```swift
+let coloredImage = UIImage(color: .red)
+UINavigationBar.appearance().setBackgroundImage(coloredImage, for: UIBarMetrics.default)
+// UIImage+color helper https://stackoverflow.com/questions/26542035/create-uiimage-with-solid-color-in-swift
+```
+
+### Navigation bar fonts
+```swift
+let attributes = [NSAttributedStringKey.font : UIFont.systemFont(ofSize: 30, weight: .bold) ]
+UINavigationBar.appearance().titleTextAttributes = attributes // Title fonts
+UIBarButtonItem.appearance().setTitleTextAttributes(attributes, for: .normal) // Bar Button fonts
+```
+
+### Navigation bar Text colors
+```swift
+UINavigationBar.appearance().titleTextAttributes = [NSAttributedStringKey.foregroundColor : UIColor.yellow ] // Title color
+UINavigationBar.appearance().tintColor = .red // Left. bar buttons
+config.colors.tintColor = .green // Right bar buttons (actions)
+```
+
 ## Original Project & Author
 
 This project has been first inspired by [Fusuma](https://github.com/ytakzk/Fusuma)
