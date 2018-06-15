@@ -6,7 +6,7 @@
 "YPImagePickerFilter" = "Filter"; //ignore-same-translation-warning
 "YPImagePickerLibrary" = "Bibliothek";
 "YPImagePickerNext" = "Weiter";
-"YPImagePickerOk" = "Ok";
+"YPImagePickerOk" = "Fertig";
 "YPImagePickerPermissionDeniedPopupCancel" = "Abbrechen";
 "YPImagePickerPermissionDeniedPopupGrantPermission" = "Zugriff erlauben";
 "YPImagePickerPermissionDeniedPopupMessage" = "Bitte Zugriff erlauben";

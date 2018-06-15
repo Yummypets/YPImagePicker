@@ -6,7 +6,7 @@
 "YPImagePickerFilter" = "Фильтр";
 "YPImagePickerLibrary" = "Библиотека";
 "YPImagePickerNext" = "Дальше";
-"YPImagePickerOk" = "Ok";
+"YPImagePickerOk" = "OK"; //ignore-same-translation-warning
 "YPImagePickerPermissionDeniedPopupCancel" = "Отмена";
 "YPImagePickerPermissionDeniedPopupGrantPermission" = "Настроить разрешения";
 "YPImagePickerPermissionDeniedPopupMessage" = "Пожалуйста, разрешите доступ";
