@@ -320,7 +320,7 @@ extension YPPickerVC: YPLibraryViewDelegate {
     public func libraryViewFinishedLoading() {
         libraryVC?.isProcessing = false
         DispatchQueue.main.async {
-            self.v.scrollView.isScrollEnabled = true
+            self.v.scrollView.isScrollEnabled = YPConfig.isScrollToChangeModesEnabled
             self.libraryVC?.v.hideLoader()
             self.updateUI()
         }
