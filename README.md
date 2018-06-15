@@ -14,6 +14,10 @@ YPImagePicker is an instagram-like photo/video picker for iOS written in pure Sw
 [![License: MIT](http://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat)](https://github.com/Yummypets/YPImagePicker/blob/master/LICENSE)
 [![GitHub tag](https://img.shields.io/github/release/Yummypets/YPImagePicker.svg)]()
 
+
+[Installation](#Installation) - [Configuration](#Configuration) - [Usage](#Usage) - [Languages](#Languages) - [UI Customization](#UI-Customization)
+
+
 Give it a quick try :
 `pod repo update` then `pod try YPImagePicker`
 
