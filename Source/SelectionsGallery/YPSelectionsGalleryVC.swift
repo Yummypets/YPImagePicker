@@ -84,22 +84,25 @@ extension YPSelectionsGalleryVC: UICollectionViewDataSource {
 }
 
 extension YPSelectionsGalleryVC: UICollectionViewDelegate {
+    
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let item = items[indexPath.row]
-        var mediaFilterVC: IsMediaFilterVC!
+        var mediaFilterVC: IsMediaFilterVC?
         switch item {
         case .photo(let photo):
-            mediaFilterVC = YPPhotoFiltersVC(inputPhoto: photo, isFromSelectionVC: true)
+            if !YPConfig.filters.isEmpty {
+                mediaFilterVC = YPPhotoFiltersVC(inputPhoto: photo, isFromSelectionVC: true)
+            }
         case .video(let video):
             mediaFilterVC = YPVideoFiltersVC.initWith(video: video, isFromSelectionVC: true)
         }
         
-        mediaFilterVC.didSave = { outputMedia in
+        mediaFilterVC?.didSave = { outputMedia in
             self.items[indexPath.row] = outputMedia
             collectionView.reloadData()
             self.dismiss(animated: true, completion: nil)
         }
-        mediaFilterVC.didCancel = {
+        mediaFilterVC?.didCancel = {
             self.dismiss(animated: true, completion: nil)
         }
         if let mediaFilterVC = mediaFilterVC as? UIViewController {
