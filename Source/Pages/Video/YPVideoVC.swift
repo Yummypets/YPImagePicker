@@ -14,7 +14,6 @@ public class YPVideoVC: UIViewController, YPPermissionCheckable {
     
     private let videoHelper = YPVideoHelper()
     private let v = YPCameraView(overlayView: nil)
-    private var isPreviewSetup = false
     private var viewState = ViewState()
     
     // MARK: - Init
@@ -24,14 +23,10 @@ public class YPVideoVC: UIViewController, YPPermissionCheckable {
     public required init() {
         super.init(nibName: nil, bundle: nil)
         title = YPConfig.wordings.videoTitle
-        
-        videoHelper.initialize(withVideoRecordingLimit: YPConfig.video.recordingTimeLimit)
-        
         videoHelper.didCaptureVideo = { [weak self] videoURL in
             self?.didCaptureVideo?(videoURL)
             self?.resetVisualState()
         }
-        
         videoHelper.videoRecordingProgress = { [weak self] progress, timeElapsed in
             self?.updateState {
                 $0.progress = progress
@@ -49,15 +44,28 @@ public class YPVideoVC: UIViewController, YPPermissionCheckable {
         v.timeElapsedLabel.isHidden = false // Show the time elapsed label since we're in the video screen.
         setupButtons()
         linkButtons()
+        
+        // Focus
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(focusTapped(_:)))
+        v.previewViewContainer.addGestureRecognizer(tapRecognizer)
+    }
+
+    func start() {
+        doAfterPermissionCheck { [weak self] in
+            guard let strongSelf = self else {
+                return
+            }
+            self?.videoHelper.start(previewView: strongSelf.v.previewViewContainer,
+                                    withVideoRecordingLimit: YPConfig.video.recordingTimeLimit,
+                                    completion: {
+                                        DispatchQueue.main.async {
+                                            self?.refreshState()
+                                        }
+            })
+        }
     }
     
-    public override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        if !isPreviewSetup {
-            setupPreview()
-            isPreviewSetup = true
-        }
-        
+    func refreshState() {
         // Init view state with video helper's state
         updateState {
             $0.isRecording = self.videoHelper.isRecording
@@ -77,14 +85,6 @@ public class YPVideoVC: UIViewController, YPPermissionCheckable {
         v.flashButton.addTarget(self, action: #selector(flashButtonTapped), for: .touchUpInside)
         v.shotButton.addTarget(self, action: #selector(shotButtonTapped), for: .touchUpInside)
         v.flipButton.addTarget(self, action: #selector(flipButtonTapped), for: .touchUpInside)
-    }
-    
-    private func setupPreview() {
-        let videoLayer = videoHelper.newVideoLayer()
-        videoLayer.frame = v.previewViewContainer.bounds
-        v.previewViewContainer.layer.addSublayer(videoLayer)
-        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(focusTapped(_:)))
-        v.previewViewContainer.addGestureRecognizer(tapRecognizer)
     }
     
     // MARK: - Flip Camera
@@ -140,13 +140,7 @@ public class YPVideoVC: UIViewController, YPPermissionCheckable {
             $0.isRecording = false
         }
     }
-    
-    public func tryToStartCamera() {
-        doAfterPermissionCheck { [weak self] in
-            self?.videoHelper.startCamera()
-        }
-    }
-    
+
     public func stopCamera() {
         videoHelper.stopCamera()
     }
@@ -209,7 +203,9 @@ public class YPVideoVC: UIViewController, YPPermissionCheckable {
         v.flipButton.isEnabled = !state.isRecording
         v.progressBar.progress = state.progress
         v.timeElapsedLabel.text = YPHelper.formattedStrigFrom(state.timeElapsed)
-        UIView.animate(withDuration: 1, animations: v.layoutIfNeeded)
+        
+        // Animate progress bar changes.
+        UIView.animate(withDuration: 1, animations: v.progressBar.layoutIfNeeded)
     }
     
     private func resetVisualState() {

@@ -6,7 +6,7 @@
 //  Copyright © 2018 Yummypets. All rights reserved.
 //
 
-import Foundation
+import UIKit
 import AVFoundation
 
 /// Abstracts Low Level AVFoudation details.
@@ -23,29 +23,40 @@ class YPVideoHelper: NSObject {
     private var videoInput: AVCaptureDeviceInput?
     private var videoOutput = AVCaptureMovieFileOutput()
     private var videoRecordingTimeLimit: TimeInterval = 0
+    private var isCaptureSessionSetup: Bool = false
+    private var isPreviewSetup = false
+    private var previewView: UIView!
     
     // MARK: - Init
     
-    public func initialize(withVideoRecordingLimit: TimeInterval) {
+    public func start(previewView: UIView, withVideoRecordingLimit: TimeInterval, completion: @escaping () -> Void) {
+        self.previewView = previewView
         self.videoRecordingTimeLimit = withVideoRecordingLimit
         sessionQueue.async { [unowned self] in
-            self.setupCaptureSession()
+            if !self.isCaptureSessionSetup {
+                self.setupCaptureSession()
+            }
+            self.startCamera(completion: {
+                completion()
+            })
         }
     }
     
     // MARK: - Start Camera
     
-    public func startCamera() {
+    public func startCamera(completion: @escaping (() -> Void)) {
         if !session.isRunning {
-            sessionQueue.async { [unowned self] in
+            sessionQueue.async { [weak self] in
                 // Re-apply session preset
-                self.session.sessionPreset = .high
+                self?.session.sessionPreset = .high
                 let status = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
                 switch status {
                 case .notDetermined, .restricted, .denied:
-                    self.session.stopRunning()
+                    self?.session.stopRunning()
                 case .authorized:
-                    self.session.startRunning()
+                    self?.session.startRunning()
+                    completion()
+                    self?.tryToSetupPreview()
                 }
             }
         }
@@ -173,14 +184,7 @@ class YPVideoHelper: NSObject {
             session.sessionPreset = .high
         }
         session.commitConfiguration()
-    }
-    
-    // MARK: - Video Layer
-    
-    public func newVideoLayer() -> CALayer {
-        let videoLayer = AVCaptureVideoPreviewLayer(session: session)
-        videoLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
-        return videoLayer
+        isCaptureSessionSetup = true
     }
     
     // MARK: - Recording Progress
@@ -193,6 +197,25 @@ class YPVideoHelper: NSObject {
             self.videoRecordingProgress?(progress, timeElapsed)
         }
     }
+    
+    // MARK: - Preview
+    
+    func tryToSetupPreview() {
+        if !isPreviewSetup {
+            setupPreview()
+            isPreviewSetup = true
+        }
+    }
+    
+    func setupPreview() {
+        let videoLayer = AVCaptureVideoPreviewLayer(session: session)
+        DispatchQueue.main.async {
+            videoLayer.frame = self.previewView.bounds
+            videoLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
+            self.previewView.layer.addSublayer(videoLayer)
+        }
+    }
+
 }
 
 extension YPVideoHelper: AVCaptureFileOutputRecordingDelegate {

@@ -18,6 +18,7 @@ class PostiOS10PhotoCapture: NSObject, YPPhotoCapture, AVCapturePhotoCaptureDele
     var device: AVCaptureDevice? { return deviceInput?.device }
     private let photoOutput = AVCapturePhotoOutput()
     var output: AVCaptureOutput { return photoOutput }
+    var isCaptureSessionSetup: Bool = false
     var isPreviewSetup: Bool = false
     var previewView: UIView!
     var videoLayer: AVCaptureVideoPreviewLayer!
