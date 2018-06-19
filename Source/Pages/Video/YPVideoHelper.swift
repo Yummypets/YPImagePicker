@@ -6,7 +6,7 @@
 //  Copyright © 2018 Yummypets. All rights reserved.
 //
 
-import Foundation
+import UIKit
 import AVFoundation
 
 /// Abstracts Low Level AVFoudation details.
@@ -132,6 +132,12 @@ class YPVideoHelper: NSObject {
                 return
             }
         }
+        
+        let connection = videoOutput.connection(with: .video)
+        if (connection?.isVideoOrientationSupported)! {
+            connection?.videoOrientation = currentVideoOrientation()
+        }
+        
         videoOutput.startRecording(to: outputURL, recordingDelegate: self)
     }
     
@@ -192,6 +198,23 @@ class YPVideoHelper: NSObject {
         DispatchQueue.main.async {
             self.videoRecordingProgress?(progress, timeElapsed)
         }
+    }
+    
+    // MARK: - Orientation
+    
+    func currentVideoOrientation() -> AVCaptureVideoOrientation {
+        var orientation: AVCaptureVideoOrientation
+        switch UIDevice.current.orientation {
+        case .portrait:
+            orientation = .portrait
+        case .landscapeRight:
+            orientation = .landscapeLeft
+        case .portraitUpsideDown:
+            orientation = .portraitUpsideDown
+        default:
+            orientation = .landscapeRight
+        }
+        return orientation
     }
 }
 
