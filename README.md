@@ -86,8 +86,8 @@ you'll need to ad these `plist entries` :
 
 ```swift
 var config = YPImagePickerConfiguration()
-config.libraryMediaType = .photoAndVideo
-config.onlySquareFromLibrary = false
+config.library.mediaType = .photoAndVideo
+config.library.onlySquare  = false
 config.onlySquareImagesFromCamera = true
 config.targetImageSize = .original
 config.usesFrontCamera = true
@@ -95,17 +95,18 @@ config.showsFilters = true
 config.filters = [YPFilterDescriptor(name: "Normal", filterName: ""),
                   YPFilterDescriptor(name: "Mono", filterName: "CIPhotoEffectMono")]
 config.shouldSaveNewPicturesToAlbum = true
-config.videoCompression = AVAssetExportPresetHighestQuality
+config.video.compression = AVAssetExportPresetHighestQuality
 config.albumName = "MyGreatAppName"
 config.screens = [.library, .photo, .video]
 config.startOnScreen = .library
-config.videoRecordingTimeLimit = 10
-config.videoFromLibraryTimeLimit = 20
+config.video.recordingTimeLimit = 10
+config.video.libraryTimeLimit = 20
 config.showsCrop = .rectangle(ratio: (16/9))
 config.wordings.libraryTitle = "Gallery"
 config.hidesStatusBar = false
 config.overlayView = myOverlayView
 config.library.maxNumberOfItems = 5
+config.isScrollToChangeModesEnabled = false
 
 // Build a picker with your configuration
 let picker = YPImagePicker(configuration: config)
