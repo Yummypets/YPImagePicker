@@ -103,6 +103,11 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         if !YPConfig.library.onlySquare && v.assetZoomableView.contentSize == CGSize(width: 0, height: 0) {
             v.assetZoomableView.setZoomScale(1, animated: false)
         }
+        
+        // Activate multiple selection when using `minNumberOfItems`
+        if YPConfig.library.minNumberOfItems > 1 {
+            multipleSelectionButtonTapped()
+        }
     }
     
     public override func viewWillDisappear(_ animated: Bool) {
@@ -126,6 +131,12 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
 
     @objc
     func multipleSelectionButtonTapped() {
+        
+        // Prevent desactivating multiple selection when using `minNumberOfItems`
+        if YPConfig.library.minNumberOfItems > 1 && multipleSelectionEnabled {
+            return
+        }
+        
         multipleSelectionEnabled = !multipleSelectionEnabled
 
         if multipleSelectionEnabled {
