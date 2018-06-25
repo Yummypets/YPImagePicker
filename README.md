@@ -106,6 +106,7 @@ config.wordings.libraryTitle = "Gallery"
 config.hidesStatusBar = false
 config.overlayView = myOverlayView
 config.library.maxNumberOfItems = 5
+config.library.minNumberOfItems = 3
 config.isScrollToChangeModesEnabled = false
 
 // Build a picker with your configuration

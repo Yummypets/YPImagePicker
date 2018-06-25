@@ -44,6 +44,11 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         
         delegate = self
         
+        // Force Library only when using `minNumberOfItems`.
+        if YPConfig.library.minNumberOfItems > 1 {
+            YPImagePickerConfiguration.shared.screens = [.library]
+        }
+        
         // Library
         if YPConfig.screens.contains(.library) {
             libraryVC = YPLibraryVC()
@@ -262,6 +267,12 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
                                                                 target: self,
                                                                 action: #selector(done))
             navigationItem.rightBarButtonItem?.tintColor = YPConfig.colors.tintColor
+            
+            // Disable Next Button until minNumberOfItems is reached.
+            let minNumberOfItems = YPConfig.library.minNumberOfItems
+            if minNumberOfItems > 1 {
+                navigationItem.rightBarButtonItem?.isEnabled = libraryVC!.selection.count >= minNumberOfItems
+            }
         case .camera:
             navigationItem.titleView = nil
             title = cameraVC?.title
