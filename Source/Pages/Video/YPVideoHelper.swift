@@ -143,6 +143,12 @@ class YPVideoHelper: NSObject {
                 return
             }
         }
+        
+        let connection = videoOutput.connection(with: .video)
+        if (connection?.isVideoOrientationSupported)! {
+            connection?.videoOrientation = currentVideoOrientation()
+        }
+        
         videoOutput.startRecording(to: outputURL, recordingDelegate: self)
     }
     
@@ -198,6 +204,23 @@ class YPVideoHelper: NSObject {
         }
     }
     
+    // MARK: - Orientation
+    
+    func currentVideoOrientation() -> AVCaptureVideoOrientation {
+        var orientation: AVCaptureVideoOrientation
+        switch UIDevice.current.orientation {
+        case .portrait:
+            orientation = .portrait
+        case .landscapeRight:
+            orientation = .landscapeLeft
+        case .portraitUpsideDown:
+            orientation = .portraitUpsideDown
+        default:
+            orientation = .landscapeRight
+        }
+        return orientation
+    }
+
     // MARK: - Preview
     
     func tryToSetupPreview() {
@@ -215,7 +238,6 @@ class YPVideoHelper: NSObject {
             self.previewView.layer.addSublayer(videoLayer)
         }
     }
-
 }
 
 extension YPVideoHelper: AVCaptureFileOutputRecordingDelegate {
