@@ -106,6 +106,7 @@ config.wordings.libraryTitle = "Gallery"
 config.hidesStatusBar = false
 config.overlayView = myOverlayView
 config.library.maxNumberOfItems = 5
+config.library.minNumberOfItems = 3
 config.isScrollToChangeModesEnabled = false
 
 // Build a picker with your configuration
@@ -199,7 +200,7 @@ picker.didFinishPicking { [unowned picker] items, cancelled in
 That's it !
 
 ## Languages
-🇺🇸 English, 🇪🇸 Spanish, 🇫🇷 French 🇷🇺 Russian, 🇳🇱 Dutch, 🇧🇷 Brazilian, 🇹🇷 Turkish,  Arabic, 🇩🇪 German, 🇮🇹 Italian, 🇯🇵 Japanese
+🇺🇸 English, 🇪🇸 Spanish, 🇫🇷 French 🇷🇺 Russian, 🇳🇱 Dutch, 🇧🇷 Brazilian, 🇹🇷 Turkish,  Arabic, 🇩🇪 German, 🇮🇹 Italian, 🇯🇵 Japanese, 🇨🇳 Chinese
 
 If your language is not supported, you can still customize the wordings via the `configuration.wordings` api:
 

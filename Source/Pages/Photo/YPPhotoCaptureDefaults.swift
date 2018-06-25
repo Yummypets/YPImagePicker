@@ -13,13 +13,6 @@ extension YPPhotoCapture {
     
     // MARK: - Setup
     
-    func setup(with previewView: UIView) {
-        self.previewView = previewView
-        sessionQueue.async { [unowned self] in
-            self.setupCaptureSession()
-        }
-    }
-    
     private func setupCaptureSession() {
         session.beginConfiguration()
         session.sessionPreset = .photo
@@ -38,17 +31,24 @@ extension YPPhotoCapture {
             }
         }
         session.commitConfiguration()
+        isCaptureSessionSetup = true
     }
     
     // MARK: - Start/Stop Camera
     
-    func tryToStartCamera() {
-        if isPreviewSetup {
-            startCamera()
+    func start(with previewView: UIView, completion: @escaping () -> Void) {
+        self.previewView = previewView
+        sessionQueue.async { [unowned self] in
+            if !self.isCaptureSessionSetup {
+                self.setupCaptureSession()
+            }
+            self.startCamera(completion: {
+                completion()
+            })
         }
     }
     
-    func startCamera() {
+    func startCamera(completion: @escaping (() -> Void)) {
         if !session.isRunning {
             sessionQueue.async { [weak self] in
                 // Re-apply session preset
@@ -59,6 +59,7 @@ extension YPPhotoCapture {
                     self?.session.stopRunning()
                 case .authorized:
                     self?.session.startRunning()
+                    completion()
                     self?.tryToSetupPreview()
                 }
             }

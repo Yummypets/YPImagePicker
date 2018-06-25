@@ -18,6 +18,7 @@ class PreiOS10PhotoCapture: YPPhotoCapture {
     var device: AVCaptureDevice? { return deviceInput?.device }
     private let imageOutput = AVCaptureStillImageOutput()
     var output: AVCaptureOutput { return imageOutput }
+    var isCaptureSessionSetup: Bool = false
     var isPreviewSetup: Bool = false
     var previewView: UIView!
     var videoLayer: AVCaptureVideoPreviewLayer!

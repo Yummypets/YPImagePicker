@@ -140,6 +140,7 @@ class ExampleViewController: UIViewController {
         
         /* Disable scroll to change between mode */
         // config.isScrollToChangeModesEnabled = false
+        config.library.minNumberOfItems = 2
         
         /* Skip selection gallery after multiple selections */
         // config.library.skipSelectionsGallery = true

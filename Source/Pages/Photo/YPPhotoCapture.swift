@@ -13,8 +13,7 @@ import UIKit
 protocol YPPhotoCapture: class {
     
     // Public api
-    func setup(with previewView: UIView)
-    func tryToStartCamera()
+    func start(with previewView: UIView, completion: @escaping () -> Void)
     func stopCamera()
     func focus(on point: CGPoint)
     func tryToggleFlash()
@@ -27,7 +26,7 @@ protocol YPPhotoCapture: class {
     
     // Used by Default extension
     var previewView: UIView! { get set }
-    func startCamera()
+    var isCaptureSessionSetup: Bool { get set }
     var isPreviewSetup: Bool { get set }
     var sessionQueue: DispatchQueue { get }
     var session: AVCaptureSession { get }

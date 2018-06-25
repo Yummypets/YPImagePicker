@@ -88,7 +88,7 @@ extension PHCachingImageManager {
         options.isNetworkAccessAllowed = true
         options.isSynchronous = true
         requestImage(for: asset,
-                     targetSize: CGSize(width: asset.pixelWidth, height: asset.pixelHeight),
+                     targetSize: PHImageManagerMaximumSize,
                      contentMode: .aspectFill,
                      options: options) { result, info in
                         guard let image = result else {
