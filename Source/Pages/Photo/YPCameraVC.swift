@@ -34,25 +34,25 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, YPPermis
         v.shotButton.addTarget(self, action: #selector(shotButtonTapped), for: .touchUpInside)
         v.flipButton.addTarget(self, action: #selector(flipButtonTapped), for: .touchUpInside)
         
-        photoCapture.setup(with: v.previewViewContainer)
-        
         // Focus
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.focusTapped(_:)))
         tapRecognizer.delegate = self
         v.previewViewContainer.addGestureRecognizer(tapRecognizer)
-        
     }
     
-    public override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        photoCapture.tryToStartCamera()
+    func start() {
+        doAfterPermissionCheck { [weak self] in
+            guard let strongSelf = self else {
+                return
+            }
+            self?.photoCapture.start(with: strongSelf.v.previewViewContainer, completion: {
+                DispatchQueue.main.async {
+                    self?.refreshFlashButton()
+                }
+            })
+        }
     }
-    
-    public override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        refreshFlashButton()
-    }
-    
+
     @objc
     func focusTapped(_ recognizer: UITapGestureRecognizer) {
         doAfterPermissionCheck { [weak self] in
@@ -75,13 +75,7 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, YPPermis
         v.addSubview(v.focusView)
         YPHelper.animateFocusView(v.focusView)
     }
-    
-    public func tryToStartCamera() {
-        doAfterPermissionCheck { [weak self] in
-            self?.photoCapture.startCamera()
-        }
-    }
-    
+        
     func stopCamera() {
         photoCapture.stopCamera()
     }

@@ -112,8 +112,6 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
             startOnPage(index)
         }
         
-        updateMode(with: currentController)
-        
         YPHelper.changeBackButtonIcon(self)
         YPHelper.changeBackButtonTitle(self)
     }
@@ -121,6 +119,8 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         cameraVC?.v.shotButton.isEnabled = true
+        
+        updateMode(with: currentController)
     }
     
     public override func viewDidAppear(_ animated: Bool) {
@@ -158,12 +158,15 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         mode = modeFor(vc: vc)
         
         // Re-trigger permission check
-        if let vc = vc as? YPPermissionCheckable {
+        if let vc = vc as? YPLibraryVC {
             vc.checkPermission()
+        } else if let cameraVC = vc as? YPCameraVC {
+            cameraVC.start()
+        } else if let videoVC = vc as? YPVideoVC {
+            videoVC.start()
         }
-        
+    
         updateUI()
-        startCurrentCamera()
     }
     
     func stopCurrentCamera() {
@@ -174,17 +177,6 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
             cameraVC?.stopCamera()
         case .video:
             videoVC?.stopCamera()
-        }
-    }
-    
-    func startCurrentCamera() {
-        switch mode {
-        case .library:
-            break
-        case .camera:
-            cameraVC?.tryToStartCamera()
-        case .video:
-            videoVC?.tryToStartCamera()
         }
     }
     
