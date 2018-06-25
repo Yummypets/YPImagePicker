@@ -245,8 +245,6 @@ SWIFT_CLASS("_TtC13YPImagePicker10YPCameraVC")
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 - (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
 - (void)viewDidLoad;
-- (void)viewWillAppear:(BOOL)animated;
-- (void)viewDidAppear:(BOOL)animated;
 - (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil SWIFT_UNAVAILABLE;
 @end
 
@@ -407,7 +405,6 @@ SWIFT_CLASS("_TtC13YPImagePicker9YPVideoVC")
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 - (void)loadView;
 - (void)viewDidLoad;
-- (void)viewDidAppear:(BOOL)animated;
 - (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil SWIFT_UNAVAILABLE;
 @end
 
