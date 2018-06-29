@@ -200,7 +200,7 @@ picker.didFinishPicking { [unowned picker] items, cancelled in
 That's it !
 
 ## Languages
-🇺🇸 English, 🇪🇸 Spanish, 🇫🇷 French 🇷🇺 Russian, 🇳🇱 Dutch, 🇧🇷 Brazilian, 🇹🇷 Turkish,  Arabic, 🇩🇪 German, 🇮🇹 Italian, 🇯🇵 Japanese, 🇨🇳 Chinese
+🇺🇸 English, 🇪🇸 Spanish, 🇫🇷 French 🇷🇺 Russian, 🇳🇱 Dutch, 🇧🇷 Brazilian, 🇹🇷 Turkish, 🇸🇾 Arabic, 🇩🇪 German, 🇮🇹 Italian, 🇯🇵 Japanese, 🇨🇳 Chinese
 
 If your language is not supported, you can still customize the wordings via the `configuration.wordings` api:
 
