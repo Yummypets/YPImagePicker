@@ -8,32 +8,34 @@
 
 import UIKit
 
-// TODO: Add paging to collection view
-
 public class YPSelectionsGalleryVC: UIViewController {
-    @IBOutlet weak var collectionV: UICollectionView!
-
+    
     public var items: [YPMediaItem] = []
     public var didFinishHandler: ((_ gallery: YPSelectionsGalleryVC, _ items: [YPMediaItem]) -> Void)?
+    private var lastContentOffsetX: CGFloat = 0
+    
+    var v = YPSelectionsGalleryView()
+    public override func loadView() { view = v }
 
-    /// Designated initializer
-    public class func initWith(items: [YPMediaItem],
-                               didFinishHandler:
-        @escaping ((_ gallery: YPSelectionsGalleryVC, _ items: [YPMediaItem]) -> Void)) -> YPSelectionsGalleryVC {
-        let vc = YPSelectionsGalleryVC(nibName: "YPSelectionsGalleryVC",
-                                       bundle: Bundle(for: YPSelectionsGalleryVC.self))
-        vc.items = items
-        vc.didFinishHandler = didFinishHandler
-        return vc
+    public required init(items: [YPMediaItem],
+                         didFinishHandler:
+        @escaping ((_ gallery: YPSelectionsGalleryVC, _ items: [YPMediaItem]) -> Void)) {
+        super.init(nibName: nil, bundle: nil)
+        self.items = items
+        self.didFinishHandler = didFinishHandler
     }
-
+    
+    public required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override public func viewDidLoad() {
         super.viewDidLoad()
 
         // Register collection view cell
-        let bundle = Bundle(for: YPSelectionsGalleryVC.self)
-        collectionV.register(UINib(nibName: "YPSelectionsGalleryCVCell",
-                                   bundle: bundle), forCellWithReuseIdentifier: "item")
+        v.collectionView.register(YPSelectionsGalleryCell.self, forCellWithReuseIdentifier: "item")
+        v.collectionView.dataSource = self
+        v.collectionView.delegate = self
         
         // Setup navigation bar
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: YPConfig.wordings.next,
@@ -69,15 +71,15 @@ extension YPSelectionsGalleryVC: UICollectionViewDataSource {
     public func collectionView(_ collectionView: UICollectionView,
                                cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "item",
-                                                            for: indexPath) as? YPSelectionsGalleryCVCell else {
+                                                            for: indexPath) as? YPSelectionsGalleryCell else {
             return UICollectionViewCell()
         }
         let item = items[indexPath.row]
         switch item {
         case .photo(let photo):
-            cell.imageV.image = photo.image
+            cell.imageView.image = photo.image
         case .video(let video):
-            cell.imageV.image = video.thumbnail
+            cell.imageView.image = video.thumbnail
         }
         return cell
     }
@@ -111,13 +113,15 @@ extension YPSelectionsGalleryVC: UICollectionViewDelegate {
             present(navVC, animated: true, completion: nil)
         }
     }
-}
-
-extension YPSelectionsGalleryVC: UICollectionViewDelegateFlowLayout {
-    public func collectionView(_ collectionView: UICollectionView,
-                               layout collectionViewLayout: UICollectionViewLayout,
-                               sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let sideSize = collectionView.frame.size.height - 30
-        return CGSize(width: sideSize, height: sideSize)
+    
+    // Set "paging" behaviour when scrolling backwards.
+    // This works by having `targetContentOffset(forProposedContentOffset: withScrollingVelocity` overriden
+    // in the collection view Flow subclass & using UIScrollViewDecelerationRateFast
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let isScrollingBackwards = scrollView.contentOffset.x < lastContentOffsetX
+        scrollView.decelerationRate = isScrollingBackwards
+            ? UIScrollViewDecelerationRateFast
+            : UIScrollViewDecelerationRateNormal
+        lastContentOffsetX = scrollView.contentOffset.x
     }
 }

@@ -89,7 +89,7 @@ public class YPImagePicker: UINavigationController {
                     self.didSelect(items: items)
                     return
                 } else {
-                    let selectionsGalleryVC = YPSelectionsGalleryVC.initWith(items: items) { _, items in
+                    let selectionsGalleryVC = YPSelectionsGalleryVC(items: items) { _, items in
                         self.didSelect(items: items)
                     }
                     self.pushViewController(selectionsGalleryVC, animated: true)
