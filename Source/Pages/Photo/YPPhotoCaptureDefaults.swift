@@ -38,11 +38,14 @@ extension YPPhotoCapture {
     
     func start(with previewView: UIView, completion: @escaping () -> Void) {
         self.previewView = previewView
-        sessionQueue.async { [unowned self] in
-            if !self.isCaptureSessionSetup {
-                self.setupCaptureSession()
+        sessionQueue.async { [weak self] in
+            guard let strongSelf = self else {
+                return
             }
-            self.startCamera(completion: {
+            if !strongSelf.isCaptureSessionSetup {
+                strongSelf.setupCaptureSession()
+            }
+            strongSelf.startCamera(completion: {
                 completion()
             })
         }

@@ -73,7 +73,7 @@ public class YPImagePicker: UINavigationController {
         setupLoadingView()
         navigationBar.isTranslucent = false
 
-        picker.didSelectItems = { [unowned self] items in
+        picker.didSelectItems = { [weak self] items in
             let showsFilters = YPConfig.showsFilters
             
             // Use Fade transition instead of default push animation
@@ -81,18 +81,18 @@ public class YPImagePicker: UINavigationController {
             transition.duration = 0.3
             transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
             transition.type = kCATransitionFade
-            self.view.layer.add(transition, forKey: nil)
+            self?.view.layer.add(transition, forKey: nil)
             
             // Multiple items flow
             if items.count > 1 {
                 if YPConfig.library.skipSelectionsGallery {
-                    self.didSelect(items: items)
+                    self?.didSelect(items: items)
                     return
                 } else {
                     let selectionsGalleryVC = YPSelectionsGalleryVC(items: items) { _, items in
-                        self.didSelect(items: items)
+                        self?.didSelect(items: items)
                     }
-                    self.pushViewController(selectionsGalleryVC, animated: true)
+                    self?.pushViewController(selectionsGalleryVC, animated: true)
                     return
                 }
             }
@@ -110,7 +110,7 @@ public class YPImagePicker: UINavigationController {
                             YPPhotoSaver.trySaveImage(photo.image, inAlbumNamed: YPConfig.albumName)
                         }
                     }
-                    self.didSelect(items: [mediaItem])
+                    self?.didSelect(items: [mediaItem])
                 }
                 
                 func showCropVC(photo: YPMediaPhoto, completion: @escaping (_ aphoto: YPMediaPhoto) -> Void) {
@@ -120,7 +120,7 @@ public class YPImagePicker: UINavigationController {
                             photo.modifiedImage = croppedImage
                             completion(photo)
                         }
-                        self.pushViewController(cropVC, animated: true)
+                        self?.pushViewController(cropVC, animated: true)
                     } else {
                         completion(photo)
                     }
@@ -135,7 +135,7 @@ public class YPImagePicker: UINavigationController {
                             showCropVC(photo: outputPhoto, completion: completion)
                         }
                     }
-                    self.pushViewController(filterVC, animated: false)
+                    self?.pushViewController(filterVC, animated: false)
                 } else {
                     showCropVC(photo: photo, completion: completion)
                 }
@@ -143,12 +143,12 @@ public class YPImagePicker: UINavigationController {
                 if showsFilters {
                     let videoFiltersVC = YPVideoFiltersVC.initWith(video: video,
                                                                    isFromSelectionVC: false)
-                    videoFiltersVC.didSave = { [unowned self] outputMedia in
-                        self.didSelect(items: [outputMedia])
+                    videoFiltersVC.didSave = { [weak self] outputMedia in
+                        self?.didSelect(items: [outputMedia])
                     }
-                    self.pushViewController(videoFiltersVC, animated: true)
+                    self?.pushViewController(videoFiltersVC, animated: true)
                 } else {
-                    self.didSelect(items: [YPMediaItem.video(v: video)])
+                    self?.didSelect(items: [YPMediaItem.video(v: video)])
                 }
             }
         }

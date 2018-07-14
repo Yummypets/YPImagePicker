@@ -58,28 +58,31 @@ final class YPAssetZoomableView: UIScrollView {
                          mediaManager: LibraryMediaManager,
                          storedCropPosition: YPLibrarySelection?,
                          completion: @escaping () -> Void) {
-        mediaManager.imageManager?.fetchPreviewFor(video: video) { [unowned self] preview in
-            self.isVideoMode = true
-            self.photoImageView.removeFromSuperview()
+        mediaManager.imageManager?.fetchPreviewFor(video: video) { [weak self] preview in
+            guard let strongSelf = self else {
+                return
+            }
+            strongSelf.isVideoMode = true
+            strongSelf.photoImageView.removeFromSuperview()
             
-            if self.videoView.isDescendant(of: self) == false {
-                self.addSubview(self.videoView)
+            if strongSelf.videoView.isDescendant(of: strongSelf) == false {
+                strongSelf.addSubview(strongSelf.videoView)
             }
             
-            self.setZoomScale(1, animated: false)
+            strongSelf.setZoomScale(1, animated: false)
             
-            self.videoView.setPreviewImage(preview)
+            strongSelf.videoView.setPreviewImage(preview)
             
-            self.setAssetFrame(for: self.videoView, with: preview)
+            strongSelf.setAssetFrame(for: strongSelf.videoView, with: preview)
             
             // Fit video view if only squared
             if YPConfig.library.onlySquare {
-                self.fitImage(true)
+                strongSelf.fitImage(true)
             }
             
             // Stored crop position in multiple selection
             if let scp = storedCropPosition {
-                self.applyStoredCropPosition(scp)
+                strongSelf.applyStoredCropPosition(scp)
             }
             
             completion()
@@ -94,32 +97,35 @@ final class YPAssetZoomableView: UIScrollView {
                          mediaManager: LibraryMediaManager,
                          storedCropPosition: YPLibrarySelection?,
                          completion: @escaping () -> Void) {
-        mediaManager.imageManager?.fetch(photo: photo) { [unowned self] image, _ in
-            self.isVideoMode = false
-            self.videoView.showPlayImage(show: false)
-            self.videoView.removeFromSuperview()
-            self.videoView.deallocate()
+        mediaManager.imageManager?.fetch(photo: photo) { [weak self] image, _ in
+            guard let strongSelf = self else {
+                return
+            }
+            strongSelf.isVideoMode = false
+            strongSelf.videoView.showPlayImage(show: false)
+            strongSelf.videoView.removeFromSuperview()
+            strongSelf.videoView.deallocate()
             
-            if self.photoImageView.isDescendant(of: self) == false {
-                self.addSubview(self.photoImageView)
+            if strongSelf.photoImageView.isDescendant(of: strongSelf) == false {
+                strongSelf.addSubview(strongSelf.photoImageView)
             }
             
-            self.setZoomScale(1, animated: false)
+            strongSelf.setZoomScale(1, animated: false)
             
-            self.photoImageView.image = image
-            self.photoImageView.contentMode = .scaleAspectFill
-            self.photoImageView.clipsToBounds = true
+            strongSelf.photoImageView.image = image
+            strongSelf.photoImageView.contentMode = .scaleAspectFill
+            strongSelf.photoImageView.clipsToBounds = true
             
-            self.setAssetFrame(for: self.photoImageView, with: image)
+            strongSelf.setAssetFrame(for: strongSelf.photoImageView, with: image)
             
             // Fit image if only squared
             if YPConfig.library.onlySquare {
-                self.fitImage(true)
+                strongSelf.fitImage(true)
             }
             
             // Stored crop position in multiple selection
             if let scp = storedCropPosition {
-                self.applyStoredCropPosition(scp)
+                strongSelf.applyStoredCropPosition(scp)
             }
 
             completion()

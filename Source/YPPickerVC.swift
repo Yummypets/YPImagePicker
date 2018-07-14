@@ -58,8 +58,8 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         // Camera
         if YPConfig.screens.contains(.photo) {
             cameraVC = YPCameraVC()
-            cameraVC?.didCapturePhoto = { [unowned self] img in
-                self.didSelectItems?([YPMediaItem.photo(p: YPMediaPhoto(image: img,
+            cameraVC?.didCapturePhoto = { [weak self] img in
+                self?.didSelectItems?([YPMediaItem.photo(p: YPMediaPhoto(image: img,
                                                                         fromCamera: true))])
             }
         }
@@ -67,8 +67,8 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         // Video
         if YPConfig.screens.contains(.video) {
             videoVC = YPVideoVC()
-            videoVC?.didCaptureVideo = { [unowned self] videoURL in
-                self.didSelectItems?([YPMediaItem
+            videoVC?.didCaptureVideo = { [weak self] videoURL in
+                self?.didSelectItems?([YPMediaItem
                     .video(v: YPMediaVideo(thumbnail: thumbnailFromVideoPath(videoURL),
                                            videoURL: videoURL,
                                            fromCamera: true))])

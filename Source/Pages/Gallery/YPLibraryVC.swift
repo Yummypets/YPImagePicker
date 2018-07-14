@@ -78,9 +78,12 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         // When crop area changes in multiple selection mode,
         // we need to update the scrollView values in order to restore
         // them when user selects a previously selected item.
-        v.assetZoomableView.cropAreaDidChange = { [unowned self] in
-            if self.multipleSelectionEnabled {
-                self.updateCropInfo()
+        v.assetZoomableView.cropAreaDidChange = { [weak self] in
+            guard let strongSelf = self else {
+                return
+            }
+            if strongSelf.multipleSelectionEnabled {
+                strongSelf.updateCropInfo()
             }
         }
     }
@@ -185,10 +188,13 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     }
     
     func checkPermission() {
-        checkPermissionToAccessPhotoLibrary { [unowned self] hasPermission in
-            if hasPermission && !self.initialized {
-                self.initialize()
-                self.initialized = true
+        checkPermissionToAccessPhotoLibrary { [weak self] hasPermission in
+            guard let strongSelf = self else {
+                return
+            }
+            if hasPermission && !strongSelf.initialized {
+                strongSelf.initialize()
+                strongSelf.initialized = true
             }
         }
     }
