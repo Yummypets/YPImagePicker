@@ -146,7 +146,13 @@ public struct YPConfigLibrary {
     /// Anything greater than 1 will desactivate live photo and video modes (library only) and
     // force users to select at least the number of items defined.
     public var minNumberOfItems = 1
-    
+
+    /// Set the number of items per row in collection view. Defaults to 4.
+    public var numberOfItemsInRow: Int = 4
+
+    /// Set the spacing between items in collection view. Defaults to 1.0.
+    public var spacingBetweenItems: CGFloat = 1.0
+
     /// Allow to skip the selections gallery when selecting the multiple media items. Defaults to false.
     public var skipSelectionsGallery = false
 }
