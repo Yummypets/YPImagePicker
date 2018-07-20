@@ -32,11 +32,14 @@ class YPVideoHelper: NSObject {
     public func start(previewView: UIView, withVideoRecordingLimit: TimeInterval, completion: @escaping () -> Void) {
         self.previewView = previewView
         self.videoRecordingTimeLimit = withVideoRecordingLimit
-        sessionQueue.async { [unowned self] in
-            if !self.isCaptureSessionSetup {
-                self.setupCaptureSession()
+        sessionQueue.async { [weak self] in
+            guard let strongSelf = self else {
+                return
             }
-            self.startCamera(completion: {
+            if !strongSelf.isCaptureSessionSetup {
+                strongSelf.setupCaptureSession()
+            }
+            strongSelf.startCamera(completion: {
                 completion()
             })
         }
@@ -65,29 +68,32 @@ class YPVideoHelper: NSObject {
     // MARK: - Flip Camera
     
     public func flipCamera(completion: @escaping () -> Void) {
-        sessionQueue.async { [unowned self] in
-            self.session.beginConfiguration()
-            self.session.resetInputs()
+        sessionQueue.async { [weak self] in
+            guard let strongSelf = self else {
+                return
+            }
+            strongSelf.session.beginConfiguration()
+            strongSelf.session.resetInputs()
             
-            if let videoInput = self.videoInput {
-                self.videoInput = flippedDeviceInputForInput(videoInput)
+            if let videoInput = strongSelf.videoInput {
+                strongSelf.videoInput = flippedDeviceInputForInput(videoInput)
             }
             
-            if let videoInput = self.videoInput {
-                if self.session.canAddInput(videoInput) {
-                    self.session.addInput(videoInput)
+            if let videoInput = strongSelf.videoInput {
+                if strongSelf.session.canAddInput(videoInput) {
+                    strongSelf.session.addInput(videoInput)
                 }
             }
             
             // Re Add audio recording
             for device in AVCaptureDevice.devices(for: .audio) {
                 if let audioInput = try? AVCaptureDeviceInput(device: device) {
-                    if self.session.canAddInput(audioInput) {
-                        self.session.addInput(audioInput)
+                    if strongSelf.session.canAddInput(audioInput) {
+                        strongSelf.session.addInput(audioInput)
                     }
                 }
             }
-            self.session.commitConfiguration()
+            strongSelf.session.commitConfiguration()
             DispatchQueue.main.async {
                 completion()
             }
