@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension UIImage {
+internal extension UIImage {
     
     /// Kudos to Trevor Harmon and his UIImage+Resize category from
     // which this code is heavily inspired.
@@ -85,7 +85,7 @@ extension UIImage {
         return self
     }
     
-    private func cappedSize(for size: CGSize, cappedAt: CGFloat) -> CGSize {
+    fileprivate func cappedSize(for size: CGSize, cappedAt: CGFloat) -> CGSize {
         var cappedWidth: CGFloat = 0
         var cappedHeight: CGFloat = 0
         if size.width > size.height {
@@ -104,5 +104,9 @@ extension UIImage {
             cappedHeight = min(size.height, cappedAt)
         }
         return CGSize(width: cappedWidth, height: cappedHeight)
+    }
+    
+    func toCIImage() -> CIImage? {
+        return self.ciImage ?? CIImage(cgImage: self.cgImage!)
     }
 }
