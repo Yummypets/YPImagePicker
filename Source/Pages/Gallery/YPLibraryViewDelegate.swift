@@ -13,4 +13,5 @@ public protocol YPLibraryViewDelegate: class {
     func libraryViewStartedLoading()
     func libraryViewFinishedLoading()
     func libraryViewDidToggleMultipleSelection(enabled: Bool)
+    func noPhotosForOptions()
 }

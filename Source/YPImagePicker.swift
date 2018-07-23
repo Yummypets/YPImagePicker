@@ -8,6 +8,11 @@
 
 import UIKit
 import AVFoundation
+import Photos
+
+public protocol YPImagePickerDelegate {
+    func noPhotos()
+}
 
 public class YPImagePicker: UINavigationController {
     
@@ -21,6 +26,11 @@ public class YPImagePicker: UINavigationController {
     private var _didFinishPicking: (([YPMediaItem], Bool) -> Void)?
     public func didFinishPicking(completion: @escaping (_ items: [YPMediaItem], _ cancelled: Bool) -> Void) {
         _didFinishPicking = completion
+    }
+    public var imagePickerDelegate: YPImagePickerDelegate?
+    
+    public override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .default
     }
     
     // This nifty little trick enables us to call the single version of the callbacks.
@@ -49,14 +59,18 @@ public class YPImagePicker: UINavigationController {
     
     /// Get a YPImagePicker instance with the default configuration.
     public convenience init() {
-        self.init(configuration: YPImagePickerConfiguration.shared)
+        self.init(configuration: YPImagePickerConfiguration.shared, options: nil)
     }
     
     /// Get a YPImagePicker with the specified configuration.
-    public required init(configuration: YPImagePickerConfiguration) {
+    public required init(configuration: YPImagePickerConfiguration, options: PHFetchOptions?) {
         YPImagePickerConfiguration.shared = configuration
         picker = YPPickerVC()
+        if let opt = options {
+            picker.options = opt
+        }
         super.init(nibName: nil, bundle: nil)
+        picker.imagePickerDelegate = self
     }
     
     public required init?(coder aDecoder: NSCoder) {
@@ -169,5 +183,11 @@ public class YPImagePicker: UINavigationController {
         )
         loadingView.fillContainer()
         loadingView.alpha = 0
+    }
+}
+
+extension YPImagePicker: ImagePickerDelegate {
+    func noPhotos() {
+        self.imagePickerDelegate?.noPhotos()
     }
 }
