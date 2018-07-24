@@ -15,47 +15,32 @@ protocol IsMediaFilterVC: class {
 
 open class YPPhotoFiltersVC: UIViewController, IsMediaFilterVC, UIGestureRecognizerDelegate {
     
-    override open var prefersStatusBarHidden: Bool { return YPConfig.hidesStatusBar }
-    
-    var v = YPFiltersView()
-    
-    var filterPreviews = [YPFilterPreview]()
-    var filters = [YPFilter]()
-    var selectedFilter: YPFilter?
-    
-    var inputPhoto: YPMediaPhoto!
-    var filteredImage: UIImage?
-    var thumbImage = UIImage()
-    
-    private var isFromSelectionVC = false
-    
-    var didSave: ((YPMediaItem) -> Void)?
-    var didCancel: (() -> Void)?
-    
-    override open func loadView() { view = v }
-    
     required public init(inputPhoto: YPMediaPhoto, isFromSelectionVC: Bool) {
         super.init(nibName: nil, bundle: nil)
         
         self.inputPhoto = inputPhoto
         self.isFromSelectionVC = isFromSelectionVC
-        
-        for filterDescriptor in YPConfig.filters {
-            filterPreviews.append(YPFilterPreview(filterDescriptor.name))
-            filters.append(YPFilter(filterDescriptor.filterName))
-        }
     }
     
-    func thumbFromImage(_ img: UIImage) -> UIImage {
-        let k = img.size.height / 160 // 160 is a height of the collection view
-        let width: CGFloat = img.size.width / k
-        let height: CGFloat = img.size.height / k
-        UIGraphicsBeginImageContext(CGSize(width: width, height: height))
-        img.draw(in: CGRect(x: 0, y: 0, width: width, height: height))
-        let smallImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return smallImage!
-    }
+    public var inputPhoto: YPMediaPhoto!
+    public var isFromSelectionVC = false
+
+    public var didSave: ((YPMediaItem) -> Void)?
+    public var didCancel: (() -> Void)?
+
+
+    fileprivate let filters: [YPFilter] = YPConfig.filters
+
+    fileprivate var selectedFilter: YPFilter?
+    
+    fileprivate var filteredThumbnailImagesArray: [UIImage] = []
+    fileprivate var thumbnailImageForFiltering: CIImage? // Small image for creating filters thumbnails
+    fileprivate var currentlySelectedImageThumbnail: UIImage? // Used for comparing with original image when tapped
+
+    fileprivate var v = YPFiltersView()
+
+    override open var prefersStatusBarHidden: Bool { return YPConfig.hidesStatusBar }
+    override open func loadView() { view = v }
     
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -64,22 +49,34 @@ open class YPPhotoFiltersVC: UIViewController, IsMediaFilterVC, UIGestureRecogni
     override open func viewDidLoad() {
         super.viewDidLoad()
         
+        // Setup of main image an thumbnail images
         v.imageView.image = inputPhoto.image
-        thumbImage = thumbFromImage(inputPhoto.originalImage)
+        thumbnailImageForFiltering = thumbFromImage(inputPhoto.image)
+        DispatchQueue.global().async {
+            self.filteredThumbnailImagesArray = self.filters.map { filter -> UIImage in
+                return self.getFilteredThumbnailImage(filter)
+            }
+            DispatchQueue.main.async {
+                self.v.collectionView.reloadData()
+                self.v.collectionView.selectItem(at: IndexPath(row: 0, section: 0),
+                                            animated: false,
+                                            scrollPosition: UICollectionViewScrollPosition.bottom)
+                self.v.filtersLoader.stopAnimating()
+            }
+        }
+        
+        // Setup of Collection View
         v.collectionView.register(YPFilterCollectionViewCell.self, forCellWithReuseIdentifier: "FilterCell")
         v.collectionView.dataSource = self
         v.collectionView.delegate = self
-        v.collectionView.selectItem(at: IndexPath(row: 0, section: 0),
-                                                  animated: false,
-                                                  scrollPosition: UICollectionViewScrollPosition.bottom)
         
-        // Navigation bar setup
+        // Setup of Navigation Bar
         title = YPConfig.wordings.filter
         if isFromSelectionVC {
             navigationItem.leftBarButtonItem = UIBarButtonItem(title: YPConfig.wordings.cancel,
-                                                                style: .plain,
-                                                                target: self,
-                                                                action: #selector(cancel))
+                                                               style: .plain,
+                                                               target: self,
+                                                               action: #selector(cancel))
         }
         let rightBarButtonTitle = isFromSelectionVC ? YPConfig.wordings.done : YPConfig.wordings.next
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: rightBarButtonTitle,
@@ -106,7 +103,7 @@ open class YPPhotoFiltersVC: UIViewController, IsMediaFilterVC, UIGestureRecogni
         case .began:
             v.imageView.image = inputPhoto.originalImage
         case .ended:
-            v.imageView.image = filteredImage ?? inputPhoto.originalImage
+            v.imageView.image = currentlySelectedImageThumbnail ?? inputPhoto.originalImage
         default: ()
         }
     }
@@ -118,32 +115,45 @@ open class YPPhotoFiltersVC: UIViewController, IsMediaFilterVC, UIGestureRecogni
     
     @objc
     func save() {
-        if selectedFilter != nil {
-            inputPhoto.modifiedImage = filteredImage
+        if let f = selectedFilter,
+            let applier = f.applier,
+            let ciImage = inputPhoto.originalImage.toCIImage(),
+            let modifiedFullSizeImage = applier(ciImage) {
+            inputPhoto.modifiedImage = modifiedFullSizeImage.toUIImage()
+        } else {
+            inputPhoto.modifiedImage = nil
         }
         didSave?(YPMediaItem.photo(p: inputPhoto))
+    }
+    
+    fileprivate func thumbFromImage(_ img: UIImage) -> CIImage {
+        let k = img.size.width / img.size.height
+        let scale = UIScreen.main.scale
+        let thumbnailHeight: CGFloat = 300 * scale
+        let thumbnailWidth = thumbnailHeight * k
+        let thumbnailSize = CGSize(width: thumbnailWidth, height: thumbnailHeight)
+        UIGraphicsBeginImageContext(thumbnailSize)
+        img.draw(in: CGRect(x: 0, y: 0, width: thumbnailSize.width, height: thumbnailSize.height))
+        let smallImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return CIImage(cgImage: smallImage!.cgImage!)
     }
 }
 
 extension YPPhotoFiltersVC: UICollectionViewDataSource {
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return filterPreviews.count
+        return filteredThumbnailImagesArray.count
     }
     
     public func collectionView(_ collectionView: UICollectionView,
                                cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let filterPreview = filterPreviews[indexPath.row]
-        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "FilterCell",
-                                                         for: indexPath) as? YPFilterCollectionViewCell {
-            cell.name.text = filterPreview.name
-            if let img = filterPreview.image {
-                cell.imageView.image = img
-            } else {
-                let filter = self.filters[indexPath.row]
-                let filteredImage = filter.filter(self.thumbImage)
-                cell.imageView.image = filteredImage
-                filterPreview.image = filteredImage // Cache
-            }
+        let filter = filters[indexPath.row]
+        let image = filteredThumbnailImagesArray[indexPath.row]
+        if let cell = collectionView
+            .dequeueReusableCell(withReuseIdentifier: "FilterCell",
+                                 for: indexPath) as? YPFilterCollectionViewCell {
+            cell.name.text = filter.name
+            cell.imageView.image = image
             return cell
         }
         return UICollectionViewCell()
@@ -151,15 +161,22 @@ extension YPPhotoFiltersVC: UICollectionViewDataSource {
 }
 
 extension YPPhotoFiltersVC: UICollectionViewDelegate {
-    // TODO: If the image is very big (>3 mb) than the filtering spent much time. In instagram it's instant.
-    // I think the make big previews instantly.
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         selectedFilter = filters[indexPath.row]
-        DispatchQueue.global(qos: .userInitiated).async {
-            self.filteredImage = self.selectedFilter?.filter(self.inputPhoto.originalImage)
-            DispatchQueue.main.async {
-                self.v.imageView.image = self.filteredImage
-            }
+        currentlySelectedImageThumbnail = getFilteredThumbnailImage(selectedFilter!)
+        self.v.imageView.image = currentlySelectedImageThumbnail
+    }
+}
+
+// MARK: - Filter applying
+extension YPPhotoFiltersVC {
+    func getFilteredThumbnailImage(_ filter: YPFilter) -> UIImage {
+        if let applier = filter.applier,
+            let thumbnailImage = thumbnailImageForFiltering,
+            let outputImage = applier(thumbnailImage) {
+            return UIImage(ciImage: outputImage)
+        } else {
+            return inputPhoto.originalImage
         }
     }
 }

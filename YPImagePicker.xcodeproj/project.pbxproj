@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		20B6BB042081E065009064E9 /* YPFilterDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20B6BB032081E065009064E9 /* YPFilterDescriptor.swift */; };
 		99019E4C2018CCD6007325C2 /* YPBottomPagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99019E4B2018CCD6007325C2 /* YPBottomPagerView.swift */; };
 		99019E4E2018CD31007325C2 /* YPPagerMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99019E4D2018CD31007325C2 /* YPPagerMenu.swift */; };
 		99019E512018CDED007325C2 /* YPImageSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99019E502018CDED007325C2 /* YPImageSize.swift */; };
@@ -47,7 +46,6 @@
 		99C6D6C31F1FB5C100711DB2 /* YPCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6A81F1FB5C100711DB2 /* YPCameraView.swift */; };
 		99C6D6C41F1FB5C100711DB2 /* YPFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6AA1F1FB5C100711DB2 /* YPFilter.swift */; };
 		99C6D6C51F1FB5C100711DB2 /* YPFilterCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6AB1F1FB5C100711DB2 /* YPFilterCollectionViewCell.swift */; };
-		99C6D6C61F1FB5C100711DB2 /* YPFilterPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6AC1F1FB5C100711DB2 /* YPFilterPreview.swift */; };
 		99C6D6C71F1FB5C100711DB2 /* YPPhotoFiltersVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6AD1F1FB5C100711DB2 /* YPPhotoFiltersVC.swift */; };
 		99C6D6C81F1FB5C100711DB2 /* YPFiltersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6AE1F1FB5C100711DB2 /* YPFiltersView.swift */; };
 		99C6D6C91F1FB5C100711DB2 /* YPBottomPager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6AF1F1FB5C100711DB2 /* YPBottomPager.swift */; };
@@ -92,10 +90,10 @@
 		EBD2B641207B7D7400E711C2 /* YPMediaItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD2B640207B7D7400E711C2 /* YPMediaItem.swift */; };
 		EBD66105208104EA00EA276E /* YPIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD66104208104EA00EA276E /* YPIcons.swift */; };
 		EBD66107208104F400EA276E /* YPColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD66106208104F400EA276E /* YPColors.swift */; };
+		EBE6CA48210389ED005B0A6A /* CIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE6CA47210389ED005B0A6A /* CIImage+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		20B6BB032081E065009064E9 /* YPFilterDescriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPFilterDescriptor.swift; sourceTree = "<group>"; };
 		3B0E1B962070669B0048E95B /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4EA67521208A45080076D4E3 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		52412A931CA6114A0073C4BE /* YPImagePicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = YPImagePicker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -145,7 +143,6 @@
 		99C6D6A81F1FB5C100711DB2 /* YPCameraView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPCameraView.swift; sourceTree = "<group>"; };
 		99C6D6AA1F1FB5C100711DB2 /* YPFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPFilter.swift; sourceTree = "<group>"; };
 		99C6D6AB1F1FB5C100711DB2 /* YPFilterCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPFilterCollectionViewCell.swift; sourceTree = "<group>"; };
-		99C6D6AC1F1FB5C100711DB2 /* YPFilterPreview.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPFilterPreview.swift; sourceTree = "<group>"; };
 		99C6D6AD1F1FB5C100711DB2 /* YPPhotoFiltersVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPPhotoFiltersVC.swift; sourceTree = "<group>"; };
 		99C6D6AE1F1FB5C100711DB2 /* YPFiltersView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPFiltersView.swift; sourceTree = "<group>"; };
 		99C6D6AF1F1FB5C100711DB2 /* YPBottomPager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPBottomPager.swift; sourceTree = "<group>"; };
@@ -194,6 +191,7 @@
 		EBD2B640207B7D7400E711C2 /* YPMediaItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPMediaItem.swift; sourceTree = "<group>"; };
 		EBD66104208104EA00EA276E /* YPIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPIcons.swift; sourceTree = "<group>"; };
 		EBD66106208104F400EA276E /* YPColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPColors.swift; sourceTree = "<group>"; };
+		EBE6CA47210389ED005B0A6A /* CIImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CIImage+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -242,7 +240,6 @@
 			isa = PBXGroup;
 			children = (
 				99D1DC2A1F9788930047F0E0 /* YPImagePickerConfiguration.swift */,
-				20B6BB032081E065009064E9 /* YPFilterDescriptor.swift */,
 				99472DEC2056E33700419F9E /* YPWordings.swift */,
 				EBD66104208104EA00EA276E /* YPIcons.swift */,
 				EBD66106208104F400EA276E /* YPColors.swift */,
@@ -388,6 +385,7 @@
 				99CF6D1E201B6B9E00487F77 /* CGRect+Extensions.swift */,
 				EB1AB2E920AC1DED00BFA79F /* CGFloat+Extensions.swift */,
 				9911FA23203C3A31000E9B06 /* UIImage+Extensions.swift */,
+				EBE6CA47210389ED005B0A6A /* CIImage+Extensions.swift */,
 				EB473E16208E192800D16105 /* URL+Extensions.swift */,
 				EB473E1A208E1B7400D16105 /* NSFileManager+Extensions.swift */,
 				99CF6D1A201B6A5C00487F77 /* UICollectionView+Extensions.swift */,
@@ -404,10 +402,9 @@
 			isa = PBXGroup;
 			children = (
 				99C6D6AD1F1FB5C100711DB2 /* YPPhotoFiltersVC.swift */,
+				99C6D6AB1F1FB5C100711DB2 /* YPFilterCollectionViewCell.swift */,
 				99C6D6AE1F1FB5C100711DB2 /* YPFiltersView.swift */,
 				99C6D6AA1F1FB5C100711DB2 /* YPFilter.swift */,
-				99C6D6AB1F1FB5C100711DB2 /* YPFilterCollectionViewCell.swift */,
-				99C6D6AC1F1FB5C100711DB2 /* YPFilterPreview.swift */,
 			);
 			name = Photo;
 			sourceTree = "<group>";
@@ -632,7 +629,6 @@
 				EB584BFB207B870F00265B38 /* YPSelectionsGalleryVC.swift in Sources */,
 				99019E512018CDED007325C2 /* YPImageSize.swift in Sources */,
 				99CF6D25201B727900487F77 /* YPLibraryVC+PanGesture.swift in Sources */,
-				20B6BB042081E065009064E9 /* YPFilterDescriptor.swift in Sources */,
 				99CF6D27201B739600487F77 /* YPAlerts.swift in Sources */,
 				99C6D6CF1F1FB5C100711DB2 /* YPPickerVC.swift in Sources */,
 				EB94F28E208E3A140049F523 /* YPLoaders.swift in Sources */,
@@ -641,13 +637,13 @@
 				99C6D6BE1F1FB5C100711DB2 /* YPLibraryViewCell.swift in Sources */,
 				99C6D6C41F1FB5C100711DB2 /* YPFilter.swift in Sources */,
 				99C6D6C91F1FB5C100711DB2 /* YPBottomPager.swift in Sources */,
-				99C6D6C61F1FB5C100711DB2 /* YPFilterPreview.swift in Sources */,
 				99CF6D2B201CB96700487F77 /* YPVideoHelper.swift in Sources */,
 				99019E4E2018CD31007325C2 /* YPPagerMenu.swift in Sources */,
 				99C6D6C01F1FB5C100711DB2 /* YPAssetZoomableView.swift in Sources */,
 				EB867BCF209134F100332A54 /* UIColor+Extensions.swift in Sources */,
 				EBD66107208104F400EA276E /* YPColors.swift in Sources */,
 				99A052A11F20B49B005600B3 /* YPAlbum.swift in Sources */,
+				EBE6CA48210389ED005B0A6A /* CIImage+Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
