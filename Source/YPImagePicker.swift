@@ -59,11 +59,11 @@ public class YPImagePicker: UINavigationController {
     
     /// Get a YPImagePicker instance with the default configuration.
     public convenience init() {
-        self.init(configuration: YPImagePickerConfiguration.shared, options: nil)
+        self.init(configuration: YPImagePickerConfiguration.shared)
     }
     
     /// Get a YPImagePicker with the specified configuration.
-    public required init(configuration: YPImagePickerConfiguration, options: PHFetchOptions?) {
+    public required init(configuration: YPImagePickerConfiguration, options: PHFetchOptions? = nil) {
         YPImagePickerConfiguration.shared = configuration
         picker = YPPickerVC()
         if let opt = options {
