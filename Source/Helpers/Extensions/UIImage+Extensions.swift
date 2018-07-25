@@ -10,6 +10,13 @@ import UIKit
 
 internal extension UIImage {
     
+    func resized(to size: CGSize) -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(size, false, scale)
+        defer { UIGraphicsEndImageContext() }
+        draw(in: CGRect(origin: .zero, size: size))
+        return UIGraphicsGetImageFromCurrentImageContext()
+    }
+    
     /// Kudos to Trevor Harmon and his UIImage+Resize category from
     // which this code is heavily inspired.
     func resetOrientation() -> UIImage {
