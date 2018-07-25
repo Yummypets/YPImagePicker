@@ -98,7 +98,6 @@ extension YPFilter {
         let centerHeight = height / 2.0
         let radius0 = min(width / 4.0, height / 4.0)
         let radius1 = min(width / 1.5, height / 1.5)
-        print(width, height, centerWidth, centerHeight, radius0, radius1)
         
         let color0 = self.getColor(red: 128, green: 78, blue: 15, alpha: 255)
         let color1 = self.getColor(red: 79, green: 0, blue: 79, alpha: 255)

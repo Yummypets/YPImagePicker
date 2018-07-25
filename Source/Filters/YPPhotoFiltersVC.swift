@@ -53,7 +53,13 @@ open class YPPhotoFiltersVC: UIViewController, IsMediaFilterVC, UIGestureRecogni
         thumbnailImageForFiltering = thumbFromImage(inputPhoto.image)
         DispatchQueue.global().async {
             self.filteredThumbnailImagesArray = self.filters.map { filter -> UIImage in
-                return self.getFilteredThumbnailImage(filter)
+                if let applier = filter.applier,
+                    let thumbnailImage = self.thumbnailImageForFiltering,
+                    let outputImage = applier(thumbnailImage) {
+                    return outputImage.toUIImage()
+                } else {
+                    return self.inputPhoto.originalImage
+                }
             }
             DispatchQueue.main.async {
                 self.v.collectionView.reloadData()
@@ -180,20 +186,7 @@ extension YPPhotoFiltersVC: UICollectionViewDataSource {
 extension YPPhotoFiltersVC: UICollectionViewDelegate {
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         selectedFilter = filters[indexPath.row]
-        currentlySelectedImageThumbnail = getFilteredThumbnailImage(selectedFilter!)
+        currentlySelectedImageThumbnail = filteredThumbnailImagesArray[indexPath.row]
         self.v.imageView.image = currentlySelectedImageThumbnail
-    }
-}
-
-// MARK: - Filter applying
-extension YPPhotoFiltersVC {
-    func getFilteredThumbnailImage(_ filter: YPFilter) -> UIImage {
-        if let applier = filter.applier,
-            let thumbnailImage = thumbnailImageForFiltering,
-            let outputImage = applier(thumbnailImage) {
-            return outputImage.toUIImage()
-        } else {
-            return inputPhoto.originalImage
-        }
     }
 }
