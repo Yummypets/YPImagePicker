@@ -41,11 +41,10 @@ open class YPPhotoFiltersVC: UIViewController, IsMediaFilterVC, UIGestureRecogni
 
     override open var prefersStatusBarHidden: Bool { return YPConfig.hidesStatusBar }
     override open func loadView() { view = v }
+    required public init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     
-    required public init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
+    // MARK: - Life Cycle ♻️
+
     override open func viewDidLoad() {
         super.viewDidLoad()
         
@@ -78,12 +77,7 @@ open class YPPhotoFiltersVC: UIViewController, IsMediaFilterVC, UIGestureRecogni
                                                                target: self,
                                                                action: #selector(cancel))
         }
-        let rightBarButtonTitle = isFromSelectionVC ? YPConfig.wordings.done : YPConfig.wordings.next
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: rightBarButtonTitle,
-                                                            style: .done,
-                                                            target: self,
-                                                            action: #selector(save))
-        navigationItem.rightBarButtonItem?.tintColor = YPConfig.colors.tintColor
+        setupRightBarButton()
         
         YPHelper.changeBackButtonIcon(self)
         YPHelper.changeBackButtonTitle(self)
@@ -97,8 +91,21 @@ open class YPPhotoFiltersVC: UIViewController, IsMediaFilterVC, UIGestureRecogni
         v.imageView.isUserInteractionEnabled = true
     }
     
+    // MARK: Setup - ⚙️
+    
+    fileprivate func setupRightBarButton() {
+        let rightBarButtonTitle = isFromSelectionVC ? YPConfig.wordings.done : YPConfig.wordings.next
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: rightBarButtonTitle,
+                                                            style: .done,
+                                                            target: self,
+                                                            action: #selector(save))
+        navigationItem.rightBarButtonItem?.tintColor = YPConfig.colors.tintColor
+    }
+    
+    // MARK: - Methods 🏓
+
     @objc
-    private func handleTouchDown(sender: UILongPressGestureRecognizer) {
+    fileprivate func handleTouchDown(sender: UILongPressGestureRecognizer) {
         switch sender.state {
         case .began:
             v.imageView.image = inputPhoto.originalImage
@@ -106,24 +113,6 @@ open class YPPhotoFiltersVC: UIViewController, IsMediaFilterVC, UIGestureRecogni
             v.imageView.image = currentlySelectedImageThumbnail ?? inputPhoto.originalImage
         default: ()
         }
-    }
-    
-    @objc
-    func cancel() {
-        didCancel?()
-    }
-    
-    @objc
-    func save() {
-        if let f = selectedFilter,
-            let applier = f.applier,
-            let ciImage = inputPhoto.originalImage.toCIImage(),
-            let modifiedFullSizeImage = applier(ciImage) {
-            inputPhoto.modifiedImage = modifiedFullSizeImage.toUIImage()
-        } else {
-            inputPhoto.modifiedImage = nil
-        }
-        didSave?(YPMediaItem.photo(p: inputPhoto))
     }
     
     fileprivate func thumbFromImage(_ img: UIImage) -> CIImage {
@@ -137,6 +126,34 @@ open class YPPhotoFiltersVC: UIViewController, IsMediaFilterVC, UIGestureRecogni
         let smallImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return smallImage!.toCIImage()!
+    }
+    
+    // MARK: - Actions 🥂
+
+    @objc
+    func cancel() {
+        didCancel?()
+    }
+    
+    @objc
+    func save() {
+        guard let didSave = didSave else { return print("Don't have saveCallback") }
+        self.navigationItem.rightBarButtonItem = YPLoaders.defaultLoader
+
+        DispatchQueue.global().async {
+            if let f = self.selectedFilter,
+                let applier = f.applier,
+                let ciImage = self.inputPhoto.originalImage.toCIImage(),
+                let modifiedFullSizeImage = applier(ciImage) {
+                self.inputPhoto.modifiedImage = modifiedFullSizeImage.toUIImage()
+            } else {
+                self.inputPhoto.modifiedImage = nil
+            }
+            DispatchQueue.main.async {
+                didSave(YPMediaItem.photo(p: self.inputPhoto))
+                self.setupRightBarButton()
+            }
+        }
     }
 }
 
