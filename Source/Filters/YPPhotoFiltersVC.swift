@@ -136,7 +136,7 @@ open class YPPhotoFiltersVC: UIViewController, IsMediaFilterVC, UIGestureRecogni
         img.draw(in: CGRect(x: 0, y: 0, width: thumbnailSize.width, height: thumbnailSize.height))
         let smallImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        return CIImage(cgImage: smallImage!.cgImage!)
+        return smallImage!.toCIImage()!
     }
 }
 
@@ -174,7 +174,7 @@ extension YPPhotoFiltersVC {
         if let applier = filter.applier,
             let thumbnailImage = thumbnailImageForFiltering,
             let outputImage = applier(thumbnailImage) {
-            return UIImage(ciImage: outputImage)
+            return outputImage.toUIImage()
         } else {
             return inputPhoto.originalImage
         }
