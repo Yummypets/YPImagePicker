@@ -9,25 +9,25 @@
 import UIKit
 import CoreImage
 
-typealias FilterApplierType = ((_ image: CIImage) -> CIImage?)
+public typealias FilterApplierType = ((_ image: CIImage) -> CIImage?)
 
 public struct YPFilter {
     var name = ""
     var applier: FilterApplierType?
     
-    init(name: String, coreImageFilterName: String) {
+    public init(name: String, coreImageFilterName: String) {
         self.name = name
         self.applier = YPFilter.coreImageFilter(name: coreImageFilterName)
     }
     
-    init(name: String, applier: FilterApplierType?) {
+    public init(name: String, applier: FilterApplierType?) {
         self.name = name
         self.applier = applier
     }
 }
 
 extension YPFilter {
-    static func coreImageFilter(name: String) -> FilterApplierType {
+    public static func coreImageFilter(name: String) -> FilterApplierType {
         return { (image: CIImage) -> CIImage? in
             let filter = CIFilter(name: name)
             filter?.setValue(image, forKey: kCIInputImageKey)
@@ -35,7 +35,7 @@ extension YPFilter {
         }
     }
     
-    static func clarendonFilter(foregroundImage: CIImage) -> CIImage? {
+    public static func clarendonFilter(foregroundImage: CIImage) -> CIImage? {
         let backgroundImage = getColorImage(red: 127, green: 187, blue: 227, alpha: Int(255 * 0.2), rect: foregroundImage.extent)
         return foregroundImage.applyingFilter("CIOverlayBlendMode", parameters: [
             "inputBackgroundImage": backgroundImage,
@@ -47,7 +47,7 @@ extension YPFilter {
                 ])
     }
     
-    static func nashvilleFilter(foregroundImage: CIImage) -> CIImage? {
+    public static func nashvilleFilter(foregroundImage: CIImage) -> CIImage? {
         let backgroundImage = getColorImage(red: 247, green: 176, blue: 153, alpha: Int(255 * 0.56), rect: foregroundImage.extent)
         let backgroundImage2 = getColorImage(red: 0, green: 70, blue: 150, alpha: Int(255 * 0.4), rect: foregroundImage.extent)
         return foregroundImage
@@ -67,7 +67,7 @@ extension YPFilter {
                 ])
     }
     
-    static func apply1977Filter(ciImage: CIImage) -> CIImage? {
+    public static func apply1977Filter(ciImage: CIImage) -> CIImage? {
         let filterImage = getColorImage(red: 243, green: 106, blue: 188, alpha: Int(255 * 0.1), rect: ciImage.extent)
         let backgroundImage = ciImage
             .applyingFilter("CIColorControls", parameters: [
@@ -91,7 +91,7 @@ extension YPFilter {
                 ])
     }
     
-    static func toasterFilter(ciImage: CIImage) -> CIImage? {
+    public static func toasterFilter(ciImage: CIImage) -> CIImage? {
         let width = ciImage.extent.width
         let height = ciImage.extent.height
         let centerWidth = width / 2.0
@@ -122,7 +122,7 @@ extension YPFilter {
     }
     
     
-    static func hazeRemovalFilter(image: CIImage) -> CIImage? {
+    public static func hazeRemovalFilter(image: CIImage) -> CIImage? {
         let filter = HazeRemovalFilter()
         filter.inputImage = image
         return filter.outputImage
