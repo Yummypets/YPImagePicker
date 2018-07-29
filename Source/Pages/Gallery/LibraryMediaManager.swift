@@ -86,16 +86,14 @@ class LibraryMediaManager {
                                             return
                                             
                 }
-                guard let audioTrack = asset.tracks(withMediaType: AVMediaType.audio).first,
+                if let audioTrack = asset.tracks(withMediaType: AVMediaType.audio).first,
                     let audioCompositionTrack = assetComposition
                         .addMutableTrack(withMediaType: AVMediaType.audio,
-                                         preferredTrackID: kCMPersistentTrackID_Invalid) else {
-                                            print("⚠️ PHCachingImageManager >>> Problems with audio track")
-                                            return
+                                         preferredTrackID: kCMPersistentTrackID_Invalid) {
+                    try audioCompositionTrack.insertTimeRange(trackTimeRange, of: audioTrack, at: kCMTimeZero)
                 }
                 
                 try videoCompositionTrack.insertTimeRange(trackTimeRange, of: videoTrack, at: kCMTimeZero)
-                try audioCompositionTrack.insertTimeRange(trackTimeRange, of: audioTrack, at: kCMTimeZero)
                 
                 // 2. Create the instructions
                 
