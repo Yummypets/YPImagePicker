@@ -51,6 +51,7 @@ public class YPVideoCaptureVC: UIViewController, YPPermissionCheckable {
     }
 
     func start() {
+        v.shotButton.isEnabled = false
         doAfterPermissionCheck { [weak self] in
             guard let strongSelf = self else {
                 return
@@ -59,6 +60,7 @@ public class YPVideoCaptureVC: UIViewController, YPPermissionCheckable {
                                     withVideoRecordingLimit: YPConfig.video.recordingTimeLimit,
                                     completion: {
                                         DispatchQueue.main.async {
+                                            self?.v.shotButton.isEnabled = true
                                             self?.refreshState()
                                         }
             })
