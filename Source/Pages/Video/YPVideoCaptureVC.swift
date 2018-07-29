@@ -8,11 +8,11 @@
 
 import UIKit
 
-public class YPVideoVC: UIViewController, YPPermissionCheckable {
+public class YPVideoCaptureVC: UIViewController, YPPermissionCheckable {
     
     public var didCaptureVideo: ((URL) -> Void)?
     
-    private let videoHelper = YPVideoHelper()
+    private let videoHelper = YPVideoCaptureHelper()
     private let v = YPCameraView(overlayView: nil)
     private var viewState = ViewState()
     
@@ -217,7 +217,7 @@ public class YPVideoVC: UIViewController, YPPermissionCheckable {
         }
     }
     
-    private func flashModeFrom(videoHelper: YPVideoHelper) -> FlashMode {
+    private func flashModeFrom(videoHelper: YPVideoCaptureHelper) -> FlashMode {
         if videoHelper.hasTorch() {
             switch videoHelper.currentTorchMode() {
             case .off: return .off

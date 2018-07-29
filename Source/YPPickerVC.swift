@@ -31,7 +31,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     
     private var libraryVC: YPLibraryVC?
     private var cameraVC: YPCameraVC?
-    private var videoVC: YPVideoVC?
+    private var videoVC: YPVideoCaptureVC?
     
     var mode = Mode.camera
     
@@ -66,7 +66,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         
         // Video
         if YPConfig.screens.contains(.video) {
-            videoVC = YPVideoVC()
+            videoVC = YPVideoCaptureVC()
             videoVC?.didCaptureVideo = { [weak self] videoURL in
                 self?.didSelectItems?([YPMediaItem
                     .video(v: YPMediaVideo(thumbnail: thumbnailFromVideoPath(videoURL),
@@ -140,7 +140,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
             return .library
         case is YPCameraVC:
             return .camera
-        case is YPVideoVC:
+        case is YPVideoCaptureVC:
             return .video
         default:
             return .camera
@@ -162,7 +162,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
             vc.checkPermission()
         } else if let cameraVC = vc as? YPCameraVC {
             cameraVC.start()
-        } else if let videoVC = vc as? YPVideoVC {
+        } else if let videoVC = vc as? YPVideoCaptureVC {
             videoVC.start()
         }
     
