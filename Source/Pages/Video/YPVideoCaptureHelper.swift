@@ -141,7 +141,7 @@ class YPVideoCaptureHelper: NSObject {
     // MARK: - Recording
     
     public func startRecording() {
-        let outputPath = "\(NSTemporaryDirectory())output.mov"
+        let outputPath = "\(NSTemporaryDirectory())output.\(YPConfig.video.fileType.fileExtension)"
         let outputURL = URL(fileURLWithPath: outputPath)
         let fileManager = FileManager.default
         if fileManager.fileExists(atPath: outputPath) {
