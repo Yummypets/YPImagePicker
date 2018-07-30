@@ -25,6 +25,8 @@ final class YPAssetZoomableView: UIScrollView {
     public var squaredZoomScale: CGFloat = 1
     public var minWidth: CGFloat? = YPConfig.library.minWidthForItem
     
+    fileprivate var currentAsset: PHAsset?
+    
     // Image view of the asset for convenience. Can be video preview image view or photo image view.
     public var assetImageView: UIImageView {
         return isVideoMode ? videoView.previewImageView : photoImageView
@@ -61,6 +63,7 @@ final class YPAssetZoomableView: UIScrollView {
                          completion: @escaping () -> Void) {
         mediaManager.imageManager?.fetchPreviewFor(video: video) { [weak self] preview in
             guard let strongSelf = self else { return }
+            guard strongSelf.currentAsset != video else { completion() ; return }
             
             if strongSelf.videoView.isDescendant(of: strongSelf) == false {
                 strongSelf.isVideoMode = true
@@ -84,9 +87,13 @@ final class YPAssetZoomableView: UIScrollView {
             
             completion()
         }
-        mediaManager.imageManager?.fetchPlayerItem(for: video) { playerItem in
-            self.videoView.loadVideo(playerItem)
-            self.videoView.play()
+        mediaManager.imageManager?.fetchPlayerItem(for: video) { [weak self] playerItem in
+            guard let strongSelf = self else { return }
+            guard strongSelf.currentAsset != video else { completion() ; return }
+            strongSelf.currentAsset = video
+
+            strongSelf.videoView.loadVideo(playerItem)
+            strongSelf.videoView.play()
         }
     }
     
@@ -94,14 +101,17 @@ final class YPAssetZoomableView: UIScrollView {
                          mediaManager: LibraryMediaManager,
                          storedCropPosition: YPLibrarySelection?,
                          completion: @escaping () -> Void) {
+        guard currentAsset != photo else { DispatchQueue.main.async { completion() }; return }
+        currentAsset = photo
+        
         mediaManager.imageManager?.fetch(photo: photo) { [weak self] image, _ in
             guard let strongSelf = self else { return }
             
             if strongSelf.photoImageView.isDescendant(of: strongSelf) == false {
                 strongSelf.isVideoMode = false
+                strongSelf.videoView.removeFromSuperview()
                 strongSelf.videoView.showPlayImage(show: false)
                 strongSelf.videoView.deallocate()
-                strongSelf.videoView.removeFromSuperview()
                 strongSelf.addSubview(strongSelf.photoImageView)
             
                 strongSelf.photoImageView.contentMode = .scaleAspectFill
@@ -159,7 +169,7 @@ final class YPAssetZoomableView: UIScrollView {
         
         // Centering image view
         view.center = center
-        centerImage()
+        centerAssetView()
         
         // Setting new scale
         minimumZoomScale = zoomScale
@@ -186,17 +196,18 @@ final class YPAssetZoomableView: UIScrollView {
     }
     
     // Centring the image frame
-    fileprivate func centerImage() {
+    fileprivate func centerAssetView() {
+        let assetView = isVideoMode ? videoView : photoImageView
         let scrollViewBoundsSize = self.bounds.size
-        var assetFrame = assetImageView.frame
-        let assetSize = assetImageView.frame.size
+        var assetFrame = assetView.frame
+        let assetSize = assetView.frame.size
         
         assetFrame.origin.x = (assetSize.width < scrollViewBoundsSize.width) ?
             (scrollViewBoundsSize.width - assetSize.width) / 2.0 : 0
         assetFrame.origin.y = (assetSize.height < scrollViewBoundsSize.height) ?
             (scrollViewBoundsSize.height - assetSize.height) / 2.0 : 0.0
         
-        assetImageView.frame = assetFrame
+        assetView.frame = assetFrame
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -230,7 +241,7 @@ extension YPAssetZoomableView: UIScrollViewDelegate {
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         myDelegate?.ypAssetZoomableViewScrollViewDidZoom()
         
-        centerImage()
+        centerAssetView()
     }
     
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
