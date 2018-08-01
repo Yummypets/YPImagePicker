@@ -314,6 +314,10 @@ Special thanks to [ihtiht](https://github.com/ihtiht) for the cool looking logo!
 ## Dependency
 YPImagePicker relies on [prynt/PryntTrimmerView](https://github.com/prynt/PryntTrimmerView) for provide video trimming and cover features. Big thanks to @HHK1 for making this open source :)
 
+## Obj-C support
+Objective-C is not supported and this is not on our roadmap.
+Swift is the future and dropping Obj-C is the price to pay to keep our velocity on this library :)
+
 ## License
 YPImagePicker is released under the MIT license.  
 See [LICENSE](LICENSE) for details.
