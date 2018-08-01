@@ -21,7 +21,6 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     internal let mediaManager = LibraryMediaManager()
     internal var latestImageTapped = ""
     internal let panGestureHelper = PanGestureHelper()
-    var userOptions: PHFetchOptions?
 
     // MARK: - Init
     
@@ -248,7 +247,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     
     func buildPHFetchOptions() -> PHFetchOptions {
         // Sorting condition
-        if let userOpt = userOptions {
+        if let userOpt = YPConfig.library.options {
             return userOpt
         }
         let options = PHFetchOptions()

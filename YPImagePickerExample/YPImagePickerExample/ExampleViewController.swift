@@ -10,6 +10,7 @@ import UIKit
 import YPImagePicker
 import AVFoundation
 import AVKit
+import Photos
 
 class ExampleViewController: UIViewController {
     var selectedItems = [YPMediaItem]()
@@ -63,7 +64,7 @@ class ExampleViewController: UIViewController {
     // MARK: - Configuration
     @objc
     func showPicker() {
-
+        
         var config = YPImagePickerConfiguration()
 
         /* Uncomment and play around with the configuration 👨‍🔬 🚀 */
@@ -148,6 +149,21 @@ class ExampleViewController: UIViewController {
         /* Here we use a per picker configuration. Configuration is always shared.
            That means than when you create one picker with configuration, than you can create other picker with just
            let picker = YPImagePicker() and the configuration will be the same as the first picker. */
+        
+        
+        /* Only show library pictures from the last 3 days */
+        //let threDaysTimeInterval: TimeInterval = 3 * 60 * 60 * 24
+        //let fromDate = Date().addingTimeInterval(-threDaysTimeInterval)
+        //let toDate = Date()
+        //let options = PHFetchOptions()
+        //options.predicate = NSPredicate(format: "creationDate > %@ && creationDate < %@", fromDate as CVarArg, toDate as CVarArg)
+        //
+        ////Just a way to set order
+        //let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: true)
+        //options.sortDescriptors = [sortDescriptor]
+        //
+        //config.library.options = options
+
         let picker = YPImagePicker(configuration: config)
 
         /* Change configuration directly */

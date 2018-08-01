@@ -19,7 +19,6 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     let albumsManager = YPAlbumsManager()
     var shouldHideStatusBar = false
     var initialStatusBarHidden = false
-    var options: PHFetchOptions?
     var imagePickerDelegate: ImagePickerDelegate?
     
     override public var prefersStatusBarHidden: Bool {
@@ -59,9 +58,6 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         // Library
         if YPConfig.screens.contains(.library) {
             libraryVC = YPLibraryVC()
-            if let opt = options, let lib = libraryVC {
-                lib.userOptions = opt
-            }
             libraryVC?.delegate = self
         }
         
@@ -230,7 +226,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
             label.textColor = navBarTitleColor
         }
         
-        if let _ = options {
+        if YPConfig.library.options != nil {
             titleView.sv(
                 label
             )
