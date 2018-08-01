@@ -18,6 +18,7 @@ class LibraryMediaManager {
     internal var imageManager: PHCachingImageManager?
     internal var selectedAsset: PHAsset!
     internal var exportTimer: Timer?
+    internal var currentExportSessions: [AVAssetExportSession] = []
     
     func initialize() {
         imageManager = PHCachingImageManager()
@@ -85,16 +86,14 @@ class LibraryMediaManager {
                                             return
                                             
                 }
-                guard let audioTrack = asset.tracks(withMediaType: AVMediaType.audio).first,
+                if let audioTrack = asset.tracks(withMediaType: AVMediaType.audio).first,
                     let audioCompositionTrack = assetComposition
                         .addMutableTrack(withMediaType: AVMediaType.audio,
-                                         preferredTrackID: kCMPersistentTrackID_Invalid) else {
-                                            print("⚠️ PHCachingImageManager >>> Problems with audio track")
-                                            return
+                                         preferredTrackID: kCMPersistentTrackID_Invalid) {
+                    try audioCompositionTrack.insertTimeRange(trackTimeRange, of: audioTrack, at: kCMTimeZero)
                 }
                 
                 try videoCompositionTrack.insertTimeRange(trackTimeRange, of: videoTrack, at: kCMTimeZero)
-                try audioCompositionTrack.insertTimeRange(trackTimeRange, of: audioTrack, at: kCMTimeZero)
                 
                 // 2. Create the instructions
                 
@@ -126,19 +125,22 @@ class LibraryMediaManager {
                     .appendingUniquePathComponent(pathExtension: YPConfig.video.fileType.fileExtension)
                 
                 // 6. Exporting
-                
                 DispatchQueue.main.async {
-                self.exportTimer = Timer.scheduledTimer(timeInterval: 0.1,
-                                                        target: self,
-                                                        selector: #selector(self.onTickExportTimer),
-                                                        userInfo: exportSession,
-                                                        repeats: true)
+                    self.exportTimer = Timer.scheduledTimer(timeInterval: 0.1,
+                                                            target: self,
+                                                            selector: #selector(self.onTickExportTimer),
+                                                            userInfo: exportSession,
+                                                            repeats: true)
                 }
                 
+                self.currentExportSessions.append(exportSession!)
                 exportSession?.exportAsynchronously(completionHandler: {
                     DispatchQueue.main.async {
                         if let url = exportSession?.outputURL, exportSession?.status == .completed {
                             callback(url)
+                            if let index = self.currentExportSessions.index(of:exportSession!) {
+                                self.currentExportSessions.remove(at: index)
+                            }
                         } else {
                             let error = exportSession?.error
                             print("error exporting video \(String(describing: error))")
@@ -154,7 +156,9 @@ class LibraryMediaManager {
     @objc func onTickExportTimer(sender: Timer) {
         if let exportSession = sender.userInfo as? AVAssetExportSession {
             if let v = v {
-                v.updateProgress(exportSession.progress)
+                if exportSession.progress > 0 {
+                    v.updateProgress(exportSession.progress)
+                }
             }
             
             if exportSession.progress > 0.99 {
@@ -164,4 +168,11 @@ class LibraryMediaManager {
             }
         }
     }
+    
+    func forseCancelExporting() {
+        for s in self.currentExportSessions {
+            s.cancelExport()
+        }
+    }
 }
+

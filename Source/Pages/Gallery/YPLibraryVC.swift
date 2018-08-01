@@ -269,26 +269,25 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         latestImageTapped = asset.localIdentifier
         delegate?.libraryViewStartedLoading()
         
+        let completion = {
+            self.v.hideLoader()
+            self.v.hideGrid()
+            self.delegate?.libraryViewFinishedLoading()
+            self.v.assetViewContainer.refreshSquareCropButton()
+        }
+        
         DispatchQueue.global(qos: .userInitiated).async {
             switch asset.mediaType {
             case .image:
                 self.v.assetZoomableView.setImage(asset,
                                                   mediaManager: self.mediaManager,
-                                                  storedCropPosition: self.fetchStoredCrop()) {
-                    self.v.hideLoader()
-                    self.v.hideGrid()
-                    self.delegate?.libraryViewFinishedLoading()
-                    self.v.assetViewContainer.refreshSquareCropButton()
-                }
+                                                  storedCropPosition: self.fetchStoredCrop(),
+                                                  completion: completion)
             case .video:
                 self.v.assetZoomableView.setVideo(asset,
                                                   mediaManager: self.mediaManager,
-                                                  storedCropPosition: self.fetchStoredCrop()) {
-                    self.v.hideLoader()
-                    self.v.hideGrid()
-                    self.delegate?.libraryViewFinishedLoading()
-                    self.v.assetViewContainer.refreshSquareCropButton()
-                }
+                                                  storedCropPosition: self.fetchStoredCrop(),
+                                                  completion: completion)
             case .audio, .unknown:
                 ()
             }
@@ -476,15 +475,5 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     
     deinit {
         PHPhotoLibrary.shared().unregisterChangeObserver(self)
-    }
-}
-
-extension UIImage {
-    
-    func resized(to size: CGSize) -> UIImage? {
-        UIGraphicsBeginImageContextWithOptions(size, false, scale)
-        defer { UIGraphicsEndImageContext() }
-        draw(in: CGRect(origin: .zero, size: size))
-        return UIGraphicsGetImageFromCurrentImageContext()
     }
 }

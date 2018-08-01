@@ -8,11 +8,11 @@
 
 import UIKit
 
-public class YPVideoVC: UIViewController, YPPermissionCheckable {
+public class YPVideoCaptureVC: UIViewController, YPPermissionCheckable {
     
     public var didCaptureVideo: ((URL) -> Void)?
     
-    private let videoHelper = YPVideoHelper()
+    private let videoHelper = YPVideoCaptureHelper()
     private let v = YPCameraView(overlayView: nil)
     private var viewState = ViewState()
     
@@ -51,6 +51,7 @@ public class YPVideoVC: UIViewController, YPPermissionCheckable {
     }
 
     func start() {
+        v.shotButton.isEnabled = false
         doAfterPermissionCheck { [weak self] in
             guard let strongSelf = self else {
                 return
@@ -59,6 +60,7 @@ public class YPVideoVC: UIViewController, YPPermissionCheckable {
                                     withVideoRecordingLimit: YPConfig.video.recordingTimeLimit,
                                     completion: {
                                         DispatchQueue.main.async {
+                                            self?.v.shotButton.isEnabled = true
                                             self?.refreshState()
                                         }
             })
@@ -217,7 +219,7 @@ public class YPVideoVC: UIViewController, YPPermissionCheckable {
         }
     }
     
-    private func flashModeFrom(videoHelper: YPVideoHelper) -> FlashMode {
+    private func flashModeFrom(videoHelper: YPVideoCaptureHelper) -> FlashMode {
         if videoHelper.hasTorch() {
             switch videoHelper.currentTorchMode() {
             case .off: return .off

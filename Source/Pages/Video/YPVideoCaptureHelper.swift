@@ -11,7 +11,7 @@ import AVFoundation
 import CoreMotion
 
 /// Abstracts Low Level AVFoudation details.
-class YPVideoHelper: NSObject {
+class YPVideoCaptureHelper: NSObject {
     
     public var isRecording: Bool { return videoOutput.isRecording }
     public var didCaptureVideo: ((URL) -> Void)?
@@ -141,7 +141,7 @@ class YPVideoHelper: NSObject {
     // MARK: - Recording
     
     public func startRecording() {
-        let outputPath = "\(NSTemporaryDirectory())output.mov"
+        let outputPath = "\(NSTemporaryDirectory())output.\(YPConfig.video.fileType.fileExtension)"
         let outputURL = URL(fileURLWithPath: outputPath)
         let fileManager = FileManager.default
         if fileManager.fileExists(atPath: outputPath) {
@@ -256,7 +256,7 @@ class YPVideoHelper: NSObject {
     }
 }
 
-extension YPVideoHelper: AVCaptureFileOutputRecordingDelegate {
+extension YPVideoCaptureHelper: AVCaptureFileOutputRecordingDelegate {
     
     public func fileOutput(_ captureOutput: AVCaptureFileOutput,
                            didStartRecordingTo fileURL: URL,

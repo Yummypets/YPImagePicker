@@ -144,6 +144,9 @@ public struct YPConfigLibrary {
     /// Set this to true if you want to force the library output to be a squared image. Defaults to false
     public var onlySquare = false
     
+    /// Minimum width, to prevent selectiong too high images. Have sense if onlySquare is true and the image is portrait.
+    public var minWidthForItem: CGFloat?
+    
     /// Choose what media types are available in the library. Defaults to `.photo`
     public var mediaType = YPlibraryMediaType.photo
     

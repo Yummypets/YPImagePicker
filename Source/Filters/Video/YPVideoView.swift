@@ -66,7 +66,6 @@ public class YPVideoView: UIView {
     override public func layoutSubviews() {
         super.layoutSubviews()
         playerLayer.frame = playerView.frame
-        previewImageView.frame = playerView.frame
     }
     
     @objc internal func singleTap() {
