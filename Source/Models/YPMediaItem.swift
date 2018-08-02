@@ -31,14 +31,17 @@ public class YPMediaPhoto {
 }
 
 public class YPMediaVideo {
+    
     public var thumbnail: UIImage
     public var url: URL
     public let fromCamera: Bool
+    public var asset: PHAsset?
 
-    init(thumbnail: UIImage, videoURL: URL, fromCamera: Bool = false) {
+    init(thumbnail: UIImage, videoURL: URL, fromCamera: Bool = false, asset: PHAsset? = nil) {
         self.thumbnail = thumbnail
         self.url = videoURL
         self.fromCamera = fromCamera
+        self.asset = asset
     }
 }
 

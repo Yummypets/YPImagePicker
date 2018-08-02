@@ -307,10 +307,9 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
             libraryVC.doAfterPermissionCheck { [weak self] in
                 libraryVC.selectedMedia(photoCallback: { photo in
                     self?.didSelectItems?([YPMediaItem.photo(p: photo)])
-                }, videoCallback: { videoURL in
+                }, videoCallback: { video in
                     self?.didSelectItems?([YPMediaItem
-                        .video(v: YPMediaVideo(thumbnail: thumbnailFromVideoPath(videoURL),
-                                               videoURL: videoURL))])
+                        .video(v: video)])
                 }, multipleItemsCallback: { items in
                     self?.didSelectItems?(items)
                 })

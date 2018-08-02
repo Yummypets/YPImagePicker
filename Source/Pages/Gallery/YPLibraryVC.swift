@@ -387,7 +387,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     }
     
     public func selectedMedia(photoCallback: @escaping (_ photo: YPMediaPhoto) -> Void,
-                              videoCallback: @escaping (_ videoURL: URL) -> Void,
+                              videoCallback: @escaping (_ videoURL: YPMediaVideo) -> Void,
                               multipleItemsCallback: @escaping (_ items: [YPMediaItem]) -> Void) {
         DispatchQueue.global(qos: .userInitiated).async {
             
@@ -422,7 +422,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                     case .video:
                         self.checkVideoLengthAndCrop(for: asset.asset, withCropRect: asset.cropRect) { videoURL in
                             let videoItem = YPMediaVideo(thumbnail: thumbnailFromVideoPath(videoURL),
-                                                         videoURL: videoURL)
+                                                         videoURL: videoURL, asset: asset.asset)
                             resultMediaItems.append(YPMediaItem.video(v: videoItem))
                             asyncGroup.leave()
                         }
@@ -442,7 +442,9 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                     self.checkVideoLengthAndCrop(for: asset, callback: { videoURL in
                         DispatchQueue.main.async {
                             self.delegate?.libraryViewFinishedLoading()
-                            videoCallback(videoURL)
+                            let video = YPMediaVideo(thumbnail: thumbnailFromVideoPath(videoURL),
+                                                     videoURL: videoURL, asset: asset)
+                            videoCallback(video)
                         }
                     })
                 case .image:
