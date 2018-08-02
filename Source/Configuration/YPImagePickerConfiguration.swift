@@ -9,6 +9,7 @@
 import Foundation
 import AVFoundation
 import UIKit
+import Photos
 
 /// Typealias for code prettiness
 internal var YPConfig: YPImagePickerConfiguration { return YPImagePickerConfiguration.shared }
@@ -140,6 +141,8 @@ public struct YPImagePickerConfiguration {
 
 /// Encapsulates library specific settings.
 public struct YPConfigLibrary {
+    
+     public var options: PHFetchOptions? = nil
     
     /// Set this to true if you want to force the library output to be a squared image. Defaults to false
     public var onlySquare = false

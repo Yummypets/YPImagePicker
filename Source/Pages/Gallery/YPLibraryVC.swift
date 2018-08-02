@@ -239,12 +239,17 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
             v.collectionView.selectItem(at: IndexPath(row: 0, section: 0),
                                              animated: false,
                                              scrollPosition: UICollectionViewScrollPosition())
+        } else {
+            delegate?.noPhotosForOptions()
         }
         scrollToTop()
     }
     
     func buildPHFetchOptions() -> PHFetchOptions {
         // Sorting condition
+        if let userOpt = YPConfig.library.options {
+            return userOpt
+        }
         let options = PHFetchOptions()
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         options.predicate = YPConfig.library.mediaType.predicate()

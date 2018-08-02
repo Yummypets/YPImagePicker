@@ -8,12 +8,18 @@
 
 import Foundation
 import Stevia
+import Photos
+
+protocol ImagePickerDelegate {
+    func noPhotos()
+}
 
 public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     
     let albumsManager = YPAlbumsManager()
     var shouldHideStatusBar = false
     var initialStatusBarHidden = false
+    var imagePickerDelegate: ImagePickerDelegate?
     
     override public var prefersStatusBarHidden: Bool {
         return (shouldHideStatusBar || initialStatusBarHidden) && YPConfig.hidesStatusBar
@@ -220,25 +226,32 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
             label.textColor = navBarTitleColor
         }
         
-        let arrow = UIImageView()
-        arrow.image = YPConfig.icons.arrowDownIcon
-        
-        let button = UIButton()
-        button.addTarget(self, action: #selector(navBarTapped), for: .touchUpInside)
-        button.setBackgroundColor(UIColor.white.withAlphaComponent(0.5), forState: .highlighted)
-        
-        titleView.sv(
-            label,
-            arrow,
-            button
-        )
+        if YPConfig.library.options != nil {
+            titleView.sv(
+                label
+            )
+            |-(>=8)-label.centerHorizontally()-(>=8)-|
+            align(horizontally: label)
+        } else {
+            let arrow = UIImageView()
+            arrow.image = YPConfig.icons.arrowDownIcon
+            let button = UIButton()
+            button.addTarget(self, action: #selector(navBarTapped), for: .touchUpInside)
+            button.setBackgroundColor(UIColor.white.withAlphaComponent(0.5), forState: .highlighted)
+            
+            titleView.sv(
+                label,
+                arrow,
+                button
+            )
+            button.fillContainer()
+            |-(>=8)-label.centerHorizontally()-arrow-(>=8)-|
+            align(horizontally: label-arrow)
+        }
         
         label.firstBaselineAnchor.constraint(equalTo: titleView.bottomAnchor, constant: -14).isActive = true
         
-        button.fillContainer()
         
-        |-(>=8)-label.centerHorizontally()-arrow-(>=8)-|
-        align(horizontally: label-arrow)
         
         titleView.heightAnchor.constraint(equalToConstant: 40).isActive = true
         navigationItem.titleView = titleView
@@ -341,5 +354,11 @@ extension YPPickerVC: YPLibraryViewDelegate {
         
         v.header.bottomConstraint?.constant = enabled ? offset : 0
         v.layoutIfNeeded()
+    }
+    
+    public func noPhotosForOptions() {
+        self.dismiss(animated: true) {
+            self.imagePickerDelegate?.noPhotos()
+        }
     }
 }
