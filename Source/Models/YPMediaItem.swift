@@ -9,19 +9,24 @@
 import UIKit
 import Foundation
 import AVFoundation
+import Photos
+
 
 public class YPMediaPhoto {
+    
     public var image: UIImage { return modifiedImage ?? originalImage }
     public let originalImage: UIImage
     public var modifiedImage: UIImage?
     public let fromCamera: Bool
     public let exifMeta : [String : Any]?
+    public var asset: PHAsset?
     
-    init(image: UIImage, exifMeta : [String : Any]? = nil, fromCamera: Bool = false) {
+    init(image: UIImage, exifMeta : [String : Any]? = nil, fromCamera: Bool = false, asset: PHAsset? = nil) {
         self.originalImage = image
         self.modifiedImage = nil
         self.fromCamera = fromCamera
         self.exifMeta = exifMeta
+        self.asset = asset
     }
 }
 
