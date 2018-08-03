@@ -10,30 +10,32 @@ import Foundation
 import Photos
 
 extension PHCachingImageManager {
-    
+
     private func photoImageRequestOptions() -> PHImageRequestOptions {
         let options = PHImageRequestOptions()
         options.deliveryMode = .highQualityFormat
         options.isNetworkAccessAllowed = true
         options.resizeMode = .exact
-        options.isSynchronous = true // Ok since we're already in a background thread
+        options.isSynchronous = false // isSynchronous = true breaks iCloud images
         return options
     }
-    
+
     func fetchImage(for asset: PHAsset, cropRect: CGRect, targetSize: CGSize, callback: @escaping (UIImage, [String: Any]) -> Void) {
         let options = photoImageRequestOptions()
-    
+
         // Fetch Highiest quality image possible.
         requestImageData(for: asset, options: options) { data, dataUTI, CTFontOrientation, info in
             if let data = data, let image = UIImage(data: data)?.resetOrientation() {
-            
+
+                let imageScale = image.size.width / CGFloat(asset.pixelWidth)
+
                 // Crop the high quality image manually.
-                let xCrop: CGFloat = cropRect.origin.x * CGFloat(asset.pixelWidth)
-                let yCrop: CGFloat = cropRect.origin.y * CGFloat(asset.pixelHeight)
+                let xCrop: CGFloat = cropRect.origin.x * CGFloat(image.size.width)
+                let yCrop: CGFloat = cropRect.origin.y * CGFloat(image.size.height)
                 let scaledCropRect = CGRect(x: xCrop,
                                             y: yCrop,
-                                            width: targetSize.width,
-                                            height: targetSize.height)
+                                            width: targetSize.width * imageScale,
+                                            height: targetSize.height * imageScale)
                 if let imageRef = image.cgImage?.cropping(to: scaledCropRect) {
                     let croppedImage = UIImage(cgImage: imageRef)
                     let exifs = self.metadataForImageData(data: data)
@@ -42,7 +44,7 @@ extension PHCachingImageManager {
             }
         }
     }
-    
+
     private func metadataForImageData(data: Data) -> [String: Any] {
         if let imageSource = CGImageSourceCreateWithData(data as CFData, nil),
         let imageProperties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil),
@@ -51,11 +53,11 @@ extension PHCachingImageManager {
         }
         return [:]
     }
-    
+
     func fetchPreviewFor(video asset: PHAsset, callback: @escaping (UIImage) -> Void) {
         let options = PHImageRequestOptions()
         options.isNetworkAccessAllowed = true
-        options.isSynchronous = true
+        options.isSynchronous = true // isSynchronous = true breaks iCloud images
         let screenWidth = UIScreen.main.bounds.width
         let ts = CGSize(width: screenWidth, height: screenWidth)
         requestImage(for: asset, targetSize: ts, contentMode: .aspectFill, options: options) { image, _ in
@@ -66,7 +68,7 @@ extension PHCachingImageManager {
             }
         }
     }
-    
+
     func fetchPlayerItem(for video: PHAsset, callback: @escaping (AVPlayerItem) -> Void) {
         let videosOptions = PHVideoRequestOptions()
         videosOptions.deliveryMode = PHVideoRequestOptionsDeliveryMode.automatic
@@ -79,14 +81,14 @@ extension PHCachingImageManager {
             }
         })
     }
-    
+
     /// This method return two images in the callback. First is with low resolution, second with high.
     /// So the callback fires twice. But with isSynchronous = true there is only one high resolution image.
     /// Bool = isFromCloud
     func fetch(photo asset: PHAsset, callback: @escaping (UIImage, Bool) -> Void) {
         let options = PHImageRequestOptions()
         options.isNetworkAccessAllowed = true
-        options.isSynchronous = true
+        options.isSynchronous = false
         requestImage(for: asset,
                      targetSize: PHImageManagerMaximumSize,
                      contentMode: .aspectFill,
