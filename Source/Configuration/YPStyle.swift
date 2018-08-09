@@ -21,7 +21,7 @@ public struct YPStyle {
     /// The color of the title in the navigation bar
     public var navBarTitleColor: UIColor = .black
     /// The color of the 'Next' button located on the right navigation bar item
-    public var nextButtonColor: UIColor = .red
+    public var nextButtonColor: UIColor = .blue
     /// The background color of the currently selected photo, from within the Gallery
     public var selectedPhotoBackgroundColor: UIColor = .white
     /// The background color of the photos presented from the gallery view
@@ -37,6 +37,6 @@ public struct YPStyle {
     public var bottomPagerTextUnselectedColor: UIColor = .lightGray
 
     /// The color of any progress spinners that appear
-    public var progressSpinnerTintColor: UIColor = .red
+    public var progressSpinnerTintColor: UIColor = .black
 
 }
