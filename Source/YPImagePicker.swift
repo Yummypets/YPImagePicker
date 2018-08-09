@@ -82,7 +82,7 @@ public class YPImagePicker: UINavigationController {
         }
         viewControllers = [picker]
         setupLoadingView()
-        navigationBar.isTranslucent = false
+        styleNavBar()
 
         picker.didSelectItems = { [weak self] items in
             let showsFilters = YPConfig.showsFilters
@@ -163,15 +163,18 @@ public class YPImagePicker: UINavigationController {
                 }
             }
         }
-        
-        // If user has not customized the Nav Bar tintColor, then use black.
-        if UINavigationBar.appearance().tintColor == nil {
-            UINavigationBar.appearance().tintColor  = .black
-        }
+
     }
-    
+
     deinit {
         print("Picker deinited 👍")
+    }
+
+
+    private func styleNavBar() {
+        navigationBar.isTranslucent = false
+        navigationBar.tintColor = YPConfig.customStyling.navBarTintColor
+        navigationBar.barTintColor = YPConfig.customStyling.navBarBackgroundColor
     }
     
     private func setupLoadingView() {

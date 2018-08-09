@@ -20,7 +20,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     var shouldHideStatusBar = false
     var initialStatusBarHidden = false
     var imagePickerDelegate: ImagePickerDelegate?
-    
+
     override public var prefersStatusBarHidden: Bool {
         return (shouldHideStatusBar || initialStatusBarHidden) && YPConfig.hidesStatusBar
     }
@@ -46,7 +46,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     public override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = UIColor(r: 247, g: 247, b: 247)
+        view.backgroundColor = YPConfig.customStyling.photoCollectionBackgroundColor
         
         delegate = self
         
@@ -216,16 +216,10 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         // Use standard font by default.
         label.font = UIFont.boldSystemFont(ofSize: 17)
         
-        // Use custom font if set by user.
-        if let navBarTitleFont = UINavigationBar.appearance().titleTextAttributes?[.font] as? UIFont {
-            // Use custom font if set by user.
-            label.font = navBarTitleFont
-        }
         // Use custom textColor if set by user.
-        if let navBarTitleColor = UINavigationBar.appearance().titleTextAttributes?[.foregroundColor] as? UIColor {
-            label.textColor = navBarTitleColor
-        }
-        
+        label.textColor = YPConfig.customStyling.navBarTitleColor
+        label.font = YPConfig.customStyling.navBarTitleFont
+
         if YPConfig.library.options != nil {
             titleView.sv(
                 label

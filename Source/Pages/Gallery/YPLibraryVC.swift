@@ -63,6 +63,8 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         
         v.assetViewContainer.multipleSelectionButton.isHidden = !(YPConfig.library.maxNumberOfItems > 1)
         v.maxNumberWarningLabel.text = String(format: YPConfig.wordings.warningMaxItemsLimit, YPConfig.library.maxNumberOfItems)
+        v.collectionView.backgroundColor = YPConfig.customStyling.photoCollectionBackgroundColor
+        v.assetViewContainer.backgroundColor = YPConfig.customStyling.selectedPhotoBackgroundColor
     }
     
     // MARK: - View Lifecycle

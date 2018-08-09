@@ -66,6 +66,7 @@
 		99CF6D29201B900400487F77 /* LibraryMediaManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CF6D28201B900400487F77 /* LibraryMediaManager.swift */; };
 		99CF6D2B201CB96700487F77 /* YPVideoCaptureHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CF6D2A201CB96700487F77 /* YPVideoCaptureHelper.swift */; };
 		99D1DC2B1F9788930047F0E0 /* YPImagePickerConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D1DC2A1F9788930047F0E0 /* YPImagePickerConfiguration.swift */; };
+		EAAED830C5DB5F1095740AC2 /* YPStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAAEDC803C07FD87F98C20C2 /* YPStyle.swift */; };
 		EB19A8F420AC41AE007F88D8 /* AVAssetTrack+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB19A8F320AC41AE007F88D8 /* AVAssetTrack+Extensions.swift */; };
 		EB1AB2EA20AC1DED00BFA79F /* CGFloat+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1AB2E920AC1DED00BFA79F /* CGFloat+Extensions.swift */; };
 		EB473E17208E192800D16105 /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB473E16208E192800D16105 /* URL+Extensions.swift */; };
@@ -166,6 +167,7 @@
 		99D1DC2A1F9788930047F0E0 /* YPImagePickerConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPImagePickerConfiguration.swift; sourceTree = "<group>"; };
 		A7FD716620755C2D0044A8E8 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E5287F5820B908720052153D /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
+		EAAEDC803C07FD87F98C20C2 /* YPStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPStyle.swift; sourceTree = "<group>"; };
 		EB11EE9820572F3700A19365 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		EB19A8F320AC41AE007F88D8 /* AVAssetTrack+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVAssetTrack+Extensions.swift"; sourceTree = "<group>"; };
 		EB1AB2E920AC1DED00BFA79F /* CGFloat+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat+Extensions.swift"; sourceTree = "<group>"; };
@@ -245,6 +247,7 @@
 				EBD66106208104F400EA276E /* YPColors.swift */,
 				99019E502018CDED007325C2 /* YPImageSize.swift */,
 				99019E522018CE19007325C2 /* YPPickerScreen.swift */,
+				EAAEDC803C07FD87F98C20C2 /* YPStyle.swift */,
 			);
 			path = Configuration;
 			sourceTree = "<group>";
@@ -644,6 +647,7 @@
 				EBD66107208104F400EA276E /* YPColors.swift in Sources */,
 				99A052A11F20B49B005600B3 /* YPAlbum.swift in Sources */,
 				EBE6CA48210389ED005B0A6A /* CIImage+Extensions.swift in Sources */,
+				EAAED830C5DB5F1095740AC2 /* YPStyle.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

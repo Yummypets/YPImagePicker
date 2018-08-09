@@ -30,6 +30,7 @@ public class YPBottomPager: UIViewController, UIScrollViewDelegate {
     override public func loadView() {
         self.automaticallyAdjustsScrollViewInsets = false
         v.scrollView.delegate = self
+        v.backgroundColor = YPConfig.customStyling.bottomPagerBackgroundColor
         view = v
     }
     
@@ -70,6 +71,9 @@ public class YPBottomPager: UIViewController, UIScrollViewDelegate {
         for (index, c) in controllers.enumerated() {
             let menuItem = YPMenuItem()
             menuItem.textLabel.text = c.title?.capitalized
+            menuItem.textLabel.textColor = YPConfig.customStyling.bottomPagerTextColor
+            menuItem.textLabel.font = YPConfig.customStyling.bottomPagerTextFont
+            menuItem.button.backgroundColor = YPConfig.customStyling.bottomPagerBackgroundColor
             menuItem.button.tag = index
             menuItem.button.addTarget(self,
                                       action: #selector(tabTapped(_:)),
