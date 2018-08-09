@@ -24,7 +24,7 @@ public struct YPStyle {
     public var navBarStyle: UIBarStyle = .default
 
     /// The color of the 'Next' button located on the right navigation bar item
-    public var nextButtonColor: UIColor = .blue
+    public var nextButtonColor: UIColor = YPColors().tintColor
     /// The background color of the currently selected photo, from within the Gallery
     public var selectedPhotoBackgroundColor: UIColor = .white
     /// The background color of the photos presented from the gallery view
