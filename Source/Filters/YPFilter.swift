@@ -15,9 +15,9 @@ public struct YPFilter {
     var name = ""
     var applier: FilterApplierType?
     
-    public init(name: String, coreImageFilterName: String) {
+    public init(name: String, coreImageFilter: YPCoreImageFilter) {
         self.name = name
-        self.applier = YPFilter.coreImageFilter(name: coreImageFilterName)
+        self.applier = YPFilter.coreImageFilter(type: coreImageFilter)
     }
     
     public init(name: String, applier: FilterApplierType?) {
@@ -27,9 +27,9 @@ public struct YPFilter {
 }
 
 extension YPFilter {
-    public static func coreImageFilter(name: String) -> FilterApplierType {
+    public static func coreImageFilter(type: YPCoreImageFilter) -> FilterApplierType {
         return { (image: CIImage) -> CIImage? in
-            let filter = CIFilter(name: name)
+            let filter = CIFilter(name: type.filterName)
             filter?.setValue(image, forKey: kCIInputImageKey)
             return filter?.outputImage!
         }
@@ -223,3 +223,33 @@ kernel vec4 myHazeRemovalKernel(
     }
 }
 
+public enum YPCoreImageFilter: String {
+    case Chrome
+    case Fade
+    case Instant
+    case Mono
+    case Noir
+    case Process
+    case Tonal
+    case Transfer
+    case Tone
+    case Linear
+    case Sepia
+
+    var filterName: String {
+
+        switch self {
+            case .Chrome:   return "CIPhotoEffectChrome"
+            case .Fade:     return "CIPhotoEffectFade"
+            case .Instant:  return "CIPhotoEffectInstant"
+            case .Mono:     return "CIPhotoEffectMono"
+            case .Noir:     return "CIPhotoEffectNoir"
+            case .Process:  return "CIPhotoEffectProcess"
+            case .Tonal:    return "CIPhotoEffectTonal"
+            case .Transfer: return "CIPhotoEffectTransfer"
+            case .Tone:     return "CILinearToSRGBToneCurve"
+            case .Linear:   return "CISRGBToneCurveToLinear"
+            case .Sepia:    return "CISepiaTone"
+        }
+    }
+}

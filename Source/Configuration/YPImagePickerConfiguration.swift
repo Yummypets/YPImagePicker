@@ -83,18 +83,18 @@ public struct YPImagePickerConfiguration {
         YPFilter(name: "1977", applier: YPFilter.apply1977Filter),
         YPFilter(name: "Clarendon", applier: YPFilter.clarendonFilter),
         YPFilter(name: "HazeRemoval", applier: YPFilter.hazeRemovalFilter),
-        YPFilter(name: "Chrome", coreImageFilterName: "CIPhotoEffectChrome"),
-        YPFilter(name: "Fade", coreImageFilterName: "CIPhotoEffectFade"),
-        YPFilter(name: "Instant", coreImageFilterName: "CIPhotoEffectInstant"),
-        YPFilter(name: "Mono", coreImageFilterName: "CIPhotoEffectMono"),
-        YPFilter(name: "Noir", coreImageFilterName: "CIPhotoEffectNoir"),
-        YPFilter(name: "Process", coreImageFilterName: "CIPhotoEffectProcess"),
-        YPFilter(name: "Tonal", coreImageFilterName: "CIPhotoEffectTonal"),
-        YPFilter(name: "Transfer", coreImageFilterName: "CIPhotoEffectTransfer"),
-        YPFilter(name: "Tone", coreImageFilterName: "CILinearToSRGBToneCurve"),
-        YPFilter(name: "Linear", coreImageFilterName: "CISRGBToneCurveToLinear"),
-        YPFilter(name: "Sepia", coreImageFilterName: "CISepiaTone"),
-        ]
+        YPFilter(name: "Chrome", coreImageFilter: .Chrome),
+        YPFilter(name: "Fade", coreImageFilter: .Fade),
+        YPFilter(name: "Instant", coreImageFilter: .Instant),
+        YPFilter(name: "Mono", coreImageFilter: .Mono),
+        YPFilter(name: "Noir", coreImageFilter: .Noir),
+        YPFilter(name: "Process", coreImageFilter: .Process),
+        YPFilter(name: "Tonal", coreImageFilter: .Tonal),
+        YPFilter(name: "Transfer", coreImageFilter: .Transfer),
+        YPFilter(name: "Tone", coreImageFilter: .Tone),
+        YPFilter(name: "Linear", coreImageFilter: .Linear),
+        YPFilter(name: "Sepia", coreImageFilter: .Sepia)
+    ]
     
     /// Migration
     
