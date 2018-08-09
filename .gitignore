@@ -38,3 +38,5 @@ Pods/
 
 
 *.lock
+
+.idea/
