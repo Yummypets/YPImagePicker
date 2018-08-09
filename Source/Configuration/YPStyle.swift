@@ -17,7 +17,7 @@ public struct YPStyle {
     /// Tint color of items contained within the navigation bar
     public var navBarTintColor: UIColor = .black
     /// The font of the title in the navigation bar
-    public var navBarTitleFont: UIFont = .systemFont(ofSize: 12, weight: .bold)
+    public var navBarTitleFont: UIFont = .systemFont(ofSize: 21, weight: .bold)
     /// The color of the title in the navigation bar
     public var navBarTitleColor: UIColor = .black
     /// The color of the 'Next' button located on the right navigation bar item
