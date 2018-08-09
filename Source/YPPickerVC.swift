@@ -24,7 +24,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     override public var prefersStatusBarHidden: Bool {
         return (shouldHideStatusBar || initialStatusBarHidden) && YPConfig.hidesStatusBar
     }
-    
+
     /// Private callbacks to YPImagePicker
     public var didClose:(() -> Void)?
     public var didSelectItems: (([YPMediaItem]) -> Void)?
@@ -232,6 +232,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
             let button = UIButton()
             button.addTarget(self, action: #selector(navBarTapped), for: .touchUpInside)
             button.setBackgroundColor(UIColor.white.withAlphaComponent(0.5), forState: .highlighted)
+            button.tintColor = YPConfig.customStyling.navBarTitleColor
             
             titleView.sv(
                 label,

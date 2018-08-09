@@ -15,7 +15,7 @@ public protocol YPImagePickerDelegate {
 }
 
 public class YPImagePicker: UINavigationController {
-    
+
     @available(*, deprecated, message: "Use didFinishPicking callback instead")
     public var didSelectImage: ((UIImage) -> Void)?
     @available(*, deprecated, message: "Use didFinishPicking callback instead")
@@ -28,11 +28,7 @@ public class YPImagePicker: UINavigationController {
         _didFinishPicking = completion
     }
     public var imagePickerDelegate: YPImagePickerDelegate?
-    
-    public override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .default
-    }
-    
+
     // This nifty little trick enables us to call the single version of the callbacks.
     // This keeps the backwards compatibility keeps the api as simple as possible.
     // Multiple selection becomes available as an opt-in.
@@ -172,9 +168,18 @@ public class YPImagePicker: UINavigationController {
 
 
     private func styleNavBar() {
-        navigationBar.isTranslucent = false
-        navigationBar.tintColor = YPConfig.customStyling.navBarTintColor
-        navigationBar.barTintColor = YPConfig.customStyling.navBarBackgroundColor
+        let styling = YPConfig.customStyling
+
+        navigationBar.isTranslucent = styling.navBarIsTranslucent
+        navigationBar.tintColor = styling.navBarTintColor
+        navigationBar.barTintColor = styling.navBarBackgroundColor
+        navigationBar.barStyle = .black
+        
+        var titleAttributes = navigationBar.titleTextAttributes  ?? [NSAttributedStringKey: Any]()
+        
+        titleAttributes[.font] = styling.navBarTitleFont
+        titleAttributes[.foregroundColor] = styling.navBarTitleColor
+        navigationBar.titleTextAttributes = titleAttributes
     }
     
     private func setupLoadingView() {

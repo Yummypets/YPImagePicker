@@ -11,15 +11,18 @@ import UIKit
 
 public struct YPStyle {
 
+    public var navBarIsTranslucent: Bool = false
     /// Solid background color of the navigation bar itself
     public var navBarBackgroundColor: UIColor = .white
-
     /// Tint color of items contained within the navigation bar
     public var navBarTintColor: UIColor = .black
     /// The font of the title in the navigation bar
     public var navBarTitleFont: UIFont = .systemFont(ofSize: 21, weight: .bold)
     /// The color of the title in the navigation bar
     public var navBarTitleColor: UIColor = .black
+    /// Helps define the color of the status bar
+    public var navBarStyle: UIBarStyle = .default
+
     /// The color of the 'Next' button located on the right navigation bar item
     public var nextButtonColor: UIColor = .blue
     /// The background color of the currently selected photo, from within the Gallery
