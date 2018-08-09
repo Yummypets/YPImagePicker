@@ -11,14 +11,29 @@ import UIKit
 
 public struct YPStyle {
 
-    public var navBarTintColor: UIColor = .black
+    /// Solid background color of the navigation bar itself
     public var navBarBackgroundColor: UIColor = .white
-    public var navBarTitleFont: UIFont = .systemFont(ofSize: 21, weight: .bold)
+
+    /// Tint color of items contained within the navigation bar
+    public var navBarTintColor: UIColor = .black
+    /// The font of the title in the navigation bar
+    public var navBarTitleFont: UIFont = .systemFont(ofSize: 12, weight: .bold)
+    /// The color of the title in the navigation bar
     public var navBarTitleColor: UIColor = .black
+    /// The color of the 'Next' button located on the right navigation bar item
     public var nextButtonColor: UIColor = .red
-    public var selectedPhotoBackgroundColor: UIColor = .black
+    /// The background color of the currently selected photo, from within the Gallery
+    public var selectedPhotoBackgroundColor: UIColor = .white
+    /// The background color of the photos presented from the gallery view
     public var photoCollectionBackgroundColor: UIColor = .white
-    public var bottomPagerBackgroundColor: UIColor = .black
-    public var bottomPagerTextColor: UIColor = .blue
+
+    /// The background color of the pager items on the bottom of the YPImagePicker
+    public var bottomPagerBackgroundColor: UIColor = .clear
+    /// The font of the text on the bottom pager
     public var bottomPagerTextFont: UIFont = .systemFont(ofSize: 16)
+    /// The color of the text for the currently active tab
+    public var bottomPagerTextSelectedColor: UIColor = .black
+    /// The color of the text for any unselected tabs
+    public var bottomPagerTextUnselectedColor: UIColor = .lightGray
+
 }

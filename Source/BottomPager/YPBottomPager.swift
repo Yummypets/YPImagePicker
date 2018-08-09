@@ -71,9 +71,9 @@ public class YPBottomPager: UIViewController, UIScrollViewDelegate {
         for (index, c) in controllers.enumerated() {
             let menuItem = YPMenuItem()
             menuItem.textLabel.text = c.title?.capitalized
-            menuItem.textLabel.textColor = YPConfig.customStyling.bottomPagerTextColor
+            menuItem.textLabel.textColor = YPConfig.customStyling.bottomPagerTextUnselectedColor
             menuItem.textLabel.font = YPConfig.customStyling.bottomPagerTextFont
-            menuItem.button.backgroundColor = YPConfig.customStyling.bottomPagerBackgroundColor
+            menuItem.button.backgroundColor = .clear
             menuItem.button.tag = index
             menuItem.button.addTarget(self,
                                       action: #selector(tabTapped(_:)),
@@ -83,6 +83,7 @@ public class YPBottomPager: UIViewController, UIScrollViewDelegate {
         
         let currentMenuItem = v.header.menuItems[0]
         currentMenuItem.select()
+        v.header.backgroundColor = YPConfig.customStyling.bottomPagerBackgroundColor
         v.header.refreshMenuItems()
     }
     
