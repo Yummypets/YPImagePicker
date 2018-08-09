@@ -21,7 +21,7 @@ class YPFiltersView: UIView {
         filtersLoader = UIActivityIndicatorView(activityIndicatorStyle: .gray)
         filtersLoader.hidesWhenStopped = true
         filtersLoader.startAnimating()
-        filtersLoader.color = YPConfig.colors.tintColor
+        filtersLoader.color = YPConfig.customStyling.progressSpinnerTintColor
         
         sv(
             imageView,

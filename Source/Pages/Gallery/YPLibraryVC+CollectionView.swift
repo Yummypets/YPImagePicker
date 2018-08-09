@@ -99,8 +99,9 @@ extension YPLibraryVC: UICollectionViewDelegate {
                                                                 fatalError("unexpected cell in collection view")
         }
         cell.representedAssetIdentifier = asset.localIdentifier
-        cell.multipleSelectionIndicator.selectionColor = YPConfig.colors.multipleItemsSelectedCircleColor
-                                                            ?? YPConfig.colors.tintColor
+        cell.multipleSelectionIndicator.selectionColor = YPConfig.colors.multipleItemsSelectedCircleColor ??
+                                                         YPConfig.customStyling.progressSpinnerTintColor
+
         mediaManager.imageManager?.requestImage(for: asset,
                                    targetSize: v.cellSize(),
                                    contentMode: .aspectFill,

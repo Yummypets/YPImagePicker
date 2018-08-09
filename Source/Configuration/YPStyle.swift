@@ -36,4 +36,7 @@ public struct YPStyle {
     /// The color of the text for any unselected tabs
     public var bottomPagerTextUnselectedColor: UIColor = .lightGray
 
+    /// The color of any progress spinners that appear
+    public var progressSpinnerTintColor: UIColor = .red
+
 }

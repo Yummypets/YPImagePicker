@@ -78,7 +78,7 @@ final class YPLibraryView: UIView {
         progressView.Width == line.Width
         progressView.progressViewStyle = .bar
         progressView.trackTintColor = YPConfig.colors.progressBarTrackColor
-        progressView.progressTintColor = YPConfig.colors.progressBarCompletedColor ?? YPConfig.colors.tintColor
+        progressView.progressTintColor = YPConfig.colors.progressBarCompletedColor ?? YPConfig.customStyling.navBarTintColor
         progressView.isHidden = true
         progressView.isUserInteractionEnabled = false
     }

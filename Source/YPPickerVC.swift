@@ -266,7 +266,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
                                                                 target: self,
                                                                 action: #selector(done))
 
-            navigationItem.rightBarButtonItem?.tintColor = YPConfig.customStyling.navBarTintColor
+            navigationItem.rightBarButtonItem?.tintColor = YPConfig.customStyling.nextButtonColor
             
             // Disable Next Button until minNumberOfItems is reached.
             let minNumberOfItems = YPConfig.library.minNumberOfItems
