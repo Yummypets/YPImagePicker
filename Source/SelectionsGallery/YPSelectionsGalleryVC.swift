@@ -42,7 +42,7 @@ public class YPSelectionsGalleryVC: UIViewController {
                                                             style: .done,
                                                             target: self,
                                                             action: #selector(done))
-        navigationItem.rightBarButtonItem?.tintColor = YPConfig.colors.tintColor
+        navigationItem.rightBarButtonItem?.tintColor = YPConfig.customStyling.nextButtonColor
         
         YPHelper.changeBackButtonIcon(self)
         YPHelper.changeBackButtonTitle(self)
