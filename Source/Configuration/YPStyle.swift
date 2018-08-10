@@ -24,6 +24,8 @@ public struct YPStyle {
     public var navBarTitleColor: UIColor = .black
     /// Helps define the color of the status bar
     public var navBarStyle: UIBarStyle = .default
+    /// The font of any buttons added to the navigation bar
+    public var navBarButtonFont: UIFont = .systemFont(ofSize: 17, weight: .medium)
 
     /// The color of the 'Next' button located on the right navigation bar item
     public var nextButtonColor: UIColor = YPColors().tintColor

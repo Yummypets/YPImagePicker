@@ -283,6 +283,13 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
             title = videoVC?.title
             navigationItem.rightBarButtonItem = nil
         }
+        
+        [navigationItem.leftBarButtonItem, navigationItem.rightBarButtonItem].forEach { item in
+            let font: UIFont = YPConfig.styling.navBarButtonFont
+            item?.setTitleTextAttributes([.font: font], for: .normal)
+            item?.setTitleTextAttributes([.font: font], for: .highlighted)
+            item?.setTitleTextAttributes([.font: font], for: .selected)
+        }
     }
     
     @objc

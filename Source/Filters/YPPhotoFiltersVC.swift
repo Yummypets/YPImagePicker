@@ -101,11 +101,16 @@ open class YPPhotoFiltersVC: UIViewController, IsMediaFilterVC, UIGestureRecogni
     
     fileprivate func setupRightBarButton() {
         let rightBarButtonTitle = isFromSelectionVC ? YPConfig.wordings.done : YPConfig.wordings.next
+        let rightBarButtonFont = YPConfig.styling.navBarButtonFont
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: rightBarButtonTitle,
                                                             style: .done,
                                                             target: self,
                                                             action: #selector(save))
         navigationItem.rightBarButtonItem?.tintColor = YPConfig.styling.nextButtonColor
+        navigationItem.rightBarButtonItem?.setTitleTextAttributes([.font: rightBarButtonFont], for: .normal)
+        navigationItem.rightBarButtonItem?.setTitleTextAttributes([.font: rightBarButtonFont], for: .highlighted)
+        navigationItem.rightBarButtonItem?.setTitleTextAttributes([.font: rightBarButtonFont], for: .selected)
+        
     }
     
     // MARK: - Methods 🏓
