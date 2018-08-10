@@ -168,7 +168,7 @@ public class YPImagePicker: UINavigationController {
 
 
     private func styleNavBar() {
-        let styling = YPConfig.customStyling
+        let styling = YPConfig.styling
 
         navigationBar.isTranslucent = styling.navBarIsTranslucent
         navigationBar.tintColor = styling.navBarTintColor

@@ -44,4 +44,14 @@ public struct YPStyle {
     /// The color of any progress spinners that appear
     public var progressSpinnerTintColor: UIColor = .black
 
+    /// Set the background color for the Camera's Button view on the bottom half
+    public var cameraBackgroundColor: UIColor = .white
+
+    /// Set the background color for the Filters view
+    public var filtersBackgroundColor: UIColor = .black
+    public var filtersSelectedTextColor: UIColor = .black
+    public var filtersSelectedFont: UIFont = .systemFont(ofSize: 11, weight: .medium)
+    public var filtersUnselectedTextColor: UIColor = UIColor(r: 154, g: 154, b: 154)
+    public var filtersUnselectedFont: UIFont = .systemFont(ofSize: 11, weight: .regular)
+
 }

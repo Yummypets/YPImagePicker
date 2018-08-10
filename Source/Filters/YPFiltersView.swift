@@ -21,7 +21,7 @@ class YPFiltersView: UIView {
         filtersLoader = UIActivityIndicatorView(activityIndicatorStyle: .gray)
         filtersLoader.hidesWhenStopped = true
         filtersLoader.startAnimating()
-        filtersLoader.color = YPConfig.customStyling.progressSpinnerTintColor
+        filtersLoader.color = YPConfig.styling.progressSpinnerTintColor
         
         sv(
             imageView,
@@ -43,11 +43,13 @@ class YPFiltersView: UIView {
         
         imageView.heightEqualsWidth()
         
-        backgroundColor = UIColor(r: 247, g: 247, b: 247)
+        backgroundColor = YPConfig.styling.filtersBackgroundColor
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
+
         collectionView.backgroundColor = .clear
         collectionView.showsHorizontalScrollIndicator = false
+        collectionViewContainer.backgroundColor = YPConfig.styling.filtersBackgroundColor
     }
     
     func layout() -> UICollectionViewFlowLayout {

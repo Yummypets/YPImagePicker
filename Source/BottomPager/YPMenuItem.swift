@@ -50,11 +50,11 @@ final class YPMenuItem: UIView {
     }
     
     func selectedColor() -> UIColor {
-        return YPConfig.customStyling.bottomPagerTextSelectedColor
+        return YPConfig.styling.bottomPagerTextSelectedColor
     }
     
     func unselectedColor() -> UIColor {
-        return YPConfig.customStyling.bottomPagerTextUnselectedColor
+        return YPConfig.styling.bottomPagerTextUnselectedColor
     }
     
     func select() {

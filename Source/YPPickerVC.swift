@@ -46,7 +46,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     public override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = YPConfig.customStyling.photoCollectionBackgroundColor
+        view.backgroundColor = YPConfig.styling.photoCollectionBackgroundColor
         
         delegate = self
         
@@ -217,8 +217,8 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         label.font = UIFont.boldSystemFont(ofSize: 17)
         
         // Use custom textColor if set by user.
-        label.textColor = YPConfig.customStyling.navBarTitleColor
-        label.font = YPConfig.customStyling.navBarTitleFont
+        label.textColor = YPConfig.styling.navBarTitleColor
+        label.font = YPConfig.styling.navBarTitleFont
 
         if YPConfig.library.options != nil {
             titleView.sv(
@@ -232,7 +232,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
             let button = UIButton()
             button.addTarget(self, action: #selector(navBarTapped), for: .touchUpInside)
             button.setBackgroundColor(UIColor.white.withAlphaComponent(0.5), forState: .highlighted)
-            button.tintColor = YPConfig.customStyling.navBarTitleColor
+            button.tintColor = YPConfig.styling.navBarTitleColor
             
             titleView.sv(
                 label,
@@ -267,7 +267,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
                                                                 target: self,
                                                                 action: #selector(done))
 
-            navigationItem.rightBarButtonItem?.tintColor = YPConfig.customStyling.nextButtonColor
+            navigationItem.rightBarButtonItem?.tintColor = YPConfig.styling.nextButtonColor
             
             // Disable Next Button until minNumberOfItems is reached.
             let minNumberOfItems = YPConfig.library.minNumberOfItems

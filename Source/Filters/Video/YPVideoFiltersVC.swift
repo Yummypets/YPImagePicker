@@ -109,7 +109,7 @@ public class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
                                                             style: .done,
                                                             target: self,
                                                             action: #selector(save))
-        navigationItem.rightBarButtonItem?.tintColor = YPConfig.customStyling.nextButtonColor
+        navigationItem.rightBarButtonItem?.tintColor = YPConfig.styling.nextButtonColor
     }
     
     // MARK: - Top buttons

@@ -105,7 +105,7 @@ open class YPPhotoFiltersVC: UIViewController, IsMediaFilterVC, UIGestureRecogni
                                                             style: .done,
                                                             target: self,
                                                             action: #selector(save))
-        navigationItem.rightBarButtonItem?.tintColor = YPConfig.customStyling.nextButtonColor
+        navigationItem.rightBarButtonItem?.tintColor = YPConfig.styling.nextButtonColor
     }
     
     // MARK: - Methods 🏓

@@ -100,7 +100,7 @@ extension YPLibraryVC: UICollectionViewDelegate {
         }
         cell.representedAssetIdentifier = asset.localIdentifier
         cell.multipleSelectionIndicator.selectionColor = YPConfig.colors.multipleItemsSelectedCircleColor ??
-                                                         YPConfig.customStyling.progressSpinnerTintColor
+                                                         YPConfig.styling.progressSpinnerTintColor
 
         mediaManager.imageManager?.requestImage(for: asset,
                                    targetSize: v.cellSize(),

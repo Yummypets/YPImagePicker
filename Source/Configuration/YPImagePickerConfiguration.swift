@@ -76,7 +76,7 @@ public struct YPImagePickerConfiguration {
     public var hidesStatusBar = true
 
     /// Defines any customize styling of the YPImagePicker
-    public var customStyling: YPStyle = .init()
+    public var styling: YPStyle = .init()
     
     /// List of default filters which will be added on the filter screen
     public var filters: [YPFilter] = [
