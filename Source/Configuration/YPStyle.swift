@@ -48,7 +48,7 @@ public struct YPStyle {
     public var cameraBackgroundColor: UIColor = .white
 
     /// Set the background color for the Filters view
-    public var filtersBackgroundColor: UIColor = .black
+    public var filtersBackgroundColor: UIColor = .white
     public var filtersSelectedTextColor: UIColor = .black
     public var filtersSelectedFont: UIFont = .systemFont(ofSize: 11, weight: .medium)
     public var filtersUnselectedTextColor: UIColor = UIColor(r: 154, g: 154, b: 154)
