@@ -45,7 +45,7 @@ public struct YPStyle {
     public var progressSpinnerTintColor: UIColor = .black
 
     /// Set the background color for the Camera's Button view on the bottom half
-    public var cameraBackgroundColor: UIColor = .white
+    public var cameraCaptureButtonContainerColor: UIColor = .white
 
     /// Set the background color for the Filters view
     public var filtersBackgroundColor: UIColor = .white
