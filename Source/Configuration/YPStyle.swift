@@ -11,6 +11,8 @@ import UIKit
 
 public struct YPStyle {
 
+    public init() { }
+    
     public var navBarIsTranslucent: Bool = false
     /// Solid background color of the navigation bar itself
     public var navBarBackgroundColor: UIColor = .white
