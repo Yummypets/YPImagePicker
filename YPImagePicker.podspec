@@ -1,5 +1,5 @@
 Pod::Spec.new do |s|
-  s.name             = 'GCDYPImagePicker'
+  s.name             = 'YPImagePicker'
   s.version          = "3.4.0"
   s.summary          = "Instagram-like image picker & filters for iOS"
   s.homepage         = "https://github.com/GCDTech/YPImagePicker"
