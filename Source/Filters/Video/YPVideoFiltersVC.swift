@@ -134,7 +134,7 @@ public class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
                 
                 DispatchQueue.main.async {
                     let resultVideo = YPMediaVideo(thumbnail: strongSelf.coverImageView.image!,
-                                              videoURL: destinationURL)
+                                                   videoURL: destinationURL, asset: strongSelf.inputVideo.asset)
                     didSave(YPMediaItem.video(v: resultVideo))
                     strongSelf.setupRightBarButtonItem()
                 }
