@@ -30,7 +30,7 @@ public class YPImagePicker: UINavigationController {
     public var imagePickerDelegate: YPImagePickerDelegate?
     
     public override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .default
+        return YPImagePickerConfiguration.shared.preferredStatusBarStyle
     }
     
     // This nifty little trick enables us to call the single version of the callbacks.

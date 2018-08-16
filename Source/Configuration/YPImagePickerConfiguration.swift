@@ -75,6 +75,9 @@ public struct YPImagePickerConfiguration {
     /// Defines if the status bar should be hidden when showing the picker. Default is true
     public var hidesStatusBar = true
     
+    /// Defines the preferredStatusBarAppearance
+    public var preferredStatusBarStyle = UIStatusBarStyle.default
+    
     /// List of default filters which will be added on the filter screen
     public var filters: [YPFilter] = [
         YPFilter(name: "Normal", applier: nil),
