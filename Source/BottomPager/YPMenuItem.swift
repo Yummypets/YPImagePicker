@@ -50,11 +50,11 @@ final class YPMenuItem: UIView {
     }
     
     func selectedColor() -> UIColor {
-        return UIColor(r: 38, g: 38, b: 38)
+        return YPImagePickerConfiguration.shared.bottomMenuItemSelectedColour
     }
     
     func unselectedColor() -> UIColor {
-        return UIColor(r: 153, g: 153, b: 153)
+        return YPImagePickerConfiguration.shared.bottomMenuItemUnSelectedColour
     }
     
     func select() {

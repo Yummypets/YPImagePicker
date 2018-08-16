@@ -235,6 +235,13 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         } else {
             let arrow = UIImageView()
             arrow.image = YPConfig.icons.arrowDownIcon
+            
+            let attributes = UINavigationBar.appearance().titleTextAttributes
+            if let attributes = attributes, let foregroundColor = attributes[NSAttributedStringKey.foregroundColor] as? UIColor {
+                arrow.image = arrow.image?.withRenderingMode(.alwaysTemplate)
+                arrow.tintColor = foregroundColor
+            }
+            
             let button = UIButton()
             button.addTarget(self, action: #selector(navBarTapped), for: .touchUpInside)
             button.setBackgroundColor(UIColor.white.withAlphaComponent(0.5), forState: .highlighted)
