@@ -14,9 +14,9 @@
 "YPImagePickerPhoto" = "Фото";
 "YPImagePickerProcessing" = "Обработка..";
 "YPImagePickerSave" = "Сохранить";
-"YPImagePickerTrim" = "Укоротить";
+"YPImagePickerTrim" = "Обрезать";
 "YPImagePickerVideo" = "Видео";
 "YPImagePickerVideoDurationTitle" = "Длина видео";
-"YPImagePickerVideoTooLong" = "Видео должно быть не длиннее %@ секунд";
-"YPImagePickerVideoTooShort" = "Видео должно не должно быть короче %@ секунд";
+"YPImagePickerVideoTooLong" = "Выберите видео короче %@ секунд";
+"YPImagePickerVideoTooShort" = "Видео должно быть длиннее %@ секунд";
 "YPImagePickerWarningItemsLimit" = "Максимум %d фото или видео";
