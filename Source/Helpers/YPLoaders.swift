@@ -16,4 +16,5 @@ struct YPLoaders {
         spinner.startAnimating()
         return UIBarButtonItem(customView: spinner)
     }
+    
 }

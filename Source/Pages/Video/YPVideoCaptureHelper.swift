@@ -141,16 +141,8 @@ class YPVideoCaptureHelper: NSObject {
     // MARK: - Recording
     
     public func startRecording() {
-        let outputPath = "\(NSTemporaryDirectory())output.\(YPConfig.video.fileType.fileExtension)"
-        let outputURL = URL(fileURLWithPath: outputPath)
-        let fileManager = FileManager.default
-        if fileManager.fileExists(atPath: outputPath) {
-            do {
-                try fileManager.removeItem(atPath: outputPath)
-            } catch {
-                return
-            }
-        }
+        
+        let outputURL = YPVideoProcessor.makeVideoPathURL(temporaryFolder: true, fileName: "recordedVideoRAW")
         
         checkOrientation { [weak self] orientation in
             guard let strongSelf = self else {
@@ -273,7 +265,10 @@ extension YPVideoCaptureHelper: AVCaptureFileOutputRecordingDelegate {
                            didFinishRecordingTo outputFileURL: URL,
                            from connections: [AVCaptureConnection],
                            error: Error?) {
-        didCaptureVideo?(outputFileURL)
+        YPVideoProcessor.cropToSquare(filePath: outputFileURL) { [weak self] url in
+            guard let _self = self, let u = url else { return }
+            _self.didCaptureVideo?(u)
+        }
         timer.invalidate()
     }
 }
