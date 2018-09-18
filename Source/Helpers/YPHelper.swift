@@ -50,7 +50,7 @@ struct YPHelper {
     
     static func animateFocusView(_ v: UIView) {
         UIView.animate(withDuration: 0.8, delay: 0.0, usingSpringWithDamping: 0.8,
-                       initialSpringVelocity: 3.0, options: UIViewAnimationOptions.curveEaseIn,
+                       initialSpringVelocity: 3.0, options: UIView.AnimationOptions.curveEaseIn,
                        animations: {
                         v.alpha = 1.0
                         v.transform = CGAffineTransform(scaleX: 0.7, y: 0.7)

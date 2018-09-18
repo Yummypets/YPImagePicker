@@ -143,7 +143,7 @@ public class PanGestureHelper: NSObject, UIGestureRecognizerDelegate {
             
         default:
             imaginaryCollectionViewOffsetStartPosY = 0.0
-            if sender.state == UIGestureRecognizerState.ended && dragDirection == .stop {
+            if sender.state == UIGestureRecognizer.State.ended && dragDirection == .stop {
                 return
             }
             

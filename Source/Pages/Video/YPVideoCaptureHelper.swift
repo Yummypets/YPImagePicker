@@ -186,7 +186,7 @@ class YPVideoCaptureHelper: NSObject {
             
             let timeScale: Int32 = 30 // FPS
             let maxDuration =
-                CMTimeMakeWithSeconds(self.videoRecordingTimeLimit, timeScale)
+                CMTimeMakeWithSeconds(self.videoRecordingTimeLimit, preferredTimescale: timeScale)
             videoOutput.maxRecordedDuration = maxDuration
             videoOutput.minFreeDiskSpaceLimit = 1024 * 1024
             if session.canAddOutput(videoOutput) {

@@ -11,7 +11,7 @@ import Stevia
 
 class YPLoadingView: UIView {
     
-    let spinner = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+    let spinner = UIActivityIndicatorView(style: .whiteLarge)
     let processingLabel = UILabel()
     
     convenience init() {
