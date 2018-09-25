@@ -15,7 +15,7 @@ struct YPAlert {
         let alert = UIAlertController(title: YPConfig.wordings.videoDurationPopup.title,
                                       message: msg,
                                       preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction(title: YPConfig.wordings.ok, style: UIAlertActionStyle.default, handler: nil))
+        alert.addAction(UIAlertAction(title: YPConfig.wordings.ok, style: UIAlertAction.Style.default, handler: nil))
         return alert
     }
     
@@ -25,7 +25,7 @@ struct YPAlert {
         let alert = UIAlertController(title: YPConfig.wordings.videoDurationPopup.title,
                                       message: msg,
                                       preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction(title: YPConfig.wordings.ok, style: UIAlertActionStyle.default, handler: nil))
+        alert.addAction(UIAlertAction(title: YPConfig.wordings.ok, style: UIAlertAction.Style.default, handler: nil))
         return alert
     }
 }

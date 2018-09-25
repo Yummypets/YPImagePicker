@@ -237,7 +237,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
             arrow.image = YPConfig.icons.arrowDownIcon
             
             let attributes = UINavigationBar.appearance().titleTextAttributes
-            if let attributes = attributes, let foregroundColor = attributes[NSAttributedStringKey.foregroundColor] as? UIColor {
+            if let attributes = attributes, let foregroundColor = attributes[NSAttributedString.Key.foregroundColor] as? UIColor {
                 arrow.image = arrow.image?.withRenderingMode(.alwaysTemplate)
                 arrow.tintColor = foregroundColor
             }

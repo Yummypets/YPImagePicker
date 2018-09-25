@@ -239,6 +239,6 @@ extension ExampleViewController {
     func resolutionForLocalVideo(url: URL) -> CGSize? {
         guard let track = AVURLAsset(url: url).tracks(withMediaType: AVMediaType.video).first else { return nil }
         let size = track.naturalSize.applying(track.preferredTransform)
-        return CGSize(width: fabs(size.width), height: fabs(size.height))
+        return CGSize(width: abs(size.width), height: abs(size.height))
     }
 }
