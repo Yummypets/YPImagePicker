@@ -14,6 +14,7 @@ Pod::Spec.new do |s|
   s.source_files = 'Source/**/*.swift'
   s.dependency 'PryntTrimmerView', :git => 'https://github.com/HHK1/PryntTrimmerView.git', :commit => '9841375d4730e959f95fb8bc141f3cbf01610b6e'
   s.dependency 'SteviaLayout', '~> 4.4.0'
+  s.dependency 'PryntTrimmerView', '~> 3.0'
   s.resources    = ['Resources/*', 'Source/**/*.xib']
   s.description  = "Instagram-like image picker & filters for iOS supporting videos and albums"
 end
