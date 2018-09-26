@@ -12,7 +12,7 @@
 "YPImagePickerPermissionDeniedPopupMessage" = "E' necessario autorizzare l'accesso";
 "YPImagePickerPermissionDeniedPopupTitle" = "Autorizzazione negata";
 "YPImagePickerPhoto" = "Foto";
-"YPImagePickerProcessing" = "Processing..";
+"YPImagePickerProcessing" = "Processing.."; //ignore-same-translation-warning
 "YPImagePickerSave" = "Salva";
 "YPImagePickerTrim" = "Taglia";
 "YPImagePickerVideo" = "Video"; //ignore-same-translation-warning

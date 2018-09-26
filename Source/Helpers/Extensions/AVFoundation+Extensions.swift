@@ -23,8 +23,8 @@ func thumbnailFromVideoPath(_ path: URL) -> UIImage {
     let asset = AVURLAsset(url: path, options: nil)
     let gen = AVAssetImageGenerator(asset: asset)
     gen.appliesPreferredTrackTransform = true
-    let time = CMTimeMakeWithSeconds(0.0, 600)
-    var actualTime = CMTimeMake(0, 0)
+    let time = CMTimeMakeWithSeconds(0.0, preferredTimescale: 600)
+    var actualTime = CMTimeMake(value: 0, timescale: 0)
     let image: CGImage
     do {
         image = try gen.copyCGImage(at: time, actualTime: &actualTime)

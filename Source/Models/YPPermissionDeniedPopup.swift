@@ -16,7 +16,7 @@ class YPPermissionDeniedPopup {
                                       preferredStyle: .alert)
         alert.addAction(
             UIAlertAction(title: YPConfig.wordings.permissionPopup.cancel,
-                          style: UIAlertActionStyle.cancel,
+                          style: UIAlertAction.Style.cancel,
                           handler: { _ in
                             cancelBlock()
             }))
@@ -25,9 +25,9 @@ class YPPermissionDeniedPopup {
                           style: .default,
                           handler: { _ in
                             if #available(iOS 10.0, *) {
-                                UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!)
+                                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
                             } else {
-                                UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+                                UIApplication.shared.openURL(URL(string: UIApplication.openSettingsURLString)!)
                             }
             }))
         return alert

@@ -30,7 +30,7 @@ public class YPImagePicker: UINavigationController {
     public var imagePickerDelegate: YPImagePickerDelegate?
     
     public override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .default
+        return YPImagePickerConfiguration.shared.preferredStatusBarStyle
     }
     
     // This nifty little trick enables us to call the single version of the callbacks.
@@ -90,8 +90,8 @@ public class YPImagePicker: UINavigationController {
             // Use Fade transition instead of default push animation
             let transition = CATransition()
             transition.duration = 0.3
-            transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
-            transition.type = kCATransitionFade
+            transition.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
+            transition.type = CATransitionType.fade
             self?.view.layer.add(transition, forKey: nil)
             
             // Multiple items flow

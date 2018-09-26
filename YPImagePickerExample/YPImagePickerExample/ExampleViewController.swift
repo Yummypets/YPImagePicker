@@ -89,10 +89,10 @@ class ExampleViewController: UIViewController {
         // config.showsFilters = false
 
         /* Manage filters by yourself */
-//        config.filters = [YPFilterDescriptor(name: "Normal", filterName: ""),
-//                          YPFilterDescriptor(name: "Mono", filterName: "CIPhotoEffectMono")]
+//        config.filters = [YPFilter(name: "Mono", coreImageFilterName: "CIPhotoEffectMono"),
+//                          YPFilter(name: "Normal", coreImageFilterName: "")]
 //        config.filters.remove(at: 1)
-//        config.filters.insert(YPFilterDescriptor(name: "Blur", filterName: "CIBoxBlur"), at: 1)
+//        config.filters.insert(YPFilter(name: "Blur", coreImageFilterName: "CIBoxBlur"), at: 1)
 
         /* Enables you to opt out from saving new (or old but filtered) images to the
            user's photo library. Defaults to true. */
@@ -112,7 +112,9 @@ class ExampleViewController: UIViewController {
         /* Defines which screens are shown at launch, and their order.
            Default value is `[.library, .photo]` */
         config.screens = [.library, .photo, .video]
-
+        
+        /* Can forbid the items with very big height with this property */
+//        config.library.minWidthForItem = UIScreen.main.bounds.width * 0.8
 
         /* Defines the time limit for recording videos.
            Default is 30 seconds. */
@@ -237,6 +239,6 @@ extension ExampleViewController {
     func resolutionForLocalVideo(url: URL) -> CGSize? {
         guard let track = AVURLAsset(url: url).tracks(withMediaType: AVMediaType.video).first else { return nil }
         let size = track.naturalSize.applying(track.preferredTransform)
-        return CGSize(width: fabs(size.width), height: fabs(size.height))
+        return CGSize(width: abs(size.width), height: abs(size.height))
     }
 }
