@@ -18,6 +18,7 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, YPPermis
     let v: YPCameraView!
     let volumeNotificationName = "AVSystemController_SystemVolumeDidChangeNotification"
     let volumeNotificationChangeKey = "AVSystemController_AudioVolumeChangeReasonNotificationParameter"
+    
     override public func loadView() { view = v }
 
     public required init() {
