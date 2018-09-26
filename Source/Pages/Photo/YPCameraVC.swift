@@ -41,7 +41,7 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, YPPermis
         tapRecognizer.delegate = self
         v.previewViewContainer.addGestureRecognizer(tapRecognizer)
         
-        // Shoot with volume buttons
+        // Shoot photo with volume buttons
         if YPConfig.shootsWithVolumeButtons {
             let volumeView = MPVolumeView(frame: CGRect(x: -20.0, y: -20.0, width: 0.0, height: 0.0))
             self.view.addSubview(volumeView)
