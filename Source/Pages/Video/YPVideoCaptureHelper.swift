@@ -105,7 +105,9 @@ class YPVideoCaptureHelper: NSObject {
     // MARK: - Focus
     
     public func focus(onPoint point: CGPoint) {
-        setFocusPointOnDevice(device: videoInput!.device, point: point)
+        if let device = videoInput?.device {
+            setFocusPointOnDevice(device: device, point: point)
+        }
     }
     
     // MARK: - Stop Camera
