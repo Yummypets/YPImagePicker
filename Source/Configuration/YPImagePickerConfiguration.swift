@@ -84,6 +84,9 @@ public struct YPImagePickerConfiguration {
     /// Defines the text colour to be shown when a bottom option is unselected
     public var bottomMenuItemUnSelectedColour = UIColor(r: 153, g: 153, b: 153)
     
+    /// Defines if the user can shoot a photo by touching the volume buttons
+    public var shootsWithVolumeButtons = true
+    
     /// List of default filters which will be added on the filter screen
     public var filters: [YPFilter] = [
         YPFilter(name: "Normal", applier: nil),
@@ -151,7 +154,7 @@ public struct YPImagePickerConfiguration {
 /// Encapsulates library specific settings.
 public struct YPConfigLibrary {
     
-     public var options: PHFetchOptions? = nil
+    public var options: PHFetchOptions? = nil
     
     /// Set this to true if you want to force the library output to be a squared image. Defaults to false
     public var onlySquare = false

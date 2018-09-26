@@ -9,12 +9,14 @@
 import UIKit
 import AVFoundation
 import Photos
+import MediaPlayer
 
 public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, YPPermissionCheckable {
     
     public var didCapturePhoto: ((UIImage) -> Void)?
     let photoCapture = newPhotoCapture()
     let v: YPCameraView!
+    let volumeNotificationName = "AVSystemController_SystemVolumeDidChangeNotification"
     override public func loadView() { view = v }
 
     public required init() {
@@ -38,6 +40,18 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, YPPermis
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.focusTapped(_:)))
         tapRecognizer.delegate = self
         v.previewViewContainer.addGestureRecognizer(tapRecognizer)
+        
+        // Shoot with volume buttons
+        if YPConfig.shootsWithVolumeButtons {
+            let volumeView = MPVolumeView(frame: CGRect(x: -20.0, y: -20.0, width: 0.0, height: 0.0))
+            self.view.addSubview(volumeView)
+            NotificationCenter.default.addObserver(
+                self,
+                selector: #selector(volumeChanged(notification:)),
+                name: NSNotification.Name(rawValue: volumeNotificationName),
+                object: nil
+            )
+        }
     }
     
     func start() {
@@ -125,6 +139,15 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, YPPermis
                 let noOrietationImage = image.resetOrientation()
                 self.didCapturePhoto?(noOrietationImage.resizedImageIfNeeded())
             }
+        }
+    }
+    
+    @objc
+    func volumeChanged(notification: NSNotification) {
+        if let userInfo = notification.userInfo,
+            let volumeChangeType = userInfo[volumeNotificationName] as? String,
+            volumeChangeType == "ExplicitVolumeChange" {
+            self.shoot()
         }
     }
     
