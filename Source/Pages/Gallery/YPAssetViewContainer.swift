@@ -77,10 +77,12 @@ class YPAssetViewContainer: UIView {
         
         // Multiple selection button
         sv(multipleSelectionButton)
-        multipleSelectionButton.size(42)
+        multipleSelectionButton.size(150)
+        multipleSelectionButton.height(52)
         multipleSelectionButton-15-|
         multipleSelectionButton.setImage(YPConfig.icons.multipleSelectionOffIcon, for: .normal)
-        multipleSelectionButton.Bottom == zoomableView!.Bottom - 15
+        //multipleSelectionButton.setTitle(" SELECT MULTIPLE", for: .normal)
+        multipleSelectionButton.Bottom == zoomableView!.Bottom - 10
         
     }
     
@@ -116,6 +118,11 @@ class YPAssetViewContainer: UIView {
         isMultipleSelection = on
         let image = on ? YPConfig.icons.multipleSelectionOnIcon : YPConfig.icons.multipleSelectionOffIcon
         multipleSelectionButton.setImage(image, for: .normal)
+        if on {
+            multipleSelectionButton.width(55)
+        } else {
+            multipleSelectionButton.width(150)
+        }
         refreshSquareCropButton()
     }
 }

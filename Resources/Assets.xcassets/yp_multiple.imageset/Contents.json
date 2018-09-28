@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "yp_multiple.png",
+      "filename" : "select multiple.pdf",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "yp_multiple@2x.png",
+      "filename" : "select multiple-1.pdf",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "yp_multiple@3x.png",
+      "filename" : "select multiple-2.pdf",
       "scale" : "3x"
     }
   ],
