@@ -10,7 +10,7 @@ import UIKit
 import AVFoundation
 import Photos
 
-public protocol YPImagePickerDelegate {
+public protocol YPImagePickerDelegate: AnyObject {
     func noPhotos()
 }
 
@@ -27,7 +27,7 @@ public class YPImagePicker: UINavigationController {
     public func didFinishPicking(completion: @escaping (_ items: [YPMediaItem], _ cancelled: Bool) -> Void) {
         _didFinishPicking = completion
     }
-    public var imagePickerDelegate: YPImagePickerDelegate?
+    public weak var imagePickerDelegate: YPImagePickerDelegate?
     
     public override var preferredStatusBarStyle: UIStatusBarStyle {
         return YPImagePickerConfiguration.shared.preferredStatusBarStyle
