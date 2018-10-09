@@ -74,18 +74,13 @@ final class YPAssetZoomableView: UIScrollView {
             strongSelf.videoView.setPreviewImage(preview)
             
             strongSelf.setAssetFrame(for: strongSelf.videoView, with: preview)
-
-            // Fit video view if only squared
-            if YPConfig.library.onlySquare {
-                strongSelf.fitImage(true)
-            }
+            
+            completion()
             
             // Stored crop position in multiple selection
             if let scp173 = storedCropPosition {
                 strongSelf.applyStoredCropPosition(scp173)
             }
-            
-            completion()
         }
         mediaManager.imageManager?.fetchPlayerItem(for: video) { [weak self] playerItem in
             guard let strongSelf = self else { return }
@@ -121,18 +116,13 @@ final class YPAssetZoomableView: UIScrollView {
             strongSelf.photoImageView.image = image
            
             strongSelf.setAssetFrame(for: strongSelf.photoImageView, with: image)
-            
-            // Fit image if only squared
-            if YPConfig.library.onlySquare {
-                strongSelf.fitImage(true)
-            }
+        
+            completion()
             
             // Stored crop position in multiple selection
             if let scp173 = storedCropPosition {
                 strongSelf.applyStoredCropPosition(scp173)
             }
-            
-            completion()
         }
     }
     
