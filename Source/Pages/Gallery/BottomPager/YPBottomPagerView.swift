@@ -13,7 +13,12 @@ final class YPBottomPagerView: UIView {
     
     var header = YPPagerMenu()
     var scrollView = UIScrollView()
-    
+    var hidesBottomBar = false {
+        didSet {
+            updateBottomBarVisibility()
+        }
+    }
+
     convenience init() {
         self.init(frame: .zero)
         backgroundColor = UIColor(red: 239/255, green: 238/255, blue: 237/255, alpha: 1)
@@ -35,10 +40,14 @@ final class YPBottomPagerView: UIView {
         } else {
             header.bottom(0)
         }
-        header.heightConstraint?.constant = YPConfig.hidesBottomBar ? 0 : 44
+        updateBottomBarVisibility()
         
         clipsToBounds = false
         setupScrollView()
+    }
+
+    private func updateBottomBarVisibility() {
+        header.heightConstraint?.constant = hidesBottomBar ? 0 : 44
     }
 
     private func setupScrollView() {

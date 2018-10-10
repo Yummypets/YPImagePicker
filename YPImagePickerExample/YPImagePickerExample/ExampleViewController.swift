@@ -139,9 +139,6 @@ class ExampleViewController: UIViewController {
         /* Defines if the status bar should be hidden when showing the picker. Default is true */
         config.hidesStatusBar = false
 
-        /* Defines if the bottom bar should be hidden when showing the picker. Default is false */
-        config.hidesBottomBar = false
-
         config.library.maxNumberOfItems = 5
         
         /* Disable scroll to change between mode */
