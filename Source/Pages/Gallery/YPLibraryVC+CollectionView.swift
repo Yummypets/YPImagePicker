@@ -136,11 +136,6 @@ extension YPLibraryVC: UICollectionViewDelegate {
         let previouslySelectedIndexPath = IndexPath(row: currentlySelectedIndex, section: 0)
         currentlySelectedIndex = indexPath.row
 
-        // If this is the only selected cell, do not deselect.
-        if selection.count == 1 && selection.first?.index == indexPath.row {
-            return
-        }
-        
         changeAsset(mediaManager.fetchResult[indexPath.row])
         panGestureHelper.resetToOriginalState()
         
@@ -165,6 +160,7 @@ extension YPLibraryVC: UICollectionViewDelegate {
         } else {
             let previouslySelectedIndices = selection
             selection.removeAll()
+            addToSelection(indexPath: indexPath)
             if let selectedRow = previouslySelectedIndices.first?.index {
                 let previouslySelectedIndexPath = IndexPath(row: selectedRow, section: 0)
                 collectionView.reloadItems(at: [previouslySelectedIndexPath])
