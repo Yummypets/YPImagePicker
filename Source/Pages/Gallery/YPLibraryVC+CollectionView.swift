@@ -69,7 +69,8 @@ extension YPLibraryVC {
     
     /// Adds cell to selection
     func addToSelection(indexPath: IndexPath) {
-        selection.append(YPLibrarySelection(index: indexPath.row, cropRect: nil))
+        let asset = mediaManager.fetchResult[indexPath.item]
+        selection.append(YPLibrarySelection(index: indexPath.row, assetIdentifier: asset.localIdentifier))
         checkLimit()
     }
     

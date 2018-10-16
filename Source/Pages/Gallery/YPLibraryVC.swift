@@ -35,15 +35,31 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     
     func setAlbum(_ album: YPAlbum) {
         mediaManager.collection = album.collection
-        resetMultipleSelection()
     }
-    
-    private func resetMultipleSelection() {
-        selection.removeAll()
+
+    private func adjustSelection() {
+        guard !selection.isEmpty else { return }
+        var newSelection = [YPLibrarySelection]()
+        mediaManager.fetchResult.enumerateObjects { [weak self] (asset, index, _) in
+            guard let `self` = self else { return }
+            if let old = self.selection.filter({ $0.assetIdentifier == asset.localIdentifier }).first {
+                newSelection.append(
+                    YPLibrarySelection(
+                        index: index,
+                        cropRect: old.cropRect,
+                        scrollViewContentOffset: old.scrollViewContentOffset,
+                        scrollViewZoomScale: old.scrollViewZoomScale,
+                        assetIdentifier: old.assetIdentifier
+                    )
+                )
+            }
+        }
         currentlySelectedIndex = 0
-        multipleSelectionEnabled = false
-        v.assetViewContainer.setMultipleSelectionMode(on: false)
-        delegate?.libraryViewDidToggleMultipleSelection(enabled: false)
+        if newSelection.isEmpty {
+            let asset = mediaManager.fetchResult[currentlySelectedIndex]
+            newSelection.append(YPLibrarySelection(index: currentlySelectedIndex, assetIdentifier: asset.localIdentifier))
+        }
+        selection = newSelection
         checkLimit()
     }
     
@@ -144,11 +160,13 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
 
         if multipleSelectionEnabled {
             if selection.isEmpty {
+                let asset = mediaManager.fetchResult[currentlySelectedIndex]
                 selection = [
                     YPLibrarySelection(index: currentlySelectedIndex,
                                        cropRect: v.currentCropRect(),
                                        scrollViewContentOffset: v.assetZoomableView!.contentOffset,
-                                       scrollViewZoomScale: v.assetZoomableView!.zoomScale)
+                                       scrollViewZoomScale: v.assetZoomableView!.zoomScale,
+                                       assetIdentifier: asset.localIdentifier)
                 ]
             }
         } else {
@@ -235,6 +253,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                 
         if mediaManager.fetchResult.count > 0 {
             changeAsset(mediaManager.fetchResult[0])
+            adjustSelection()
             v.collectionView.reloadData()
             v.collectionView.selectItem(at: IndexPath(row: 0, section: 0),
                                              animated: false,
