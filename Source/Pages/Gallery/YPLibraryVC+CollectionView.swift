@@ -78,8 +78,7 @@ extension YPLibraryVC {
         selection.append(
             YPLibrarySelection(
                 index: indexPath.row,
-                assetIdentifier: asset.localIdentifier,
-                collectionIdentifier: mediaManager.collection?.localIdentifier
+                assetIdentifier: asset.localIdentifier
             )
         )
         checkLimit()
