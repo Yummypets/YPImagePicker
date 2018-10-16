@@ -35,32 +35,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     
     func setAlbum(_ album: YPAlbum) {
         mediaManager.collection = album.collection
-    }
-
-    private func adjustSelection() {
-        guard !selection.isEmpty else { return }
-        var newSelection = [YPLibrarySelection]()
-        mediaManager.fetchResult.enumerateObjects { [weak self] (asset, index, _) in
-            guard let `self` = self else { return }
-            if let old = self.selection.filter({ $0.assetIdentifier == asset.localIdentifier }).first {
-                newSelection.append(
-                    YPLibrarySelection(
-                        index: index,
-                        cropRect: old.cropRect,
-                        scrollViewContentOffset: old.scrollViewContentOffset,
-                        scrollViewZoomScale: old.scrollViewZoomScale,
-                        assetIdentifier: old.assetIdentifier
-                    )
-                )
-            }
-        }
         currentlySelectedIndex = 0
-        if newSelection.isEmpty {
-            let asset = mediaManager.fetchResult[currentlySelectedIndex]
-            newSelection.append(YPLibrarySelection(index: currentlySelectedIndex, assetIdentifier: asset.localIdentifier))
-        }
-        selection = newSelection
-        checkLimit()
     }
     
     func initialize() {
@@ -253,7 +228,6 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                 
         if mediaManager.fetchResult.count > 0 {
             changeAsset(mediaManager.fetchResult[0])
-            adjustSelection()
             v.collectionView.reloadData()
             v.collectionView.selectItem(at: IndexPath(row: 0, section: 0),
                                              animated: false,
@@ -413,7 +387,8 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
             // Multiple selection
             if self.multipleSelectionEnabled && self.selection.count > 1 {
                 let selectedAssets: [(asset: PHAsset, cropRect: CGRect?)] = self.selection.map {
-                    return (self.mediaManager.fetchResult[$0.index], $0.cropRect)
+                    guard let asset = PHAsset.fetchAssets(withLocalIdentifiers: [$0.assetIdentifier], options: PHFetchOptions()).firstObject else { fatalError() }
+                    return (asset, $0.cropRect)
                 }
                 
                 // Check video length
