@@ -60,8 +60,11 @@ extension YPLibraryVC {
             selection.remove(at: positionIndex)
 
             // Refresh the numbers
-            let selectedIndexPaths = selection.compactMap {
-                $0.collectionIdentifier == mediaManager.collection?.localIdentifier ? IndexPath(row: $0.index, section: 0) : nil
+            var selectedIndexPaths = [IndexPath]()
+            mediaManager.fetchResult.enumerateObjects { [unowned self] (asset, index, _) in
+                if self.selection.contains(where: { $0.assetIdentifier == asset.localIdentifier }) {
+                    selectedIndexPaths.append(IndexPath(row: index, section: 0))
+                }
             }
             v.collectionView.reloadItems(at: selectedIndexPaths)
 
