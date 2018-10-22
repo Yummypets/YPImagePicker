@@ -77,8 +77,8 @@ class YPAssetViewContainer: UIView {
         
         // Multiple selection button
         sv(multipleSelectionButton)
-        multipleSelectionButton.size(150)
-        multipleSelectionButton.height(52)
+        multipleSelectionButton.width(115)
+        multipleSelectionButton.height(32)
         multipleSelectionButton-15-|
         multipleSelectionButton.setImage(YPConfig.icons.multipleSelectionOffIcon, for: .normal)
         //multipleSelectionButton.setTitle(" SELECT MULTIPLE", for: .normal)
@@ -119,7 +119,7 @@ class YPAssetViewContainer: UIView {
         let image = on ? YPConfig.icons.multipleSelectionOnIcon : YPConfig.icons.multipleSelectionOffIcon
         multipleSelectionButton.setImage(image, for: .normal)
         if on {
-            multipleSelectionButton.width(55)
+            multipleSelectionButton.width(multipleSelectionButton.frame.size.height)
         } else {
             multipleSelectionButton.width(150)
         }
