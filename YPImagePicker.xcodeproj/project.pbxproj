@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8458057421819B95004F241C /* YPImagePickerLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 99C6D6991F1FB5C100711DB2 /* YPImagePickerLocalizable.strings */; };
 		99019E4C2018CCD6007325C2 /* YPBottomPagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99019E4B2018CCD6007325C2 /* YPBottomPagerView.swift */; };
 		99019E4E2018CD31007325C2 /* YPPagerMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99019E4D2018CD31007325C2 /* YPPagerMenu.swift */; };
 		99019E512018CDED007325C2 /* YPImageSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99019E502018CDED007325C2 /* YPImageSize.swift */; };
@@ -34,7 +35,6 @@
 		99A3C91220319231008D7E23 /* YPCropVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A3C91120319231008D7E23 /* YPCropVC.swift */; };
 		99B8C4C3208F8EE900127119 /* YPLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B8C4C2208F8EE900127119 /* YPLoadingView.swift */; };
 		99C6D6B91F1FB5C100711DB2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 99C6D6981F1FB5C100711DB2 /* Assets.xcassets */; };
-		99C6D6BA1F1FB5C100711DB2 /* YPImagePickerLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 99C6D6991F1FB5C100711DB2 /* YPImagePickerLocalizable.strings */; };
 		99C6D6BB1F1FB5C100711DB2 /* YPLibraryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D69F1F1FB5C100711DB2 /* YPLibraryVC.swift */; };
 		99C6D6BC1F1FB5C100711DB2 /* YPLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6A01F1FB5C100711DB2 /* YPLibraryView.swift */; };
 		99C6D6BD1F1FB5C100711DB2 /* YPLibraryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 99C6D6A11F1FB5C100711DB2 /* YPLibraryView.xib */; };
@@ -541,10 +541,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8458057421819B95004F241C /* YPImagePickerLocalizable.strings in Resources */,
 				99C6D6B91F1FB5C100711DB2 /* Assets.xcassets in Resources */,
 				99C6D6BD1F1FB5C100711DB2 /* YPLibraryView.xib in Resources */,
 				EB59F453208766B800811B7B /* YPVideoFiltersVC.xib in Resources */,
-				99C6D6BA1F1FB5C100711DB2 /* YPImagePickerLocalizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
