@@ -180,6 +180,10 @@ public struct YPConfigLibrary {
 
     /// Allow to skip the selections gallery when selecting the multiple media items. Defaults to false.
     public var skipSelectionsGallery = false
+    
+    /// Adds a caption step in the photo selection process, after filters.  Defaults to false
+    public var showsCaption: Bool = false
+
 }
 
 /// Encapsulates video specific settings.

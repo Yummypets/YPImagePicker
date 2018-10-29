@@ -12,6 +12,7 @@ public struct YPWordings {
     
     public var permissionPopup = PermissionPopup()
     public var videoDurationPopup = VideoDurationPopup()
+    public var caption = Caption()
 
     public struct PermissionPopup {
         public var title = ypLocalized("YPImagePickerPermissionDeniedPopupTitle")
@@ -24,6 +25,12 @@ public struct YPWordings {
         public var title = ypLocalized("YPImagePickerVideoDurationTitle")
         public var tooShortMessage = ypLocalized("YPImagePickerVideoTooShort")
         public var tooLongMessage = ypLocalized("YPImagePickerVideoTooLong")
+    }
+    
+    public struct Caption {
+        public var title = ypLocalized("YPCaptionViewTitle")
+        public var button = ypLocalized("YPCaptionButton")
+        public var placeholder = ypLocalized("YPCaptionTextViewPlaceHolder")
     }
     
     public var ok = ypLocalized("YPImagePickerOk")

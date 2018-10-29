@@ -82,11 +82,13 @@ class ExampleViewController: UIViewController {
         /* Choose what media types are available in the library. Defaults to `.photo` */
         config.library.mediaType = .photoAndVideo
 
+        config.filters = []
+        config.library.showsCaption  = true
         /* Enables selecting the front camera by default, useful for avatars. Defaults to false */
         // config.usesFrontCamera = true
 
         /* Adds a Filter step in the photo taking process. Defaults to true */
-        // config.showsFilters = false
+        //config.showsFilters = false
 
         /* Manage filters by yourself */
 //        config.filters = [YPFilter(name: "Mono", coreImageFilterName: "CIPhotoEffectMono"),
@@ -125,7 +127,7 @@ class ExampleViewController: UIViewController {
         config.video.libraryTimeLimit = 500.0
 
         /* Adds a Crop step in the photo taking process, after filters. Defaults to .none */
-        config.showsCrop = .rectangle(ratio: (16/9))
+        config.showsCrop = .none
 
         /* Defines the overlay view for the camera. Defaults to UIView(). */
         // let overlayView = UIView()

@@ -62,10 +62,13 @@ open class YPPhotoFiltersVC: UIViewController, IsMediaFilterVC, UIGestureRecogni
                 }
             }
             DispatchQueue.main.async {
-                self.v.collectionView.reloadData()
-                self.v.collectionView.selectItem(at: IndexPath(row: 0, section: 0),
-                                            animated: false,
-                                            scrollPosition: UICollectionView.ScrollPosition.bottom)
+                if !YPConfig.filters.isEmpty {
+                    self.v.collectionView.reloadData()
+                    self.v.collectionView.selectItem(at: IndexPath(row: 0, section: 0),
+                                                     animated: false,
+                                                     scrollPosition: UICollectionView.ScrollPosition.bottom)
+                }
+                
                 self.v.filtersLoader.stopAnimating()
             }
         }

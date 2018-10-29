@@ -64,6 +64,7 @@ public class YPImagePicker: UINavigationController {
 
         picker.didSelectItems = { [weak self] items in
             let showsFilters = YPConfig.showsFilters
+            let showsCaption = YPConfig.library.showsCaption
             
             // Use Fade transition instead of default push animation
             let transition = CATransition()
@@ -115,18 +116,35 @@ public class YPImagePicker: UINavigationController {
                     }
                 }
                 
-                if showsFilters {
-                    let filterVC = YPPhotoFiltersVC(inputPhoto: photo,
-                                                    isFromSelectionVC: false)
-                    // Show filters and then crop
-                    filterVC.didSave = { outputMedia in
+                func showFilterVC(photo: YPMediaPhoto, completion: @escaping (_ aphoto: YPMediaPhoto) -> Void) {
+                    if showsFilters {
+                        let filterVC = YPPhotoFiltersVC(inputPhoto: photo,
+                                                        isFromSelectionVC: false)
+                        // Show filters and then crop
+                        filterVC.didSave = { outputMedia in
+                            if case let YPMediaItem.photo(outputPhoto) = outputMedia {
+                                showCropVC(photo: outputPhoto, completion: completion)
+                            }
+                        }
+                        self?.pushViewController(filterVC, animated: false)
+                    } else {
+                        showCropVC(photo: photo, completion: completion)
+                    }
+                }
+                
+                
+                if showsCaption
+                {
+                    let captionVC = YPPhotoCaptionVC(inputPhoto: photo, isFromSelectionVC: false)
+                    captionVC.didSave = { outputMedia in
                         if case let YPMediaItem.photo(outputPhoto) = outputMedia {
-                            showCropVC(photo: outputPhoto, completion: completion)
+                            showFilterVC(photo: outputPhoto, completion: completion)
                         }
                     }
-                    self?.pushViewController(filterVC, animated: false)
-                } else {
-                    showCropVC(photo: photo, completion: completion)
+                    self?.pushViewController(captionVC, animated: false)
+                }
+                else {
+                    showFilterVC(photo: photo, completion: completion)
                 }
             case .video(let video):
                 if showsFilters {

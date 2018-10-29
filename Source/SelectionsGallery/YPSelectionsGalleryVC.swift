@@ -92,9 +92,32 @@ extension YPSelectionsGalleryVC: UICollectionViewDelegate {
         var mediaFilterVC: IsMediaFilterVC?
         switch item {
         case .photo(let photo):
-            if !YPConfig.filters.isEmpty {
-                mediaFilterVC = YPPhotoFiltersVC(inputPhoto: photo, isFromSelectionVC: true)
+            
+            //func to avoid copy-paste in if-else methods
+            func showsCaptionVC()
+            {
+                if YPConfig.library.showsCaption
+                {
+                    mediaFilterVC = YPPhotoCaptionVC(inputPhoto: photo, isFromSelectionVC: true)
+                }
             }
+            
+            //check the show filters and show caption flags
+            if YPConfig.showsFilters
+            {
+                if !YPConfig.filters.isEmpty {
+                    mediaFilterVC = YPPhotoFiltersVC(inputPhoto: photo, isFromSelectionVC: true)
+                }
+                else
+                {
+                    showsCaptionVC()
+                }
+            }
+            else
+            {
+                showsCaptionVC()
+            }
+            
         case .video(let video):
             mediaFilterVC = YPVideoFiltersVC.initWith(video: video, isFromSelectionVC: true)
         }

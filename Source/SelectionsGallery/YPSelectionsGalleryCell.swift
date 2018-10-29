@@ -15,13 +15,19 @@ public class YPSelectionsGalleryCell: UICollectionViewCell {
     let editIcon = UIView()
     let editSquare = UIView()
     
+    let addCaptionImage = UIImageView()
+    let addCaptionView = UIView()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
     
         sv(
             imageView,
             editIcon,
-            editSquare
+            editSquare,
+            
+            addCaptionView,
+            addCaptionImage
         )
         
         imageView.fillContainer()
@@ -29,6 +35,11 @@ public class YPSelectionsGalleryCell: UICollectionViewCell {
         editSquare.size(16)
         editSquare.CenterY == editIcon.CenterY
         editSquare.CenterX == editIcon.CenterX
+        
+        addCaptionView.size(32).left(48).bottom(12)
+        addCaptionImage.size(20)
+        addCaptionImage.CenterY == addCaptionView.CenterY
+        addCaptionImage.CenterX == addCaptionView.CenterX
         
         layer.shadowColor = UIColor(r: 46, g: 43, b: 37).cgColor
         layer.shadowOpacity = 0.2
@@ -46,6 +57,17 @@ public class YPSelectionsGalleryCell: UICollectionViewCell {
         editSquare.style { v in
             v.layer.borderWidth = 1
             v.layer.borderColor = UIColor.black.cgColor
+        }
+        
+        addCaptionView.style { v in
+            v.backgroundColor = .white
+            v.layer.cornerRadius = 16
+        }
+        
+        addCaptionImage.image = imageFromBundle("yp_pencil") 
+        addCaptionImage.style { i in
+            i.clipsToBounds = true
+            i.contentMode = .scaleAspectFill
         }
     }
     
