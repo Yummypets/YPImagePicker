@@ -92,16 +92,19 @@ public class YPBottomPager: UIViewController, UIScrollViewDelegate {
     }
 
     func selectPage(_ page: Int) {
-        if page != currentPage {
-            currentPage = page
-            //select menut item and deselect others
-            for mi in v.header.menuItems {
+        guard page != currentPage && page < controllers.count else {
+            return
+        }
+        currentPage = page
+        //select menu item and deselect others
+        for (i, mi) in v.header.menuItems.enumerated() {
+            if (i == page) {
+                mi.select()
+            } else {
                 mi.unselect()
             }
-            let currentMenuItem = v.header.menuItems[page]
-            currentMenuItem.select()
-            delegate?.pagerDidSelectController(controllers[page])
         }
+        delegate?.pagerDidSelectController(controllers[page])
     }
     
     func startOnPage(_ page: Int) {
