@@ -92,7 +92,7 @@ public class YPBottomPager: UIViewController, UIScrollViewDelegate {
     }
 
     func selectPage(_ page: Int) {
-        guard page != currentPage && page < controllers.count else {
+        guard page != currentPage && page >= 0 && page < controllers.count else {
             return
         }
         currentPage = page
