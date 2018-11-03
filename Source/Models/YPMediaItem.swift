@@ -21,7 +21,7 @@ public class YPMediaPhoto {
     public let exifMeta : [String : Any]?
     public var asset: PHAsset?
     
-    init(image: UIImage, exifMeta : [String : Any]? = nil, fromCamera: Bool = false, asset: PHAsset? = nil) {
+    public init(image: UIImage, exifMeta : [String : Any]? = nil, fromCamera: Bool = false, asset: PHAsset? = nil) {
         self.originalImage = image
         self.modifiedImage = nil
         self.fromCamera = fromCamera
@@ -37,7 +37,7 @@ public class YPMediaVideo {
     public let fromCamera: Bool
     public var asset: PHAsset?
 
-    init(thumbnail: UIImage, videoURL: URL, fromCamera: Bool = false, asset: PHAsset? = nil) {
+    public init(thumbnail: UIImage, videoURL: URL, fromCamera: Bool = false, asset: PHAsset? = nil) {
         self.thumbnail = thumbnail
         self.url = videoURL
         self.fromCamera = fromCamera
