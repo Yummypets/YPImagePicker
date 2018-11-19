@@ -19,6 +19,7 @@ class YPAssetViewContainer: UIView {
     public let spinnerView = UIView()
     public let squareCropButton = UIButton()
     public let multipleSelectionButton = UIButton()
+    public let imgSelection = UIImageView()
     public var onlySquare = YPConfig.library.onlySquare
     public var isShown = true
     
@@ -80,9 +81,20 @@ class YPAssetViewContainer: UIView {
         multipleSelectionButton.width(115)
         multipleSelectionButton.height(32)
         multipleSelectionButton-15-|
-        multipleSelectionButton.setImage(YPConfig.icons.multipleSelectionOffIcon, for: .normal)
+        //multipleSelectionButton.setImage(YPConfig.icons.multipleSelectionOffIcon, for: .normal)
         //multipleSelectionButton.setTitle(" SELECT MULTIPLE", for: .normal)
         multipleSelectionButton.Bottom == zoomableView!.Bottom - 10
+        
+        //imgSelection
+        sv(imgSelection)
+        imgSelection.width(140)
+        imgSelection.height(38)
+        imgSelection-15-|
+        imgSelection.image = YPConfig.icons.multipleSelectionOffIcon
+        imgSelection.contentMode = .scaleToFill
+        imgSelection.clipsToBounds = true
+        //multipleSelectionButton.setTitle(" SELECT MULTIPLE", for: .normal)
+        imgSelection.Bottom == zoomableView!.Bottom - 10
         
     }
     
@@ -117,12 +129,17 @@ class YPAssetViewContainer: UIView {
     public func setMultipleSelectionMode(on: Bool) {
         isMultipleSelection = on
         let image = on ? YPConfig.icons.multipleSelectionOnIcon : YPConfig.icons.multipleSelectionOffIcon
-        multipleSelectionButton.setImage(image, for: .normal)
+        imgSelection.image = image
         if on {
-            multipleSelectionButton.width(multipleSelectionButton.frame.size.height)
+            imgSelection.height(38)
+            imgSelection.width(38)
+            imgSelection.contentMode = .scaleAspectFit
         } else {
-            multipleSelectionButton.width(150)
+            imgSelection.height(38)
+            imgSelection.width(140)
+            imgSelection.contentMode = .scaleToFill
         }
+        
         refreshSquareCropButton()
     }
 }
