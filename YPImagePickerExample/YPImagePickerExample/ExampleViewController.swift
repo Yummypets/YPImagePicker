@@ -155,7 +155,6 @@ class ExampleViewController: UIViewController {
            That means than when you create one picker with configuration, than you can create other picker with just
            let picker = YPImagePicker() and the configuration will be the same as the first picker. */
         
-        
         /* Only show library pictures from the last 3 days */
         //let threDaysTimeInterval: TimeInterval = 3 * 60 * 60 * 24
         //let fromDate = Date().addingTimeInterval(-threDaysTimeInterval)
@@ -169,11 +168,12 @@ class ExampleViewController: UIViewController {
         //
         //config.library.options = options
 
-        let picker = YPImagePicker(configuration: config)
+        config.library.skipSelectionsGallery = true
+        config.showsFilters = false
+        let picker = YPImagePicker(selected: selectedItems, configuration: config)
 
         /* Change configuration directly */
         // YPImagePickerConfiguration.shared.wordings.libraryTitle = "Gallery2"
-        
 
         /* Multiple media implementation */
         picker.didFinishPicking { [unowned picker] items, cancelled in
@@ -196,7 +196,7 @@ class ExampleViewController: UIViewController {
                     
                     let assetURL = video.url
                     let playerVC = AVPlayerViewController()
-                    let player = AVPlayer(playerItem: AVPlayerItem(url:assetURL))
+                    let player = AVPlayer(playerItem: AVPlayerItem(url: assetURL))
                     playerVC.player = player
                 
                     picker.dismiss(animated: true, completion: { [weak self] in

@@ -16,6 +16,7 @@ protocol ImagePickerDelegate: AnyObject {
 
 public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     
+    private var selected: [YPMediaItem] = []
     let albumsManager = YPAlbumsManager()
     var shouldHideStatusBar = false
     var initialStatusBarHidden = false
@@ -42,7 +43,20 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     var mode = Mode.camera
     
     var capturedImage: UIImage?
+
+    public init() {
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    public init(selected: [YPMediaItem]) {
+        self.selected = selected
+        super.init(nibName: nil, bundle: nil)
+    }
     
+    public required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     public override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -57,7 +71,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         
         // Library
         if YPConfig.screens.contains(.library) {
-            libraryVC = YPLibraryVC()
+            libraryVC = YPLibraryVC(selected: selected)
             libraryVC?.delegate = self
         }
         
@@ -257,8 +271,6 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         }
         
         label.firstBaselineAnchor.constraint(equalTo: titleView.bottomAnchor, constant: -14).isActive = true
-        
-        
         
         titleView.heightAnchor.constraint(equalToConstant: 40).isActive = true
         navigationItem.titleView = titleView

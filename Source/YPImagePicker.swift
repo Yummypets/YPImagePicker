@@ -48,7 +48,14 @@ public class YPImagePicker: UINavigationController {
         super.init(nibName: nil, bundle: nil)
         picker.imagePickerDelegate = self
     }
-    
+
+    public init(selected: [YPMediaItem], configuration: YPImagePickerConfiguration) {
+        YPImagePickerConfiguration.shared = configuration
+        picker = YPPickerVC(selected: selected)
+        super.init(nibName: nil, bundle: nil)
+        picker.imagePickerDelegate = self
+    }
+
     public required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

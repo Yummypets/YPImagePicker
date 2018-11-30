@@ -8,11 +8,11 @@
 
 import UIKit
 
-struct YPLibrarySelection {
-    let index: Int
-    var cropRect: CGRect?
-    var scrollViewContentOffset: CGPoint?
-    var scrollViewZoomScale: CGFloat?
+public struct YPLibrarySelection {
+    public let index: Int
+    public var cropRect: CGRect?
+    public var scrollViewContentOffset: CGPoint?
+    public var scrollViewZoomScale: CGFloat?
     
     init(index: Int,
          cropRect: CGRect? = nil,
