@@ -78,8 +78,8 @@ class YPAssetViewContainer: UIView {
         
         // Multiple selection button
         sv(multipleSelectionButton)
-        multipleSelectionButton.width(115)
-        multipleSelectionButton.height(32)
+        multipleSelectionButton.width(140)
+        multipleSelectionButton.height(40)
         multipleSelectionButton-15-|
         //multipleSelectionButton.setImage(YPConfig.icons.multipleSelectionOffIcon, for: .normal)
         //multipleSelectionButton.setTitle(" SELECT MULTIPLE", for: .normal)
@@ -93,6 +93,7 @@ class YPAssetViewContainer: UIView {
         imgSelection.image = YPConfig.icons.multipleSelectionOffIcon
         imgSelection.contentMode = .scaleToFill
         imgSelection.clipsToBounds = true
+        
         //multipleSelectionButton.setTitle(" SELECT MULTIPLE", for: .normal)
         imgSelection.Bottom == zoomableView!.Bottom - 10
         
