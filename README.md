@@ -84,35 +84,59 @@ you'll need to ad these `plist entries` :
 
 ## Configuration
 
+All the configuration endpoints are in the [YPImagePickerConfiguration](https://github.com/Yummypets/YPImagePicker/blob/master/Source/Configuration/YPImagePickerConfiguration.swift) struct.
+Below are the default value for reference, feel free to play around :)
+
 ```swift
 var config = YPImagePickerConfiguration()
-config.library.mediaType = .photoAndVideo
-config.library.onlySquare  = false
-config.onlySquareImagesFromCamera = true
-config.targetImageSize = .original
-config.usesFrontCamera = true
-config.showsFilters = true
-config.filters = [YPFilterDescriptor(name: "Normal", filterName: ""),
-                  YPFilterDescriptor(name: "Mono", filterName: "CIPhotoEffectMono")]
-config.shouldSaveNewPicturesToAlbum = true
-config.video.compression = AVAssetExportPresetHighestQuality
-config.albumName = "MyGreatAppName"
-config.screens = [.library, .photo, .video]
-config.startOnScreen = .library
-config.video.recordingTimeLimit = 10
-config.video.libraryTimeLimit = 20
-config.showsCrop = .rectangle(ratio: (16/9))
-config.wordings.libraryTitle = "Gallery"
-config.hidesStatusBar = false
-config.overlayView = myOverlayView
-config.library.maxNumberOfItems = 5
-config.library.minNumberOfItems = 3
-config.library.numberOfItemsInRow = 3
-config.library.spacingBetweenItems = 2
-config.isScrollToChangeModesEnabled = false
-
+// [Edit configuration here ...]
 // Build a picker with your configuration
 let picker = YPImagePicker(configuration: config)
+```
+
+### General
+```Swift
+config.isScrollToChangeModesEnabled = true
+config.onlySquareImagesFromCamera = true
+config.usesFrontCamera = false
+config.showsFilters = true
+config.shouldSaveNewPicturesToAlbum = true
+config.albumName = "DefaultYPImagePickerAlbumName"
+config.startOnScreen: YPPickerScreen = .photo
+config.screens = [.library, .photo]
+config.showsCrop = .none
+config.targetImageSize = YPImageSize.original
+config.overlayView = UIView()
+config.hidesStatusBar = true
+config.hidesBottomBar = false
+config.preferredStatusBarStyle = UIStatusBarStyle.default
+config.bottomMenuItemSelectedColour = UIColor(r: 38, g: 38, b: 38)
+config.bottomMenuItemUnSelectedColour = UIColor(r: 153, g: 153, b: 153)
+config.filters = [DefaultYPFilters...]
+```
+
+### Library
+```swift
+config.library.options = nil
+config.library.onlySquare = false
+config.library.minWidthForItem = nil
+config.library.mediaType = YPlibraryMediaType.photo
+config.library.maxNumberOfItems = 1
+config.library.minNumberOfItems = 1
+config.library.numberOfItemsInRow = 4
+config.library.spacingBetweenItems = 1.0
+config.library.skipSelectionsGallery = false
+```
+
+### Video
+```swift
+config.video.compression = AVAssetExportPresetHighestQuality
+config.video.fileType = .mov
+config.video.recordingTimeLimit = 60.0
+config.video.libraryTimeLimit = 60.0
+config.video.minimumTimeLimit = 3.0
+config.video.trimmerMaxDuration = 60.0
+config.video.trimmerMinDuration = 3.0
 ```
 
 ## Default Configuration
