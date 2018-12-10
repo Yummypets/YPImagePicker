@@ -176,7 +176,7 @@ present(picker, animated: true, completion: nil)
 // Here we configure the picker to only show videos, no photos.
 var config = YPImagePickerConfiguration()
 config.screens = [.library, .video]
-config.libraryMediaType = .video
+config.library.mediaType = .video
 
 let picker = YPImagePicker(configuration: config)
 picker.didFinishPicking { [unowned picker] items, _ in
