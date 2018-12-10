@@ -60,9 +60,11 @@ extension YPLibraryVC {
             selection.remove(at: positionIndex)
             // Refresh the numbers
             
+            currentlySelectedIndex = selection.last?.index ?? 0
+            changeAsset(mediaManager.fetchResult[currentlySelectedIndex])
             let selectedIndexPaths = selection.map { IndexPath(row: $0.index, section: 0 )}
             v.collectionView.reloadItems(at: selectedIndexPaths)
-            
+            v.collectionView.reloadItems(at: [IndexPath(row: positionIndex, section: 0 )])
             checkLimit()
         }
     }
