@@ -26,8 +26,8 @@ class YPCameraView: UIView, UIGestureRecognizerDelegate {
         if let overlayView = overlayView {
             // View Hierarchy
             sv(
-                previewViewContainer,
                 overlayView,
+                previewViewContainer,
                 progressBar,
                 timeElapsedLabel,
                 flashButton,
