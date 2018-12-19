@@ -66,6 +66,23 @@ class ExampleViewController: UIViewController {
     func showPicker() {
         
         var config = YPImagePickerConfiguration()
+        var styling = config.styling
+        styling.navBarBackgroundColor = .red
+        styling.navBarTintColor = .white
+        styling.nextButtonColor = .white
+        styling.progressSpinnerTintColor = .red
+        styling.navBarTitleFont = .systemFont(ofSize: 24, weight: .bold)
+        styling.navBarTitleColor = .white
+        styling.navBarButtonFont = .systemFont(ofSize: 17, weight: .bold)
+        styling.bottomPagerTextSelectedColor = .red
+        styling.navBarStyle = .black
+        styling.navBarIsTranslucent = false
+        styling.filtersBackgroundColor = .black
+        styling.filtersSelectedTextColor = .white
+        styling.filtersUnselectedTextColor = .lightText
+        styling.cameraCaptureButtonContainerColor = .black
+        config.styling = styling
+        
 
         /* Uncomment and play around with the configuration 👨‍🔬 🚀 */
 
