@@ -14,7 +14,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     internal weak var delegate: YPLibraryViewDelegate?
     internal var v: YPLibraryView!
     internal var isProcessing = false // true if video or image is in processing state
-    internal var multipleSelectionEnabled = false
+    internal var multipleSelectionEnabled = true
     internal var initialized = false
     internal var selection = [YPLibrarySelection]()
     internal var currentlySelectedIndex: Int = 0
@@ -62,7 +62,9 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         refreshMediaRequest()
         
         v.assetViewContainer.multipleSelectionButton.isHidden = !(YPConfig.library.maxNumberOfItems > 1)
-        v.maxNumberWarningLabel.text = String(format: YPConfig.wordings.warningMaxItemsLimit, YPConfig.library.maxNumberOfItems)
+        if YPConfig.library.maxNumberOfItems  > 1 {
+            v.maxNumberWarningLabel.text = String(format: YPConfig.wordings.warningMaxItemsLimit, YPConfig.library.maxNumberOfItems)
+        }
     }
     
     // MARK: - View Lifecycle
@@ -136,11 +138,8 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     func multipleSelectionButtonTapped() {
         
         // Prevent desactivating multiple selection when using `minNumberOfItems`
-        if YPConfig.library.minNumberOfItems > 1 && multipleSelectionEnabled {
-            return
-        }
         
-        multipleSelectionEnabled = !multipleSelectionEnabled
+        multipleSelectionEnabled = true
 
         if multipleSelectionEnabled {
             if selection.isEmpty {

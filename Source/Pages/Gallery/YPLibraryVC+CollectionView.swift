@@ -115,7 +115,11 @@ extension YPLibraryVC: UICollectionViewDelegate {
         let isVideo = (asset.mediaType == .video)
         cell.durationLabel.isHidden = !isVideo
         cell.durationLabel.text = isVideo ? YPHelper.formattedStrigFrom(asset.duration) : ""
-        cell.multipleSelectionIndicator.isHidden = !multipleSelectionEnabled
+        if YPConfig.library.maxNumberOfItems > 1 {
+            cell.multipleSelectionIndicator.isHidden = !multipleSelectionEnabled
+        } else {
+            cell.multipleSelectionIndicator.isHidden = multipleSelectionEnabled
+        }
         cell.isSelected = currentlySelectedIndex == indexPath.row
         
         // Set correct selection number
@@ -134,14 +138,12 @@ extension YPLibraryVC: UICollectionViewDelegate {
     
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let previouslySelectedIndexPath = IndexPath(row: currentlySelectedIndex, section: 0)
-        currentlySelectedIndex = indexPath.row
 
         // If this is the only selected cell, do not deselect.
-        if selection.count == 1 && selection.first?.index == indexPath.row {
-            return
-        }
+//        if selection.count == 1 && selection.first?.index == indexPath.row {
+//            return
+//        }
         
-        changeAsset(mediaManager.fetchResult[indexPath.row])
         panGestureHelper.resetToOriginalState()
         
         // Only scroll cell to top if preview is hidden.
@@ -160,7 +162,23 @@ extension YPLibraryVC: UICollectionViewDelegate {
                     deselect(indexPath: indexPath)
                 }
             } else if isLimitExceeded == false {
+                currentlySelectedIndex = indexPath.row
                 addToSelection(indexPath: indexPath)
+            } else if isLimitExceeded {
+                addToSelection(indexPath: indexPath)
+                if YPConfig.library.maxNumberOfItems > 1 {
+                    //deselect(indexPath: indexPath)
+                } else {
+                    currentlySelectedIndex = indexPath.row
+                    selection.removeAll()
+                    addToSelection(indexPath: indexPath)
+                }
+            }
+            
+            if selection.count > 0 && cellIsInTheSelectionPool {
+                changeAsset(mediaManager.fetchResult[(selection.first?.index)!])
+            } else {
+                changeAsset(mediaManager.fetchResult[indexPath.row])
             }
         } else {
             let previouslySelectedIndices = selection

@@ -95,7 +95,9 @@ class YPLibraryViewCell: UICollectionViewCell {
     }
 
     override var isSelected: Bool {
-        didSet { isHighlighted = isSelected }
+        didSet {
+            isHighlighted = isSelected
+        }
     }
     
     override var isHighlighted: Bool {

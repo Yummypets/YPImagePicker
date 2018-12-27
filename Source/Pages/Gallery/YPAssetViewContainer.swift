@@ -25,7 +25,7 @@ class YPAssetViewContainer: UIView {
     
     private let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
     private var shouldCropToSquare = false
-    private var isMultipleSelection = false
+    private var isMultipleSelection = true
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -75,28 +75,6 @@ class YPAssetViewContainer: UIView {
             |-15-squareCropButton
             squareCropButton.Bottom == zoomableView!.Bottom - 15
         }
-        
-        // Multiple selection button
-        sv(multipleSelectionButton)
-        multipleSelectionButton.width(140)
-        multipleSelectionButton.height(40)
-        multipleSelectionButton-15-|
-        //multipleSelectionButton.setImage(YPConfig.icons.multipleSelectionOffIcon, for: .normal)
-        //multipleSelectionButton.setTitle(" SELECT MULTIPLE", for: .normal)
-        multipleSelectionButton.Bottom == zoomableView!.Bottom - 10
-        
-        //imgSelection
-        sv(imgSelection)
-        imgSelection.width(140)
-        imgSelection.height(38)
-        imgSelection-15-|
-        imgSelection.image = YPConfig.icons.multipleSelectionOffIcon
-        imgSelection.contentMode = .scaleToFill
-        imgSelection.clipsToBounds = true
-        
-        //multipleSelectionButton.setTitle(" SELECT MULTIPLE", for: .normal)
-        imgSelection.Bottom == zoomableView!.Bottom - 10
-        
     }
     
     // MARK: - Square button
