@@ -82,9 +82,8 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
             guard let strongSelf = self else {
                 return
             }
-            if strongSelf.multipleSelectionEnabled {
-                strongSelf.updateCropInfo()
-            }
+
+            strongSelf.updateCropInfo()
         }
     }
     
