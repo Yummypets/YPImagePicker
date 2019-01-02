@@ -73,9 +73,8 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
             guard let strongSelf = self else {
                 return
             }
-            if strongSelf.multipleSelectionEnabled {
-                strongSelf.updateCropInfo()
-            }
+
+            strongSelf.updateCropInfo()
         }
     }
     
@@ -146,6 +145,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
             }
         } else {
             selection.removeAll()
+            addToSelection(indexPath: IndexPath(row: currentlySelectedIndex, section: 0))
         }
 
         v.assetViewContainer.setMultipleSelectionMode(on: multipleSelectionEnabled)
@@ -232,6 +232,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
             v.collectionView.selectItem(at: IndexPath(row: 0, section: 0),
                                              animated: false,
                                              scrollPosition: UICollectionView.ScrollPosition())
+            addToSelection(indexPath: IndexPath(row: 0, section: 0))
         } else {
             delegate?.noPhotosForOptions()
         }
@@ -263,7 +264,6 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     }
     
     func changeAsset(_ asset: PHAsset) {
-        mediaManager.selectedAsset = asset
         latestImageTapped = asset.localIdentifier
         delegate?.libraryViewStartedLoading()
         
@@ -272,6 +272,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
             self.v.hideGrid()
             self.delegate?.libraryViewFinishedLoading()
             self.v.assetViewContainer.refreshSquareCropButton()
+            self.updateCropInfo()
         }
         
         DispatchQueue.global(qos: .userInitiated).async {
