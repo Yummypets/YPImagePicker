@@ -159,7 +159,7 @@ extension YPLibraryVC: UICollectionViewDelegate {
         if multipleSelectionEnabled {
             
             let cellIsInTheSelectionPool = isInSelectionPool(indexPath: indexPath)
-            let cellIsCurrentlySelected = selection.contains { $0.assetIdentifier == mediaManager.fetchResult[indexPath.row].localIdentifier }
+            let cellIsCurrentlySelected = previouslySelectedIndexPath.row == currentlySelectedIndex
 
             if cellIsInTheSelectionPool {
                 if cellIsCurrentlySelected {
