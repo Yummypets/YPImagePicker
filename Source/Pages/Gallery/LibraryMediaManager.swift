@@ -16,7 +16,6 @@ class LibraryMediaManager {
     internal var fetchResult: PHFetchResult<PHAsset>!
     internal var previousPreheatRect: CGRect = .zero
     internal var imageManager: PHCachingImageManager?
-    internal var selectedAsset: PHAsset!
     internal var exportTimer: Timer?
     internal var currentExportSessions: [AVAssetExportSession] = []
     
