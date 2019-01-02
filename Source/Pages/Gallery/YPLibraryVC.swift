@@ -35,16 +35,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     
     func setAlbum(_ album: YPAlbum) {
         mediaManager.collection = album.collection
-        resetMultipleSelection()
-    }
-    
-    private func resetMultipleSelection() {
-        selection.removeAll()
         currentlySelectedIndex = 0
-        multipleSelectionEnabled = false
-        v.assetViewContainer.setMultipleSelectionMode(on: false)
-        delegate?.libraryViewDidToggleMultipleSelection(enabled: false)
-        checkLimit()
     }
     
     func initialize() {
@@ -143,11 +134,13 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
 
         if multipleSelectionEnabled {
             if selection.isEmpty {
+                let asset = mediaManager.fetchResult[currentlySelectedIndex]
                 selection = [
                     YPLibrarySelection(index: currentlySelectedIndex,
                                        cropRect: v.currentCropRect(),
                                        scrollViewContentOffset: v.assetZoomableView!.contentOffset,
-                                       scrollViewZoomScale: v.assetZoomableView!.zoomScale)
+                                       scrollViewZoomScale: v.assetZoomableView!.zoomScale,
+                                       assetIdentifier: asset.localIdentifier)
                 ]
             }
         } else {
@@ -391,54 +384,77 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                               videoCallback: @escaping (_ videoURL: YPMediaVideo) -> Void,
                               multipleItemsCallback: @escaping (_ items: [YPMediaItem]) -> Void) {
         DispatchQueue.global(qos: .userInitiated).async {
-            let selectedAssets: [(asset: PHAsset, cropRect: CGRect?)] = self.selection.map {
-                return (self.mediaManager.fetchResult[$0.index], $0.cropRect)
-            }
-
-            // Check video length
-            for asset in selectedAssets {
-                if self.fitsVideoLengthLimits(asset: asset.asset) == false {
+            
+            // Multiple selection
+            if self.multipleSelectionEnabled && self.selection.count > 1 {
+                let selectedAssets: [(asset: PHAsset, cropRect: CGRect?)] = self.selection.map {
+                    guard let asset = PHAsset.fetchAssets(withLocalIdentifiers: [$0.assetIdentifier], options: PHFetchOptions()).firstObject else { fatalError() }
+                    return (asset, $0.cropRect)
+                }
+                
+                // Check video length
+                for asset in selectedAssets {
+                    if self.fitsVideoLengthLimits(asset: asset.asset) == false {
+                        return
+                    }
+                }
+                
+                // Fill result media items array
+                var resultMediaItems: [YPMediaItem] = []
+                let asyncGroup = DispatchGroup()
+                
+                for asset in selectedAssets {
+                    asyncGroup.enter()
+                    
+                    switch asset.asset.mediaType {
+                    case .image:
+                        self.fetchImageAndCrop(for: asset.asset, withCropRect: asset.cropRect) { image, exifMeta in
+                            let photo = YPMediaPhoto(image: image.resizedImageIfNeeded(), exifMeta: exifMeta, asset: asset.asset)
+                            resultMediaItems.append(YPMediaItem.photo(p: photo))
+                            asyncGroup.leave()
+                        }
+                        
+                    case .video:
+                        self.checkVideoLengthAndCrop(for: asset.asset, withCropRect: asset.cropRect) { videoURL in
+                            let videoItem = YPMediaVideo(thumbnail: thumbnailFromVideoPath(videoURL),
+                                                         videoURL: videoURL, asset: asset.asset)
+                            resultMediaItems.append(YPMediaItem.video(v: videoItem))
+                            asyncGroup.leave()
+                        }
+                    default:
+                        break
+                    }
+                }
+                
+                asyncGroup.notify(queue: .main) {
+                    multipleItemsCallback(resultMediaItems)
+                    self.delegate?.libraryViewFinishedLoading()
+                }
+        } else {
+                let asset = self.mediaManager.selectedAsset!
+                switch asset.mediaType {
+                case .video:
+                    self.checkVideoLengthAndCrop(for: asset, callback: { videoURL in
+                        DispatchQueue.main.async {
+                            self.delegate?.libraryViewFinishedLoading()
+                            let video = YPMediaVideo(thumbnail: thumbnailFromVideoPath(videoURL),
+                                                     videoURL: videoURL, asset: asset)
+                            videoCallback(video)
+                        }
+                    })
+                case .image:
+                    self.fetchImageAndCrop(for: asset) { image, exifMeta in
+                        DispatchQueue.main.async {
+                            self.delegate?.libraryViewFinishedLoading()
+                            let photo = YPMediaPhoto(image: image.resizedImageIfNeeded(),
+                                                     exifMeta: exifMeta,
+                                                     asset: asset)
+                            photoCallback(photo)
+                        }
+                    }
+                case .audio, .unknown:
                     return
                 }
-            }
-
-            // Fill result media items array
-            var resultMediaItems: [YPMediaItem] = []
-            let asyncGroup = DispatchGroup()
-
-            for asset in selectedAssets {
-                asyncGroup.enter()
-
-                switch asset.asset.mediaType {
-                case .image:
-                    self.fetchImageAndCrop(for: asset.asset, withCropRect: asset.cropRect) { image, exifMeta in
-                        let photo = YPMediaPhoto(image: image.resizedImageIfNeeded(), exifMeta: exifMeta, asset: asset.asset)
-                        resultMediaItems.append(YPMediaItem.photo(p: photo))
-                        asyncGroup.leave()
-                    }
-
-                case .video:
-                    self.checkVideoLengthAndCrop(for: asset.asset, withCropRect: asset.cropRect) { videoURL in
-                        let videoItem = YPMediaVideo(thumbnail: thumbnailFromVideoPath(videoURL),
-                                                     videoURL: videoURL, asset: asset.asset)
-                        resultMediaItems.append(YPMediaItem.video(v: videoItem))
-                        asyncGroup.leave()
-                    }
-                default:
-                    break
-                }
-            }
-
-            asyncGroup.notify(queue: .main) {
-                if resultMediaItems.count == 1, let onlyOneItem = resultMediaItems.first {
-                    switch onlyOneItem {
-                    case let .photo(p): photoCallback(p)
-                    case let .video(v): videoCallback(v)
-                    }
-                } else {
-                    multipleItemsCallback(resultMediaItems)
-                }
-                self.delegate?.libraryViewFinishedLoading()
             }
         }
     }
