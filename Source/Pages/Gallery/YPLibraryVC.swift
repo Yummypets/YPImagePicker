@@ -232,7 +232,9 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
             v.collectionView.selectItem(at: IndexPath(row: 0, section: 0),
                                              animated: false,
                                              scrollPosition: UICollectionView.ScrollPosition())
-            addToSelection(indexPath: IndexPath(row: 0, section: 0))
+            if !multipleSelectionEnabled {
+                addToSelection(indexPath: IndexPath(row: 0, section: 0))
+            }
         } else {
             delegate?.noPhotosForOptions()
         }
