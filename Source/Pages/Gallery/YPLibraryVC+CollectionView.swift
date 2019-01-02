@@ -84,7 +84,7 @@ extension YPLibraryVC {
         checkLimit()
     }
     
-    func isInSelectionPull(indexPath: IndexPath) -> Bool {
+    func isInSelectionPool(indexPath: IndexPath) -> Bool {
         return selection.contains(where: { $0.assetIdentifier == mediaManager.fetchResult[indexPath.row].localIdentifier })
     }
     
@@ -158,7 +158,7 @@ extension YPLibraryVC: UICollectionViewDelegate {
 
         if multipleSelectionEnabled {
             
-            let cellIsInTheSelectionPool = isInSelectionPull(indexPath: indexPath)
+            let cellIsInTheSelectionPool = isInSelectionPool(indexPath: indexPath)
             let cellIsCurrentlySelected = selection.contains { $0.assetIdentifier == mediaManager.fetchResult[indexPath.row].localIdentifier }
 
             if cellIsInTheSelectionPool {
