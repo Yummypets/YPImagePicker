@@ -311,7 +311,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         
         if tooLong || tooShort {
             DispatchQueue.main.async {
-                let alert = tooLong ? YPAlert.videoTooLongAlert() : YPAlert.videoTooShortAlert()
+                let alert = tooLong ? YPAlert.videoTooLongAlert(self.view) : YPAlert.videoTooShortAlert(self.view)
                 self.present(alert, animated: true, completion: nil)
             }
             return false
