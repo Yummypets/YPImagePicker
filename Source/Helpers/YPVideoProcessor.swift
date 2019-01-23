@@ -86,7 +86,7 @@ class YPVideoProcessor {
         exporter?.outputURL = outputPath
         exporter?.shouldOptimizeForNetworkUse = true
         exporter?.outputFileType = YPConfig.video.fileType
-
+        
         exporter?.exportAsynchronously {
             if exporter?.status == .completed {
                 DispatchQueue.main.async(execute: {

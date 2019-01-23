@@ -24,13 +24,21 @@ public class YPVideoCaptureVC: UIViewController, YPPermissionCheckable {
         super.init(nibName: nil, bundle: nil)
         title = YPConfig.wordings.videoTitle
         videoHelper.didCaptureVideo = { [weak self] videoURL in
-            self?.didCaptureVideo?(videoURL)
-            self?.resetVisualState()
+            self?.v.shotButton.isEnabled = true
+            if let url = videoURL {
+                self?.didCaptureVideo?(url)
+                self?.resetVisualState()
+            }
         }
         videoHelper.videoRecordingProgress = { [weak self] progress, timeElapsed in
             self?.updateState {
-                $0.progress = progress
-                $0.timeElapsed = timeElapsed
+                
+                if timeElapsed > 100 {
+                } else {
+                    $0.progress = progress
+                    $0.timeElapsed = timeElapsed
+                }
+                print(timeElapsed)
             }
         }
     }
@@ -127,6 +135,9 @@ public class YPVideoCaptureVC: UIViewController, YPPermissionCheckable {
     
     private func toggleRecording() {
         videoHelper.isRecording ? stopRecording() : startRecording()
+        if videoHelper.isRecording {
+            self.v.shotButton.isEnabled = false
+        }
     }
     
     private func startRecording() {

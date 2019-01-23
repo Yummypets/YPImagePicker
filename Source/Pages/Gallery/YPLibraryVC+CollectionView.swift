@@ -165,9 +165,9 @@ extension YPLibraryVC: UICollectionViewDelegate {
                 currentlySelectedIndex = indexPath.row
                 addToSelection(indexPath: indexPath)
             } else if isLimitExceeded {
-                addToSelection(indexPath: indexPath)
+                //addToSelection(indexPath: indexPath)
                 if YPConfig.library.maxNumberOfItems > 1 {
-                    //deselect(indexPath: indexPath)
+//                    deselect(indexPath: indexPath)
                 } else {
                     currentlySelectedIndex = indexPath.row
                     selection.removeAll()
@@ -178,7 +178,11 @@ extension YPLibraryVC: UICollectionViewDelegate {
             if selection.count > 0 && cellIsInTheSelectionPool {
                 changeAsset(mediaManager.fetchResult[(selection.first?.index)!])
             } else {
-                changeAsset(mediaManager.fetchResult[indexPath.row])
+                if isLimitExceeded {
+                    changeAsset(mediaManager.fetchResult[(selection.last?.index)!])
+                } else {
+                    changeAsset(mediaManager.fetchResult[indexPath.row])
+                }
             }
         } else {
             let previouslySelectedIndices = selection

@@ -12,9 +12,10 @@ import CoreMotion
 
 /// Abstracts Low Level AVFoudation details.
 class YPVideoCaptureHelper: NSObject {
+    public let spinner = UIActivityIndicatorView(activityIndicatorStyle: .gray)
     
     public var isRecording: Bool { return videoOutput.isRecording }
-    public var didCaptureVideo: ((URL) -> Void)?
+    public var didCaptureVideo: ((URL?) -> Void)?
     public var videoRecordingProgress: ((Float, TimeInterval) -> Void)?
     
     private let session = AVCaptureSession()
@@ -204,9 +205,17 @@ class YPVideoCaptureHelper: NSObject {
     func tick() {
         let timeElapsed = Date().timeIntervalSince(dateVideoStarted)
         let progress: Float = Float(timeElapsed) / Float(videoRecordingTimeLimit)
-        DispatchQueue.main.async {
-            self.videoRecordingProgress?(progress, timeElapsed)
+        if timeElapsed > 90.0 {
+            self.stopRecording()
+            DispatchQueue.main.async {
+                self.videoRecordingProgress?(progress, 105.0)
+            }
+        } else {
+            DispatchQueue.main.async {
+                self.videoRecordingProgress?(progress, timeElapsed)
+            }
         }
+        print(String(progress))
     }
     
     // MARK: - Orientation
@@ -265,9 +274,12 @@ extension YPVideoCaptureHelper: AVCaptureFileOutputRecordingDelegate {
                            didFinishRecordingTo outputFileURL: URL,
                            from connections: [AVCaptureConnection],
                            error: Error?) {
+    
         YPVideoProcessor.cropToSquare(filePath: outputFileURL) { [weak self] url in
-            guard let _self = self, let u = url else { return }
-            _self.didCaptureVideo?(u)
+            if let _self = self {
+                self?.spinner.stopAnimating()
+                _self.didCaptureVideo?(url)
+            }
         }
         timer.invalidate()
     }

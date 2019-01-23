@@ -23,7 +23,6 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     internal let panGestureHelper = PanGestureHelper()
 
     // MARK: - Init
-    
     public required init() {
         super.init(nibName: nil, bundle: nil)
         title = YPConfig.wordings.libraryTitle
@@ -41,7 +40,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     private func resetMultipleSelection() {
         selection.removeAll()
         currentlySelectedIndex = 0
-        multipleSelectionEnabled = false
+        multipleSelectionEnabled = true
         v.assetViewContainer.setMultipleSelectionMode(on: false)
         delegate?.libraryViewDidToggleMultipleSelection(enabled: false)
         checkLimit()
@@ -413,7 +412,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                     switch asset.asset.mediaType {
                     case .image:
                         self.fetchImageAndCrop(for: asset.asset, withCropRect: asset.cropRect) { image, exifMeta in
-                            let photo = YPMediaPhoto(image: image.resizedImageIfNeeded(), exifMeta: exifMeta, asset: asset.asset)
+                            let photo = YPMediaPhoto(image: image, exifMeta: exifMeta, asset: asset.asset)
                             resultMediaItems.append(YPMediaItem.photo(p: photo))
                             asyncGroup.leave()
                         }
