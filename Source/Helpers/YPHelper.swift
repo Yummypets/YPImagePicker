@@ -12,7 +12,7 @@ import Photos
 
 internal func ypLocalized(_ str: String) -> String {
     return NSLocalizedString(str,
-                             tableName: nil,
+                             tableName: "YPImagePickerLocalizable",
                              bundle: Bundle(for: YPPickerVC.self),
                              value: "",
                              comment: "")
