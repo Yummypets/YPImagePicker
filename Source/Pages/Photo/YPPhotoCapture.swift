@@ -19,7 +19,7 @@ protocol YPPhotoCapture: class {
     func tryToggleFlash()
     var hasFlash: Bool { get }
     var currentFlashMode: YPFlashMode { get }
-    func flipCamera()
+    func flipCamera(completion: @escaping () -> Void)
     func shoot(completion: @escaping (Data) -> Void)
     var videoLayer: AVCaptureVideoPreviewLayer! { get set }
     var device: AVCaptureDevice? { get }
