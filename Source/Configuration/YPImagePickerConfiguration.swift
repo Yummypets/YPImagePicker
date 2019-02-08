@@ -154,7 +154,7 @@ public struct YPImagePickerConfiguration {
 /// Encapsulates library specific settings.
 public struct YPConfigLibrary {
     
-     public var options: PHFetchOptions? = nil
+    public var options: PHFetchOptions? = nil
     
     /// Set this to true if you want to force the library output to be a squared image. Defaults to false
     public var onlySquare = false
@@ -164,7 +164,10 @@ public struct YPConfigLibrary {
     
     /// Choose what media types are available in the library. Defaults to `.photo`
     public var mediaType = YPlibraryMediaType.photo
-    
+
+    /// Initial state of multiple selection button.
+    public var defaultMultipleSelection = false
+
     /// Anything superior than 1 will enable the multiple selection feature.
     public var maxNumberOfItems = 1
     

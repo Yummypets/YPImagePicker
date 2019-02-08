@@ -51,7 +51,10 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         panGestureHelper.registerForPanGesture(on: v)
         registerForTapOnPreview()
         refreshMediaRequest()
-        
+
+        if YPConfig.library.defaultMultipleSelection {
+            multipleSelectionButtonTapped()
+        }
         v.assetViewContainer.multipleSelectionButton.isHidden = !(YPConfig.library.maxNumberOfItems > 1)
         v.maxNumberWarningLabel.text = String(format: YPConfig.wordings.warningMaxItemsLimit, YPConfig.library.maxNumberOfItems)
     }
