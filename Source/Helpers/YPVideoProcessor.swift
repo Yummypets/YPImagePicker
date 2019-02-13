@@ -69,7 +69,7 @@ class YPVideoProcessor {
         videoComposition.renderSize = CGSize(width: CGFloat(clipVideoTrack.naturalSize.height), height: CGFloat(clipVideoTrack.naturalSize.height))
         videoComposition.frameDuration = CMTimeMake(1, 30)
         let instruction = AVMutableVideoCompositionInstruction()
-        instruction.timeRange = CMTimeRangeMake(kCMTimeZero, CMTimeMakeWithSeconds(60, 30))
+        instruction.timeRange = CMTimeRangeMake(kCMTimeZero, asset.duration)
         
         // rotate to potrait
         let transformer = AVMutableVideoCompositionLayerInstruction(assetTrack: clipVideoTrack)
@@ -81,7 +81,7 @@ class YPVideoProcessor {
         videoComposition.instructions = [instruction]
         
         // exporter
-        let exporter = AVAssetExportSession.init(asset: asset, presetName: AVAssetExportPresetMediumQuality)
+        let exporter = AVAssetExportSession.init(asset: asset, presetName: AVAssetExportPresetHighestQuality)
         exporter?.videoComposition = videoComposition
         exporter?.outputURL = outputPath
         exporter?.shouldOptimizeForNetworkUse = true
@@ -95,6 +95,9 @@ class YPVideoProcessor {
                 return
             } else if exporter?.status == .failed {
                 print("YPVideoProcessor -> Export of the video failed. Reason: \(String(describing: exporter?.error))")
+                DispatchQueue.main.async(execute: {
+                    completion(nil)
+                })
             }
             completion(nil)
             return

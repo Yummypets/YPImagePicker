@@ -362,7 +362,8 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                                    withCropRect: CGRect? = nil,
                                    callback: @escaping (_ photo: UIImage, _ exif: [String : Any]) -> Void) {
         delegate?.libraryViewStartedLoading()
-        let cropRect = withCropRect ?? DispatchQueue.main.sync { v.currentCropRect() }
+//        let cropRect = withCropRect ?? DispatchQueue.main.sync { v.currentCropRect() }
+        let cropRect = withCropRect ?? v.currentCropRect()
         let ts = targetSize(for: asset, cropRect: cropRect)
         mediaManager.imageManager?.fetchImage(for: asset, cropRect: cropRect, targetSize: ts, callback: callback)
     }

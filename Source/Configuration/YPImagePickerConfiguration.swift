@@ -146,6 +146,12 @@ public struct YPImagePickerConfiguration {
     @available(*, obsoleted: 3.0.0, renamed: "library.maxNumberOfItems")
     public var maxNumberOfItems = 1
     
+    @available(*, obsoleted: 3.0.0, renamed: "library.maxNumberVideo")
+    public var maxNumberVideo = 1
+    
+    @available(*, obsoleted: 3.0.0, renamed:"library.maxNumberImage")
+    public var maxNumberImage = 1
+    
 }
 
 /// Encapsulates library specific settings.
@@ -164,6 +170,8 @@ public struct YPConfigLibrary {
     
     /// Anything superior than 1 will enable the multiple selection feature.
     public var maxNumberOfItems = 1
+    public var maxNumberVideo = 1
+    public var maxNumberImage = 3
     
     /// Anything greater than 1 will desactivate live photo and video modes (library only) and
     // force users to select at least the number of items defined.

@@ -49,12 +49,11 @@ class YPVideoCaptureHelper: NSObject {
     }
     
     // MARK: - Start Camera
-    
     public func startCamera(completion: @escaping (() -> Void)) {
         if !session.isRunning {
             sessionQueue.async { [weak self] in
                 // Re-apply session preset
-                self?.session.sessionPreset = .high
+                self?.session.sessionPreset = .hd4K3840x2160
                 let status = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
                 switch status {
                 case .notDetermined, .restricted, .denied:
@@ -193,7 +192,7 @@ class YPVideoCaptureHelper: NSObject {
             if session.canAddOutput(videoOutput) {
                 session.addOutput(videoOutput)
             }
-            session.sessionPreset = .high
+            session.sessionPreset = .hd4K3840x2160
         }
         session.commitConfiguration()
         isCaptureSessionSetup = true
@@ -205,8 +204,7 @@ class YPVideoCaptureHelper: NSObject {
     func tick() {
         let timeElapsed = Date().timeIntervalSince(dateVideoStarted)
         let progress: Float = Float(timeElapsed) / Float(videoRecordingTimeLimit)
-        if timeElapsed > 90.0 {
-            self.stopRecording()
+        if timeElapsed > 91.0 {
             DispatchQueue.main.async {
                 self.videoRecordingProgress?(progress, 105.0)
             }

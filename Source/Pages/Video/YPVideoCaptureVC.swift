@@ -15,7 +15,8 @@ public class YPVideoCaptureVC: UIViewController, YPPermissionCheckable {
     private let videoHelper = YPVideoCaptureHelper()
     private let v = YPCameraView(overlayView: nil)
     private var viewState = ViewState()
-    
+    var isStopRecording = true
+    var activityView = UIActivityIndicatorView()
     // MARK: - Init
     
     public required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
@@ -24,6 +25,7 @@ public class YPVideoCaptureVC: UIViewController, YPPermissionCheckable {
         super.init(nibName: nil, bundle: nil)
         title = YPConfig.wordings.videoTitle
         videoHelper.didCaptureVideo = { [weak self] videoURL in
+            self?.activityView.removeFromSuperview()
             self?.v.shotButton.isEnabled = true
             if let url = videoURL {
                 self?.didCaptureVideo?(url)
@@ -32,8 +34,19 @@ public class YPVideoCaptureVC: UIViewController, YPPermissionCheckable {
         }
         videoHelper.videoRecordingProgress = { [weak self] progress, timeElapsed in
             self?.updateState {
-                
                 if timeElapsed > 100 {
+                    if let object = self {
+                        object.v.shotButton.isEnabled = false
+                        object.activityView.removeFromSuperview()
+                        object.activityView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+                        object.activityView.center = self?.v.shotButton.center ?? (self?.view.center)!
+                        object.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: (self?.activityView)!)
+//                        object.v.addSubview(object.activityView)
+                    }
+                    if self?.isStopRecording ?? false {
+                        self?.isStopRecording = false
+                        self?.shotButtonTapped()
+                    }
                 } else {
                     $0.progress = progress
                     $0.timeElapsed = timeElapsed
@@ -64,6 +77,7 @@ public class YPVideoCaptureVC: UIViewController, YPPermissionCheckable {
             guard let strongSelf = self else {
                 return
             }
+            self?.isStopRecording = false
             self?.videoHelper.start(previewView: strongSelf.v.previewViewContainer,
                                     withVideoRecordingLimit: YPConfig.video.recordingTimeLimit,
                                     completion: {

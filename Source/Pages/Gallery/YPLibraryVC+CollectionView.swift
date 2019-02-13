@@ -81,6 +81,20 @@ extension YPLibraryVC {
     func checkLimit() {
         v.maxNumberWarningView.isHidden = !isLimitExceeded || multipleSelectionEnabled == false
     }
+    
+    func checkLimitImageAndVideo() -> Bool {
+        var imageCount = 0
+        var videoCount = 0
+        for item in selection {
+            let asset = mediaManager.fetchResult[item.index]
+            if asset.mediaType == .image {
+                imageCount =  imageCount + 1
+            } else if asset.mediaType == .video {
+                videoCount = videoCount + 1
+            }
+        }
+        return (imageCount <= YPConfig.library.maxNumberImage) && (videoCount <= YPConfig.library.maxNumberVideo)
+    }
 }
 
 extension YPLibraryVC: UICollectionViewDataSource {
@@ -145,25 +159,46 @@ extension YPLibraryVC: UICollectionViewDelegate {
 //        }
         
         panGestureHelper.resetToOriginalState()
-        
+//        v.maxNumberWarningLabel.text = ""
+//        v.maxNumberWarningView.isHidden = true
         // Only scroll cell to top if preview is hidden.
         if !panGestureHelper.isImageShown {
             collectionView.scrollToItem(at: indexPath, at: .top, animated: true)
         }
         v.refreshImageCurtainAlpha()
 
-        if multipleSelectionEnabled {
-            
+         if multipleSelectionEnabled {
+            var addNew: Bool = false
             let cellIsInTheSelectionPool = isInSelectionPull(indexPath: indexPath)
             let cellIsCurrentlySelected = previouslySelectedIndexPath.row == currentlySelectedIndex
             
             if cellIsInTheSelectionPool {
                 if cellIsCurrentlySelected {
                     deselect(indexPath: indexPath)
+                    addNew = true
                 }
             } else if isLimitExceeded == false {
                 currentlySelectedIndex = indexPath.row
-                addToSelection(indexPath: indexPath)
+                //Dhaval Check
+                let selectedItem = mediaManager.fetchResult[indexPath.row]
+                var imageCount = 0
+                var videoCount = 0
+                for item in selection {
+                    let asset = mediaManager.fetchResult[item.index]
+                    if asset.mediaType == .image {
+                        imageCount =  imageCount + 1
+                    } else if asset.mediaType == .video {
+                        videoCount = videoCount + 1
+                    }
+                }
+                
+                if selectedItem.mediaType == .image && imageCount < YPConfig.library.maxNumberImage {
+                    addToSelection(indexPath: indexPath)
+                    addNew = true
+                } else if selectedItem.mediaType == .video && videoCount < YPConfig.library.maxNumberVideo {
+                    addToSelection(indexPath: indexPath)
+                    addNew = true
+                }
             } else if isLimitExceeded {
                 //addToSelection(indexPath: indexPath)
                 if YPConfig.library.maxNumberOfItems > 1 {
@@ -172,13 +207,28 @@ extension YPLibraryVC: UICollectionViewDelegate {
                     currentlySelectedIndex = indexPath.row
                     selection.removeAll()
                     addToSelection(indexPath: indexPath)
+                    addNew = true
                 }
             }
             
-            if selection.count > 0 && cellIsInTheSelectionPool {
-                changeAsset(mediaManager.fetchResult[(selection.first?.index)!])
+            if selection.count > 0 {
+                if addNew {
+                    changeAsset(mediaManager.fetchResult[(selection.last?.index)!])
+                    let previouslySelectedIndices = selection
+                } else {
+                    let selectedItem = mediaManager.fetchResult[indexPath.row]
+                    if isLimitExceeded {
+                        
+                    } else if selectedItem.mediaType == .image {
+                        v.maxNumberWarningLabel.text = String(format: "The limit is %d photos",YPConfig.library.maxNumberImage)
+                        v.maxNumberWarningView.isHidden = false
+                    } else if selectedItem.mediaType == .video {
+                        v.maxNumberWarningLabel.text = String(format: "The limit is %d videos",YPConfig.library.maxNumberVideo)
+                        v.maxNumberWarningView.isHidden = false
+                    }
+                }
             } else {
-                if isLimitExceeded {
+                if isLimitExceeded || !checkLimitImageAndVideo() {
                     changeAsset(mediaManager.fetchResult[(selection.last?.index)!])
                 } else {
                     changeAsset(mediaManager.fetchResult[indexPath.row])
