@@ -21,7 +21,7 @@ class YPFiltersView: UIView {
         filtersLoader = UIActivityIndicatorView(style: .gray)
         filtersLoader.hidesWhenStopped = true
         filtersLoader.startAnimating()
-        filtersLoader.color = YPConfig.colors.tintColor
+        filtersLoader.color = YPConfig.colors.navigationBarActivityIndicatorColor ?? .lightGray
         
         sv(
             imageView,
