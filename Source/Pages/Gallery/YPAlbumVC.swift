@@ -35,8 +35,7 @@ class YPAlbumVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: YPConfig.wordings.cancel,
-                                                           style: .plain,
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .stop,
                                                            target: self,
                                                            action: #selector(close))
         setUpTableView()
