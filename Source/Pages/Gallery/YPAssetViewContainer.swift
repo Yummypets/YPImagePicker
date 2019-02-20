@@ -105,8 +105,7 @@ class YPAssetViewContainer: UIView {
             }
         }
         
-        let shouldFit = YPConfig.library.onlySquare ? true : shouldCropToSquare
-        zoomableView?.fitImage(shouldFit)
+        zoomableView?.fitImage(onlySquare)
     }
     
     // MARK: - Multiple selection
