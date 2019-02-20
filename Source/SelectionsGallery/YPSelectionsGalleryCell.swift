@@ -49,6 +49,11 @@ public class YPSelectionsGalleryCell: UICollectionViewCell {
         }
     }
     
+    func setEditable(_ editable: Bool) {
+        self.editIcon.isHidden = !editable
+        self.editSquare.isHidden = !editable
+    }
+    
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
