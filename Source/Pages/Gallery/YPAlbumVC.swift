@@ -64,7 +64,7 @@ class YPAlbumVC: UIViewController {
         v.tableView.isHidden = true
         v.tableView.dataSource = self
         v.tableView.delegate = self
-        v.tableView.rowHeight = UITableViewAutomaticDimension
+        v.tableView.rowHeight = UITableView.automaticDimension
         v.tableView.estimatedRowHeight = 80
         v.tableView.separatorStyle = .none
         v.tableView.register(YPAlbumCell.self, forCellReuseIdentifier: "AlbumCell")

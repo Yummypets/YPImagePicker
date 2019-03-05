@@ -74,7 +74,7 @@ class LibraryMediaManager {
                 guard let asset = asset else { print("⚠️ PHCachingImageManager >>> Don't have the asset"); return }
                 
                 let assetComposition = AVMutableComposition()
-                let trackTimeRange = CMTimeRangeMake(kCMTimeZero, asset.duration)
+                let trackTimeRange = CMTimeRangeMake(start: CMTime.zero, duration: asset.duration)
                 
                 // 1. Inserting audio and video tracks in composition
                 
@@ -90,10 +90,10 @@ class LibraryMediaManager {
                     let audioCompositionTrack = assetComposition
                         .addMutableTrack(withMediaType: AVMediaType.audio,
                                          preferredTrackID: kCMPersistentTrackID_Invalid) {
-                    try audioCompositionTrack.insertTimeRange(trackTimeRange, of: audioTrack, at: kCMTimeZero)
+                    try audioCompositionTrack.insertTimeRange(trackTimeRange, of: audioTrack, at: CMTime.zero)
                 }
                 
-                try videoCompositionTrack.insertTimeRange(trackTimeRange, of: videoTrack, at: kCMTimeZero)
+                try videoCompositionTrack.insertTimeRange(trackTimeRange, of: videoTrack, at: CMTime.zero)
                 
                 // 2. Create the instructions
                 
@@ -103,8 +103,8 @@ class LibraryMediaManager {
                 // 3. Adding the layer instructions. Transforming
                 
                 let layerInstructions = AVMutableVideoCompositionLayerInstruction(assetTrack: videoCompositionTrack)
-                layerInstructions.setTransform(videoTrack.getTransform(cropRect: cropRect), at: kCMTimeZero)
-                layerInstructions.setOpacity(1.0, at: kCMTimeZero)
+                layerInstructions.setTransform(videoTrack.getTransform(cropRect: cropRect), at: CMTime.zero)
+                layerInstructions.setOpacity(1.0, at: CMTime.zero)
                 mainInstructions.layerInstructions = [layerInstructions]
                 
                 // 4. Create the main composition and add the instructions
@@ -112,7 +112,7 @@ class LibraryMediaManager {
                 let videoComposition = AVMutableVideoComposition()
                 videoComposition.renderSize = cropRect.size
                 videoComposition.instructions = [mainInstructions]
-                videoComposition.frameDuration = CMTimeMake(1, 30)
+                videoComposition.frameDuration = CMTimeMake(value: 1, timescale: 30)
                 
                 // 5. Configuring export session
                 

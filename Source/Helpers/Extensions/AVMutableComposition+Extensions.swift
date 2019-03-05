@@ -21,7 +21,7 @@ extension AVMutableComposition {
     
     func trim(timeOffStart: Double) {
         let duration = CMTime(seconds: timeOffStart, preferredTimescale: 1)
-        let timeRange = CMTimeRange(start: kCMTimeZero, duration: duration)
+        let timeRange = CMTimeRange(start: CMTime.zero, duration: duration)
         
         for track in tracks {
             track.removeTimeRange(timeRange)

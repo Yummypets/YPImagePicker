@@ -74,7 +74,7 @@ public class YPVideoView: UIView {
     
     @objc public func playerItemDidReachEnd(_ note: Notification) {
         player.actionAtItemEnd = .none
-        player.seek(to: kCMTimeZero)
+        player.seek(to: CMTime.zero)
         player.play()
     }
 }
@@ -123,7 +123,7 @@ extension YPVideoView {
     
     public func stop() {
         player.pause()
-        player.seek(to: kCMTimeZero)
+        player.seek(to: CMTime.zero)
         showPlayImage(show: true)
         removeReachEndObserver()
     }

@@ -12,7 +12,7 @@ import CoreMotion
 
 /// Abstracts Low Level AVFoudation details.
 class YPVideoCaptureHelper: NSObject {
-    public let spinner = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+    public let spinner = UIActivityIndicatorView(style: .gray)
     
     public var isRecording: Bool { return videoOutput.isRecording }
     public var didCaptureVideo: ((URL?) -> Void)?
@@ -186,7 +186,7 @@ class YPVideoCaptureHelper: NSObject {
             
             let timeScale: Int32 = 30 // FPS
             let maxDuration =
-                CMTimeMakeWithSeconds(self.videoRecordingTimeLimit, timeScale)
+                CMTimeMakeWithSeconds(self.videoRecordingTimeLimit, preferredTimescale: timeScale)
             videoOutput.maxRecordedDuration = maxDuration
             videoOutput.minFreeDiskSpaceLimit = 1024 * 1024
             if session.canAddOutput(videoOutput) {

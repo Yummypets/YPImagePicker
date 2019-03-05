@@ -38,7 +38,7 @@ public class YPVideoCaptureVC: UIViewController, YPPermissionCheckable {
                     if let object = self {
                         object.v.shotButton.isEnabled = false
                         object.activityView.removeFromSuperview()
-                        object.activityView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+                        object.activityView = UIActivityIndicatorView(style: .whiteLarge)
                         object.activityView.center = self?.v.shotButton.center ?? (self?.view.center)!
                         object.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: (self?.activityView)!)
 //                        object.v.addSubview(object.activityView)

@@ -101,7 +101,7 @@ extension YPFilter {
         
         let color0 = self.getColor(red: 128, green: 78, blue: 15, alpha: 255)
         let color1 = self.getColor(red: 79, green: 0, blue: 79, alpha: 255)
-        let circle = CIFilter(name: "CIRadialGradient", withInputParameters: [
+        let circle = CIFilter(name: "CIRadialGradient", parameters: [
             "inputCenter": CIVector(x: centerWidth, y: centerHeight),
             "inputRadius0": radius0,
             "inputRadius1": radius1,
