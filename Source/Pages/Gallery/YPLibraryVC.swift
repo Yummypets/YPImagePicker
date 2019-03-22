@@ -241,6 +241,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                 addToSelection(indexPath: IndexPath(row: 0, section: 0))
             }
         } else {
+            v.hideLoader()
             delegate?.noPhotosForOptions()
         }
         scrollToTop()
