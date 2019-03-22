@@ -163,6 +163,7 @@ public class YPImagePicker: UINavigationController {
 
 extension YPImagePicker: ImagePickerDelegate {
     func noPhotos() {
+        loadingView.toggleLoading()
         self.imagePickerDelegate?.noPhotos()
     }
 }
