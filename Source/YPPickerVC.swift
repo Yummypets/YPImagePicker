@@ -5,6 +5,7 @@
 //  Created by Sacha Durand Saint Omer on 25/10/16.
 //  Copyright © 2016 Yummypets. All rights reserved.
 //
+// Cool
 
 import Foundation
 import Stevia
