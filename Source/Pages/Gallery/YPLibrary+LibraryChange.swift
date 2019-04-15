@@ -28,6 +28,17 @@ extension YPLibraryVC: PHPhotoLibraryChangeObserver {
                         let removedIndexes = collectionChanges!.removedIndexes
                         if (removedIndexes?.count ?? 0) != 0 {
                             collectionView.deleteItems(at: removedIndexes!.aapl_indexPathsFromIndexesWithSection(0))
+                            
+                            let indexs = removedIndexes!.aapl_indexPathsFromIndexesWithSection(0).flatMap { $0.item }
+                            let selections = self.selection.flatMap { $0.index }
+                            for index in indexs {
+                                if selections.contains(index) {
+                                    self.selection.remove(at: index)
+                                }
+                            }
+                            if self.selection.count <= 0 {
+                                self.refreshMediaRequest()
+                            }
                         }
                         let insertedIndexes = collectionChanges!.insertedIndexes
                         if (insertedIndexes?.count ?? 0) != 0 {
