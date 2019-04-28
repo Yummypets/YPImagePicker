@@ -14,7 +14,7 @@ public protocol YPImagePickerDelegate: AnyObject {
     func noPhotos()
 }
 
-public class YPImagePicker: UINavigationController {
+open class YPImagePicker: UINavigationController {
     
     private var _didFinishPicking: (([YPMediaItem], Bool) -> Void)?
     public func didFinishPicking(completion: @escaping (_ items: [YPMediaItem], _ cancelled: Bool) -> Void) {
@@ -22,7 +22,7 @@ public class YPImagePicker: UINavigationController {
     }
     public weak var imagePickerDelegate: YPImagePickerDelegate?
     
-    public override var preferredStatusBarStyle: UIStatusBarStyle {
+    open override var preferredStatusBarStyle: UIStatusBarStyle {
         return YPImagePickerConfiguration.shared.preferredStatusBarStyle
     }
     
@@ -53,7 +53,7 @@ public class YPImagePicker: UINavigationController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override public func viewDidLoad() {
+override open func viewDidLoad() {
         super.viewDidLoad()
         picker.didClose = { [weak self] in
             self?._didFinishPicking?([], true)
