@@ -34,8 +34,13 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     }
     
     func setAlbum(_ album: YPAlbum) {
+        title = album.title
         mediaManager.collection = album.collection
         currentlySelectedIndex = 0
+        if !multipleSelectionEnabled {
+            selection.removeAll()
+        }
+        refreshMediaRequest()
     }
     
     func initialize() {
