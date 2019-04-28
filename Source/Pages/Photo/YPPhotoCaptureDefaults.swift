@@ -103,9 +103,12 @@ extension YPPhotoCapture {
     
     // MARK: - Flip
     
-    func flipCamera() {
+    func flipCamera(completion: @escaping () -> Void) {
         sessionQueue.async { [weak self] in
             self?.flip()
+            DispatchQueue.main.async {
+                completion()
+            }
         }
     }
     
