@@ -24,7 +24,8 @@ class YPAlbumCell: UITableViewCell {
         stackView.axis = .vertical
         stackView.addArrangedSubview(title)
         stackView.addArrangedSubview(numberOfItems)
-        
+        let width = UIScreen.main.bounds.width - 78 - 30
+        stackView.width(width)
         sv(
             thumbnail,
             stackView
