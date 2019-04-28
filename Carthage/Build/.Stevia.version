@@ -8,14 +8,16 @@
   "tvOS" : [
     {
       "name" : "Stevia",
-      "hash" : "3b8f26792ccb7df075b7fbb97307d61e05b59c22634d3cc27059d8255d61b0b2"
+      "hash" : "b9d841828ea15820fbeb88421a98c98912d2db209c39037f2f4e2891103ccd6e",
+      "swiftToolchainVersion" : "5.0 (swiftlang-1001.0.69.5 clang-1001.0.46.3)"
     }
   ],
-  "commitish" : "4.4.1",
+  "commitish" : "4.5.0",
   "iOS" : [
     {
       "name" : "Stevia",
-      "hash" : "3c7dfd5658c158b2f90ace9e4dd7ddc972316eead6012c06c87f9218044f6bba"
+      "hash" : "b0e8b79476d2b1ef7faa502c7f2ccb52e3c0def27de9b9263836f18fbb40e54e",
+      "swiftToolchainVersion" : "5.0 (swiftlang-1001.0.69.5 clang-1001.0.46.3)"
     }
   ]
 }
