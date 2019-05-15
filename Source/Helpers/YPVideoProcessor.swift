@@ -68,6 +68,7 @@ class YPVideoProcessor {
         
         // input clip
         let clipVideoTrack = asset.tracks(withMediaType: .video)[0]
+        
         // make it square
         let videoComposition = AVMutableVideoComposition()
         videoComposition.renderSize = CGSize(width: CGFloat(clipVideoTrack.naturalSize.height), height: CGFloat(clipVideoTrack.naturalSize.height))
