@@ -191,6 +191,7 @@ class YPVideoCaptureHelper: NSObject {
                 CMTimeMakeWithSeconds(self.videoRecordingTimeLimit, preferredTimescale: timeScale)
             videoOutput.maxRecordedDuration = maxDuration
             videoOutput.minFreeDiskSpaceLimit = 1024 * 1024
+            videoOutput.movieFragmentInterval = .invalid // Allows audio for MP4s over 10 seconds.
             if session.canAddOutput(videoOutput) {
                 session.addOutput(videoOutput)
             }
