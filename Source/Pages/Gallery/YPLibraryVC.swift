@@ -507,6 +507,8 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                 @unknown default:
                     fatalError()
                 }
+                
+                return
             }
         }
     }
