@@ -2,7 +2,18 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "iconCapture2.pdf"
+      "filename" : "camera_btn.png",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "universal",
+      "filename" : "camera_btn@2x.png",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "filename" : "camera_btn@3x.png",
+      "scale" : "3x"
     }
   ],
   "info" : {
