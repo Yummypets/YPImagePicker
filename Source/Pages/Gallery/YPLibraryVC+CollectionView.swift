@@ -56,7 +56,7 @@ extension YPLibraryVC {
     
     /// Removes cell from selection
     func deselect(indexPath: IndexPath) {
-        if let positionIndex = selection.index(where: { $0.assetIdentifier == mediaManager.fetchResult[indexPath.row].localIdentifier }) {
+        if let positionIndex = selection.firstIndex(where: { $0.assetIdentifier == mediaManager.fetchResult[indexPath.row].localIdentifier }) {
             selection.remove(at: positionIndex)
 
             // Refresh the numbers
@@ -67,7 +67,15 @@ extension YPLibraryVC {
                 }
             }
             v.collectionView.reloadItems(at: selectedIndexPaths)
-
+			
+            // Replace the current selected image with the previously selected one
+            if let previouslySelectedIndexPath = selectedIndexPaths.last {
+                v.collectionView.deselectItem(at: indexPath, animated: false)
+                v.collectionView.selectItem(at: previouslySelectedIndexPath, animated: false, scrollPosition: [])
+                currentlySelectedIndex = previouslySelectedIndexPath.row
+                changeAsset(mediaManager.fetchResult[previouslySelectedIndexPath.row])
+            }
+			
             checkLimit()
         }
     }
@@ -130,7 +138,7 @@ extension YPLibraryVC: UICollectionViewDelegate {
         cell.isSelected = currentlySelectedIndex == indexPath.row
         
         // Set correct selection number
-        if let index = selection.index(where: { $0.assetIdentifier == asset.localIdentifier }) {
+        if let index = selection.firstIndex(where: { $0.assetIdentifier == asset.localIdentifier }) {
             cell.multipleSelectionIndicator.set(number: index + 1) // start at 1, not 0
         } else {
             cell.multipleSelectionIndicator.set(number: nil)

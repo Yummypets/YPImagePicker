@@ -83,8 +83,7 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, YPPermis
     @objc
     func flipButtonTapped() {
         doAfterPermissionCheck { [weak self] in
-            self?.photoCapture.flipCamera()
-            DispatchQueue.main.async {
+            self?.photoCapture.flipCamera {
                 self?.refreshFlashButton()
             }
         }

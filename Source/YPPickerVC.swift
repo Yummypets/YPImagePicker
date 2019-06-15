@@ -15,14 +15,14 @@ protocol ImagePickerDelegate: AnyObject {
     func noPhotos()
 }
 
-public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
+open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     
     let albumsManager = YPAlbumsManager()
     var shouldHideStatusBar = false
     var initialStatusBarHidden = false
     weak var imagePickerDelegate: ImagePickerDelegate?
     
-    override public var prefersStatusBarHidden: Bool {
+    override open    var prefersStatusBarHidden: Bool {
         return (shouldHideStatusBar || initialStatusBarHidden) && YPConfig.hidesStatusBar
     }
     
@@ -44,7 +44,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     
     var capturedImage: UIImage?
     
-    public override func viewDidLoad() {
+    open override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = UIColor(r: 247, g: 247, b: 247)
@@ -115,7 +115,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         }
         
         // Select good screen
-        if let index = YPConfig.screens.index(of: YPConfig.startOnScreen) {
+        if let index = YPConfig.screens.firstIndex(of: YPConfig.startOnScreen) {
             startOnPage(index)
         }
         
@@ -123,14 +123,14 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         YPHelper.changeBackButtonTitle(self)
     }
     
-    public override func viewWillAppear(_ animated: Bool) {
+    open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         cameraVC?.v.shotButton.isEnabled = true
         
         updateMode(with: currentController)
     }
     
-    public override func viewDidAppear(_ animated: Bool) {
+    open override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         shouldHideStatusBar = true
         initialStatusBarHidden = true
@@ -187,7 +187,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         }
     }
     
-    public override func viewWillDisappear(_ animated: Bool) {
+    open override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         shouldHideStatusBar = false
         stopAll()
@@ -200,8 +200,6 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         
         vc.didSelectAlbum = { [weak self] album in
             self?.libraryVC?.setAlbum(album)
-            self?.libraryVC?.title = album.title
-            self?.libraryVC?.refreshMediaRequest()
             self?.setTitleViewWithTitle(aTitle: album.title)
             self?.dismiss(animated: true, completion: nil)
         }

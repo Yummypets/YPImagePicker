@@ -44,7 +44,10 @@ public struct YPImagePickerConfiguration {
     public var usesFrontCamera = false
     
     /// Adds a Filter step in the photo taking process.  Defaults to true
-    public var showsFilters = true
+    public var showsPhotoFilters = true
+    
+    /// Adds a Video Trimmer step in the video taking process.  Defaults to true
+    public var showsVideoTrimmer = true
     
     /// Enables you to opt out from saving new (or old but filtered) images to the
     /// user's photo library. Defaults to true.
@@ -110,43 +113,43 @@ public struct YPImagePickerConfiguration {
     
     /// Migration
     
-    @available(*, obsoleted: 3.0.0, renamed: "video.compression")
+    @available(iOS, obsoleted: 3.0.0, renamed: "video.compression")
     public var videoCompression: String = AVAssetExportPresetHighestQuality
     
-    @available(*, obsoleted: 3.0.0, renamed: "video.fileType")
+    @available(iOS, obsoleted: 3.0.0, renamed: "video.fileType")
     public var videoExtension: AVFileType = .mov
     
-    @available(*, obsoleted: 3.0.0, renamed: "video.recordingTimeLimit")
+    @available(iOS, obsoleted: 3.0.0, renamed: "video.recordingTimeLimit")
     public var videoRecordingTimeLimit: TimeInterval = 60.0
     
-    @available(*, obsoleted: 3.0.0, renamed: "video.libraryTimeLimit")
+    @available(iOS, obsoleted: 3.0.0, renamed: "video.libraryTimeLimit")
     public var videoFromLibraryTimeLimit: TimeInterval = 60.0
     
-    @available(*, obsoleted: 3.0.0, renamed: "video.minimumTimeLimit")
+    @available(iOS, obsoleted: 3.0.0, renamed: "video.minimumTimeLimit")
     public var videoMinimumTimeLimit: TimeInterval = 3.0
     
-    @available(*, obsoleted: 3.0.0, renamed: "video.trimmerMaxDuration")
+    @available(iOS, obsoleted: 3.0.0, renamed: "video.trimmerMaxDuration")
     public var trimmerMaxDuration: Double = 60.0
 
-    @available(*, obsoleted: 3.0.0, renamed: "video.trimmerMinDuration")
+    @available(iOS, obsoleted: 3.0.0, renamed: "video.trimmerMinDuration")
     public var trimmerMinDuration: Double = 3.0
     
-    @available(*, obsoleted: 3.0.0, renamed: "library.onlySquare")
+    @available(iOS, obsoleted: 3.0.0, renamed: "library.onlySquare")
     public var onlySquareImagesFromLibrary = false
     
-    @available(*, obsoleted: 3.0.0, renamed: "library.onlySquare")
+    @available(iOS, obsoleted: 3.0.0, renamed: "library.onlySquare")
     public var onlySquareFromLibrary = false
     
-    @available(*, obsoleted: 3.0.0, renamed: "targetImageSize")
+    @available(iOS, obsoleted: 3.0.0, renamed: "targetImageSize")
     public var libraryTargetImageSize = YPImageSize.original
     
-    @available(*, obsoleted: 3.0.0, renamed: "library.mediaType")
+    @available(iOS, obsoleted: 3.0.0, renamed: "library.mediaType")
     public var showsVideoInLibrary = false
     
-    @available(*, obsoleted: 3.0.0, renamed: "library.mediaType")
+    @available(iOS, obsoleted: 3.0.0, renamed: "library.mediaType")
     public var libraryMediaType = YPlibraryMediaType.photo
     
-    @available(*, obsoleted: 3.0.0, renamed: "library.maxNumberOfItems")
+    @available(iOS, obsoleted: 3.0.0, renamed: "library.maxNumberOfItems")
     public var maxNumberOfItems = 1
     
 }
@@ -154,7 +157,7 @@ public struct YPImagePickerConfiguration {
 /// Encapsulates library specific settings.
 public struct YPConfigLibrary {
     
-     public var options: PHFetchOptions? = nil
+    public var options: PHFetchOptions? = nil
     
     /// Set this to true if you want to force the library output to be a squared image. Defaults to false
     public var onlySquare = false
@@ -164,7 +167,10 @@ public struct YPConfigLibrary {
     
     /// Choose what media types are available in the library. Defaults to `.photo`
     public var mediaType = YPlibraryMediaType.photo
-    
+
+    /// Initial state of multiple selection button.
+    public var defaultMultipleSelection = false
+
     /// Anything superior than 1 will enable the multiple selection feature.
     public var maxNumberOfItems = 1
     
