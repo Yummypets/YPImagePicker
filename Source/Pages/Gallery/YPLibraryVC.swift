@@ -225,6 +225,8 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                     block(s == .authorized)
                 }
             }
+        @unknown default:
+            break
         }
     }
     
@@ -303,6 +305,8 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                                                   completion: completion)
             case .audio, .unknown:
                 ()
+            @unknown default:
+                break
             }
         }
     }
@@ -468,8 +472,11 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                         }
                     }
                 case .audio, .unknown:
-                    return
+                    break
+                @unknown default:
+                    break
                 }
+                return
             }
         }
     }

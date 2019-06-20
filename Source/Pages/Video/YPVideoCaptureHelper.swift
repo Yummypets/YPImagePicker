@@ -62,6 +62,8 @@ class YPVideoCaptureHelper: NSObject {
                     self?.session.startRunning()
                     completion()
                     self?.tryToSetupPreview()
+                @unknown default:
+                    break
                 }
             }
         }
@@ -191,6 +193,9 @@ class YPVideoCaptureHelper: NSObject {
                 CMTimeMakeWithSeconds(self.videoRecordingTimeLimit, preferredTimescale: timeScale)
             videoOutput.maxRecordedDuration = maxDuration
             videoOutput.minFreeDiskSpaceLimit = 1024 * 1024
+            if (YPConfig.video.fileType == .mp4) {
+                videoOutput.movieFragmentInterval = .invalid // Allows audio for MP4s over 10 seconds.
+            }
             if session.canAddOutput(videoOutput) {
                 session.addOutput(videoOutput)
             }
