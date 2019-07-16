@@ -21,7 +21,7 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     var initialStatusBarHidden = false
     weak var imagePickerDelegate: ImagePickerDelegate?
     
-    override open    var prefersStatusBarHidden: Bool {
+    override open var prefersStatusBarHidden: Bool {
         return (shouldHideStatusBar || initialStatusBarHidden) && YPConfig.hidesStatusBar
     }
     
@@ -34,6 +34,8 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         case camera
         case video
     }
+    
+    var preSelectedItems: [YPMediaItem]?
     
     private var libraryVC: YPLibraryVC?
     private var cameraVC: YPCameraVC?
@@ -57,7 +59,7 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         
         // Library
         if YPConfig.screens.contains(.library) {
-            libraryVC = YPLibraryVC()
+            libraryVC = YPLibraryVC(items: preSelectedItems)
             libraryVC?.delegate = self
         }
         
