@@ -62,7 +62,13 @@ class YPCameraView: UIView, UIGestureRecognizerDelegate {
             |buttonsContainer|,
             0
         )
-        previewViewContainer.heightEqualsWidth()
+        
+        if YPConfig.onlySquareImagesFromCamera {
+            previewViewContainer.heightEqualsWidth()
+        }
+        else {
+            previewViewContainer.width(UIScreen.main.bounds.width).height(UIScreen.main.bounds.height - 200)
+        }
 
         overlayView?.followEdges(previewViewContainer)
 
