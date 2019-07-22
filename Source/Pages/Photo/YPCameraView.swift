@@ -53,21 +53,33 @@ class YPCameraView: UIView, UIGestureRecognizerDelegate {
         // Layout
         let isIphone4 = UIScreen.main.bounds.height == 480
         let sideMargin: CGFloat = isIphone4 ? 20 : 0
-        layout(
-            0,
-            |-sideMargin-previewViewContainer-sideMargin-|,
-            -2,
-            |progressBar|,
-            0,
-            |buttonsContainer|,
-            0
-        )
-        
         if YPConfig.onlySquareImagesFromCamera {
+            layout(
+                0,
+                |-sideMargin-previewViewContainer-sideMargin-|,
+                -2,
+                |progressBar|,
+                0,
+                |buttonsContainer|,
+                0
+            )
+            
             previewViewContainer.heightEqualsWidth()
         }
         else {
-            previewViewContainer.width(UIScreen.main.bounds.width).height(UIScreen.main.bounds.height - 200)
+            layout(
+                0,
+                |-sideMargin-previewViewContainer-sideMargin-|,
+                -2,
+                |progressBar|,
+                0
+            )
+            
+            previewViewContainer.fillContainer()
+            
+            buttonsContainer.fillHorizontally()
+            buttonsContainer.height(100)
+            buttonsContainer.Bottom == previewViewContainer.Bottom - 50
         }
 
         overlayView?.followEdges(previewViewContainer)
