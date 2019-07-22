@@ -21,10 +21,16 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, YPPermis
         self.v = YPCameraView(overlayView: YPConfig.overlayView)
         super.init(nibName: nil, bundle: nil)
         title = YPConfig.wordings.cameraTitle
+        
+        YPDeviceOrientationHelper.shared.startDeviceOrientationNotifier { _ in }
     }
     
     public required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        YPDeviceOrientationHelper.shared.stopDeviceOrientationNotifier()
     }
     
     override public func viewDidLoad() {
@@ -121,14 +127,14 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, YPPermis
             }
             
             DispatchQueue.main.async {
-                let noOrietationImage = image.resetOrientation()
+                let noOrietationImage = image.resetOrientation(imageOrientation: UIImage.getImageOrientation(deviceOrientation: YPDeviceOrientationHelper.shared.currentDeviceOrientation))
                 self.didCapturePhoto?(noOrietationImage.resizedImageIfNeeded())
             }
         }
     }
     
     func cropImageToSquare(_ image: UIImage) -> UIImage {
-        let orientation: UIDeviceOrientation = UIDevice.current.orientation
+        let orientation: UIDeviceOrientation = YPDeviceOrientationHelper.shared.currentDeviceOrientation
         var imageWidth = image.size.width
         var imageHeight = image.size.height
         switch orientation {
@@ -140,11 +146,13 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, YPPermis
             break
         }
         
+        let imageOrientation = UIImage.getImageOrientation(deviceOrientation: orientation)
+        
         // The center coordinate along Y axis
         let rcy = imageHeight * 0.5
         let rect = CGRect(x: rcy - imageWidth * 0.5, y: 0, width: imageWidth, height: imageWidth)
         let imageRef = image.cgImage?.cropping(to: rect)
-        return UIImage(cgImage: imageRef!, scale: 1.0, orientation: image.imageOrientation)
+        return UIImage(cgImage: imageRef!, scale: 1.0, orientation: imageOrientation)
     }
     
     // Used when image is taken from the front camera.

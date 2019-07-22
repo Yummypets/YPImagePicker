@@ -126,7 +126,7 @@ extension YPPhotoCapture {
     
     func setCurrentOrienation() {
         let connection = output.connection(with: .video)
-        let orientation = UIDevice.current.orientation
+        let orientation = YPDeviceOrientationHelper.shared.currentDeviceOrientation
         switch orientation {
         case .portrait:
             connection?.videoOrientation = .portrait
