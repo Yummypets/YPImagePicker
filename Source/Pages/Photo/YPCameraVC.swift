@@ -121,7 +121,7 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, YPPermis
             }
             
             DispatchQueue.main.async {
-                let noOrietationImage = image.resetOrientation()
+                let noOrietationImage = YPConfig.resetOrientation ? image.resetOrientation() : image
                 self.didCapturePhoto?(noOrietationImage.resizedImageIfNeeded())
             }
         }
