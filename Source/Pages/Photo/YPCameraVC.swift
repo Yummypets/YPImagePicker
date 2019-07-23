@@ -15,6 +15,7 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, YPPermis
     public var didCapturePhoto: ((UIImage) -> Void)?
     let photoCapture = newPhotoCapture()
     let v: YPCameraView!
+    var isInited = false
     override public func loadView() { view = v }
 
     public required init() {
@@ -47,6 +48,7 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, YPPermis
             }
             self?.photoCapture.start(with: strongSelf.v.previewViewContainer, completion: {
                 DispatchQueue.main.async {
+                    self?.isInited = true
                     self?.refreshFlashButton()
                 }
             })
@@ -55,6 +57,10 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, YPPermis
 
     @objc
     func focusTapped(_ recognizer: UITapGestureRecognizer) {
+        guard isInited else {
+            return
+        }
+        
         doAfterPermissionCheck { [weak self] in
             self?.focus(recognizer: recognizer)
         }
