@@ -127,7 +127,7 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, YPPermis
             }
             
             DispatchQueue.main.async {
-                let noOrietationImage = image.resetOrientation(imageOrientation: UIImage.getImageOrientation(deviceOrientation: YPDeviceOrientationHelper.shared.currentDeviceOrientation))
+                let noOrietationImage = image.resetOrientation()
                 self.didCapturePhoto?(noOrietationImage.resizedImageIfNeeded())
             }
         }
@@ -146,13 +146,11 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, YPPermis
             break
         }
         
-        let imageOrientation = UIImage.getImageOrientation(deviceOrientation: orientation)
-        
         // The center coordinate along Y axis
         let rcy = imageHeight * 0.5
         let rect = CGRect(x: rcy - imageWidth * 0.5, y: 0, width: imageWidth, height: imageWidth)
         let imageRef = image.cgImage?.cropping(to: rect)
-        return UIImage(cgImage: imageRef!, scale: 1.0, orientation: imageOrientation)
+        return UIImage(cgImage: imageRef!, scale: 1.0, orientation: image.imageOrientation)
     }
     
     // Used when image is taken from the front camera.

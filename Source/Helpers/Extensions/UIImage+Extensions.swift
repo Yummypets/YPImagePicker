@@ -10,22 +10,6 @@ import UIKit
 
 internal extension UIImage {
     
-    static func getImageOrientation(deviceOrientation: UIDeviceOrientation) -> UIImage.Orientation {
-        var imageOrientation: UIImage.Orientation = .right
-        switch deviceOrientation {
-        case .portraitUpsideDown:
-            imageOrientation = .left
-        case .landscapeLeft:
-            imageOrientation = .up
-        case .landscapeRight:
-            imageOrientation = .down
-        default:
-            break
-        }
-        
-        return imageOrientation
-    }
-    
     func resized(to size: CGSize) -> UIImage? {
         UIGraphicsBeginImageContextWithOptions(size, false, scale)
         defer { UIGraphicsEndImageContext() }
@@ -35,16 +19,15 @@ internal extension UIImage {
     
     /// Kudos to Trevor Harmon and his UIImage+Resize category from
     // which this code is heavily inspired.
-    func resetOrientation(imageOrientation : UIImage.Orientation? = nil) -> UIImage {
-        let orientation = imageOrientation ?? self.imageOrientation
+    func resetOrientation() -> UIImage {
         // Image has no orientation, so keep the same
-        if orientation == .up {
+        if imageOrientation == .up {
             return self
         }
         
         // Process the transform corresponding to the current orientation
         var transform = CGAffineTransform.identity
-        switch orientation {
+        switch imageOrientation {
         case .down, .downMirrored:           // EXIF = 3, 4
             transform = transform.translatedBy(x: size.width, y: size.height)
             transform = transform.rotated(by: CGFloat(Double.pi))
@@ -60,7 +43,7 @@ internal extension UIImage {
             ()
         }
         
-        switch orientation {
+        switch imageOrientation {
         case .upMirrored, .downMirrored:     // EXIF = 2, 4
             transform = transform.translatedBy(x: size.width, y: 0)
             transform = transform.scaledBy(x: -1, y: 1)
@@ -81,7 +64,7 @@ internal extension UIImage {
                                 space: cgImage!.colorSpace!,
                                 bitmapInfo: cgImage!.bitmapInfo.rawValue)
         context?.concatenate(transform)
-        switch orientation {
+        switch imageOrientation {
         case .left, .leftMirrored, .right, .rightMirrored:
             context?.draw(cgImage!, in: CGRect(x: 0, y: 0, width: size.height, height: size.width))
         default:
