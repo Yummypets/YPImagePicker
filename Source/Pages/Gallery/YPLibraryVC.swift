@@ -225,6 +225,8 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                     block(s == .authorized)
                 }
             }
+        @unknown default:
+            fatalError()
         }
     }
     
@@ -303,6 +305,8 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                                                   completion: completion)
             case .audio, .unknown:
                 ()
+            @unknown default:
+                fatalError()
             }
         }
     }
@@ -448,6 +452,8 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         } else {
                 let asset = selectedAssets.first!.asset
                 switch asset.mediaType {
+                case .audio, .unknown:
+                    return
                 case .video:
                     self.checkVideoLengthAndCrop(for: asset, callback: { videoURL in
                         DispatchQueue.main.async {
@@ -467,8 +473,8 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                             photoCallback(photo)
                         }
                     }
-                case .audio, .unknown:
-                    return
+                @unknown default:
+                    fatalError()
                 }
             }
         }
