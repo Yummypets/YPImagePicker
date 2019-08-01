@@ -21,7 +21,7 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     var initialStatusBarHidden = false
     weak var imagePickerDelegate: ImagePickerDelegate?
     
-    override open    var prefersStatusBarHidden: Bool {
+    override open var prefersStatusBarHidden: Bool {
         return (shouldHideStatusBar || initialStatusBarHidden) && YPConfig.hidesStatusBar
     }
     
