@@ -62,7 +62,7 @@ public class YPSelectionsGalleryVC: UIViewController {
     }
     
     @objc
-    private func reomveButtonDidClick(sender: UIButton) {
+    private func removeButtonDidClick(sender: UIButton) {
         guard let cell = sender.superview as? UICollectionViewCell, let indexPath = v.collectionView.indexPath(for: cell) else {
             return
         }
@@ -96,7 +96,7 @@ extension YPSelectionsGalleryVC: UICollectionViewDataSource {
         }
         
         if !YPConfig.gallery.hidesRemoveButton {
-            cell.addRemoveButton(target: self, action: #selector(reomveButtonDidClick(sender:)))
+            cell.addRemoveButton(target: self, action: #selector(removeButtonDidClick(sender:)))
         }
         
         return cell
