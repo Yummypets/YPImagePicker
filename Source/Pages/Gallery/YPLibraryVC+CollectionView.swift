@@ -82,6 +82,10 @@ extension YPLibraryVC {
     
     /// Adds cell to selection
     func addToSelection(indexPath: IndexPath) {
+        if !(delegate?.libraryViewShouldAddToSelection(indexPath: indexPath, numSelections: selection.count) ?? true) {
+            return
+        }
+        
         let asset = mediaManager.fetchResult[indexPath.item]
         selection.append(
             YPLibrarySelection(
