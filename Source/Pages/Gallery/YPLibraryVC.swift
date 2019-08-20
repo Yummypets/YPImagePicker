@@ -21,12 +21,10 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     internal let mediaManager = LibraryMediaManager()
     internal var latestImageTapped = ""
     internal let panGestureHelper = PanGestureHelper()
-    internal let preSelectedItems: [YPMediaItem]?
 
     // MARK: - Init
     
     public required init(items: [YPMediaItem]?) {
-        preSelectedItems = items
         super.init(nibName: nil, bundle: nil)
         title = YPConfig.wordings.libraryTitle
     }
@@ -69,8 +67,8 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         v.assetViewContainer.multipleSelectionButton.isHidden = !(YPConfig.library.maxNumberOfItems > 1)
         v.maxNumberWarningLabel.text = String(format: YPConfig.wordings.warningMaxItemsLimit, YPConfig.library.maxNumberOfItems)
         
-        if let items = preSelectedItems {
-            selection = items.compactMap { item -> YPLibrarySelection? in
+        if let preselectedItems = YPConfig.library.preselectedItems {
+            selection = preselectedItems.compactMap { item -> YPLibrarySelection? in
                 var itemAsset: PHAsset?
                 switch item {
                 case .photo(let photo):

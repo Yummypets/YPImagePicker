@@ -35,8 +35,6 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         case video
     }
     
-    var preSelectedItems: [YPMediaItem]?
-    
     private var libraryVC: YPLibraryVC?
     private var cameraVC: YPCameraVC?
     private var videoVC: YPVideoCaptureVC?
@@ -59,7 +57,7 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         
         // Library
         if YPConfig.screens.contains(.library) {
-            libraryVC = YPLibraryVC(items: preSelectedItems)
+            libraryVC = YPLibraryVC()
             libraryVC?.delegate = self
         }
         

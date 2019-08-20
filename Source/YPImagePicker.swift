@@ -42,15 +42,9 @@ open class YPImagePicker: UINavigationController {
     }
     
     /// Get a YPImagePicker with the specified configuration.
-    public convenience init(configuration: YPImagePickerConfiguration) {
-        self.init(configuration: configuration, items: nil)
-    }
-    
-    /// Get a YPImagePicker with the specified configuration.
-    public required init(configuration: YPImagePickerConfiguration, items: [YPMediaItem]?) {
+    public required init(configuration: YPImagePickerConfiguration) {
         YPImagePickerConfiguration.shared = configuration
         picker = YPPickerVC()
-        picker.preSelectedItems = items
         super.init(nibName: nil, bundle: nil)
         picker.imagePickerDelegate = self
     }
