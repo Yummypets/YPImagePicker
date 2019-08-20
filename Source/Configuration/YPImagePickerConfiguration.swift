@@ -29,7 +29,7 @@ public struct YPImagePickerConfiguration {
     public var video = YPConfigVideo()
     
     // Gallery configuration
-    public var gallery = YPConfigGallery()
+    public var gallery = YPConfigSelectionsGallery()
     
     /// Use this property to modify the default wordings provided.
     public var wordings = YPWordings()
@@ -221,7 +221,7 @@ public struct YPConfigVideo {
 }
 
 /// Encapsulates gallery specific settings.
-public struct YPConfigGallery {
+public struct YPConfigSelectionsGallery {
     /// Defines if the remove button should be hidden when showing the gallery. Default is true.
     public var hidesRemoveButton = true
 }
