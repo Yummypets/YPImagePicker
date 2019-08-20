@@ -1,19 +1,19 @@
 {
   "images": [
     {
-      "filename": "Remove-universal-32@1x.png",
+      "filename": "yp_remove@1x.png",
       "idiom": "universal",
       "scale": "1x",
       "size": "32x32"
     },
     {
-      "filename": "Remove-universal-32@2x.png",
+      "filename": "yp_remove@2x.png",
       "idiom": "universal",
       "scale": "2x",
       "size": "32x32"
     },
     {
-      "filename": "Remove-universal-32@3x.png",
+      "filename": "yp_remove@3x.png",
       "idiom": "universal",
       "scale": "3x",
       "size": "32x32"
