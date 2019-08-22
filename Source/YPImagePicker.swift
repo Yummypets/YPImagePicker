@@ -13,6 +13,7 @@ import Photos
 public protocol YPImagePickerDelegate: AnyObject {
     func noPhotos()
     func shouldAddToSelection(indexPath: IndexPath, numSelections: Int) -> Bool
+    func shouldFilter(photo: YPMediaPhoto, filter: YPFilter?) -> Bool
 }
 
 open class YPImagePicker: UINavigationController {
@@ -118,6 +119,9 @@ override open func viewDidLoad() {
                     let filterVC = YPPhotoFiltersVC(inputPhoto: photo,
                                                     isFromSelectionVC: false)
                     // Show filters and then crop
+                    filterVC.shouldSave = { photo, filter in
+                        return self?.imagePickerDelegate?.shouldFilter(photo: photo, filter: filter) ?? true
+                    }
                     filterVC.didSave = { outputMedia in
                         if case let YPMediaItem.photo(outputPhoto) = outputMedia {
                             showCropVC(photo: outputPhoto, completion: completion)
@@ -168,5 +172,9 @@ extension YPImagePicker: ImagePickerDelegate {
     
     func shouldAddToSelection(indexPath: IndexPath, numSelections: Int) -> Bool {
         return self.imagePickerDelegate?.shouldAddToSelection(indexPath: indexPath, numSelections: numSelections) ?? true
+    }
+    
+    func shouldFilter(photo: YPMediaPhoto, filter: YPFilter?) -> Bool {
+        return self.imagePickerDelegate?.shouldFilter(photo: photo, filter: filter) ?? true
     }
 }

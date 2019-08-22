@@ -27,6 +27,7 @@ open class YPPhotoFiltersVC: UIViewController, IsMediaFilterVC, UIGestureRecogni
 
     public var didSave: ((YPMediaItem) -> Void)?
     public var didCancel: (() -> Void)?
+    public var shouldSave: ((YPMediaPhoto, YPFilter?) -> Bool)?
 
 
     fileprivate let filters: [YPFilter] = YPConfig.filters
@@ -144,6 +145,9 @@ open class YPPhotoFiltersVC: UIViewController, IsMediaFilterVC, UIGestureRecogni
     @objc
     func save() {
         guard let didSave = didSave else { return print("Don't have saveCallback") }
+        guard shouldSave?(inputPhoto, selectedFilter) ?? true else {
+            return print("Cannot be saved with the filter:", selectedFilter)
+        }
         self.navigationItem.rightBarButtonItem = YPLoaders.defaultLoader
 
         DispatchQueue.global().async {
