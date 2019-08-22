@@ -132,7 +132,12 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
 
     @objc
     func multipleSelectionButtonTapped() {
-        
+        doAfterPermissionCheck { [weak self] in
+            self?.showMultipleSelection()
+        }
+    }
+    
+    private func showMultipleSelection() {
         if !multipleSelectionEnabled {
             selection.removeAll()
         }
