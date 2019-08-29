@@ -53,7 +53,7 @@ class YPVideoCaptureHelper: NSObject {
         if !session.isRunning {
             sessionQueue.async { [weak self] in
                 // Re-apply session preset
-                self?.session.sessionPreset = .hd4K3840x2160
+                self?.session.sessionPreset = .medium
                 let status = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
                 switch status {
                 case .notDetermined, .restricted, .denied:
@@ -192,7 +192,7 @@ class YPVideoCaptureHelper: NSObject {
             if session.canAddOutput(videoOutput) {
                 session.addOutput(videoOutput)
             }
-            session.sessionPreset = .hd4K3840x2160
+            session.sessionPreset = .medium
         }
         session.commitConfiguration()
         isCaptureSessionSetup = true
