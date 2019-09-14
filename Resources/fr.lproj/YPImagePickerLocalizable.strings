@@ -9,7 +9,7 @@
 "YPImagePickerOk" = "Ok"; //ignore-same-translation-warning
 "YPImagePickerPermissionDeniedPopupCancel" = "Annuler";
 "YPImagePickerPermissionDeniedPopupGrantPermission" = "Donner la permission";
-"YPImagePickerPermissionDeniedPopupMessage" = "Vous devez authoriser l'accès";
+"YPImagePickerPermissionDeniedPopupMessage" = "Vous devez autoriser l'accès";
 "YPImagePickerPermissionDeniedPopupTitle" = "Permission refusée";
 "YPImagePickerPhoto" = "Photo"; //ignore-same-translation-warning
 "YPImagePickerProcessing" = "Chargement..";

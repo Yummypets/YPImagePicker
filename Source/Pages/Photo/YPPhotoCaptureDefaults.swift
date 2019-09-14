@@ -64,6 +64,8 @@ extension YPPhotoCapture {
                     self?.session.startRunning()
                     completion()
                     self?.tryToSetupPreview()
+                @unknown default:
+                    fatalError()
                 }
             }
         }
