@@ -28,6 +28,7 @@ class PostiOS10PhotoCapture: NSObject, YPPhotoCapture, AVCapturePhotoCaptureDele
         return device.hasFlash
     }
     var block: ((Data) -> Void)?
+    var initVideoZoomFactor: CGFloat = 1.0
     
     // MARK: - Configuration
     

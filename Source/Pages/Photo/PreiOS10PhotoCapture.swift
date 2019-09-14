@@ -27,6 +27,7 @@ class PreiOS10PhotoCapture: YPPhotoCapture {
         guard let device = device else { return false }
         return device.hasFlash
     }
+    var initVideoZoomFactor: CGFloat = 1.0
     
     // MARK: - Configuration
     
