@@ -169,6 +169,8 @@ class ExampleViewController: UIViewController {
         //
         //config.library.options = options
 
+        config.library.preselectedItems = selectedItems
+        
         let picker = YPImagePicker(configuration: config)
 
         /* Change configuration directly */
