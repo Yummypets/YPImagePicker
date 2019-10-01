@@ -141,7 +141,11 @@ extension YPLibraryVC: UICollectionViewDelegate {
         if let index = selection.firstIndex(where: { $0.assetIdentifier == asset.localIdentifier }) {
             let currentSelection = selection[index]
             if currentSelection.index < 0 {
-                selection[index] = YPLibrarySelection(index: indexPath.row, cropRect: currentSelection.cropRect, scrollViewContentOffset: currentSelection.scrollViewContentOffset, scrollViewZoomScale: currentSelection.scrollViewZoomScale, assetIdentifier: currentSelection.assetIdentifier)
+                selection[index] = YPLibrarySelection(index: indexPath.row,
+                                                      cropRect: currentSelection.cropRect,
+                                                      scrollViewContentOffset: currentSelection.scrollViewContentOffset,
+                                                      scrollViewZoomScale: currentSelection.scrollViewZoomScale,
+                                                      assetIdentifier: currentSelection.assetIdentifier)
             }
             cell.multipleSelectionIndicator.set(number: index + 1) // start at 1, not 0
         } else {
