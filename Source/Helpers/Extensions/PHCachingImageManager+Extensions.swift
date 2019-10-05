@@ -6,7 +6,7 @@
 //  Copyright © 2018 Yummypets. All rights reserved.
 //
 
-import Foundation
+import UIKit
 import Photos
 
 extension PHCachingImageManager {

@@ -353,3 +353,4 @@ See [LICENSE](LICENSE) for details.
 - Swift 4.2 -> version [**3.5.2**](https://github.com/Yummypets/YPImagePicker/releases/tag/3.5.2)
 releases/tag/3.4.0)
 - Swift 5.0 -> version [**4.0.0**](https://github.com/Yummypets/YPImagePicker/releases/tag/4.0.0)
+- Swift 5.1 -> version [**4.1.2**](https://github.com/Yummypets/YPImagePicker/releases/tag/4.1.2)
