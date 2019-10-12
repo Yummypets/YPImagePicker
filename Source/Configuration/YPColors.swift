@@ -31,6 +31,9 @@ public struct YPColors {
 
     /// A color for background of the asset container. You can see it when bouncing the image.
     public var assetViewBackgroundColor: UIColor = .white
+
+    /// A color for background in filters.
+    public var filterBackgroundColor: UIColor = .red
     
     // MARK: - Trimmer
     
