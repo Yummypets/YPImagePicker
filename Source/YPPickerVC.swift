@@ -268,7 +268,8 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
                                                            style: .plain,
                                                            target: self,
                                                            action: #selector(close))
-        
+        navigationItem.leftBarButtonItem?.tintColor = YPConfig.colors.tintColor
+
         switch mode {
         case .library:
             setTitleViewWithTitle(aTitle: libraryVC?.title ?? "")
