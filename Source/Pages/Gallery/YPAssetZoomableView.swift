@@ -37,12 +37,16 @@ final class YPAssetZoomableView: UIScrollView {
     /// - Parameters:
     ///   - fit: If true - zoom to show squared. If false - show full.
     public func fitImage(_ fit: Bool, animated isAnimated: Bool = false) {
-        squaredZoomScale = calculateSquaredZoomScale()
-        if fit {
-            setZoomScale(squaredZoomScale, animated: isAnimated)
-        } else {
-            setZoomScale(1, animated: isAnimated)
-        }
+        // vh
+        // show full always
+        setZoomScale(1, animated: isAnimated)
+
+//        squaredZoomScale = calculateSquaredZoomScale()
+//        if fit {
+//            setZoomScale(squaredZoomScale, animated: isAnimated)
+//        } else {
+//            setZoomScale(1, animated: isAnimated)
+//        }
     }
     
     /// Re-apply correct scrollview settings if image has already been adjusted in

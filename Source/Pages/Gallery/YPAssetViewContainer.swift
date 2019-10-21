@@ -66,14 +66,14 @@ class YPAssetViewContainer: UIView {
         curtain.backgroundColor = UIColor.black.withAlphaComponent(0.7)
         curtain.alpha = 0
         
-        if !onlySquare {
-            // Crop Button
-            squareCropButton.setImage(YPConfig.icons.cropIcon, for: .normal)
-            sv(squareCropButton)
-            squareCropButton.size(42)
-            |-15-squareCropButton
-            squareCropButton.Bottom == zoomableView!.Bottom - 15
-        }
+//        if !onlySquare {
+//            // Crop Button
+//            squareCropButton.setImage(YPConfig.icons.cropIcon, for: .normal)
+//            sv(squareCropButton)
+//            squareCropButton.size(42)
+//            |-15-squareCropButton
+//            squareCropButton.Bottom == zoomableView!.Bottom - 15
+//        }
         // hide button
         squareCropButton.isHidden = true
         
