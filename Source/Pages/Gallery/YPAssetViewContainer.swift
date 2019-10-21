@@ -74,6 +74,8 @@ class YPAssetViewContainer: UIView {
             |-15-squareCropButton
             squareCropButton.Bottom == zoomableView!.Bottom - 15
         }
+        // hide button
+        squareCropButton.isHidden = true
         
         // Multiple selection button
         sv(multipleSelectionButton)
@@ -107,6 +109,9 @@ class YPAssetViewContainer: UIView {
         
         let shouldFit = YPConfig.library.onlySquare ? true : shouldCropToSquare
         zoomableView?.fitImage(shouldFit)
+        
+        // hide crop button
+        squareCropButton.isHidden = true
     }
     
     // MARK: - Multiple selection
