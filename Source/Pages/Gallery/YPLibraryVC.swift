@@ -322,18 +322,22 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
             self.updateCropInfo()
         }
         
+        let updateCropInfo = {
+            self.updateCropInfo()
+        }
+        //MARK: add a func(updateCropInfo) after crop multiple
         DispatchQueue.global(qos: .userInitiated).async {
             switch asset.mediaType {
             case .image:
                 self.v.assetZoomableView.setImage(asset,
                                                   mediaManager: self.mediaManager,
                                                   storedCropPosition: self.fetchStoredCrop(),
-                                                  completion: completion)
+                                                  completion: completion,updateCropInfo: updateCropInfo)
             case .video:
                 self.v.assetZoomableView.setVideo(asset,
                                                   mediaManager: self.mediaManager,
                                                   storedCropPosition: self.fetchStoredCrop(),
-                                                  completion: completion)
+                                                  completion: completion,updateCropInfo: updateCropInfo)
             case .audio, .unknown:
                 ()
             @unknown default:
