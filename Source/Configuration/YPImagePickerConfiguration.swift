@@ -158,7 +158,10 @@ public struct YPImagePickerConfiguration {
 public struct YPConfigLibrary {
     
     public var options: PHFetchOptions? = nil
-    
+
+    /// default to square cropping. Ignored if onlySquare is true. Defaults to true
+    public var defaultSquare = true
+
     /// Set this to true if you want to force the library output to be a squared image. Defaults to false
     public var onlySquare = false
     
