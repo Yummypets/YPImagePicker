@@ -119,7 +119,6 @@ config.filters = [DefaultYPFilters...]
 ```swift
 config.library.options = nil
 config.library.onlySquare = false
-config.library.defaultSquare = true
 config.library.minWidthForItem = nil
 config.library.mediaType = YPlibraryMediaType.photo
 config.library.maxNumberOfItems = 1
