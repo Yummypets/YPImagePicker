@@ -33,8 +33,17 @@ public struct YPColors {
     public var assetViewBackgroundColor: UIColor = .white
 
     /// A color for background in filters.
-    public var filterBackgroundColor: UIColor = .red
+    public var filterBackgroundColor: UIColor = .white
+
+    /// A color for bottom buttons (photo, video, all photos).
+    public var bottomMenuItemBackgroundColor: UIColor = .clear
+
+    /// A color for for bottom buttons selected text.
+    public var bottomMenuItemSelectedTextColor: UIColor = UIColor(r: 38, g: 38, b: 38)
     
+    /// A color for for bottom buttons not selected text.
+    public var bottomMenuItemUnselectedTextColor: UIColor = UIColor(r: 153, g: 153, b: 153)
+
     // MARK: - Trimmer
     
     /// The color of the main border of the view
