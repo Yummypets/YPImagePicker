@@ -29,6 +29,9 @@ public struct YPColors {
     /// The background color of the library and space between collection view cells.
     public var libraryScreenBackgroundColor: UIColor = .white
 
+    /// The background color of safe area. For example under the menu items.
+    public var safeAreaBackgroundColor: UIColor = .white
+
     /// A color for background of the asset container. You can see it when bouncing the image.
     public var assetViewBackgroundColor: UIColor = .white
 
