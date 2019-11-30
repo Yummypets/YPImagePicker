@@ -84,15 +84,12 @@ public struct YPImagePickerConfiguration {
     /// Defines the preferredStatusBarAppearance
     public var preferredStatusBarStyle = UIStatusBarStyle.default
     
-<<<<<<< HEAD
-=======
     /// Defines the text colour to be shown when a bottom option is selected
-    public var bottomMenuItemSelectedColour = UIColor.labelCompat
+    public var bottomMenuItemSelectedTextColour: UIColor = .labelCompat
     
     /// Defines the text colour to be shown when a bottom option is unselected
-    public var bottomMenuItemUnSelectedColour = UIColor.secondaryLabelCompat
+    public var bottomMenuItemUnSelectedTextColour: UIColor = .secondaryLabelCompat
     
->>>>>>> Update colors for iOS 13.
     /// List of default filters which will be added on the filter screen
     public var filters: [YPFilter] = [
         YPFilter(name: "Normal", applier: nil),

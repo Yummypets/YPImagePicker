@@ -42,13 +42,8 @@ final class YPMenuItem: UIView {
         
         textLabel.style { l in
             l.textAlignment = .center
-<<<<<<< HEAD
-            l.font = UIFont.systemFont(ofSize: 17, weight: UIFont.Weight.medium)
-            l.textColor = YPImagePickerConfiguration.shared.colors.bottomMenuItemUnselectedTextColor
-=======
             l.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
-            l.textColor = self.unselectedColor()
->>>>>>> Update colors for iOS 13.
+            l.textColor = YPImagePickerConfiguration.shared.colors.bottomMenuItemUnselectedTextColor
             l.adjustsFontSizeToFitWidth = true
             l.numberOfLines = 2
         }
