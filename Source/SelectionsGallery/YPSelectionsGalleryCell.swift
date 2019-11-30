@@ -30,7 +30,7 @@ public class YPSelectionsGalleryCell: UICollectionViewCell {
         editSquare.CenterY == editIcon.CenterY
         editSquare.CenterX == editIcon.CenterX
         
-        layer.shadowColor = UIColor(r: 46, g: 43, b: 37).cgColor
+        layer.shadowColor = UIColor.black.cgColor
         layer.shadowOpacity = 0.2
         layer.shadowOffset = CGSize(width: 4, height: 7)
         layer.shadowRadius = 5
@@ -40,12 +40,12 @@ public class YPSelectionsGalleryCell: UICollectionViewCell {
             i.contentMode = .scaleAspectFill
         }
         editIcon.style { v in
-            v.backgroundColor = .white
+            v.backgroundColor = UIColor.systemBackgroundCompat
             v.layer.cornerRadius = 16
         }
         editSquare.style { v in
             v.layer.borderWidth = 1
-            v.layer.borderColor = UIColor.black.cgColor
+            v.layer.borderColor = UIColor.labelCompat.cgColor
         }
     }
     

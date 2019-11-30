@@ -16,7 +16,7 @@ final class YPPagerMenu: UIView {
     
     convenience init() {
         self.init(frame: .zero)
-        backgroundColor = UIColor(r: 247, g: 247, b: 247)
+        backgroundColor = .offWhiteOrBlack
         clipsToBounds = true
     }
     
@@ -26,7 +26,6 @@ final class YPPagerMenu: UIView {
         let menuItemWidth: CGFloat = UIScreen.main.bounds.width / CGFloat(menuItems.count)
         var previousMenuItem: YPMenuItem?
         for m in menuItems {
-            
             sv(
                 m
             )

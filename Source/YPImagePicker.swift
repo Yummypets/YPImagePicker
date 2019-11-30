@@ -143,7 +143,7 @@ override open func viewDidLoad() {
         
         // If user has not customized the Nav Bar tintColor, then use black.
         if UINavigationBar.appearance().tintColor == nil {
-            UINavigationBar.appearance().tintColor  = .black
+            UINavigationBar.appearance().tintColor = .labelCompat
         }
     }
     

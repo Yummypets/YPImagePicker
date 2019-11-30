@@ -10,11 +10,11 @@ import UIKit
 
 public struct YPColors {
     
-   // MARK: - Common
-
+    // MARK: - Common
+    
     /// The common tint color which is used for done buttons in navigation bar, multiple items selection and so on.
-    public var tintColor = UIColor(r: 10, g: 120, b: 254)
-        
+    public var tintColor = UIColor.systemBlueCompat
+    
     /// A color for navigation bar spinner.
     /// Default is nil, which is default iOS gray UIActivityIndicator.
     public var navigationBarActivityIndicatorColor: UIColor?
@@ -24,47 +24,47 @@ public struct YPColors {
     public var multipleItemsSelectedCircleColor: UIColor?
     
     /// The background color of the bottom of photo and video screens.
-    public var photoVideoScreenBackgroundColor: UIColor = .white
+    public var photoVideoScreenBackgroundColor: UIColor = .offWhiteOrBlack
 
     /// The background color of the library and space between collection view cells.
-    public var libraryScreenBackgroundColor: UIColor = .white
+    public var libraryScreenBackgroundColor: UIColor = .offWhiteOrBlack
 
     /// The background color of safe area. For example under the menu items.
-    public var safeAreaBackgroundColor: UIColor = .white
+    public var safeAreaBackgroundColor: UIColor = .offWhiteOrBlack
 
     /// A color for background of the asset container. You can see it when bouncing the image.
-    public var assetViewBackgroundColor: UIColor = .white
-
+    public var assetViewBackgroundColor: UIColor = .offWhiteOrBlack
+    
     /// A color for background in filters.
-    public var filterBackgroundColor: UIColor = .white
+    public var filterBackgroundColor: UIColor = .offWhiteOrBlack
 
     /// A color for bottom buttons (photo, video, all photos).
     public var bottomMenuItemBackgroundColor: UIColor = .clear
 
     /// A color for for bottom buttons selected text.
-    public var bottomMenuItemSelectedTextColor: UIColor = UIColor(r: 38, g: 38, b: 38)
-    
+    public var bottomMenuItemSelectedTextColor: UIColor = .labelCompat
+
     /// A color for for bottom buttons not selected text.
-    public var bottomMenuItemUnselectedTextColor: UIColor = UIColor(r: 153, g: 153, b: 153)
+    public var bottomMenuItemUnselectedTextColor: UIColor = .secondaryLabelCompat
 
     // MARK: - Trimmer
     
     /// The color of the main border of the view
-    public var trimmerMainColor: UIColor = UIColor.black
+    public var trimmerMainColor: UIColor = .labelCompat
     /// The color of the handles on the side of the view
-    public var trimmerHandleColor: UIColor = UIColor.white
+    public var trimmerHandleColor: UIColor = .systemBackgroundCompat
     /// The color of the position indicator
-    public var positionLineColor: UIColor = UIColor.white
+    public var positionLineColor: UIColor = .systemBackgroundCompat
     
-   // MARK: - Cover selector
+    // MARK: - Cover selector
     
     /// The color of the cover selector border
-    public var coverSelectorBorderColor: UIColor = UIColor.white
+    public var coverSelectorBorderColor: UIColor = .offWhiteOrBlack
     
     // MARK: - Progress bar
     
     /// The color for the progress bar when processing video or images. The all track color.
-    public var progressBarTrackColor: UIColor = UIColor.white
+    public var progressBarTrackColor: UIColor = .systemBackgroundCompat
     /// The color of completed track for the progress bar
     public var progressBarCompletedColor: UIColor?
 }

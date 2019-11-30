@@ -31,7 +31,7 @@ class YPSelectionsGalleryView: UIView {
         collectionView.CenterY == CenterY - 30
         
         // Apply style
-        backgroundColor = UIColor(r: 247, g: 247, b: 247)
+        backgroundColor = .offWhiteOrBlack
         collectionView.backgroundColor = .clear
         collectionView.showsHorizontalScrollIndicator = false
     }
