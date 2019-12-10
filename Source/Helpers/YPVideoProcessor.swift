@@ -74,7 +74,7 @@ class YPVideoProcessor {
         videoComposition.renderSize = CGSize(width: CGFloat(clipVideoTrack.naturalSize.height), height: CGFloat(clipVideoTrack.naturalSize.height))
         videoComposition.frameDuration = CMTimeMake(value: 1, timescale: 30)
         let instruction = AVMutableVideoCompositionInstruction()
-        instruction.timeRange = CMTimeRangeMake(start: CMTime.zero, duration: CMTimeMakeWithSeconds(60, preferredTimescale: 30))
+        instruction.timeRange = CMTimeRangeMake(start: CMTime.zero, duration: asset.duration)
         
         // rotate to potrait
         let transformer = AVMutableVideoCompositionLayerInstruction(assetTrack: clipVideoTrack)
