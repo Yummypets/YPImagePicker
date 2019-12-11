@@ -60,7 +60,7 @@ final class YPAssetZoomableView: UIScrollView {
     public func setVideo(_ video: PHAsset,
                          mediaManager: LibraryMediaManager,
                          storedCropPosition: YPLibrarySelection?,
-                         completion: @escaping () -> Void) {
+                         completion: @escaping () -> Void,updateCropInfo: @escaping () -> Void) {
         mediaManager.imageManager?.fetchPreviewFor(video: video) { [weak self] preview in
             guard let strongSelf = self else { return }
             guard strongSelf.currentAsset != video else { completion() ; return }
@@ -80,6 +80,8 @@ final class YPAssetZoomableView: UIScrollView {
             // Stored crop position in multiple selection
             if let scp173 = storedCropPosition {
                 strongSelf.applyStoredCropPosition(scp173)
+                //MARK: add update CropInfo after multiple
+                updateCropInfo()
             }
         }
         mediaManager.imageManager?.fetchPlayerItem(for: video) { [weak self] playerItem in
@@ -95,7 +97,7 @@ final class YPAssetZoomableView: UIScrollView {
     public func setImage(_ photo: PHAsset,
                          mediaManager: LibraryMediaManager,
                          storedCropPosition: YPLibrarySelection?,
-                         completion: @escaping () -> Void) {
+                         completion: @escaping () -> Void,updateCropInfo: @escaping () -> Void) {
         guard currentAsset != photo else { DispatchQueue.main.async { completion() }; return }
         currentAsset = photo
         
@@ -122,6 +124,8 @@ final class YPAssetZoomableView: UIScrollView {
             // Stored crop position in multiple selection
             if let scp173 = storedCropPosition {
                 strongSelf.applyStoredCropPosition(scp173)
+                //MARK: add update CropInfo after multiple
+                updateCropInfo()
             }
         }
     }
