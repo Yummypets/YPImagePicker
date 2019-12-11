@@ -45,7 +45,7 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     
     open override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         view.backgroundColor = YPConfig.colors.safeAreaBackgroundColor
         
         delegate = self
@@ -233,9 +233,11 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         } else {
             let arrow = UIImageView()
             arrow.image = YPConfig.icons.arrowDownIcon
+            arrow.image = arrow.image?.withRenderingMode(.alwaysTemplate)
+            arrow.tintColor = .labelCompat
             
             let attributes = UINavigationBar.appearance().titleTextAttributes
-            if let attributes = attributes, let foregroundColor = attributes[NSAttributedString.Key.foregroundColor] as? UIColor {
+            if let attributes = attributes, let foregroundColor = attributes[.foregroundColor] as? UIColor {
                 arrow.image = arrow.image?.withRenderingMode(.alwaysTemplate)
                 arrow.tintColor = foregroundColor
             }
@@ -255,8 +257,6 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         }
         
         label.firstBaselineAnchor.constraint(equalTo: titleView.bottomAnchor, constant: -14).isActive = true
-        
-        
         
         titleView.heightAnchor.constraint(equalToConstant: 40).isActive = true
         navigationItem.titleView = titleView

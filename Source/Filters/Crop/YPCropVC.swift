@@ -48,7 +48,7 @@ class YPCropVC: UIViewController {
                                            style: .plain,
                                            target: self,
                                            action: #selector(cancel))
-        cancelButton.tintColor = .white
+        cancelButton.tintColor = .systemBackgroundCompat
         
         let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         
@@ -56,7 +56,7 @@ class YPCropVC: UIViewController {
                                            style: .plain,
                                            target: self,
                                            action: #selector(done))
-        saveButton.tintColor = .white
+        saveButton.tintColor = .systemBackgroundCompat
         v.toolbar.items = [cancelButton, flexibleSpace, saveButton]
     }
     
