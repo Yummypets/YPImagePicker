@@ -85,10 +85,10 @@ public struct YPImagePickerConfiguration {
     public var preferredStatusBarStyle = UIStatusBarStyle.default
     
     /// Defines the text colour to be shown when a bottom option is selected
-    public var bottomMenuItemSelectedTextColour: UIColor = .labelCompat
+    public var bottomMenuItemSelectedTextColour: UIColor = .ypLabel
     
     /// Defines the text colour to be shown when a bottom option is unselected
-    public var bottomMenuItemUnSelectedTextColour: UIColor = .secondaryLabelCompat
+    public var bottomMenuItemUnSelectedTextColour: UIColor = .ypSecondaryLabel
     
     /// List of default filters which will be added on the filter screen
     public var filters: [YPFilter] = [

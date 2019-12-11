@@ -13,7 +13,7 @@ public struct YPColors {
     // MARK: - Common
     
     /// The common tint color which is used for done buttons in navigation bar, multiple items selection and so on.
-    public var tintColor = UIColor.systemBlueCompat
+    public var tintColor = UIColor.ypSystemBlue
     
     /// A color for navigation bar spinner.
     /// Default is nil, which is default iOS gray UIActivityIndicator.
@@ -42,19 +42,19 @@ public struct YPColors {
     public var bottomMenuItemBackgroundColor: UIColor = .clear
 
     /// A color for for bottom buttons selected text.
-    public var bottomMenuItemSelectedTextColor: UIColor = .labelCompat
+    public var bottomMenuItemSelectedTextColor: UIColor = .ypLabel
 
     /// A color for for bottom buttons not selected text.
-    public var bottomMenuItemUnselectedTextColor: UIColor = .secondaryLabelCompat
+    public var bottomMenuItemUnselectedTextColor: UIColor = .ypSecondaryLabel
 
     // MARK: - Trimmer
     
     /// The color of the main border of the view
-    public var trimmerMainColor: UIColor = .labelCompat
+    public var trimmerMainColor: UIColor = .ypLabel
     /// The color of the handles on the side of the view
-    public var trimmerHandleColor: UIColor = .systemBackgroundCompat
+    public var trimmerHandleColor: UIColor = .ypSystemBackground
     /// The color of the position indicator
-    public var positionLineColor: UIColor = .systemBackgroundCompat
+    public var positionLineColor: UIColor = .ypSystemBackground
     
     // MARK: - Cover selector
     
@@ -64,7 +64,7 @@ public struct YPColors {
     // MARK: - Progress bar
     
     /// The color for the progress bar when processing video or images. The all track color.
-    public var progressBarTrackColor: UIColor = .systemBackgroundCompat
+    public var progressBarTrackColor: UIColor = .ypSystemBackground
     /// The color of completed track for the progress bar
     public var progressBarCompletedColor: UIColor?
 }

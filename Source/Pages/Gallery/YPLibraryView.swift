@@ -36,7 +36,7 @@ final class YPLibraryView: UIView {
             |line| ~ 1
         )
         
-        line.backgroundColor = .systemBackgroundCompat
+        line.backgroundColor = .ypSystemBackground
         
         setupMaxNumberOfItemsView()
         setupProgressBarView()
@@ -62,7 +62,7 @@ final class YPLibraryView: UIView {
         }
         
         // Style
-        maxNumberWarningView.backgroundColor = .secondarySystemBackgroundCompat
+        maxNumberWarningView.backgroundColor = .ypSecondarySystemBackground
         maxNumberWarningLabel.font = UIFont(name: "Helvetica Neue", size: 14)
         maxNumberWarningView.isHidden = true
     }

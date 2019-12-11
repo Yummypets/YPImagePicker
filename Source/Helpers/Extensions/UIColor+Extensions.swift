@@ -27,14 +27,14 @@ extension UIColor {
     /// The color for text labels that contain primary content.
     ///
     /// Like `.label`, but backwards-compatible with iOS 12 and lower.
-    static var labelCompat: UIColor {
+    static var ypLabel: UIColor {
         if #available(iOS 13, *) {
             return .label
         }
         return .black
     }
     
-    static var secondaryLabelCompat: UIColor {
+    static var ypSecondaryLabel: UIColor {
         if #available(iOS 13, *) {
             return .secondaryLabel
         }
@@ -44,7 +44,7 @@ extension UIColor {
     /// The color for content layered on top of the main background.
     ///
     /// Like `.secondarySystemBackground`, but backwards-compatible with iOS 12 and lower.
-    static var secondarySystemBackgroundCompat: UIColor {
+    static var ypSecondarySystemBackground: UIColor {
         if #available(iOS 13, *) {
             return .secondarySystemBackground
         }
@@ -54,7 +54,7 @@ extension UIColor {
     /// The color for the main background of your interface.
     ///
     /// Like `.systemBackground`, but backwards-compatible with iOS 12 and lower.
-    static var systemBackgroundCompat: UIColor {
+    static var ypSystemBackground: UIColor {
         if #available(iOS 13, *) {
             return .systemBackground
         }
@@ -64,7 +64,7 @@ extension UIColor {
     /// The base blue color.
     ///
     /// Like `.systemBlue`, but backwards-compatible with iOS 12 and lower.
-    static var systemBlueCompat: UIColor {
+    static var ypSystemBlue: UIColor {
         if #available(iOS 13, *) {
             return .systemBlue
         }
@@ -74,7 +74,7 @@ extension UIColor {
     /// The base gray color.
     ///
     /// Like `.systemGray`, but backwards-compatible with iOS 12 and lower.
-    static var systemGrayCompat: UIColor {
+    static var ypSystemGray: UIColor {
         if #available(iOS 13, *) {
             return .systemGray
         }
@@ -84,7 +84,7 @@ extension UIColor {
     /// The color for red, compatible with dark mode in iOS 13.
     ///
     /// Like `.red`, but backwards-compatible with iOS 12 and lower.
-    static var systemRedCompat: UIColor {
+    static var ypSystemRed: UIColor {
         if #available(iOS 13, *) {
             return .systemRed
         }

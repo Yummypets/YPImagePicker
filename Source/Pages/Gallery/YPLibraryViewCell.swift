@@ -13,7 +13,7 @@ class YPMultipleSelectionIndicator: UIView {
     
     let circle = UIView()
     let label = UILabel()
-    var selectionColor = UIColor.systemBlueCompat
+    var selectionColor = UIColor.ypSystemBlue
 
     convenience init() {
         self.init(frame: .zero)
@@ -91,7 +91,7 @@ class YPLibraryViewCell: UICollectionViewCell {
         durationLabel.isHidden = true
         selectionOverlay.backgroundColor = .white
         selectionOverlay.alpha = 0
-        backgroundColor = .secondarySystemBackgroundCompat
+        backgroundColor = .ypSecondarySystemBackground
     }
 
     override var isSelected: Bool {

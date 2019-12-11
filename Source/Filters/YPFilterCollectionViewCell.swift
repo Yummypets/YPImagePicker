@@ -23,8 +23,8 @@ class YPFilterCollectionViewCell: UICollectionViewCell {
     override var isSelected: Bool {
         didSet {
             name.textColor = isSelected
-                ? UIColor.labelCompat
-                : UIColor.secondaryLabelCompat
+                ? UIColor.ypLabel
+                : UIColor.ypSecondaryLabel
             name.font = .systemFont(
                 ofSize: 11,
                 weight: isSelected ? .semibold : .regular
@@ -45,14 +45,14 @@ class YPFilterCollectionViewCell: UICollectionViewCell {
         |imageView|.bottom(0).heightEqualsWidth()
         
         name.font = .systemFont(ofSize: 11, weight: UIFont.Weight.regular)
-        name.textColor = UIColor.secondaryLabelCompat
+        name.textColor = UIColor.ypSecondaryLabel
         name.textAlignment = .center
         
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         
         self.clipsToBounds = false
-        self.layer.shadowColor = UIColor.labelCompat.cgColor
+        self.layer.shadowColor = UIColor.ypLabel.cgColor
         self.layer.shadowOpacity = 0.2
         self.layer.shadowOffset = CGSize(width: 4, height: 7)
         self.layer.shadowRadius = 5

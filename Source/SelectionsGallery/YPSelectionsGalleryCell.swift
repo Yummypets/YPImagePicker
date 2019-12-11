@@ -40,12 +40,12 @@ public class YPSelectionsGalleryCell: UICollectionViewCell {
             i.contentMode = .scaleAspectFill
         }
         editIcon.style { v in
-            v.backgroundColor = UIColor.systemBackgroundCompat
+            v.backgroundColor = UIColor.ypSystemBackground
             v.layer.cornerRadius = 16
         }
         editSquare.style { v in
             v.layer.borderWidth = 1
-            v.layer.borderColor = UIColor.labelCompat.cgColor
+            v.layer.borderColor = UIColor.ypLabel.cgColor
         }
     }
     

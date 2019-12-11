@@ -80,16 +80,16 @@ class YPCameraView: UIView, UIGestureRecognizerDelegate {
 
         // Style
         backgroundColor = YPConfig.colors.photoVideoScreenBackgroundColor
-        previewViewContainer.backgroundColor = UIColor.labelCompat
+        previewViewContainer.backgroundColor = UIColor.ypLabel
         timeElapsedLabel.style { l in
-            l.textColor = UIColor.systemBackgroundCompat
+            l.textColor = UIColor.ypSystemBackground
             l.text = "00:00"
             l.isHidden = true
             l.font = .monospacedDigitSystemFont(ofSize: 13, weight: .medium)
         }
         progressBar.style { p in
             p.trackTintColor = .clear
-            p.tintColor = .systemRedCompat
+            p.tintColor = .ypSystemRed
         }
         flashButton.setImage(YPConfig.icons.flashOffIcon, for: .normal)
         flipButton.setImage(YPConfig.icons.loopIcon, for: .normal)
