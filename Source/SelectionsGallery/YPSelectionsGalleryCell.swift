@@ -58,13 +58,8 @@ public class YPSelectionsGalleryCell: UICollectionViewCell {
         let image = YPConfig.icons.removeImage
         let removeButton = UIButton(frame: CGRect(origin: CGPoint.zero, size: image.size))
         removeButton.setBackgroundImage(image, for: UIControl.State())
-        removeButton.translatesAutoresizingMaskIntoConstraints = false
-        
-        self.addSubview(removeButton)
-        ["H:[subview]-12-|", "V:|-12-[subview]"].forEach { visualFormat in
-            self.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: visualFormat, options: .directionLeadingToTrailing, metrics: nil, views: ["subview": removeButton]))
-        }
-        
+        sv(removeButton)
+        removeButton.top(12).trailing(12)
         removeButton.addTarget(target, action: action, for: .touchUpInside)
     }
     
