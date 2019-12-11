@@ -28,6 +28,9 @@ public struct YPImagePickerConfiguration {
     // Video configuration
     public var video = YPConfigVideo()
     
+    // Gallery configuration
+    public var gallery = YPConfigSelectionsGallery()
+    
     /// Use this property to modify the default wordings provided.
     public var wordings = YPWordings()
     
@@ -224,6 +227,12 @@ public struct YPConfigVideo {
     /// The minimum duration allowed for the trimming.
     /// The handles won't pan further if the minimum duration is attained.
     public var trimmerMinDuration: Double = 3.0
+}
+
+/// Encapsulates gallery specific settings.
+public struct YPConfigSelectionsGallery {
+    /// Defines if the remove button should be hidden when showing the gallery. Default is true.
+    public var hidesRemoveButton = true
 }
 
 public enum YPlibraryMediaType {

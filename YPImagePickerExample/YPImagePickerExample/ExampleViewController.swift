@@ -145,6 +145,7 @@ class ExampleViewController: UIViewController {
         config.maxVideoZoomFactor = 2.0
 
         config.library.maxNumberOfItems = 5
+        config.gallery.hidesRemoveButton = false
         
         /* Disable scroll to change between mode */
         // config.isScrollToChangeModesEnabled = false

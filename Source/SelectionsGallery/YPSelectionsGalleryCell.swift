@@ -54,6 +54,20 @@ public class YPSelectionsGalleryCell: UICollectionViewCell {
         self.editSquare.isHidden = !editable
     }
     
+    func addRemoveButton(target: Any?, action: Selector) {
+        let image = YPConfig.icons.removeImage
+        let removeButton = UIButton(frame: CGRect(origin: CGPoint.zero, size: image.size))
+        removeButton.setBackgroundImage(image, for: UIControl.State())
+        removeButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        self.addSubview(removeButton)
+        ["H:[subview]-12-|", "V:|-12-[subview]"].forEach { visualFormat in
+            self.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: visualFormat, options: .directionLeadingToTrailing, metrics: nil, views: ["subview": removeButton]))
+        }
+        
+        removeButton.addTarget(target, action: action, for: .touchUpInside)
+    }
+    
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
