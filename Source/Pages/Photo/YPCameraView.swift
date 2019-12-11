@@ -100,7 +100,7 @@ class YPCameraView: UIView, UIGestureRecognizerDelegate {
         backgroundColor = YPConfig.colors.photoVideoScreenBackgroundColor
         previewViewContainer.backgroundColor = UIColor.ypLabel
         timeElapsedLabel.style { l in
-            l.textColor = UIColor.ypSystemBackground
+            l.textColor = .white
             l.text = "00:00"
             l.isHidden = true
             l.font = .monospacedDigitSystemFont(ofSize: 13, weight: .medium)
