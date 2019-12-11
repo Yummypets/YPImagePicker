@@ -332,12 +332,14 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                 self.v.assetZoomableView.setImage(asset,
                                                   mediaManager: self.mediaManager,
                                                   storedCropPosition: self.fetchStoredCrop(),
-                                                  completion: completion,updateCropInfo: updateCropInfo)
+                                                  completion: completion,
+                                                  updateCropInfo: updateCropInfo)
             case .video:
                 self.v.assetZoomableView.setVideo(asset,
                                                   mediaManager: self.mediaManager,
                                                   storedCropPosition: self.fetchStoredCrop(),
-                                                  completion: completion,updateCropInfo: updateCropInfo)
+                                                  completion: completion,
+                                                  updateCropInfo: updateCropInfo)
             case .audio, .unknown:
                 ()
             @unknown default:
