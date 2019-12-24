@@ -97,6 +97,8 @@
 
 /* Begin PBXFileReference section */
 		16550C5C214D5EE60090BADF /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
+		2577138123B1E09300BB9C86 /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
+		2577138223B1E09E00BB9C86 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
 		3B0E1B962070669B0048E95B /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
 		4EA67521208A45080076D4E3 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
 		52412A931CA6114A0073C4BE /* YPImagePicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = YPImagePicker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -535,6 +537,8 @@
 				ko,
 				"zh-Hant",
 				Base,
+				th,
+				vi,
 			);
 			mainGroup = 52412A891CA6114A0073C4BE;
 			productRefGroup = 52412A941CA6114A0073C4BE /* Products */;
@@ -688,6 +692,8 @@
 				16550C5C214D5EE60090BADF /* bg */,
 				E3E492BB2169012B002BA807 /* ko */,
 				991712D021BE9FF900DE781F /* zh-Hant */,
+				2577138123B1E09300BB9C86 /* th */,
+				2577138223B1E09E00BB9C86 /* vi */,
 			);
 			name = YPImagePickerLocalizable.strings;
 			sourceTree = "<group>";
