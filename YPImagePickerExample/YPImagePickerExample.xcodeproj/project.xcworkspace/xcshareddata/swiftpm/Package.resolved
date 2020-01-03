@@ -1,0 +1,25 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "PryntTrimmerView",
+        "repositoryURL": "https://github.com/freshOS/PryntTrimmerView",
+        "state": {
+          "branch": "master",
+          "revision": "631fb5e0f1f80816cbae6eb07711e7cfbe7b5334",
+          "version": null
+        }
+      },
+      {
+        "package": "Stevia",
+        "repositoryURL": "https://github.com/freshOS/Stevia",
+        "state": {
+          "branch": null,
+          "revision": "603ab44670e22ad182d70b31b16d8786f4a52251",
+          "version": "4.7.3"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
