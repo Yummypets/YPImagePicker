@@ -10,6 +10,8 @@ import UIKit
 
 public class YPSelectionsGalleryVC: UIViewController {
     
+    override public var prefersStatusBarHidden: Bool { return YPConfig.hidesStatusBar }
+    
     public var items: [YPMediaItem] = []
     public var didFinishHandler: ((_ gallery: YPSelectionsGalleryVC, _ items: [YPMediaItem]) -> Void)?
     private var lastContentOffsetX: CGFloat = 0
