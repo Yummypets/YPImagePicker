@@ -68,6 +68,7 @@ class LibraryMediaManager {
     func fetchVideoUrlAndCrop(for videoAsset: PHAsset, cropRect: CGRect, callback: @escaping (URL) -> Void) {
         let videosOptions = PHVideoRequestOptions()
         videosOptions.isNetworkAccessAllowed = true
+        videosOptions.deliveryMode = .highQualityFormat
         imageManager?.requestAVAsset(forVideo: videoAsset, options: videosOptions) { asset, _, _ in
             do {
                 guard let asset = asset else { print("⚠️ PHCachingImageManager >>> Don't have the asset"); return }
