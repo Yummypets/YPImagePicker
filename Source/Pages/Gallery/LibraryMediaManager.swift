@@ -95,24 +95,22 @@ class LibraryMediaManager {
                 
                 try videoCompositionTrack.insertTimeRange(trackTimeRange, of: videoTrack, at: CMTime.zero)
                 
-                // 2. Create the instructions
+                // Layer Instructions
+                let layerInstructions = AVMutableVideoCompositionLayerInstruction(assetTrack: videoCompositionTrack)
+                var transform = videoTrack.preferredTransform
+                transform.tx -= cropRect.minX
+                transform.ty -= cropRect.minY
+                layerInstructions.setTransform(transform, at: CMTime.zero)
                 
+                // CompositionInstruction
                 let mainInstructions = AVMutableVideoCompositionInstruction()
                 mainInstructions.timeRange = trackTimeRange
-                
-                // 3. Adding the layer instructions. Transforming
-                
-                let layerInstructions = AVMutableVideoCompositionLayerInstruction(assetTrack: videoCompositionTrack)
-                layerInstructions.setTransform(videoTrack.getTransform(cropRect: cropRect), at: CMTime.zero)
-                layerInstructions.setOpacity(1.0, at: CMTime.zero)
                 mainInstructions.layerInstructions = [layerInstructions]
                 
-                // 4. Create the main composition and add the instructions
-                
-                let videoComposition = AVMutableVideoComposition()
-                videoComposition.renderSize = cropRect.size
+                // Video Composition
+                let videoComposition = AVMutableVideoComposition(propertiesOf: asset)
                 videoComposition.instructions = [mainInstructions]
-                videoComposition.frameDuration = CMTimeMake(value: 1, timescale: 30)
+                videoComposition.renderSize = cropRect.size // needed? 
                 
                 // 5. Configuring export session
                 
@@ -175,4 +173,3 @@ class LibraryMediaManager {
         }
     }
 }
-
