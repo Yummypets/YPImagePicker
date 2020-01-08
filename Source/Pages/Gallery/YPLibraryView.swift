@@ -23,6 +23,7 @@ final class YPLibraryView: UIView {
     let maxNumberWarningLabel = UILabel()
     let progressView = UIProgressView()
     let line = UIView()
+    var shouldShowLoader = false
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -105,12 +106,26 @@ extension YPLibraryView {
     // MARK: - Loader and progress
     
     func fadeInLoader() {
-        UIView.animate(withDuration: 0.2) {
-            self.assetViewContainer.spinnerView.alpha = 1
+        shouldShowLoader = true
+        // Only show loader if full res image takes more than 0.5s to load.
+        if #available(iOS 10.0, *) {
+            Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { _ in
+                if self.shouldShowLoader == true {
+                    UIView.animate(withDuration: 0.2) {
+                        self.assetViewContainer.spinnerView.alpha = 1
+                    }
+                }
+            }
+        } else {
+            // Fallback on earlier versions
+            UIView.animate(withDuration: 0.2) {
+                self.assetViewContainer.spinnerView.alpha = 1
+            }
         }
     }
     
     func hideLoader() {
+        shouldShowLoader = false
         assetViewContainer.spinnerView.alpha = 0
     }
     
