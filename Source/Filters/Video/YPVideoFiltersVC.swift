@@ -49,7 +49,7 @@ public class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
         trimmerView.mainColor = YPConfig.colors.trimmerMainColor
         trimmerView.handleColor = YPConfig.colors.trimmerHandleColor
         trimmerView.positionBarColor = YPConfig.colors.positionLineColor
-        trimmerView.maxDuration = 90.0
+        trimmerView.maxDuration = 9000.0
         trimmerView.minDuration = YPConfig.video.trimmerMinDuration
         
         coverThumbSelectorView.thumbBorderColor = YPConfig.colors.coverSelectorBorderColor

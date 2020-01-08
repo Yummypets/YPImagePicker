@@ -34,7 +34,7 @@ public class YPVideoCaptureVC: UIViewController, YPPermissionCheckable {
         }
         videoHelper.videoRecordingProgress = { [weak self] progress, timeElapsed in
             self?.updateState {
-                if timeElapsed > 100 {
+                if timeElapsed > 10000 {
                     if let object = self {
                         object.v.shotButton.isEnabled = false
                         object.activityView.removeFromSuperview()
