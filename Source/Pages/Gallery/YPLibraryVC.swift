@@ -314,12 +314,14 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         latestImageTapped = asset.localIdentifier
         delegate?.libraryViewStartedLoading()
         
-        let completion = {
-            self.v.hideLoader()
+        let completion = { (isLowResIntermediaryImage: Bool) in
             self.v.hideGrid()
-            self.delegate?.libraryViewFinishedLoading()
             self.v.assetViewContainer.refreshSquareCropButton()
             self.updateCropInfo()
+            if !isLowResIntermediaryImage {
+                self.v.hideLoader()
+                self.delegate?.libraryViewFinishedLoading()
+            }
         }
         
         let updateCropInfo = {
@@ -338,7 +340,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                 self.v.assetZoomableView.setVideo(asset,
                                                   mediaManager: self.mediaManager,
                                                   storedCropPosition: self.fetchStoredCrop(),
-                                                  completion: completion,
+                                                  completion: { completion(false) },
                                                   updateCropInfo: updateCropInfo)
             case .audio, .unknown:
                 ()
