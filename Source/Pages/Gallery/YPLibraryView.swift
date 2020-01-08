@@ -109,7 +109,7 @@ extension YPLibraryView {
         shouldShowLoader = true
         // Only show loader if full res image takes more than 0.5s to load.
         if #available(iOS 10.0, *) {
-            Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { _ in
+            Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { _ in
                 if self.shouldShowLoader == true {
                     UIView.animate(withDuration: 0.2) {
                         self.assetViewContainer.spinnerView.alpha = 1
