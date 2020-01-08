@@ -172,12 +172,10 @@ extension YPLibraryVC: UICollectionViewDelegate {
             collectionView.scrollToItem(at: indexPath, at: .top, animated: true)
         }
         v.refreshImageCurtainAlpha()
-
-        if multipleSelectionEnabled {
             
+        if multipleSelectionEnabled {
             let cellIsInTheSelectionPool = isInSelectionPool(indexPath: indexPath)
             let cellIsCurrentlySelected = previouslySelectedIndexPath.row == currentlySelectedIndex
-
             if cellIsInTheSelectionPool {
                 if cellIsCurrentlySelected {
                     deselect(indexPath: indexPath)
@@ -185,18 +183,21 @@ extension YPLibraryVC: UICollectionViewDelegate {
             } else if isLimitExceeded == false {
                 addToSelection(indexPath: indexPath)
             }
+            collectionView.reloadItems(at: [indexPath])
+            collectionView.reloadItems(at: [previouslySelectedIndexPath])
         } else {
-            let previouslySelectedIndices = selection
             selection.removeAll()
             addToSelection(indexPath: indexPath)
-            if let selectedRow = previouslySelectedIndices.first?.index {
-                let previouslySelectedIndexPath = IndexPath(row: selectedRow, section: 0)
-                collectionView.reloadItems(at: [previouslySelectedIndexPath])
+            
+            
+            // Force deseletion of previously selected cell.
+            // In the case where the previous cell was loaded from iCloud, a new image was fetched
+            // which triggered photoLibraryDidChange() and reloadItems() which breaks selection.
+            //
+            if let previousCell = collectionView.cellForItem(at: previouslySelectedIndexPath) as? YPLibraryViewCell {
+                previousCell.isSelected = false
             }
         }
-
-        collectionView.reloadItems(at: [indexPath])
-        collectionView.reloadItems(at: [previouslySelectedIndexPath])
     }
     
     public func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {

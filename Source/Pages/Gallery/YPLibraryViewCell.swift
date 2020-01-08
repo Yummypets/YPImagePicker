@@ -95,12 +95,15 @@ class YPLibraryViewCell: UICollectionViewCell {
     }
 
     override var isSelected: Bool {
-        didSet { isHighlighted = isSelected }
+        didSet { refreshSelection() }
     }
     
     override var isHighlighted: Bool {
-        didSet {
-            selectionOverlay.alpha = isHighlighted ? 0.6 : 0
-        }
+        didSet { refreshSelection() }
+    }
+    
+    private func refreshSelection() {
+        let showOverlay = isSelected || isHighlighted
+        selectionOverlay.alpha = showOverlay ? 0.6 : 0
     }
 }
