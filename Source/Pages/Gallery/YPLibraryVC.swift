@@ -312,7 +312,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     
     func changeAsset(_ asset: PHAsset) {
         latestImageTapped = asset.localIdentifier
-        delegate?.libraryViewStartedLoading()
+        delegate?.libraryViewStartedLoadingImage()
         
         let completion = { (isLowResIntermediaryImage: Bool) in
             self.v.hideGrid()
@@ -414,7 +414,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     private func fetchImageAndCrop(for asset: PHAsset,
                                    withCropRect: CGRect? = nil,
                                    callback: @escaping (_ photo: UIImage, _ exif: [String : Any]) -> Void) {
-        delegate?.libraryViewStartedLoading()
+        delegate?.libraryViewDidTapNext()
         let cropRect = withCropRect ?? DispatchQueue.main.sync { v.currentCropRect() }
         let ts = targetSize(for: asset, cropRect: cropRect)
         mediaManager.imageManager?.fetchImage(for: asset, cropRect: cropRect, targetSize: ts, callback: callback)
@@ -424,7 +424,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                                          withCropRect: CGRect? = nil,
                                          callback: @escaping (_ videoURL: URL) -> Void) {
         if fitsVideoLengthLimits(asset: asset) == true {
-            delegate?.libraryViewStartedLoading()
+            delegate?.libraryViewDidTapNext()
             let normalizedCropRect = withCropRect ?? DispatchQueue.main.sync { v.currentCropRect() }
             let ts = targetSize(for: asset, cropRect: normalizedCropRect)
             let xCrop: CGFloat = normalizedCropRect.origin.x * CGFloat(asset.pixelWidth)

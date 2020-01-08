@@ -328,12 +328,19 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
 
 extension YPPickerVC: YPLibraryViewDelegate {
     
-    public func libraryViewStartedLoading() {
+    public func libraryViewDidTapNext() {
         libraryVC?.isProcessing = true
         DispatchQueue.main.async {
             self.v.scrollView.isScrollEnabled = false
             self.libraryVC?.v.fadeInLoader()
             self.navigationItem.rightBarButtonItem = YPLoaders.defaultLoader
+        }
+    }
+    
+    public func libraryViewStartedLoadingImage() {
+        libraryVC?.isProcessing = true //TODO remove to enable changing selection while loading but needs cancelling previous image requests.
+        DispatchQueue.main.async {
+            self.libraryVC?.v.fadeInLoader()
         }
     }
     
