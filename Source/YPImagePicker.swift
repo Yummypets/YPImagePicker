@@ -52,6 +52,7 @@ open class YPImagePicker: UINavigationController {
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .fullScreen // Force .fullScreen as iOS 13 now shows modals as cards by default.
         picker.imagePickerDelegate = self
+        navigationBar.tintColor = .ypLabel
     }
     
     public required init?(coder aDecoder: NSCoder) {
@@ -143,11 +144,6 @@ override open func viewDidLoad() {
                     self?.didSelect(items: [YPMediaItem.video(v: video)])
                 }
             }
-        }
-        
-        // If user has not customized the Nav Bar tintColor, then use black.
-        if UINavigationBar.appearance().tintColor == nil {
-            UINavigationBar.appearance().tintColor = .ypLabel
         }
     }
     
