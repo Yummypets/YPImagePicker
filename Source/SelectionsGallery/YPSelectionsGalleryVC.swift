@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class YPSelectionsGalleryVC: UIViewController {
+public class YPSelectionsGalleryVC: UIViewController, YPSelectionsGalleryCellDelegate {
     
     override public var prefersStatusBarHidden: Bool { return YPConfig.hidesStatusBar }
     
@@ -63,15 +63,13 @@ public class YPSelectionsGalleryVC: UIViewController {
         didFinishHandler?(self, items)
     }
     
-    @objc
-    private func removeButtonDidClick(sender: UIButton) {
-        guard let cell = sender.superview as? UICollectionViewCell, let indexPath = v.collectionView.indexPath(for: cell) else {
-            return
+    public func selectionsGalleryCellDidTapRemove(cell: YPSelectionsGalleryCell) {
+        if let indexPath = v.collectionView.indexPath(for: cell) {
+            items.remove(at: indexPath.row)
+            v.collectionView.performBatchUpdates({
+                v.collectionView.deleteItems(at: [indexPath])
+            }, completion: { _ in })
         }
-        items.remove(at: indexPath.row)
-        v.collectionView.performBatchUpdates({
-            v.collectionView.deleteItems(at: [indexPath])
-        }, completion: { _ in })
     }
 }
 
@@ -87,6 +85,7 @@ extension YPSelectionsGalleryVC: UICollectionViewDataSource {
                                                             for: indexPath) as? YPSelectionsGalleryCell else {
             return UICollectionViewCell()
         }
+        cell.delegate = self
         let item = items[indexPath.row]
         switch item {
         case .photo(let photo):
@@ -96,11 +95,7 @@ extension YPSelectionsGalleryVC: UICollectionViewDataSource {
             cell.imageView.image = video.thumbnail
             cell.setEditable(YPConfig.showsVideoTrimmer)
         }
-        
-        if !YPConfig.gallery.hidesRemoveButton {
-            cell.addRemoveButton(target: self, action: #selector(removeButtonDidClick(sender:)))
-        }
-        
+        cell.removeButton.isHidden = YPConfig.gallery.hidesRemoveButton
         return cell
     }
 }

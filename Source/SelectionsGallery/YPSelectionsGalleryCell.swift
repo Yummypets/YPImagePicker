@@ -9,11 +9,17 @@
 import UIKit
 import Stevia
 
+public protocol YPSelectionsGalleryCellDelegate: class {
+    func selectionsGalleryCellDidTapRemove(cell: YPSelectionsGalleryCell)
+}
+
 public class YPSelectionsGalleryCell: UICollectionViewCell {
     
+    weak var delegate: YPSelectionsGalleryCellDelegate?
     let imageView = UIImageView()
     let editIcon = UIView()
     let editSquare = UIView()
+    let removeButton = UIButton()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -21,7 +27,8 @@ public class YPSelectionsGalleryCell: UICollectionViewCell {
         sv(
             imageView,
             editIcon,
-            editSquare
+            editSquare,
+            removeButton
         )
         
         imageView.fillContainer()
@@ -29,6 +36,8 @@ public class YPSelectionsGalleryCell: UICollectionViewCell {
         editSquare.size(16)
         editSquare.CenterY == editIcon.CenterY
         editSquare.CenterX == editIcon.CenterX
+        
+        removeButton.top(12).trailing(12)
         
         layer.shadowColor = UIColor.black.cgColor
         layer.shadowOpacity = 0.2
@@ -47,6 +56,14 @@ public class YPSelectionsGalleryCell: UICollectionViewCell {
             v.layer.borderWidth = 1
             v.layer.borderColor = UIColor.ypLabel.cgColor
         }
+        removeButton.setImage(YPConfig.icons.removeImage, for: .normal)
+    
+        removeButton.addTarget(self, action: #selector(removeButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc
+    func removeButtonTapped() {
+        delegate?.selectionsGalleryCellDidTapRemove(cell: self)
     }
     
     func setEditable(_ editable: Bool) {
@@ -54,19 +71,9 @@ public class YPSelectionsGalleryCell: UICollectionViewCell {
         self.editSquare.isHidden = !editable
     }
     
-    func addRemoveButton(target: Any?, action: Selector) {
-        let image = YPConfig.icons.removeImage
-        let removeButton = UIButton(frame: CGRect(origin: CGPoint.zero, size: image.size))
-        removeButton.setBackgroundImage(image, for: UIControl.State())
-        sv(removeButton)
-        removeButton.top(12).trailing(12)
-        removeButton.addTarget(target, action: action, for: .touchUpInside)
-    }
-    
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
     
     public override var isHighlighted: Bool {
         didSet {
