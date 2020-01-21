@@ -127,7 +127,7 @@ extension YPPhotoCapture {
             if #available(iOS 11.0, *) {
                 maxAvailableVideoZoomFactor = device.maxAvailableVideoZoomFactor
             }
-            maxAvailableVideoZoomFactor = min(maxAvailableVideoZoomFactor, YPConfig.maxVideoZoomFactor)
+            maxAvailableVideoZoomFactor = min(maxAvailableVideoZoomFactor, YPConfig.maxCameraZoomFactor)
             
             let desiredZoomFactor = initVideoZoomFactor * scale
             device.videoZoomFactor = max(minAvailableVideoZoomFactor, min(desiredZoomFactor, maxAvailableVideoZoomFactor))

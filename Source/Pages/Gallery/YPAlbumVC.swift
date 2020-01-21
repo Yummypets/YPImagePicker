@@ -80,7 +80,7 @@ extension YPAlbumVC: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let album = albums[indexPath.row]
         if let cell = tableView.dequeueReusableCell(withIdentifier: "AlbumCell", for: indexPath) as? YPAlbumCell {
-            cell.thumbnail.backgroundColor = .gray
+            cell.thumbnail.backgroundColor = .ypSystemGray
             cell.thumbnail.image = album.thumbnail
             cell.title.text = album.title
             cell.numberOfItems.text = "\(album.numberOfItems)"

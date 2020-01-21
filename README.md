@@ -100,6 +100,7 @@ config.isScrollToChangeModesEnabled = true
 config.onlySquareImagesFromCamera = true
 config.usesFrontCamera = false
 config.showsPhotoFilters = true
+config.showsVideoTrimmer = true
 config.shouldSaveNewPicturesToAlbum = true
 config.albumName = "DefaultYPImagePickerAlbumName"
 config.startOnScreen = YPPickerScreen.photo
@@ -113,19 +114,23 @@ config.preferredStatusBarStyle = UIStatusBarStyle.default
 config.bottomMenuItemSelectedColour = UIColor(r: 38, g: 38, b: 38)
 config.bottomMenuItemUnSelectedColour = UIColor(r: 153, g: 153, b: 153)
 config.filters = [DefaultYPFilters...]
+config.maxCameraZoomFactor = 1.0
 ```
 
 ### Library
 ```swift
 config.library.options = nil
 config.library.onlySquare = false
+config.library.isSquareByDefault = true
 config.library.minWidthForItem = nil
 config.library.mediaType = YPlibraryMediaType.photo
+config.library.defaultMultipleSelection = false
 config.library.maxNumberOfItems = 1
 config.library.minNumberOfItems = 1
 config.library.numberOfItemsInRow = 4
 config.library.spacingBetweenItems = 1.0
 config.library.skipSelectionsGallery = false
+config.library.preselectedItems = nil
 ```
 
 ### Video
@@ -137,6 +142,11 @@ config.video.libraryTimeLimit = 60.0
 config.video.minimumTimeLimit = 3.0
 config.video.trimmerMaxDuration = 60.0
 config.video.trimmerMinDuration = 3.0
+```
+
+### Gallery
+```swift
+config.gallery.hidesRemoveButton = false
 ```
 
 ## Default Configuration
@@ -226,7 +236,7 @@ picker.didFinishPicking { [unowned picker] items, cancelled in
 That's it !
 
 ## Languages
-🇺🇸 English, 🇪🇸 Spanish, 🇫🇷 French 🇷🇺 Russian, 🇳🇱 Dutch, 🇧🇷 Brazilian, 🇹🇷 Turkish, 🇸🇾 Arabic, 🇩🇪 German, 🇮🇹 Italian, 🇯🇵 Japanese, 🇨🇳 Chinese, 🇮🇩 Indonesian, 🇰🇷 Korean, 🇹🇼 Traditional Chinese（Taiwan)
+🇺🇸 English, 🇪🇸 Spanish, 🇫🇷 French 🇷🇺 Russian, 🇳🇱 Dutch, 🇧🇷 Brazilian, 🇹🇷 Turkish, 🇸🇾 Arabic, 🇩🇪 German, 🇮🇹 Italian, 🇯🇵 Japanese, 🇨🇳 Chinese, 🇮🇩 Indonesian, 🇰🇷 Korean, 🇹🇼 Traditional Chinese（Taiwan), 🇻🇳 Vietnamese, 🇹🇭 Thai. 
 
 If your language is not supported, you can still customize the wordings via the `configuration.wordings` api:
 

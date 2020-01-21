@@ -47,8 +47,8 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     
     open override func viewDidLoad() {
         super.viewDidLoad()
-        
-        view.backgroundColor = UIColor(r: 247, g: 247, b: 247)
+
+        view.backgroundColor = YPConfig.colors.safeAreaBackgroundColor
         
         delegate = self
         
@@ -198,11 +198,12 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     func navBarTapped() {
         let vc = YPAlbumVC(albumsManager: albumsManager)
         let navVC = UINavigationController(rootViewController: vc)
+        navVC.navigationBar.tintColor = .ypLabel
         
         vc.didSelectAlbum = { [weak self] album in
             self?.libraryVC?.setAlbum(album)
             self?.setTitleViewWithTitle(aTitle: album.title)
-            self?.dismiss(animated: true, completion: nil)
+            navVC.dismiss(animated: true, completion: nil)
         }
         present(navVC, animated: true, completion: nil)
     }
@@ -235,9 +236,11 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         } else {
             let arrow = UIImageView()
             arrow.image = YPConfig.icons.arrowDownIcon
+            arrow.image = arrow.image?.withRenderingMode(.alwaysTemplate)
+            arrow.tintColor = .ypLabel
             
             let attributes = UINavigationBar.appearance().titleTextAttributes
-            if let attributes = attributes, let foregroundColor = attributes[NSAttributedString.Key.foregroundColor] as? UIColor {
+            if let attributes = attributes, let foregroundColor = attributes[.foregroundColor] as? UIColor {
                 arrow.image = arrow.image?.withRenderingMode(.alwaysTemplate)
                 arrow.tintColor = foregroundColor
             }
@@ -258,8 +261,6 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         
         label.firstBaselineAnchor.constraint(equalTo: titleView.bottomAnchor, constant: -14).isActive = true
         
-        
-        
         titleView.heightAnchor.constraint(equalToConstant: 40).isActive = true
         navigationItem.titleView = titleView
     }
@@ -270,7 +271,6 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
                                                            style: .plain,
                                                            target: self,
                                                            action: #selector(close))
-        
         switch mode {
         case .library:
             setTitleViewWithTitle(aTitle: libraryVC?.title ?? "")
@@ -331,12 +331,19 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
 
 extension YPPickerVC: YPLibraryViewDelegate {
     
-    public func libraryViewStartedLoading() {
+    public func libraryViewDidTapNext() {
         libraryVC?.isProcessing = true
         DispatchQueue.main.async {
             self.v.scrollView.isScrollEnabled = false
             self.libraryVC?.v.fadeInLoader()
             self.navigationItem.rightBarButtonItem = YPLoaders.defaultLoader
+        }
+    }
+    
+    public func libraryViewStartedLoadingImage() {
+        libraryVC?.isProcessing = true //TODO remove to enable changing selection while loading but needs cancelling previous image requests.
+        DispatchQueue.main.async {
+            self.libraryVC?.v.fadeInLoader()
         }
     }
     

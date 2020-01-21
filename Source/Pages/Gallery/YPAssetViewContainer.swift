@@ -23,7 +23,7 @@ class YPAssetViewContainer: UIView {
     public var isShown = true
     
     private let spinner = UIActivityIndicatorView(style: .white)
-    private var shouldCropToSquare = true
+    private var shouldCropToSquare = YPConfig.library.isSquareByDefault
     private var isMultipleSelection = false
 
     override func awakeFromNib() {
@@ -62,8 +62,8 @@ class YPAssetViewContainer: UIView {
         curtain.fillContainer()
         
         spinner.startAnimating()
-        spinnerView.backgroundColor = UIColor.black.withAlphaComponent(0.3)
-        curtain.backgroundColor = UIColor.black.withAlphaComponent(0.7)
+        spinnerView.backgroundColor = UIColor.ypLabel.withAlphaComponent(0.3)
+        curtain.backgroundColor = UIColor.ypLabel.withAlphaComponent(0.7)
         curtain.alpha = 0
         
         if !onlySquare {

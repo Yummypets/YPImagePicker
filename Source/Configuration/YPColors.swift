@@ -10,11 +10,11 @@ import UIKit
 
 public struct YPColors {
     
-   // MARK: - Common
-
+    // MARK: - Common
+    
     /// The common tint color which is used for done buttons in navigation bar, multiple items selection and so on.
-    public var tintColor = UIColor(r: 10, g: 120, b: 254)
-        
+    public var tintColor = UIColor.ypSystemBlue
+    
     /// A color for navigation bar spinner.
     /// Default is nil, which is default iOS gray UIActivityIndicator.
     public var navigationBarActivityIndicatorColor: UIColor?
@@ -24,26 +24,47 @@ public struct YPColors {
     public var multipleItemsSelectedCircleColor: UIColor?
     
     /// The background color of the bottom of photo and video screens.
-    public var photoVideoScreenBackground: UIColor = .white
+    public var photoVideoScreenBackgroundColor: UIColor = .offWhiteOrBlack
+
+    /// The background color of the library and space between collection view cells.
+    public var libraryScreenBackgroundColor: UIColor = .offWhiteOrBlack
+
+    /// The background color of safe area. For example under the menu items.
+    public var safeAreaBackgroundColor: UIColor = .offWhiteOrBlack
+
+    /// A color for background of the asset container. You can see it when bouncing the image.
+    public var assetViewBackgroundColor: UIColor = .offWhiteOrBlack
     
+    /// A color for background in filters.
+    public var filterBackgroundColor: UIColor = .offWhiteOrBlack
+
+    /// A color for bottom buttons (photo, video, all photos).
+    public var bottomMenuItemBackgroundColor: UIColor = .clear
+
+    /// A color for for bottom buttons selected text.
+    public var bottomMenuItemSelectedTextColor: UIColor = .ypLabel
+
+    /// A color for for bottom buttons not selected text.
+    public var bottomMenuItemUnselectedTextColor: UIColor = .ypSecondaryLabel
+
     // MARK: - Trimmer
     
     /// The color of the main border of the view
-    public var trimmerMainColor: UIColor = UIColor.black
+    public var trimmerMainColor: UIColor = .ypLabel
     /// The color of the handles on the side of the view
-    public var trimmerHandleColor: UIColor = UIColor.white
+    public var trimmerHandleColor: UIColor = .ypSystemBackground
     /// The color of the position indicator
-    public var positionLineColor: UIColor = UIColor.white
+    public var positionLineColor: UIColor = .ypSystemBackground
     
-   // MARK: - Cover selector
+    // MARK: - Cover selector
     
     /// The color of the cover selector border
-    public var coverSelectorBorderColor: UIColor = UIColor.white
+    public var coverSelectorBorderColor: UIColor = .offWhiteOrBlack
     
     // MARK: - Progress bar
     
     /// The color for the progress bar when processing video or images. The all track color.
-    public var progressBarTrackColor: UIColor = UIColor.white
+    public var progressBarTrackColor: UIColor = .ypSystemBackground
     /// The color of completed track for the progress bar
     public var progressBarCompletedColor: UIColor?
 }

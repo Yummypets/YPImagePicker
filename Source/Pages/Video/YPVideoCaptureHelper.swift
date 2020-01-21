@@ -137,7 +137,7 @@ class YPVideoCaptureHelper: NSObject {
            if #available(iOS 11.0, *) {
                maxAvailableVideoZoomFactor = device.maxAvailableVideoZoomFactor
            }
-           maxAvailableVideoZoomFactor = min(maxAvailableVideoZoomFactor, YPConfig.maxVideoZoomFactor)
+           maxAvailableVideoZoomFactor = min(maxAvailableVideoZoomFactor, YPConfig.maxCameraZoomFactor)
            
            let desiredZoomFactor = initVideoZoomFactor * scale
            device.videoZoomFactor = max(minAvailableVideoZoomFactor, min(desiredZoomFactor, maxAvailableVideoZoomFactor))
@@ -228,6 +228,9 @@ class YPVideoCaptureHelper: NSObject {
                 CMTimeMakeWithSeconds(self.videoRecordingTimeLimit, preferredTimescale: timeScale)
             videoOutput.maxRecordedDuration = maxDuration
             videoOutput.minFreeDiskSpaceLimit = 1024 * 1024
+            if (YPConfig.video.fileType == .mp4) {
+                videoOutput.movieFragmentInterval = .invalid // Allows audio for MP4s over 10 seconds.
+            }
             if session.canAddOutput(videoOutput) {
                 session.addOutput(videoOutput)
             }

@@ -60,7 +60,8 @@ final class YPAssetZoomableView: UIScrollView {
     public func setVideo(_ video: PHAsset,
                          mediaManager: LibraryMediaManager,
                          storedCropPosition: YPLibrarySelection?,
-                         completion: @escaping () -> Void) {
+                         completion: @escaping () -> Void,
+                         updateCropInfo: @escaping () -> Void) {
         mediaManager.imageManager?.fetchPreviewFor(video: video) { [weak self] preview in
             guard let strongSelf = self else { return }
             guard strongSelf.currentAsset != video else { completion() ; return }
@@ -80,6 +81,8 @@ final class YPAssetZoomableView: UIScrollView {
             // Stored crop position in multiple selection
             if let scp173 = storedCropPosition {
                 strongSelf.applyStoredCropPosition(scp173)
+                //MARK: add update CropInfo after multiple
+                updateCropInfo()
             }
         }
         mediaManager.imageManager?.fetchPlayerItem(for: video) { [weak self] playerItem in
@@ -95,11 +98,15 @@ final class YPAssetZoomableView: UIScrollView {
     public func setImage(_ photo: PHAsset,
                          mediaManager: LibraryMediaManager,
                          storedCropPosition: YPLibrarySelection?,
-                         completion: @escaping () -> Void) {
-        guard currentAsset != photo else { DispatchQueue.main.async { completion() }; return }
+                         completion: @escaping (Bool) -> Void,
+                         updateCropInfo: @escaping () -> Void) {
+        guard currentAsset != photo else {
+            DispatchQueue.main.async { completion(false) }
+            return
+        }
         currentAsset = photo
         
-        mediaManager.imageManager?.fetch(photo: photo) { [weak self] image, _ in
+        mediaManager.imageManager?.fetch(photo: photo) { [weak self] image, isLowResIntermediaryImage in
             guard let strongSelf = self else { return }
             
             if strongSelf.photoImageView.isDescendant(of: strongSelf) == false {
@@ -116,13 +123,15 @@ final class YPAssetZoomableView: UIScrollView {
             strongSelf.photoImageView.image = image
            
             strongSelf.setAssetFrame(for: strongSelf.photoImageView, with: image)
-        
-            completion()
-            
+                
             // Stored crop position in multiple selection
             if let scp173 = storedCropPosition {
                 strongSelf.applyStoredCropPosition(scp173)
+                //MARK: add update CropInfo after multiple
+                updateCropInfo()
             }
+            
+            completion(isLowResIntermediaryImage)
         }
     }
     
@@ -202,14 +211,15 @@ final class YPAssetZoomableView: UIScrollView {
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)!
-        frame.size      = CGSize.zero
-        clipsToBounds   = true
+        backgroundColor = YPConfig.colors.assetViewBackgroundColor
+        frame.size = CGSize.zero
+        clipsToBounds = true
         photoImageView.frame = CGRect(origin: CGPoint.zero, size: CGSize.zero)
         videoView.frame = CGRect(origin: CGPoint.zero, size: CGSize.zero)
         maximumZoomScale = 6.0
         minimumZoomScale = 1
         showsHorizontalScrollIndicator = false
-        showsVerticalScrollIndicator   = false
+        showsVerticalScrollIndicator = false
         delegate = self
         alwaysBounceHorizontal = true
         alwaysBounceVertical = true

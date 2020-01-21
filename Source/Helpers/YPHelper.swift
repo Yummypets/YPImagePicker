@@ -43,7 +43,7 @@ struct YPHelper {
     static func configureFocusView(_ v: UIView) {
         v.alpha = 0.0
         v.backgroundColor = UIColor.clear
-        v.layer.borderColor = UIColor(r: 204, g: 204, b: 204).cgColor
+        v.layer.borderColor = UIColor.ypSecondaryLabel.cgColor
         v.layer.borderWidth = 1.0
         v.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
     }

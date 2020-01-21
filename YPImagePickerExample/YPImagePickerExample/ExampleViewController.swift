@@ -142,7 +142,7 @@ class ExampleViewController: UIViewController {
         /* Defines if the bottom bar should be hidden when showing the picker. Default is false */
         config.hidesBottomBar = false
         
-        config.maxVideoZoomFactor = 2.0
+        config.maxCameraZoomFactor = 2.0
 
         config.library.maxNumberOfItems = 5
         config.gallery.hidesRemoveButton = false
