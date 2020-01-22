@@ -38,6 +38,9 @@ public struct YPColors {
     /// A color for background in filters.
     public var filterBackgroundColor: UIColor = .offWhiteOrBlack
 
+    /// A color for background in selections gallery. When multiple items selected.
+    public var selectionsBackgroundColor: UIColor = .offWhiteOrBlack
+
     /// A color for bottom buttons (photo, video, all photos).
     public var bottomMenuItemBackgroundColor: UIColor = .clear
 
