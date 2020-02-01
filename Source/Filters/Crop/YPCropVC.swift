@@ -13,31 +13,31 @@ public enum YPCropType {
     case rectangle(ratio: Double)
 }
 
-class YPCropVC: UIViewController {
+open class YPCropVC: UIViewController {
     
     public var didFinishCropping: ((UIImage) -> Void)?
     
-    override var prefersStatusBarHidden: Bool { return YPConfig.hidesStatusBar }
+    override open var prefersStatusBarHidden: Bool { return YPConfig.hidesStatusBar }
     
     private let originalImage: UIImage
     private let pinchGR = UIPinchGestureRecognizer()
     private let panGR = UIPanGestureRecognizer()
     
     private let v: YPCropView
-    override func loadView() { view = v }
+    override open func loadView() { view = v }
     
-    required init(image: UIImage, ratio: Double) {
+    required public init(image: UIImage, ratio: Double) {
         v = YPCropView(image: image, ratio: ratio)
         originalImage = image
         super.init(nibName: nil, bundle: nil)
         self.title = YPConfig.wordings.crop
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func viewDidLoad() {
+    override open func viewDidLoad() {
         super.viewDidLoad()
         setupToolbar()
         setupGestureRecognizers()
@@ -214,7 +214,7 @@ extension YPCropVC: UIGestureRecognizerDelegate {
     }
     
     /// Allow both Pinching and Panning at the same time.
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
                            shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
