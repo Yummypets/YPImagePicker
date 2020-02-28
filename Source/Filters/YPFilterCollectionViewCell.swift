@@ -25,10 +25,7 @@ class YPFilterCollectionViewCell: UICollectionViewCell {
             name.textColor = isSelected
                 ? UIColor.ypLabel
                 : UIColor.ypSecondaryLabel
-            name.font = .systemFont(
-                ofSize: 11,
-                weight: isSelected ? .semibold : .regular
-            )
+            name.font = isSelected ? YPConfig.fonts.filterSelectionSelectedFont : YPConfig.fonts.filterSelectionUnSelectedFont
         }
     }
     
@@ -44,7 +41,7 @@ class YPFilterCollectionViewCell: UICollectionViewCell {
         |name|.top(0)
         |imageView|.bottom(0).heightEqualsWidth()
         
-        name.font = .systemFont(ofSize: 11, weight: UIFont.Weight.regular)
+        name.font = YPConfig.fonts.filterNameFont
         name.textColor = UIColor.ypSecondaryLabel
         name.textAlignment = .center
         

@@ -64,7 +64,7 @@ final class YPLibraryView: UIView {
         
         // Style
         maxNumberWarningView.backgroundColor = .ypSecondarySystemBackground
-        maxNumberWarningLabel.font = UIFont(name: "Helvetica Neue", size: 14)
+        maxNumberWarningLabel.font = YPConfig.fonts.libaryWarningFont
         maxNumberWarningView.isHidden = true
     }
     
@@ -91,8 +91,7 @@ extension YPLibraryView {
     
     class func xibView() -> YPLibraryView? {
         let bundle = Bundle(for: YPPickerVC.self)
-        let nib = UINib(nibName: "YPLibraryView",
-                        bundle: bundle)
+        let nib = UINib(nibName: "YPLibraryView", bundle: bundle)
         let xibView = nib.instantiate(withOwner: self, options: nil)[0] as? YPLibraryView
         return xibView
     }
