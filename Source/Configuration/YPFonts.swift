@@ -32,4 +32,8 @@ public struct YPFonts {
     public var filterSelectionUnSelectedFont: UIFont = .systemFont(ofSize: 11, weight: .regular)
 
     public var cameraTimeElapsedFont: UIFont = .monospacedDigitSystemFont(ofSize: 13, weight: .medium)
+
+    public var rightBarButtonFont: UIFont?
+
+    public var leftBarButtonFont: UIFont?
 }

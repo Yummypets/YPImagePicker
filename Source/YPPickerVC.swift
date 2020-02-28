@@ -272,6 +272,11 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
                                                                 target: self,
                                                                 action: #selector(done))
             navigationItem.rightBarButtonItem?.tintColor = YPConfig.colors.tintColor
+
+            if let rightBarButtonFont = YPConfig.fonts.rightBarButtonFont {
+                navigationItem.rightBarButtonItem?.setTitleTextAttributes([NSAttributedString.Key.font: rightBarButtonFont], for: .normal)
+            }
+
             
             // Disable Next Button until minNumberOfItems is reached.
             navigationItem.rightBarButtonItem?.isEnabled = libraryVC!.selection.count >= YPConfig.library.minNumberOfItems
@@ -284,6 +289,14 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
             navigationItem.titleView = nil
             title = videoVC?.title
             navigationItem.rightBarButtonItem = nil
+        }
+
+        if let rightBarButtonFont = YPConfig.fonts.rightBarButtonFont {
+            navigationItem.rightBarButtonItem?.setTitleTextAttributes([NSAttributedString.Key.font: rightBarButtonFont], for: .normal)
+        }
+
+        if let leftBarButtonFont =  YPConfig.fonts.leftBarButtonFont {
+            navigationItem.leftBarButtonItem?.setTitleTextAttributes([NSAttributedString.Key.font: leftBarButtonFont], for: .normal)
         }
     }
     
