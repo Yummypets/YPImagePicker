@@ -315,7 +315,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         delegate?.libraryViewStartedLoadingImage()
         
         let completion = { (isLowResIntermediaryImage: Bool) in
-            self.v.hideGrid()
+            self.v.hideOverlayView()
             self.v.assetViewContainer.refreshSquareCropButton()
             self.updateCropInfo()
             if !isLowResIntermediaryImage {

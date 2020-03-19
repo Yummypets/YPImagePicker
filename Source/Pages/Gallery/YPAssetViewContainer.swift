@@ -14,7 +14,7 @@ import AVFoundation
 /// The container for asset (video or image). It containts the YPGridView and YPAssetZoomableView.
 class YPAssetViewContainer: UIView {
     public var zoomableView: YPAssetZoomableView?
-    public let grid = YPGridView()
+    public var itemOverlay: UIView?
     public let curtain = UIView()
     public let spinnerView = UIView()
     public let squareCropButton = UIButton()
@@ -26,17 +26,24 @@ class YPAssetViewContainer: UIView {
     private var shouldCropToSquare = YPConfig.library.isSquareByDefault
     private var isMultipleSelection = false
 
-    public var showGrid = YPConfig.library.showGrid
+    public var itemOverlayType = YPConfig.library.itemOverlayType
     
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        if showGrid {
-            addSubview(grid)
-            grid.frame = frame
+        switch itemOverlayType {
+        case .grid:
+            itemOverlay = YPGridView()
+        default:
+            break
+        }
+        
+        if let itemOverlay = itemOverlay {
+            addSubview(itemOverlay)
+            itemOverlay.frame = frame
             clipsToBounds = true
             
-            grid.alpha = 0
+            itemOverlay.alpha = 0
         }
         
         for sv in subviews {
@@ -129,10 +136,10 @@ extension YPAssetViewContainer: YPAssetZoomableViewDelegate {
     public func ypAssetZoomableViewDidLayoutSubviews(_ zoomableView: YPAssetZoomableView) {
         let newFrame = zoomableView.assetImageView.convert(zoomableView.assetImageView.bounds, to: self)
         
-        if showGrid {
+        if let itemOverlay = itemOverlay {
             // update grid position
-            grid.frame = frame.intersection(newFrame)
-            grid.layoutIfNeeded()
+            itemOverlay.frame = frame.intersection(newFrame)
+            itemOverlay.layoutIfNeeded()
         }
         
         // Update play imageView position - bringing the playImageView from the videoView to assetViewContainer,
@@ -144,22 +151,22 @@ extension YPAssetViewContainer: YPAssetZoomableViewDelegate {
     }
     
     public func ypAssetZoomableViewScrollViewDidZoom() {
-        guard showGrid else {
+        guard let itemOverlay = itemOverlay else {
             return
         }
         if isShown {
             UIView.animate(withDuration: 0.1) {
-                self.grid.alpha = 1
+                itemOverlay.alpha = 1
             }
         }
     }
     
     public func ypAssetZoomableViewScrollViewDidEndZooming() {
-        guard showGrid else {
+        guard let itemOverlay = itemOverlay else {
             return
         }
         UIView.animate(withDuration: 0.3) {
-            self.grid.alpha = 0
+            itemOverlay.alpha = 0
         }
     }
 }
@@ -177,19 +184,19 @@ extension YPAssetViewContainer: UIGestureRecognizerDelegate {
     
     @objc
     private func handleTouchDown(sender: UILongPressGestureRecognizer) {
-        guard showGrid else {
+        guard let itemOverlay = itemOverlay else {
             return
         }
         switch sender.state {
         case .began:
             if isShown {
                 UIView.animate(withDuration: 0.1) {
-                    self.grid.alpha = 1
+                    itemOverlay.alpha = 1
                 }
             }
         case .ended:
             UIView.animate(withDuration: 0.3) {
-                self.grid.alpha = 0
+                itemOverlay.alpha = 0
             }
         default: ()
         }

@@ -199,8 +199,8 @@ public struct YPConfigLibrary {
     /// Allow to preselected media items
     public var preselectedItems: [YPMediaItem]?
     
-    /// Show or hide the grid show on top of the selected item
-    public var showGrid: Bool = true
+    /// Set the overlay type shown on top of the selected library item
+    public var itemOverlayType: YPItemOverlayType = .grid
 }
 
 /// Encapsulates video specific settings.
@@ -236,6 +236,11 @@ public struct YPConfigVideo {
 public struct YPConfigSelectionsGallery {
     /// Defines if the remove button should be hidden when showing the gallery. Default is true.
     public var hidesRemoveButton = true
+}
+
+public enum YPItemOverlayType {
+    case none
+    case grid
 }
 
 public enum YPlibraryMediaType {

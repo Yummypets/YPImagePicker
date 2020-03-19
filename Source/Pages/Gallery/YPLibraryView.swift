@@ -97,10 +97,10 @@ extension YPLibraryView {
         return xibView
     }
     
-    // MARK: - Grid
+    // MARK: - Overlay view
     
-    func hideGrid() {
-        assetViewContainer.grid.alpha = 0
+    func hideOverlayView() {
+        assetViewContainer.itemOverlay?.alpha = 0
     }
     
     // MARK: - Loader and progress
