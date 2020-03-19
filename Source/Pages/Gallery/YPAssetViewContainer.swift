@@ -26,12 +26,18 @@ class YPAssetViewContainer: UIView {
     private var shouldCropToSquare = YPConfig.library.isSquareByDefault
     private var isMultipleSelection = false
 
+    public var showGrid = YPConfig.library.showGrid
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        addSubview(grid)
-        grid.frame = frame
-        clipsToBounds = true
+        if showGrid {
+            addSubview(grid)
+            grid.frame = frame
+            clipsToBounds = true
+            
+            grid.alpha = 0
+        }
         
         for sv in subviews {
             if let cv = sv as? YPAssetZoomableView {
@@ -39,8 +45,6 @@ class YPAssetViewContainer: UIView {
                 zoomableView?.myDelegate = self
             }
         }
-        
-        grid.alpha = 0
         
         let touchDownGR = UILongPressGestureRecognizer(target: self,
                                                        action: #selector(handleTouchDown))
@@ -125,9 +129,11 @@ extension YPAssetViewContainer: YPAssetZoomableViewDelegate {
     public func ypAssetZoomableViewDidLayoutSubviews(_ zoomableView: YPAssetZoomableView) {
         let newFrame = zoomableView.assetImageView.convert(zoomableView.assetImageView.bounds, to: self)
         
-        // update grid position
-        grid.frame = frame.intersection(newFrame)
-        grid.layoutIfNeeded()
+        if showGrid {
+            // update grid position
+            grid.frame = frame.intersection(newFrame)
+            grid.layoutIfNeeded()
+        }
         
         // Update play imageView position - bringing the playImageView from the videoView to assetViewContainer,
         // but the controll for appearing it still in videoView.
@@ -138,6 +144,9 @@ extension YPAssetViewContainer: YPAssetZoomableViewDelegate {
     }
     
     public func ypAssetZoomableViewScrollViewDidZoom() {
+        guard showGrid else {
+            return
+        }
         if isShown {
             UIView.animate(withDuration: 0.1) {
                 self.grid.alpha = 1
@@ -146,6 +155,9 @@ extension YPAssetViewContainer: YPAssetZoomableViewDelegate {
     }
     
     public func ypAssetZoomableViewScrollViewDidEndZooming() {
+        guard showGrid else {
+            return
+        }
         UIView.animate(withDuration: 0.3) {
             self.grid.alpha = 0
         }
@@ -165,6 +177,9 @@ extension YPAssetViewContainer: UIGestureRecognizerDelegate {
     
     @objc
     private func handleTouchDown(sender: UILongPressGestureRecognizer) {
+        guard showGrid else {
+            return
+        }
         switch sender.state {
         case .began:
             if isShown {

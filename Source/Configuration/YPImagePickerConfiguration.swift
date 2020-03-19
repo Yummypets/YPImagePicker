@@ -198,6 +198,9 @@ public struct YPConfigLibrary {
     
     /// Allow to preselected media items
     public var preselectedItems: [YPMediaItem]?
+    
+    /// Show or hide the grid show on top of the selected item
+    public var showGrid: Bool = true
 }
 
 /// Encapsulates video specific settings.
