@@ -93,7 +93,7 @@ final class YPAssetZoomableView: UIScrollView {
             strongSelf.currentAsset = video
 
             strongSelf.videoView.loadVideo(playerItem)
-            strongSelf.videoView.play()
+            strongSelf.videoView.pause()
         }
     }
     
