@@ -273,11 +273,6 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
                                                                 action: #selector(done))
             navigationItem.rightBarButtonItem?.tintColor = YPConfig.colors.tintColor
 
-            if let rightBarButtonFont = YPConfig.fonts.rightBarButtonFont {
-                navigationItem.rightBarButtonItem?.setTitleTextAttributes([NSAttributedString.Key.font: rightBarButtonFont], for: .normal)
-            }
-
-            
             // Disable Next Button until minNumberOfItems is reached.
             navigationItem.rightBarButtonItem?.isEnabled = libraryVC!.selection.count >= YPConfig.library.minNumberOfItems
 
@@ -291,13 +286,9 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
             navigationItem.rightBarButtonItem = nil
         }
 
-        if let rightBarButtonFont = YPConfig.fonts.rightBarButtonFont {
-            navigationItem.rightBarButtonItem?.setTitleTextAttributes([NSAttributedString.Key.font: rightBarButtonFont], for: .normal)
-        }
-
-        if let leftBarButtonFont =  YPConfig.fonts.leftBarButtonFont {
-            navigationItem.leftBarButtonItem?.setTitleTextAttributes([NSAttributedString.Key.font: leftBarButtonFont], for: .normal)
-        }
+        navigationItem.rightBarButtonItem?.setFont(font: YPConfig.fonts.rightBarButtonFont, forState: .normal)
+        navigationItem.rightBarButtonItem?.setFont(font: YPConfig.fonts.rightBarButtonFont, forState: .disabled)
+        navigationItem.leftBarButtonItem?.setFont(font: YPConfig.fonts.leftBarButtonFont, forState: .normal)
     }
     
     @objc

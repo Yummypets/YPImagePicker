@@ -33,7 +33,11 @@ public struct YPFonts {
 
     public var cameraTimeElapsedFont: UIFont = .monospacedDigitSystemFont(ofSize: 13, weight: .medium)
 
+    public var navigationBarTitleFont: UIFont?
+
+    /// The font used in the UINavigationBar rightBarButtonItem
     public var rightBarButtonFont: UIFont?
 
+    /// The font used in the UINavigationBar leftBarButtonItem
     public var leftBarButtonFont: UIFont?
 }

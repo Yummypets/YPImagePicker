@@ -45,6 +45,9 @@ public class YPSelectionsGalleryVC: UIViewController, YPSelectionsGalleryCellDel
                                                             target: self,
                                                             action: #selector(done))
         navigationItem.rightBarButtonItem?.tintColor = YPConfig.colors.tintColor
+        navigationItem.rightBarButtonItem?.setFont(font: YPConfig.fonts.rightBarButtonFont, forState: .disabled)
+        navigationItem.rightBarButtonItem?.setFont(font: YPConfig.fonts.rightBarButtonFont, forState: .normal)
+        navigationController?.navigationBar.setTitleFont(font: YPConfig.fonts.navigationBarTitleFont)
         
         YPHelper.changeBackButtonIcon(self)
         YPHelper.changeBackButtonTitle(self)
