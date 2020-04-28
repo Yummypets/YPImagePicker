@@ -183,9 +183,9 @@
 				TargetAttributes = {
 					99428A051E7BE02400B765A9 = {
 						CreatedOnToolsVersion = 8.2;
-						DevelopmentTeam = 4TATSTJ3J3;
+						DevelopmentTeam = T46W2Z6KNS;
 						LastSwiftMigration = 1020;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -441,8 +441,8 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 4TATSTJ3J3;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = T46W2Z6KNS;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/../Carthage/Build/iOS",
@@ -451,9 +451,9 @@
 				INFOPLIST_FILE = YPImagePickerExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = test.YPImagePickerExample2;
+				PRODUCT_BUNDLE_IDENTIFIER = CreateChina;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "match Development CreateChina";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -464,8 +464,8 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 4TATSTJ3J3;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = T46W2Z6KNS;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/../Carthage/Build/iOS",
@@ -474,9 +474,9 @@
 				INFOPLIST_FILE = YPImagePickerExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = test.YPImagePickerExample2;
+				PRODUCT_BUNDLE_IDENTIFIER = CreateChina;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "match Development CreateChina";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
