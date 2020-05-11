@@ -121,7 +121,8 @@ class LibraryMediaManager {
                 exportSession?.outputFileType = YPConfig.video.fileType
                 exportSession?.shouldOptimizeForNetworkUse = true
                 exportSession?.videoComposition = videoComposition
-                exportSession?.outputURL = URL(fileURLWithPath: NSTemporaryDirectory())
+                let dirPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+                exportSession?.outputURL = URL(fileURLWithPath: dirPath[0])
                     .appendingUniquePathComponent(pathExtension: YPConfig.video.fileType.fileExtension)
                 
                 // 6. Exporting

@@ -126,7 +126,8 @@ public class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
             
             // Looks like file:///private/var/mobile/Containers/Data/Application
             // /FAD486B4-784D-4397-B00C-AD0EFFB45F52/tmp/8A2B410A-BD34-4E3F-8CB5-A548A946C1F1.mov
-            let destinationURL = URL(fileURLWithPath: NSTemporaryDirectory())
+            let dirPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+            let destinationURL = URL(fileURLWithPath: dirPath[0])
                 .appendingUniquePathComponent(pathExtension: YPConfig.video.fileType.fileExtension)
             
             try trimmedAsset.export(to: destinationURL) { [weak self] in

@@ -30,14 +30,36 @@ public class YPMediaPhoto {
     }
 }
 
-public class YPMediaVideo {
+public class YPMediaVideo: NSObject, NSCoding {
+
+    
+    public func encode(with coder: NSCoder) {
+        let encodedData = NSKeyedArchiver.archivedData(withRootObject: thumbnail)
+        coder.encode(encodedData, forKey: "thumbnailImage")
+        coder.encode(url, forKey: "url")
+        coder.encode(fromCamera, forKey: "fromCamera")
+    }
+    
+    public required init?(coder aDecoder: NSCoder) {
+        thumbnail = UIImage()
+        url = URL(string: "http://en.wikipedia.org/wiki/")!
+        if let data = aDecoder.decodeObject(forKey: "thumbnailImage") as? Data, let thumbnailImg = NSKeyedUnarchiver.unarchiveObject(with: data) as? UIImage {
+            thumbnail = thumbnailImg
+        }
+        if let videoURL = aDecoder.decodeObject(forKey: "url") as? URL {
+            url = videoURL
+        }
+        fromCamera = aDecoder.decodeObject(forKey: "fromCamera") as? Bool ?? false
+        asset = nil
+    }
+    
     
     public var thumbnail: UIImage
     public var url: URL
     public let fromCamera: Bool
     public var asset: PHAsset?
 
-    init(thumbnail: UIImage, videoURL: URL, fromCamera: Bool = false, asset: PHAsset? = nil) {
+    public init(thumbnail: UIImage, videoURL: URL, fromCamera: Bool = false, asset: PHAsset? = nil) {
         self.thumbnail = thumbnail
         self.url = videoURL
         self.fromCamera = fromCamera
