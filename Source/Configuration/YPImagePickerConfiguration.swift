@@ -203,7 +203,17 @@ public struct YPConfigLibrary {
 /// Encapsulates video specific settings.
 public struct YPConfigVideo {
     
-    /// Choose the videoCompression.  Defaults to AVAssetExportPresetHighestQuality
+    /** Choose the videoCompression. Defaults to AVAssetExportPresetHighestQuality
+     - "AVAssetExportPresetLowQuality"
+     - "AVAssetExportPreset640x480"
+     - "AVAssetExportPresetMediumQuality"
+     - "AVAssetExportPreset1920x1080"
+     - "AVAssetExportPreset1280x720"
+     - "AVAssetExportPresetHighestQuality"
+     - "AVAssetExportPresetAppleM4A"
+     - "AVAssetExportPreset3840x2160"
+     - "AVAssetExportPreset960x540"
+     */
     public var compression: String = AVAssetExportPresetHighestQuality
     
     /// Choose the result video extension if you trim or compress a video. Defaults to mov.
