@@ -259,14 +259,14 @@ UINavigationBar.appearance().setBackgroundImage(coloredImage, for: UIBarMetrics.
 
 ### Navigation bar fonts
 ```swift
-let attributes = [NSAttributedStringKey.font : UIFont.systemFont(ofSize: 30, weight: .bold) ]
+let attributes = [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 30, weight: .bold) ]
 UINavigationBar.appearance().titleTextAttributes = attributes // Title fonts
 UIBarButtonItem.appearance().setTitleTextAttributes(attributes, for: .normal) // Bar Button fonts
 ```
 
 ### Navigation bar Text colors
 ```swift
-UINavigationBar.appearance().titleTextAttributes = [NSAttributedStringKey.foregroundColor : UIColor.yellow ] // Title color
+UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.yellow ] // Title color
 UINavigationBar.appearance().tintColor = .red // Left. bar buttons
 config.colors.tintColor = .green // Right bar buttons (actions)
 ```
