@@ -98,6 +98,9 @@ class LibraryMediaManager {
                 // Layer Instructions
                 let layerInstructions = AVMutableVideoCompositionLayerInstruction(assetTrack: videoCompositionTrack)
                 var transform = videoTrack.preferredTransform
+                let videoSize = videoTrack.naturalSize.applying(transform)
+                transform.tx = (videoSize.width < 0) ? abs(videoSize.width) : 0.0
+                transform.ty = (videoSize.height < 0) ? abs(videoSize.height) : 0.0
                 transform.tx -= cropRect.minX
                 transform.ty -= cropRect.minY
                 layerInstructions.setTransform(transform, at: CMTime.zero)
