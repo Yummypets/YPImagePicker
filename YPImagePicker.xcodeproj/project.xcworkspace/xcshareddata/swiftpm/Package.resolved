@@ -1,0 +1,25 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "PryntTrimmerView",
+        "repositoryURL": "https://github.com/Yummypets/PryntTrimmerView",
+        "state": {
+          "branch": null,
+          "revision": "75815f9bf577879b3d0d1e0014c8701b8ab6bf6b",
+          "version": "5.0.0"
+        }
+      },
+      {
+        "package": "Stevia",
+        "repositoryURL": "https://github.com/freshOS/Stevia",
+        "state": {
+          "branch": null,
+          "revision": "d066d9e7a718e2a087985695b68b212ad2defa57",
+          "version": "5.0.1"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

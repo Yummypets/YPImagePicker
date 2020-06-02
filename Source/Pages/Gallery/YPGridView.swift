@@ -6,6 +6,7 @@
 //  Copyright © 2016 Yummypets. All rights reserved.
 //
 
+import UIKit
 import Stevia
 
 class YPGridView: UIView {
