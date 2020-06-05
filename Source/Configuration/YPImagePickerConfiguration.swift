@@ -213,6 +213,7 @@ public struct YPConfigVideo {
      - "AVAssetExportPresetAppleM4A"
      - "AVAssetExportPreset3840x2160"
      - "AVAssetExportPreset960x540"
+     - "AVAssetExportPresetPassthrough" // without any compression
      */
     public var compression: String = AVAssetExportPresetHighestQuality
     
