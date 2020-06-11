@@ -157,8 +157,11 @@ extension YPLibraryView {
     }
     
     func cellSize() -> CGSize {
-        let hack_ScreenWidth : CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 500 : UIScreen.main.bounds.width
-        let size = hack_ScreenWidth / 4 * UIScreen.main.scale
+        var screenWidth : CGFloat = UIScreen.main.bounds.width
+        if UIDevice.current.userInterfaceIdiom == .pad && YPImagePickerConfiguration.widthOniPad > 0 {
+            screenWidth =  YPImagePickerConfiguration.widthOniPad
+        }
+        let size = screenWidth / 4 * UIScreen.main.scale
         return CGSize(width: size, height: size)
     }
 }

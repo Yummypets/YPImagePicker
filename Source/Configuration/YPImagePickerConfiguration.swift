@@ -17,6 +17,19 @@ internal var YPConfig: YPImagePickerConfiguration { return YPImagePickerConfigur
 public struct YPImagePickerConfiguration {
     public static var shared: YPImagePickerConfiguration = YPImagePickerConfiguration()
     
+    
+    public static var widthOniPad : CGFloat = -1
+    
+    public static var screenWidth : CGFloat {
+        get {
+            var screenWidth : CGFloat = UIScreen.main.bounds.width
+            if UIDevice.current.userInterfaceIdiom == .pad && YPImagePickerConfiguration.widthOniPad > 0 {
+                screenWidth =  YPImagePickerConfiguration.widthOniPad
+            }
+            return screenWidth
+        }
+    }
+    
     public init() {}
     
     /// Scroll to change modes, defaults to true

@@ -142,8 +142,9 @@ final class YPAssetZoomableView: UIScrollView {
         self.zoomScale = 1
         
         // Calculating and setting the image view frame depending on screenWidth
-        let hack_ScreenWidth : CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 500 : UIScreen.main.bounds.width
-        let screenWidth: CGFloat = hack_ScreenWidth
+        var screenWidth = YPImagePickerConfiguration.screenWidth
+        
+        
         let w = image.size.width
         let h = image.size.height
 
