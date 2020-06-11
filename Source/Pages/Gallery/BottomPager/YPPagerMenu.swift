@@ -23,7 +23,8 @@ final class YPPagerMenu: UIView {
     var separators = [UIView]()
     
     func setUpMenuItemsConstraints() {
-        let menuItemWidth: CGFloat = UIScreen.main.bounds.width / CGFloat(menuItems.count)
+        let hack_ScreenWidth : CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 500 : UIScreen.main.bounds.width
+        let menuItemWidth: CGFloat = hack_ScreenWidth / CGFloat(menuItems.count)
         var previousMenuItem: YPMenuItem?
         for m in menuItems {
             sv(
