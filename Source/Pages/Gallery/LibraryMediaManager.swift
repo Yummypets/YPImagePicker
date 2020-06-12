@@ -65,7 +65,7 @@ class LibraryMediaManager {
         }
     }
     
-    func fetchVideoUrlAndCrop(for videoAsset: PHAsset, cropRect: CGRect, callback: @escaping (URL) -> Void) {
+    func fetchVideoUrlAndCrop(for videoAsset: PHAsset, cropRect: CGRect, callback: @escaping (_ videoURL: URL?) -> Void) {
         let videosOptions = PHVideoRequestOptions()
         videosOptions.isNetworkAccessAllowed = true
         videosOptions.deliveryMode = .highQualityFormat
@@ -98,6 +98,9 @@ class LibraryMediaManager {
                 // Layer Instructions
                 let layerInstructions = AVMutableVideoCompositionLayerInstruction(assetTrack: videoCompositionTrack)
                 var transform = videoTrack.preferredTransform
+                let videoSize = videoTrack.naturalSize.applying(transform)
+                transform.tx = (videoSize.width < 0) ? abs(videoSize.width) : 0.0
+                transform.ty = (videoSize.height < 0) ? abs(videoSize.height) : 0.0
                 transform.tx -= cropRect.minX
                 transform.ty -= cropRect.minY
                 layerInstructions.setTransform(transform, at: CMTime.zero)
@@ -113,15 +116,35 @@ class LibraryMediaManager {
                 videoComposition.renderSize = cropRect.size // needed? 
                 
                 // 5. Configuring export session
-                
-                let exportSession = AVAssetExportSession(asset: assetComposition,
-                                                         presetName: YPConfig.video.compression)
-                exportSession?.outputFileType = YPConfig.video.fileType
-                exportSession?.shouldOptimizeForNetworkUse = true
-                exportSession?.videoComposition = videoComposition
-                exportSession?.outputURL = URL(fileURLWithPath: NSTemporaryDirectory())
+
+                let fileURL = URL(fileURLWithPath: NSTemporaryDirectory())
                     .appendingUniquePathComponent(pathExtension: YPConfig.video.fileType.fileExtension)
-                
+                let exportSession = assetComposition
+                    .export(to: fileURL,
+                            videoComposition: videoComposition,
+                            removeOldFile: true) { [weak self] session in
+                                DispatchQueue.main.async {
+                                    switch session.status {
+                                    case .completed:
+                                        if let url = session.outputURL {
+                                            if let index = self?.currentExportSessions.firstIndex(of: session) {
+                                                self?.currentExportSessions.remove(at: index)
+                                            }
+                                            callback(url)
+                                        } else {
+                                            print("LibraryMediaManager -> Don't have URL.")
+                                            callback(nil)
+                                        }
+                                    case .failed:
+                                        print("LibraryMediaManager -> Export of the video failed. Reason: \(String(describing: session.error))")
+                                        callback(nil)
+                                    default:
+                                        print("LibraryMediaManager -> Export session completed with \(session.status) status. Not handling.")
+                                        callback(nil)
+                                    }
+                                }
+                }
+
                 // 6. Exporting
                 DispatchQueue.main.async {
                     self.exportTimer = Timer.scheduledTimer(timeInterval: 0.1,
@@ -130,21 +153,10 @@ class LibraryMediaManager {
                                                             userInfo: exportSession,
                                                             repeats: true)
                 }
-                
-                self.currentExportSessions.append(exportSession!)
-                exportSession?.exportAsynchronously(completionHandler: {
-                    DispatchQueue.main.async {
-                        if let url = exportSession?.outputURL, exportSession?.status == .completed {
-                            callback(url)
-                            if let index = self.currentExportSessions.firstIndex(of:exportSession!) {
-                                self.currentExportSessions.remove(at: index)
-                            }
-                        } else {
-                            let error = exportSession?.error
-                            print("error exporting video \(String(describing: error))")
-                        }
-                    }
-                })
+
+                if let s = exportSession {
+                    self.currentExportSessions.append(s)
+                }
             } catch let error {
                 print("⚠️ PHCachingImageManager >>> \(error)")
             }

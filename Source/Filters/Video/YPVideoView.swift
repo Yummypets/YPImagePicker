@@ -65,7 +65,7 @@ public class YPVideoView: UIView {
     
     override public func layoutSubviews() {
         super.layoutSubviews()
-        playerLayer.frame = playerView.frame
+        playerLayer.frame = playerView.bounds
     }
     
     @objc internal func singleTap() {
@@ -98,6 +98,7 @@ extension YPVideoView {
         
         playerLayer.player = player
         playerView.alpha = 1
+        setNeedsLayout()
     }
     
     /// Convenience func to pause or unpause video dependely of state

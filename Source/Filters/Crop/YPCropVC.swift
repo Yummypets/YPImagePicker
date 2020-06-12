@@ -56,6 +56,8 @@ class YPCropVC: UIViewController {
                                            style: .plain,
                                            target: self,
                                            action: #selector(done))
+        saveButton.tintColor = .ypLabel
+        
         v.toolbar.items = [cancelButton, flexibleSpace, saveButton]
     }
     
