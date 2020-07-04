@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clipsSubviews="YES" contentMode="scaleToFill" id="iN0-l3-epB" customClass="YPLibraryView" customModule="YPImagePicker" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="400" height="550"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Cu-Zp-X0j">
+                    <rect key="frame" x="0.0" y="0.0" width="400" height="550"/>
+                    <subviews>
+                        <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="6id-Ro-HHC">
+                            <rect key="frame" x="0.0" y="400" width="400" height="150"/>
+                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                            <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="1" minimumInteritemSpacing="1" id="jnu-mn-3OB">
+                                <size key="itemSize" width="60" height="60"/>
+                                <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                            </collectionViewFlowLayout>
+                        </collectionView>
+                    </subviews>
+                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="bottom" secondItem="6id-Ro-HHC" secondAttribute="bottom" id="H2u-OW-Xid"/>
+                        <constraint firstAttribute="trailing" secondItem="6id-Ro-HHC" secondAttribute="trailing" id="fKl-55-Q4t"/>
+                        <constraint firstItem="6id-Ro-HHC" firstAttribute="leading" secondItem="9Cu-Zp-X0j" secondAttribute="leading" id="l5I-IF-1rx"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="90B-0c-ych" userLabel="Image Crop View Container" customClass="YPAssetViewContainer" customModule="YPImagePicker" customModuleProvider="target">
+                    <rect key="frame" x="0.0" y="0.0" width="400" height="400"/>
+                    <subviews>
+                        <scrollView multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Mc5-1c-z7q" customClass="YPAssetZoomableView" customModule="YPImagePicker" customModuleProvider="target">
+                            <rect key="frame" x="0.0" y="0.0" width="400" height="400"/>
+                            <constraints>
+                                <constraint firstAttribute="width" secondItem="Mc5-1c-z7q" secondAttribute="height" multiplier="1:1" id="Tue-WW-idi"/>
+                            </constraints>
+                        </scrollView>
+                    </subviews>
+                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstItem="Mc5-1c-z7q" firstAttribute="leading" secondItem="90B-0c-ych" secondAttribute="leading" id="1DN-yd-Kyl"/>
+                        <constraint firstAttribute="bottom" secondItem="Mc5-1c-z7q" secondAttribute="bottom" id="1Yc-V1-EBB"/>
+                        <constraint firstItem="Mc5-1c-z7q" firstAttribute="top" secondItem="90B-0c-ych" secondAttribute="top" id="Jn1-QR-IAN"/>
+                        <constraint firstAttribute="width" secondItem="90B-0c-ych" secondAttribute="height" multiplier="1:1" id="coZ-5v-rE3"/>
+                        <constraint firstAttribute="trailing" secondItem="Mc5-1c-z7q" secondAttribute="trailing" id="sKD-NK-t20"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="6id-Ro-HHC" firstAttribute="top" secondItem="Mc5-1c-z7q" secondAttribute="bottom" id="2VS-x4-Kjb"/>
+                <constraint firstAttribute="trailing" secondItem="90B-0c-ych" secondAttribute="trailing" id="7re-q7-aoD"/>
+                <constraint firstAttribute="bottom" secondItem="9Cu-Zp-X0j" secondAttribute="bottom" id="94b-v2-S3a"/>
+                <constraint firstItem="90B-0c-ych" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="Nqq-tJ-MXy"/>
+                <constraint firstAttribute="trailing" secondItem="9Cu-Zp-X0j" secondAttribute="trailing" id="Uhw-Pi-jJn"/>
+                <constraint firstItem="9Cu-Zp-X0j" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="gu4-5B-2qu"/>
+                <constraint firstItem="90B-0c-ych" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="u5j-7G-j99"/>
+                <constraint firstItem="9Cu-Zp-X0j" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="zCK-Xd-fZp"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="assetViewContainer" destination="90B-0c-ych" id="75y-1t-G37"/>
+                <outlet property="assetViewContainerConstraintTop" destination="u5j-7G-j99" id="FfD-fg-8ch"/>
+                <outlet property="assetZoomableView" destination="Mc5-1c-z7q" id="sGM-mc-f2B"/>
+                <outlet property="collectionView" destination="6id-Ro-HHC" id="NDT-3i-ayr"/>
+            </connections>
+        </view>
+    </objects>
+</document>

@@ -12,25 +12,38 @@ class YPFiltersView: UIView {
     
     let imageView = UIImageView()
     var collectionView: UICollectionView!
+    var filtersLoader: UIActivityIndicatorView!
+    fileprivate let collectionViewContainer: UIView = UIView()
     
     convenience init() {
         self.init(frame: CGRect.zero)
         collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout())
+        filtersLoader = UIActivityIndicatorView(style: .gray)
+        filtersLoader.hidesWhenStopped = true
+        filtersLoader.startAnimating()
+        filtersLoader.color = YPConfig.colors.tintColor
         
         sv(
             imageView,
-            collectionView
+            collectionViewContainer.sv(
+                filtersLoader,
+                collectionView
+            )
         )
         
         let isIphone4 = UIScreen.main.bounds.height == 480
         let sideMargin: CGFloat = isIphone4 ? 20 : 0
         
         |-sideMargin-imageView.top(0)-sideMargin-|
-        |collectionView.bottom(42).height(160)|
+        |-sideMargin-collectionViewContainer-sideMargin-|
+        collectionViewContainer.bottom(0)
+        imageView.Bottom == collectionViewContainer.Top
+        |collectionView.centerVertically().height(160)|
+        filtersLoader.centerInContainer()
         
         imageView.heightEqualsWidth()
         
-        backgroundColor = UIColor(r: 247, g: 247, b: 247)
+        backgroundColor = .offWhiteOrBlack
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         collectionView.backgroundColor = .clear

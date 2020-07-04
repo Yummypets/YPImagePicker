@@ -8,97 +8,82 @@
 
 import Foundation
 import Stevia
+import Photos
 
-var flashOffImage: UIImage?
-var flashOnImage: UIImage?
-var flashAutoImage: UIImage?
-var videoStartImage: UIImage?
-var videoStopImage: UIImage?
-
-extension UIColor {
-    convenience init(r: CGFloat, g: CGFloat, b: CGFloat, a: CGFloat = 1.0) {
-        self.init(red: r / 255.0, green: g / 255.0, blue: b / 255.0, alpha: a)
-    }
+protocol ImagePickerDelegate: AnyObject {
+    func noPhotos()
 }
 
-public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
+open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     
-    private let configuration: YPImagePickerConfiguration!
-    public required init(configuration: YPImagePickerConfiguration) {
-        self.configuration = configuration
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    public required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
+    let albumsManager = YPAlbumsManager()
     var shouldHideStatusBar = false
     var initialStatusBarHidden = false
+    weak var imagePickerDelegate: ImagePickerDelegate?
     
-    override public var prefersStatusBarHidden: Bool {
-        return (shouldHideStatusBar || initialStatusBarHidden) && configuration.hidesStatusBar
+    override open var prefersStatusBarHidden: Bool {
+        return (shouldHideStatusBar || initialStatusBarHidden) && YPConfig.hidesStatusBar
     }
     
+    /// Private callbacks to YPImagePicker
     public var didClose:(() -> Void)?
-    public var didSelectImage: ((UIImage, Bool) -> Void)?
-    public var didSelectVideo: ((URL) -> Void)?
+    public var didSelectItems: (([YPMediaItem]) -> Void)?
     
     enum Mode {
         case library
         case camera
         case video
     }
-
+    
     private var libraryVC: YPLibraryVC?
     private var cameraVC: YPCameraVC?
-    private var videoVC: YPVideoVC?
+    private var videoVC: YPVideoCaptureVC?
     
     var mode = Mode.camera
     
     var capturedImage: UIImage?
     
-    func imageFromBundle(_ named: String) -> UIImage {
-        let bundle = Bundle(for: self.classForCoder)
-        return UIImage(named: named, in: bundle, compatibleWith: nil) ?? UIImage()
-    }
-    
-    public override func viewDidLoad() {
+    open override func viewDidLoad() {
         super.viewDidLoad()
 
-        flashOnImage = imageFromBundle("yp_iconFlash_on")
-        flashOffImage = imageFromBundle("yp_iconFlash_off")
-        flashAutoImage = imageFromBundle("yp_iconFlash_auto")
+        view.backgroundColor = YPConfig.colors.safeAreaBackgroundColor
         
-        view.backgroundColor = UIColor(r: 247, g: 247, b: 247)
-
         delegate = self
         
+        // Force Library only when using `minNumberOfItems`.
+        if YPConfig.library.minNumberOfItems > 1 {
+            YPImagePickerConfiguration.shared.screens = [.library]
+        }
+        
         // Library
-        if configuration.screens.contains(.library) {
-            libraryVC = YPLibraryVC(configuration: configuration)
+        if YPConfig.screens.contains(.library) {
+            libraryVC = YPLibraryVC()
             libraryVC?.delegate = self
         }
         
         // Camera
-        if configuration.screens.contains(.photo) {
-            cameraVC = YPCameraVC(configuration: configuration)
-            cameraVC?.didCapturePhoto = { [unowned self] img in
-                self.didSelectImage?(img, true)
+        if YPConfig.screens.contains(.photo) {
+            cameraVC = YPCameraVC()
+            cameraVC?.didCapturePhoto = { [weak self] img in
+                self?.didSelectItems?([YPMediaItem.photo(p: YPMediaPhoto(image: img,
+                                                                        fromCamera: true))])
             }
         }
         
         // Video
-        if configuration.screens.contains(.video) {
-            videoVC = YPVideoVC(configuration: configuration)
-            videoVC?.didCaptureVideo = { [unowned self] videoURL in
-                self.didSelectVideo?(videoURL)
+        if YPConfig.screens.contains(.video) {
+            videoVC = YPVideoCaptureVC()
+            videoVC?.didCaptureVideo = { [weak self] videoURL in
+                self?.didSelectItems?([YPMediaItem
+                    .video(v: YPMediaVideo(thumbnail: thumbnailFromVideoPath(videoURL),
+                                           videoURL: videoURL,
+                                           fromCamera: true))])
             }
         }
-    
+        
         // Show screens
         var vcs = [UIViewController]()
-        for screen in configuration.screens {
+        for screen in YPConfig.screens {
             switch screen {
             case .library:
                 if let libraryVC = libraryVC {
@@ -115,10 +100,10 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
             }
         }
         controllers = vcs
-      
+        
         // Select good mode
-        if configuration.screens.contains(configuration.startOnScreen) {
-            switch configuration.startOnScreen {
+        if YPConfig.screens.contains(YPConfig.startOnScreen) {
+            switch YPConfig.startOnScreen {
             case .library:
                 mode = .library
             case .photo:
@@ -129,19 +114,22 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         }
         
         // Select good screen
-        if let index = configuration.screens.index(of: configuration.startOnScreen) {
+        if let index = YPConfig.screens.firstIndex(of: YPConfig.startOnScreen) {
             startOnPage(index)
         }
+        
+        YPHelper.changeBackButtonIcon(self)
+        YPHelper.changeBackButtonTitle(self)
+    }
+    
+    open override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        cameraVC?.v.shotButton.isEnabled = true
         
         updateMode(with: currentController)
     }
     
-    public override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        cameraVC?.v.shotButton.isEnabled = true
-    }
-    
-    public override func viewDidAppear(_ animated: Bool) {
+    open override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         shouldHideStatusBar = true
         initialStatusBarHidden = true
@@ -158,7 +146,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
             return .library
         case is YPCameraVC:
             return .camera
-        case is YPVideoVC:
+        case is YPVideoCaptureVC:
             return .video
         default:
             return .camera
@@ -176,12 +164,15 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         mode = modeFor(vc: vc)
         
         // Re-trigger permission check
-        if let vc = vc as? PermissionCheckable {
+        if let vc = vc as? YPLibraryVC {
             vc.checkPermission()
+        } else if let cameraVC = vc as? YPCameraVC {
+            cameraVC.start()
+        } else if let videoVC = vc as? YPVideoCaptureVC {
+            videoVC.start()
         }
-        
+    
         updateUI()
-        startCurrentCamera()
     }
     
     func stopCurrentCamera() {
@@ -195,18 +186,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         }
     }
     
-    func startCurrentCamera() {
-        switch mode {
-        case .library:
-            break
-        case .camera:
-            cameraVC?.tryToStartCamera()
-        case .video:
-            videoVC?.tryToStartCamera()
-        }
-    }
-    
-    public override func viewWillDisappear(_ animated: Bool) {
+    open override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         shouldHideStatusBar = false
         stopAll()
@@ -214,17 +194,14 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     
     @objc
     func navBarTapped() {
-        
-        let vc = YPAlbumVC(configuration: configuration)
-        vc.noVideos = !self.configuration.showsVideoInLibrary
+        let vc = YPAlbumVC(albumsManager: albumsManager)
         let navVC = UINavigationController(rootViewController: vc)
-
+        navVC.navigationBar.tintColor = .ypLabel
+        
         vc.didSelectAlbum = { [weak self] album in
             self?.libraryVC?.setAlbum(album)
-            self?.libraryVC?.title = album.title
-            self?.libraryVC?.refreshMediaRequest()
             self?.setTitleViewWithTitle(aTitle: album.title)
-            self?.dismiss(animated: true, completion: nil)
+            navVC.dismiss(animated: true, completion: nil)
         }
         present(navVC, animated: true, completion: nil)
     }
@@ -235,35 +212,52 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         
         let label = UILabel()
         label.text = aTitle
-        label.textColor = .black
+        // Use standard font by default.
+        label.font = UIFont.boldSystemFont(ofSize: 17)
         
+        // Use custom font if set by user.
         if let navBarTitleFont = UINavigationBar.appearance().titleTextAttributes?[.font] as? UIFont {
             // Use custom font if set by user.
             label.font = navBarTitleFont
-        } else {
-            // Use standard font by default.
-            label.font = UIFont.boldSystemFont(ofSize: 17)
+        }
+        // Use custom textColor if set by user.
+        if let navBarTitleColor = UINavigationBar.appearance().titleTextAttributes?[.foregroundColor] as? UIColor {
+            label.textColor = navBarTitleColor
         }
         
-        let arrow = UIImageView()
-        arrow.image = imageFromBundle("yp_arrow")
-        
-        let button = UIButton()
-        button.addTarget(self, action: #selector(navBarTapped), for: .touchUpInside)
-        button.setBackgroundColor(UIColor.white.withAlphaComponent(0.5), forState: .highlighted)
-        
-        titleView.sv(
-            label,
-            arrow,
-            button
-        )
+        if YPConfig.library.options != nil {
+            titleView.sv(
+                label
+            )
+            |-(>=8)-label.centerHorizontally()-(>=8)-|
+            align(horizontally: label)
+        } else {
+            let arrow = UIImageView()
+            arrow.image = YPConfig.icons.arrowDownIcon
+            arrow.image = arrow.image?.withRenderingMode(.alwaysTemplate)
+            arrow.tintColor = .ypLabel
+            
+            let attributes = UINavigationBar.appearance().titleTextAttributes
+            if let attributes = attributes, let foregroundColor = attributes[.foregroundColor] as? UIColor {
+                arrow.image = arrow.image?.withRenderingMode(.alwaysTemplate)
+                arrow.tintColor = foregroundColor
+            }
+            
+            let button = UIButton()
+            button.addTarget(self, action: #selector(navBarTapped), for: .touchUpInside)
+            button.setBackgroundColor(UIColor.white.withAlphaComponent(0.5), forState: .highlighted)
+            
+            titleView.sv(
+                label,
+                arrow,
+                button
+            )
+            button.fillContainer()
+            |-(>=8)-label.centerHorizontally()-arrow-(>=8)-|
+            align(horizontally: label-arrow)
+        }
         
         label.firstBaselineAnchor.constraint(equalTo: titleView.bottomAnchor, constant: -14).isActive = true
-        
-        button.fillContainer()
-        
-        |-(>=8)-label.centerHorizontally()-arrow-(>=8)-|
-        align(horizontally: label-arrow)
         
         titleView.heightAnchor.constraint(equalToConstant: 40).isActive = true
         navigationItem.titleView = titleView
@@ -271,18 +265,22 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     
     func updateUI() {
         // Update Nav Bar state.
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel,
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: YPConfig.wordings.cancel,
+                                                           style: .plain,
                                                            target: self,
                                                            action: #selector(close))
-        navigationItem.leftBarButtonItem?.tintColor = UIColor(r: 38, g: 38, b: 38)
         switch mode {
         case .library:
             setTitleViewWithTitle(aTitle: libraryVC?.title ?? "")
-            navigationItem.rightBarButtonItem = UIBarButtonItem(title: configuration.wordings.next,
+            navigationItem.rightBarButtonItem = UIBarButtonItem(title: YPConfig.wordings.next,
                                                                 style: .done,
                                                                 target: self,
                                                                 action: #selector(done))
-            navigationItem.rightBarButtonItem?.isEnabled = true
+            navigationItem.rightBarButtonItem?.tintColor = YPConfig.colors.tintColor
+            
+            // Disable Next Button until minNumberOfItems is reached.
+            navigationItem.rightBarButtonItem?.isEnabled = libraryVC!.selection.count >= YPConfig.library.minNumberOfItems
+
         case .camera:
             navigationItem.titleView = nil
             title = cameraVC?.title
@@ -296,25 +294,34 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     
     @objc
     func close() {
-        dismiss(animated: true) {
-            self.didClose?()
+        // Cancelling exporting of all videos
+        if let libraryVC = libraryVC {
+            libraryVC.mediaManager.forseCancelExporting()
         }
+        self.didClose?()
     }
     
+    // When pressing "Next"
     @objc
     func done() {
+        guard let libraryVC = libraryVC else { print("⚠️ YPPickerVC >>> YPLibraryVC deallocated"); return }
+        
         if mode == .library {
-            libraryVC?.doAfterPermissionCheck { [weak self] in
-                self?.libraryVC?.selectedMedia(photoCallback: { img in
-                    self?.didSelectImage?(img, false)
-                }, videoCallback: { videoURL in
-                    self?.didSelectVideo?(videoURL)
+            libraryVC.doAfterPermissionCheck { [weak self] in
+                libraryVC.selectedMedia(photoCallback: { photo in
+                    self?.didSelectItems?([YPMediaItem.photo(p: photo)])
+                }, videoCallback: { video in
+                    self?.didSelectItems?([YPMediaItem
+                        .video(v: video)])
+                }, multipleItemsCallback: { items in
+                    self?.didSelectItems?(items)
                 })
             }
         }
     }
     
     func stopAll() {
+        libraryVC?.v.assetZoomableView.videoView.deallocate()
         videoVC?.stopCamera()
         cameraVC?.stopCamera()
     }
@@ -322,39 +329,45 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
 
 extension YPPickerVC: YPLibraryViewDelegate {
     
-    public func libraryViewStartedLoadingImage() {
+    public func libraryViewDidTapNext() {
+        libraryVC?.isProcessing = true
         DispatchQueue.main.async {
-            let spinner = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: spinner)
-            spinner.startAnimating()
+            self.v.scrollView.isScrollEnabled = false
+            self.libraryVC?.v.fadeInLoader()
+            self.navigationItem.rightBarButtonItem = YPLoaders.defaultLoader
         }
     }
     
-    public func libraryViewFinishedLoadingImage() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: configuration.wordings.next,
-                                                            style: .done,
-                                                            target: self,
-                                                            action: #selector(done))
+    public func libraryViewStartedLoadingImage() {
+        libraryVC?.isProcessing = true //TODO remove to enable changing selection while loading but needs cancelling previous image requests.
+        DispatchQueue.main.async {
+            self.libraryVC?.v.fadeInLoader()
+        }
     }
     
-    public func libraryViewCameraRollUnauthorized() {
+    public func libraryViewFinishedLoading() {
+        libraryVC?.isProcessing = false
+        DispatchQueue.main.async {
+            self.v.scrollView.isScrollEnabled = YPConfig.isScrollToChangeModesEnabled
+            self.libraryVC?.v.hideLoader()
+            self.updateUI()
+        }
+    }
+    
+    public func libraryViewDidToggleMultipleSelection(enabled: Bool) {
+        var offset = v.header.frame.height
+        if #available(iOS 11.0, *) {
+            offset += v.safeAreaInsets.bottom
+        }
         
+        v.header.bottomConstraint?.constant = enabled ? offset : 0
+        v.layoutIfNeeded()
+        updateUI()
     }
-}
-
-public extension UIButton {
-    func setBackgroundColor(_ color: UIColor, forState: UIControlState) {
-        setBackgroundImage(imageWithColor(color), for: forState)
+    
+    public func noPhotosForOptions() {
+        self.dismiss(animated: true) {
+            self.imagePickerDelegate?.noPhotos()
+        }
     }
-}
-
-func imageWithColor(_ color: UIColor) -> UIImage {
-    let rect = CGRect(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
-    UIGraphicsBeginImageContext(rect.size)
-    let context = UIGraphicsGetCurrentContext()
-    context?.setFillColor(color.cgColor)
-    context?.fill(rect)
-    let image = UIGraphicsGetImageFromCurrentImageContext()
-    UIGraphicsEndImageContext()
-    return image ?? UIImage()
 }
