@@ -135,9 +135,21 @@ override open func viewDidLoad() {
             case .video(let video):
                 if YPConfig.showsVideoTrimmer {
                     let videoFiltersVC = YPVideoFiltersVC.initWith(video: video,
-                                                                   isFromSelectionVC: false)
+                                                                   isFromSelectionVC: false,
+                                                                   type:.Trimmer)
                     videoFiltersVC.didSave = { [weak self] outputMedia in
-                        self?.didSelect(items: [outputMedia])
+                        let media = [outputMedia]
+                        
+                        if let video = media.singleVideo {                            
+                            // show select cover
+                            let videoFiltersVC = YPVideoFiltersVC.initWith(video: video,
+                                                                           isFromSelectionVC: false,
+                                                                           type: .Cover)
+                            videoFiltersVC.didSave = { [weak self] outputMedia in
+                                self?.didSelect(items: [outputMedia])
+                            }
+                            self?.pushViewController(videoFiltersVC, animated: true)
+                        }
                     }
                     self?.pushViewController(videoFiltersVC, animated: true)
                 } else {
