@@ -114,7 +114,10 @@ class ExampleViewController: UIViewController {
         config.screens = [.library, .photo, .video]
         
         /* Can forbid the items with very big height with this property */
-//        config.library.minWidthForItem = UIScreen.main.bounds.width * 0.8
+        //config.library.minWidthForItem = UIScreen.main.bounds.width * 0.2
+        
+        config.library.maxAspectRatio = 3 / 2
+        config.library.minAspectRatio = 2 / 3
 
         /* Defines the time limit for recording videos.
            Default is 30 seconds. */
@@ -125,7 +128,7 @@ class ExampleViewController: UIViewController {
         config.video.libraryTimeLimit = 500.0
 
         /* Adds a Crop step in the photo taking process, after filters. Defaults to .none */
-        config.showsCrop = .rectangle(ratio: (16/9))
+        //config.showsCrop = .rectangle(ratio: (16/9))
 
         /* Defines the overlay view for the camera. Defaults to UIView(). */
         // let overlayView = UIView()

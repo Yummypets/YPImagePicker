@@ -24,6 +24,8 @@ final class YPAssetZoomableView: UIScrollView {
     public var videoView = YPVideoView()
     public var squaredZoomScale: CGFloat = 1
     public var minWidth: CGFloat? = YPConfig.library.minWidthForItem
+    public var maxAspectRatio: CGFloat? = YPConfig.library.maxAspectRatio
+    public var minAspectRatio: CGFloat? = YPConfig.library.minAspectRatio
     
     fileprivate var currentAsset: PHAsset?
     
@@ -153,6 +155,14 @@ final class YPAssetZoomableView: UIScrollView {
             aspectRatio = h / w
             view.frame.size.width = screenWidth
             view.frame.size.height = screenWidth * aspectRatio
+            
+            // if the content aspect ratio is wider than minimum, then increase zoom scale so the sides are cropped off to maintain the minimum ar
+            if let minAR = minAspectRatio {
+                if aspectRatio < minAR {
+                    let targetHeight = screenWidth * minAR
+                    zoomScale = targetHeight / view.frame.size.height
+                }
+            }
         } else if h > w { // Portrait
             aspectRatio = w / h
             view.frame.size.width = screenWidth * aspectRatio
@@ -161,6 +171,16 @@ final class YPAssetZoomableView: UIScrollView {
             if let minWidth = minWidth {
                 let k = minWidth / screenWidth
                 zoomScale = (h / w) * k
+            }
+            
+            // if the content aspect ratio is taller than maximum, then increase zoom scale so the top and bottom are cropped off to maintain the maximum ar
+            if let maxAspectRatio = maxAspectRatio {
+                aspectRatio = h / w
+                
+                if aspectRatio > maxAspectRatio {
+                    let targetWidth = view.frame.size.height / maxAspectRatio
+                    zoomScale = targetWidth / view.frame.size.width
+                }
             }
         } else { // Square
             view.frame.size.width = screenWidth
