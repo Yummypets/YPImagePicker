@@ -10,6 +10,11 @@ import UIKit
 import Photos
 import PryntTrimmerView
 
+public enum YPVideoFiltersType {
+    case Trimmer
+    case Cover
+}
+
 public class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
     
     @IBOutlet weak var trimBottomItem: YPMenuItem!
@@ -27,16 +32,19 @@ public class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
     private var playbackTimeCheckerTimer: Timer?
     private var imageGenerator: AVAssetImageGenerator?
     private var isFromSelectionVC = false
+    private var vcType: YPVideoFiltersType = .Trimmer
     
     var didSave: ((YPMediaItem) -> Void)?
     var didCancel: (() -> Void)?
 
     /// Designated initializer
     public class func initWith(video: YPMediaVideo,
-                               isFromSelectionVC: Bool) -> YPVideoFiltersVC {
+                               isFromSelectionVC: Bool,
+                               type: YPVideoFiltersType = .Trimmer) -> YPVideoFiltersVC {
         let vc = YPVideoFiltersVC(nibName: "YPVideoFiltersVC", bundle: Bundle(for: YPVideoFiltersVC.self))
         vc.inputVideo = video
         vc.isFromSelectionVC = isFromSelectionVC
+        vc.vcType = type
         
         return vc
     }
@@ -45,6 +53,9 @@ public class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
 
     override public func viewDidLoad() {
         super.viewDidLoad()
+        
+        trimBottomItem.isHidden = true
+        coverBottomItem.isHidden = true
 
         view.backgroundColor = YPConfig.colors.filterBackgroundColor
         trimmerView.mainColor = YPConfig.colors.trimmerMainColor
@@ -92,7 +103,12 @@ public class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
         coverThumbSelectorView.asset = inputAsset
         coverThumbSelectorView.delegate = self
         
-        selectTrim()
+        if vcType == .Trimmer {
+            selectTrim()
+        } else {
+            selectCover()
+        }
+        
         videoView.loadVideo(inputVideo)
 
         super.viewDidAppear(animated)
@@ -159,7 +175,7 @@ public class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
     
     // MARK: - Bottom buttons
 
-    @objc public func selectTrim() {
+    @objc private func selectTrim() {
         title = YPConfig.wordings.trim
         
         trimBottomItem.select()
@@ -171,7 +187,7 @@ public class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
         coverThumbSelectorView.isHidden = true
     }
     
-    @objc public func selectCover() {
+    @objc private func selectCover() {
         title = YPConfig.wordings.cover
         
         trimBottomItem.deselect()
