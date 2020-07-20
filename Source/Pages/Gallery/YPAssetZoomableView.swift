@@ -38,9 +38,9 @@ final class YPAssetZoomableView: UIScrollView {
     //
     /// - Parameters:
     ///   - fit: If true - zoom to show squared. If false - show full.
-    public func fitImage(_ fit: Bool, animated isAnimated: Bool = false) {
+    public func fillImage(_ fill: Bool, animated isAnimated: Bool = false) {
         squaredZoomScale = calculateSquaredZoomScale()
-        if fit {
+        if fill {
             setZoomScale(squaredZoomScale, animated: isAnimated)
         } else {
             setZoomScale(1, animated: isAnimated)
@@ -276,7 +276,7 @@ extension YPAssetZoomableView: UIScrollViewDelegate {
         
         // prevent to zoom out
         if YPConfig.library.onlySquare && scale < squaredZoomScale {
-            self.fitImage(true, animated: true)
+            self.fillImage(true, animated: true)
         }
         
         myDelegate?.ypAssetZoomableViewScrollViewDidEndZooming()
