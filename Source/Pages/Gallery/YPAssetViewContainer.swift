@@ -105,8 +105,13 @@ class YPAssetViewContainer: UIView {
             }
         }
         
+        if zoomableView?.isVideoMode == false {
+            squareCropButton.isHidden = true // hide square crop if selection is image
+            zoomableView?.fitImage(false) //
+        } else {
         let shouldFit = YPConfig.library.onlySquare ? true : shouldCropToSquare
         zoomableView?.fitImage(shouldFit)
+        }
         zoomableView?.layoutSubviews()
     }
     
