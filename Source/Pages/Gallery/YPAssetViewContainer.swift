@@ -98,10 +98,19 @@ class YPAssetViewContainer: UIView {
     public func refreshSquareCropButton() {
         if onlySquare {
             squareCropButton.isHidden = true
-        } else {
+        } else if zoomableView?.isVideoMode == true {
             if let image = zoomableView?.assetImageView.image {
                 let isImageASquare = image.size.width == image.size.height
                 squareCropButton.isHidden = isImageASquare
+                
+                if squareCropButton.isHidden == false {
+                    // animate the button
+                    squareCropButton.transform = CGAffineTransform(scaleX: 0, y: 0)
+                    
+                    UIView.animate(withDuration: 0.15) { [weak self] in
+                        self?.squareCropButton.transform = .identity
+                    }
+                }
             }
         }
         
