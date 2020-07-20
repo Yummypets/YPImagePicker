@@ -19,4 +19,4 @@
 "YPImagePickerVideoDurationTitle" = "Długość filmu";
 "YPImagePickerVideoTooLong" = "Wybierz film krótszy niż %@ s.";
 "YPImagePickerVideoTooShort" = "Film musi mieć długość co najmniej %@ s.";
-"YPImagePickerWarningItemsLimit" = "Limit to %d zdjęć lub filmów";
+"YPImagePickerWarningItemsLimit" = "Limit zdjęć lub filmów to %d";
