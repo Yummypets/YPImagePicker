@@ -311,6 +311,10 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     }
     
     func changeAsset(_ asset: PHAsset) {
+        if latestImageTapped == asset.localIdentifier {
+            return // ignore if the same asset is selected
+        }
+        
         latestImageTapped = asset.localIdentifier
         delegate?.libraryViewStartedLoadingImage()
         
