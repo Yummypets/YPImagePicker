@@ -25,7 +25,7 @@ class YPGridView: UIView {
             line4
         )
         
-        let stroke: CGFloat = 0.5
+        let stroke: CGFloat = 1.0 / UIScreen.main.scale
         line1.top(0).width(stroke).bottom(0)
         line1.Right == 33 % Right
         
@@ -38,7 +38,7 @@ class YPGridView: UIView {
         line4.left(0).height(stroke).right(0)
         line4.Bottom == 66 % Bottom
         
-        let color = UIColor.white.withAlphaComponent(0.6)
+        let color = UIColor.white.withAlphaComponent(1.0)
         line1.backgroundColor = color
         line2.backgroundColor = color
         line3.backgroundColor = color
@@ -52,8 +52,8 @@ class YPGridView: UIView {
     
     func applyShadow(to view: UIView) {
         view.layer.shadowColor = UIColor.black.cgColor
-        view.layer.shadowOpacity = 1
-        view.layer.shadowRadius = 2
+        view.layer.shadowOpacity = 0.25
+        view.layer.shadowRadius = 0.5
         view.layer.shadowOffset = CGSize(width: 0, height: 0)
     }
 }

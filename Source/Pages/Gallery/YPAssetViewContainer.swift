@@ -25,7 +25,7 @@ class YPAssetViewContainer: UIView {
     private let spinner = UIActivityIndicatorView(style: .white)
     private var shouldCropToSquare = YPConfig.library.isSquareByDefault
     private var isMultipleSelection = false
-
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -85,33 +85,47 @@ class YPAssetViewContainer: UIView {
     }
     
     // MARK: - Square button
-
+    
     @objc public func squareCropButtonTapped() {
         if let zoomableView = zoomableView {
             let z = zoomableView.zoomScale
             shouldCropToSquare = (z >= 1 && z < zoomableView.squaredZoomScale)
         }
-        zoomableView?.fitImage(shouldCropToSquare, animated: true)
+        zoomableView?.fillImage(shouldCropToSquare, animated: true)
     }
     
     
     public func refreshSquareCropButton() {
         if onlySquare {
             squareCropButton.isHidden = true
-        } else {
+        } else if zoomableView?.isVideoMode == true {
             if let image = zoomableView?.assetImageView.image {
                 let isImageASquare = image.size.width == image.size.height
                 squareCropButton.isHidden = isImageASquare
+                
+                if squareCropButton.isHidden == false {
+                    // animate the button
+                    squareCropButton.transform = CGAffineTransform(scaleX: 0, y: 0)
+                    
+                    UIView.animate(withDuration: 0.15) { [weak self] in
+                        self?.squareCropButton.transform = .identity
+                    }
+                }
             }
         }
         
-        let shouldFit = YPConfig.library.onlySquare ? true : shouldCropToSquare
-        zoomableView?.fitImage(shouldFit)
+        if zoomableView?.isVideoMode == false {
+            squareCropButton.isHidden = true // hide square crop if selection is image
+            zoomableView?.fillImage(false) // always fit image into square
+        } else {
+            let shouldFit = YPConfig.library.onlySquare ? true : shouldCropToSquare
+            zoomableView?.fillImage(shouldFit)
+        }
         zoomableView?.layoutSubviews()
     }
     
     // MARK: - Multiple selection
-
+    
     /// Use this to update the multiple selection mode UI state for the YPAssetViewContainer
     public func setMultipleSelectionMode(on: Bool) {
         isMultipleSelection = on

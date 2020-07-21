@@ -38,9 +38,9 @@ final class YPAssetZoomableView: UIScrollView {
     //
     /// - Parameters:
     ///   - fit: If true - zoom to show squared. If false - show full.
-    public func fitImage(_ fit: Bool, animated isAnimated: Bool = false) {
+    public func fillImage(_ fill: Bool, animated isAnimated: Bool = false) {
         squaredZoomScale = calculateSquaredZoomScale()
-        if fit {
+        if fill {
             setZoomScale(squaredZoomScale, animated: isAnimated)
         } else {
             setZoomScale(1, animated: isAnimated)
@@ -156,9 +156,9 @@ final class YPAssetZoomableView: UIScrollView {
             view.frame.size.width = screenWidth
             view.frame.size.height = screenWidth * aspectRatio
             
-            // if the content aspect ratio is wider than minimum, then increase zoom scale so the sides are cropped off to maintain the minimum ar
+            // if the content aspect ratio is wider than minimum, then increase zoom scale so the sides are cropped off to maintain the minimum ar. This only applies to videos.
             if let minAR = minAspectRatio {
-                if aspectRatio < minAR {
+                if aspectRatio < minAR  && isVideoMode {
                     let targetHeight = screenWidth * minAR
                     zoomScale = targetHeight / view.frame.size.height
                 }
@@ -173,11 +173,11 @@ final class YPAssetZoomableView: UIScrollView {
                 zoomScale = (h / w) * k
             }
             
-            // if the content aspect ratio is taller than maximum, then increase zoom scale so the top and bottom are cropped off to maintain the maximum ar
+            // if the content aspect ratio is taller than maximum, then increase zoom scale so the top and bottom are cropped off to maintain the maximum ar. This only applies to videos.
             if let maxAspectRatio = maxAspectRatio {
                 aspectRatio = h / w
                 
-                if aspectRatio > maxAspectRatio {
+                if aspectRatio > maxAspectRatio  && isVideoMode {
                     let targetWidth = view.frame.size.height / maxAspectRatio
                     zoomScale = targetWidth / view.frame.size.width
                 }
@@ -194,6 +194,12 @@ final class YPAssetZoomableView: UIScrollView {
         // Setting new scale
         minimumZoomScale = zoomScale
         self.zoomScale = zoomScale
+        
+        if isVideoMode {
+            isScrollEnabled = true
+        } else {
+            isScrollEnabled = false // can't scroll for images
+        }
     }
     
     /// Calculate zoom scale which will fit the image to square
@@ -237,7 +243,7 @@ final class YPAssetZoomableView: UIScrollView {
         clipsToBounds = true
         photoImageView.frame = CGRect(origin: CGPoint.zero, size: CGSize.zero)
         videoView.frame = CGRect(origin: CGPoint.zero, size: CGSize.zero)
-        maximumZoomScale = 6.0
+        maximumZoomScale = 3.0
         minimumZoomScale = 1
         showsHorizontalScrollIndicator = false
         showsVerticalScrollIndicator = false
@@ -270,7 +276,7 @@ extension YPAssetZoomableView: UIScrollViewDelegate {
         
         // prevent to zoom out
         if YPConfig.library.onlySquare && scale < squaredZoomScale {
-            self.fitImage(true, animated: true)
+            self.fillImage(true, animated: true)
         }
         
         myDelegate?.ypAssetZoomableViewScrollViewDidEndZooming()

@@ -101,6 +101,9 @@ extension YPLibraryView {
     
     func hideGrid() {
         assetViewContainer.grid.alpha = 0
+        
+        // disable grid for images
+        assetViewContainer.grid.isHidden = !assetZoomableView.isVideoMode        
     }
     
     // MARK: - Loader and progress
