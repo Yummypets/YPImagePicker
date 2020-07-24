@@ -180,6 +180,9 @@ public struct YPConfigLibrary {
     /// Initial state of multiple selection button.
     public var defaultMultipleSelection = false
 
+    /// Pre-selects the current item on setting multiple selection
+    public var preSelectItemOnMultipleSelection = true
+
     /// Anything superior than 1 will enable the multiple selection feature.
     public var maxNumberOfItems = 1
     
