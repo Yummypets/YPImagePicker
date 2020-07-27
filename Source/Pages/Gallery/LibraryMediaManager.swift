@@ -32,16 +32,16 @@ class LibraryMediaManager {
     func updateCachedAssets(in collectionView: UICollectionView) {
         let size = UIScreen.main.bounds.width/4 * UIScreen.main.scale
         let cellSize = CGSize(width: size, height: size)
-
+        
         var preheatRect = collectionView.bounds
         preheatRect = preheatRect.insetBy(dx: 0.0, dy: -0.5 * preheatRect.height)
-
+        
         let delta = abs(preheatRect.midY - previousPreheatRect.midY)
         if delta > collectionView.bounds.height / 3.0 {
-
+            
             var addedIndexPaths: [IndexPath] = []
             var removedIndexPaths: [IndexPath] = []
-
+            
             previousPreheatRect.differenceWith(rect: preheatRect, removedHandler: { removedRect in
                 let indexPaths = collectionView.aapl_indexPathsForElementsInRect(removedRect)
                 removedIndexPaths += indexPaths
@@ -49,10 +49,10 @@ class LibraryMediaManager {
                 let indexPaths = collectionView.aapl_indexPathsForElementsInRect(addedRect)
                 addedIndexPaths += indexPaths
             })
-
+            
             let assetsToStartCaching = fetchResult.assetsAtIndexPaths(addedIndexPaths)
             let assetsToStopCaching = fetchResult.assetsAtIndexPaths(removedIndexPaths)
-
+            
             imageManager?.startCachingImages(for: assetsToStartCaching,
                                              targetSize: cellSize,
                                              contentMode: .aspectFill,
@@ -154,7 +154,7 @@ class LibraryMediaManager {
                                     }
                                 }
                 }
-                
+
                 // 6. Exporting
                 DispatchQueue.main.async {
                     self.exportTimer = Timer.scheduledTimer(timeInterval: 0.1,
@@ -163,7 +163,7 @@ class LibraryMediaManager {
                                                             userInfo: exportSession,
                                                             repeats: true)
                 }
-                
+
                 if let s = exportSession {
                     self.currentExportSessions.append(s)
                 }
@@ -190,7 +190,7 @@ class LibraryMediaManager {
                     v.updateProgress(exportSession.progress)
                 }
             }
-
+            
             if exportSession.progress > 0.99 {
                 sender.invalidate()
                 v?.updateProgress(0)

@@ -21,7 +21,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     internal let mediaManager = LibraryMediaManager()
     internal var latestImageTapped = ""
     internal let panGestureHelper = PanGestureHelper()
-    
+
     // MARK: - Init
     
     public required init(items: [YPMediaItem]?) {
@@ -50,7 +50,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     func initialize() {
         mediaManager.initialize()
         mediaManager.v = v
-        
+
         if mediaManager.fetchResult != nil {
             return
         }
@@ -60,7 +60,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         panGestureHelper.registerForPanGesture(on: v)
         registerForTapOnPreview()
         refreshMediaRequest()
-        
+
         if YPConfig.library.defaultMultipleSelection {
             multipleSelectionButtonTapped()
         }
@@ -83,13 +83,13 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                 // The negative index will be corrected in the collectionView:cellForItemAt:
                 return YPLibrarySelection(index: -1, assetIdentifier: asset.localIdentifier)
             }
-            
+
             multipleSelectionEnabled = selection.count > 1
             v.assetViewContainer.setMultipleSelectionMode(on: multipleSelectionEnabled)
             v.collectionView.reloadData()
         }
     }
-
+    
     // MARK: - View Lifecycle
     
     public override func loadView() {
@@ -107,11 +107,11 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
             guard let strongSelf = self else {
                 return
             }
-            
+
             strongSelf.updateCropInfo()
         }
     }
-
+    
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
@@ -136,7 +136,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
             multipleSelectionButtonTapped()
         }
     }
-
+    
     public override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
@@ -144,7 +144,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         NotificationCenter.default.removeObserver(self)
         PHPhotoLibrary.shared().unregisterChangeObserver(self)
     }
-
+    
     // MARK: - Crop control
     
     @objc
@@ -155,7 +155,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     }
     
     // MARK: - Multiple Selection
-    
+
     @objc
     func multipleSelectionButtonTapped() {
         doAfterPermissionCheck { [weak self] in
@@ -214,7 +214,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     }
     
     // MARK: - Permissions
-
+    
     func doAfterPermissionCheck(block:@escaping () -> Void) {
         checkPermissionToAccessPhotoLibrary { hasPermission in
             if hasPermission {
@@ -234,7 +234,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
             }
         }
     }
-    
+
     // Async beacause will prompt permission if .notDetermined
     // and ask custom popup if denied.
     func checkPermissionToAccessPhotoLibrary(block: @escaping (Bool) -> Void) {
@@ -387,7 +387,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         selectedAsset.scrollViewContentOffset = v.assetZoomableView.contentOffset
         selectedAsset.scrollViewZoomScale = v.assetZoomableView.zoomScale
         selectedAsset.cropRect = v.currentCropRect()
-
+        
         // Replace
         selection.remove(at: selectedAssetIndex)
         selection.insert(selectedAsset, at: selectedAssetIndex)
