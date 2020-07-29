@@ -22,6 +22,8 @@ public struct YPImagePickerConfiguration {
     /// Scroll to change modes, defaults to true
     public var isScrollToChangeModesEnabled = true
     
+    public var isTrimDisabled = false
+    
     // Library configuration
     public var library = YPConfigLibrary()
     
