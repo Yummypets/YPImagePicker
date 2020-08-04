@@ -159,6 +159,15 @@ YPImagePickerConfiguration.shared = config
 let picker = YPImagePicker()
 ```
 
+When displaying picker on iPad, picker will support one size only you should set it before displaying it: 
+```
+let preferredContentSize = CGSize(width: 500, height: 600);
+YPImagePickerConfiguration.widthOniPad = preferredContentSize.width;
+
+// Now you can Display the picker with preferred size in dialog, popup etc
+
+```
+
 ## Usage
 
 First things first `import YPImagePicker`.  

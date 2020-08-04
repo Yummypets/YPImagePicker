@@ -30,7 +30,8 @@ class LibraryMediaManager {
     }
     
     func updateCachedAssets(in collectionView: UICollectionView) {
-        let size = UIScreen.main.bounds.width/4 * UIScreen.main.scale
+        var screenWidth = YPImagePickerConfiguration.screenWidth
+        let size = screenWidth / 4 * UIScreen.main.scale
         let cellSize = CGSize(width: size, height: size)
         
         var preheatRect = collectionView.bounds

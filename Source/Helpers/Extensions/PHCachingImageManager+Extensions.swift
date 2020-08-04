@@ -56,7 +56,7 @@ extension PHCachingImageManager {
         let options = PHImageRequestOptions()
         options.isNetworkAccessAllowed = true
         options.isSynchronous = true
-        let screenWidth = UIScreen.main.bounds.width
+        let screenWidth = YPImagePickerConfiguration.screenWidth
         let ts = CGSize(width: screenWidth, height: screenWidth)
         requestImage(for: asset, targetSize: ts, contentMode: .aspectFill, options: options) { image, _ in
             if let image = image {
