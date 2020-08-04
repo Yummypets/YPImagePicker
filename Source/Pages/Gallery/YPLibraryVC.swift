@@ -61,9 +61,6 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         registerForTapOnPreview()
         refreshMediaRequest()
 
-        if YPConfig.library.defaultMultipleSelection {
-            multipleSelectionButtonTapped()
-        }
         v.assetViewContainer.multipleSelectionButton.isHidden = !(YPConfig.library.maxNumberOfItems > 1)
         v.maxNumberWarningLabel.text = String(format: YPConfig.wordings.warningMaxItemsLimit, YPConfig.library.maxNumberOfItems)
         
@@ -83,11 +80,11 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                 // The negative index will be corrected in the collectionView:cellForItemAt:
                 return YPLibrarySelection(index: -1, assetIdentifier: asset.localIdentifier)
             }
-
-            // If defaultMultipleSelection is true then enable multiple selection irrespective of number of selected items
-            multipleSelectionEnabled = YPConfig.library.defaultMultipleSelection == true ? true : selection.count > 1
             v.assetViewContainer.setMultipleSelectionMode(on: multipleSelectionEnabled)
             v.collectionView.reloadData()
+        }
+        if YPConfig.library.defaultMultipleSelection || selection.count > 1 {
+            multipleSelectionButtonTapped()
         }
     }
     
