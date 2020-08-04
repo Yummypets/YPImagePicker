@@ -233,11 +233,17 @@ public struct YPConfigVideo {
     public var minimumTimeLimit: TimeInterval = 3.0
     
     /// The maximum duration allowed for the trimming. Change it before setting the asset, as the asset preview
+    /// - Tag: trimmerMaxDuration
     public var trimmerMaxDuration: Double = 60.0
     
     /// The minimum duration allowed for the trimming.
     /// The handles won't pan further if the minimum duration is attained.
     public var trimmerMinDuration: Double = 3.0
+    
+    /// Defines if the user skips the trimer stage, the video will be trimmed automatically to the maximum value of trimmerMaxDuration
+    /// This case occurs when the user already has a video selected and enables a multiselection to pick more than one type of media (video or image), so, the trimmer step becomes optional.
+    /// - SeeAlso: [trimmerMaxDuration](x-source-tag://trimmerMaxDuration)
+    public var automaticTrimToTrimmerMaxDuration: Bool = false
 }
 
 /// Encapsulates gallery specific settings.
