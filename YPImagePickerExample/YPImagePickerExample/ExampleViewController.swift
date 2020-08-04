@@ -81,7 +81,7 @@ class ExampleViewController: UIViewController {
 
         /* Choose what media types are available in the library. Defaults to `.photo` */
         config.library.mediaType = .photoAndVideo
-
+      config.library.itemOverlayType = .grid
         /* Enables selecting the front camera by default, useful for avatars. Defaults to false */
         // config.usesFrontCamera = true
 
