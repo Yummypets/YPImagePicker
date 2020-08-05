@@ -110,11 +110,14 @@ config.targetImageSize = YPImageSize.original
 config.overlayView = UIView()
 config.hidesStatusBar = true
 config.hidesBottomBar = false
+config.hidesCancelButton = false
 config.preferredStatusBarStyle = UIStatusBarStyle.default
 config.bottomMenuItemSelectedColour = UIColor(r: 38, g: 38, b: 38)
 config.bottomMenuItemUnSelectedColour = UIColor(r: 153, g: 153, b: 153)
 config.filters = [DefaultYPFilters...]
 config.maxCameraZoomFactor = 1.0
+config.preSelectItemOnMultipleSelection = true
+config.fonts..
 ```
 
 ### Library
