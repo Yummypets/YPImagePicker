@@ -17,17 +17,14 @@ internal var YPConfig: YPImagePickerConfiguration { return YPImagePickerConfigur
 public struct YPImagePickerConfiguration {
     public static var shared: YPImagePickerConfiguration = YPImagePickerConfiguration()
     
+    public static var widthOniPad: CGFloat = -1
     
-    public static var widthOniPad : CGFloat = -1
-    
-    public static var screenWidth : CGFloat {
-        get {
-            var screenWidth : CGFloat = UIScreen.main.bounds.width
-            if UIDevice.current.userInterfaceIdiom == .pad && YPImagePickerConfiguration.widthOniPad > 0 {
-                screenWidth =  YPImagePickerConfiguration.widthOniPad
-            }
-            return screenWidth
-        }
+    public static var screenWidth: CGFloat {
+		var screenWidth: CGFloat = UIScreen.main.bounds.width
+		if UIDevice.current.userInterfaceIdiom == .pad && YPImagePickerConfiguration.widthOniPad > 0 {
+			screenWidth =  YPImagePickerConfiguration.widthOniPad
+		}
+		return screenWidth
     }
     
     public init() {}
@@ -133,7 +130,7 @@ public struct YPImagePickerConfiguration {
         YPFilter(name: "Transfer", coreImageFilterName: "CIPhotoEffectTransfer"),
         YPFilter(name: "Tone", coreImageFilterName: "CILinearToSRGBToneCurve"),
         YPFilter(name: "Linear", coreImageFilterName: "CISRGBToneCurveToLinear"),
-        YPFilter(name: "Sepia", coreImageFilterName: "CISepiaTone"),
+        YPFilter(name: "Sepia", coreImageFilterName: "CISepiaTone")
         ]
     
     /// Migration
@@ -182,7 +179,7 @@ public struct YPImagePickerConfiguration {
 /// Encapsulates library specific settings.
 public struct YPConfigLibrary {
     
-    public var options: PHFetchOptions? = nil
+    public var options: PHFetchOptions?
 
     /// Set this to true if you want to force the library output to be a squared image. Defaults to false.
     public var onlySquare = false
@@ -190,7 +187,7 @@ public struct YPConfigLibrary {
     /// Sets the cropping style to square or not. Ignored if `onlySquare` is true. Defaults to true.
     public var isSquareByDefault = true
     
-    /// Minimum width, to prevent selectiong too high images. Have sense if onlySquare is true and the image is portrait.
+	/// Minimum width, to prevent selectiong too high images. Have sense if onlySquare is true and the image is portrait.
     public var minWidthForItem: CGFloat?
     
     /// Choose what media types are available in the library. Defaults to `.photo`
@@ -264,9 +261,12 @@ public struct YPConfigVideo {
     /// The minimum duration allowed for the trimming.
     /// The handles won't pan further if the minimum duration is attained.
     public var trimmerMinDuration: Double = 3.0
-    
-    /// Defines if the user skips the trimer stage, the video will be trimmed automatically to the maximum value of trimmerMaxDuration
-    /// This case occurs when the user already has a video selected and enables a multiselection to pick more than one type of media (video or image), so, the trimmer step becomes optional.
+
+	/// Defines if the user skips the trimer stage,
+	/// the video will be trimmed automatically to the maximum value of trimmerMaxDuration.
+	/// This case occurs when the user already has a video selected and enables a
+	/// multiselection to pick more than one type of media (video or image),
+	/// so, the trimmer step becomes optional.
     /// - SeeAlso: [trimmerMaxDuration](x-source-tag://trimmerMaxDuration)
     public var automaticTrimToTrimmerMaxDuration: Bool = false
 }

@@ -140,9 +140,9 @@ class YPVideoCaptureHelper: NSObject {
            maxAvailableVideoZoomFactor = min(maxAvailableVideoZoomFactor, YPConfig.maxCameraZoomFactor)
            
            let desiredZoomFactor = initVideoZoomFactor * scale
-           device.videoZoomFactor = max(minAvailableVideoZoomFactor, min(desiredZoomFactor, maxAvailableVideoZoomFactor))
-       }
-       catch let error {
+           device.videoZoomFactor = max(minAvailableVideoZoomFactor,
+										min(desiredZoomFactor, maxAvailableVideoZoomFactor))
+       } catch let error {
           print("💩 \(error)")
        }
     }
@@ -228,7 +228,7 @@ class YPVideoCaptureHelper: NSObject {
                 CMTimeMakeWithSeconds(self.videoRecordingTimeLimit, preferredTimescale: timeScale)
             videoOutput.maxRecordedDuration = maxDuration
             videoOutput.minFreeDiskSpaceLimit = 1024 * 1024
-            if (YPConfig.video.fileType == .mp4) {
+            if YPConfig.video.fileType == .mp4 {
                 videoOutput.movieFragmentInterval = .invalid // Allows audio for MP4s over 10 seconds.
             }
             if session.canAddOutput(videoOutput) {
@@ -254,7 +254,7 @@ class YPVideoCaptureHelper: NSObject {
     // MARK: - Orientation
 
     /// This enables to get the correct orientation even when the device is locked for orientation \o/
-    private func checkOrientation(completion: @escaping(_ orientation: AVCaptureVideoOrientation?)->()) {
+    private func checkOrientation(completion: @escaping(_ orientation: AVCaptureVideoOrientation?) -> Void) {
         motionManager.accelerometerUpdateInterval = 5
         motionManager.startAccelerometerUpdates( to: OperationQueue() ) { [weak self] data, _ in
             self?.motionManager.stopAccelerometerUpdates()

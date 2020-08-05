@@ -9,7 +9,6 @@
 import UIKit
 import Foundation
 
-
 extension UIBarButtonItem {
 
     func setFont(font: UIFont?, forState state: UIControl.State) {

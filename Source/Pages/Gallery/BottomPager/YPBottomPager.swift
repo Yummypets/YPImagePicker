@@ -101,7 +101,7 @@ open class YPBottomPager: UIViewController, UIScrollViewDelegate {
         currentPage = page
         //select menu item and deselect others
         for (i, mi) in v.header.menuItems.enumerated() {
-            if (i == page) {
+            if i == page {
                 mi.select()
             } else {
                 mi.deselect()

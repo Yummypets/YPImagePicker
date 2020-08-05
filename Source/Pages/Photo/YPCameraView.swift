@@ -65,8 +65,7 @@ class YPCameraView: UIView, UIGestureRecognizerDelegate {
             )
             
             previewViewContainer.heightEqualsWidth()
-        }
-        else {
+        } else {
             layout(
                 0,
                 |-sideMargin-previewViewContainer-sideMargin-|,

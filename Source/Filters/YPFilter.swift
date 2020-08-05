@@ -36,34 +36,37 @@ extension YPFilter {
     }
     
     public static func clarendonFilter(foregroundImage: CIImage) -> CIImage? {
-        let backgroundImage = getColorImage(red: 127, green: 187, blue: 227, alpha: Int(255 * 0.2), rect: foregroundImage.extent)
+        let backgroundImage = getColorImage(red: 127, green: 187, blue: 227, alpha: Int(255 * 0.2),
+											rect: foregroundImage.extent)
         return foregroundImage.applyingFilter("CIOverlayBlendMode", parameters: [
-            "inputBackgroundImage": backgroundImage,
+            "inputBackgroundImage": backgroundImage
             ])
             .applyingFilter("CIColorControls", parameters: [
                 "inputSaturation": 1.35,
                 "inputBrightness": 0.05,
-                "inputContrast": 1.1,
+                "inputContrast": 1.1
                 ])
     }
     
     public static func nashvilleFilter(foregroundImage: CIImage) -> CIImage? {
-        let backgroundImage = getColorImage(red: 247, green: 176, blue: 153, alpha: Int(255 * 0.56), rect: foregroundImage.extent)
-        let backgroundImage2 = getColorImage(red: 0, green: 70, blue: 150, alpha: Int(255 * 0.4), rect: foregroundImage.extent)
+        let backgroundImage = getColorImage(red: 247, green: 176, blue: 153, alpha: Int(255 * 0.56),
+											rect: foregroundImage.extent)
+        let backgroundImage2 = getColorImage(red: 0, green: 70, blue: 150, alpha: Int(255 * 0.4),
+											 rect: foregroundImage.extent)
         return foregroundImage
             .applyingFilter("CIDarkenBlendMode", parameters: [
-                "inputBackgroundImage": backgroundImage,
+                "inputBackgroundImage": backgroundImage
                 ])
             .applyingFilter("CISepiaTone", parameters: [
-                "inputIntensity": 0.2,
+                "inputIntensity": 0.2
                 ])
             .applyingFilter("CIColorControls", parameters: [
                 "inputSaturation": 1.2,
                 "inputBrightness": 0.05,
-                "inputContrast": 1.1,
+                "inputContrast": 1.1
                 ])
             .applyingFilter("CILightenBlendMode", parameters: [
-                "inputBackgroundImage": backgroundImage2,
+                "inputBackgroundImage": backgroundImage2
                 ])
     }
     
@@ -73,21 +76,21 @@ extension YPFilter {
             .applyingFilter("CIColorControls", parameters: [
                 "inputSaturation": 1.3,
                 "inputBrightness": 0.1,
-                "inputContrast": 1.05,
+                "inputContrast": 1.05
                 ])
             .applyingFilter("CIHueAdjust", parameters: [
-                "inputAngle": 0.3,
+                "inputAngle": 0.3
                 ])
         return filterImage
             .applyingFilter("CIScreenBlendMode", parameters: [
-                "inputBackgroundImage": backgroundImage,
+                "inputBackgroundImage": backgroundImage
                 ])
             .applyingFilter("CIToneCurve", parameters: [
                 "inputPoint0": CIVector(x: 0, y: 0),
                 "inputPoint1": CIVector(x: 0.25, y: 0.20),
                 "inputPoint2": CIVector(x: 0.5, y: 0.5),
                 "inputPoint3": CIVector(x: 0.75, y: 0.80),
-                "inputPoint4": CIVector(x: 1, y: 1),
+                "inputPoint4": CIVector(x: 1, y: 1)
                 ])
     }
     
@@ -106,20 +109,19 @@ extension YPFilter {
             "inputRadius0": radius0,
             "inputRadius1": radius1,
             "inputColor0": color0,
-            "inputColor1": color1,
+            "inputColor1": color1
             ])?.outputImage?.cropped(to: ciImage.extent)
         
         return ciImage
             .applyingFilter("CIColorControls", parameters: [
                 "inputSaturation": 1.0,
                 "inputBrightness": 0.01,
-                "inputContrast": 1.1,
+                "inputContrast": 1.1
                 ])
             .applyingFilter("CIScreenBlendMode", parameters: [
-                "inputBackgroundImage": circle!,
+                "inputBackgroundImage": circle!
                 ])
     }
-    
     
     public static func hazeRemovalFilter(image: CIImage) -> CIImage? {
         let filter = HazeRemovalFilter()
@@ -147,8 +149,7 @@ class HazeRemovalFilter: CIFilter {
     var inputSlope: Float! = 0.0
     var hazeRemovalKernel: CIKernel!
     
-    override init()
-    {
+    override init() {
         // check kernel has been already initialized
         let code: String = """
 kernel vec4 myHazeRemovalKernel(
@@ -175,8 +176,7 @@ kernel vec4 myHazeRemovalKernel(
         fatalError("init(coder:) has not been implemented")
     }
     
-    override var outputImage: CIImage?
-    {
+    override var outputImage: CIImage? {
         guard let inputImage = self.inputImage,
             let hazeRemovalKernel = self.hazeRemovalKernel,
             let inputColor = self.inputColor,
@@ -187,17 +187,17 @@ kernel vec4 myHazeRemovalKernel(
         }
         let src: CISampler = CISampler(image: inputImage)
         return hazeRemovalKernel.apply(extent: inputImage.extent,
-            roiCallback: { (index, rect) -> CGRect in
+            roiCallback: { (_, rect) -> CGRect in
                 return rect
         }, arguments: [
             src,
             inputColor,
             inputDistance,
-            inputSlope,
+            inputSlope
             ])
     }
     
-    override var attributes: [String : Any] {
+    override var attributes: [String: Any] {
         return [
             kCIAttributeFilterDisplayName: "Haze Removal Filter",
             "inputDistance": [
@@ -206,7 +206,7 @@ kernel vec4 myHazeRemovalKernel(
                 kCIAttributeSliderMin: 0.0,
                 kCIAttributeSliderMax: 0.7,
                 kCIAttributeDefault: 0.2,
-                kCIAttributeIdentity : 0.0,
+                kCIAttributeIdentity: 0.0,
                 kCIAttributeType: kCIAttributeTypeScalar
             ],
             "inputSlope": [
@@ -217,9 +217,8 @@ kernel vec4 myHazeRemovalKernel(
                 kCIAttributeType: kCIAttributeTypeScalar
             ],
             kCIInputColorKey: [
-                kCIAttributeDefault: CIColor(red:1.0, green:1.0, blue:1.0, alpha:1.0)
-            ],
+                kCIAttributeDefault: CIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+            ]
         ]
     }
 }
-

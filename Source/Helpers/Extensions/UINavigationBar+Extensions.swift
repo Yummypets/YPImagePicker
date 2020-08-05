@@ -9,7 +9,6 @@
 import UIKit
 import Foundation
 
-
 extension UINavigationBar {
 
     func setTitleFont(font: UIFont?) {

@@ -25,7 +25,9 @@ class YPFilterCollectionViewCell: UICollectionViewCell {
             name.textColor = isSelected
                 ? UIColor.ypLabel
                 : UIColor.ypSecondaryLabel
-            name.font = isSelected ? YPConfig.fonts.filterSelectionSelectedFont : YPConfig.fonts.filterSelectionUnSelectedFont
+            name.font = isSelected
+				? YPConfig.fonts.filterSelectionSelectedFont
+				: YPConfig.fonts.filterSelectionUnSelectedFont
         }
     }
     

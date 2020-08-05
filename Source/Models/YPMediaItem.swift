@@ -11,7 +11,6 @@ import Foundation
 import AVFoundation
 import Photos
 
-
 public class YPMediaPhoto {
     
     public var image: UIImage { return modifiedImage ?? originalImage }

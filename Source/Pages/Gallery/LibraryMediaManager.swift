@@ -147,10 +147,12 @@ class LibraryMediaManager {
                                             callback(nil)
                                         }
                                     case .failed:
-                                        print("LibraryMediaManager -> Export of the video failed. Reason: \(String(describing: session.error))")
+                                        print("LibraryMediaManager")
+										print("Export of the video failed : \(String(describing: session.error))")
                                         callback(nil)
                                     default:
-                                        print("LibraryMediaManager -> Export session completed with \(session.status) status. Not handling.")
+										print("LibraryMediaManager")
+                                        print("Export session completed with \(session.status) status. Not handled.")
                                         callback(nil)
                                     }
                                 }
