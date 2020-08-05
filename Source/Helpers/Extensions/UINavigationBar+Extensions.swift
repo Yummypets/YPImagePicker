@@ -13,7 +13,7 @@ import Foundation
 extension UINavigationBar {
 
     func setTitleFont(font: UIFont?) {
-        guard font != nil else { return }
+        guard let font = font  else { return }
         self.titleTextAttributes = [NSAttributedString.Key.font: font!]
     }
 }
