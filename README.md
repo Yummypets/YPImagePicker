@@ -159,6 +159,15 @@ YPImagePickerConfiguration.shared = config
 let picker = YPImagePicker()
 ```
 
+When displaying picker on iPad, picker will support one size only you should set it before displaying it: 
+```
+let preferredContentSize = CGSize(width: 500, height: 600);
+YPImagePickerConfiguration.widthOniPad = preferredContentSize.width;
+
+// Now you can Display the picker with preferred size in dialog, popup etc
+
+```
+
 ## Usage
 
 First things first `import YPImagePicker`.  
@@ -236,7 +245,7 @@ picker.didFinishPicking { [unowned picker] items, cancelled in
 That's it !
 
 ## Languages
-🇺🇸 English, 🇪🇸 Spanish, 🇫🇷 French 🇷🇺 Russian, 🇳🇱 Dutch, 🇧🇷 Brazilian, 🇹🇷 Turkish, 🇸🇾 Arabic, 🇩🇪 German, 🇮🇹 Italian, 🇯🇵 Japanese, 🇨🇳 Chinese, 🇮🇩 Indonesian, 🇰🇷 Korean, 🇹🇼 Traditional Chinese（Taiwan), 🇻🇳 Vietnamese, 🇹🇭 Thai. 
+🇺🇸 English, 🇪🇸 Spanish, 🇫🇷 French 🇷🇺 Russian, 🇵🇱 Polish, 🇳🇱 Dutch, 🇧🇷 Brazilian, 🇹🇷 Turkish, 🇸🇾 Arabic, 🇩🇪 German, 🇮🇹 Italian, 🇯🇵 Japanese, 🇨🇳 Chinese, 🇮🇩 Indonesian, 🇰🇷 Korean, 🇹🇼 Traditional Chinese（Taiwan), 🇻🇳 Vietnamese, 🇹🇭 Thai. 
 
 If your language is not supported, you can still customize the wordings via the `configuration.wordings` api:
 
@@ -259,14 +268,14 @@ UINavigationBar.appearance().setBackgroundImage(coloredImage, for: UIBarMetrics.
 
 ### Navigation bar fonts
 ```swift
-let attributes = [NSAttributedStringKey.font : UIFont.systemFont(ofSize: 30, weight: .bold) ]
+let attributes = [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 30, weight: .bold) ]
 UINavigationBar.appearance().titleTextAttributes = attributes // Title fonts
 UIBarButtonItem.appearance().setTitleTextAttributes(attributes, for: .normal) // Bar Button fonts
 ```
 
 ### Navigation bar Text colors
 ```swift
-UINavigationBar.appearance().titleTextAttributes = [NSAttributedStringKey.foregroundColor : UIColor.yellow ] // Title color
+UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.yellow ] // Title color
 UINavigationBar.appearance().tintColor = .red // Left. bar buttons
 config.colors.tintColor = .green // Right bar buttons (actions)
 ```

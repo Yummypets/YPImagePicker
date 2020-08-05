@@ -12,6 +12,7 @@ import Photos
 
 protocol ImagePickerDelegate: AnyObject {
     func noPhotos()
+    func shouldAddToSelection(indexPath: IndexPath, numSelections: Int) -> Bool
 }
 
 open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
@@ -259,11 +260,13 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     }
     
     func updateUI() {
-        // Update Nav Bar state.
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: YPConfig.wordings.cancel,
+		if !YPConfig.hidesCancelButton {
+			// Update Nav Bar state.
+			navigationItem.leftBarButtonItem = UIBarButtonItem(title: YPConfig.wordings.cancel,
                                                            style: .plain,
                                                            target: self,
                                                            action: #selector(close))
+		}
         switch mode {
         case .library:
             setTitleViewWithTitle(aTitle: libraryVC?.title ?? "")
@@ -368,5 +371,9 @@ extension YPPickerVC: YPLibraryViewDelegate {
         self.dismiss(animated: true) {
             self.imagePickerDelegate?.noPhotos()
         }
+    }
+    
+    public func libraryViewShouldAddToSelection(indexPath: IndexPath, numSelections: Int) -> Bool {
+        return imagePickerDelegate?.shouldAddToSelection(indexPath: indexPath, numSelections: numSelections) ?? true
     }
 }

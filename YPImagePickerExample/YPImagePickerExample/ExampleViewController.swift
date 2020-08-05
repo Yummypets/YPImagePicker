@@ -81,7 +81,7 @@ class ExampleViewController: UIViewController {
 
         /* Choose what media types are available in the library. Defaults to `.photo` */
         config.library.mediaType = .photoAndVideo
-
+      config.library.itemOverlayType = .grid
         /* Enables selecting the front camera by default, useful for avatars. Defaults to false */
         // config.usesFrontCamera = true
 
@@ -181,6 +181,8 @@ class ExampleViewController: UIViewController {
         config.fonts.leftBarButtonFont = UIFont.systemFont(ofSize: 22.0, weight: .heavy)
         
         let picker = YPImagePicker(configuration: config)
+        
+        picker.imagePickerDelegate = self
 
         /* Change configuration directly */
         // YPImagePickerConfiguration.shared.wordings.libraryTitle = "Gallery2"
@@ -254,5 +256,14 @@ extension ExampleViewController {
         guard let track = AVURLAsset(url: url).tracks(withMediaType: AVMediaType.video).first else { return nil }
         let size = track.naturalSize.applying(track.preferredTransform)
         return CGSize(width: abs(size.width), height: abs(size.height))
+    }
+}
+
+// YPImagePickerDelegate
+extension ExampleViewController: YPImagePickerDelegate {
+    func noPhotos() {}
+    
+    func shouldAddToSelection(indexPath: IndexPath, numSelections: Int) -> Bool {
+        return indexPath.row != 2
     }
 }

@@ -47,7 +47,8 @@ class YPGalleryCollectionViewFlowLayout: UICollectionViewFlowLayout {
         let overlapppingNextPhoto: CGFloat = 37
         minimumLineSpacing = spacing
         minimumInteritemSpacing = spacing
-        let size = UIScreen.main.bounds.width - (sideMargin + overlapppingNextPhoto)
+        let screenWidth = YPImagePickerConfiguration.screenWidth
+        let size = screenWidth - (sideMargin + overlapppingNextPhoto)
         itemSize = CGSize(width: size, height: size)
         sectionInset = UIEdgeInsets(top: 0, left: sideMargin, bottom: 0, right: sideMargin)
     }

@@ -58,6 +58,7 @@ class YPCropVC: UIViewController {
                                            target: self,
                                            action: #selector(done))
         saveButton.setFont(font: YPConfig.fonts.rightBarButtonFont, forState: .normal)
+        saveButton.tintColor = .ypLabel
         v.toolbar.items = [cancelButton, flexibleSpace, saveButton]
     }
     
