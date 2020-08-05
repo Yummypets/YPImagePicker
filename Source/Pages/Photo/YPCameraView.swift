@@ -103,7 +103,7 @@ class YPCameraView: UIView, UIGestureRecognizerDelegate {
             l.textColor = .white
             l.text = "00:00"
             l.isHidden = true
-            l.font = .monospacedDigitSystemFont(ofSize: 13, weight: .medium)
+            l.font = YPConfig.fonts.cameraTimeElapsedFont
         }
         progressBar.style { p in
             p.trackTintColor = .clear
