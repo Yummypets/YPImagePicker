@@ -12,6 +12,7 @@ import Photos
 
 protocol ImagePickerDelegate: AnyObject {
     func noPhotos()
+    func shouldAddToSelection(indexPath: IndexPath, numSelections: Int) -> Bool
 }
 
 open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
@@ -369,5 +370,9 @@ extension YPPickerVC: YPLibraryViewDelegate {
         self.dismiss(animated: true) {
             self.imagePickerDelegate?.noPhotos()
         }
+    }
+    
+    public func libraryViewShouldAddToSelection(indexPath: IndexPath, numSelections: Int) -> Bool {
+        return imagePickerDelegate?.shouldAddToSelection(indexPath: indexPath, numSelections: numSelections) ?? true
     }
 }
