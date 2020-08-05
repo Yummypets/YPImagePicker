@@ -173,11 +173,13 @@ class ExampleViewController: UIViewController {
 
         config.library.preselectedItems = selectedItems
 
-        config.fonts.menuItemFont = UIFont.systemFont(ofSize: 22.0, weight: .semibold)
-        config.fonts.pickerTitleFont = UIFont.systemFont(ofSize: 22.0, weight: .black)
-        config.fonts.rightBarButtonFont = UIFont.systemFont(ofSize: 22.0, weight: .bold)
-        config.fonts.navigationBarTitleFont = UIFont.systemFont(ofSize: 22.0, weight: .heavy)
-        config.fonts.leftBarButtonFont = UIFont.systemFont(ofSize: 22.0, weight: .heavy)
+
+		// Customise fonts
+		//config.fonts.menuItemFont = UIFont.systemFont(ofSize: 22.0, weight: .semibold)
+		//config.fonts.pickerTitleFont = UIFont.systemFont(ofSize: 22.0, weight: .black)
+		//config.fonts.rightBarButtonFont = UIFont.systemFont(ofSize: 22.0, weight: .bold)
+		//config.fonts.navigationBarTitleFont = UIFont.systemFont(ofSize: 22.0, weight: .heavy)
+		//config.fonts.leftBarButtonFont = UIFont.systemFont(ofSize: 22.0, weight: .heavy)
 
         let picker = YPImagePicker(configuration: config)
 
