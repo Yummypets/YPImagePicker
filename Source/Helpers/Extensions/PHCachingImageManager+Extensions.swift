@@ -6,7 +6,7 @@
 //  Copyright © 2018 Yummypets. All rights reserved.
 //
 
-import Foundation
+import UIKit
 import Photos
 
 extension PHCachingImageManager {
@@ -56,7 +56,7 @@ extension PHCachingImageManager {
         let options = PHImageRequestOptions()
         options.isNetworkAccessAllowed = true
         options.isSynchronous = true
-        let screenWidth = UIScreen.main.bounds.width
+        let screenWidth = YPImagePickerConfiguration.screenWidth
         let ts = CGSize(width: screenWidth, height: screenWidth)
         requestImage(for: asset, targetSize: ts, contentMode: .aspectFill, options: options) { image, _ in
             if let image = image {
@@ -81,26 +81,20 @@ extension PHCachingImageManager {
     }
     
     /// This method return two images in the callback. First is with low resolution, second with high.
-    /// So the callback fires twice. But with isSynchronous = true there is only one high resolution image.
-    /// Bool = isFromCloud
+    /// So the callback fires twice.
     func fetch(photo asset: PHAsset, callback: @escaping (UIImage, Bool) -> Void) {
         let options = PHImageRequestOptions()
-        options.isNetworkAccessAllowed = true
-        options.isSynchronous = true
-        requestImage(for: asset,
-                     targetSize: PHImageManagerMaximumSize,
-                     contentMode: .aspectFill,
-                     options: options) { result, info in
-                        guard let image = result else {
-                            return
-                        }
-                        DispatchQueue.main.async {
-                            var isFromCloud = false
-                            if let fromCloud = info?[PHImageResultIsDegradedKey] as? Bool {
-                                isFromCloud = fromCloud
-                            }
-                            callback(image, isFromCloud)
-                        }
+        options.isNetworkAccessAllowed = true // Enables gettings iCloud photos over the network, this means PHImageResultIsInCloudKey will never be true.
+        options.deliveryMode = .opportunistic // Get 2 results, one low res quickly and the high res one later.
+        requestImage(for: asset, targetSize: PHImageManagerMaximumSize, contentMode: .aspectFill, options: options) { result, info in
+            guard let image = result else {
+                print("No Result 🛑")
+                return
+            }
+            DispatchQueue.main.async {
+                let isLowRes = (info?[PHImageResultIsDegradedKey] as? Bool) ?? false
+                callback(image, isLowRes)
+            }
         }
     }
 }

@@ -57,7 +57,8 @@ class YPCropView: UIView {
         // Fit image differently depnding on its ratio.
         let imageRatio: Double = Double(image.size.width / image.size.height)
         if ratio > imageRatio {
-            let scaledDownRatio = UIScreen.main.bounds.width / image.size.width
+            let screenWidth = YPImagePickerConfiguration.screenWidth
+            let scaledDownRatio = screenWidth / image.size.width
             imageView.width(image.size.width * scaledDownRatio )
             imageView.centerInContainer()
         } else if ratio < imageRatio {
@@ -72,7 +73,7 @@ class YPCropView: UIView {
     }
     
     private func applyStyle() {
-        backgroundColor = .black
+        backgroundColor = .ypSystemBackground
         clipsToBounds = true
         imageView.style { i in
             i.isUserInteractionEnabled = true
@@ -91,7 +92,7 @@ class YPCropView: UIView {
     }
     
     func curtainStyle(v: UIView) {
-        v.backgroundColor = UIColor.black.withAlphaComponent(0.7)
+        v.backgroundColor = UIColor.ypSystemBackground.withAlphaComponent(0.7)
         v.isUserInteractionEnabled = false
     }
 }

@@ -71,10 +71,14 @@ class YPVideoProcessor {
         
         // make it square
         let videoComposition = AVMutableVideoComposition()
-        videoComposition.renderSize = CGSize(width: CGFloat(clipVideoTrack.naturalSize.height), height: CGFloat(clipVideoTrack.naturalSize.height))
+        if YPConfig.onlySquareImagesFromCamera {
+            videoComposition.renderSize = CGSize(width: CGFloat(clipVideoTrack.naturalSize.height), height: CGFloat(clipVideoTrack.naturalSize.height))
+        } else {
+            videoComposition.renderSize = CGSize(width: CGFloat(clipVideoTrack.naturalSize.height), height: CGFloat(clipVideoTrack.naturalSize.width))
+        }
         videoComposition.frameDuration = CMTimeMake(value: 1, timescale: 30)
         let instruction = AVMutableVideoCompositionInstruction()
-        instruction.timeRange = CMTimeRangeMake(start: CMTime.zero, duration: CMTimeMakeWithSeconds(60, preferredTimescale: 30))
+        instruction.timeRange = CMTimeRangeMake(start: CMTime.zero, duration: asset.duration)
         
         // rotate to potrait
         let transformer = AVMutableVideoCompositionLayerInstruction(assetTrack: clipVideoTrack)
@@ -86,24 +90,19 @@ class YPVideoProcessor {
         videoComposition.instructions = [instruction]
         
         // exporter
-        let exporter = AVAssetExportSession.init(asset: asset, presetName: YPConfig.video.compression)
-        exporter?.videoComposition = videoComposition
-        exporter?.outputURL = outputPath
-        exporter?.shouldOptimizeForNetworkUse = true
-        exporter?.outputFileType = YPConfig.video.fileType
-
-        exporter?.exportAsynchronously {
-            if exporter?.status == .completed {
-                DispatchQueue.main.async(execute: {
+        _ = asset.export(to: outputPath, videoComposition: videoComposition, removeOldFile: true) { exportSession in
+            DispatchQueue.main.async {
+                switch exportSession.status {
+                case .completed:
                     completion(outputPath)
-                })
-                return
-            } else if exporter?.status == .failed {
-                print("YPVideoProcessor -> Export of the video failed. Reason: \(String(describing: exporter?.error))")
+                case .failed:
+                    print("YPVideoProcessor -> Export of the video failed. Reason: \(String(describing: exportSession.error))")
+                    completion(nil)
+                default:
+                    print("YPVideoProcessor -> Export session completed with \(exportSession.status) status. Not handling.")
+                    completion(nil)
+                }
             }
-            completion(nil)
-            return
         }
     }
-    
 }

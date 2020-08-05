@@ -48,6 +48,10 @@ public class YPVideoCaptureVC: UIViewController, YPPermissionCheckable {
         // Focus
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(focusTapped(_:)))
         v.previewViewContainer.addGestureRecognizer(tapRecognizer)
+        
+        // Zoom
+        let pinchRecongizer = UIPinchGestureRecognizer(target: self, action: #selector(self.pinch(_:)))
+        v.previewViewContainer.addGestureRecognizer(pinchRecongizer)
     }
 
     func start() {
@@ -167,6 +171,19 @@ public class YPVideoCaptureVC: UIViewController, YPPermissionCheckable {
         YPHelper.animateFocusView(v.focusView)
     }
     
+    // MARK: - Zoom
+    
+    @objc
+    func pinch(_ recognizer: UIPinchGestureRecognizer) {
+        doAfterPermissionCheck { [weak self] in
+            self?.zoom(recognizer: recognizer)
+        }
+    }
+    
+    func zoom(recognizer: UIPinchGestureRecognizer) {
+        videoHelper.zoom(began: recognizer.state == .began, scale: recognizer.scale)
+    }
+    
     // MARK: - UI State
     
     enum FlashMode {
@@ -225,6 +242,8 @@ public class YPVideoCaptureVC: UIViewController, YPPermissionCheckable {
             case .off: return .off
             case .on: return .on
             case .auto: return .auto
+            @unknown default:
+                fatalError()
             }
         } else {
             return .noFlash

@@ -48,7 +48,7 @@ class YPCropVC: UIViewController {
                                            style: .plain,
                                            target: self,
                                            action: #selector(cancel))
-        cancelButton.tintColor = .white
+        cancelButton.tintColor = .ypLabel
         
         let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         
@@ -56,7 +56,8 @@ class YPCropVC: UIViewController {
                                            style: .plain,
                                            target: self,
                                            action: #selector(done))
-        saveButton.tintColor = .white
+        saveButton.tintColor = .ypLabel
+        
         v.toolbar.items = [cancelButton, flexibleSpace, saveButton]
     }
     
@@ -118,6 +119,8 @@ extension YPCropVC: UIGestureRecognizerDelegate {
             pinchGestureEnded()
         case .cancelled, .failed, .possible:
             ()
+        @unknown default:
+            fatalError()
         }
         // Reset the pinch scale.
         sender.scale = 1.0

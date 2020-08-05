@@ -100,6 +100,7 @@ config.isScrollToChangeModesEnabled = true
 config.onlySquareImagesFromCamera = true
 config.usesFrontCamera = false
 config.showsPhotoFilters = true
+config.showsVideoTrimmer = true
 config.shouldSaveNewPicturesToAlbum = true
 config.albumName = "DefaultYPImagePickerAlbumName"
 config.startOnScreen = YPPickerScreen.photo
@@ -113,19 +114,23 @@ config.preferredStatusBarStyle = UIStatusBarStyle.default
 config.bottomMenuItemSelectedColour = UIColor(r: 38, g: 38, b: 38)
 config.bottomMenuItemUnSelectedColour = UIColor(r: 153, g: 153, b: 153)
 config.filters = [DefaultYPFilters...]
+config.maxCameraZoomFactor = 1.0
 ```
 
 ### Library
 ```swift
 config.library.options = nil
 config.library.onlySquare = false
+config.library.isSquareByDefault = true
 config.library.minWidthForItem = nil
 config.library.mediaType = YPlibraryMediaType.photo
+config.library.defaultMultipleSelection = false
 config.library.maxNumberOfItems = 1
 config.library.minNumberOfItems = 1
 config.library.numberOfItemsInRow = 4
 config.library.spacingBetweenItems = 1.0
 config.library.skipSelectionsGallery = false
+config.library.preselectedItems = nil
 ```
 
 ### Video
@@ -139,6 +144,11 @@ config.video.trimmerMaxDuration = 60.0
 config.video.trimmerMinDuration = 3.0
 ```
 
+### Gallery
+```swift
+config.gallery.hidesRemoveButton = false
+```
+
 ## Default Configuration
 
 ```swift
@@ -147,6 +157,15 @@ YPImagePickerConfiguration.shared = config
 
 // And then use the default configuration like so:
 let picker = YPImagePicker()
+```
+
+When displaying picker on iPad, picker will support one size only you should set it before displaying it: 
+```
+let preferredContentSize = CGSize(width: 500, height: 600);
+YPImagePickerConfiguration.widthOniPad = preferredContentSize.width;
+
+// Now you can Display the picker with preferred size in dialog, popup etc
+
 ```
 
 ## Usage
@@ -226,7 +245,7 @@ picker.didFinishPicking { [unowned picker] items, cancelled in
 That's it !
 
 ## Languages
-🇺🇸 English, 🇪🇸 Spanish, 🇫🇷 French 🇷🇺 Russian, 🇳🇱 Dutch, 🇧🇷 Brazilian, 🇹🇷 Turkish, 🇸🇾 Arabic, 🇩🇪 German, 🇮🇹 Italian, 🇯🇵 Japanese, 🇨🇳 Chinese, 🇮🇩 Indonesian, 🇰🇷 Korean, 🇹🇼 Traditional Chinese（Taiwan)
+🇺🇸 English, 🇪🇸 Spanish, 🇫🇷 French 🇷🇺 Russian, 🇵🇱 Polish, 🇳🇱 Dutch, 🇧🇷 Brazilian, 🇹🇷 Turkish, 🇸🇾 Arabic, 🇩🇪 German, 🇮🇹 Italian, 🇯🇵 Japanese, 🇨🇳 Chinese, 🇮🇩 Indonesian, 🇰🇷 Korean, 🇹🇼 Traditional Chinese（Taiwan), 🇻🇳 Vietnamese, 🇹🇭 Thai. 
 
 If your language is not supported, you can still customize the wordings via the `configuration.wordings` api:
 
@@ -249,14 +268,14 @@ UINavigationBar.appearance().setBackgroundImage(coloredImage, for: UIBarMetrics.
 
 ### Navigation bar fonts
 ```swift
-let attributes = [NSAttributedStringKey.font : UIFont.systemFont(ofSize: 30, weight: .bold) ]
+let attributes = [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 30, weight: .bold) ]
 UINavigationBar.appearance().titleTextAttributes = attributes // Title fonts
 UIBarButtonItem.appearance().setTitleTextAttributes(attributes, for: .normal) // Bar Button fonts
 ```
 
 ### Navigation bar Text colors
 ```swift
-UINavigationBar.appearance().titleTextAttributes = [NSAttributedStringKey.foregroundColor : UIColor.yellow ] // Title color
+UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.yellow ] // Title color
 UINavigationBar.appearance().tintColor = .red // Left. bar buttons
 config.colors.tintColor = .green // Right bar buttons (actions)
 ```
@@ -353,3 +372,4 @@ See [LICENSE](LICENSE) for details.
 - Swift 4.2 -> version [**3.5.2**](https://github.com/Yummypets/YPImagePicker/releases/tag/3.5.2)
 releases/tag/3.4.0)
 - Swift 5.0 -> version [**4.0.0**](https://github.com/Yummypets/YPImagePicker/releases/tag/4.0.0)
+- Swift 5.1 -> version [**4.1.2**](https://github.com/Yummypets/YPImagePicker/releases/tag/4.1.2)

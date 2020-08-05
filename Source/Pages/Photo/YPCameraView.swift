@@ -53,16 +53,34 @@ class YPCameraView: UIView, UIGestureRecognizerDelegate {
         // Layout
         let isIphone4 = UIScreen.main.bounds.height == 480
         let sideMargin: CGFloat = isIphone4 ? 20 : 0
-        layout(
-            0,
-            |-sideMargin-previewViewContainer-sideMargin-|,
-            -2,
-            |progressBar|,
-            0,
-            |buttonsContainer|,
-            0
-        )
-        previewViewContainer.heightEqualsWidth()
+        if YPConfig.onlySquareImagesFromCamera {
+            layout(
+                0,
+                |-sideMargin-previewViewContainer-sideMargin-|,
+                -2,
+                |progressBar|,
+                0,
+                |buttonsContainer|,
+                0
+            )
+            
+            previewViewContainer.heightEqualsWidth()
+        }
+        else {
+            layout(
+                0,
+                |-sideMargin-previewViewContainer-sideMargin-|,
+                -2,
+                |progressBar|,
+                0
+            )
+            
+            previewViewContainer.fillContainer()
+            
+            buttonsContainer.fillHorizontally()
+            buttonsContainer.height(100)
+            buttonsContainer.Bottom == previewViewContainer.Bottom - 50
+        }
 
         overlayView?.followEdges(previewViewContainer)
 
@@ -79,17 +97,17 @@ class YPCameraView: UIView, UIGestureRecognizerDelegate {
         shotButton.size(84).centerHorizontally()
 
         // Style
-        backgroundColor = YPConfig.colors.photoVideoScreenBackground
-        previewViewContainer.backgroundColor = .black
+        backgroundColor = YPConfig.colors.photoVideoScreenBackgroundColor
+        previewViewContainer.backgroundColor = UIColor.ypLabel
         timeElapsedLabel.style { l in
             l.textColor = .white
             l.text = "00:00"
             l.isHidden = true
-            l.font = .monospacedDigitSystemFont(ofSize: 13, weight: UIFont.Weight.medium)
+            l.font = .monospacedDigitSystemFont(ofSize: 13, weight: .medium)
         }
         progressBar.style { p in
             p.trackTintColor = .clear
-            p.tintColor = .red
+            p.tintColor = .ypSystemRed
         }
         flashButton.setImage(YPConfig.icons.flashOffIcon, for: .normal)
         flipButton.setImage(YPConfig.icons.loopIcon, for: .normal)

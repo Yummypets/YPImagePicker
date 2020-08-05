@@ -16,7 +16,7 @@ final class YPBottomPagerView: UIView {
     
     convenience init() {
         self.init(frame: .zero)
-        backgroundColor = UIColor(red: 239/255, green: 238/255, blue: 237/255, alpha: 1)
+        backgroundColor = .offWhiteOrBlack
         
         sv(
             scrollView,
@@ -35,7 +35,7 @@ final class YPBottomPagerView: UIView {
         } else {
             header.bottom(0)
         }
-        header.heightConstraint?.constant = YPConfig.hidesBottomBar ? 0 : 44
+        header.heightConstraint?.constant = (YPConfig.hidesBottomBar || (YPConfig.screens.count == 1)) ? 0 : 44
         
         clipsToBounds = false
         setupScrollView()

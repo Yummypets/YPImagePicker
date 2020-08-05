@@ -28,6 +28,7 @@ class YPVideoCaptureHelper: NSObject {
     private var isPreviewSetup = false
     private var previewView: UIView!
     private var motionManager = CMMotionManager()
+    private var initVideoZoomFactor: CGFloat = 1.0
     
     // MARK: - Init
     
@@ -62,6 +63,8 @@ class YPVideoCaptureHelper: NSObject {
                     self?.session.startRunning()
                     completion()
                     self?.tryToSetupPreview()
+                @unknown default:
+                    fatalError()
                 }
             }
         }
@@ -108,6 +111,40 @@ class YPVideoCaptureHelper: NSObject {
         if let device = videoInput?.device {
             setFocusPointOnDevice(device: device, point: point)
         }
+    }
+    
+    // MARK: - Zoom
+    
+    public func zoom(began: Bool, scale: CGFloat) {
+       guard let device = videoInput?.device else {
+           return
+       }
+       
+       if began {
+           initVideoZoomFactor = device.videoZoomFactor
+           return
+       }
+       
+       do {
+           try device.lockForConfiguration()
+           defer { device.unlockForConfiguration() }
+           
+           var minAvailableVideoZoomFactor: CGFloat = 1.0
+           if #available(iOS 11.0, *) {
+               minAvailableVideoZoomFactor = device.minAvailableVideoZoomFactor
+           }
+           var maxAvailableVideoZoomFactor: CGFloat = device.activeFormat.videoMaxZoomFactor
+           if #available(iOS 11.0, *) {
+               maxAvailableVideoZoomFactor = device.maxAvailableVideoZoomFactor
+           }
+           maxAvailableVideoZoomFactor = min(maxAvailableVideoZoomFactor, YPConfig.maxCameraZoomFactor)
+           
+           let desiredZoomFactor = initVideoZoomFactor * scale
+           device.videoZoomFactor = max(minAvailableVideoZoomFactor, min(desiredZoomFactor, maxAvailableVideoZoomFactor))
+       }
+       catch let error {
+          print("💩 \(error)")
+       }
     }
     
     // MARK: - Stop Camera
@@ -191,6 +228,9 @@ class YPVideoCaptureHelper: NSObject {
                 CMTimeMakeWithSeconds(self.videoRecordingTimeLimit, preferredTimescale: timeScale)
             videoOutput.maxRecordedDuration = maxDuration
             videoOutput.minFreeDiskSpaceLimit = 1024 * 1024
+            if (YPConfig.video.fileType == .mp4) {
+                videoOutput.movieFragmentInterval = .invalid // Allows audio for MP4s over 10 seconds.
+            }
             if session.canAddOutput(videoOutput) {
                 session.addOutput(videoOutput)
             }

@@ -23,6 +23,7 @@ final class YPLibraryView: UIView {
     let maxNumberWarningLabel = UILabel()
     let progressView = UIProgressView()
     let line = UIView()
+    var shouldShowLoader = false
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -32,11 +33,11 @@ final class YPLibraryView: UIView {
         )
         
         layout(
-            assetViewContainer,
+            assetViewContainer!,
             |line| ~ 1
         )
         
-        line.backgroundColor = .white
+        line.backgroundColor = .ypSystemBackground
         
         setupMaxNumberOfItemsView()
         setupProgressBarView()
@@ -62,7 +63,7 @@ final class YPLibraryView: UIView {
         }
         
         // Style
-        maxNumberWarningView.backgroundColor = UIColor(r: 246, g: 248, b: 248)
+        maxNumberWarningView.backgroundColor = .ypSecondarySystemBackground
         maxNumberWarningLabel.font = UIFont(name: "Helvetica Neue", size: 14)
         maxNumberWarningView.isHidden = true
     }
@@ -96,21 +97,35 @@ extension YPLibraryView {
         return xibView
     }
     
-    // MARK: - Grid
+    // MARK: - Overlay view
     
-    func hideGrid() {
-        assetViewContainer.grid.alpha = 0
+    func hideOverlayView() {
+        assetViewContainer.itemOverlay?.alpha = 0
     }
     
     // MARK: - Loader and progress
     
     func fadeInLoader() {
-        UIView.animate(withDuration: 0.2) {
-            self.assetViewContainer.spinnerView.alpha = 1
+        shouldShowLoader = true
+        // Only show loader if full res image takes more than 0.5s to load.
+        if #available(iOS 10.0, *) {
+            Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { _ in
+                if self.shouldShowLoader == true {
+                    UIView.animate(withDuration: 0.2) {
+                        self.assetViewContainer.spinnerView.alpha = 1
+                    }
+                }
+            }
+        } else {
+            // Fallback on earlier versions
+            UIView.animate(withDuration: 0.2) {
+                self.assetViewContainer.spinnerView.alpha = 1
+            }
         }
     }
     
     func hideLoader() {
+        shouldShowLoader = false
         assetViewContainer.spinnerView.alpha = 0
     }
     
@@ -142,7 +157,11 @@ extension YPLibraryView {
     }
     
     func cellSize() -> CGSize {
-        let size = UIScreen.main.bounds.width/4 * UIScreen.main.scale
+        var screenWidth : CGFloat = UIScreen.main.bounds.width
+        if UIDevice.current.userInterfaceIdiom == .pad && YPImagePickerConfiguration.widthOniPad > 0 {
+            screenWidth =  YPImagePickerConfiguration.widthOniPad
+        }
+        let size = screenWidth / 4 * UIScreen.main.scale
         return CGSize(width: size, height: size)
     }
 }

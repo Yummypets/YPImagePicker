@@ -17,6 +17,19 @@ internal var YPConfig: YPImagePickerConfiguration { return YPImagePickerConfigur
 public struct YPImagePickerConfiguration {
     public static var shared: YPImagePickerConfiguration = YPImagePickerConfiguration()
     
+    
+    public static var widthOniPad : CGFloat = -1
+    
+    public static var screenWidth : CGFloat {
+        get {
+            var screenWidth : CGFloat = UIScreen.main.bounds.width
+            if UIDevice.current.userInterfaceIdiom == .pad && YPImagePickerConfiguration.widthOniPad > 0 {
+                screenWidth =  YPImagePickerConfiguration.widthOniPad
+            }
+            return screenWidth
+        }
+    }
+    
     public init() {}
     
     /// Scroll to change modes, defaults to true
@@ -27,6 +40,9 @@ public struct YPImagePickerConfiguration {
     
     // Video configuration
     public var video = YPConfigVideo()
+    
+    // Gallery configuration
+    public var gallery = YPConfigSelectionsGallery()
     
     /// Use this property to modify the default wordings provided.
     public var wordings = YPWordings()
@@ -85,10 +101,13 @@ public struct YPImagePickerConfiguration {
     public var preferredStatusBarStyle = UIStatusBarStyle.default
     
     /// Defines the text colour to be shown when a bottom option is selected
-    public var bottomMenuItemSelectedColour = UIColor(r: 38, g: 38, b: 38)
+    public var bottomMenuItemSelectedTextColour: UIColor = .ypLabel
     
     /// Defines the text colour to be shown when a bottom option is unselected
-    public var bottomMenuItemUnSelectedColour = UIColor(r: 153, g: 153, b: 153)
+    public var bottomMenuItemUnSelectedTextColour: UIColor = .ypSecondaryLabel
+    
+    /// Defines the max camera zoom factor for camera. Disable camera zoom with 1. Default is 1.
+    public var maxCameraZoomFactor: CGFloat = 1.0
     
     /// List of default filters which will be added on the filter screen
     public var filters: [YPFilter] = [
@@ -158,9 +177,12 @@ public struct YPImagePickerConfiguration {
 public struct YPConfigLibrary {
     
     public var options: PHFetchOptions? = nil
-    
-    /// Set this to true if you want to force the library output to be a squared image. Defaults to false
+
+    /// Set this to true if you want to force the library output to be a squared image. Defaults to false.
     public var onlySquare = false
+    
+    /// Sets the cropping style to square or not. Ignored if `onlySquare` is true. Defaults to true.
+    public var isSquareByDefault = true
     
     /// Minimum width, to prevent selectiong too high images. Have sense if onlySquare is true and the image is portrait.
     public var minWidthForItem: CGFloat?
@@ -170,6 +192,9 @@ public struct YPConfigLibrary {
 
     /// Initial state of multiple selection button.
     public var defaultMultipleSelection = false
+
+    /// Pre-selects the current item on setting multiple selection
+    public var preSelectItemOnMultipleSelection = true
 
     /// Anything superior than 1 will enable the multiple selection feature.
     public var maxNumberOfItems = 1
@@ -186,12 +211,29 @@ public struct YPConfigLibrary {
 
     /// Allow to skip the selections gallery when selecting the multiple media items. Defaults to false.
     public var skipSelectionsGallery = false
+    
+    /// Allow to preselected media items
+    public var preselectedItems: [YPMediaItem]?
+    
+    /// Set the overlay type shown on top of the selected library item
+    public var itemOverlayType: YPItemOverlayType = .grid
 }
 
 /// Encapsulates video specific settings.
 public struct YPConfigVideo {
     
-    /// Choose the videoCompression.  Defaults to AVAssetExportPresetHighestQuality
+    /** Choose the videoCompression. Defaults to AVAssetExportPresetHighestQuality
+     - "AVAssetExportPresetLowQuality"
+     - "AVAssetExportPreset640x480"
+     - "AVAssetExportPresetMediumQuality"
+     - "AVAssetExportPreset1920x1080"
+     - "AVAssetExportPreset1280x720"
+     - "AVAssetExportPresetHighestQuality"
+     - "AVAssetExportPresetAppleM4A"
+     - "AVAssetExportPreset3840x2160"
+     - "AVAssetExportPreset960x540"
+     - "AVAssetExportPresetPassthrough" // without any compression
+     */
     public var compression: String = AVAssetExportPresetHighestQuality
     
     /// Choose the result video extension if you trim or compress a video. Defaults to mov.
@@ -210,11 +252,28 @@ public struct YPConfigVideo {
     public var minimumTimeLimit: TimeInterval = 3.0
     
     /// The maximum duration allowed for the trimming. Change it before setting the asset, as the asset preview
+    /// - Tag: trimmerMaxDuration
     public var trimmerMaxDuration: Double = 60.0
     
     /// The minimum duration allowed for the trimming.
     /// The handles won't pan further if the minimum duration is attained.
     public var trimmerMinDuration: Double = 3.0
+    
+    /// Defines if the user skips the trimer stage, the video will be trimmed automatically to the maximum value of trimmerMaxDuration
+    /// This case occurs when the user already has a video selected and enables a multiselection to pick more than one type of media (video or image), so, the trimmer step becomes optional.
+    /// - SeeAlso: [trimmerMaxDuration](x-source-tag://trimmerMaxDuration)
+    public var automaticTrimToTrimmerMaxDuration: Bool = false
+}
+
+/// Encapsulates gallery specific settings.
+public struct YPConfigSelectionsGallery {
+    /// Defines if the remove button should be hidden when showing the gallery. Default is true.
+    public var hidesRemoveButton = true
+}
+
+public enum YPItemOverlayType {
+    case none
+    case grid
 }
 
 public enum YPlibraryMediaType {

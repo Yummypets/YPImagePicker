@@ -81,7 +81,7 @@ class ExampleViewController: UIViewController {
 
         /* Choose what media types are available in the library. Defaults to `.photo` */
         config.library.mediaType = .photoAndVideo
-
+      config.library.itemOverlayType = .grid
         /* Enables selecting the front camera by default, useful for avatars. Defaults to false */
         // config.usesFrontCamera = true
 
@@ -141,8 +141,11 @@ class ExampleViewController: UIViewController {
 
         /* Defines if the bottom bar should be hidden when showing the picker. Default is false */
         config.hidesBottomBar = false
+        
+        config.maxCameraZoomFactor = 2.0
 
         config.library.maxNumberOfItems = 5
+        config.gallery.hidesRemoveButton = false
         
         /* Disable scroll to change between mode */
         // config.isScrollToChangeModesEnabled = false
@@ -169,6 +172,8 @@ class ExampleViewController: UIViewController {
         //
         //config.library.options = options
 
+        config.library.preselectedItems = selectedItems
+        
         let picker = YPImagePicker(configuration: config)
         
         picker.imagePickerDelegate = self
