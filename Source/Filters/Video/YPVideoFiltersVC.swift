@@ -81,6 +81,7 @@ public class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
                                                                style: .plain,
                                                                target: self,
                                                                action: #selector(cancel))
+            navigationItem.leftBarButtonItem?.tintColor = YPConfig.colors.tintColor
         }
         setupRightBarButtonItem()
     }
