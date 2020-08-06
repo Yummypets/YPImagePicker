@@ -85,7 +85,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
             v.collectionView.reloadData()
         }
         if YPConfig.library.defaultMultipleSelection || selection.count > 1 {
-            multipleSelectionButtonTapped()
+            showMultipleSelection()
         }
     }
     
@@ -158,15 +158,17 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     @objc
     func multipleSelectionButtonTapped() {
         doAfterPermissionCheck { [weak self] in
-            self?.showMultipleSelection()
+            if let self = self {
+                if !self.multipleSelectionEnabled {
+                    self.selection.removeAll()
+                }
+                self.showMultipleSelection()
+            }
         }
     }
     
-    private func showMultipleSelection() {
-        if !multipleSelectionEnabled {
-            selection.removeAll()
-        }
-        
+    func showMultipleSelection() {
+
         // Prevent desactivating multiple selection when using `minNumberOfItems`
         if YPConfig.library.minNumberOfItems > 1 && multipleSelectionEnabled {
             return
