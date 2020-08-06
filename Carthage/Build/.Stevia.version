@@ -1,10 +1,22 @@
 {
+  "Mac" : [
+
+  ],
+  "watchOS" : [
+
+  ],
+  "tvOS" : [
+    {
+      "name" : "Stevia",
+      "hash" : "d2efad52d8e7460189aa752f1e4e5496832d9a950d5f4582776b932ad7cfdb18",
+      "swiftToolchainVersion" : "5.2.4 (swiftlang-1103.0.32.9 clang-1103.0.32.53)"
+    }
+  ],
   "commitish" : "4.7.3",
   "iOS" : [
     {
-      "hash" : "e6a0b3b2cb2938907b10836c3e6fe3e59445ce400f2999fa4e56ab98a84df614",
       "name" : "Stevia",
-      "linking" : "dynamic",
+      "hash" : "ef61389c5f3e0ee24755e69a7c071100f3c112636627510694542493904fea22",
       "swiftToolchainVersion" : "5.2.4 (swiftlang-1103.0.32.9 clang-1103.0.32.53)"
     }
   ]
