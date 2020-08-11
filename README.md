@@ -110,11 +110,14 @@ config.targetImageSize = YPImageSize.original
 config.overlayView = UIView()
 config.hidesStatusBar = true
 config.hidesBottomBar = false
+config.hidesCancelButton = false
 config.preferredStatusBarStyle = UIStatusBarStyle.default
 config.bottomMenuItemSelectedColour = UIColor(r: 38, g: 38, b: 38)
 config.bottomMenuItemUnSelectedColour = UIColor(r: 153, g: 153, b: 153)
 config.filters = [DefaultYPFilters...]
 config.maxCameraZoomFactor = 1.0
+config.preSelectItemOnMultipleSelection = true
+config.fonts..
 ```
 
 ### Library
@@ -157,6 +160,15 @@ YPImagePickerConfiguration.shared = config
 
 // And then use the default configuration like so:
 let picker = YPImagePicker()
+```
+
+When displaying picker on iPad, picker will support one size only you should set it before displaying it: 
+```
+let preferredContentSize = CGSize(width: 500, height: 600);
+YPImagePickerConfiguration.widthOniPad = preferredContentSize.width;
+
+// Now you can Display the picker with preferred size in dialog, popup etc
+
 ```
 
 ## Usage
@@ -236,7 +248,7 @@ picker.didFinishPicking { [unowned picker] items, cancelled in
 That's it !
 
 ## Languages
-🇺🇸 English, 🇪🇸 Spanish, 🇫🇷 French 🇷🇺 Russian, 🇳🇱 Dutch, 🇧🇷 Brazilian, 🇹🇷 Turkish, 🇸🇾 Arabic, 🇩🇪 German, 🇮🇹 Italian, 🇯🇵 Japanese, 🇨🇳 Chinese, 🇮🇩 Indonesian, 🇰🇷 Korean, 🇹🇼 Traditional Chinese（Taiwan), 🇻🇳 Vietnamese, 🇹🇭 Thai. 
+🇺🇸 English, 🇪🇸 Spanish, 🇫🇷 French 🇷🇺 Russian, 🇵🇱 Polish, 🇳🇱 Dutch, 🇧🇷 Brazilian, 🇹🇷 Turkish, 🇸🇾 Arabic, 🇩🇪 German, 🇮🇹 Italian, 🇯🇵 Japanese, 🇨🇳 Chinese, 🇮🇩 Indonesian, 🇰🇷 Korean, 🇹🇼 Traditional Chinese（Taiwan), 🇻🇳 Vietnamese, 🇹🇭 Thai. 
 
 If your language is not supported, you can still customize the wordings via the `configuration.wordings` api:
 

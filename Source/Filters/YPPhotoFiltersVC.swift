@@ -29,7 +29,6 @@ open class YPPhotoFiltersVC: UIViewController, IsMediaFilterVC, UIGestureRecogni
     public var didCancel: (() -> Void)?
     public var shouldSave: ((YPMediaPhoto, YPFilter?) -> Bool)?
 
-
     fileprivate let filters: [YPFilter] = YPConfig.filters
 
     fileprivate var selectedFilter: YPFilter?
@@ -85,6 +84,7 @@ open class YPPhotoFiltersVC: UIViewController, IsMediaFilterVC, UIGestureRecogni
                                                                style: .plain,
                                                                target: self,
                                                                action: #selector(cancel))
+            navigationItem.leftBarButtonItem?.setFont(font: YPConfig.fonts.leftBarButtonFont, forState: .normal)
         }
         setupRightBarButton()
         
@@ -109,6 +109,7 @@ open class YPPhotoFiltersVC: UIViewController, IsMediaFilterVC, UIGestureRecogni
                                                             target: self,
                                                             action: #selector(save))
         navigationItem.rightBarButtonItem?.tintColor = YPConfig.colors.tintColor
+        navigationItem.rightBarButtonItem?.setFont(font: YPConfig.fonts.rightBarButtonFont, forState: .normal)
     }
     
     // MARK: - Methods 🏓

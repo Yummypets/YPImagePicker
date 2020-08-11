@@ -49,7 +49,8 @@ open class YPBottomPager: UIViewController, UIScrollViewDelegate {
     }
     
     func reload() {
-        let viewWidth: CGFloat = UIScreen.main.bounds.width
+        let screenWidth = YPImagePickerConfiguration.screenWidth
+        let viewWidth: CGFloat = screenWidth
         for (index, c) in controllers.enumerated() {
             c.willMove(toParent: self)
             addChild(c)
@@ -87,7 +88,8 @@ open class YPBottomPager: UIViewController, UIScrollViewDelegate {
     }
     
     func showPage(_ page: Int, animated: Bool = true) {
-        let x = CGFloat(page) * UIScreen.main.bounds.width
+        let screenWidth = YPImagePickerConfiguration.screenWidth
+        let x = CGFloat(page) * screenWidth
         v.scrollView.setContentOffset(CGPoint(x: x, y: 0), animated: animated)
         selectPage(page)
     }
@@ -99,7 +101,7 @@ open class YPBottomPager: UIViewController, UIScrollViewDelegate {
         currentPage = page
         //select menu item and deselect others
         for (i, mi) in v.header.menuItems.enumerated() {
-            if (i == page) {
+            if i == page {
                 mi.select()
             } else {
                 mi.deselect()
@@ -110,7 +112,8 @@ open class YPBottomPager: UIViewController, UIScrollViewDelegate {
     
     func startOnPage(_ page: Int) {
         currentPage = page
-        let x = CGFloat(page) * UIScreen.main.bounds.width
+        let screenWidth = YPImagePickerConfiguration.screenWidth
+        let x = CGFloat(page) * screenWidth
         v.scrollView.setContentOffset(CGPoint(x: x, y: 0), animated: false)
         //select menut item and deselect others
         for mi in v.header.menuItems {

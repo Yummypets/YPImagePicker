@@ -81,6 +81,7 @@ public class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
                                                                style: .plain,
                                                                target: self,
                                                                action: #selector(cancel))
+            navigationItem.leftBarButtonItem?.setFont(font: YPConfig.fonts.leftBarButtonFont, forState: .normal)
         }
         setupRightBarButtonItem()
     }
@@ -111,6 +112,7 @@ public class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
                                                             target: self,
                                                             action: #selector(save))
         navigationItem.rightBarButtonItem?.tintColor = YPConfig.colors.tintColor
+        navigationItem.rightBarButtonItem?.setFont(font: YPConfig.fonts.rightBarButtonFont, forState: .normal)
     }
     
     // MARK: - Top buttons
@@ -134,19 +136,20 @@ public class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
                 switch session.status {
                 case .completed:
                     DispatchQueue.main.async {
-                        if let coverImage = self?.coverImageView.image,
-                            let asset = self?.inputVideo.asset {
-                            let resultVideo = YPMediaVideo(thumbnail: coverImage, videoURL: destinationURL, asset: asset)
+                        if let coverImage = self?.coverImageView.image {
+                            let resultVideo = YPMediaVideo(thumbnail: coverImage,
+														   videoURL: destinationURL,
+														   asset: self?.inputVideo.asset)
                             didSave(YPMediaItem.video(v: resultVideo))
                             self?.setupRightBarButtonItem()
                         } else {
-                            print("YPVideoFiltersVC -> Don't have coverImage or asset.")
+                            print("YPVideoFiltersVC -> Don't have coverImage.")
                         }
                     }
                 case .failed:
-                    print("YPVideoFiltersVC -> Export of the video failed. Reason: \(String(describing: session.error))")
+                    print("YPVideoFiltersVC Export of the video failed. Reason: \(String(describing: session.error))")
                 default:
-                    print("YPVideoFiltersVC -> Export session completed with \(session.status) status. Not handling.")
+                    print("YPVideoFiltersVC Export session completed with \(session.status) status. Not handled")
                 }
             }
         } catch let error {

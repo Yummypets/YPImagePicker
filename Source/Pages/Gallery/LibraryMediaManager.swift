@@ -30,7 +30,8 @@ class LibraryMediaManager {
     }
     
     func updateCachedAssets(in collectionView: UICollectionView) {
-        let size = UIScreen.main.bounds.width/4 * UIScreen.main.scale
+        let screenWidth = YPImagePickerConfiguration.screenWidth
+        let size = screenWidth / 4 * UIScreen.main.scale
         let cellSize = CGSize(width: size, height: size)
         
         var preheatRect = collectionView.bounds
@@ -65,7 +66,16 @@ class LibraryMediaManager {
         }
     }
     
-    func fetchVideoUrlAndCrop(for videoAsset: PHAsset, cropRect: CGRect, callback: @escaping (_ videoURL: URL?) -> Void) {
+    func fetchVideoUrlAndCrop(for videoAsset: PHAsset,
+                              cropRect: CGRect,
+                              callback: @escaping (_ videoURL: URL?) -> Void) {
+        fetchVideoUrlAndCropWithDuration(for: videoAsset, cropRect: cropRect, duration: nil, callback: callback)
+    }
+    
+    func fetchVideoUrlAndCropWithDuration(for videoAsset: PHAsset,
+                                          cropRect: CGRect,
+                                          duration: CMTime?,
+                                          callback: @escaping (_ videoURL: URL?) -> Void) {
         let videosOptions = PHVideoRequestOptions()
         videosOptions.isNetworkAccessAllowed = true
         videosOptions.deliveryMode = .highQualityFormat
@@ -74,7 +84,8 @@ class LibraryMediaManager {
                 guard let asset = asset else { print("⚠️ PHCachingImageManager >>> Don't have the asset"); return }
                 
                 let assetComposition = AVMutableComposition()
-                let trackTimeRange = CMTimeRangeMake(start: CMTime.zero, duration: asset.duration)
+                let assetMaxDuration = self.getMaxVideoDuration(between: duration, andAssetDuration: asset.duration)
+                let trackTimeRange = CMTimeRangeMake(start: CMTime.zero, duration: assetMaxDuration)
                 
                 // 1. Inserting audio and video tracks in composition
                 
@@ -113,10 +124,10 @@ class LibraryMediaManager {
                 // Video Composition
                 let videoComposition = AVMutableVideoComposition(propertiesOf: asset)
                 videoComposition.instructions = [mainInstructions]
-                videoComposition.renderSize = cropRect.size // needed? 
+                videoComposition.renderSize = cropRect.size // needed?
                 
                 // 5. Configuring export session
-
+                
                 let fileURL = URL(fileURLWithPath: NSTemporaryDirectory())
                     .appendingUniquePathComponent(pathExtension: YPConfig.video.fileType.fileExtension)
                 let exportSession = assetComposition
@@ -136,10 +147,12 @@ class LibraryMediaManager {
                                             callback(nil)
                                         }
                                     case .failed:
-                                        print("LibraryMediaManager -> Export of the video failed. Reason: \(String(describing: session.error))")
+                                        print("LibraryMediaManager")
+										print("Export of the video failed : \(String(describing: session.error))")
                                         callback(nil)
                                     default:
-                                        print("LibraryMediaManager -> Export session completed with \(session.status) status. Not handling.")
+										print("LibraryMediaManager")
+                                        print("Export session completed with \(session.status) status. Not handled.")
                                         callback(nil)
                                     }
                                 }
@@ -160,6 +173,16 @@ class LibraryMediaManager {
             } catch let error {
                 print("⚠️ PHCachingImageManager >>> \(error)")
             }
+        }
+    }
+    
+    private func getMaxVideoDuration(between duration: CMTime?, andAssetDuration assetDuration: CMTime) -> CMTime {
+        guard let duration = duration else { return assetDuration }
+
+        if assetDuration <= duration {
+            return assetDuration
+        } else {
+            return duration
         }
     }
     

@@ -81,7 +81,7 @@ final class YPAssetZoomableView: UIScrollView {
             // Stored crop position in multiple selection
             if let scp173 = storedCropPosition {
                 strongSelf.applyStoredCropPosition(scp173)
-                //MARK: add update CropInfo after multiple
+                // MARK: add update CropInfo after multiple
                 updateCropInfo()
             }
         }
@@ -128,7 +128,7 @@ final class YPAssetZoomableView: UIScrollView {
             // Stored crop position in multiple selection
             if let scp173 = storedCropPosition {
                 strongSelf.applyStoredCropPosition(scp173)
-                //MARK: add update CropInfo after multiple
+                // add update CropInfo after multiple
                 updateCropInfo()
             }
             
@@ -142,7 +142,8 @@ final class YPAssetZoomableView: UIScrollView {
         self.zoomScale = 1
         
         // Calculating and setting the image view frame depending on screenWidth
-        let screenWidth: CGFloat = UIScreen.main.bounds.width
+        let screenWidth = YPImagePickerConfiguration.screenWidth
+        
         let w = image.size.width
         let h = image.size.height
 

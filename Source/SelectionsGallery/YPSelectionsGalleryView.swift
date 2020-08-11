@@ -47,7 +47,8 @@ class YPGalleryCollectionViewFlowLayout: UICollectionViewFlowLayout {
         let overlapppingNextPhoto: CGFloat = 37
         minimumLineSpacing = spacing
         minimumInteritemSpacing = spacing
-        let size = UIScreen.main.bounds.width - (sideMargin + overlapppingNextPhoto)
+        let screenWidth = YPImagePickerConfiguration.screenWidth
+        let size = screenWidth - (sideMargin + overlapppingNextPhoto)
         itemSize = CGSize(width: size, height: size)
         sectionInset = UIEdgeInsets(top: 0, left: sideMargin, bottom: 0, right: sideMargin)
     }
@@ -58,9 +59,10 @@ class YPGalleryCollectionViewFlowLayout: UICollectionViewFlowLayout {
     
     // This makes so that Scrolling the collection view always stops with a centered image.
     // This is heavily inpired form :
-    // https://stackoverflow.com/questions/13492037/targetcontentoffsetforproposedcontentoffsetwithscrollingvelocity-without-subcla
-    override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint, withScrollingVelocity velocity: CGPoint) -> CGPoint {
-        
+    // https://stackoverflow.com/questions/13492037/targetcontentoffsetforproposedcontentoffsetwithscrollingvelocity
+	// -without-subcla
+    override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint,
+									  withScrollingVelocity velocity: CGPoint) -> CGPoint {
         let spacing: CGFloat = 12
         let overlapppingNextPhoto: CGFloat = 37
         var offsetAdjustment = CGFloat.greatestFiniteMagnitude// MAXFLOAT
@@ -69,7 +71,10 @@ class YPGalleryCollectionViewFlowLayout: UICollectionViewFlowLayout {
         guard let collectionView = collectionView else {
             return proposedContentOffset
         }
-        let targetRect = CGRect(x: proposedContentOffset.x, y: 0, width: collectionView.bounds.size.width, height: collectionView.bounds.size.height)
+        let targetRect = CGRect(x: proposedContentOffset.x,
+								y: 0,
+								width: collectionView.bounds.size.width,
+								height: collectionView.bounds.size.height)
         guard let array = super.layoutAttributesForElements(in: targetRect) else {
             return proposedContentOffset
         }

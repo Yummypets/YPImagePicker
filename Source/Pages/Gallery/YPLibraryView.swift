@@ -64,7 +64,7 @@ final class YPLibraryView: UIView {
         
         // Style
         maxNumberWarningView.backgroundColor = .ypSecondarySystemBackground
-        maxNumberWarningLabel.font = UIFont(name: "Helvetica Neue", size: 14)
+        maxNumberWarningLabel.font = YPConfig.fonts.libaryWarningFont
         maxNumberWarningView.isHidden = true
     }
     
@@ -91,16 +91,15 @@ extension YPLibraryView {
     
     class func xibView() -> YPLibraryView? {
         let bundle = Bundle(for: YPPickerVC.self)
-        let nib = UINib(nibName: "YPLibraryView",
-                        bundle: bundle)
+        let nib = UINib(nibName: "YPLibraryView", bundle: bundle)
         let xibView = nib.instantiate(withOwner: self, options: nil)[0] as? YPLibraryView
         return xibView
     }
     
-    // MARK: - Grid
+    // MARK: - Overlay view
     
-    func hideGrid() {
-        assetViewContainer.grid.alpha = 0
+    func hideOverlayView() {
+        assetViewContainer.itemOverlay?.alpha = 0
     }
     
     // MARK: - Loader and progress
@@ -157,7 +156,11 @@ extension YPLibraryView {
     }
     
     func cellSize() -> CGSize {
-        let size = UIScreen.main.bounds.width/4 * UIScreen.main.scale
+        var screenWidth: CGFloat = UIScreen.main.bounds.width
+        if UIDevice.current.userInterfaceIdiom == .pad && YPImagePickerConfiguration.widthOniPad > 0 {
+            screenWidth =  YPImagePickerConfiguration.widthOniPad
+        }
+        let size = screenWidth / 4 * UIScreen.main.scale
         return CGSize(width: size, height: size)
     }
 }

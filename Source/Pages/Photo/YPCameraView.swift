@@ -65,8 +65,7 @@ class YPCameraView: UIView, UIGestureRecognizerDelegate {
             )
             
             previewViewContainer.heightEqualsWidth()
-        }
-        else {
+        } else {
             layout(
                 0,
                 |-sideMargin-previewViewContainer-sideMargin-|,
@@ -103,7 +102,7 @@ class YPCameraView: UIView, UIGestureRecognizerDelegate {
             l.textColor = .white
             l.text = "00:00"
             l.isHidden = true
-            l.font = .monospacedDigitSystemFont(ofSize: 13, weight: .medium)
+            l.font = YPConfig.fonts.cameraTimeElapsedFont
         }
         progressBar.style { p in
             p.trackTintColor = .clear

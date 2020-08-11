@@ -163,4 +163,3 @@ public class PanGestureHelper: NSObject, UIGestureRecognizerDelegate {
         isImageShown = topHeight == assetViewContainerOriginalConstraintTop
     }
 }
-

@@ -172,7 +172,8 @@ extension YPImagePicker: ImagePickerDelegate {
     }
     
     func shouldAddToSelection(indexPath: IndexPath, numSelections: Int) -> Bool {
-        return self.imagePickerDelegate?.shouldAddToSelection(indexPath: indexPath, numSelections: numSelections) ?? true
+        return self.imagePickerDelegate?.shouldAddToSelection(indexPath: indexPath, numSelections: numSelections)
+			?? true
     }
     
     func shouldFilter(photo: YPMediaPhoto, filter: YPFilter?) -> Bool {

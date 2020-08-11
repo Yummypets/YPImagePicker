@@ -17,6 +17,16 @@ internal var YPConfig: YPImagePickerConfiguration { return YPImagePickerConfigur
 public struct YPImagePickerConfiguration {
     public static var shared: YPImagePickerConfiguration = YPImagePickerConfiguration()
     
+    public static var widthOniPad: CGFloat = -1
+    
+    public static var screenWidth: CGFloat {
+		var screenWidth: CGFloat = UIScreen.main.bounds.width
+		if UIDevice.current.userInterfaceIdiom == .pad && YPImagePickerConfiguration.widthOniPad > 0 {
+			screenWidth =  YPImagePickerConfiguration.widthOniPad
+		}
+		return screenWidth
+    }
+    
     public init() {}
     
     /// Scroll to change modes, defaults to true
@@ -39,6 +49,9 @@ public struct YPImagePickerConfiguration {
     
     /// Use this property to modify the default colors provided.
     public var colors = YPColors()
+
+    /// Use this property to modify the default fonts provided
+    public var fonts = YPFonts()
     
     /// Set this to true if you want to force the camera output to be a squared image. Defaults to true
     public var onlySquareImagesFromCamera = true
@@ -77,6 +90,9 @@ public struct YPImagePickerConfiguration {
     
     /// Adds a Overlay View to the camera
     public var overlayView: UIView?
+
+	/// Defines if the navigation bar cancel button should be hidden when showing the picker. Default is false
+	public var hidesCancelButton = false
     
     /// Defines if the status bar should be hidden when showing the picker. Default is true
     public var hidesStatusBar = true
@@ -114,7 +130,7 @@ public struct YPImagePickerConfiguration {
         YPFilter(name: "Transfer", coreImageFilterName: "CIPhotoEffectTransfer"),
         YPFilter(name: "Tone", coreImageFilterName: "CILinearToSRGBToneCurve"),
         YPFilter(name: "Linear", coreImageFilterName: "CISRGBToneCurveToLinear"),
-        YPFilter(name: "Sepia", coreImageFilterName: "CISepiaTone"),
+        YPFilter(name: "Sepia", coreImageFilterName: "CISepiaTone")
         ]
     
     /// Migration
@@ -165,7 +181,7 @@ public struct YPImagePickerConfiguration {
 /// Encapsulates library specific settings.
 public struct YPConfigLibrary {
     
-    public var options: PHFetchOptions? = nil
+    public var options: PHFetchOptions?
 
     /// Set this to true if you want to force the library output to be a squared image. Defaults to false.
     public var onlySquare = false
@@ -173,7 +189,7 @@ public struct YPConfigLibrary {
     /// Sets the cropping style to square or not. Ignored if `onlySquare` is true. Defaults to true.
     public var isSquareByDefault = true
     
-    /// Minimum width, to prevent selectiong too high images. Have sense if onlySquare is true and the image is portrait.
+	/// Minimum width, to prevent selectiong too high images. Have sense if onlySquare is true and the image is portrait.
     public var minWidthForItem: CGFloat?
     
     /// Choose what media types are available in the library. Defaults to `.photo`
@@ -181,6 +197,9 @@ public struct YPConfigLibrary {
 
     /// Initial state of multiple selection button.
     public var defaultMultipleSelection = false
+
+    /// Pre-selects the current item on setting multiple selection
+    public var preSelectItemOnMultipleSelection = true
 
     /// Anything superior than 1 will enable the multiple selection feature.
     public var maxNumberOfItems = 1
@@ -200,6 +219,9 @@ public struct YPConfigLibrary {
     
     /// Allow to preselected media items
     public var preselectedItems: [YPMediaItem]?
+    
+    /// Set the overlay type shown on top of the selected library item
+    public var itemOverlayType: YPItemOverlayType = .grid
 }
 
 /// Encapsulates video specific settings.
@@ -235,17 +257,31 @@ public struct YPConfigVideo {
     public var minimumTimeLimit: TimeInterval = 3.0
     
     /// The maximum duration allowed for the trimming. Change it before setting the asset, as the asset preview
+    /// - Tag: trimmerMaxDuration
     public var trimmerMaxDuration: Double = 60.0
     
     /// The minimum duration allowed for the trimming.
     /// The handles won't pan further if the minimum duration is attained.
     public var trimmerMinDuration: Double = 3.0
+
+	/// Defines if the user skips the trimer stage,
+	/// the video will be trimmed automatically to the maximum value of trimmerMaxDuration.
+	/// This case occurs when the user already has a video selected and enables a
+	/// multiselection to pick more than one type of media (video or image),
+	/// so, the trimmer step becomes optional.
+    /// - SeeAlso: [trimmerMaxDuration](x-source-tag://trimmerMaxDuration)
+    public var automaticTrimToTrimmerMaxDuration: Bool = false
 }
 
 /// Encapsulates gallery specific settings.
 public struct YPConfigSelectionsGallery {
     /// Defines if the remove button should be hidden when showing the gallery. Default is true.
     public var hidesRemoveButton = true
+}
+
+public enum YPItemOverlayType {
+    case none
+    case grid
 }
 
 public enum YPlibraryMediaType {

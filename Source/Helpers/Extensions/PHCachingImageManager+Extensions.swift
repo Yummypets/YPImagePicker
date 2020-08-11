@@ -20,11 +20,14 @@ extension PHCachingImageManager {
         return options
     }
     
-    func fetchImage(for asset: PHAsset, cropRect: CGRect, targetSize: CGSize, callback: @escaping (UIImage, [String: Any]) -> Void) {
+    func fetchImage(for asset: PHAsset,
+					cropRect: CGRect,
+					targetSize: CGSize,
+					callback: @escaping (UIImage, [String: Any]) -> Void) {
         let options = photoImageRequestOptions()
     
         // Fetch Highiest quality image possible.
-        requestImageData(for: asset, options: options) { data, dataUTI, CTFontOrientation, info in
+        requestImageData(for: asset, options: options) { data, _, _, _ in
             if let data = data, let image = UIImage(data: data)?.resetOrientation() {
             
                 // Crop the high quality image manually.
@@ -46,7 +49,7 @@ extension PHCachingImageManager {
     private func metadataForImageData(data: Data) -> [String: Any] {
         if let imageSource = CGImageSourceCreateWithData(data as CFData, nil),
         let imageProperties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil),
-        let metaData = imageProperties as? [String : Any] {
+        let metaData = imageProperties as? [String: Any] {
             return metaData
         }
         return [:]
@@ -56,7 +59,7 @@ extension PHCachingImageManager {
         let options = PHImageRequestOptions()
         options.isNetworkAccessAllowed = true
         options.isSynchronous = true
-        let screenWidth = UIScreen.main.bounds.width
+        let screenWidth = YPImagePickerConfiguration.screenWidth
         let ts = CGSize(width: screenWidth, height: screenWidth)
         requestImage(for: asset, targetSize: ts, contentMode: .aspectFill, options: options) { image, _ in
             if let image = image {
@@ -84,9 +87,12 @@ extension PHCachingImageManager {
     /// So the callback fires twice.
     func fetch(photo asset: PHAsset, callback: @escaping (UIImage, Bool) -> Void) {
         let options = PHImageRequestOptions()
-        options.isNetworkAccessAllowed = true // Enables gettings iCloud photos over the network, this means PHImageResultIsInCloudKey will never be true.
-        options.deliveryMode = .opportunistic // Get 2 results, one low res quickly and the high res one later.
-        requestImage(for: asset, targetSize: PHImageManagerMaximumSize, contentMode: .aspectFill, options: options) { result, info in
+		// Enables gettings iCloud photos over the network, this means PHImageResultIsInCloudKey will never be true.
+        options.isNetworkAccessAllowed = true
+		// Get 2 results, one low res quickly and the high res one later.
+        options.deliveryMode = .opportunistic
+        requestImage(for: asset, targetSize: PHImageManagerMaximumSize,
+					 contentMode: .aspectFill, options: options) { result, info in
             guard let image = result else {
                 print("No Result 🛑")
                 return

@@ -23,6 +23,7 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, YPPermis
         self.v = YPCameraView(overlayView: YPConfig.overlayView)
         super.init(nibName: nil, bundle: nil)
         title = YPConfig.wordings.cameraTitle
+        navigationController?.navigationBar.setTitleFont(font: YPConfig.fonts.navigationBarTitleFont)
         
         YPDeviceOrientationHelper.shared.startDeviceOrientationNotifier { _ in }
     }
