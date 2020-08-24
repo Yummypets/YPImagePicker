@@ -519,7 +519,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                     //TODO: sort the array based on the initial order of the assets in selectedAssets
                     resultMediaItems.sort { (first, second) -> Bool in
                         var firstAsset:PHAsset?
-                        var secondAsset:PHAsset?
+                        var secondAsset: PHAsset?
                         
                         switch first {
                         case .photo(let photo):
