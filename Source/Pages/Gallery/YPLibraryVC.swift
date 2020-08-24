@@ -488,6 +488,12 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                 var resultMediaItems: [YPMediaItem] = []
                 let asyncGroup = DispatchGroup()
                 
+                var assetDictionary = Dictionary<PHAsset?, Int>()
+                for (index, assetPair) in selectedAssets.enumerated() {
+                    assetDictionary[assetPair.asset] = index
+                }
+                
+                
                 for asset in selectedAssets {
                     asyncGroup.enter()
                     
@@ -518,6 +524,34 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                 }
                 
                 asyncGroup.notify(queue: .main) {
+                    //TODO: sort the array based on the initial order of the assets in selectedAssets
+                    resultMediaItems.sort { (first, second) -> Bool in
+                        var firstAsset: PHAsset?
+                        var secondAsset: PHAsset?
+                        
+                        switch first {
+                        case .photo(let photo):
+                            firstAsset = photo.asset
+                        case .video(let video):
+                            firstAsset = video.asset
+                        }
+                        guard let firstIndex = assetDictionary[firstAsset] else {
+                            return false
+                        }
+                        
+                        switch second {
+                        case .photo(let photo):
+                            secondAsset = photo.asset
+                        case .video(let video):
+                            secondAsset = video.asset
+                        }
+                        
+                        guard let secondIndex = assetDictionary[secondAsset] else {
+                            return false
+                        }
+                        
+                        return firstIndex < secondIndex
+                    }
                     multipleItemsCallback(resultMediaItems)
                     self.delegate?.libraryViewFinishedLoading()
                 }
