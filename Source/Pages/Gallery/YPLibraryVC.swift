@@ -518,7 +518,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                 asyncGroup.notify(queue: .main) {
                     //TODO: sort the array based on the initial order of the assets in selectedAssets
                     resultMediaItems.sort { (first, second) -> Bool in
-                        var firstAsset:PHAsset?
+                        var firstAsset: PHAsset?
                         var secondAsset: PHAsset?
                         
                         switch first {
