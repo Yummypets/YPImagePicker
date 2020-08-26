@@ -10,7 +10,7 @@ import Foundation
 import Stevia
 import Photos
 
-protocol ImagePickerDelegate {
+protocol ImagePickerDelegate: AnyObject {
     func noPhotos()
 }
 
@@ -19,7 +19,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     let albumsManager = YPAlbumsManager()
     var shouldHideStatusBar = false
     var initialStatusBarHidden = false
-    var imagePickerDelegate: ImagePickerDelegate?
+    weak var imagePickerDelegate: ImagePickerDelegate?
     
     override public var prefersStatusBarHidden: Bool {
         return (shouldHideStatusBar || initialStatusBarHidden) && YPConfig.hidesStatusBar
