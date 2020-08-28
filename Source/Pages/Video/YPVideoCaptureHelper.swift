@@ -32,7 +32,7 @@ class YPVideoCaptureHelper: NSObject {
     
     // MARK: - Init
     
-    public func start(previewView: UIView, withVideoRecordingLimit: TimeInterval, completion: @escaping () -> Void) {
+    public func start(semaphore: DispatchSemaphore?, previewView: UIView, withVideoRecordingLimit: TimeInterval, completion: @escaping () -> Void) {
         self.previewView = previewView
         self.videoRecordingTimeLimit = withVideoRecordingLimit
         sessionQueue.async { [weak self] in
@@ -42,7 +42,7 @@ class YPVideoCaptureHelper: NSObject {
             if !strongSelf.isCaptureSessionSetup {
                 strongSelf.setupCaptureSession()
             }
-            strongSelf.startCamera(completion: {
+            strongSelf.startCamera(semaphore: semaphore, completion: {
                 completion()
             })
         }
@@ -50,7 +50,7 @@ class YPVideoCaptureHelper: NSObject {
     
     // MARK: - Start Camera
     
-    public func startCamera(completion: @escaping (() -> Void)) {
+    public func startCamera(semaphore: DispatchSemaphore?, completion: @escaping (() -> Void)) {
         if !session.isRunning {
             sessionQueue.async { [weak self] in
                 // Re-apply session preset
@@ -60,9 +60,11 @@ class YPVideoCaptureHelper: NSObject {
                 case .notDetermined, .restricted, .denied:
                     self?.session.stopRunning()
                 case .authorized:
+                    semaphore?.wait()
                     self?.session.startRunning()
                     completion()
                     self?.tryToSetupPreview()
+                    semaphore?.signal()
                 @unknown default:
                     fatalError()
                 }
@@ -149,10 +151,12 @@ class YPVideoCaptureHelper: NSObject {
     
     // MARK: - Stop Camera
     
-    public func stopCamera() {
+    public func stopCamera(_ semaphore: DispatchSemaphore?) {
         if session.isRunning {
             sessionQueue.async { [weak self] in
+                semaphore?.wait()
                 self?.session.stopRunning()
+                semaphore?.signal()
             }
         }
     }

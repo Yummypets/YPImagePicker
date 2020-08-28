@@ -54,13 +54,13 @@ public class YPVideoCaptureVC: UIViewController, YPPermissionCheckable {
         v.previewViewContainer.addGestureRecognizer(pinchRecongizer)
     }
 
-    func start() {
+    func start(semaphore: DispatchSemaphore?) {
         v.shotButton.isEnabled = false
         doAfterPermissionCheck { [weak self] in
             guard let strongSelf = self else {
                 return
             }
-            self?.videoHelper.start(previewView: strongSelf.v.previewViewContainer,
+            self?.videoHelper.start(semaphore: semaphore, previewView: strongSelf.v.previewViewContainer,
                                     withVideoRecordingLimit: YPConfig.video.recordingTimeLimit,
                                     completion: {
                                         DispatchQueue.main.async {
@@ -147,8 +147,8 @@ public class YPVideoCaptureVC: UIViewController, YPPermissionCheckable {
         }
     }
 
-    public func stopCamera() {
-        videoHelper.stopCamera()
+    public func stopCamera(_ semaphore: DispatchSemaphore?) {
+        videoHelper.stopCamera(semaphore)
     }
     
     // MARK: - Focus

@@ -21,6 +21,7 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     var shouldHideStatusBar = false
     var initialStatusBarHidden = false
     weak var imagePickerDelegate: ImagePickerDelegate?
+    let semaphore = DispatchSemaphore(value: 1)
     
     override open var prefersStatusBarHidden: Bool {
         return (shouldHideStatusBar || initialStatusBarHidden) && YPConfig.hidesStatusBar
@@ -155,7 +156,7 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     }
     
     func pagerDidSelectController(_ vc: UIViewController) {
-        updateMode(with: vc)
+        self.updateMode(with: vc)
     }
     
     func updateMode(with vc: UIViewController) {
@@ -168,9 +169,9 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         if let vc = vc as? YPLibraryVC {
             vc.checkPermission()
         } else if let cameraVC = vc as? YPCameraVC {
-            cameraVC.start()
+            cameraVC.start(semaphore: semaphore)
         } else if let videoVC = vc as? YPVideoCaptureVC {
-            videoVC.start()
+            videoVC.start(semaphore: semaphore)
         }
     
         updateUI()
@@ -181,9 +182,9 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         case .library:
             libraryVC?.pausePlayer()
         case .camera:
-            cameraVC?.stopCamera()
+            cameraVC?.stopCamera(semaphore)
         case .video:
-            videoVC?.stopCamera()
+            videoVC?.stopCamera(semaphore)
         }
     }
     
@@ -325,8 +326,8 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     
     func stopAll() {
         libraryVC?.v.assetZoomableView.videoView.deallocate()
-        videoVC?.stopCamera()
-        cameraVC?.stopCamera()
+        videoVC?.stopCamera(nil)
+        cameraVC?.stopCamera(nil)
     }
 }
 
