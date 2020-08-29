@@ -84,8 +84,10 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
             v.assetViewContainer.setMultipleSelectionMode(on: multipleSelectionEnabled)
             v.collectionView.reloadData()
         }
-        if YPConfig.library.defaultMultipleSelection || selection.count > 1 {
+        if selection.count > 1 {
             showMultipleSelection()
+        } else if YPConfig.library.defaultMultipleSelection {
+            multipleSelectionButtonTapped()
         }
     }
     
