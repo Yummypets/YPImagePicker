@@ -18,7 +18,7 @@ public class YPSelectionsGalleryVC: UIViewController, YPSelectionsGalleryCellDel
     
     var v = YPSelectionsGalleryView()
     public override func loadView() { view = v }
-
+    
     public required init(items: [YPMediaItem],
                          didFinishHandler:
         @escaping ((_ gallery: YPSelectionsGalleryVC, _ items: [YPMediaItem]) -> Void)) {
@@ -33,7 +33,7 @@ public class YPSelectionsGalleryVC: UIViewController, YPSelectionsGalleryCellDel
     
     override public func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Register collection view cell
         v.collectionView.register(YPSelectionsGalleryCell.self, forCellWithReuseIdentifier: "item")
         v.collectionView.dataSource = self
@@ -41,7 +41,7 @@ public class YPSelectionsGalleryVC: UIViewController, YPSelectionsGalleryCellDel
         
         // Setup navigation bar
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: YPConfig.wordings.next,
-                                                            style: .done,
+                                                            style: .plain,
                                                             target: self,
                                                             action: #selector(done))
         navigationItem.rightBarButtonItem?.tintColor = YPConfig.colors.tintColor
@@ -52,7 +52,7 @@ public class YPSelectionsGalleryVC: UIViewController, YPSelectionsGalleryCellDel
         YPHelper.changeBackButtonIcon(self)
         YPHelper.changeBackButtonTitle(self)
     }
-
+    
     @objc
     private func done() {
         // Save new images to the photo album.
@@ -86,14 +86,18 @@ extension YPSelectionsGalleryVC: UICollectionViewDataSource {
                                cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "item",
                                                             for: indexPath) as? YPSelectionsGalleryCell else {
-            return UICollectionViewCell()
+                                                                return UICollectionViewCell()
         }
         cell.delegate = self
         let item = items[indexPath.row]
         switch item {
         case .photo(let photo):
             cell.imageView.image = photo.image
-            cell.setEditable(YPConfig.showsPhotoFilters)
+            var showCrop = false
+            if case YPCropType.rectangle(_) = YPConfig.showsCrop {
+                showCrop = true
+            }
+            cell.setEditable(YPConfig.showsPhotoFilters || showCrop)
         case .video(let video):
             cell.imageView.image = video.thumbnail
             cell.setEditable(YPConfig.showsVideoTrimmer)
@@ -112,6 +116,35 @@ extension YPSelectionsGalleryVC: UICollectionViewDelegate {
         case .photo(let photo):
             if !YPConfig.filters.isEmpty, YPConfig.showsPhotoFilters {
                 mediaFilterVC = YPPhotoFiltersVC(inputPhoto: photo, isFromSelectionVC: true)
+            } else {
+                let completion = { (photo: YPMediaPhoto) in
+                    let mediaItem = YPMediaItem.photo(p: photo)
+                    // Save new image or existing but modified, to the photo album.
+                    if YPConfig.shouldSaveNewPicturesToAlbum {
+                        let isModified = photo.modifiedImage != nil
+                        if photo.fromCamera || (!photo.fromCamera && isModified) {
+                            YPPhotoSaver.trySaveImage(photo.image, inAlbumNamed: YPConfig.albumName)
+                        }
+                    }
+                    self.items[indexPath.row] = mediaItem
+                    collectionView.reloadData()
+                }
+                
+                func showCropVC(photo: YPMediaPhoto, completion: @escaping (_ aphoto: YPMediaPhoto) -> Void) {
+                    if case let YPCropType.rectangle(ratio) = YPConfig.showsCrop {
+                        let cropVC = YPCropVC(image: photo.originalImage, ratio: ratio)
+                        cropVC.didFinishCropping = { croppedImage in
+                            photo.modifiedImage = croppedImage
+                            completion(photo)
+                        }
+                        self.show(cropVC, sender: self)
+                    } else {
+                        completion(photo)
+                    }
+                }
+                
+                showCropVC(photo: photo, completion: completion)
+                return
             }
         case .video(let video):
             if YPConfig.showsVideoTrimmer {
