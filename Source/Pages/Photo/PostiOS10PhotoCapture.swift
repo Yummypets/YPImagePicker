@@ -83,6 +83,14 @@ class PostiOS10PhotoCapture: NSObject, YPPhotoCapture, AVCapturePhotoCaptureDele
     
     func tryToggleFlash() {
         // if device.hasFlash device.isFlashAvailable //TODO test these
+        #if arch(i386) || arch(x86_64)
+        currentFlashMode = .off
+        #else
+        guard let deviceInput = deviceInput, deviceInput.device.isFlashAvailable else {
+            currentFlashMode = .off
+            return
+        }
+        
         switch currentFlashMode {
         case .auto:
             currentFlashMode = .on
@@ -91,6 +99,7 @@ class PostiOS10PhotoCapture: NSObject, YPPhotoCapture, AVCapturePhotoCaptureDele
         case .off:
             currentFlashMode = .auto
         }
+        #endif
     }
     
     // MARK: - Shoot
