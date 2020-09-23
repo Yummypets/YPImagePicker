@@ -5,7 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "YPImagePicker",
-    platforms: [.iOS(.v9)],
+    platforms: [.iOS(.v12)],
     products: [ .library(name: "YPImagePicker", targets: ["YPImagePicker"]) ],
     dependencies: [
         .package(url: "https://github.com/freshOS/Stevia", .exact("5.1.0")),
