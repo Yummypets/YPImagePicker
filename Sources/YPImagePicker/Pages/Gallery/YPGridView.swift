@@ -19,12 +19,12 @@ class YPGridView: UIView {
     convenience init() {
         self.init(frame: .zero)
         isUserInteractionEnabled = false
-        sv(
-            line1,
-            line2,
-            line3,
+        subviews {
+            line1
+            line2
+            line3
             line4
-        )
+        }
         
         let stroke: CGFloat = 0.5
         line1.top(0).width(stroke).bottom(0)

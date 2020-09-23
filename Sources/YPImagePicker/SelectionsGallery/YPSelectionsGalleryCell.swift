@@ -24,12 +24,12 @@ public class YPSelectionsGalleryCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
     
-        sv(
-            imageView,
-            editIcon,
-            editSquare,
+        subviews {
+            imageView
+            editIcon
+            editSquare
             removeButton
-        )
+        }
         
         imageView.fillContainer()
         editIcon.size(32).left(12).bottom(12)

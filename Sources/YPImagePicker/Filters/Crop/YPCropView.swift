@@ -26,13 +26,13 @@ class YPCropView: UIView {
     }
     
     private func setupViewHierarchy() {
-        sv(
-            imageView,
-            topCurtain,
-            cropArea,
-            bottomCurtain,
+        subviews {
+            imageView
+            topCurtain
+            cropArea
+            bottomCurtain
             toolbar
-        )
+        }
     }
     
     private func setupLayout(with image: UIImage, ratio: Double) {

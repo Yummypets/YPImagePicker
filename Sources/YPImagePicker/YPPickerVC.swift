@@ -223,9 +223,9 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         }
         
         if YPConfig.library.options != nil {
-            titleView.sv(
+            titleView.subviews {
                 label
-            )
+            }
             |-(>=8)-label.centerHorizontally()-(>=8)-|
             align(horizontally: label)
         } else {
@@ -244,11 +244,11 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
             button.addTarget(self, action: #selector(navBarTapped), for: .touchUpInside)
             button.setBackgroundColor(UIColor.white.withAlphaComponent(0.5), forState: .highlighted)
             
-            titleView.sv(
-                label,
-                arrow,
+            titleView.subviews {
+                label
+                arrow
                 button
-            )
+            }
             button.fillContainer()
             |-(>=8)-label.centerHorizontally()-arrow-(>=8)-|
             align(horizontally: label-arrow)

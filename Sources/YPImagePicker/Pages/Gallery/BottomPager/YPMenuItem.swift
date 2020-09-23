@@ -31,10 +31,10 @@ final class YPMenuItem: UIView {
     func setup() {
         backgroundColor = YPImagePickerConfiguration.shared.colors.bottomMenuItemBackgroundColor
         
-        sv(
-            textLabel,
+        subviews {
+            textLabel
             button
-        )
+        }
         
         textLabel.centerInContainer()
         |-(10)-textLabel-(10)-|

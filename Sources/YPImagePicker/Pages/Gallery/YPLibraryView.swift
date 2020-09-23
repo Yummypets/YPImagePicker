@@ -28,9 +28,9 @@ final class YPLibraryView: UIView {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        sv(
+        subviews {
             line
-        )
+        }
         
         layout(
             assetViewContainer!,
@@ -46,11 +46,11 @@ final class YPLibraryView: UIView {
     /// At the bottom there is a view that is visible when selected a limit of items with multiple selection
     func setupMaxNumberOfItemsView() {
         // View Hierarchy
-        sv(
-            maxNumberWarningView.sv(
+        subviews {
+            maxNumberWarningView.subviews {
                 maxNumberWarningLabel
-            )
-        )
+            }
+        }
         
         // Layout
         |maxNumberWarningView|.bottom(0)
@@ -70,9 +70,9 @@ final class YPLibraryView: UIView {
     
     /// When video is processing this bar appears
     func setupProgressBarView() {
-        sv(
+        subviews {
             progressView
-        )
+        }
         
         progressView.height(5)
         progressView.Top == line.Top

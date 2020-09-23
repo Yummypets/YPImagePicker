@@ -36,10 +36,10 @@ class YPFilterCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        sv(
-            name,
+        subviews {
+            name
             imageView
-        )
+        }
         
         |name|.top(0)
         |imageView|.bottom(0).heightEqualsWidth()

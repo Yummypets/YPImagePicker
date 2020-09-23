@@ -20,10 +20,10 @@ class YPMultipleSelectionIndicator: UIView {
         
         let size: CGFloat = 20
         
-        sv(
-            circle,
+        subviews {
+            circle
             label
-        )
+        }
         
         circle.fillContainer()
         circle.size(size)
@@ -65,12 +65,12 @@ class YPLibraryViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        sv(
-            imageView,
-            durationLabel,
-            selectionOverlay,
+        subviews {
+            imageView
+            durationLabel
+            selectionOverlay
             multipleSelectionIndicator
-        )
+        }
 
         imageView.fillContainer()
         selectionOverlay.fillContainer()

@@ -17,10 +17,10 @@ class YPAlbumView: UIView {
     convenience init() {
         self.init(frame: .zero)
         
-        sv(
-            tableView,
+        subviews {
+            tableView
             spinner
-        )
+        }
         // TableView needs to be the first subview for it to automatically adjust its content inset with the NavBar
         
         spinner.centerInContainer()

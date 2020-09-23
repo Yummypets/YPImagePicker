@@ -18,10 +18,10 @@ final class YPBottomPagerView: UIView {
         self.init(frame: .zero)
         backgroundColor = .offWhiteOrBlack
         
-        sv(
-            scrollView,
+        subviews {
+            scrollView
             header
-        )
+        }
         
         layout(
             0,
