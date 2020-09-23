@@ -36,10 +36,8 @@ class PostiOS10PhotoCapture: NSObject, YPPhotoCapture, AVCapturePhotoCaptureDele
         var settings = AVCapturePhotoSettings()
         
         // Catpure Heif when available.
-        if #available(iOS 11.0, *) {
-            if photoOutput.availablePhotoCodecTypes.contains(.hevc) {
-                settings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.hevc])
-            }
+        if photoOutput.availablePhotoCodecTypes.contains(.hevc) {
+            settings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.hevc])
         }
         
         // Catpure Highest Quality possible.
