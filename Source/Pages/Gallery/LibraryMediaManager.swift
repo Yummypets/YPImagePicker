@@ -18,6 +18,15 @@ class LibraryMediaManager {
     internal var imageManager: PHCachingImageManager?
     internal var exportTimer: Timer?
     internal var currentExportSessions: [AVAssetExportSession] = []
+
+    /// If true then library has items to show. If false the user didn't allow any item to show in picker library.
+    internal var hasResultItems: Bool {
+        if let fetchResult = self.fetchResult {
+            return fetchResult.count > 0
+        } else {
+            return false
+        }
+    }
     
     func initialize() {
         imageManager = PHCachingImageManager()
