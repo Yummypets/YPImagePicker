@@ -51,10 +51,6 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         mediaManager.initialize()
         mediaManager.v = v
 
-        if mediaManager.fetchResult != nil {
-            return
-        }
-        
         setupCollectionView()
         registerForLibraryChanges()
         panGestureHelper.registerForPanGesture(on: v)
@@ -83,6 +79,9 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
             }
             v.assetViewContainer.setMultipleSelectionMode(on: multipleSelectionEnabled)
             v.collectionView.reloadData()
+        }
+        guard mediaManager.hasResultItems else {
+            return
         }
         if YPConfig.library.defaultMultipleSelection || selection.count > 1 {
             showMultipleSelection()
@@ -244,7 +243,8 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         // Only intilialize picker if photo permission is Allowed by user.
         let status = PHPhotoLibrary.authorizationStatus()
         switch status {
-        case .authorized:
+        case .authorized,
+             .limited:
             block(true)
         case .restricted, .denied:
             let popup = YPPermissionDeniedPopup()
@@ -265,16 +265,14 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     }
     
     func refreshMediaRequest() {
-        
         let options = buildPHFetchOptions()
-        
         if let collection = mediaManager.collection {
             mediaManager.fetchResult = PHAsset.fetchAssets(in: collection, options: options)
         } else {
             mediaManager.fetchResult = PHAsset.fetchAssets(with: options)
         }
         
-        if mediaManager.fetchResult.count > 0 {
+        if mediaManager.hasResultItems {
             changeAsset(mediaManager.fetchResult[0])
             v.collectionView.reloadData()
             v.collectionView.selectItem(at: IndexPath(row: 0, section: 0),
@@ -488,6 +486,12 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                 var resultMediaItems: [YPMediaItem] = []
                 let asyncGroup = DispatchGroup()
                 
+                var assetDictionary = Dictionary<PHAsset?, Int>()
+                for (index, assetPair) in selectedAssets.enumerated() {
+                    assetDictionary[assetPair.asset] = index
+                }
+                
+                
                 for asset in selectedAssets {
                     asyncGroup.enter()
                     
@@ -518,6 +522,34 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                 }
                 
                 asyncGroup.notify(queue: .main) {
+                    //TODO: sort the array based on the initial order of the assets in selectedAssets
+                    resultMediaItems.sort { (first, second) -> Bool in
+                        var firstAsset: PHAsset?
+                        var secondAsset: PHAsset?
+                        
+                        switch first {
+                        case .photo(let photo):
+                            firstAsset = photo.asset
+                        case .video(let video):
+                            firstAsset = video.asset
+                        }
+                        guard let firstIndex = assetDictionary[firstAsset] else {
+                            return false
+                        }
+                        
+                        switch second {
+                        case .photo(let photo):
+                            secondAsset = photo.asset
+                        case .video(let video):
+                            secondAsset = video.asset
+                        }
+                        
+                        guard let secondIndex = assetDictionary[secondAsset] else {
+                            return false
+                        }
+                        
+                        return firstIndex < secondIndex
+                    }
                     multipleItemsCallback(resultMediaItems)
                     self.delegate?.libraryViewFinishedLoading()
                 }
