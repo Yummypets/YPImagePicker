@@ -1,11 +1,4 @@
 framework module PryntTrimmerView {
-  umbrella header "PryntTrimmerView.h"
-
-  export *
-  module * { export * }
-}
-
-module PryntTrimmerView.Swift {
-    header "PryntTrimmerView-Swift.h"
-    requires objc
+  header "PryntTrimmerView-Swift.h"
+  requires objc
 }
