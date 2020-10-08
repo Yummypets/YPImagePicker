@@ -248,7 +248,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         #if compiler(>=5.3)
         case .limited:
             block(true)
-#endif
+        #endif
         case .restricted, .denied:
             let popup = YPPermissionDeniedPopup()
             let alert = popup.popup(cancelBlock: {
