@@ -245,7 +245,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         switch status {
         case .authorized:
             block(true)
-#if compiler(>=5.3)
+        #if compiler(>=5.3)
         case .limited:
             block(true)
 #endif
