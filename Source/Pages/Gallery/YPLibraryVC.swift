@@ -269,11 +269,24 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     
     func refreshMediaRequest() {
         let options = buildPHFetchOptions()
+        var fetchedAssets = PHFetchResult<PHAsset>()
         if let collection = mediaManager.collection {
-            mediaManager.fetchResult = PHAsset.fetchAssets(in: collection, options: options)
+            fetchedAssets = PHAsset.fetchAssets(in: collection, options: options)
         } else {
-            mediaManager.fetchResult = PHAsset.fetchAssets(with: options)
+            fetchedAssets = PHAsset.fetchAssets(with: options)
         }
+
+        var filteredAssets = [PHAsset]()
+        fetchedAssets.enumerateObjects { (asset, id, stop) in
+            if asset.location != nil {
+                filteredAssets.append(asset)
+            } else {
+                print("location not found")
+            }
+        }
+        let collection = PHAssetCollection.transientAssetCollection(with: filteredAssets, title: "Assets with location data")
+        let fetchResult = PHAsset.fetchAssets(in: collection, options: nil)
+        mediaManager.fetchResult = fetchResult
         
         if mediaManager.hasResultItems {
             changeAsset(mediaManager.fetchResult[0])
@@ -281,7 +294,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
             v.collectionView.selectItem(at: IndexPath(row: 0, section: 0),
                                              animated: false,
                                              scrollPosition: UICollectionView.ScrollPosition())
-            if !multipleSelectionEnabled && YPConfig.library.preSelectItemOnMultipleSelection {
+            if !multipleSelectionEnabled {
                 addToSelection(indexPath: IndexPath(row: 0, section: 0))
             }
         } else {
