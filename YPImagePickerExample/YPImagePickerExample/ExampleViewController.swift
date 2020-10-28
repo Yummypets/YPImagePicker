@@ -171,8 +171,8 @@ class ExampleViewController: UIViewController {
         //
         //config.library.options = options
 
-//        config.library.preSelectItemOnMultipleSelection = false
-//        config.library.defaultMultipleSelection = true
+        //config.library.preSelectItemOnMultipleSelection = false
+        //config.library.defaultMultipleSelection = true
         config.library.preselectedItems = selectedItems
 
 

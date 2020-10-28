@@ -181,6 +181,7 @@
 		E3E492BB2169012B002BA807 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
 		E5287F5820B908720052153D /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
 		EB05F6E6214A7191002040AA /* YPVideoProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPVideoProcessor.swift; sourceTree = "<group>"; };
+		EB0D6FC2252F1FDC006EE12E /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
 		EB11EE9820572F3700A19365 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
 		EB1AB2E920AC1DED00BFA79F /* CGFloat+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat+Extensions.swift"; sourceTree = "<group>"; };
 		EB473E16208E192800D16105 /* URL+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Extensions.swift"; sourceTree = "<group>"; };
@@ -512,7 +513,7 @@
 		52412A8A1CA6114A0073C4BE /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1100;
+				LastUpgradeCheck = 1200;
 				ORGANIZATIONNAME = Yummypets;
 				TargetAttributes = {
 					52412A921CA6114A0073C4BE = {
@@ -547,6 +548,7 @@
 				th,
 				vi,
 				pl,
+				da,
 			);
 			mainGroup = 52412A891CA6114A0073C4BE;
 			productRefGroup = 52412A941CA6114A0073C4BE /* Products */;
@@ -705,6 +707,7 @@
 				2577138123B1E09300BB9C86 /* th */,
 				2577138223B1E09E00BB9C86 /* vi */,
 				78B58D3524C5DB5200B83153 /* pl */,
+				EB0D6FC2252F1FDC006EE12E /* da */,
 			);
 			name = YPImagePickerLocalizable.strings;
 			sourceTree = "<group>";
@@ -737,6 +740,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -799,6 +803,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -852,7 +857,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 4.3.1;
+				MARKETING_VERSION = 4.4.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.yummypets.YPImagePicker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -885,7 +890,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MARKETING_VERSION = 4.3.1;
+				MARKETING_VERSION = 4.4.0;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.yummypets.YPImagePicker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
