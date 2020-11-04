@@ -18,7 +18,7 @@ class YPFiltersView: UIView {
     convenience init() {
         self.init(frame: CGRect.zero)
         collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout())
-        filtersLoader = UIActivityIndicatorView(style: .gray)
+        filtersLoader = UIActivityIndicatorView(style: .medium)
         filtersLoader.hidesWhenStopped = true
         filtersLoader.startAnimating()
         filtersLoader.color = YPConfig.colors.tintColor

@@ -22,7 +22,7 @@ class YPAssetViewContainer: UIView {
     public var onlySquare = YPConfig.library.onlySquare
     public var isShown = true
     
-    private let spinner = UIActivityIndicatorView(style: .white)
+    private let spinner = UIActivityIndicatorView(style: .medium)
     private var shouldCropToSquare = YPConfig.library.isSquareByDefault
     private var isMultipleSelection = false
 
