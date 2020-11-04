@@ -239,31 +239,28 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
 
     // Async beacause will prompt permission if .notDetermined
     // and ask custom popup if denied.
-    func checkPermissionToAccessPhotoLibrary(block: @escaping (Bool) -> Void) {
-        // Only intilialize picker if photo permission is Allowed by user.
-        let status = PHPhotoLibrary.authorizationStatus()
-        switch status {
-        case .authorized:
-            block(true)
-        #if compiler(>=5.3)
-        case .limited:
-            block(true)
-        #endif
-        case .restricted, .denied:
-            let popup = YPPermissionDeniedPopup()
-            let alert = popup.popup(cancelBlock: {
-                block(false)
-            })
-            present(alert, animated: true, completion: nil)
-        case .notDetermined:
-            // Show permission popup and get new status
-            PHPhotoLibrary.requestAuthorization { s in
-                DispatchQueue.main.async {
-                    block(s == .authorized)
+    func checkPermissionToAccessPhotoLibrary(block: @escaping (Bool) -> Void) {        
+        // Only intilialize picker if photo permission is Allowed by user
+        PHPhotoLibrary.requestAuthorization { status in
+            switch status {
+            case .authorized:
+                block(true)
+            case .restricted, .denied:
+                let popup = YPPermissionDeniedPopup()
+                let alert = popup.popup(cancelBlock: {
+                    block(false)
+                })
+                self.present(alert, animated: true, completion: nil)
+            case .notDetermined:
+                // Show permission popup and get new status
+                PHPhotoLibrary.requestAuthorization { s in
+                    DispatchQueue.main.async {
+                        block(s == .authorized)
+                    }
                 }
+            @unknown default:
+                fatalError()
             }
-        @unknown default:
-            fatalError()
         }
     }
     
