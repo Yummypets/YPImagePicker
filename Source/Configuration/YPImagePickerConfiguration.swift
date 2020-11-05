@@ -112,6 +112,12 @@ public struct YPImagePickerConfiguration {
     /// Defines the max camera zoom factor for camera. Disable camera zoom with 1. Default is 1.
     public var maxCameraZoomFactor: CGFloat = 1.0
     
+    //Defines if no images/videos found in library
+    public var noPhotosErrorTitle: String?
+    public var noPhotosErrorMessage: String?
+    public var noPhotosAlertButtonTitle: String?
+    
+    
     /// List of default filters which will be added on the filter screen
     public var filters: [YPFilter] = [
         YPFilter(name: "Normal", applier: nil),

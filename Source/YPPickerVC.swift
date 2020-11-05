@@ -370,12 +370,22 @@ extension YPPickerVC: YPLibraryViewDelegate {
     }
     
     public func noPhotosForOptions() {
-        self.dismiss(animated: true) {
-            self.imagePickerDelegate?.noPhotos()
-        }
+//        self.dismiss(animated: true) {
+        self.imagePickerDelegate?.noPhotos()
+        self.libraryVC?.v.hideLoader()
+        self.showNoPhotosAlert()
+//        }
     }
     
     public func libraryViewShouldAddToSelection(indexPath: IndexPath, numSelections: Int) -> Bool {
         return imagePickerDelegate?.shouldAddToSelection(indexPath: indexPath, numSelections: numSelections) ?? true
+    }
+
+//    Alert to be shown if no image is available in library
+    public func showNoPhotosAlert() {
+        let alert = UIAlertController(title:YPConfig.noPhotosErrorTitle , message: YPConfig.noPhotosErrorMessage, preferredStyle: .alert)
+        let okAction = UIAlertAction(title:  YPConfig.noPhotosAlertButtonTitle, style: .default, handler: { _ in })
+        alert.addAction(okAction)
+        self.present(alert, animated: true, completion: nil)
     }
 }

@@ -156,6 +156,9 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
 
     @objc
     func multipleSelectionButtonTapped() {
+        if !mediaManager.hasResultItems {
+            return
+        }
         doAfterPermissionCheck { [weak self] in
             if let self = self {
                 if !self.multipleSelectionEnabled {
