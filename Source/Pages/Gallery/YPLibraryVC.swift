@@ -113,10 +113,14 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        v.assetViewContainer.squareCropButton
-            .addTarget(self,
-                       action: #selector(squareCropButtonTapped),
-                       for: .touchUpInside)
+        if YPConfig.library.hideCropSquareButton {
+            v.assetViewContainer.squareCropButton.isHidden = true
+        } else {
+            v.assetViewContainer.squareCropButton
+                .addTarget(self,
+                           action: #selector(squareCropButtonTapped),
+                           for: .touchUpInside)
+        }
         v.assetViewContainer.multipleSelectionButton
             .addTarget(self,
                        action: #selector(multipleSelectionButtonTapped),
