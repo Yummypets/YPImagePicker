@@ -278,10 +278,14 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
 
         var filteredAssets = [PHAsset]()
         fetchedAssets.enumerateObjects { (asset, id, stop) in
-            if asset.location != nil {
-                filteredAssets.append(asset)
+            if YPConfig.library.onlyImagesWithLocation {
+                if asset.location != nil {
+                    filteredAssets.append(asset)
+                } else {
+                    print("location not found")
+                }
             } else {
-                print("location not found")
+                filteredAssets.append(asset)
             }
         }
         let collection = PHAssetCollection.transientAssetCollection(with: filteredAssets, title: "Assets with location data")
