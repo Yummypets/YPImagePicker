@@ -187,6 +187,9 @@ public struct YPConfigLibrary {
     /// Sets the cropping style to square or not. Ignored if `onlySquare` is true. Defaults to true.
     public var isSquareByDefault = true
     
+	/// Set this to true if you want to force the library output to be images with location. Defaults to false.
+    public var onlyImagesWithLocation = false
+
 	/// Minimum width, to prevent selectiong too high images. Have sense if onlySquare is true and the image is portrait.
     public var minWidthForItem: CGFloat?
     
