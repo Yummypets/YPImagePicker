@@ -149,7 +149,11 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, YPPermis
                 image = self.cropImageToSquare(image)
             }
 
-            // Flip image if taken form the front camera.
+            // Flip image if taken form the front camera. 
+            //*****************//                
+            //Commenting this code to fix the issue reported by customer 
+            //https://experionglobal.atlassian.net/browse/DNA-2918
+                            
             if let device = self.photoCapture.device, device.position == .front {
                 image = self.flipImage(image: image)
             }
