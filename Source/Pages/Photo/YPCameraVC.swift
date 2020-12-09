@@ -154,9 +154,9 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, YPPermis
             //Commenting this code to fix the issue reported by customer 
             //https://experionglobal.atlassian.net/browse/DNA-2918
                             
-            if let device = self.photoCapture.device, device.position == .front {
-                image = self.flipImage(image: image)
-            }
+//             if let device = self.photoCapture.device, device.position == .front {
+//                 image = self.flipImage(image: image)
+//             }
             
             DispatchQueue.main.async {
                 let noOrietationImage = image.resetOrientation()
