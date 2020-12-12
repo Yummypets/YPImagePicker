@@ -139,6 +139,7 @@ public class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
                         if let coverImage = self?.coverImageView.image {
                             let resultVideo = YPMediaVideo(thumbnail: coverImage,
 														   videoURL: destinationURL,
+							   fromCamera: self?.inputVideo.fromCamera ?? false,
 														   asset: self?.inputVideo.asset)
                             didSave(YPMediaItem.video(v: resultVideo))
                             self?.setupRightBarButtonItem()
