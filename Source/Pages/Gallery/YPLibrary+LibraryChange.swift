@@ -31,14 +31,16 @@ extension YPLibraryVC: PHPhotoLibraryChangeObserver {
                         }
                         let insertedIndexes = collectionChanges!.insertedIndexes
                         if (insertedIndexes?.count ?? 0) != 0 {
-                            collectionView
-                                .insertItems(at: insertedIndexes!.aapl_indexPathsFromIndexesWithSection(0))
+                            collectionView.insertItems(at: insertedIndexes!.aapl_indexPathsFromIndexesWithSection(0))
                         }
-                        let changedIndexes = collectionChanges!.changedIndexes
-                        if (changedIndexes?.count ?? 0) != 0 {
-                            collectionView.reloadItems(at: changedIndexes!.aapl_indexPathsFromIndexesWithSection(0))
+                    }, completion: { finished in
+                        if finished {
+                            let changedIndexes = collectionChanges!.changedIndexes
+                            if (changedIndexes?.count ?? 0) != 0 {
+                                collectionView.reloadItems(at: changedIndexes!.aapl_indexPathsFromIndexesWithSection(0))
+                            }
                         }
-                    }, completion: nil)
+                    })
                 }
                 self.mediaManager.resetCachedAssets()
             }
