@@ -200,7 +200,7 @@ extension YPLibraryVC: UICollectionViewDelegate {
 
          if multipleSelectionEnabled {
             var addNew: Bool = false
-            let cellIsInTheSelectionPool = isInSelectionPull(indexPath: indexPath)
+            let cellIsInTheSelectionPool = isInSelectionPool(indexPath: indexPath)
             let cellIsCurrentlySelected = previouslySelectedIndexPath.row == currentlySelectedIndex
             if cellIsInTheSelectionPool {
                 if cellIsCurrentlySelected {
