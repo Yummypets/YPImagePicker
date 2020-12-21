@@ -70,4 +70,11 @@ public struct YPColors {
     public var progressBarTrackColor: UIColor = .ypSystemBackground
     /// The color of completed track for the progress bar
     public var progressBarCompletedColor: UIColor?
+    
+    /// The color of the Album's NavigationBar background
+    public var albumBarTintColor: UIColor = .ypSystemBackground
+    /// The color of the Album's left and right items color
+    public var albumTintColor: UIColor = .ypLabel
+    /// The color of the Album's title color
+    public var albumTitleColor: UIColor = .ypLabel
 }
