@@ -13,8 +13,7 @@ protocol YPBottomPagerDelegate: class {
     func pagerScrollViewDidScroll(_ scrollView: UIScrollView)
     func pagerDidSelectController(_ vc: UIViewController)
 }
-
-public class YPBottomPager: UIViewController, UIScrollViewDelegate {
+open class YPBottomPager: UIViewController, UIScrollViewDelegate {
     
     weak var delegate: YPBottomPagerDelegate?
     var controllers = [UIViewController]() { didSet { reload() } }
@@ -27,7 +26,7 @@ public class YPBottomPager: UIViewController, UIScrollViewDelegate {
         return controllers[currentPage]
     }
     
-    override public func loadView() {
+    override open func loadView() {
         self.automaticallyAdjustsScrollViewInsets = false
         v.scrollView.delegate = self
         view = v
@@ -50,7 +49,8 @@ public class YPBottomPager: UIViewController, UIScrollViewDelegate {
     }
     
     func reload() {
-        let viewWidth: CGFloat = UIScreen.main.bounds.width
+        let screenWidth = YPImagePickerConfiguration.screenWidth
+        let viewWidth: CGFloat = screenWidth
         for (index, c) in controllers.enumerated() {
             c.willMove(toParent: self)
             addChild(c)
@@ -88,27 +88,32 @@ public class YPBottomPager: UIViewController, UIScrollViewDelegate {
     }
     
     func showPage(_ page: Int, animated: Bool = true) {
-        let x = CGFloat(page) * UIScreen.main.bounds.width
+        let screenWidth = YPImagePickerConfiguration.screenWidth
+        let x = CGFloat(page) * screenWidth
         v.scrollView.setContentOffset(CGPoint(x: x, y: 0), animated: animated)
         selectPage(page)
     }
 
     func selectPage(_ page: Int) {
-        if page != currentPage {
-            currentPage = page
-            //select menut item and deselect others
-            for mi in v.header.menuItems {
+        guard page != currentPage && page >= 0 && page < controllers.count else {
+            return
+        }
+        currentPage = page
+        //select menu item and deselect others
+        for (i, mi) in v.header.menuItems.enumerated() {
+            if i == page {
+                mi.select()
+            } else {
                 mi.deselect()
             }
-            let currentMenuItem = v.header.menuItems[page]
-            currentMenuItem.select()
-            delegate?.pagerDidSelectController(controllers[page])
         }
+        delegate?.pagerDidSelectController(controllers[page])
     }
     
     func startOnPage(_ page: Int) {
         currentPage = page
-        let x = CGFloat(page) * UIScreen.main.bounds.width
+        let screenWidth = YPImagePickerConfiguration.screenWidth
+        let x = CGFloat(page) * screenWidth
         v.scrollView.setContentOffset(CGPoint(x: x, y: 0), animated: false)
         //select menut item and deselect others
         for mi in v.header.menuItems {

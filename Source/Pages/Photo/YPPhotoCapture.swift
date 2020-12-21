@@ -16,10 +16,11 @@ protocol YPPhotoCapture: class {
     func start(with previewView: UIView, completion: @escaping () -> Void)
     func stopCamera()
     func focus(on point: CGPoint)
+    func zoom(began: Bool, scale: CGFloat)
     func tryToggleFlash()
     var hasFlash: Bool { get }
     var currentFlashMode: YPFlashMode { get }
-    func flipCamera()
+    func flipCamera(completion: @escaping () -> Void)
     func shoot(completion: @escaping (Data) -> Void)
     var videoLayer: AVCaptureVideoPreviewLayer! { get set }
     var device: AVCaptureDevice? { get }
@@ -32,6 +33,7 @@ protocol YPPhotoCapture: class {
     var session: AVCaptureSession { get }
     var output: AVCaptureOutput { get }
     var deviceInput: AVCaptureDeviceInput? { get set }
+    var initVideoZoomFactor: CGFloat { get set }
     func configure()
 }
 

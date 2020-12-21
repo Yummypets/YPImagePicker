@@ -15,16 +15,25 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, YPPermis
     public var didCapturePhoto: ((UIImage) -> Void)?
     let photoCapture = newPhotoCapture()
     let v: YPCameraView!
+    var isInited = false
+    var videoZoomFactor: CGFloat = 1.0
     override public func loadView() { view = v }
 
     public required init() {
         self.v = YPCameraView(overlayView: YPConfig.overlayView)
         super.init(nibName: nil, bundle: nil)
         title = YPConfig.wordings.cameraTitle
+        navigationController?.navigationBar.setTitleFont(font: YPConfig.fonts.navigationBarTitleFont)
+        
+        YPDeviceOrientationHelper.shared.startDeviceOrientationNotifier { _ in }
     }
     
     public required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        YPDeviceOrientationHelper.shared.stopDeviceOrientationNotifier()
     }
     
     override public func viewDidLoad() {
@@ -38,6 +47,11 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, YPPermis
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.focusTapped(_:)))
         tapRecognizer.delegate = self
         v.previewViewContainer.addGestureRecognizer(tapRecognizer)
+        
+        // Zoom
+        let pinchRecongizer = UIPinchGestureRecognizer(target: self, action: #selector(self.pinch(_:)))
+        pinchRecongizer.delegate = self
+        v.previewViewContainer.addGestureRecognizer(pinchRecongizer)
     }
     
     func start() {
@@ -47,6 +61,7 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, YPPermis
             }
             self?.photoCapture.start(with: strongSelf.v.previewViewContainer, completion: {
                 DispatchQueue.main.async {
+                    self?.isInited = true
                     self?.refreshFlashButton()
                 }
             })
@@ -55,6 +70,10 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, YPPermis
 
     @objc
     func focusTapped(_ recognizer: UITapGestureRecognizer) {
+        guard isInited else {
+            return
+        }
+        
         doAfterPermissionCheck { [weak self] in
             self?.focus(recognizer: recognizer)
         }
@@ -75,6 +94,21 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, YPPermis
         v.addSubview(v.focusView)
         YPHelper.animateFocusView(v.focusView)
     }
+    
+    @objc
+    func pinch(_ recognizer: UIPinchGestureRecognizer) {
+        guard isInited else {
+            return
+        }
+        
+        doAfterPermissionCheck { [weak self] in
+            self?.zoom(recognizer: recognizer)
+        }
+    }
+    
+    func zoom(recognizer: UIPinchGestureRecognizer) {
+        photoCapture.zoom(began: recognizer.state == .began, scale: recognizer.scale)
+    }
         
     func stopCamera() {
         photoCapture.stopCamera()
@@ -83,8 +117,7 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, YPPermis
     @objc
     func flipButtonTapped() {
         doAfterPermissionCheck { [weak self] in
-            self?.photoCapture.flipCamera()
-            DispatchQueue.main.async {
+            self?.photoCapture.flipCamera {
                 self?.refreshFlashButton()
             }
         }
@@ -129,7 +162,7 @@ public class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, YPPermis
     }
     
     func cropImageToSquare(_ image: UIImage) -> UIImage {
-        let orientation: UIDeviceOrientation = UIDevice.current.orientation
+        let orientation: UIDeviceOrientation = YPDeviceOrientationHelper.shared.currentDeviceOrientation
         var imageWidth = image.size.width
         var imageHeight = image.size.height
         switch orientation {

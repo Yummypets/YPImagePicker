@@ -28,6 +28,7 @@ class PostiOS10PhotoCapture: NSObject, YPPhotoCapture, AVCapturePhotoCaptureDele
         return device.hasFlash
     }
     var block: ((Data) -> Void)?
+    var initVideoZoomFactor: CGFloat = 1.0
     
     // MARK: - Configuration
     
@@ -49,15 +50,15 @@ class PostiOS10PhotoCapture: NSObject, YPPhotoCapture, AVCapturePhotoCaptureDele
             if deviceInput.device.isFlashAvailable {
                 switch currentFlashMode {
                 case .auto:
-                    if photoOutput.supportedFlashModes.contains(.auto) {
+                    if photoOutput.__supportedFlashModes.contains(NSNumber(value: AVCaptureDevice.FlashMode.auto.rawValue)) {
                         settings.flashMode = .auto
                     }
                 case .off:
-                    if photoOutput.supportedFlashModes.contains(.off) {
+                    if photoOutput.__supportedFlashModes.contains(NSNumber(value: AVCaptureDevice.FlashMode.off.rawValue)) {
                         settings.flashMode = .off
                     }
                 case .on:
-                    if photoOutput.supportedFlashModes.contains(.on) {
+                    if photoOutput.__supportedFlashModes.contains(NSNumber(value: AVCaptureDevice.FlashMode.on.rawValue)) {
                         settings.flashMode = .on
                     }
                 }

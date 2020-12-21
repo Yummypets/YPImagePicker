@@ -13,8 +13,8 @@ class YPMultipleSelectionIndicator: UIView {
     
     let circle = UIView()
     let label = UILabel()
-    var selectionColor = UIColor.black
-    
+    var selectionColor = UIColor.ypSystemBlue
+
     convenience init() {
         self.init(frame: .zero)
         
@@ -32,7 +32,7 @@ class YPMultipleSelectionIndicator: UIView {
         circle.layer.cornerRadius = size / 2.0
         label.textAlignment = .center
         label.textColor = .white
-        label.font = UIFont.systemFont(ofSize: 12, weight: .regular)
+        label.font = YPConfig.fonts.multipleSelectionIndicatorFont
         
         set(number: nil)
     }
@@ -87,22 +87,23 @@ class YPLibraryViewCell: UICollectionViewCell {
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         durationLabel.textColor = .white
-        durationLabel.font = .systemFont(ofSize: 12)
+        durationLabel.font = YPConfig.fonts.durationFont
         durationLabel.isHidden = true
         selectionOverlay.backgroundColor = .white
         selectionOverlay.alpha = 0
-        backgroundColor = UIColor(r: 247, g: 247, b: 247)
+        backgroundColor = .ypSecondarySystemBackground
     }
 
     override var isSelected: Bool {
-        didSet {
-            isHighlighted = isSelected
-        }
+        didSet { refreshSelection() }
     }
     
     override var isHighlighted: Bool {
-        didSet {
-            selectionOverlay.alpha = isHighlighted ? 0.6 : 0
-        }
+        didSet { refreshSelection() }
+    }
+    
+    private func refreshSelection() {
+        let showOverlay = isSelected || isHighlighted
+        selectionOverlay.alpha = showOverlay ? 0.6 : 0
     }
 }

@@ -16,9 +16,17 @@ class LibraryMediaManager {
     internal var fetchResult: PHFetchResult<PHAsset>!
     internal var previousPreheatRect: CGRect = .zero
     internal var imageManager: PHCachingImageManager?
-    internal var selectedAsset: PHAsset!
     internal var exportTimer: Timer?
     internal var currentExportSessions: [AVAssetExportSession] = []
+
+    /// If true then library has items to show. If false the user didn't allow any item to show in picker library.
+    internal var hasResultItems: Bool {
+        if let fetchResult = self.fetchResult {
+            return fetchResult.count > 0
+        } else {
+            return false
+        }
+    }
     
     func initialize() {
         imageManager = PHCachingImageManager()
@@ -31,7 +39,8 @@ class LibraryMediaManager {
     }
     
     func updateCachedAssets(in collectionView: UICollectionView) {
-        let size = UIScreen.main.bounds.width/4 * UIScreen.main.scale
+        let screenWidth = YPImagePickerConfiguration.screenWidth
+        let size = screenWidth / 4 * UIScreen.main.scale
         let cellSize = CGSize(width: size, height: size)
         
         var preheatRect = collectionView.bounds
@@ -66,15 +75,26 @@ class LibraryMediaManager {
         }
     }
     
-    func fetchVideoUrlAndCrop(for videoAsset: PHAsset, cropRect: CGRect, callback: @escaping (URL) -> Void) {
+    func fetchVideoUrlAndCrop(for videoAsset: PHAsset,
+                              cropRect: CGRect,
+                              callback: @escaping (_ videoURL: URL?) -> Void) {
+        fetchVideoUrlAndCropWithDuration(for: videoAsset, cropRect: cropRect, duration: nil, callback: callback)
+    }
+    
+    func fetchVideoUrlAndCropWithDuration(for videoAsset: PHAsset,
+                                          cropRect: CGRect,
+                                          duration: CMTime?,
+                                          callback: @escaping (_ videoURL: URL?) -> Void) {
         let videosOptions = PHVideoRequestOptions()
         videosOptions.isNetworkAccessAllowed = true
+        videosOptions.deliveryMode = .highQualityFormat
         imageManager?.requestAVAsset(forVideo: videoAsset, options: videosOptions) { asset, _, _ in
             do {
                 guard let asset = asset else { print("⚠️ PHCachingImageManager >>> Don't have the asset"); return }
                 
                 let assetComposition = AVMutableComposition()
-                let trackTimeRange = CMTimeRangeMake(start: CMTime.zero, duration: asset.duration)
+                let assetMaxDuration = self.getMaxVideoDuration(between: duration, andAssetDuration: asset.duration)
+                let trackTimeRange = CMTimeRangeMake(start: CMTime.zero, duration: assetMaxDuration)
                 
                 // 1. Inserting audio and video tracks in composition
                 
@@ -95,36 +115,59 @@ class LibraryMediaManager {
                 
                 try videoCompositionTrack.insertTimeRange(trackTimeRange, of: videoTrack, at: CMTime.zero)
                 
-                // 2. Create the instructions
+                // Layer Instructions
+                let layerInstructions = AVMutableVideoCompositionLayerInstruction(assetTrack: videoCompositionTrack)
+                var transform = videoTrack.preferredTransform
+                let videoSize = videoTrack.naturalSize.applying(transform)
+                transform.tx = (videoSize.width < 0) ? abs(videoSize.width) : 0.0
+                transform.ty = (videoSize.height < 0) ? abs(videoSize.height) : 0.0
+                transform.tx -= cropRect.minX
+                transform.ty -= cropRect.minY
+                layerInstructions.setTransform(transform, at: CMTime.zero)
                 
+                // CompositionInstruction
                 let mainInstructions = AVMutableVideoCompositionInstruction()
                 mainInstructions.timeRange = trackTimeRange
-                
-                // 3. Adding the layer instructions. Transforming
-                
-                let layerInstructions = AVMutableVideoCompositionLayerInstruction(assetTrack: videoCompositionTrack)
-                layerInstructions.setTransform(videoTrack.getTransform(cropRect: cropRect), at: CMTime.zero)
-                layerInstructions.setOpacity(1.0, at: CMTime.zero)
                 mainInstructions.layerInstructions = [layerInstructions]
                 
-                // 4. Create the main composition and add the instructions
-                
-                let videoComposition = AVMutableVideoComposition()
-                videoComposition.renderSize = cropRect.size
+                // Video Composition
+                let videoComposition = AVMutableVideoComposition(propertiesOf: asset)
                 videoComposition.instructions = [mainInstructions]
                 videoComposition.frameDuration = CMTimeMake(value: 1, timescale: 30)
+                videoComposition.renderSize = cropRect.size // needed?
                 
                 // 5. Configuring export session
-                
-                let exportSession = AVAssetExportSession(asset: assetComposition,
-                                                         presetName: YPConfig.video.compression)
-                exportSession?.outputFileType = YPConfig.video.fileType
-                exportSession?.shouldOptimizeForNetworkUse = true
-                exportSession?.videoComposition = videoComposition
                 let dirPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-                exportSession?.outputURL = URL(fileURLWithPath: dirPath[0])
+                let fileURL = URL(fileURLWithPath: dirPath[0])
                     .appendingUniquePathComponent(pathExtension: YPConfig.video.fileType.fileExtension)
-                
+                let exportSession = assetComposition
+                    .export(to: fileURL,
+                            videoComposition: videoComposition,
+                            removeOldFile: true) { [weak self] session in
+                                DispatchQueue.main.async {
+                                    switch session.status {
+                                    case .completed:
+                                        if let url = session.outputURL {
+                                            if let index = self?.currentExportSessions.firstIndex(of: session) {
+                                                self?.currentExportSessions.remove(at: index)
+                                            }
+                                            callback(url)
+                                        } else {
+                                            print("LibraryMediaManager -> Don't have URL.")
+                                            callback(nil)
+                                        }
+                                    case .failed:
+                                        print("LibraryMediaManager")
+										print("Export of the video failed : \(String(describing: session.error))")
+                                        callback(nil)
+                                    default:
+										print("LibraryMediaManager")
+                                        print("Export session completed with \(session.status) status. Not handled.")
+                                        callback(nil)
+                                    }
+                                }
+                }
+
                 // 6. Exporting
                 DispatchQueue.main.async {
                     self.exportTimer = Timer.scheduledTimer(timeInterval: 0.1,
@@ -133,24 +176,23 @@ class LibraryMediaManager {
                                                             userInfo: exportSession,
                                                             repeats: true)
                 }
-                
-                self.currentExportSessions.append(exportSession!)
-                exportSession?.exportAsynchronously(completionHandler: {
-                    DispatchQueue.main.async {
-                        if let url = exportSession?.outputURL, exportSession?.status == .completed {
-                            callback(url)
-                            if let index = self.currentExportSessions.index(of:exportSession!) {
-                                self.currentExportSessions.remove(at: index)
-                            }
-                        } else {
-                            let error = exportSession?.error
-                            print("error exporting video \(String(describing: error))")
-                        }
-                    }
-                })
+
+                if let s = exportSession {
+                    self.currentExportSessions.append(s)
+                }
             } catch let error {
                 print("⚠️ PHCachingImageManager >>> \(error)")
             }
+        }
+    }
+    
+    private func getMaxVideoDuration(between duration: CMTime?, andAssetDuration assetDuration: CMTime) -> CMTime {
+        guard let duration = duration else { return assetDuration }
+
+        if assetDuration <= duration {
+            return assetDuration
+        } else {
+            return duration
         }
     }
     
@@ -176,4 +218,3 @@ class LibraryMediaManager {
         }
     }
 }
-
