@@ -134,6 +134,11 @@ public class YPVideoCaptureVC: UIViewController, YPPermissionCheckable {
     }
     
     private func startRecording() {
+        /// Stop the screen from going to sleep while recording video
+        DispatchQueue.main.async {
+            UIApplication.shared.isIdleTimerDisabled = true
+        }
+        
         videoHelper.startRecording()
         updateState {
             $0.isRecording = true
@@ -141,6 +146,11 @@ public class YPVideoCaptureVC: UIViewController, YPPermissionCheckable {
     }
     
     private func stopRecording() {
+        /// Reset screen always on to false since the need no longer exists
+        DispatchQueue.main.async {
+            UIApplication.shared.isIdleTimerDisabled = false
+        }
+        
         videoHelper.stopRecording()
         updateState {
             $0.isRecording = false
