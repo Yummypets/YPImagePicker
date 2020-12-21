@@ -107,6 +107,8 @@
 		327D7B68240CEF2F00B9C368 /* UIBarButtonItem+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+Extensions.swift"; sourceTree = "<group>"; };
 		3B0E1B962070669B0048E95B /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
 		4EA67521208A45080076D4E3 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
+		4F6EC26224FE5C2900277082 /* km */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = km; path = km.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
+		4F6EC26324FE5C3C00277082 /* km-KH */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "km-KH"; path = "km-KH.lproj/YPImagePickerLocalizable.strings"; sourceTree = "<group>"; };
 		52412A931CA6114A0073C4BE /* YPImagePicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = YPImagePicker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5BB46873254497250083DFEA /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
 		5F01F9DC20DCC494007432E4 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/YPImagePickerLocalizable.strings"; sourceTree = "<group>"; };
@@ -551,6 +553,8 @@
 				th,
 				vi,
 				pl,
+				km,
+				"km-KH",
 				da,
 				ro,
 				sv,
@@ -713,6 +717,8 @@
 				2577138123B1E09300BB9C86 /* th */,
 				2577138223B1E09E00BB9C86 /* vi */,
 				78B58D3524C5DB5200B83153 /* pl */,
+				4F6EC26224FE5C2900277082 /* km */,
+				4F6EC26324FE5C3C00277082 /* km-KH */,
 				EB0D6FC2252F1FDC006EE12E /* da */,
 				166695DE253EFF0100F6EF9E /* ro */,
 				5BB46873254497250083DFEA /* sv */,
