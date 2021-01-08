@@ -55,7 +55,7 @@ open class YPBottomPager: UIViewController, UIScrollViewDelegate {
             c.willMove(toParent: self)
             addChild(c)
             let x: CGFloat = CGFloat(index) * viewWidth
-            v.scrollView.sv(c.view)
+            v.scrollView.subviews(c.view)
             c.didMove(toParent: self)
             c.view.left(x)
             c.view.top(0)

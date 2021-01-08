@@ -7,6 +7,7 @@
 //
 
 import Stevia
+import UIKit
 
 class YPFiltersView: UIView {
     
@@ -23,9 +24,9 @@ class YPFiltersView: UIView {
         filtersLoader.startAnimating()
         filtersLoader.color = YPConfig.colors.tintColor
         
-        sv(
+        subviews(
             imageView,
-            collectionViewContainer.sv(
+            collectionViewContainer.subviews(
                 filtersLoader,
                 collectionView
             )
