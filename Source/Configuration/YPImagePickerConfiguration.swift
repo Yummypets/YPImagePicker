@@ -144,6 +144,9 @@ public struct YPImagePickerConfiguration {
     @available(iOS, obsoleted: 3.0.0, renamed: "video.recordingTimeLimit")
     public var videoRecordingTimeLimit: TimeInterval = 60.0
     
+    @available(iOS, obsoleted: 3.0.0, renamed: "video.recordingSizeLimit")
+    public var videoRecordingSizeLimit: Double = 0
+    
     @available(iOS, obsoleted: 3.0.0, renamed: "video.libraryTimeLimit")
     public var videoFromLibraryTimeLimit: TimeInterval = 60.0
     
@@ -245,6 +248,10 @@ public struct YPConfigVideo {
     /// Defines the time limit for recording videos.
     /// Default is 60 seconds.
     public var recordingTimeLimit: TimeInterval = 60.0
+    
+    /// Defines the size limit in bytes for recording videos
+    /// Default is 1 GB
+    public var recordingSizeLimit: Double = 0
     
     /// Defines the time limit for videos from the library.
     /// Defaults to 60 seconds.
