@@ -215,6 +215,9 @@ public struct YPConfigLibrary {
     /// Allow to skip the selections gallery when selecting the multiple media items. Defaults to false.
     public var skipSelectionsGallery = false
     
+    /// Selection gallery navigationItem title. Defaults to "".
+    public var selectionsGalleryTitle = ""
+    
     /// Allow to preselected media items
     public var preselectedItems: [YPMediaItem]?
     
