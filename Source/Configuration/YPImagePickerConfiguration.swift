@@ -247,8 +247,8 @@ public struct YPConfigVideo {
     public var recordingTimeLimit: TimeInterval = 60.0
     
     /// Defines the size limit in bytes for recording videos
-    /// Default is 1 GB
-    public var recordingSizeLimit: Double = 0
+    /// For example: 1 GB
+    public var recordingSizeLimit: Double?
     
     /// Defines the time limit for videos from the library.
     /// Defaults to 60 seconds.
@@ -266,11 +266,11 @@ public struct YPConfigVideo {
     /// The handles won't pan further if the minimum duration is attained.
     public var trimmerMinDuration: Double = 3.0
 
-	/// Defines if the user skips the trimer stage,
-	/// the video will be trimmed automatically to the maximum value of trimmerMaxDuration.
-	/// This case occurs when the user already has a video selected and enables a
-	/// multiselection to pick more than one type of media (video or image),
-	/// so, the trimmer step becomes optional.
+    /// Defines if the user skips the trimer stage,
+    /// the video will be trimmed automatically to the maximum value of trimmerMaxDuration.
+    /// This case occurs when the user already has a video selected and enables a
+    /// multiselection to pick more than one type of media (video or image),
+    /// so, the trimmer step becomes optional.
     /// - SeeAlso: [trimmerMaxDuration](x-source-tag://trimmerMaxDuration)
     public var automaticTrimToTrimmerMaxDuration: Bool = false
 }
