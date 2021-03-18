@@ -91,8 +91,8 @@ public struct YPImagePickerConfiguration {
     /// Adds a Overlay View to the camera
     public var overlayView: UIView?
 
-	/// Defines if the navigation bar cancel button should be hidden when showing the picker. Default is false
-	public var hidesCancelButton = false
+    /// Defines if the navigation bar cancel button should be hidden when showing the picker. Default is false
+    public var hidesCancelButton = false
     
     /// Defines if the status bar should be hidden when showing the picker. Default is true
     public var hidesStatusBar = true
@@ -143,9 +143,6 @@ public struct YPImagePickerConfiguration {
     
     @available(iOS, obsoleted: 3.0.0, renamed: "video.recordingTimeLimit")
     public var videoRecordingTimeLimit: TimeInterval = 60.0
-    
-    @available(iOS, obsoleted: 3.0.0, renamed: "video.recordingSizeLimit")
-    public var videoRecordingSizeLimit: Double = 0
     
     @available(iOS, obsoleted: 3.0.0, renamed: "video.libraryTimeLimit")
     public var videoFromLibraryTimeLimit: TimeInterval = 60.0
