@@ -13,6 +13,7 @@
 		99428A141E7BE02400B765A9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 99428A121E7BE02400B765A9 /* LaunchScreen.storyboard */; };
 		99A052A61F20DF21005600B3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 99A052A81F20DF21005600B3 /* Localizable.strings */; };
 		E4B8B87ACE0F8D7E7C9E8B2A /* Pods_YPImagePickerExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39ECAC1A4280ED3A66999C55 /* Pods_YPImagePickerExample.framework */; };
+		EBFC7A3C260352D800D49AA6 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = EBFC7A3B260352D800D49AA6 /* Podfile */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +40,7 @@
 		E5287F5920B9095F0052153D /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		EB0D6FC3252F1FDC006EE12E /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
 		EB11EE9A2057C58600A19365 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		EBFC7A3B260352D800D49AA6 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +76,7 @@
 		99428A081E7BE02400B765A9 /* YPImagePickerExample */ = {
 			isa = PBXGroup;
 			children = (
+				EBFC7A3B260352D800D49AA6 /* Podfile */,
 				99428A091E7BE02400B765A9 /* AppDelegate.swift */,
 				99428A0B1E7BE02400B765A9 /* ExampleViewController.swift */,
 				99A052A81F20DF21005600B3 /* Localizable.strings */,
@@ -98,7 +101,6 @@
 				AA088D933E881AB26E8E20F0 /* Pods-YPImagePickerExample.debug.xcconfig */,
 				96E2AA2442DD86418F1EC0AB /* Pods-YPImagePickerExample.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -182,6 +184,7 @@
 			files = (
 				99428A141E7BE02400B765A9 /* LaunchScreen.storyboard in Resources */,
 				99A052A61F20DF21005600B3 /* Localizable.strings in Resources */,
+				EBFC7A3C260352D800D49AA6 /* Podfile in Resources */,
 				99428A111E7BE02400B765A9 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
