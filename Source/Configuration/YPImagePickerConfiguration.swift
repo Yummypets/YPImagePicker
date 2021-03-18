@@ -246,9 +246,15 @@ public struct YPConfigVideo {
     /// Default is 60 seconds.
     public var recordingTimeLimit: TimeInterval = 60.0
     
-    /// Defines the size limit in bytes for recording videos
-    /// For example: 1 GB
-    public var recordingSizeLimit: Double?
+    /// Defines the size limit in bytes for recording videos.
+    /// If this property is not nil, then the recording percentage line tracks buy this.
+    /// In bytes. 100000000 is 100 MB.
+    /// AVCaptureMovieFileOutput.maxRecordedFileSize.
+    public var recordingSizeLimit: Int64?
+
+    /// Minimum free space when recording videos.
+    /// AVCaptureMovieFileOutput.minFreeDiskSpaceLimit.
+    public var minFreeDiskSpaceLimit: Int64 = 1024 * 1024
     
     /// Defines the time limit for videos from the library.
     /// Defaults to 60 seconds.
