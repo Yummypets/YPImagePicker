@@ -13,8 +13,8 @@ import UIKit
 protocol YPPhotoCapture: class {
     
     // Public api
-    func start(with previewView: UIView, completion: @escaping () -> Void)
-    func stopCamera()
+    func start(semaphore: DispatchSemaphore?, with previewView: UIView, completion: @escaping () -> Void)
+    func stopCamera(_ semaphore: DispatchSemaphore?)
     func focus(on point: CGPoint)
     func zoom(began: Bool, scale: CGFloat)
     func tryToggleFlash()
