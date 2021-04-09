@@ -26,7 +26,7 @@ class YPCropView: UIView {
     }
     
     private func setupViewHierarchy() {
-        sv(
+        subviews(
             imageView,
             topCurtain,
             cropArea,

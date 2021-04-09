@@ -17,7 +17,7 @@ class YPAlbumView: UIView {
     convenience init() {
         self.init(frame: .zero)
         
-        sv(
+        subviews(
             tableView,
             spinner
         )

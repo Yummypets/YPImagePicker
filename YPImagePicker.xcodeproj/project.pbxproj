@@ -7,10 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		068A143025A9BE75008B1D67 /* YPImagePickerLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 068A141325A9BE75008B1D67 /* YPImagePickerLocalizable.strings */; };
+		068A143125A9BE75008B1D67 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 068A141F25A9BE75008B1D67 /* Assets.xcassets */; };
 		321E6D87240CFABC00D76CD8 /* UINavigationBar+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 321E6D86240CFABC00D76CD8 /* UINavigationBar+Extensions.swift */; };
 		327D7B592409510300B9C368 /* YPFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 327D7B582409510300B9C368 /* YPFonts.swift */; };
 		327D7B69240CEF2F00B9C368 /* UIBarButtonItem+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 327D7B68240CEF2F00B9C368 /* UIBarButtonItem+Extensions.swift */; };
-		8458057421819B95004F241C /* YPImagePickerLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 99C6D6991F1FB5C100711DB2 /* YPImagePickerLocalizable.strings */; };
 		99019E4C2018CCD6007325C2 /* YPBottomPagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99019E4B2018CCD6007325C2 /* YPBottomPagerView.swift */; };
 		99019E4E2018CD31007325C2 /* YPPagerMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99019E4D2018CD31007325C2 /* YPPagerMenu.swift */; };
 		99019E512018CDED007325C2 /* YPImageSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99019E502018CDED007325C2 /* YPImageSize.swift */; };
@@ -37,7 +38,6 @@
 		99A3C91020319227008D7E23 /* YPCropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A3C90F20319227008D7E23 /* YPCropView.swift */; };
 		99A3C91220319231008D7E23 /* YPCropVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A3C91120319231008D7E23 /* YPCropVC.swift */; };
 		99B8C4C3208F8EE900127119 /* YPLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B8C4C2208F8EE900127119 /* YPLoadingView.swift */; };
-		99C6D6B91F1FB5C100711DB2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 99C6D6981F1FB5C100711DB2 /* Assets.xcassets */; };
 		99C6D6BB1F1FB5C100711DB2 /* YPLibraryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D69F1F1FB5C100711DB2 /* YPLibraryVC.swift */; };
 		99C6D6BC1F1FB5C100711DB2 /* YPLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6D6A01F1FB5C100711DB2 /* YPLibraryView.swift */; };
 		99C6D6BD1F1FB5C100711DB2 /* YPLibraryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 99C6D6A11F1FB5C100711DB2 /* YPLibraryView.xib */; };
@@ -98,24 +98,38 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		16550C5C214D5EE60090BADF /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
-		166695DE253EFF0100F6EF9E /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
-		2577138123B1E09300BB9C86 /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
-		2577138223B1E09E00BB9C86 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
+		068A141425A9BE75008B1D67 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
+		068A141525A9BE75008B1D67 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
+		068A141625A9BE75008B1D67 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/YPImagePickerLocalizable.strings"; sourceTree = "<group>"; };
+		068A141725A9BE75008B1D67 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
+		068A141825A9BE75008B1D67 /* fa */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fa; path = fa.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
+		068A141925A9BE75008B1D67 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
+		068A141A25A9BE75008B1D67 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
+		068A141B25A9BE75008B1D67 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
+		068A141C25A9BE75008B1D67 /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
+		068A141D25A9BE75008B1D67 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
+		068A141E25A9BE75008B1D67 /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
+		068A141F25A9BE75008B1D67 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		068A142025A9BE75008B1D67 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
+		068A142125A9BE75008B1D67 /* km */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = km; path = km.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
+		068A142225A9BE75008B1D67 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
+		068A142325A9BE75008B1D67 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/YPImagePickerLocalizable.strings"; sourceTree = "<group>"; };
+		068A142425A9BE75008B1D67 /* km-KH */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "km-KH"; path = "km-KH.lproj/YPImagePickerLocalizable.strings"; sourceTree = "<group>"; };
+		068A142525A9BE75008B1D67 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
+		068A142625A9BE75008B1D67 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
+		068A142725A9BE75008B1D67 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/YPImagePickerLocalizable.strings"; sourceTree = "<group>"; };
+		068A142825A9BE75008B1D67 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
+		068A142925A9BE75008B1D67 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
+		068A142A25A9BE75008B1D67 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
+		068A142B25A9BE75008B1D67 /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
+		068A142C25A9BE75008B1D67 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
+		068A142D25A9BE75008B1D67 /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
+		068A142E25A9BE75008B1D67 /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/YPImagePickerLocalizable.strings"; sourceTree = "<group>"; };
+		068A142F25A9BE75008B1D67 /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
 		321E6D86240CFABC00D76CD8 /* UINavigationBar+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationBar+Extensions.swift"; sourceTree = "<group>"; };
 		327D7B582409510300B9C368 /* YPFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPFonts.swift; sourceTree = "<group>"; };
 		327D7B68240CEF2F00B9C368 /* UIBarButtonItem+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+Extensions.swift"; sourceTree = "<group>"; };
-		3B0E1B962070669B0048E95B /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
-		4EA67521208A45080076D4E3 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
-		4F6EC26224FE5C2900277082 /* km */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = km; path = km.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
-		4F6EC26324FE5C3C00277082 /* km-KH */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "km-KH"; path = "km-KH.lproj/YPImagePickerLocalizable.strings"; sourceTree = "<group>"; };
 		52412A931CA6114A0073C4BE /* YPImagePicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = YPImagePicker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		5BB46873254497250083DFEA /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
-		5F01F9DC20DCC494007432E4 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/YPImagePickerLocalizable.strings"; sourceTree = "<group>"; };
-		65BBCBAE2101BA4200277809 /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
-		7157B4CA206FD7270004EF6C /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/YPImagePickerLocalizable.strings"; sourceTree = "<group>"; };
-		7222273C254C031100CAB087 /* fa */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fa; path = fa.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
-		78B58D3524C5DB5200B83153 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
 		99019E4B2018CCD6007325C2 /* YPBottomPagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPBottomPagerView.swift; sourceTree = "<group>"; };
 		99019E4D2018CD31007325C2 /* YPPagerMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPPagerMenu.swift; sourceTree = "<group>"; };
 		99019E502018CDED007325C2 /* YPImageSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPImageSize.swift; sourceTree = "<group>"; };
@@ -128,8 +142,6 @@
 		990FD298201B67FE002A39A1 /* PHFetchResult+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PHFetchResult+Extensions.swift"; sourceTree = "<group>"; };
 		9911FA23203C3A31000E9B06 /* UIImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
 		9915D9D22087E692003FC307 /* YPLibrarySelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPLibrarySelection.swift; sourceTree = "<group>"; };
-		991712D021BE9FF900DE781F /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/YPImagePickerLocalizable.strings"; sourceTree = "<group>"; };
-		991C0E5320567D3400764131 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
 		99278DA720512BD90059532E /* PreiOS10PhotoCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreiOS10PhotoCapture.swift; sourceTree = "<group>"; };
 		99278DA920512BFB0059532E /* PostiOS10PhotoCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostiOS10PhotoCapture.swift; sourceTree = "<group>"; };
 		99278DAB20512C330059532E /* YPPhotoCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPPhotoCapture.swift; sourceTree = "<group>"; };
@@ -144,11 +156,6 @@
 		99A3C90F20319227008D7E23 /* YPCropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPCropView.swift; sourceTree = "<group>"; };
 		99A3C91120319231008D7E23 /* YPCropVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPCropVC.swift; sourceTree = "<group>"; };
 		99B8C4C2208F8EE900127119 /* YPLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPLoadingView.swift; sourceTree = "<group>"; };
-		99BEB97A20A9DE5F00FFEB55 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
-		99C6D6981F1FB5C100711DB2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		99C6D69A1F1FB5C100711DB2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
-		99C6D69B1F1FB5C100711DB2 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
-		99C6D69C1F1FB5C100711DB2 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
 		99C6D69F1F1FB5C100711DB2 /* YPLibraryVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPLibraryVC.swift; sourceTree = "<group>"; };
 		99C6D6A01F1FB5C100711DB2 /* YPLibraryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPLibraryView.swift; sourceTree = "<group>"; };
 		99C6D6A11F1FB5C100711DB2 /* YPLibraryView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = YPLibraryView.xib; sourceTree = "<group>"; };
@@ -181,13 +188,8 @@
 		99CF6D28201B900400487F77 /* LibraryMediaManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryMediaManager.swift; sourceTree = "<group>"; };
 		99CF6D2A201CB96700487F77 /* YPVideoCaptureHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPVideoCaptureHelper.swift; sourceTree = "<group>"; };
 		99D1DC2A1F9788930047F0E0 /* YPImagePickerConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPImagePickerConfiguration.swift; sourceTree = "<group>"; };
-		A7FD716620755C2D0044A8E8 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
 		AA69BCF122E601D100FBB925 /* YPDeviceOrientationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPDeviceOrientationHelper.swift; sourceTree = "<group>"; };
-		E3E492BB2169012B002BA807 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
-		E5287F5820B908720052153D /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
 		EB05F6E6214A7191002040AA /* YPVideoProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPVideoProcessor.swift; sourceTree = "<group>"; };
-		EB0D6FC2252F1FDC006EE12E /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
-		EB11EE9820572F3700A19365 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
 		EB1AB2E920AC1DED00BFA79F /* CGFloat+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat+Extensions.swift"; sourceTree = "<group>"; };
 		EB473E16208E192800D16105 /* URL+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Extensions.swift"; sourceTree = "<group>"; };
 		EB473E18208E198E00D16105 /* AVFileType+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVFileType+Extensions.swift"; sourceTree = "<group>"; };
@@ -228,6 +230,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		068A141225A9BE75008B1D67 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				068A141325A9BE75008B1D67 /* YPImagePickerLocalizable.strings */,
+				068A141F25A9BE75008B1D67 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		52412A891CA6114A0073C4BE = {
 			isa = PBXGroup;
 			children = (
@@ -235,7 +246,6 @@
 				EB84ADD522F35506003667B5 /* YPImagePicker.podspec */,
 				EB5ACE2B2620802A00C3288D /* README.md */,
 				99C6D69D1F1FB5C100711DB2 /* Source */,
-				99C6D6971F1FB5C100711DB2 /* Resources */,
 				52412A941CA6114A0073C4BE /* Products */,
 				EB3251DE20878D5900A6190D /* Frameworks */,
 			);
@@ -313,15 +323,6 @@
 			path = Crop;
 			sourceTree = "<group>";
 		};
-		99C6D6971F1FB5C100711DB2 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				99C6D6981F1FB5C100711DB2 /* Assets.xcassets */,
-				99C6D6991F1FB5C100711DB2 /* YPImagePickerLocalizable.strings */,
-			);
-			path = Resources;
-			sourceTree = "<group>";
-		};
 		99C6D69D1F1FB5C100711DB2 /* Source */ = {
 			isa = PBXGroup;
 			children = (
@@ -333,6 +334,7 @@
 				EBD2B639207B7B1100E711C2 /* SelectionsGallery */,
 				99019E542018CECC007325C2 /* Helpers */,
 				EBD2B63D207B7D4E00E711C2 /* Models */,
+				068A141225A9BE75008B1D67 /* Resources */,
 				99C6D6B31F1FB5C100711DB2 /* Info.plist */,
 				99C6D6B21F1FB5C100711DB2 /* YPImagePickerHeader.h */,
 			);
@@ -561,6 +563,8 @@
 				ro,
 				sv,
 				fa,
+				nb,
+				"pt-PT",
 			);
 			mainGroup = 52412A891CA6114A0073C4BE;
 			productRefGroup = 52412A941CA6114A0073C4BE /* Products */;
@@ -577,9 +581,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8458057421819B95004F241C /* YPImagePickerLocalizable.strings in Resources */,
-				99C6D6B91F1FB5C100711DB2 /* Assets.xcassets in Resources */,
 				99C6D6BD1F1FB5C100711DB2 /* YPLibraryView.xib in Resources */,
+				068A143025A9BE75008B1D67 /* YPImagePickerLocalizable.strings in Resources */,
+				068A143125A9BE75008B1D67 /* Assets.xcassets in Resources */,
 				EB59F453208766B800811B7B /* YPVideoFiltersVC.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -697,34 +701,36 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		99C6D6991F1FB5C100711DB2 /* YPImagePickerLocalizable.strings */ = {
+		068A141325A9BE75008B1D67 /* YPImagePickerLocalizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				99C6D69A1F1FB5C100711DB2 /* en */,
-				99C6D69B1F1FB5C100711DB2 /* es */,
-				99C6D69C1F1FB5C100711DB2 /* fr */,
-				991C0E5320567D3400764131 /* nl */,
-				EB11EE9820572F3700A19365 /* ru */,
-				7157B4CA206FD7270004EF6C /* pt-BR */,
-				3B0E1B962070669B0048E95B /* tr */,
-				A7FD716620755C2D0044A8E8 /* ar */,
-				4EA67521208A45080076D4E3 /* de */,
-				99BEB97A20A9DE5F00FFEB55 /* it */,
-				E5287F5820B908720052153D /* ja */,
-				5F01F9DC20DCC494007432E4 /* zh-Hans */,
-				65BBCBAE2101BA4200277809 /* id */,
-				16550C5C214D5EE60090BADF /* bg */,
-				E3E492BB2169012B002BA807 /* ko */,
-				991712D021BE9FF900DE781F /* zh-Hant */,
-				2577138123B1E09300BB9C86 /* th */,
-				2577138223B1E09E00BB9C86 /* vi */,
-				78B58D3524C5DB5200B83153 /* pl */,
-				4F6EC26224FE5C2900277082 /* km */,
-				4F6EC26324FE5C3C00277082 /* km-KH */,
-				EB0D6FC2252F1FDC006EE12E /* da */,
-				166695DE253EFF0100F6EF9E /* ro */,
-				5BB46873254497250083DFEA /* sv */,
-				7222273C254C031100CAB087 /* fa */,
+				068A141425A9BE75008B1D67 /* de */,
+				068A141525A9BE75008B1D67 /* ar */,
+				068A141625A9BE75008B1D67 /* zh-Hans */,
+				068A141725A9BE75008B1D67 /* ja */,
+				068A141825A9BE75008B1D67 /* fa */,
+				068A141925A9BE75008B1D67 /* en */,
+				068A141A25A9BE75008B1D67 /* nb */,
+				068A141B25A9BE75008B1D67 /* es */,
+				068A141C25A9BE75008B1D67 /* da */,
+				068A141D25A9BE75008B1D67 /* it */,
+				068A141E25A9BE75008B1D67 /* bg */,
+				068A142025A9BE75008B1D67 /* sv */,
+				068A142125A9BE75008B1D67 /* km */,
+				068A142225A9BE75008B1D67 /* ko */,
+				068A142325A9BE75008B1D67 /* zh-Hant */,
+				068A142425A9BE75008B1D67 /* km-KH */,
+				068A142525A9BE75008B1D67 /* tr */,
+				068A142625A9BE75008B1D67 /* pl */,
+				068A142725A9BE75008B1D67 /* pt-BR */,
+				068A142825A9BE75008B1D67 /* vi */,
+				068A142925A9BE75008B1D67 /* ru */,
+				068A142A25A9BE75008B1D67 /* fr */,
+				068A142B25A9BE75008B1D67 /* id */,
+				068A142C25A9BE75008B1D67 /* nl */,
+				068A142D25A9BE75008B1D67 /* th */,
+				068A142E25A9BE75008B1D67 /* pt-PT */,
+				068A142F25A9BE75008B1D67 /* ro */,
 			);
 			name = YPImagePickerLocalizable.strings;
 			sourceTree = "<group>";

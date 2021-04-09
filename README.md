@@ -10,6 +10,7 @@ YPImagePicker is an instagram-like photo/video picker for iOS written in pure Sw
 [![Version](https://img.shields.io/cocoapods/v/YPImagePicker.svg?style=flat)](http://cocoapods.org/pods/YPImagePicker)
 [![Platform](https://img.shields.io/cocoapods/p/YPImagePicker.svg?style=flat)](http://cocoapods.org/pods/YPImagePicker)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+[![SPM compatible](https://img.shields.io/badge/SPM-compatible-4BC51D.svg?style=flat)](https://swift.org/package-manager/)
 [![codebeat badge](https://codebeat.co/badges/9710a89d-b1e2-4e55-a4a2-3ae1f98f4c53)](https://codebeat.co/projects/github-com-yummypets-ypimagepicker-master)
 [![License: MIT](http://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat)](https://github.com/Yummypets/YPImagePicker/blob/master/LICENSE)
 [![GitHub tag](https://img.shields.io/github/release/Yummypets/YPImagePicker.svg)]()
@@ -41,16 +42,6 @@ And many more...
 
 ## Installation
 
-## Experimental Swift Package Manager (SPM) Support
-A first version of SPM support is available :
-package `https://github.com/Yummypets/YPImagePicker` branch `spm`.  
-This has a minimum target iOS version of `12.0`.  
-This is an early release so be sure to thoroughly test the integration and report any issues you'd encounter.
-
-Side note:  
-Swift package manager is the future and I would strongly recommend you to migrate as soon as possible.
-Once this integration is stable, the other packager managers will be deprecated.
-
 #### Using [CocoaPods](http://cocoapods.org/)
 
 First be sure to run `pod repo update` to get the latest version available.
@@ -70,6 +61,24 @@ Add `github "Yummypets/YPImagePicker"` to your `Cartfile` and run `carthage upda
 ```
 github "Yummypets/YPImagePicker"
 ```
+
+#### Using [Swift Package Manager](https://swift.org/package-manager/)
+
+Open SPM dependency manager through `File > Swift Pakcages > Add Package Dependency...`.
+
+and insert repository URL:
+
+``https://github.com/Yummypets/YPImagePicker.git``
+
+To add dependency in your own package, just specify a package in dependencies of your `Package.swift`:
+```swift
+.package(
+  name: "YPImagePicker",
+  url: "https://github.com/Yummypets/YPImagePicker.git",
+  .upToNextMajor(from: "4.5.0")
+)
+```
+Note: This has a minimum target iOS version of `12.0`.
 
 ## Plist entries
 
