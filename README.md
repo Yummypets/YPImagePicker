@@ -317,6 +317,7 @@ Original Fusuma author is [ytakz](http://ytakzk.me)
 [portellaa](https://github.com/portellaa)
 [Romixery](https://github.com/romixery)
 [shotat](https://github.com/shotat)
+[shalamowww](https://github.com/shalamowww)
 
 Special thanks to [ihtiht](https://github.com/ihtiht) for the cool looking logo!
 
