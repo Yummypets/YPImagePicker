@@ -1,7 +1,12 @@
 //*
 /**
-YPImagePicker
-Created on 25/04/2021
+ //
+ //  Bundle+Extensions.swift
+ //  YPImagePicker
+ //
+ //  Created by RIcardo Champa on 25.004.2021.
+ //  Copyright © 2018 Yummypets. All rights reserved.
+ //
 */
 
 import Foundation
