@@ -11,10 +11,10 @@ Pod::Spec.new do |s|
   s.social_media_url = 'https://twitter.com/sachadso'
   s.requires_arc     = true
   s.ios.deployment_target = "9.0"
-  s.source_files = 'Source/**/*.swift'
+  s.source_files = 'Source/**/*.{h,m,swift}'
+  s.resource_bundles = { 'YPImagePicker' => ['Source/**/*.{xcassets,ttf,strings,json,xib,gif,storyboard}', 'Resources/**/*.{xcassets,ttf,strings,json,xib,gif,storyboard}'] }
   s.dependency 'SteviaLayout', '~> 4.7.3'
   s.dependency 'PryntTrimmerView', '~> 4.0.2'
-  s.resources    = ['Resources/*', 'Source/**/*.xib']
   s.description  = "Instagram-like image picker & filters for iOS supporting videos and albums"
   s.swift_versions = ['3', '4.1', '4.2', '5.0', '5.1', '5.2', '5.3']
 end
