@@ -91,8 +91,8 @@ public struct YPImagePickerConfiguration {
     /// Adds a Overlay View to the camera
     public var overlayView: UIView?
 
-	/// Defines if the navigation bar cancel button should be hidden when showing the picker. Default is false
-	public var hidesCancelButton = false
+    /// Defines if the navigation bar cancel button should be hidden when showing the picker. Default is false
+    public var hidesCancelButton = false
     
     /// Defines if the status bar should be hidden when showing the picker. Default is true
     public var hidesStatusBar = true
@@ -245,6 +245,16 @@ public struct YPConfigVideo {
     /// Default is 60 seconds.
     public var recordingTimeLimit: TimeInterval = 60.0
     
+    /// Defines the size limit in bytes for recording videos.
+    /// If this property is not nil, then the recording percentage line tracks buy this.
+    /// In bytes. 100000000 is 100 MB.
+    /// AVCaptureMovieFileOutput.maxRecordedFileSize.
+    public var recordingSizeLimit: Int64?
+
+    /// Minimum free space when recording videos.
+    /// AVCaptureMovieFileOutput.minFreeDiskSpaceLimit.
+    public var minFreeDiskSpaceLimit: Int64 = 1024 * 1024
+    
     /// Defines the time limit for videos from the library.
     /// Defaults to 60 seconds.
     public var libraryTimeLimit: TimeInterval = 60.0
@@ -261,11 +271,11 @@ public struct YPConfigVideo {
     /// The handles won't pan further if the minimum duration is attained.
     public var trimmerMinDuration: Double = 3.0
 
-	/// Defines if the user skips the trimer stage,
-	/// the video will be trimmed automatically to the maximum value of trimmerMaxDuration.
-	/// This case occurs when the user already has a video selected and enables a
-	/// multiselection to pick more than one type of media (video or image),
-	/// so, the trimmer step becomes optional.
+    /// Defines if the user skips the trimer stage,
+    /// the video will be trimmed automatically to the maximum value of trimmerMaxDuration.
+    /// This case occurs when the user already has a video selected and enables a
+    /// multiselection to pick more than one type of media (video or image),
+    /// so, the trimmer step becomes optional.
     /// - SeeAlso: [trimmerMaxDuration](x-source-tag://trimmerMaxDuration)
     public var automaticTrimToTrimmerMaxDuration: Bool = false
 }
