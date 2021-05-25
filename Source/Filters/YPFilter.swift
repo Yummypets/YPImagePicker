@@ -27,6 +27,10 @@ public struct YPFilter {
 }
 
 extension YPFilter {
+    public var hasApplier: Bool {
+        return applier != nil
+    }
+    
     public static func coreImageFilter(name: String) -> FilterApplierType {
         return { (image: CIImage) -> CIImage? in
             let filter = CIFilter(name: name)

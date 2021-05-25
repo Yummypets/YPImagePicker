@@ -13,6 +13,7 @@ import Photos
 protocol ImagePickerDelegate: AnyObject {
     func noPhotos()
     func shouldAddToSelection(indexPath: IndexPath, numSelections: Int) -> Bool
+    func shouldFilter(photo: YPMediaPhoto, filter: YPFilter?) -> Bool
 }
 
 open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {

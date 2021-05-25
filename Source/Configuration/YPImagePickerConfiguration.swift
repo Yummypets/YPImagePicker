@@ -173,7 +173,6 @@ public struct YPImagePickerConfiguration {
     
     @available(iOS, obsoleted: 3.0.0, renamed: "library.maxNumberOfItems")
     public var maxNumberOfItems = 1
-    
 }
 
 /// Encapsulates library specific settings.
