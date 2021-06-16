@@ -15,6 +15,12 @@ class YPGridView: UIView {
     let line3 = UIView()
     let line4 = UIView()
     
+    var isCircle = false {
+        didSet {
+            self.setNeedsDisplay()
+        }
+    }
+    
     convenience init() {
         self.init(frame: .zero)
         isUserInteractionEnabled = false
@@ -55,5 +61,13 @@ class YPGridView: UIView {
         view.layer.shadowOpacity = 1
         view.layer.shadowRadius = 2
         view.layer.shadowOffset = CGSize(width: 0, height: 0)
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        if isCircle {
+            clipsToBounds = true
+            layer.cornerRadius = min(bounds.width, bounds.height) / 2
+        }
     }
 }

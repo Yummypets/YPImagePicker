@@ -84,6 +84,12 @@ public struct YPImagePickerConfiguration {
     /// Adds a Crop step in the photo taking process, after filters.  Defaults to .none
     public var showsCrop: YPCropType = .none
     
+    /// Defines the crop overlay color. Default is label color with alpha of 0.4
+    public var cropOverlayColor: UIColor = .ypLabel.withAlphaComponent(0.4)
+    
+    /// Controls the visibility of a grid on crop stage. Default it false
+    public var showsCropGridOverlay = false
+    
     /// Ex: cappedTo:1024 will make sure images from the library or the camera will be
     /// resized to fit in a 1024x1024 box. Defaults to original image size.
     public var targetImageSize = YPImageSize.original
