@@ -179,7 +179,7 @@ extension YPAssetViewContainer: UIGestureRecognizerDelegate {
     }
     
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-        return !(touch.view is UIButton)
+        return spinnerView.alpha == 0 && !(touch.view is UIButton)
     }
     
     @objc
