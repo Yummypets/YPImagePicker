@@ -23,7 +23,16 @@ final class YPLibraryView: UIView {
     let maxNumberWarningLabel = UILabel()
     let progressView = UIProgressView()
     let line = UIView()
-    var shouldShowLoader = false
+    var shouldShowLoader = false {
+        didSet {
+            DispatchQueue.main.async {
+                self.assetViewContainer.squareCropButton.isEnabled = !self.shouldShowLoader
+                self.assetViewContainer.multipleSelectionButton.isEnabled = !self.shouldShowLoader
+                self.assetViewContainer.spinnerIsShown = self.shouldShowLoader
+                self.shouldShowLoader ? self.hideOverlayView() : ()
+            }
+        }
+    }
     
     override func awakeFromNib() {
         super.awakeFromNib()

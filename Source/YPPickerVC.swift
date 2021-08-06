@@ -195,6 +195,10 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     
     @objc
     func navBarTapped() {
+        guard !(libraryVC?.isProcessing ?? false) else {
+            return
+        }
+        
         let vc = YPAlbumVC(albumsManager: albumsManager)
         let navVC = UINavigationController(rootViewController: vc)
         navVC.navigationBar.tintColor = .ypLabel

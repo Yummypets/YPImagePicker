@@ -21,6 +21,7 @@ class YPAssetViewContainer: UIView {
     public let multipleSelectionButton = UIButton()
     public var onlySquare = YPConfig.library.onlySquare
     public var isShown = true
+    public var spinnerIsShown = false
     
     private let spinner = UIActivityIndicatorView(style: .white)
     private var shouldCropToSquare = YPConfig.library.isSquareByDefault
@@ -179,7 +180,7 @@ extension YPAssetViewContainer: UIGestureRecognizerDelegate {
     }
     
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-        return !(touch.view is UIButton)
+        return !spinnerIsShown && !(touch.view is UIButton)
     }
     
     @objc
