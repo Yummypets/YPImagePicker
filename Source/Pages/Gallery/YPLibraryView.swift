@@ -28,6 +28,7 @@ final class YPLibraryView: UIView {
             DispatchQueue.main.async {
                 self.assetViewContainer.squareCropButton.isEnabled = !self.shouldShowLoader
                 self.assetViewContainer.multipleSelectionButton.isEnabled = !self.shouldShowLoader
+                self.assetViewContainer.spinnerIsShown = self.shouldShowLoader
                 self.shouldShowLoader ? self.hideOverlayView() : ()
             }
         }
