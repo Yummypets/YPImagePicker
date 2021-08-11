@@ -1,3 +1,5 @@
+platform :ios, '10.2'
+
 target 'YPImagePickerExample' do
   use_frameworks!
 

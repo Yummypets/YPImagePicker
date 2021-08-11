@@ -267,9 +267,11 @@ extension ExampleViewController {
 
 // YPImagePickerDelegate
 extension ExampleViewController: YPImagePickerDelegate {
-    func noPhotos() {}
+    func imagePickerHasNoItemsInLibrary(_ picker: YPImagePicker) {
+        // PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: self)
+    }
 
     func shouldAddToSelection(indexPath: IndexPath, numSelections: Int) -> Bool {
-        return true// indexPath.row != 2
+        return true // indexPath.row != 2
     }
 }

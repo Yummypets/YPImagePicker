@@ -118,7 +118,10 @@ public class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
     // MARK: - Top buttons
 
     @objc public func save() {
-        guard let didSave = didSave else { return print("Don't have saveCallback") }
+        guard let didSave = didSave else {
+            return ypLog("Don't have saveCallback")
+        }
+
         navigationItem.rightBarButtonItem = YPLoaders.defaultLoader
 
         do {
@@ -143,17 +146,17 @@ public class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
                             didSave(YPMediaItem.video(v: resultVideo))
                             self?.setupRightBarButtonItem()
                         } else {
-                            print("YPVideoFiltersVC -> Don't have coverImage.")
+                            ypLog("Don't have coverImage.")
                         }
                     }
                 case .failed:
-                    print("YPVideoFiltersVC Export of the video failed. Reason: \(String(describing: session.error))")
+                    ypLog("Export of the video failed. Reason: \(String(describing: session.error))")
                 default:
-                    print("YPVideoFiltersVC Export session completed with \(session.status) status. Not handled")
+                    ypLog("Export session completed with \(session.status) status. Not handled")
                 }
             }
         } catch let error {
-            print("💩 \(error)")
+            ypLog("Error: \(error)")
         }
     }
     

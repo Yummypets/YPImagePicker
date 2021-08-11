@@ -8,10 +8,10 @@
 
 import UIKit
 
-class YPPermissionDeniedPopup {
-    func popup(cancelBlock: @escaping () -> Void) -> UIAlertController {
+internal struct YPPermissionDeniedPopup {
+    static func buildGoToSettingsAlert(cancelBlock: @escaping () -> Void) -> UIAlertController {
         let alert = UIAlertController(title:
-            YPConfig.wordings.permissionPopup.title,
+                                        YPConfig.wordings.permissionPopup.title,
                                       message: YPConfig.wordings.permissionPopup.message,
                                       preferredStyle: .alert)
         alert.addAction(
@@ -19,7 +19,7 @@ class YPPermissionDeniedPopup {
                           style: UIAlertAction.Style.cancel,
                           handler: { _ in
                             cancelBlock()
-            }))
+                          }))
         alert.addAction(
             UIAlertAction(title: YPConfig.wordings.permissionPopup.grantPermission,
                           style: .default,
@@ -29,7 +29,7 @@ class YPPermissionDeniedPopup {
                             } else {
                                 UIApplication.shared.openURL(URL(string: UIApplication.openSettingsURLString)!)
                             }
-            }))
+                          }))
         return alert
     }
 }

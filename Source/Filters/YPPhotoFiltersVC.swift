@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol IsMediaFilterVC: class {
+protocol IsMediaFilterVC: AnyObject {
     var didSave: ((YPMediaItem) -> Void)? { get set }
     var didCancel: (() -> Void)? { get set }
 }
@@ -146,7 +146,10 @@ open class YPPhotoFiltersVC: UIViewController, IsMediaFilterVC, UIGestureRecogni
     
     @objc
     func save() {
-        guard let didSave = didSave else { return print("Don't have saveCallback") }
+        guard let didSave = didSave else {
+            return ypLog("Don't have saveCallback")
+        }
+        
         self.navigationItem.rightBarButtonItem = YPLoaders.defaultLoader
 
         DispatchQueue.global().async {

@@ -10,7 +10,7 @@
 import UIKit
 import Photos
 
-protocol YPAssetZoomableViewDelegate: class {
+protocol YPAssetZoomableViewDelegate: AnyObject {
     func ypAssetZoomableViewDidLayoutSubviews(_ zoomableView: YPAssetZoomableView)
     func ypAssetZoomableViewScrollViewDidZoom()
     func ypAssetZoomableViewScrollViewDidEndZooming()
@@ -135,8 +135,42 @@ final class YPAssetZoomableView: UIScrollView {
             completion(isLowResIntermediaryImage)
         }
     }
+
+    public func clearAsset() {
+        isVideoMode = false
+        videoView.removeFromSuperview()
+        videoView.deallocate()
+        photoImageView.removeFromSuperview()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)!
+        backgroundColor = YPConfig.colors.assetViewBackgroundColor
+        frame.size = CGSize.zero
+        clipsToBounds = true
+        photoImageView.frame = CGRect(origin: CGPoint.zero, size: CGSize.zero)
+        videoView.frame = CGRect(origin: CGPoint.zero, size: CGSize.zero)
+        maximumZoomScale = 6.0
+        minimumZoomScale = 1
+        showsHorizontalScrollIndicator = false
+        showsVerticalScrollIndicator = false
+        delegate = self
+        alwaysBounceHorizontal = true
+        alwaysBounceVertical = true
+        isScrollEnabled = true
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        myDelegate?.ypAssetZoomableViewDidLayoutSubviews(self)
+    }
+}
+
+// MARK: - Private
+
+fileprivate extension YPAssetZoomableView {
     
-    fileprivate func setAssetFrame(`for` view: UIView, with image: UIImage) {
+    func setAssetFrame(`for` view: UIView, with image: UIImage) {
         // Reseting the previous scale
         self.minimumZoomScale = 1
         self.zoomScale = 1
@@ -178,9 +212,9 @@ final class YPAssetZoomableView: UIScrollView {
     }
     
     /// Calculate zoom scale which will fit the image to square
-    fileprivate func calculateSquaredZoomScale() -> CGFloat {
+    func calculateSquaredZoomScale() -> CGFloat {
         guard let image = assetImageView.image else {
-            print("YPAssetZoomableView >>> No image"); return 1.0
+            ypLog("No image"); return 1.0
         }
         
         var squareZoomScale: CGFloat = 1.0
@@ -197,7 +231,7 @@ final class YPAssetZoomableView: UIScrollView {
     }
     
     // Centring the image frame
-    fileprivate func centerAssetView() {
+    func centerAssetView() {
         let assetView = isVideoMode ? videoView : photoImageView
         let scrollViewBoundsSize = self.bounds.size
         var assetFrame = assetView.frame
@@ -209,28 +243,6 @@ final class YPAssetZoomableView: UIScrollView {
             (scrollViewBoundsSize.height - assetSize.height) / 2.0 : 0.0
         
         assetView.frame = assetFrame
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)!
-        backgroundColor = YPConfig.colors.assetViewBackgroundColor
-        frame.size = CGSize.zero
-        clipsToBounds = true
-        photoImageView.frame = CGRect(origin: CGPoint.zero, size: CGSize.zero)
-        videoView.frame = CGRect(origin: CGPoint.zero, size: CGSize.zero)
-        maximumZoomScale = 6.0
-        minimumZoomScale = 1
-        showsHorizontalScrollIndicator = false
-        showsVerticalScrollIndicator = false
-        delegate = self
-        alwaysBounceHorizontal = true
-        alwaysBounceVertical = true
-        isScrollEnabled = true
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        myDelegate?.ypAssetZoomableViewDidLayoutSubviews(self)
     }
 }
 
