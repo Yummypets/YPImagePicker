@@ -257,9 +257,17 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
             present(alert, animated: true, completion: nil)
         case .notDetermined:
             // Show permission popup and get new status
-            PHPhotoLibrary.requestAuthorization { s in
-                DispatchQueue.main.async {
-                    block(s == .authorized)
+            if #available(iOS 14, *) {
+                PHPhotoLibrary.requestAuthorization(for: .readWrite) { s in
+                    DispatchQueue.main.async {
+                        block(s == .authorized)
+                    }
+                }
+            } else {
+                PHPhotoLibrary.requestAuthorization { s in
+                    DispatchQueue.main.async {
+                        block(s == .authorized)
+                    }
                 }
             }
         @unknown default:
