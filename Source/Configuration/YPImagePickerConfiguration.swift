@@ -85,10 +85,7 @@ public struct YPImagePickerConfiguration {
     public var showsCrop: YPCropType = .none
     
     /// Controls the visibility of a grid on crop stage. Default it false
-    public var showsCropOverlayGrid = false
-    
-    /// Makes the bottom toolbar on crop stage transparent. Defaults to true
-    public var isCropToolbarTransparent = true
+    public var showsCropGridOverlay = false
     
     /// Ex: cappedTo:1024 will make sure images from the library or the camera will be
     /// resized to fit in a 1024x1024 box. Defaults to original image size.

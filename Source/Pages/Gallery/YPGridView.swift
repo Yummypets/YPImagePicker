@@ -17,7 +17,7 @@ class YPGridView: UIView {
     
     var isCircle = false {
         didSet {
-            setNeedsDisplay()
+            self.setNeedsDisplay()
         }
     }
     
