@@ -63,12 +63,7 @@ extension YPLibraryVC {
             selection.remove(at: positionIndex)
 
             // Refresh the numbers
-            var selectedIndexPaths = [IndexPath]()
-            mediaManager.fetchResult.enumerateObjects { [unowned self] (asset, index, _) in
-                if self.selection.contains(where: { $0.assetIdentifier == asset.localIdentifier }) {
-                    selectedIndexPaths.append(IndexPath(row: index, section: 0))
-                }
-            }
+            let selectedIndexPaths = selection.map { IndexPath(row: $0.index, section: 0) }
             v.collectionView.reloadItems(at: selectedIndexPaths)
 			
             // Replace the current selected image with the previously selected one
