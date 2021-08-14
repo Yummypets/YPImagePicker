@@ -16,34 +16,36 @@ extension YPLibraryVC: PHPhotoLibraryChangeObserver {
     
     public func photoLibraryDidChange(_ changeInstance: PHChange) {
         guard let fetchResult = self.mediaManager.fetchResult,
-              let collectionChanges = changeInstance.changeDetails(for: fetchResult) else {
+              let collectionChanges = changeInstance.changeDetails(for: fetchResult),
+              let collectionView = self.v.collectionView else {
+            ypLog("Some problems there.")
             return
         }
 
         DispatchQueue.main.async {
             self.mediaManager.fetchResult = collectionChanges.fetchResultAfterChanges
-            let collectionView = self.v.collectionView!
             if !collectionChanges.hasIncrementalChanges || collectionChanges.hasMoves {
                 collectionView.reloadData()
             } else {
                 collectionView.performBatchUpdates({
-                    let removedIndexes = collectionChanges.removedIndexes
-                    if (removedIndexes?.count ?? 0) != 0 {
-                        collectionView.deleteItems(at: removedIndexes!.aapl_indexPathsFromIndexesWithSection(0))
+                    if let removedIndexes = collectionChanges.removedIndexes,
+                       removedIndexes.count != 0 {
+                        collectionView.deleteItems(at: removedIndexes.aapl_indexPathsFromIndexesWithSection(0))
                     }
-                    let insertedIndexes = collectionChanges.insertedIndexes
-                    if (insertedIndexes?.count ?? 0) != 0 {
-                        collectionView.insertItems(at: insertedIndexes!.aapl_indexPathsFromIndexesWithSection(0))
+
+                    if let insertedIndexes = collectionChanges.insertedIndexes, insertedIndexes.count != 0 {
+                        collectionView.insertItems(at: insertedIndexes.aapl_indexPathsFromIndexesWithSection(0))
                     }
                 }, completion: { finished in
-                    if finished {
-                        let changedIndexes = collectionChanges.changedIndexes
-                        if (changedIndexes?.count ?? 0) != 0 {
-                            collectionView.reloadItems(at: changedIndexes!.aapl_indexPathsFromIndexesWithSection(0))
-                        }
+                    guard finished,
+                          let changedIndexes = collectionChanges.changedIndexes,
+                          changedIndexes.count != 0 else {
+                        ypLog("Some problems there.")
+                        return
                     }
-                })
 
+                    collectionView.reloadItems(at: changedIndexes.aapl_indexPathsFromIndexesWithSection(0))
+                })
             }
 
             self.updateAssetSelection()
