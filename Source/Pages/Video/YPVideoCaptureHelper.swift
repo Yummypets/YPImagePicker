@@ -204,7 +204,9 @@ class YPVideoCaptureHelper: NSObject {
     
     private func setupCaptureSession() {
         session.beginConfiguration()
-        let aDevice = deviceForPosition(.back)
+        let cameraPosition: AVCaptureDevice.Position = YPConfig.usesFrontCamera ? .front : .back
+        let aDevice = deviceForPosition(cameraPosition)
+        
         if let d = aDevice {
             videoInput = try? AVCaptureDeviceInput(device: d)
         }
