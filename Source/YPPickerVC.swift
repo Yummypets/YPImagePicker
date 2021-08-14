@@ -67,7 +67,7 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
             cameraVC = YPCameraVC()
             cameraVC?.didCapturePhoto = { [weak self] img in
                 self?.didSelectItems?([YPMediaItem.photo(p: YPMediaPhoto(image: img,
-                                                                        fromCamera: true))])
+                                                                         fromCamera: true))])
             }
         }
         
@@ -76,9 +76,9 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
             videoVC = YPVideoCaptureVC()
             videoVC?.didCaptureVideo = { [weak self] videoURL in
                 self?.didSelectItems?([YPMediaItem
-                    .video(v: YPMediaVideo(thumbnail: thumbnailFromVideoPath(videoURL),
-                                           videoURL: videoURL,
-                                           fromCamera: true))])
+                                        .video(v: YPMediaVideo(thumbnail: thumbnailFromVideoPath(videoURL),
+                                                               videoURL: videoURL,
+                                                               fromCamera: true))])
             }
         }
         
@@ -174,7 +174,7 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         } else if let videoVC = vc as? YPVideoCaptureVC {
             videoVC.start()
         }
-    
+
         updateUI()
     }
     
@@ -266,13 +266,13 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     }
     
     func updateUI() {
-		if !YPConfig.hidesCancelButton {
-			// Update Nav Bar state.
-			navigationItem.leftBarButtonItem = UIBarButtonItem(title: YPConfig.wordings.cancel,
-                                                           style: .plain,
-                                                           target: self,
-                                                           action: #selector(close))
-		}
+        if !YPConfig.hidesCancelButton {
+            // Update Nav Bar state.
+            navigationItem.leftBarButtonItem = UIBarButtonItem(title: YPConfig.wordings.cancel,
+                                                               style: .plain,
+                                                               target: self,
+                                                               action: #selector(close))
+        }
         switch mode {
         case .library:
             setTitleViewWithTitle(aTitle: libraryVC?.title ?? "")
@@ -284,7 +284,7 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
 
             // Disable Next Button until minNumberOfItems is reached.
             navigationItem.rightBarButtonItem?.isEnabled =
-				libraryVC!.selectedItems.count >= YPConfig.library.minNumberOfItems
+                libraryVC!.selectedItems.count >= YPConfig.library.minNumberOfItems
 
         case .camera:
             navigationItem.titleView = nil
@@ -346,7 +346,7 @@ extension YPPickerVC: YPLibraryViewDelegate {
     }
     
     public func libraryViewStartedLoadingImage() {
-		// TODO remove to enable changing selection while loading but needs cancelling previous image requests.
+        // TODO remove to enable changing selection while loading but needs cancelling previous image requests.
         libraryVC?.isProcessing = true
         DispatchQueue.main.async {
             self.libraryVC?.v.fadeInLoader()
