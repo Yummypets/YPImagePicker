@@ -203,11 +203,11 @@ class ExampleViewController: UIViewController {
         // YPImagePickerConfiguration.shared.wordings.libraryTitle = "Gallery2"
 
         /* Multiple media implementation */
-        picker.didFinishPicking { [unowned picker] items, cancelled in
+        picker.didFinishPicking { [weak picker] items, cancelled in
 
             if cancelled {
                 print("Picker was canceled")
-                picker.dismiss(animated: true, completion: nil)
+                picker?.dismiss(animated: true, completion: nil)
                 return
             }
             _ = items.map { print("🧀 \($0)") }
@@ -217,7 +217,7 @@ class ExampleViewController: UIViewController {
                 switch firstItem {
                 case .photo(let photo):
                     self.selectedImageV.image = photo.image
-                    picker.dismiss(animated: true, completion: nil)
+                    picker?.dismiss(animated: true, completion: nil)
                 case .video(let video):
                     self.selectedImageV.image = video.thumbnail
 
@@ -226,7 +226,7 @@ class ExampleViewController: UIViewController {
                     let player = AVPlayer(playerItem: AVPlayerItem(url:assetURL))
                     playerVC.player = player
 
-                    picker.dismiss(animated: true, completion: { [weak self] in
+                    picker?.dismiss(animated: true, completion: { [weak self] in
                         self?.present(playerVC, animated: true, completion: nil)
                         print("😀 \(String(describing: self?.resolutionForLocalVideo(url: assetURL)!))")
                     })
@@ -235,14 +235,14 @@ class ExampleViewController: UIViewController {
         }
 
         /* Single Photo implementation. */
-        // picker.didFinishPicking { [unowned picker] items, _ in
+        // picker.didFinishPicking { [weak picker] items, _ in
         //     self.selectedItems = items
         //     self.selectedImageV.image = items.singlePhoto?.image
         //     picker.dismiss(animated: true, completion: nil)
         // }
 
         /* Single Video implementation. */
-        //picker.didFinishPicking { [unowned picker] items, cancelled in
+        // picker.didFinishPicking { [weak picker] items, cancelled in
         //    if cancelled { picker.dismiss(animated: true, completion: nil); return }
         //
         //    self.selectedItems = items
