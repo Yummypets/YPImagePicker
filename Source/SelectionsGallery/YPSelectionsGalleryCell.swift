@@ -9,7 +9,7 @@
 import UIKit
 import Stevia
 
-public protocol YPSelectionsGalleryCellDelegate: class {
+public protocol YPSelectionsGalleryCellDelegate: AnyObject {
     func selectionsGalleryCellDidTapRemove(cell: YPSelectionsGalleryCell)
 }
 
