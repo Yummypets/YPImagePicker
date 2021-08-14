@@ -230,7 +230,8 @@ internal class YPVideoCaptureVC: UIViewController, YPPermissionCheckable {
             case .on: return .on
             case .auto: return .auto
             @unknown default:
-                fatalError()
+                ypLog("unknown default reached. Check code.")
+                return .noFlash
             }
         } else {
             return .noFlash

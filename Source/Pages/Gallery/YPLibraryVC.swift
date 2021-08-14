@@ -553,7 +553,7 @@ internal class YPLibraryVC: UIViewController, YPPermissionCheckable {
                         }
                     }
                 @unknown default:
-                    fatalError()
+                    ypLog("unknown default reached. Check code.")
                 }
                 return
             }

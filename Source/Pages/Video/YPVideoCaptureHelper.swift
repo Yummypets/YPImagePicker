@@ -65,7 +65,7 @@ class YPVideoCaptureHelper: NSObject {
                     completion()
                     self?.tryToSetupPreview()
                 @unknown default:
-                    fatalError()
+                    ypLog("unknown default reached. Check code.")
                 }
             }
         }

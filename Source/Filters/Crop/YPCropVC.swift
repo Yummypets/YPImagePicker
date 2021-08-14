@@ -122,7 +122,7 @@ extension YPCropVC: UIGestureRecognizerDelegate {
         case .cancelled, .failed, .possible:
             ()
         @unknown default:
-            fatalError()
+            ypLog("unknown default reached. Check code.")
         }
         // Reset the pinch scale.
         sender.scale = 1.0
