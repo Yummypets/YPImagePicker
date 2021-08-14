@@ -15,42 +15,50 @@ import Photos
 class ExampleViewController: UIViewController {
     var selectedItems = [YPMediaItem]()
 
-    let selectedImageV = UIImageView()
-    let pickButton = UIButton()
-    let resultsButton = UIButton()
+    lazy var selectedImageV : UIImageView = {
+        let imageView = UIImageView(frame: CGRect(x: 0,
+                                                  y: 0,
+                                                  width: UIScreen.main.bounds.width,
+                                                  height: UIScreen.main.bounds.height * 0.45))
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
+
+    lazy var pickButton : UIButton = {
+        let button = UIButton(frame: CGRect(x: 0,
+                                            y: 0,
+                                            width: 100,
+                                            height: 100))
+        button.setTitle("Pick", for: .normal)
+        button.setTitleColor(.black, for: .normal)
+        button.addTarget(self, action: #selector(showPicker), for: .touchUpInside)
+        return button
+    }()
+
+    lazy var resultsButton : UIButton = {
+        let button = UIButton(frame: CGRect(x: 0,
+                                            y: UIScreen.main.bounds.height - 100,
+                                            width: UIScreen.main.bounds.width,
+                                            height: 100))
+        button.setTitle("Show selected", for: .normal)
+        button.setTitleColor(.black, for: .normal)
+        button.addTarget(self, action: #selector(showResults), for: .touchUpInside)
+        return button
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         self.view.backgroundColor = .white
-
-        selectedImageV.contentMode = .scaleAspectFit
-        selectedImageV.frame = CGRect(x: 0,
-                                      y: 0,
-                                      width: UIScreen.main.bounds.width,
-                                      height: UIScreen.main.bounds.height * 0.45)
         view.addSubview(selectedImageV)
-
-        pickButton.setTitle("Pick", for: .normal)
-        pickButton.setTitleColor(.black, for: .normal)
-        pickButton.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
-        pickButton.addTarget(self, action: #selector(showPicker), for: .touchUpInside)
         view.addSubview(pickButton)
         pickButton.center = view.center
-
-        resultsButton.setTitle("Show selected", for: .normal)
-        resultsButton.setTitleColor(.black, for: .normal)
-        resultsButton.frame = CGRect(x: 0,
-                                     y: UIScreen.main.bounds.height - 100,
-                                     width: UIScreen.main.bounds.width,
-                                     height: 100)
-        resultsButton.addTarget(self, action: #selector(showResults), for: .touchUpInside)
         view.addSubview(resultsButton)
     }
 
     @objc
     func showResults() {
-        if selectedItems.count > 0 {
+        if !selectedItems.isEmpty {
             let gallery = YPSelectionsGalleryVC(items: selectedItems) { g, _ in
                 g.dismiss(animated: true, completion: nil)
             }
