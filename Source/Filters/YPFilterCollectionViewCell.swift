@@ -7,6 +7,7 @@
 //
 
 import Stevia
+import UIKit
 
 class YPFilterCollectionViewCell: UICollectionViewCell {
     

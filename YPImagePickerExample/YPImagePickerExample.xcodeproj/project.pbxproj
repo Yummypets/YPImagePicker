@@ -12,16 +12,38 @@
 		99428A111E7BE02400B765A9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 99428A101E7BE02400B765A9 /* Assets.xcassets */; };
 		99428A141E7BE02400B765A9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 99428A121E7BE02400B765A9 /* LaunchScreen.storyboard */; };
 		99A052A61F20DF21005600B3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 99A052A81F20DF21005600B3 /* Localizable.strings */; };
-		E4B8B87ACE0F8D7E7C9E8B2A /* Pods_YPImagePickerExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39ECAC1A4280ED3A66999C55 /* Pods_YPImagePickerExample.framework */; };
-		EBFC7A3C260352D800D49AA6 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = EBFC7A3B260352D800D49AA6 /* Podfile */; };
+		99D2912C26D2F0EE0052695D /* YPImagePicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 99D2912A26D2F0680052695D /* YPImagePicker.framework */; };
+		99D2912D26D2F0EE0052695D /* YPImagePicker.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 99D2912A26D2F0680052695D /* YPImagePicker.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		99D2912926D2F0680052695D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 99D2912526D2F0680052695D /* YPImagePicker.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 52412A931CA6114A0073C4BE;
+			remoteInfo = YPImagePicker;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		99D2912E26D2F0EE0052695D /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				99D2912D26D2F0EE0052695D /* YPImagePicker.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
-		39ECAC1A4280ED3A66999C55 /* Pods_YPImagePickerExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_YPImagePickerExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B0E1B9D207069630048E95B /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5F01F9DE20DCC5EA007432E4 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		71524A8C206FD954002F3162 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
-		96E2AA2442DD86418F1EC0AB /* Pods-YPImagePickerExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YPImagePickerExample.release.xcconfig"; path = "Target Support Files/Pods-YPImagePickerExample/Pods-YPImagePickerExample.release.xcconfig"; sourceTree = "<group>"; };
 		991C0E5520567E1300764131 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		99428A061E7BE02400B765A9 /* YPImagePickerExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YPImagePickerExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		99428A091E7BE02400B765A9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -34,14 +56,13 @@
 		99A052AA1F20DF39005600B3 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		99A052AB1F20DF54005600B3 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		99BEB97B20A9DE5F00FFEB55 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
+		99D2912526D2F0680052695D /* YPImagePicker.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = YPImagePicker.xcodeproj; path = ../YPImagePicker.xcodeproj; sourceTree = "<group>"; };
 		A7B961E020755CF500216346 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
-		AA088D933E881AB26E8E20F0 /* Pods-YPImagePickerExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YPImagePickerExample.debug.xcconfig"; path = "Target Support Files/Pods-YPImagePickerExample/Pods-YPImagePickerExample.debug.xcconfig"; sourceTree = "<group>"; };
 		DC3DAC4626C79B2F007FD95A /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/Localizable.strings; sourceTree = "<group>"; };
 		DF1BD2FC216F8BE500330319 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		E5287F5920B9095F0052153D /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		EB0D6FC3252F1FDC006EE12E /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
 		EB11EE9A2057C58600A19365 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
-		EBFC7A3B260352D800D49AA6 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,7 +70,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E4B8B87ACE0F8D7E7C9E8B2A /* Pods_YPImagePickerExample.framework in Frameworks */,
+				99D2912C26D2F0EE0052695D /* YPImagePicker.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,10 +80,10 @@
 		994289FD1E7BE02400B765A9 = {
 			isa = PBXGroup;
 			children = (
+				99D2912526D2F0680052695D /* YPImagePicker.xcodeproj */,
 				99428A081E7BE02400B765A9 /* YPImagePickerExample */,
 				99428A071E7BE02400B765A9 /* Products */,
 				99428A231E7BE17800B765A9 /* Frameworks */,
-				EE54722A140A94570BAC950C /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -77,7 +98,6 @@
 		99428A081E7BE02400B765A9 /* YPImagePickerExample */ = {
 			isa = PBXGroup;
 			children = (
-				EBFC7A3B260352D800D49AA6 /* Podfile */,
 				99428A091E7BE02400B765A9 /* AppDelegate.swift */,
 				99428A0B1E7BE02400B765A9 /* ExampleViewController.swift */,
 				99A052A81F20DF21005600B3 /* Localizable.strings */,
@@ -91,18 +111,16 @@
 		99428A231E7BE17800B765A9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				39ECAC1A4280ED3A66999C55 /* Pods_YPImagePickerExample.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		EE54722A140A94570BAC950C /* Pods */ = {
+		99D2912626D2F0680052695D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				AA088D933E881AB26E8E20F0 /* Pods-YPImagePickerExample.debug.xcconfig */,
-				96E2AA2442DD86418F1EC0AB /* Pods-YPImagePickerExample.release.xcconfig */,
+				99D2912A26D2F0680052695D /* YPImagePicker.framework */,
 			);
-			path = Pods;
+			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -112,13 +130,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 99428A181E7BE02400B765A9 /* Build configuration list for PBXNativeTarget "YPImagePickerExample" */;
 			buildPhases = (
-				0E6AFEB930B43A581197A0CA /* [CP] Check Pods Manifest.lock */,
 				99428A021E7BE02400B765A9 /* Sources */,
 				99428A031E7BE02400B765A9 /* Frameworks */,
 				99428A041E7BE02400B765A9 /* Resources */,
 				99BEB97920A9BD1300FFEB55 /* Localizations Sanitizer */,
 				9992698324DAA5D7000CAAFC /* SwiftLint */,
-				633BF14194CB6DDF67A45F1E /* [CP] Embed Pods Frameworks */,
+				99D2912E26D2F0EE0052695D /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -136,12 +153,12 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0820;
-				LastUpgradeCheck = 0930;
+				LastUpgradeCheck = 1250;
 				ORGANIZATIONNAME = Octopepper;
 				TargetAttributes = {
 					99428A051E7BE02400B765A9 = {
 						CreatedOnToolsVersion = 8.2;
-						DevelopmentTeam = B3U3XRF8D7;
+						DevelopmentTeam = J9YALKHJ5R;
 						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 					};
@@ -172,12 +189,28 @@
 			mainGroup = 994289FD1E7BE02400B765A9;
 			productRefGroup = 99428A071E7BE02400B765A9 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 99D2912626D2F0680052695D /* Products */;
+					ProjectRef = 99D2912526D2F0680052695D /* YPImagePicker.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				99428A051E7BE02400B765A9 /* YPImagePickerExample */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		99D2912A26D2F0680052695D /* YPImagePicker.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = YPImagePicker.framework;
+			remoteRef = 99D2912926D2F0680052695D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		99428A041E7BE02400B765A9 /* Resources */ = {
@@ -186,7 +219,6 @@
 			files = (
 				99428A141E7BE02400B765A9 /* LaunchScreen.storyboard in Resources */,
 				99A052A61F20DF21005600B3 /* Localizable.strings in Resources */,
-				EBFC7A3C260352D800D49AA6 /* Podfile in Resources */,
 				99428A111E7BE02400B765A9 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -194,50 +226,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0E6AFEB930B43A581197A0CA /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-YPImagePickerExample-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		633BF14194CB6DDF67A45F1E /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-YPImagePickerExample/Pods-YPImagePickerExample-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/PryntTrimmerView/PryntTrimmerView.framework",
-				"${BUILT_PRODUCTS_DIR}/SteviaLayout/Stevia.framework",
-				"${BUILT_PRODUCTS_DIR}/YPImagePicker/YPImagePicker.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PryntTrimmerView.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Stevia.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YPImagePicker.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-YPImagePickerExample/Pods-YPImagePickerExample-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		9992698324DAA5D7000CAAFC /* SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -343,6 +331,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -367,7 +356,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -403,6 +392,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -421,7 +411,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -433,19 +423,18 @@
 		};
 		99428A191E7BE02400B765A9 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AA088D933E881AB26E8E20F0 /* Pods-YPImagePickerExample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = B3U3XRF8D7;
+				DEVELOPMENT_TEAM = J9YALKHJ5R;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/../Carthage/Build/iOS",
 					"$(PROJECT_DIR)/../Resources\"",
 				);
 				INFOPLIST_FILE = YPImagePickerExample/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = test.ypImagePicker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -456,19 +445,18 @@
 		};
 		99428A1A1E7BE02400B765A9 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 96E2AA2442DD86418F1EC0AB /* Pods-YPImagePickerExample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = B3U3XRF8D7;
+				DEVELOPMENT_TEAM = J9YALKHJ5R;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/../Carthage/Build/iOS",
 					"$(PROJECT_DIR)/../Resources\"",
 				);
 				INFOPLIST_FILE = YPImagePickerExample/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = test.ypImagePicker;
 				PRODUCT_NAME = "$(TARGET_NAME)";

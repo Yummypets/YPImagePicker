@@ -6,6 +6,7 @@
 //
 
 import AVFoundation
+import UIKit
 
 enum YPFlashMode {
     case off
