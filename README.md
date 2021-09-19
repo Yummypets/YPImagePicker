@@ -66,7 +66,7 @@ To add dependency in your own package, just specify a package in dependencies of
 .package(
 name: "YPImagePicker",
 url: "https://github.com/Yummypets/YPImagePicker.git",
-.upToNextMajor(from: "4.5.0")
+.upToNextMajor(from: "5.0.0")
 )
 ```
 Note: This has a minimum target iOS version of `12.0`.

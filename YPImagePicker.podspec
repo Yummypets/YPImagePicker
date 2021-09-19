@@ -4,11 +4,11 @@ Pod::Spec.new do |s|
   s.summary          = "Instagram-like image picker & filters for iOS"
   s.homepage         = "https://github.com/Yummypets/YPImagePicker"
   s.license          = { :type => "MIT", :file => "LICENSE" }
-  s.author           = 'S4cha, NikKovIos'
+  s.authors = { 'S4cha'   => 'https://twitter.com/sachadso',
+                'NikeKov' => 'nikkovios@gmail.com' }
   s.platform         = :ios
   s.source           = { :git => "https://github.com/Yummypets/YPImagePicker.git",
                          :tag => s.version.to_s }
-  s.social_media_url = 'https://twitter.com/sachadso, www.nik-kov.com'
   s.ios.deployment_target = "12.0"
   s.source_files = 'Source/**/*.swift'
   s.dependency 'SteviaLayout', '= 4.7.3'
