@@ -13,6 +13,7 @@ internal func ypLog(_ description: String,
         return
     }
 
+    // swiftlint:disable:next line_length
     let traceString = "🖼 YPImagePicker. \(fileName.components(separatedBy: "/").last!) -> \(functionName) -> \(description) (line: \(lineNumber))"
     print(traceString)
 }

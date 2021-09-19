@@ -80,7 +80,8 @@ extension YPLibraryVC {
     
     /// Adds cell to selection
     func addToSelection(indexPath: IndexPath) {
-        if !(delegate?.libraryViewShouldAddToSelection(indexPath: indexPath, numSelections: selectedItems.count) ?? true) {
+        if !(delegate?.libraryViewShouldAddToSelection(indexPath: indexPath,
+                                                       numSelections: selectedItems.count) ?? true) {
             return
         }
         

@@ -1,6 +1,5 @@
 //
 //  AVCaptureDevice+Extensions.swift
-//  YPImagePickerExample
 //
 //  Created by Nik Kov on 23.04.2018.
 //  Copyright © 2018 Octopepper. All rights reserved.

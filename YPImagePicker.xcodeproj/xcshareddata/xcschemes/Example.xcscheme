@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "52412A921CA6114A0073C4BE"
-               BuildableName = "YPImagePicker.framework"
-               BlueprintName = "YPImagePicker"
+               BlueprintIdentifier = "EBA37B4E26F749C6005DAAD4"
+               BuildableName = "Example.app"
+               BlueprintName = "Example"
                ReferencedContainer = "container:YPImagePicker.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -40,15 +40,16 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <MacroExpansion>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "52412A921CA6114A0073C4BE"
-            BuildableName = "YPImagePicker.framework"
-            BlueprintName = "YPImagePicker"
+            BlueprintIdentifier = "EBA37B4E26F749C6005DAAD4"
+            BuildableName = "Example.app"
+            BlueprintName = "Example"
             ReferencedContainer = "container:YPImagePicker.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -56,15 +57,16 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <MacroExpansion>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "52412A921CA6114A0073C4BE"
-            BuildableName = "YPImagePicker.framework"
-            BlueprintName = "YPImagePicker"
+            BlueprintIdentifier = "EBA37B4E26F749C6005DAAD4"
+            BuildableName = "Example.app"
+            BlueprintName = "Example"
             ReferencedContainer = "container:YPImagePicker.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

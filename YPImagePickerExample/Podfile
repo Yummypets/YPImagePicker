@@ -1,9 +1,0 @@
-platform :ios, '10.2'
-
-target 'YPImagePickerExample' do
-  use_frameworks!
-
-  # Pods for YPImagePickerExample
-  pod 'YPImagePicker', :path => '../'
-
-end

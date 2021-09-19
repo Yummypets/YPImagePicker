@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view clipsSubviews="YES" contentMode="scaleToFill" id="iN0-l3-epB" customClass="YPLibraryView" customModule="YPImagePicker" customModuleProvider="target">
+        <view clipsSubviews="YES" contentMode="scaleToFill" id="iN0-l3-epB" customClass="YPLibraryView" customModule="Example" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="400" height="550"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
@@ -37,10 +34,10 @@
                         <constraint firstItem="6id-Ro-HHC" firstAttribute="leading" secondItem="9Cu-Zp-X0j" secondAttribute="leading" id="l5I-IF-1rx"/>
                     </constraints>
                 </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="90B-0c-ych" userLabel="Image Crop View Container" customClass="YPAssetViewContainer" customModule="YPImagePicker" customModuleProvider="target">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="90B-0c-ych" userLabel="Image Crop View Container" customClass="YPAssetViewContainer" customModule="Example" customModuleProvider="target">
                     <rect key="frame" x="0.0" y="0.0" width="400" height="400"/>
                     <subviews>
-                        <scrollView multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Mc5-1c-z7q" customClass="YPAssetZoomableView" customModule="YPImagePicker" customModuleProvider="target">
+                        <scrollView multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mc5-1c-z7q" customClass="YPAssetZoomableView" customModule="Example" customModuleProvider="target">
                             <rect key="frame" x="0.0" y="0.0" width="400" height="400"/>
                             <constraints>
                                 <constraint firstAttribute="width" secondItem="Mc5-1c-z7q" secondAttribute="height" multiplier="1:1" id="Tue-WW-idi"/>
@@ -76,6 +73,7 @@
                 <outlet property="assetZoomableView" destination="Mc5-1c-z7q" id="sGM-mc-f2B"/>
                 <outlet property="collectionView" destination="6id-Ro-HHC" id="NDT-3i-ayr"/>
             </connections>
+            <point key="canvasLocation" x="139" y="100"/>
         </view>
     </objects>
 </document>

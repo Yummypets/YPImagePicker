@@ -6,6 +6,7 @@
 //
 
 import Photos
+import UIKit
 
 internal struct YPPermissionManager {
     typealias YPPermissionManagerCompletion = (_ hasPermission: Bool) -> Void

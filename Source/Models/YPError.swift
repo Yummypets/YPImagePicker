@@ -5,6 +5,8 @@
 //  Created by Nik Kov on 13.08.2021.
 //
 
+import UIKit
+
 enum YPError: Error, LocalizedError {
     case custom(message: String)
 

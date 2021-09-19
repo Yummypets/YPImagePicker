@@ -21,7 +21,11 @@ public class YPMediaPhoto {
     public var asset: PHAsset?
     public var url: URL?
     
-    public init(image: UIImage, exifMeta: [String: Any]? = nil, fromCamera: Bool = false, asset: PHAsset? = nil, url: URL? = nil) {
+    public init(image: UIImage,
+                exifMeta: [String: Any]? = nil,
+                fromCamera: Bool = false,
+                asset: PHAsset? = nil,
+                url: URL? = nil) {
         self.originalImage = image
         self.modifiedImage = nil
         self.fromCamera = fromCamera
