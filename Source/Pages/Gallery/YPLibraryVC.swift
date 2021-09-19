@@ -444,6 +444,11 @@ internal class YPLibraryVC: UIViewController, YPPermissionCheckable {
                 return (asset, $0.cropRect)
             }
             
+            guard self.selectedItems.count > 0 else {
+                ypLog("Nothing selected. Cannot continue.")
+                return
+            }
+            
             // Multiple selection
             if self.multipleSelectionEnabled && self.selectedItems.count > 1 {
                 
