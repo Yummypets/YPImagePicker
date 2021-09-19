@@ -9,7 +9,7 @@
 import UIKit
 import Stevia
 
-class YPCropView: UIView {
+final class YPCropView: UIView {
     
     let containerView = UIView()
     let imageView = UIImageView()
@@ -171,7 +171,7 @@ class YPCropView: UIView {
     }
 }
 
-class YPCropAreaView: UIView {
+final class YPCropAreaView: UIView {
 
     var isCircle = false {
         didSet {

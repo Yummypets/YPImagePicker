@@ -1,0 +1,25 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "PryntTrimmerView",
+        "repositoryURL": "https://github.com/HHK1/PryntTrimmerView",
+        "state": {
+          "branch": null,
+          "revision": "ac1b60a22c7e6a6514de7a66d2f3d5b537c956d5",
+          "version": "4.0.2"
+        }
+      },
+      {
+        "package": "Stevia",
+        "repositoryURL": "https://github.com/freshOS/Stevia",
+        "state": {
+          "branch": null,
+          "revision": "a32dc3c015fe583080f4947edf795bced9a11108",
+          "version": "5.1.1"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

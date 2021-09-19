@@ -6,9 +6,10 @@
 //  Copyright © 2016 Yummypets. All rights reserved.
 //
 
+import UIKit
 import Stevia
 
-class YPGridView: UIView {
+final class YPGridView: UIView {
     
     let line1 = UIView()
     let line2 = UIView()

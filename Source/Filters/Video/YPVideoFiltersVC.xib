@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
-        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="YPVideoFiltersVC" customModule="YPImagePicker" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="YPVideoFiltersVC" customModule="Example" customModuleProvider="target">
             <connections>
                 <outlet property="coverBottomItem" destination="qy9-MY-67C" id="LaY-F2-uVO"/>
                 <outlet property="coverImageView" destination="daH-No-sZc" id="sNy-7V-7gV"/>
@@ -24,18 +23,18 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qy9-MY-67C" customClass="YPMenuItem" customModule="YPImagePicker" customModuleProvider="target">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qy9-MY-67C" customClass="YPMenuItem" customModule="Example" customModuleProvider="target">
                     <rect key="frame" x="187.5" y="627" width="187.5" height="40"/>
                     <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="40" id="Ik5-9V-0hz"/>
                     </constraints>
                 </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uB8-a7-Vh0" customClass="YPMenuItem" customModule="YPImagePicker" customModuleProvider="target">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uB8-a7-Vh0" customClass="YPMenuItem" customModule="Example" customModuleProvider="target">
                     <rect key="frame" x="0.0" y="627" width="187.5" height="40"/>
                     <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AFl-Bk-oPH" customClass="YPVideoView" customModule="YPImagePicker" customModuleProvider="target">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AFl-Bk-oPH" customClass="YPVideoView" customModule="Example" customModuleProvider="target">
                     <rect key="frame" x="0.0" y="0.0" width="375" height="375"/>
                     <constraints>
                         <constraint firstAttribute="width" secondItem="AFl-Bk-oPH" secondAttribute="height" multiplier="1:1" id="tL6-cM-ei5"/>
@@ -69,26 +68,25 @@
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="uB8-a7-Vh0" firstAttribute="bottom" secondItem="fnl-2z-Ty3" secondAttribute="bottom" id="CC1-rc-s2V"/>
-                <constraint firstItem="AFl-Bk-oPH" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="FRD-Vm-8CW"/>
+                <constraint firstItem="uB8-a7-Vh0" firstAttribute="bottom" secondItem="i5M-Pr-FkT" secondAttribute="bottom" id="CC1-rc-s2V"/>
+                <constraint firstItem="AFl-Bk-oPH" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="FRD-Vm-8CW"/>
                 <constraint firstItem="uB8-a7-Vh0" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Fzr-Gx-9yI"/>
-                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="AFl-Bk-oPH" secondAttribute="trailing" id="HuF-V0-NP6"/>
+                <constraint firstAttribute="trailing" secondItem="AFl-Bk-oPH" secondAttribute="trailing" id="HuF-V0-NP6"/>
                 <constraint firstItem="daH-No-sZc" firstAttribute="top" secondItem="AFl-Bk-oPH" secondAttribute="top" id="IXg-d6-twu"/>
-                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="qy9-MY-67C" secondAttribute="bottom" id="K8l-EJ-kc2"/>
+                <constraint firstAttribute="bottom" secondItem="qy9-MY-67C" secondAttribute="bottom" id="K8l-EJ-kc2"/>
                 <constraint firstItem="daH-No-sZc" firstAttribute="bottom" secondItem="AFl-Bk-oPH" secondAttribute="bottom" id="MaG-K6-Aq8"/>
                 <constraint firstItem="qy9-MY-67C" firstAttribute="top" secondItem="dMy-Fy-gyR" secondAttribute="bottom" id="Qlv-q8-8Hh"/>
-                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="qy9-MY-67C" secondAttribute="trailing" id="RdA-eh-2U7"/>
-                <constraint firstItem="AFl-Bk-oPH" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="SaE-kX-wSu"/>
+                <constraint firstAttribute="trailing" secondItem="qy9-MY-67C" secondAttribute="trailing" id="RdA-eh-2U7"/>
+                <constraint firstItem="AFl-Bk-oPH" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="SaE-kX-wSu"/>
                 <constraint firstItem="uB8-a7-Vh0" firstAttribute="height" secondItem="qy9-MY-67C" secondAttribute="height" id="dil-cq-CMa"/>
-                <constraint firstItem="dMy-Fy-gyR" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="ecA-Oe-ps4"/>
-                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="dMy-Fy-gyR" secondAttribute="trailing" id="hyI-iq-qoa"/>
+                <constraint firstItem="dMy-Fy-gyR" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="ecA-Oe-ps4"/>
+                <constraint firstAttribute="trailing" secondItem="dMy-Fy-gyR" secondAttribute="trailing" id="hyI-iq-qoa"/>
                 <constraint firstItem="qy9-MY-67C" firstAttribute="leading" secondItem="uB8-a7-Vh0" secondAttribute="trailing" id="i8m-ID-dah"/>
                 <constraint firstItem="daH-No-sZc" firstAttribute="leading" secondItem="AFl-Bk-oPH" secondAttribute="leading" id="mBO-x4-u0c"/>
                 <constraint firstItem="daH-No-sZc" firstAttribute="trailing" secondItem="AFl-Bk-oPH" secondAttribute="trailing" id="ncu-ea-Qsv"/>
                 <constraint firstItem="uB8-a7-Vh0" firstAttribute="width" secondItem="qy9-MY-67C" secondAttribute="width" id="qhk-iL-B9n"/>
                 <constraint firstItem="dMy-Fy-gyR" firstAttribute="top" secondItem="AFl-Bk-oPH" secondAttribute="bottom" id="zco-k3-gb7"/>
             </constraints>
-            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <point key="canvasLocation" x="32.5" y="105.5"/>
         </view>
     </objects>

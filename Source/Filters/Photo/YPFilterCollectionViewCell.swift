@@ -6,9 +6,10 @@
 //  Copyright © 2016 octopepper. All rights reserved.
 //
 
+import UIKit
 import Stevia
 
-class YPFilterCollectionViewCell: UICollectionViewCell {
+final class YPFilterCollectionViewCell: UICollectionViewCell {
     
     let name = UILabel()
     let imageView = UIImageView()

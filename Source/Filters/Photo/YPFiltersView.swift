@@ -6,6 +6,7 @@
 //  Copyright © 2016 octopepper. All rights reserved.
 //
 
+import UIKit
 import Stevia
 
 class YPFiltersView: UIView {
