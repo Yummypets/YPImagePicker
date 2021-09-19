@@ -441,7 +441,6 @@
 				DEVELOPMENT_TEAM = B3U3XRF8D7;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/../Carthage/Build/iOS",
 					"$(PROJECT_DIR)/../Resources\"",
 				);
 				INFOPLIST_FILE = YPImagePickerExample/Info.plist;
@@ -464,7 +463,6 @@
 				DEVELOPMENT_TEAM = B3U3XRF8D7;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/../Carthage/Build/iOS",
 					"$(PROJECT_DIR)/../Resources\"",
 				);
 				INFOPLIST_FILE = YPImagePickerExample/Info.plist;

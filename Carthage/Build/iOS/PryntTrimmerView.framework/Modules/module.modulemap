@@ -1,4 +1,0 @@
-framework module PryntTrimmerView {
-  header "PryntTrimmerView-Swift.h"
-  requires objc
-}
