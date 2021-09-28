@@ -5,12 +5,8 @@ import PackageDescription
 let package = Package(
     name: "YPImagePicker",
     defaultLocalization: "en",
-    platforms: [
-        .iOS(.v12)
-    ],
-    products: [
-        .library(name: "YPImagePicker", targets: ["YPImagePicker"])
-    ],
+    platforms: [.iOS(.v12)],
+    products: [ .library(name: "YPImagePicker", targets: ["YPImagePicker"])],
     dependencies: [
         .package(
             url: "https://github.com/freshOS/Stevia",
@@ -20,14 +16,12 @@ let package = Package(
             url: "https://github.com/HHK1/PryntTrimmerView",
             .exact("4.0.2")
         )
-
     ],
     targets: [
         .target(
             name: "YPImagePicker",
-            dependencies: ["Stevia", "PryntTrimmerView"],
-            path: "Source",
-            exclude: ["Info.plist", "YPImagePickerHeader.h"]
+            dependencies: ["Stevia", "PryntTrimmerView"]
+//            exclude: ["Info.plist", "YPImagePickerHeader.h"]
         )
     ]
 )

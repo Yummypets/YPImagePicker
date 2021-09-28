@@ -41,3 +41,11 @@ Pods/
 
 
 *.lock
+
+# SPM 
+/.build
+/Packages
+/*.xcodeproj
+xcuserdata/
+DerivedData/
+.swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
