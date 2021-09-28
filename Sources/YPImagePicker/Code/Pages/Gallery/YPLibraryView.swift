@@ -100,7 +100,7 @@ extension YPLibraryView {
     
     class func xibView() -> YPLibraryView? {
 			
-				let nib = UINib(nibName: "YPLibraryView", bundle: Bundle.module)
+				let nib = UINib(nibName: "YPLibraryView", bundle: Bundle.local)
         let xibView = nib.instantiate(withOwner: self, options: nil)[0] as? YPLibraryView
         return xibView
     }
