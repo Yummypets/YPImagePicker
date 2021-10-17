@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -66,14 +66,15 @@
                     </constraints>
                 </view>
             </subviews>
+            <viewLayoutGuide key="safeArea" id="oww-my-WxG"/>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="uB8-a7-Vh0" firstAttribute="bottom" secondItem="i5M-Pr-FkT" secondAttribute="bottom" id="CC1-rc-s2V"/>
+                <constraint firstItem="uB8-a7-Vh0" firstAttribute="bottom" secondItem="oww-my-WxG" secondAttribute="bottom" id="CC1-rc-s2V"/>
                 <constraint firstItem="AFl-Bk-oPH" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="FRD-Vm-8CW"/>
                 <constraint firstItem="uB8-a7-Vh0" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Fzr-Gx-9yI"/>
                 <constraint firstAttribute="trailing" secondItem="AFl-Bk-oPH" secondAttribute="trailing" id="HuF-V0-NP6"/>
                 <constraint firstItem="daH-No-sZc" firstAttribute="top" secondItem="AFl-Bk-oPH" secondAttribute="top" id="IXg-d6-twu"/>
-                <constraint firstAttribute="bottom" secondItem="qy9-MY-67C" secondAttribute="bottom" id="K8l-EJ-kc2"/>
+                <constraint firstItem="oww-my-WxG" firstAttribute="bottom" secondItem="qy9-MY-67C" secondAttribute="bottom" id="K8l-EJ-kc2"/>
                 <constraint firstItem="daH-No-sZc" firstAttribute="bottom" secondItem="AFl-Bk-oPH" secondAttribute="bottom" id="MaG-K6-Aq8"/>
                 <constraint firstItem="qy9-MY-67C" firstAttribute="top" secondItem="dMy-Fy-gyR" secondAttribute="bottom" id="Qlv-q8-8Hh"/>
                 <constraint firstAttribute="trailing" secondItem="qy9-MY-67C" secondAttribute="trailing" id="RdA-eh-2U7"/>
