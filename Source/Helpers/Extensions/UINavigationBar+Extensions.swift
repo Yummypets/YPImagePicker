@@ -15,4 +15,20 @@ extension UINavigationBar {
         guard let font = font  else { return }
         self.titleTextAttributes = [NSAttributedString.Key.font: font]
     }
+
+    func configureNavigationBar(isTransculent: Bool, tintColor: UIColor) {
+        self.tintColor = .ypLabel
+
+        if #available(iOS 15.0, *) {
+            let appearance = standardAppearance
+            if isTransculent {
+                appearance.configureWithTransparentBackground()
+            } else {
+                appearance.configureWithOpaqueBackground()
+            }
+            scrollEdgeAppearance = appearance
+        } else {
+            self.isTranslucent = isTransculent
+        }
+    }
 }
