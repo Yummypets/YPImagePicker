@@ -17,7 +17,7 @@ extension UINavigationBar {
     }
 
     func configureNavigationBar(isTransculent: Bool, tintColor: UIColor) {
-        self.tintColor = .ypLabel
+        self.tintColor = tintColor
 
         if #available(iOS 15.0, *) {
             let appearance = standardAppearance
