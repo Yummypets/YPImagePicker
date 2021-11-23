@@ -71,7 +71,6 @@
 		EB584BFF207B883A00265B38 /* YPSelectionsGalleryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB584BFD207B883A00265B38 /* YPSelectionsGalleryCell.swift */; };
 		EB584C03207B990200265B38 /* AVFoundation+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB584C02207B990200265B38 /* AVFoundation+Extensions.swift */; };
 		EB59F452208766B800811B7B /* YPVideoFiltersVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB59F450208766B800811B7B /* YPVideoFiltersVC.swift */; };
-		EB59F453208766B800811B7B /* YPVideoFiltersVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB59F451208766B800811B7B /* YPVideoFiltersVC.xib */; };
 		EB5B07C4209146F00099C1FA /* UIButton+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5B07C3209146F00099C1FA /* UIButton+Extensions.swift */; };
 		EB867BCF209134F100332A54 /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB867BCE209134F100332A54 /* UIColor+Extensions.swift */; };
 		EB94F28E208E3A140049F523 /* YPLoaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB94F28D208E3A140049F523 /* YPLoaders.swift */; };
@@ -180,7 +179,6 @@
 		EBA37BC126F74CE0005DAAD4 /* YPFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA37BBA26F74CE0005DAAD4 /* YPFilter.swift */; };
 		EBA37BC226F74CE0005DAAD4 /* YPFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA37BBA26F74CE0005DAAD4 /* YPFilter.swift */; };
 		EBA37BC426F750DE005DAAD4 /* YPLibraryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 99C6D6A11F1FB5C100711DB2 /* YPLibraryView.xib */; };
-		EBA37BC526F750DE005DAAD4 /* YPVideoFiltersVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB59F451208766B800811B7B /* YPVideoFiltersVC.xib */; };
 		EBA37BC626F75144005DAAD4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 99C6D6981F1FB5C100711DB2 /* Assets.xcassets */; };
 		EBA37BC726F75151005DAAD4 /* YPImagePickerLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 99C6D6991F1FB5C100711DB2 /* YPImagePickerLocalizable.strings */; };
 		EBA37BC926F757FF005DAAD4 /* Bundle+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA37BC826F757FF005DAAD4 /* Bundle+Extensions.swift */; };
@@ -302,7 +300,6 @@
 		EB584BFD207B883A00265B38 /* YPSelectionsGalleryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPSelectionsGalleryCell.swift; sourceTree = "<group>"; };
 		EB584C02207B990200265B38 /* AVFoundation+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVFoundation+Extensions.swift"; sourceTree = "<group>"; };
 		EB59F450208766B800811B7B /* YPVideoFiltersVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPVideoFiltersVC.swift; sourceTree = "<group>"; };
-		EB59F451208766B800811B7B /* YPVideoFiltersVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = YPVideoFiltersVC.xib; sourceTree = "<group>"; };
 		EB5ACE2B2620802A00C3288D /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		EB5B07C3209146F00099C1FA /* UIButton+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extensions.swift"; sourceTree = "<group>"; };
 		EB84ADD522F35506003667B5 /* YPImagePicker.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; path = YPImagePicker.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
@@ -562,7 +559,6 @@
 			isa = PBXGroup;
 			children = (
 				EB59F450208766B800811B7B /* YPVideoFiltersVC.swift */,
-				EB59F451208766B800811B7B /* YPVideoFiltersVC.xib */,
 				EBB0FF7920877A7500C84E25 /* YPVideoView.swift */,
 			);
 			path = Video;
@@ -782,7 +778,6 @@
 				8458057421819B95004F241C /* YPImagePickerLocalizable.strings in Resources */,
 				99C6D6B91F1FB5C100711DB2 /* Assets.xcassets in Resources */,
 				99C6D6BD1F1FB5C100711DB2 /* YPLibraryView.xib in Resources */,
-				EB59F453208766B800811B7B /* YPVideoFiltersVC.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -793,7 +788,6 @@
 				EBA37B5E26F749C7005DAAD4 /* LaunchScreen.storyboard in Resources */,
 				EBA37BC426F750DE005DAAD4 /* YPLibraryView.xib in Resources */,
 				EBA37B5B26F749C7005DAAD4 /* Assets.xcassets in Resources */,
-				EBA37BC526F750DE005DAAD4 /* YPVideoFiltersVC.xib in Resources */,
 				EBA37BC726F75151005DAAD4 /* YPImagePickerLocalizable.strings in Resources */,
 				EBA37BC626F75144005DAAD4 /* Assets.xcassets in Resources */,
 			);
