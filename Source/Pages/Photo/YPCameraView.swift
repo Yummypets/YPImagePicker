@@ -24,26 +24,26 @@ internal class YPCameraView: UIView, UIGestureRecognizerDelegate {
         
         if let overlayView = overlayView {
             // View Hierarchy
-            sv(
+            subviews(
                 previewViewContainer,
                 overlayView,
                 progressBar,
                 timeElapsedLabel,
                 flashButton,
                 flipButton,
-                buttonsContainer.sv(
+                buttonsContainer.subviews(
                     shotButton
                 )
             )
         } else {
             // View Hierarchy
-            sv(
+            subviews(
                 previewViewContainer,
                 progressBar,
                 timeElapsedLabel,
                 flashButton,
                 flipButton,
-                buttonsContainer.sv(
+                buttonsContainer.subviews(
                     shotButton
                 )
             )

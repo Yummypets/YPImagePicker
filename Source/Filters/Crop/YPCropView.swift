@@ -53,8 +53,8 @@ final class YPCropView: UIView {
         
     private func setupViewHierarchy() {
         
-        sv(
-            containerView.sv(
+        subviews(
+            containerView.subviews(
                 imageView,
                 topCurtain,
                 leadingCurtain,
@@ -88,7 +88,7 @@ final class YPCropView: UIView {
         cropArea.Top == topCurtain.Bottom
         cropArea.Bottom == bottomCurtain.Top
           
-        |leadingCurtain--0--cropArea--0--trailingCurtain|
+        |leadingCurtain⁃0⁃cropArea⁃0⁃trailingCurtain|
         
         grid.followEdges(cropArea)
         
