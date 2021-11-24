@@ -16,13 +16,13 @@ extension YPLibraryVC: PHPhotoLibraryChangeObserver {
     
     public func photoLibraryDidChange(_ changeInstance: PHChange) {
         guard let fetchResult = self.mediaManager.fetchResult,
-              let collectionChanges = changeInstance.changeDetails(for: fetchResult),
-              let collectionView = self.v.collectionView else {
+              let collectionChanges = changeInstance.changeDetails(for: fetchResult) else {
             ypLog("Some problems there.")
             return
         }
 
         DispatchQueue.main.async {
+            let collectionView = self.v.collectionView
             self.mediaManager.fetchResult = collectionChanges.fetchResultAfterChanges
             if !collectionChanges.hasIncrementalChanges || collectionChanges.hasMoves {
                 collectionView.reloadData()

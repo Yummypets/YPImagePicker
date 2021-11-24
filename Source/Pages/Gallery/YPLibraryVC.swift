@@ -10,9 +10,9 @@ import UIKit
 import Photos
 import PhotosUI
 
-internal class YPLibraryVC: UIViewController, YPPermissionCheckable {
+internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
     internal weak var delegate: YPLibraryViewDelegate?
-    internal var v: YPLibraryView!
+    internal var v = YPLibraryView(frame: .zero)
     internal var isProcessing = false // true if video or image is in processing state
     internal var selectedItems = [YPLibrarySelection]()
     internal let mediaManager = LibraryMediaManager()
@@ -22,28 +22,18 @@ internal class YPLibraryVC: UIViewController, YPPermissionCheckable {
     internal var isInitialized = false
 
     // MARK: - Init
-    
-    internal required init(items: [YPMediaItem]?) {
+
+    internal override func loadView() {
+        view = v
+    }
+
+    required init() {
         super.init(nibName: nil, bundle: nil)
         title = YPConfig.wordings.libraryTitle
     }
-    
-    internal convenience init() {
-        self.init(items: nil)
-    }
-    
+
     internal required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    func setAlbum(_ album: YPAlbum) {
-        title = album.title
-        mediaManager.collection = album.collection
-        currentlySelectedIndex = 0
-        if !multipleSelectionEnabled {
-            selectedItems.removeAll()
-        }
-        refreshMediaRequest()
     }
     
     func initialize() {
@@ -54,7 +44,7 @@ internal class YPLibraryVC: UIViewController, YPPermissionCheckable {
         defer {
             isInitialized = true
         }
-        
+
         mediaManager.initialize()
         mediaManager.v = v
 
@@ -97,13 +87,18 @@ internal class YPLibraryVC: UIViewController, YPPermissionCheckable {
             showMultipleSelection()
         }
     }
-    
-    // MARK: - View Lifecycle
-    
-    public override func loadView() {
-        v = YPLibraryView.xibView()
-        view = v
+
+    func setAlbum(_ album: YPAlbum) {
+        title = album.title
+        mediaManager.collection = album.collection
+        currentlySelectedIndex = 0
+        if !multipleSelectionEnabled {
+            selectedItems.removeAll()
+        }
+        refreshMediaRequest()
     }
+
+    // MARK: - View Lifecycle
     
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -199,8 +194,8 @@ internal class YPLibraryVC: UIViewController, YPPermissionCheckable {
                 selectedItems = [
                     YPLibrarySelection(index: currentlySelectedIndex,
                                        cropRect: v.currentCropRect(),
-                                       scrollViewContentOffset: v.assetZoomableView!.contentOffset,
-                                       scrollViewZoomScale: v.assetZoomableView!.zoomScale,
+                                       scrollViewContentOffset: v.assetZoomableView.contentOffset,
+                                       scrollViewZoomScale: v.assetZoomableView.zoomScale,
                                        assetIdentifier: asset.localIdentifier)
                 ]
             }

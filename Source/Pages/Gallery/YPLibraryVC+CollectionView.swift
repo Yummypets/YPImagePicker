@@ -12,7 +12,6 @@ extension YPLibraryVC {
     var isLimitExceeded: Bool { return selectedItems.count >= YPConfig.library.maxNumberOfItems }
     
     func setupCollectionView() {
-        v.collectionView.backgroundColor = YPConfig.colors.libraryScreenBackgroundColor
         v.collectionView.dataSource = self
         v.collectionView.delegate = self
         v.collectionView.register(YPLibraryViewCell.self, forCellWithReuseIdentifier: "YPLibraryViewCell")
