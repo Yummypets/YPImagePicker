@@ -214,6 +214,7 @@ internal final class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, 
             let flashImage = self.photoCapture.currentFlashMode.flashImage()
             self.v.flashButton.setImage(flashImage, for: .normal)
             self.v.flashButton.isHidden = !self.photoCapture.hasFlash
+            self.v.flashButton.isHidden = self.photoCapture.device?.position == .front
         }
     }
 }
