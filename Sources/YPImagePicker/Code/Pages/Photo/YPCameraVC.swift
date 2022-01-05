@@ -64,17 +64,19 @@ internal final class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, 
     }
     
     func start() {
-        doAfterCameraPermissionCheck { [weak self] in
-            guard let previewContainer = self?.v.previewViewContainer else {
-                return
-            }
-
-            self?.photoCapture.start(with: previewContainer, completion: {
-                DispatchQueue.main.async {
-                    self?.isInited = true
-                    self?.updateFlashButtonUI()
+        doAfterLibraryPermissionCheck { [weak self] in
+            self?.doAfterCameraPermissionCheck { [weak self] in
+                guard let previewContainer = self?.v.previewViewContainer else {
+                    return
                 }
-            })
+                
+                self?.photoCapture.start(with: previewContainer, completion: {
+                    DispatchQueue.main.async {
+                        self?.isInited = true
+                        self?.updateFlashButtonUI()
+                    }
+                })
+            }
         }
     }
 
@@ -129,8 +131,10 @@ internal final class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, 
     
     @objc
     func shotButtonTapped() {
-        doAfterCameraPermissionCheck { [weak self] in
-            self?.shoot()
+        doAfterLibraryPermissionCheck { [weak self] in 
+            self?.doAfterCameraPermissionCheck { [weak self] in
+                self?.shoot()
+            }
         }
     }
     
