@@ -31,7 +31,7 @@ final class YPMenuItem: UIView {
     func setup() {
         backgroundColor = YPImagePickerConfiguration.shared.colors.bottomMenuItemBackgroundColor
         
-        subviews(
+        sv(
             textLabel,
             button
         )

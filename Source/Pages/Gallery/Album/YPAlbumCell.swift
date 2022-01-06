@@ -25,7 +25,7 @@ class YPAlbumCell: UITableViewCell {
         stackView.addArrangedSubview(title)
         stackView.addArrangedSubview(numberOfItems)
         
-        subviews(
+        sv(
             thumbnail,
             stackView
         )

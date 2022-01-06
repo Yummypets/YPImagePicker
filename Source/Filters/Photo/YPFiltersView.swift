@@ -24,9 +24,9 @@ class YPFiltersView: UIView {
         filtersLoader.startAnimating()
         filtersLoader.color = YPConfig.colors.tintColor
         
-        subviews(
+        sv(
             imageView,
-            collectionViewContainer.subviews(
+            collectionViewContainer.sv(
                 filtersLoader,
                 collectionView
             )

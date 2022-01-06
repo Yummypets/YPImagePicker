@@ -52,7 +52,7 @@ public class YPVideoView: UIView {
         playerLayer.videoGravity = .resizeAspect
         previewImageView.contentMode = .scaleAspectFit
         
-        subviews(
+        sv(
             previewImageView,
             playerView,
             playImageView

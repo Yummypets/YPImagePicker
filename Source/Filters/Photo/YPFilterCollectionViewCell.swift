@@ -36,7 +36,7 @@ final class YPFilterCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        subviews(
+        sv(
             name,
             imageView
         )

@@ -145,12 +145,12 @@ public final class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
     }
 
     private func setupLayout() {
-        view.subviews(
+        view.sv(
             trimBottomItem,
             coverBottomItem,
             videoView,
             coverImageView,
-            trimmerContainerView.subviews(
+            trimmerContainerView.sv(
                 trimmerView,
                 coverThumbSelectorView
             )
@@ -172,7 +172,7 @@ public final class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
         trimmerContainerView.Top == videoView.Bottom
         trimmerContainerView.Bottom == trimBottomItem.Top
 
-        trimmerView.fillHorizontally(padding: 30).centerVertically()
+        trimmerView.fillHorizontally(m: 30).centerVertically()
         trimmerView.Height == trimmerContainerView.Height / 3
 
         coverThumbSelectorView.followEdges(trimmerView)

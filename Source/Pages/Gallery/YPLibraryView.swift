@@ -167,16 +167,16 @@ internal final class YPLibraryView: UIView {
     // MARK: - Private Methods
 
     private func setupLayout() {
-        subviews(
-            collectionContainerView.subviews(
+        sv(
+            collectionContainerView.sv(
                 collectionView
             ),
             line,
-            assetViewContainer.subviews(
+            assetViewContainer.sv(
                 assetZoomableView
             ),
             progressView,
-            maxNumberWarningView.subviews(
+            maxNumberWarningView.sv(
                 maxNumberWarningLabel
             )
         )
