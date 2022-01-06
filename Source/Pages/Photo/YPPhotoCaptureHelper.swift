@@ -120,24 +120,9 @@ extension YPPhotoCaptureHelper {
 }
 
 extension YPPhotoCaptureHelper: AVCapturePhotoCaptureDelegate {
-    @available(iOS 11.0, *)
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
         guard let data = photo.fileDataRepresentation() else { return }
         block?(data)
-    }
-    
-    func photoOutput(_ output: AVCapturePhotoOutput,
-                     didFinishProcessingPhoto photoSampleBuffer: CMSampleBuffer?,
-                     previewPhoto previewPhotoSampleBuffer: CMSampleBuffer?,
-                     resolvedSettings: AVCaptureResolvedPhotoSettings,
-                     bracketSettings: AVCaptureBracketedStillImageSettings?,
-                     error: Error?) {
-        guard let buffer = photoSampleBuffer else { return }
-        if let data = AVCapturePhotoOutput
-            .jpegPhotoDataRepresentation(forJPEGSampleBuffer: buffer,
-                                         previewPhotoSampleBuffer: previewPhotoSampleBuffer) {
-            block?(data)
-        }
     }
 }
 
