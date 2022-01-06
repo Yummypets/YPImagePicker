@@ -125,7 +125,6 @@ public struct YPImagePickerConfiguration {
         YPFilter(name: "Toaster", applier: YPFilter.toasterFilter),
         YPFilter(name: "1977", applier: YPFilter.apply1977Filter),
         YPFilter(name: "Clarendon", applier: YPFilter.clarendonFilter),
-        YPFilter(name: "HazeRemoval", applier: YPFilter.hazeRemovalFilter),
         YPFilter(name: "Chrome", coreImageFilterName: "CIPhotoEffectChrome"),
         YPFilter(name: "Fade", coreImageFilterName: "CIPhotoEffectFade"),
         YPFilter(name: "Instant", coreImageFilterName: "CIPhotoEffectInstant"),
