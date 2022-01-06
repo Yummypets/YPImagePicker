@@ -86,7 +86,7 @@
 		EBA37B0B26F73080005DAAD4 /* YPAlbumCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA37B0626F73080005DAAD4 /* YPAlbumCell.swift */; };
 		EBA37B0C26F73080005DAAD4 /* YPAlbumsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA37B0726F73080005DAAD4 /* YPAlbumsManager.swift */; };
 		EBA37B0D26F73080005DAAD4 /* YPAlbumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA37B0826F73080005DAAD4 /* YPAlbumView.swift */; };
-		EBA37B3026F74228005DAAD4 /* BuildFile in Embed Frameworks */ = {isa = PBXBuildFile; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		EBA37B3026F74228005DAAD4 /* (null) in Embed Frameworks */ = {isa = PBXBuildFile; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		EBA37B5226F749C6005DAAD4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA37B5126F749C6005DAAD4 /* AppDelegate.swift */; };
 		EBA37B5B26F749C7005DAAD4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EBA37B5A26F749C7005DAAD4 /* Assets.xcassets */; };
 		EBA37B5E26F749C7005DAAD4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EBA37B5C26F749C7005DAAD4 /* LaunchScreen.storyboard */; };
@@ -199,7 +199,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				EBA37B3026F74228005DAAD4 /* BuildFile in Embed Frameworks */,
+				EBA37B3026F74228005DAAD4 /* (null) in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -333,6 +333,7 @@
 		EBD2B640207B7D7400E711C2 /* YPMediaItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPMediaItem.swift; sourceTree = "<group>"; };
 		EBD66104208104EA00EA276E /* YPIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPIcons.swift; sourceTree = "<group>"; };
 		EBD66106208104F400EA276E /* YPColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPColors.swift; sourceTree = "<group>"; };
+		EBDDF0E62787069E00A372FD /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		EBE6CA47210389ED005B0A6A /* CIImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CIImage+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -362,6 +363,7 @@
 			children = (
 				EB84ADD522F35506003667B5 /* YPImagePicker.podspec */,
 				EBA37B1426F737CE005DAAD4 /* Podfile */,
+				EBDDF0E62787069E00A372FD /* Package.swift */,
 				EB5ACE2B2620802A00C3288D /* README.md */,
 				99C6D69D1F1FB5C100711DB2 /* Source */,
 				EBA37B5026F749C6005DAAD4 /* Example */,
@@ -1233,7 +1235,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.5.0;
+				MARKETING_VERSION = 5.1.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.yummypets.YPImagePicker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1270,7 +1272,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.5.0;
+				MARKETING_VERSION = 5.1.0;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.yummypets.YPImagePicker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
