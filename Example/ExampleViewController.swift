@@ -124,7 +124,7 @@ class ExampleViewController: UIViewController {
         config.screens = [.library, .photo, .video]
 
         /* Can forbid the items with very big height with this property */
-        // config.library.minWidthForItem = UIScreen.main.bounds.width * 0.8
+        config.library.minWidthForItem = UIScreen.main.bounds.width * 0.8
 
         /* Defines the time limit for recording videos.
            Default is 30 seconds. */
