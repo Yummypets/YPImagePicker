@@ -135,7 +135,8 @@ public struct YPImagePickerConfiguration {
         YPFilter(name: "Transfer", coreImageFilterName: "CIPhotoEffectTransfer"),
         YPFilter(name: "Tone", coreImageFilterName: "CILinearToSRGBToneCurve"),
         YPFilter(name: "Linear", coreImageFilterName: "CISRGBToneCurveToLinear"),
-        YPFilter(name: "Sepia", coreImageFilterName: "CISepiaTone")
+        YPFilter(name: "Sepia", coreImageFilterName: "CISepiaTone"),
+        YPFilter(name: "XRay", coreImageFilterName: "CIXRay")
         ]
     
     /// Migration
