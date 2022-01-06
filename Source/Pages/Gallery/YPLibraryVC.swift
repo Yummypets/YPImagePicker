@@ -181,6 +181,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
     func showMultipleSelection() {
         // Prevent desactivating multiple selection when using `minNumberOfItems`
         if YPConfig.library.minNumberOfItems > 1 && multipleSelectionEnabled {
+            print("Selected minNumberOfItems greater than one :\(YPConfig.library.minNumberOfItems). Don't deselect multiple selection.")
             return
         }
         
@@ -281,7 +282,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         
         let completion = { (isLowResIntermediaryImage: Bool) in
             self.v.hideOverlayView()
-            self.v.assetViewContainer.refreshSquareCropButton()
+            self.v.assetViewContainer.updateSquareCropButtonState()
             self.updateCropInfo()
             if !isLowResIntermediaryImage {
                 self.v.hideLoader()
