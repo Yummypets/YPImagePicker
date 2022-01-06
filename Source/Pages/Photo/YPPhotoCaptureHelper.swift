@@ -17,7 +17,9 @@ internal final class YPPhotoCaptureHelper: NSObject {
         return deviceInput?.device
     }
     var hasFlash: Bool {
-        return device?.hasFlash ?? false
+        let isFrontCamera = device?.position == .front
+        let deviceHasFlash = device?.hasFlash ?? false
+        return !isFrontCamera && deviceHasFlash
     }
     
     private let sessionQueue = DispatchQueue(label: "YPPhotoCaptureHelperQueue", qos: .background)
