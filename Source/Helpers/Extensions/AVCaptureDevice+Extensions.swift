@@ -33,3 +33,22 @@ extension AVCaptureDevice {
         }
     }
 }
+
+internal extension AVCaptureDevice {
+    class var audioCaptureDevice: AVCaptureDevice? {
+        let availableMicrophoneAudioDevices = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInMicrophone], mediaType: .audio, position: .unspecified).devices
+        return availableMicrophoneAudioDevices.first
+    }
+
+    /// Best available device for selected position.
+    class func deviceForPosition(_ p: AVCaptureDevice.Position) -> AVCaptureDevice? {
+        let devicesSession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInTrueDepthCamera, .builtInDualCamera, .builtInWideAngleCamera], mediaType: .video, position: p)
+        let devices = devicesSession.devices
+        guard !devices.isEmpty else {
+            print("Don't have supported cameras for this position: \(p.rawValue)")
+            return nil
+        }
+
+        return devices.first
+    }
+}

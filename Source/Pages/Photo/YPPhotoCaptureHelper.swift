@@ -172,7 +172,7 @@ private extension YPPhotoCaptureHelper {
         session.beginConfiguration()
         session.sessionPreset = .photo
         let cameraPosition: AVCaptureDevice.Position = YPConfig.usesFrontCamera ? .front : .back
-        let aDevice = deviceForPosition(cameraPosition)
+        let aDevice = AVCaptureDevice.deviceForPosition(cameraPosition)
         if let d = aDevice {
             deviceInput = try? AVCaptureDeviceInput(device: d)
         }
