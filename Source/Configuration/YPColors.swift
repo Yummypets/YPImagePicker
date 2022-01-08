@@ -53,6 +53,9 @@ public struct YPColors {
     /// The color of the crop overlay.
     public var cropOverlayColor: UIColor = .ypSystemBackground.withAlphaComponent(0.4)
 
+    /// The default color of all navigation bars except album's.
+    public var defaultNavigationBarColor: UIColor = .offWhiteOrBlack
+
     // MARK: - Trimmer
     
     /// The color of the main border of the view
