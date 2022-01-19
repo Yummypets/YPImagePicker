@@ -32,7 +32,7 @@ class YPMultipleSelectionIndicator: UIView {
         circle.layer.cornerRadius = size / 2.0
         label.textAlignment = .center
         label.textColor = .white
-        label.font = UIFont.systemFont(ofSize: 12, weight: .regular)
+        label.font = YPConfig.fonts.multipleSelectionIndicatorFont
         
         set(number: nil)
     }
@@ -87,11 +87,12 @@ class YPLibraryViewCell: UICollectionViewCell {
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         durationLabel.textColor = .white
-        durationLabel.font = .systemFont(ofSize: 12)
+        durationLabel.font = YPConfig.fonts.durationFont
         durationLabel.isHidden = true
         selectionOverlay.backgroundColor = .white
         selectionOverlay.alpha = 0
         backgroundColor = .ypSecondarySystemBackground
+        setAccessibilityInfo()
     }
 
     override var isSelected: Bool {
@@ -105,5 +106,11 @@ class YPLibraryViewCell: UICollectionViewCell {
     private func refreshSelection() {
         let showOverlay = isSelected || isHighlighted
         selectionOverlay.alpha = showOverlay ? 0.6 : 0
+    }
+
+    private func setAccessibilityInfo() {
+        isAccessibilityElement = true
+        self.accessibilityIdentifier = "YPLibraryViewCell"
+        self.accessibilityLabel = "Library Image"
     }
 }

@@ -42,7 +42,7 @@ final class YPMenuItem: UIView {
         
         textLabel.style { l in
             l.textAlignment = .center
-            l.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
+            l.font = YPConfig.fonts.menuItemFont
             l.textColor = YPImagePickerConfiguration.shared.colors.bottomMenuItemUnselectedTextColor
             l.adjustsFontSizeToFitWidth = true
             l.numberOfLines = 2

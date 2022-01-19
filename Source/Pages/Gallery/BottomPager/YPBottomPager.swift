@@ -9,7 +9,7 @@
 import UIKit
 import Stevia
 
-protocol YPBottomPagerDelegate: class {
+protocol YPBottomPagerDelegate: AnyObject {
     func pagerScrollViewDidScroll(_ scrollView: UIScrollView)
     func pagerDidSelectController(_ vc: UIViewController)
 }
@@ -27,7 +27,7 @@ open class YPBottomPager: UIViewController, UIScrollViewDelegate {
     }
     
     override open func loadView() {
-        self.automaticallyAdjustsScrollViewInsets = false
+        v.scrollView.contentInsetAdjustmentBehavior = .never
         v.scrollView.delegate = self
         view = v
     }
@@ -49,7 +49,8 @@ open class YPBottomPager: UIViewController, UIScrollViewDelegate {
     }
     
     func reload() {
-        let viewWidth: CGFloat = UIScreen.main.bounds.width
+        let screenWidth = YPImagePickerConfiguration.screenWidth
+        let viewWidth: CGFloat = screenWidth
         for (index, c) in controllers.enumerated() {
             c.willMove(toParent: self)
             addChild(c)
@@ -87,7 +88,8 @@ open class YPBottomPager: UIViewController, UIScrollViewDelegate {
     }
     
     func showPage(_ page: Int, animated: Bool = true) {
-        let x = CGFloat(page) * UIScreen.main.bounds.width
+        let screenWidth = YPImagePickerConfiguration.screenWidth
+        let x = CGFloat(page) * screenWidth
         v.scrollView.setContentOffset(CGPoint(x: x, y: 0), animated: animated)
         selectPage(page)
     }
@@ -97,9 +99,9 @@ open class YPBottomPager: UIViewController, UIScrollViewDelegate {
             return
         }
         currentPage = page
-        //select menu item and deselect others
+        // select menu item and deselect others
         for (i, mi) in v.header.menuItems.enumerated() {
-            if (i == page) {
+            if i == page {
                 mi.select()
             } else {
                 mi.deselect()
@@ -110,9 +112,10 @@ open class YPBottomPager: UIViewController, UIScrollViewDelegate {
     
     func startOnPage(_ page: Int) {
         currentPage = page
-        let x = CGFloat(page) * UIScreen.main.bounds.width
+        let screenWidth = YPImagePickerConfiguration.screenWidth
+        let x = CGFloat(page) * screenWidth
         v.scrollView.setContentOffset(CGPoint(x: x, y: 0), animated: false)
-        //select menut item and deselect others
+        // select menut item and deselect others
         for mi in v.header.menuItems {
             mi.deselect()
         }

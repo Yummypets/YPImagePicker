@@ -17,7 +17,10 @@ struct YPAlert {
                                       preferredStyle: .actionSheet)
         if let popoverController = alert.popoverPresentationController {
             popoverController.sourceView = sourceView
-            popoverController.sourceRect = CGRect(x: sourceView.bounds.midX, y: sourceView.bounds.midY, width: 0, height: 0)
+            popoverController.sourceRect = CGRect(x: sourceView.bounds.midX,
+												  y: sourceView.bounds.midY,
+												  width: 0,
+												  height: 0)
             popoverController.permittedArrowDirections = []
         }
         alert.addAction(UIAlertAction(title: YPConfig.wordings.ok, style: UIAlertAction.Style.default, handler: nil))
@@ -32,7 +35,10 @@ struct YPAlert {
                                       preferredStyle: .actionSheet)
         if let popoverController = alert.popoverPresentationController {
             popoverController.sourceView = sourceView
-            popoverController.sourceRect = CGRect(x: sourceView.bounds.midX, y: sourceView.bounds.midY, width: 0, height: 0)
+            popoverController.sourceRect = CGRect(x: sourceView.bounds.midX,
+												  y: sourceView.bounds.midY,
+												  width: 0,
+												  height: 0)
             popoverController.permittedArrowDirections = []
         }
         alert.addAction(UIAlertAction(title: YPConfig.wordings.ok, style: UIAlertAction.Style.default, handler: nil))

@@ -27,10 +27,10 @@ class YPVideoProcessor {
             outputURL = URL(fileURLWithPath: outputPath)
         } else {
             guard let documentsURL = FileManager
-                .default
-                .urls(for: .documentDirectory,
-                      in: .userDomainMask).first else {
-                        print("YPVideoProcessor -> Can't get the documents directory URL")
+                    .default
+                    .urls(for: .documentDirectory,
+                          in: .userDomainMask).first else {
+                ypLog("Can't get the documents directory URL")
                 return URL(fileURLWithPath: "Error")
             }
             outputURL = documentsURL.appendingPathComponent("\(fileName).\(YPConfig.video.fileType.fileExtension)")
@@ -41,7 +41,7 @@ class YPVideoProcessor {
             do {
                 try fileManager.removeItem(atPath: outputURL.path)
             } catch {
-                print("YPVideoProcessor -> Can't remove the file for some reason.")
+                ypLog("Can't remove the file for some reason.")
             }
         }
         
@@ -51,7 +51,7 @@ class YPVideoProcessor {
     /*
      Crops the video to square by video height from the top of the video.
      */
-    static func cropToSquare(filePath: URL, completion: @escaping (_ outputURL : URL?) -> ()) {
+    static func cropToSquare(filePath: URL, completion: @escaping (_ outputURL: URL?) -> Void) {
         
         // output file
         let outputPath = makeVideoPathURL(temporaryFolder: true, fileName: "squaredVideoFromCamera")
@@ -62,19 +62,19 @@ class YPVideoProcessor {
         composition.addMutableTrack(withMediaType: .video, preferredTrackID: kCMPersistentTrackID_Invalid)
         
         // Prevent crash if tracks is empty
-        if asset.tracks.isEmpty {
+        guard asset.tracks.isEmpty == false,
+              let clipVideoTrack = asset.tracks(withMediaType: .video).first else {
             return
         }
-        
-        // input clip
-        let clipVideoTrack = asset.tracks(withMediaType: .video)[0]
         
         // make it square
         let videoComposition = AVMutableVideoComposition()
         if YPConfig.onlySquareImagesFromCamera {
-            videoComposition.renderSize = CGSize(width: CGFloat(clipVideoTrack.naturalSize.height), height: CGFloat(clipVideoTrack.naturalSize.height))
+            videoComposition.renderSize = CGSize(width: CGFloat(clipVideoTrack.naturalSize.height),
+                                                 height: CGFloat(clipVideoTrack.naturalSize.height))
         } else {
-            videoComposition.renderSize = CGSize(width: CGFloat(clipVideoTrack.naturalSize.height), height: CGFloat(clipVideoTrack.naturalSize.width))
+            videoComposition.renderSize = CGSize(width: CGFloat(clipVideoTrack.naturalSize.height),
+                                                 height: CGFloat(clipVideoTrack.naturalSize.width))
         }
         videoComposition.frameDuration = CMTimeMake(value: 1, timescale: 30)
         let instruction = AVMutableVideoCompositionInstruction()
@@ -82,7 +82,8 @@ class YPVideoProcessor {
         
         // rotate to potrait
         let transformer = AVMutableVideoCompositionLayerInstruction(assetTrack: clipVideoTrack)
-        let t1 = CGAffineTransform(translationX: clipVideoTrack.naturalSize.height, y: -(clipVideoTrack.naturalSize.width - clipVideoTrack.naturalSize.height) / 2)
+        let t1 = CGAffineTransform(translationX: clipVideoTrack.naturalSize.height,
+                                   y: -(clipVideoTrack.naturalSize.width - clipVideoTrack.naturalSize.height) / 2)
         let t2: CGAffineTransform = t1.rotated(by: .pi/2)
         let finalTransform: CGAffineTransform = t2
         transformer.setTransform(finalTransform, at: CMTime.zero)
@@ -96,10 +97,10 @@ class YPVideoProcessor {
                 case .completed:
                     completion(outputPath)
                 case .failed:
-                    print("YPVideoProcessor -> Export of the video failed. Reason: \(String(describing: exportSession.error))")
+                    ypLog("Export of the video failed: \(String(describing: exportSession.error))")
                     completion(nil)
                 default:
-                    print("YPVideoProcessor -> Export session completed with \(exportSession.status) status. Not handling.")
+                    ypLog("Export session completed with \(exportSession.status) status. Not handled.")
                     completion(nil)
                 }
             }
