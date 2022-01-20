@@ -9,7 +9,7 @@
 import UIKit
 import Stevia
 
-class YPLoadingView: UIView {
+public class YPLoadingView: UIView {
     
     let spinner = UIActivityIndicatorView(style: .whiteLarge)
     let processingLabel = UILabel()

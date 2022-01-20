@@ -10,7 +10,7 @@ import UIKit
 import AVFoundation
 import Photos
 
-internal final class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, YPPermissionCheckable {
+public final class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, YPPermissionCheckable {
     var didCapturePhoto: ((UIImage) -> Void)?
     let v: YPCameraView!
 
@@ -18,11 +18,11 @@ internal final class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, 
     private var isInited = false
     private var videoZoomFactor: CGFloat = 1.0
 
-    override internal func loadView() {
+    public override func loadView() {
         view = v
     }
 
-    internal required init() {
+    public required init() {
         self.v = YPCameraView(overlayView: YPConfig.overlayView)
         super.init(nibName: nil, bundle: nil)
 
@@ -40,7 +40,7 @@ internal final class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, 
         YPDeviceOrientationHelper.shared.stopDeviceOrientationNotifier()
     }
     
-    override internal func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
 
         v.flashButton.isHidden = true

@@ -36,9 +36,9 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         case video
     }
     
-    private var libraryVC: YPLibraryVC?
-    private var cameraVC: YPCameraVC?
-    private var videoVC: YPVideoCaptureVC?
+    public var libraryVC: YPLibraryVC?
+    public var cameraVC: YPCameraVC?
+    public var videoVC: YPVideoCaptureVC?
     
     var mode = Mode.camera
     

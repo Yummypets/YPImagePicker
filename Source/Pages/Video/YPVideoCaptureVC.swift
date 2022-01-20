@@ -8,7 +8,7 @@
 
 import UIKit
 
-internal class YPVideoCaptureVC: UIViewController, YPPermissionCheckable {
+public class YPVideoCaptureVC: UIViewController, YPPermissionCheckable {
     var didCaptureVideo: ((URL) -> Void)?
     
     private let videoHelper = YPVideoCaptureHelper()
@@ -36,9 +36,9 @@ internal class YPVideoCaptureVC: UIViewController, YPPermissionCheckable {
     
     // MARK: - View LifeCycle
     
-    override func loadView() { view = v }
+    public override func loadView() { view = v }
     
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         v.timeElapsedLabel.isHidden = false // Show the time elapsed label since we're in the video screen.
         setupButtons()

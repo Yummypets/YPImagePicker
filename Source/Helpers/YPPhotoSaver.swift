@@ -10,7 +10,7 @@ import UIKit
 import Photos
 
 public class YPPhotoSaver {
-    class func trySaveImage(_ image: UIImage, inAlbumNamed: String) {
+    public class func trySaveImage(_ image: UIImage, inAlbumNamed: String) {
         if PHPhotoLibrary.authorizationStatus() == .authorized {
             if let album = album(named: inAlbumNamed) {
                 saveImage(image, toAlbum: album)

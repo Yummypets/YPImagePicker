@@ -16,7 +16,7 @@ public enum YPVideoFiltersType {
     case Cover
 }
 
-public final class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
+open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
 
     /// Designated initializer
     public class func initWith(video: YPMediaVideo,
@@ -38,16 +38,17 @@ public final class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
 
     // MARK: - Private vars
 
-    private var playbackTimeCheckerTimer: Timer?
-    private var imageGenerator: AVAssetImageGenerator?
-    private var isFromSelectionVC = false
-    private var vcType: YPVideoFiltersType = .Trimmer
+    public var playbackTimeCheckerTimer: Timer?
+    public var imageGenerator: AVAssetImageGenerator?
+    
+    public var isFromSelectionVC = false
+    public var vcType: YPVideoFiltersType = .Trimmer
 
-    private let trimmerContainerView: UIView = {
+    public var trimmerContainerView: UIView = {
         let v = UIView()
         return v
     }()
-    private let trimmerView: TrimmerView = {
+    public var trimmerView: TrimmerView = {
         let v = TrimmerView()
         v.mainColor = YPConfig.colors.trimmerMainColor
         v.handleColor = YPConfig.colors.trimmerHandleColor
@@ -56,29 +57,29 @@ public final class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
         v.minDuration = YPConfig.video.trimmerMinDuration
         return v
     }()
-    private let coverThumbSelectorView: ThumbSelectorView = {
+    public var coverThumbSelectorView: ThumbSelectorView = {
         let v = ThumbSelectorView()
         v.thumbBorderColor = YPConfig.colors.coverSelectorBorderColor
         v.isHidden = true
         return v
     }()
-    private let trimBottomItem: YPMenuItem = {
+    public var trimBottomItem: YPMenuItem = {
         let v = YPMenuItem()
         v.textLabel.text = YPConfig.wordings.trim
         v.button.addTarget(self, action: #selector(selectTrim), for: .touchUpInside)
         return v
     }()
-    private let coverBottomItem: YPMenuItem = {
+    public var coverBottomItem: YPMenuItem = {
         let v = YPMenuItem()
         v.textLabel.text = YPConfig.wordings.cover
         v.button.addTarget(self, action: #selector(selectCover), for: .touchUpInside)
         return v
     }()
-    private let videoView: YPVideoView = {
+    public var videoView: YPVideoView = {
         let v = YPVideoView()
         return v
     }()
-    private let coverImageView: UIImageView = {
+    public var coverImageView: UIImageView = {
         let v = UIImageView()
         v.contentMode = .scaleAspectFit
         v.isHidden = true
@@ -87,7 +88,7 @@ public final class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
 
     // MARK: - Live cycle
 
-    override public func viewDidLoad() {
+    open override func viewDidLoad() {
         super.viewDidLoad()
         
         trimBottomItem.isHidden = true
@@ -112,7 +113,7 @@ public final class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
         didChangeThumbPosition(CMTime(seconds: 1, preferredTimescale: 1))
     }
 
-    override public func viewDidAppear(_ animated: Bool) {
+    open override func viewDidAppear(_ animated: Bool) {
         trimmerView.asset = inputAsset
         trimmerView.delegate = self
         
@@ -130,7 +131,7 @@ public final class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
         super.viewDidAppear(animated)
     }
     
-    public override func viewWillDisappear(_ animated: Bool) {
+    open override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
         stopPlaybackTimeChecker()

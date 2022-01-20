@@ -10,20 +10,20 @@ import UIKit
 import Photos
 import PhotosUI
 
-internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
-    internal weak var delegate: YPLibraryViewDelegate?
+public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
+    public weak var delegate: YPLibraryViewDelegate?
     internal var v = YPLibraryView(frame: .zero)
-    internal var isProcessing = false // true if video or image is in processing state
-    internal var selectedItems = [YPLibrarySelection]()
-    internal let mediaManager = LibraryMediaManager()
-    internal var isMultipleSelectionEnabled = false
-    internal var currentlySelectedIndex: Int = 0
+    public var isProcessing = false // true if video or image is in processing state
+    public var selectedItems = [YPLibrarySelection]()
+    public let mediaManager = LibraryMediaManager()
+    public var isMultipleSelectionEnabled = false
+    public var currentlySelectedIndex: Int = 0
     internal let panGestureHelper = PanGestureHelper()
     internal var isInitialized = false
 
     // MARK: - Init
 
-    internal override func loadView() {
+    public override func loadView() {
         view = v
     }
 

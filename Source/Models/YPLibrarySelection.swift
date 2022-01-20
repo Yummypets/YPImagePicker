@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct YPLibrarySelection {
+public struct YPLibrarySelection {
     let index: Int
     var cropRect: CGRect?
     var scrollViewContentOffset: CGPoint?
