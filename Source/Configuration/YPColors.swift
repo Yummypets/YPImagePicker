@@ -12,6 +12,9 @@ public struct YPColors {
     
     // MARK: - Common
     
+    /// The common cancel color which is used for cancel button in navigation bar.
+    public var cancelButtonColor = UIColor.ypSystemBlue
+    
     /// The common tint color which is used for done buttons in navigation bar, multiple items selection and so on.
     public var tintColor = UIColor.ypSystemBlue
     

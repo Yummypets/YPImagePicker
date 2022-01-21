@@ -48,6 +48,16 @@ internal final class YPLibraryView: UIView {
         v.font = YPConfig.fonts.libaryWarningFont
         return v
     }()
+    internal var enabledCrop: Bool = true {
+        didSet {
+            self.assetViewContainer.squareCropButton.isHidden = !enabledCrop
+            self.assetViewContainer.itemOverlay?.isHidden = !enabledCrop
+            self.assetViewContainer.enabledCrop = enabledCrop
+            self.assetZoomableView.isScrollEnabled = enabledCrop
+            self.assetZoomableView.pinchGestureRecognizer?.isEnabled = enabledCrop
+            self.assetZoomableView.panGestureRecognizer.isEnabled = enabledCrop
+        }
+    }
 
     // MARK: - Private vars
 

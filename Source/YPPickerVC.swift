@@ -44,6 +44,13 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     
     var capturedImage: UIImage?
     
+    private(set) var enabledCrop: Bool = true
+    
+    convenience init(enabledCrop: Bool) {
+        self.init()
+        self.enabledCrop = enabledCrop
+    }
+    
     open override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -58,7 +65,7 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         
         // Library
         if YPConfig.screens.contains(.library) {
-            libraryVC = YPLibraryVC()
+            libraryVC = YPLibraryVC(enabledCrop: enabledCrop)
             libraryVC?.delegate = self
         }
         
@@ -272,6 +279,7 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
                                                                style: .plain,
                                                                target: self,
                                                                action: #selector(close))
+            navigationItem.leftBarButtonItem?.setTitleTextAttributes([.foregroundColor : YPConfig.colors.cancelButtonColor], for: .normal)
         }
         switch mode {
         case .library:
@@ -295,10 +303,6 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
             title = videoVC?.title
             navigationItem.rightBarButtonItem = nil
         }
-
-        navigationItem.rightBarButtonItem?.setFont(font: YPConfig.fonts.rightBarButtonFont, forState: .normal)
-        navigationItem.rightBarButtonItem?.setFont(font: YPConfig.fonts.rightBarButtonFont, forState: .disabled)
-        navigationItem.leftBarButtonItem?.setFont(font: YPConfig.fonts.leftBarButtonFont, forState: .normal)
     }
     
     @objc
