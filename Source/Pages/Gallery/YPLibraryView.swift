@@ -56,6 +56,7 @@ internal final class YPLibraryView: UIView {
             self.assetZoomableView.isScrollEnabled = enabledCrop
             self.assetZoomableView.pinchGestureRecognizer?.isEnabled = enabledCrop
             self.assetZoomableView.panGestureRecognizer.isEnabled = enabledCrop
+            self.assetZoomableView.isUserInteractionEnabled = false
         }
     }
 

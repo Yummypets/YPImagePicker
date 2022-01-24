@@ -46,7 +46,7 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     
     private(set) var enabledCrop: Bool = true
     
-    convenience init(enabledCrop: Bool) {
+    public convenience init(enabledCrop: Bool) {
         self.init()
         self.enabledCrop = enabledCrop
     }
