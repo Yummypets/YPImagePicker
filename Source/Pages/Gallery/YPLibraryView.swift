@@ -56,7 +56,7 @@ internal final class YPLibraryView: UIView {
             self.assetZoomableView.isScrollEnabled = enabledCrop
             self.assetZoomableView.pinchGestureRecognizer?.isEnabled = enabledCrop
             self.assetZoomableView.panGestureRecognizer.isEnabled = enabledCrop
-            self.assetZoomableView.isUserInteractionEnabled = false
+            //self.assetZoomableView.isUserInteractionEnabled = false
         }
     }
 
@@ -113,6 +113,9 @@ internal final class YPLibraryView: UIView {
 
     func hideOverlayView() {
         assetViewContainer.itemOverlay?.alpha = 0
+
+        // disable grid for images
+        assetViewContainer.itemOverlay?.isHidden = !assetZoomableView.isVideoMode
     }
 
     // MARK: Loader and progress
