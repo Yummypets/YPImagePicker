@@ -77,7 +77,9 @@ final class YPAssetZoomableView: UIScrollView {
             
             strongSelf.videoView.setPreviewImage(preview)
             
-            strongSelf.setAssetFrame(for: strongSelf.videoView, with: preview)
+            // calculate size from asset
+            let videoSize = CGSize(width: video.pixelWidth, height: video.pixelHeight)
+            strongSelf.setAssetFrame(for: strongSelf.videoView, with: videoSize)
             
             completion()
             
@@ -126,7 +128,7 @@ final class YPAssetZoomableView: UIScrollView {
             
             strongSelf.photoImageView.image = image
            
-            strongSelf.setAssetFrame(for: strongSelf.photoImageView, with: image)
+            strongSelf.setAssetFrame(for: strongSelf.photoImageView, with: image.size)
                 
             // Stored crop position in multiple selection
             if let scp173 = storedCropPosition {
@@ -178,7 +180,7 @@ final class YPAssetZoomableView: UIScrollView {
 
 fileprivate extension YPAssetZoomableView {
     
-    func setAssetFrame(`for` view: UIView, with image: UIImage) {
+    func setAssetFrame(`for` view: UIView, with size:CGSize) {
         // Reseting the previous scale
         self.minimumZoomScale = 1
         self.zoomScale = 1
@@ -186,26 +188,24 @@ fileprivate extension YPAssetZoomableView {
         // Calculating and setting the image view frame depending on screenWidth
         let screenWidth = YPImagePickerConfiguration.screenWidth
         
-        let w = image.size.width
-        let h = image.size.height
+        let w = size.width
+        let h = size.height
 
-        var aspectRatio: CGFloat = 1
+        let aspectRatio: CGFloat = w / h
         var zoomScale: CGFloat = 1
 
         if w > h { // Landscape
-            aspectRatio = h / w
             view.frame.size.width = screenWidth
-            view.frame.size.height = screenWidth * aspectRatio
+            view.frame.size.height = screenWidth / aspectRatio
             
             // if the content aspect ratio is wider than minimum, then increase zoom scale so the sides are cropped off to maintain the minimum ar. This only applies to videos.
-            if let minAR = minAspectRatio {
-                if aspectRatio < minAR  && isVideoMode {
-                    let targetHeight = screenWidth * minAR
+            if let maxAR = maxAspectRatio {
+                if aspectRatio > maxAR  && isVideoMode {
+                    let targetHeight = screenWidth / maxAR
                     zoomScale = targetHeight / view.frame.size.height
                 }
             }
         } else if h > w { // Portrait
-            aspectRatio = w / h
             view.frame.size.width = screenWidth * aspectRatio
             view.frame.size.height = screenWidth
             
@@ -215,11 +215,9 @@ fileprivate extension YPAssetZoomableView {
             }
             
             // if the content aspect ratio is taller than maximum, then increase zoom scale so the top and bottom are cropped off to maintain the maximum ar. This only applies to videos.
-            if let maxAspectRatio = maxAspectRatio {
-                aspectRatio = h / w
-                
-                if aspectRatio > maxAspectRatio  && isVideoMode {
-                    let targetWidth = view.frame.size.height / maxAspectRatio
+            if let minAR = minAspectRatio {
+                if aspectRatio < minAR  && isVideoMode {
+                    let targetWidth = view.frame.size.height * minAR
                     zoomScale = targetWidth / view.frame.size.width
                 }
             }
@@ -238,8 +236,10 @@ fileprivate extension YPAssetZoomableView {
         
         if isVideoMode {
             isScrollEnabled = true
+            maximumZoomScale = 3.0
         } else {
             isScrollEnabled = false // can't scroll for images
+            maximumZoomScale = zoomScale
         }
     }
     
