@@ -32,6 +32,9 @@ public struct YPImagePickerConfiguration {
 
     public init() {}
     
+    /// Include another aspect ratio
+    public var isPost = false
+    
     /// Library configuration
     public var library = YPConfigLibrary()
     

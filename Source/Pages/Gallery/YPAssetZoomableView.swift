@@ -24,6 +24,8 @@ final class YPAssetZoomableView: UIScrollView {
     public var videoView = YPVideoView()
     public var squaredZoomScale: CGFloat = 1
     public var minWidthForItem: CGFloat? = YPConfig.library.minWidthForItem
+    public var isPost: Bool = YPConfig.isPost
+    public var assetType = 0
     
     fileprivate var currentAsset: PHAsset?
     
@@ -38,10 +40,25 @@ final class YPAssetZoomableView: UIScrollView {
     ///   - fit: If true - zoom to show squared. If false - show full.
     public func fitImage(_ fit: Bool, animated isAnimated: Bool = false) {
         squaredZoomScale = calculateSquaredZoomScale()
-        if fit {
-            setZoomScale(squaredZoomScale, animated: isAnimated)
+        
+        if isPost {
+            if fit {
+                setZoomScale(squaredZoomScale, animated: isAnimated)
+            }  else {
+                if self.assetType == 0 {
+                    setZoomScale(squaredZoomScale * 0.8, animated: isAnimated)
+                } else if self.assetType == 1 {
+                    setZoomScale(squaredZoomScale * 0.5235602094240838, animated: isAnimated)
+                } else if self.assetType == 2 {
+                    setZoomScale(1, animated: isAnimated)
+                }
+            }
         } else {
-            setZoomScale(1, animated: isAnimated)
+            if fit {
+                      setZoomScale(squaredZoomScale, animated: isAnimated)
+                  } else {
+                      setZoomScale(1, animated: isAnimated)
+                  }
         }
     }
     
@@ -176,45 +193,50 @@ final class YPAssetZoomableView: UIScrollView {
 fileprivate extension YPAssetZoomableView {
     
     func setAssetFrame(`for` view: UIView, with image: UIImage) {
-        // Reseting the previous scale
-        self.minimumZoomScale = 1
-        self.zoomScale = 1
-        
-        // Calculating and setting the image view frame depending on screenWidth
-        let screenWidth = YPImagePickerConfiguration.screenWidth
-        
-        let w = image.size.width
-        let h = image.size.height
-
-        var aspectRatio: CGFloat = 1
-        var zoomScale: CGFloat = 1
-
-        if w > h { // Landscape
-            aspectRatio = h / w
-            view.frame.size.width = screenWidth
-            view.frame.size.height = screenWidth * aspectRatio
-        } else if h > w { // Portrait
-            aspectRatio = w / h
-            view.frame.size.width = screenWidth * aspectRatio
-            view.frame.size.height = screenWidth
+            // Reseting the previous scale
+            self.minimumZoomScale = 1
+            self.zoomScale = 1
             
-            if let minWidth = minWidthForItem {
-                let k = minWidth / screenWidth
-                zoomScale = (h / w) * k
+            // Calculating and setting the image view frame depending on screenWidth
+            let screenWidth = YPImagePickerConfiguration.screenWidth
+            
+            let w = image.size.width
+            let h = image.size.height
+
+            var aspectRatio: CGFloat = 1
+            var zoomScale: CGFloat = 1
+
+            if w > h { // Landscape
+                aspectRatio = h / w
+                view.frame.size.width = screenWidth
+                view.frame.size.height = screenWidth * aspectRatio
+                self.assetType = 1
+            } else if h > w { // Portrait
+                aspectRatio = w / h
+                view.frame.size.width = screenWidth * aspectRatio
+                view.frame.size.height = screenWidth
+                self.assetType = 0
+                
+                if let minWidth = minWidthForItem {
+                    let k = minWidth / screenWidth
+                    zoomScale = (h / w) * k
+                }
+            } else { // Square
+                view.frame.size.width = screenWidth
+                view.frame.size.height = screenWidth
+                self.assetType = 2
             }
-        } else { // Square
-            view.frame.size.width = screenWidth
-            view.frame.size.height = screenWidth
+            
+            // Centering image view
+            view.center = center
+            centerAssetView()
+            
+            // Setting new scale
+            minimumZoomScale = zoomScale
+            self.zoomScale = zoomScale
         }
-        
-        // Centering image view
-        view.center = center
-        centerAssetView()
-        
-        // Setting new scale
-        minimumZoomScale = zoomScale
-        self.zoomScale = zoomScale
-    }
+    
+    
     
     /// Calculate zoom scale which will fit the image to square
     func calculateSquaredZoomScale() -> CGFloat {
@@ -267,9 +289,22 @@ extension YPAssetZoomableView: UIScrollViewDelegate {
         guard let view = view, view == photoImageView || view == videoView else { return }
         
         // prevent to zoom out
-        if YPConfig.library.onlySquare && scale < squaredZoomScale {
-            self.fitImage(true, animated: true)
-        }
+//        if YPConfig.library.onlySquare && scale < squaredZoomScale {
+//            self.fitImage(true, animated: true)
+//        }
+        
+        
+        if isPost {
+                 if self.assetType == 0 {
+                         if scale < squaredZoomScale * 0.8 {
+                             fitImage(false, animated: true)
+                         }
+                     } else if self.assetType == 1 {
+                         if scale < squaredZoomScale * 0.5625 {
+                             fitImage(false, animated: true)
+                         }
+                     }
+             }
         
         zoomableViewDelegate?.ypAssetZoomableViewScrollViewDidEndZooming()
         cropAreaDidChange()
