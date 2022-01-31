@@ -192,7 +192,11 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     open override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         shouldHideStatusBar = false
+    }
+    
+    deinit {
         stopAll()
+        ypLog("YPPickerVC deinited ✅")
     }
     
     @objc
