@@ -48,7 +48,7 @@ final class YPAssetZoomableView: UIScrollView {
                 if self.assetType == 0 {
                     setZoomScale(squaredZoomScale * 0.8, animated: isAnimated)
                 } else if self.assetType == 1 {
-                    setZoomScale(squaredZoomScale * 0.5235602094240838, animated: isAnimated)
+                    setZoomScale(squaredZoomScale * 0.5625, animated: isAnimated)
                 } else if self.assetType == 2 {
                     setZoomScale(1, animated: isAnimated)
                 }
@@ -234,6 +234,8 @@ fileprivate extension YPAssetZoomableView {
             // Setting new scale
             minimumZoomScale = zoomScale
             self.zoomScale = zoomScale
+
+             fitImage(true)
         }
     
     
