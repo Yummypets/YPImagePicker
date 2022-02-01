@@ -33,8 +33,6 @@ final class YPAssetViewContainer: UIView {
     private var isMultipleSelectionEnabled = false
 
     public var itemOverlayType = YPConfig.library.itemOverlayType
-    
-    public var enabledCrop: Bool = true
 
     init(frame: CGRect, zoomableView: YPAssetZoomableView) {
         self.zoomableView = zoomableView
@@ -105,10 +103,6 @@ final class YPAssetViewContainer: UIView {
     // MARK: - Square button
     
     @objc public func squareCropButtonTapped() {
-        if (!enabledCrop) {
-            return
-        }
-        
         let z = zoomableView.zoomScale
         shouldCropToSquare = (z >= 1 && z < zoomableView.squaredZoomScale)
         zoomableView.fillImage(shouldCropToSquare, animated: true)
@@ -116,10 +110,6 @@ final class YPAssetViewContainer: UIView {
 
     /// Update only UI of square crop button.
     public func updateSquareCropButtonState() {
-        if (!enabledCrop) {
-            return
-        }
-        
         guard !isMultipleSelectionEnabled else {
             // If multiple selection enabled, the squareCropButton is not visible
             squareCropButton.isHidden = true
@@ -204,7 +194,7 @@ extension YPAssetViewContainer: YPAssetZoomableViewDelegate {
 extension YPAssetViewContainer: UIGestureRecognizerDelegate {
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith
         otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return enabledCrop
+        return true
     }
     
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {

@@ -44,13 +44,6 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     
     var capturedImage: UIImage?
     
-    private(set) var enabledCrop: Bool = true
-    
-    public convenience init(enabledCrop: Bool) {
-        self.init()
-        self.enabledCrop = enabledCrop
-    }
-    
     open override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -65,7 +58,7 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         
         // Library
         if YPConfig.screens.contains(.library) {
-            libraryVC = YPLibraryVC(enabledCrop: enabledCrop)
+            libraryVC = YPLibraryVC()
             libraryVC?.delegate = self
         }
         

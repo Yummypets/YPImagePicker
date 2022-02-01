@@ -26,11 +26,6 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
     public override func loadView() {
         view = v
     }
-    
-    convenience init(enabledCrop: Bool) {
-        self.init()
-        v.enabledCrop = enabledCrop
-    }
 
     internal required init() {
         super.init(nibName: nil, bundle: nil)
