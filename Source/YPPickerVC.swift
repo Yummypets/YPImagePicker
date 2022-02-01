@@ -191,8 +191,7 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     
     open override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        shouldHideStatusBar = false
-        stopAll()
+        shouldHideStatusBar = false        
     }
     
     @objc
