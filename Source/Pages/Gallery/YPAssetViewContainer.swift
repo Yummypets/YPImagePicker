@@ -110,6 +110,8 @@ final class YPAssetViewContainer: UIView {
 
     /// Update only UI of square crop button.
     public func updateSquareCropButtonState() {
+        let currentHiddenState = squareCropButton.isHidden
+
         guard !isMultipleSelectionEnabled else {
             // If multiple selection enabled, the squareCropButton is not visible
             squareCropButton.isHidden = true
@@ -127,9 +129,9 @@ final class YPAssetViewContainer: UIView {
         }
 
         let isImageASquare = selectedAssetImage.size.width == selectedAssetImage.size.height
-        squareCropButton.isHidden = isImageASquare
+        squareCropButton.isHidden = isImageASquare || !zoomableView.isVideoMode
     
-        if squareCropButton.isHidden == false {
+        if squareCropButton.isHidden == false && squareCropButton.isHidden != currentHiddenState {
             // animate the button
             squareCropButton.transform = CGAffineTransform(scaleX: 0, y: 0)
             
