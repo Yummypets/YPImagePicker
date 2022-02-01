@@ -9,6 +9,12 @@
 import UIKit
 import Photos
 
+extension Notification.Name {
+    private static var namespace = "YPImagePicker.LibraryMediaManager"
+
+    static var LibraryMediaManagerExportProgressUpdate: Notification.Name { return .init(rawValue: "\(namespace).LibraryMediaManagerExportProgressUpdate") }
+}
+
 public class LibraryMediaManager {
     
     weak var v: YPLibraryView?
@@ -62,7 +68,7 @@ public class LibraryMediaManager {
             
             guard let assetsToStartCaching = fetchResult?.assetsAtIndexPaths(addedIndexPaths),
                   let assetsToStopCaching = fetchResult?.assetsAtIndexPaths(removedIndexPaths) else {
-                print("Some problems in fetching and caching assets.")
+                ypLog("Some problems in fetching and caching assets.")
                 return
             }
             
@@ -78,75 +84,151 @@ public class LibraryMediaManager {
         }
     }
     
-    func fetchVideoUrlAndCrop(for videoAsset: PHAsset,
-                              cropRect: CGRect,
-                              callback: @escaping (_ videoURL: URL?) -> Void) {
-        fetchVideoUrlAndCropWithDuration(for: videoAsset, cropRect: cropRect, duration: nil, callback: callback)
-    }
-    
-    func fetchVideoUrlAndCropWithDuration(for videoAsset: PHAsset,
-                                          cropRect: CGRect,
-                                          duration: CMTime?,
-                                          callback: @escaping (_ videoURL: URL?) -> Void) {
+    /// Fetch video asset url from PHAsset.
+    /// - Parameters:
+    ///   - videoAsset: PHAsset which url is requested
+    ///   - callback: Returns the AVAsset url for the PHAsset
+    func fetchVideoUrl(for videoAsset: PHAsset, callback: @escaping (_ videoURL: URL?) -> Void) {
         let videosOptions = PHVideoRequestOptions()
         videosOptions.isNetworkAccessAllowed = true
         videosOptions.deliveryMode = .highQualityFormat
         imageManager?.requestAVAsset(forVideo: videoAsset, options: videosOptions) { asset, _, _ in
             do {
-                guard let asset = asset else { ypLog("Don't have the asset"); return }
-                
-                let assetComposition = AVMutableComposition()
-                let assetMaxDuration = self.getMaxVideoDuration(between: duration, andAssetDuration: asset.duration)
-                let trackTimeRange = CMTimeRangeMake(start: CMTime.zero, duration: assetMaxDuration)
-                
-                // 1. Inserting audio and video tracks in composition
-                
-                guard let videoTrack = asset.tracks(withMediaType: AVMediaType.video).first,
-                      let videoCompositionTrack = assetComposition
-                        .addMutableTrack(withMediaType: .video,
-                                         preferredTrackID: kCMPersistentTrackID_Invalid) else {
-                    ypLog("Problems with video track")
-                    return
+                guard let asset = asset else { ypLog("⚠️ PHCachingImageManager >>> Don't have the asset"); return }
 
+                // pass the asset url through, no need to export
+                if let urlAsset = asset as? AVURLAsset {
+                    DispatchQueue.main.async {
+                        callback(urlAsset.url)
+                    }
+                } else { // slow-mo videos assets aren't AVURLAssets so export using passthrough
+                    let presetName = AVAssetExportPresetPassthrough
+
+                    let fileURL = URL(fileURLWithPath: NSTemporaryDirectory())
+                        .appendingUniquePathComponent(pathExtension: YPConfig.video.fileType.fileExtension)
+                    let exportSession = asset
+                        .export(to: fileURL,
+                                presetName: presetName) { [weak self] session in
+                            DispatchQueue.main.async {
+                                switch session.status {
+                                case .completed:
+                                    if let url = session.outputURL {
+                                        if let index = self?.currentExportSessions.firstIndex(of: session) {
+                                            self?.currentExportSessions.remove(at: index)
+                                        }
+                                        callback(url)
+                                    } else {
+                                        ypLog("LibraryMediaManager -> Don't have URL.")
+                                        callback(nil)
+                                    }
+                                case .failed:
+                                    ypLog("LibraryMediaManager -> Export of the video failed. Reason: \(String(describing: session.error))")
+                                    callback(nil)
+                                default:
+                                    ypLog("LibraryMediaManager -> Export session completed with \(session.status) status. Not handling.")
+                                    callback(nil)
+                                }
+                            }
+                        }
+
+                    // 6. Exporting
+                    DispatchQueue.main.async {
+                        self.exportTimer = Timer.scheduledTimer(timeInterval: 0.1,
+                                                                target: self,
+                                                                selector: #selector(self.onTickExportTimer),
+                                                                userInfo: exportSession,
+                                                                repeats: true)
+                    }
+
+                    if let s = exportSession {
+                        self.currentExportSessions.append(s)
+                    }
                 }
+            } catch let error {
+                ypLog("⚠️ PHCachingImageManager >>> \(error)")
+            }
+        }
+    }
+
+    func fetchVideoUrlAndCrop(for videoAsset: PHAsset, cropRect: CGRect, timeRange:CMTimeRange = CMTimeRange(start: CMTime.zero, end: CMTime.zero), callback: @escaping (_ videoURL: URL?) -> Void) {
+        let videosOptions = PHVideoRequestOptions()
+        videosOptions.isNetworkAccessAllowed = true
+        videosOptions.deliveryMode = .highQualityFormat
+        imageManager?.requestAVAsset(forVideo: videoAsset, options: videosOptions) { asset, _, _ in
+            do {
+                guard let asset = asset else { ypLog("⚠️ PHCachingImageManager >>> Don't have the asset"); return }
+
+                let assetComposition = AVMutableComposition()
+                let trackTimeRange = timeRange
+
+                // 1. Inserting audio and video tracks in composition
+
+                guard let videoTrack = asset.tracks(withMediaType: AVMediaType.video).first,
+                      let videoCompositionTrack = assetComposition.addMutableTrack(withMediaType: .video,
+                                                                                   preferredTrackID: kCMPersistentTrackID_Invalid) else {
+                          ypLog("⚠️ PHCachingImageManager >>> Problems with video track")
+                          return
+
+                      }
                 if let audioTrack = asset.tracks(withMediaType: AVMediaType.audio).first,
-                   let audioCompositionTrack = assetComposition
-                    .addMutableTrack(withMediaType: AVMediaType.audio,
-                                     preferredTrackID: kCMPersistentTrackID_Invalid) {
-                    try audioCompositionTrack.insertTimeRange(trackTimeRange, of: audioTrack, at: CMTime.zero)
+                   let audioCompositionTrack = assetComposition.addMutableTrack(withMediaType: AVMediaType.audio,
+                                                                                preferredTrackID: kCMPersistentTrackID_Invalid) {
+                    do {
+                        try audioCompositionTrack.insertTimeRange(trackTimeRange, of: audioTrack, at: CMTime.zero)
+                    } catch {
+                        ypLog("Unexpected error: \(error).")
+                    }
                 }
-                
-                try videoCompositionTrack.insertTimeRange(trackTimeRange, of: videoTrack, at: CMTime.zero)
-                
-                // Layer Instructions
-                let layerInstructions = AVMutableVideoCompositionLayerInstruction(assetTrack: videoCompositionTrack)
+
+                do {
+                    try videoCompositionTrack.insertTimeRange(trackTimeRange, of: videoTrack, at: CMTime.zero)
+                } catch {
+                    ypLog("Unexpected error: \(error).")
+                }
+
                 var transform = videoTrack.preferredTransform
                 let videoSize = videoTrack.naturalSize.applying(transform)
-                transform.tx = (videoSize.width < 0) ? abs(videoSize.width) : 0.0
-                transform.ty = (videoSize.height < 0) ? abs(videoSize.height) : 0.0
-                transform.tx -= cropRect.minX
-                transform.ty -= cropRect.minY
-                layerInstructions.setTransform(transform, at: CMTime.zero)
-                videoCompositionTrack.preferredTransform = transform
-                
-                // CompositionInstruction
-                let mainInstructions = AVMutableVideoCompositionInstruction()
-                mainInstructions.timeRange = trackTimeRange
-                mainInstructions.layerInstructions = [layerInstructions]
-                
-                // Video Composition
-                let videoComposition = AVMutableVideoComposition(propertiesOf: asset)
-                videoComposition.instructions = [mainInstructions]
-                videoComposition.renderSize = cropRect.size // needed?
-                
+
+                let videoIsTrimmed = CMTimeCompare(videoTrack.timeRange.duration, timeRange.duration) != 0
+                let videoIsRotated = !transform.isIdentity // transcode the video if source is rotated.
+
                 // 5. Configuring export session
-                
+                let videoIsCropped = cropRect.size.width < abs(videoSize.width) || cropRect.size.height < abs(videoSize.height)
+                let presetName = videoIsCropped || videoIsTrimmed || videoIsRotated ? YPConfig.video.compression : AVAssetExportPresetPassthrough
+
+                var videoComposition:AVMutableVideoComposition?
+
+                if videoIsCropped {
+                    // Layer Instructions
+                    let layerInstructions = AVMutableVideoCompositionLayerInstruction(assetTrack: videoCompositionTrack)
+                    transform.tx = (videoSize.width < 0) ? abs(videoSize.width) : 0.0
+                    transform.ty = (videoSize.height < 0) ? abs(videoSize.height) : 0.0
+                    transform.tx -= cropRect.minX
+                    transform.ty -= cropRect.minY
+                    layerInstructions.setTransform(transform, at: CMTime.zero)
+
+                    // CompositionInstruction
+                    let mainInstructions = AVMutableVideoCompositionInstruction()
+                    // time range is different from value passed in. Main instructions time range must start at zero.
+                    mainInstructions.timeRange = CMTimeRangeMake(start: CMTime.zero, duration: timeRange.duration)
+                    mainInstructions.layerInstructions = [layerInstructions]
+
+                    // Video Composition
+                    videoComposition = AVMutableVideoComposition(propertiesOf: asset)
+                    videoComposition?.instructions = [mainInstructions]
+                    videoComposition?.renderSize = cropRect.size // needed?
+                } else {
+                    // transfer the transform so the video renders in the correct orientation
+                    videoCompositionTrack.preferredTransform = transform
+                }
+
                 let fileURL = URL(fileURLWithPath: NSTemporaryDirectory())
                     .appendingUniquePathComponent(pathExtension: YPConfig.video.fileType.fileExtension)
                 let exportSession = assetComposition
                     .export(to: fileURL,
                             videoComposition: videoComposition,
-                            removeOldFile: true) { [weak self] session in
+                            removeOldFile: true,
+                            presetName: presetName) { [weak self] session in
                         DispatchQueue.main.async {
                             switch session.status {
                             case .completed:
@@ -156,14 +238,17 @@ public class LibraryMediaManager {
                                     }
                                     callback(url)
                                 } else {
-                                    ypLog("Don't have URL.")
+                                    ypLog("LibraryMediaManager -> Don't have URL.")
+                                    self?.stopExportTimer()
                                     callback(nil)
                                 }
                             case .failed:
-                                ypLog("Export of the video failed : \(String(describing: session.error))")
+                                ypLog("LibraryMediaManager -> Export of the video failed. Reason: \(String(describing: session.error))")
+                                self?.stopExportTimer()
                                 callback(nil)
                             default:
-                                ypLog("Export session completed with \(session.status) status. Not handled.")
+                                ypLog("LibraryMediaManager -> Export session completed with \(session.status) status. Not handling.")
+                                self?.stopExportTimer()
                                 callback(nil)
                             }
                         }
@@ -182,18 +267,8 @@ public class LibraryMediaManager {
                     self.currentExportSessions.append(s)
                 }
             } catch let error {
-                ypLog("Error: \(error)")
+                ypLog("⚠️ PHCachingImageManager >>> \(error)")
             }
-        }
-    }
-    
-    private func getMaxVideoDuration(between duration: CMTime?, andAssetDuration assetDuration: CMTime) -> CMTime {
-        guard let duration = duration else { return assetDuration }
-
-        if assetDuration <= duration {
-            return assetDuration
-        } else {
-            return duration
         }
     }
     
@@ -203,14 +278,26 @@ public class LibraryMediaManager {
                 if exportSession.progress > 0 {
                     v.updateProgress(exportSession.progress)
                 }
+            } else {
+                // dispatch notification
+                let progress = ["progress": exportSession.progress]
+                NotificationCenter.default.post(name: .LibraryMediaManagerExportProgressUpdate, object: self, userInfo: progress)
             }
-            
+
             if exportSession.progress > 0.99 {
-                sender.invalidate()
-                v?.updateProgress(0)
-                self.exportTimer = nil
+                stopExportTimer()
+                let progress = ["progress": Float.zero]
+                NotificationCenter.default.post(name: .LibraryMediaManagerExportProgressUpdate, object: self, userInfo: progress)
             }
         }
+    }
+
+    private func stopExportTimer() {
+        exportTimer?.invalidate()
+        exportTimer = nil
+
+        // also reset progress view if one is available
+        v?.updateProgress(0)
     }
     
     func forseCancelExporting() {
@@ -221,11 +308,11 @@ public class LibraryMediaManager {
 
     func getAsset(at index: Int) -> PHAsset? {
         guard let fetchResult = fetchResult else {
-            print("FetchResult not contain this index: \(index)")
+            ypLog("FetchResult not contain this index: \(index)")
             return nil
         }
         guard fetchResult.count > index else {
-            print("FetchResult not contain this index: \(index)")
+            ypLog("FetchResult not contain this index: \(index)")
             return nil
         }
         return fetchResult.object(at: index)

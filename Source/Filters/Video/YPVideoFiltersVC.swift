@@ -10,6 +10,7 @@ import UIKit
 import Photos
 import PryntTrimmerView
 import Stevia
+import PureLayout
 
 public enum YPVideoFiltersType {
     case Trimmer
@@ -37,6 +38,8 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
     public var didCancel: (() -> Void)?
 
     // MARK: - Private vars
+    private let mediaManager = LibraryMediaManager() // used to crop and trim video
+    private let progressView = UIProgressView()
 
     public var playbackTimeCheckerTimer: Timer?
     public var imageGenerator: AVAssetImageGenerator?
@@ -53,9 +56,19 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
     public var coverImageView: UIImageView = UIImageView()
 
     // MARK: - Live cycle
+    deinit {
+        ypLog("deinit filters vc")
+        mediaManager.forseCancelExporting()
+        NotificationCenter.default.removeObserver(self)
+    }
 
     open override func viewDidLoad() {
         super.viewDidLoad()
+
+        videoView.cropRect = inputVideo.cropRect // pass the crop rect over to the video so it can present the video relative to the crop rect
+        videoView.asset = inputVideo.asset // pass the asset over so we can use it to determine the original video dimensions
+
+        mediaManager.initialize()
         
         trimBottomItem.isHidden = true
         coverBottomItem.isHidden = true
@@ -72,39 +85,84 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
                          selector: #selector(itemDidFinishPlaying(_:)),
                          name: .AVPlayerItemDidPlayToEndTime,
                          object: nil)
-        
-        // Set initial video cover
-        imageGenerator = AVAssetImageGenerator(asset: self.inputAsset)
-        imageGenerator?.appliesPreferredTrackTransform = true
-        didChangeThumbPosition(CMTime(seconds: 1, preferredTimescale: 1))
+
+        videoView.clipsToBounds = true
+
+        // configure progress view
+        view.addSubview(progressView)
+
+        progressView.autoPinEdge(toSuperviewEdge: .left)
+        progressView.autoPinEdge(toSuperviewEdge: .right)
+        progressView.autoPinEdge(.top, to: .bottom, of: videoView)
+        progressView.autoSetDimension(.height, toSize: 5)
+
+        progressView.progressViewStyle = .bar
+        progressView.trackTintColor = YPConfig.colors.progressBarTrackColor
+        progressView.progressTintColor = YPConfig.colors.progressBarCompletedColor ?? YPConfig.colors.tintColor
+        progressView.isHidden = true
+        progressView.isUserInteractionEnabled = false
+        progressView.progress = 0
     }
 
     open override func viewDidAppear(_ animated: Bool) {
-        trimmerView.asset = inputAsset
-        trimmerView.delegate = self
-        
-        coverThumbSelectorView.asset = inputAsset
-        coverThumbSelectorView.delegate = self
-        
-        if vcType == .Trimmer {
-            selectTrim()
-        } else {
-            selectCover()
-        }
-        
-        videoView.loadVideo(inputVideo)
-
         super.viewDidAppear(animated)
+
+        if isMovingToParent {
+            prepareThumbnails()
+        }
+    }
+
+    open override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        // should be harmless to start the timer again, just ensure that this gets removed on disappear. we need to start this timer
+        // here because the user can tap the video to start playback and this view controller isn't informed when that occurs.
+        if let startTime = trimmerView.startTime {
+            // seek to start time first
+            videoView.player.seek(to: startTime)
+        }
+
+        startPlaybackTimeChecker()
     }
     
     open override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-
         stopPlaybackTimeChecker()
-        videoView.stop()
+        videoView.pause()
     }
 
     // MARK: - Setup
+
+    private func setupGenerator() {
+        // Set initial video cover
+        imageGenerator = AVAssetImageGenerator(asset: inputAsset)
+        imageGenerator?.appliesPreferredTrackTransform = true
+        imageGenerator?.requestedTimeToleranceAfter = CMTime.zero
+        imageGenerator?.requestedTimeToleranceBefore = CMTime.zero
+    }
+
+    private func prepareThumbnails() {
+        if vcType == .Trimmer {
+            if trimmerView.asset != nil {
+                return
+            }
+
+            trimmerView.asset = inputAsset
+            trimmerView.delegate = self
+            selectTrim()
+            videoView.loadVideo(inputVideo)
+            videoView.pause()
+        } else {
+            if coverThumbSelectorView.asset != nil {
+                return
+            }
+
+            setupGenerator()
+            coverThumbSelectorView.delegate = self
+            coverThumbSelectorView.asset = inputAsset
+            selectCover()
+        }
+    }
 
     private func setupNavigationBar(isFromSelectionVC: Bool) {
         if isFromSelectionVC {
@@ -141,46 +199,108 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
 
     // MARK: - Actions
 
-    @objc private func save() {
-        guard let didSave = didSave else {
-            return ypLog("Don't have saveCallback")
-        }
+    private func completeSave(thumbnail:UIImage, videoUrl:URL, asset:PHAsset?) {
+        guard let didSave = didSave else { return ypLog("Don't have saveCallback") }
 
+        let resultVideo = YPMediaVideo(thumbnail: thumbnail, videoURL: videoUrl, asset: asset)
+        didSave(YPMediaItem.video(v: resultVideo))
+        setupRightBarButtonItem()
+
+        // reset user interaction
+        view.isUserInteractionEnabled = true
+
+        // invalidate the timer to prevent memory leak
+        stopPlaybackTimeChecker()
+    }
+
+    private func resetView() {
+        // restore user interaction and right bar button item.
+        view.isUserInteractionEnabled = true
+        setupRightBarButtonItem()
+
+        // reset progress
+        progressView.isHidden = true
+        progressView.progress = 0
+    }
+
+    @objc public func save() {
+        guard let _ = didSave else { return ypLog("Don't have saveCallback") }
         navigationItem.rightBarButtonItem = YPLoaders.defaultLoader
+
+        // disable user interaction so user cannot make more adjustments
+        view.isUserInteractionEnabled = false
+
+        // if the view is in cover image selection mode, just pass the asset straight through because it's not transforming the asset in any way
+        if vcType == .Cover {
+            if let coverImage = self.coverImageView.image {
+                self.completeSave(thumbnail: coverImage, videoUrl: self.inputVideo.url, asset: self.inputVideo.asset)
+            } else {
+                ypLog("YPVideoFiltersVC -> Don't have coverImage.")
+                self.resetView()
+            }
+
+            return
+        }
 
         do {
             let asset = AVURLAsset(url: inputVideo.url)
-            let trimmedAsset = try asset
-                .assetByTrimming(startTime: trimmerView.startTime ?? CMTime.zero,
-                                 endTime: trimmerView.endTime ?? inputAsset.duration)
-            
-            // Looks like file:///private/var/mobile/Containers/Data/Application
-            // /FAD486B4-784D-4397-B00C-AD0EFFB45F52/tmp/8A2B410A-BD34-4E3F-8CB5-A548A946C1F1.mov
-            let destinationURL = URL(fileURLWithPath: NSTemporaryDirectory())
-                .appendingUniquePathComponent(pathExtension: YPConfig.video.fileType.fileExtension)
-            
-            _ = trimmedAsset.export(to: destinationURL) { [weak self] session in
-                switch session.status {
-                case .completed:
-                    DispatchQueue.main.async {
-                        if let coverImage = self?.coverImageView.image {
-                            let resultVideo = YPMediaVideo(thumbnail: coverImage,
-														   videoURL: destinationURL,
-														   asset: self?.inputVideo.asset)
-                            didSave(YPMediaItem.video(v: resultVideo))
-                            self?.setupRightBarButtonItem()
-                        } else {
-                            ypLog("Don't have coverImage.")
-                        }
+            let startTime = trimmerView.startTime ?? CMTime.zero
+            let endTime = trimmerView.endTime ?? inputAsset.duration
+
+            // check if any trimming and cropping is involved - wc
+            let untrimmed = CMTimeCompare(startTime, CMTime.zero) == 0 && CMTimeCompare(endTime, inputAsset.duration) == 0
+
+            var cropped = false
+
+            if let cropRect = self.inputVideo.cropRect, let asset = self.inputVideo.asset {
+                let pixelWidth = CGFloat(asset.pixelWidth)
+                let pixelHeight = CGFloat(asset.pixelHeight)
+                cropped = cropRect.size.width < pixelWidth || cropRect.size.height < pixelHeight
+            }
+
+            // check if video is rotated
+            guard let videoTrack = asset.tracks(withMediaType: AVMediaType.video).first else {
+                ypLog("⚠️ Problems with video track")
+                return
+            }
+
+            let rotated = !videoTrack.preferredTransform.isIdentity
+
+            if untrimmed && !cropped && !rotated {
+                // if video remains untrimmed and uncropped, use existing video url to eliminate video transcoding effort
+                // we will be selecting a cover image next, use generic uiimage for now
+                self.completeSave(thumbnail: UIImage(), videoUrl: self.inputVideo.url, asset: self.inputVideo.asset)
+
+                return
+            }
+
+            let timeRange = CMTimeRange(start: startTime, end: endTime)
+
+            // cropping and trimming simultaneously to reduce total transcoding time
+            mediaManager.fetchVideoUrlAndCrop(for: inputVideo.asset!, cropRect: inputVideo.cropRect!, timeRange: timeRange) { [weak self] (url) in
+                DispatchQueue.main.async {
+                    if let url = url {
+                        self?.completeSave(thumbnail:  UIImage(), videoUrl: url, asset: self?.inputVideo.asset)
+                    } else {
+                        ypLog("YPVideoFiltersVC -> Invalid asset url.")
+                        self?.resetView()
                     }
-                case .failed:
-                    ypLog("Export of the video failed. Reason: \(String(describing: session.error))")
-                default:
-                    ypLog("Export session completed with \(session.status) status. Not handled")
                 }
             }
+
+            // set up notification listener
+            progressView.isHidden = false
+
+            NotificationCenter.default.addObserver(self, selector: #selector(onExportProgressUpdate(notification:)), name: .LibraryMediaManagerExportProgressUpdate, object: mediaManager)
         } catch let error {
-            ypLog("Error: \(error)")
+            ypLog("💩 \(error)")
+        }
+    }
+
+    @objc
+    func onExportProgressUpdate(notification:Notification) {
+        if let info = notification.userInfo as? [String:Float], let progress = info["progress"] {
+            progressView.progress = progress
         }
     }
     
@@ -192,9 +312,6 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
 
     @objc private func selectTrim() {
         title = YPConfig.wordings.trim
-        
-        trimBottomItem.select()
-        coverBottomItem.deselect()
 
         trimmerView.isHidden = false
         videoView.isHidden = false
@@ -204,10 +321,7 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
     
     @objc private func selectCover() {
         title = YPConfig.wordings.cover
-        
-        trimBottomItem.deselect()
-        coverBottomItem.select()
-        
+
         trimmerView.isHidden = true
         videoView.isHidden = true
         coverImageView.isHidden = false
@@ -239,9 +353,19 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
     
     // MARK: - Trimmer playback
     
-    @objc private func itemDidFinishPlaying(_ notification: Notification) {
+    @objc func itemDidFinishPlaying(_ notification: Notification) {
+        guard let item = notification.object as? AVPlayerItem else {
+            return
+        }
+
+        if item != videoView.player.currentItem {
+            return // ignore notifications that aren't for this player item
+        }
+
         if let startTime = trimmerView.startTime {
+            videoView.player.actionAtItemEnd = .none
             videoView.player.seek(to: startTime)
+            videoView.player.play()
         }
     }
     
@@ -280,12 +404,15 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
 // MARK: - TrimmerViewDelegate
 extension YPVideoFiltersVC: TrimmerViewDelegate {
     public func positionBarStoppedMoving(_ playerTime: CMTime) {
-        videoView.player.seek(to: playerTime, toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
-        videoView.play()
-        startPlaybackTimeChecker()
-        updateCoverPickerBounds()
+        // user has lifted off trimmer handle so restart the video at trimmer start time
+        if let startTime = trimmerView.startTime {
+            videoView.player.seek(to: startTime)
+            videoView.play()
+            videoView.removeReachEndObserver() // videoView.play() adds reach end observer so we need to remove it again.
+            startPlaybackTimeChecker()
+        }
     }
-    
+
     public func didChangePositionBar(_ playerTime: CMTime) {
         stopPlaybackTimeChecker()
         videoView.pause()
@@ -296,9 +423,23 @@ extension YPVideoFiltersVC: TrimmerViewDelegate {
 // MARK: - ThumbSelectorViewDelegate
 extension YPVideoFiltersVC: ThumbSelectorViewDelegate {
     public func didChangeThumbPosition(_ imageTime: CMTime) {
-        if let imageGenerator = imageGenerator,
-            let imageRef = try? imageGenerator.copyCGImage(at: imageTime, actualTime: nil) {
-            coverImageView.image = UIImage(cgImage: imageRef)
-        }
+        let generator = imageGenerator
+        let time = imageTime
+
+        // fetch new image
+        generator?.generateCGImagesAsynchronously(forTimes: [NSValue(time:time)],
+                                                  completionHandler: { (_, image, _, _, _) in
+            guard let image = image else {
+                return
+            }
+
+            // it's safe to create UIImages off the main thread
+            let uiimage = UIImage(cgImage: image)
+
+            DispatchQueue.main.async { [weak self] in
+                generator?.cancelAllCGImageGeneration()
+                self?.coverImageView.image = uiimage
+            }
+        })
     }
 }

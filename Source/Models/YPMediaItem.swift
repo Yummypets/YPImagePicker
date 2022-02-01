@@ -42,6 +42,10 @@ public class YPMediaVideo {
     public let fromCamera: Bool
     public var asset: PHAsset?
 
+    // used to defer clipping and cropping until necessary
+    public var timeRange: CMTimeRange?
+    public var cropRect: CGRect?
+
     public init(thumbnail: UIImage, videoURL: URL, fromCamera: Bool = false, asset: PHAsset? = nil) {
         self.thumbnail = thumbnail
         self.url = videoURL

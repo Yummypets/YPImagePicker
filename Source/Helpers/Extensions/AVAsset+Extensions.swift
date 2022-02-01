@@ -44,15 +44,16 @@ extension AVAsset {
     func export(to destination: URL,
                 videoComposition: AVVideoComposition? = nil,
                 removeOldFile: Bool = false,
+                presetName: String = YPConfig.video.compression,
                 completion: @escaping (_ exportSession: AVAssetExportSession) -> Void) -> AVAssetExportSession? {
-        guard let exportSession = AVAssetExportSession(asset: self, presetName: YPConfig.video.compression) else {
-            ypLog("AVAsset -> Could not create an export session.")
+        guard let exportSession = AVAssetExportSession(asset: self, presetName: presetName) else {
+            ypLog("YPImagePicker -> AVAsset -> Could not create an export session.")
             return nil
         }
         
         exportSession.outputURL = destination
         exportSession.outputFileType = YPConfig.video.fileType
-        exportSession.shouldOptimizeForNetworkUse = true
+        exportSession.shouldOptimizeForNetworkUse = false
         exportSession.videoComposition = videoComposition
         
         if removeOldFile { try? FileManager.default.removeFileIfNecessary(at: destination) }
@@ -60,7 +61,7 @@ extension AVAsset {
         exportSession.exportAsynchronously(completionHandler: {
             completion(exportSession)
         })
-
+        
         return exportSession
     }
 }
