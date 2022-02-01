@@ -235,7 +235,7 @@ fileprivate extension YPAssetZoomableView {
             minimumZoomScale = zoomScale
             self.zoomScale = zoomScale
 
-             fitImage(true)
+            fitImage(false)
         }
     
     
