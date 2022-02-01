@@ -82,6 +82,7 @@ final class YPAssetZoomableView: UIScrollView {
             strongSelf.setAssetFrame(for: strongSelf.videoView, with: videoSize)
             
             completion()
+            strongSelf.squaredZoomScale = strongSelf.calculateSquaredZoomScale()
             
             // Stored crop position in multiple selection
             if let scp173 = storedCropPosition {
@@ -138,6 +139,7 @@ final class YPAssetZoomableView: UIScrollView {
             }
             
             completion(isLowResIntermediaryImage)
+            strongSelf.squaredZoomScale = strongSelf.calculateSquaredZoomScale()
         }
     }
 
