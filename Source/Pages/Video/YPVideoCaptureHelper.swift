@@ -53,7 +53,7 @@ class YPVideoCaptureHelper: NSObject {
     
     public func startCamera(completion: @escaping (() -> Void)) {
         guard !session.isRunning else {
-            print("Session is already running. Returning.")
+            ypLog("Session is already running. Returning.")
             return
         }
 

@@ -45,7 +45,7 @@ internal extension AVCaptureDevice {
         let devicesSession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInTrueDepthCamera, .builtInDualCamera, .builtInWideAngleCamera], mediaType: .video, position: p)
         let devices = devicesSession.devices
         guard !devices.isEmpty else {
-            print("Don't have supported cameras for this position: \(p.rawValue)")
+            ypLog("Don't have supported cameras for this position: \(p.rawValue)")
             return nil
         }
 

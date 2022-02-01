@@ -84,7 +84,7 @@ extension YPLibraryVC {
             return
         }
         guard let asset = mediaManager.getAsset(at: indexPath.item) else {
-            print("No asset to add to selection.")
+            ypLog("No asset to add to selection.")
             return
         }
 
