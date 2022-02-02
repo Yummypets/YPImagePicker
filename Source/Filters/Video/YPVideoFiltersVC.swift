@@ -123,6 +123,10 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
         }
 
         startPlaybackTimeChecker()
+
+        // reset progress
+        progressView.isHidden = true
+        progressView.progress = 0
     }
     
     open override func viewWillDisappear(_ animated: Bool) {
@@ -300,6 +304,10 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
     @objc
     func onExportProgressUpdate(notification:Notification) {
         if let info = notification.userInfo as? [String:Float], let progress = info["progress"] {
+            if progress < progressView.progress {
+                progressView.isHidden = true // progress has reached the end
+            }
+            
             progressView.progress = progress
         }
     }
