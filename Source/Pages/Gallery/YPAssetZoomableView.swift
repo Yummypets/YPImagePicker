@@ -234,8 +234,7 @@ fileprivate extension YPAssetZoomableView {
         
         // Setting new scale
         minimumZoomScale = zoomScale
-        self.zoomScale = zoomScale
-        
+
         if isVideoMode {
             isScrollEnabled = true
             maximumZoomScale = 3.0
@@ -243,6 +242,8 @@ fileprivate extension YPAssetZoomableView {
             isScrollEnabled = false // can't scroll for images
             maximumZoomScale = zoomScale
         }
+
+        self.zoomScale = zoomScale
     }
     
     /// Calculate zoom scale which will fit the image to square
