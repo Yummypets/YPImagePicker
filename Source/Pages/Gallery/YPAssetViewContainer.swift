@@ -130,7 +130,7 @@ final class YPAssetViewContainer: UIView {
         }
 
         let isImageASquare = selectedAssetImage.size.width == selectedAssetImage.size.height
-        squareCropButton.isHidden = (isImageASquare || !zoomableView.isVideoMode) && isSquareCropButtonEnabled
+        squareCropButton.isHidden = isImageASquare || !zoomableView.isVideoMode || !isSquareCropButtonEnabled
     
         if squareCropButton.isHidden == false && squareCropButton.isHidden != currentHiddenState {
             // animate the button
