@@ -31,6 +31,7 @@ final class YPAssetViewContainer: UIView {
     private var shouldCropToSquare = YPConfig.library.isSquareByDefault
 
     private var isMultipleSelectionEnabled = false
+    private var isSquareCropButtonEnabled = false
 
     public var itemOverlayType = YPConfig.library.itemOverlayType
 
@@ -129,7 +130,7 @@ final class YPAssetViewContainer: UIView {
         }
 
         let isImageASquare = selectedAssetImage.size.width == selectedAssetImage.size.height
-        squareCropButton.isHidden = isImageASquare || !zoomableView.isVideoMode
+        squareCropButton.isHidden = (isImageASquare || !zoomableView.isVideoMode) && isSquareCropButtonEnabled
     
         if squareCropButton.isHidden == false && squareCropButton.isHidden != currentHiddenState {
             // animate the button
