@@ -138,6 +138,11 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
             self.setNeedsStatusBarAppearanceUpdate()
         }
     }
+
+    deinit {
+        stopAll()
+        ypLog("YPPickerVC deinited ✅")
+    }
     
     internal func pagerScrollViewDidScroll(_ scrollView: UIScrollView) { }
     
