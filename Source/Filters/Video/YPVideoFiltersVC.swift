@@ -10,7 +10,6 @@ import UIKit
 import Photos
 import PryntTrimmerView
 import Stevia
-import PureLayout
 
 public enum YPVideoFiltersType {
     case Trimmer
@@ -91,10 +90,9 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
         // configure progress view
         view.addSubview(progressView)
 
-        progressView.autoPinEdge(toSuperviewEdge: .left)
-        progressView.autoPinEdge(toSuperviewEdge: .right)
-        progressView.autoPinEdge(.top, to: .bottom, of: videoView)
-        progressView.autoSetDimension(.height, toSize: 5)
+        progressView.translatesAutoresizingMaskIntoConstraints = false
+        progressView.fillHorizontally().height(5)
+        progressView.Top == videoView.Bottom
 
         progressView.progressViewStyle = .bar
         progressView.trackTintColor = YPConfig.colors.progressBarTrackColor
