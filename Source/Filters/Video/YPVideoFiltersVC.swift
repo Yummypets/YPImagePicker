@@ -93,7 +93,7 @@ public final class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
             .addObserver(self,
                          selector: #selector(itemDidFinishPlaying(_:)),
                          name: .AVPlayerItemDidPlayToEndTime,
-                         object: nil)
+                         object: videoView.player.currentItem)
         
         // Set initial video cover
         imageGenerator = AVAssetImageGenerator(asset: self.inputAsset)
