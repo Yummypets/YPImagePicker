@@ -46,9 +46,9 @@ final class YPAssetZoomableView: UIScrollView {
                 setZoomScale(squaredZoomScale, animated: isAnimated)
             }  else {
                 if self.assetType == 0 {
-                    setZoomScale(squaredZoomScale * 0.8, animated: isAnimated)
+                    setZoomScale(squaredZoomScale * 0.81, animated: isAnimated)
                 } else if self.assetType == 1 {
-                    setZoomScale(squaredZoomScale * 0.5625, animated: isAnimated)
+                    setZoomScale(squaredZoomScale * 0.5263, animated: isAnimated)
                 } else if self.assetType == 2 {
                     setZoomScale(1, animated: isAnimated)
                 }
@@ -302,11 +302,11 @@ extension YPAssetZoomableView: UIScrollViewDelegate {
         
         if isPost {
                  if self.assetType == 0 {
-                         if scale < squaredZoomScale * 0.8 {
+                         if scale < squaredZoomScale * 0.81 {
                              fitImage(false, animated: true)
                          }
                      } else if self.assetType == 1 {
-                         if scale < squaredZoomScale * 0.5625 {
+                         if scale < squaredZoomScale * 0.5263 {
                              fitImage(false, animated: true)
                          }
                      }
