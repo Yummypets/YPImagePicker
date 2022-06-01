@@ -123,7 +123,6 @@ config.bottomMenuItemSelectedColour = UIColor(r: 38, g: 38, b: 38)
 config.bottomMenuItemUnSelectedColour = UIColor(r: 153, g: 153, b: 153)
 config.filters = [DefaultYPFilters...]
 config.maxCameraZoomFactor = 1.0
-config.preSelectItemOnMultipleSelection = true
 config.fonts..
 ```
 
@@ -141,6 +140,7 @@ config.library.numberOfItemsInRow = 4
 config.library.spacingBetweenItems = 1.0
 config.library.skipSelectionsGallery = false
 config.library.preselectedItems = nil
+config.library.preSelectItemOnMultipleSelection = true
 ```
 
 ### Video
@@ -255,7 +255,7 @@ picker.didFinishPicking { [unowned picker] items, cancelled in
 That's it !
 
 ## Languages
-🇺🇸 English, 🇪🇸 Spanish, 🇫🇷 French 🇷🇺 Russian, 🇵🇱 Polish, 🇳🇱 Dutch, 🇧🇷 Brazilian, 🇹🇷 Turkish, 🇸🇾 Arabic, 🇩🇪 German, 🇮🇹 Italian, 🇯🇵 Japanese, 🇨🇳 Chinese, 🇮🇩 Indonesian, 🇰🇷 Korean, 🇹🇼 Traditional Chinese（Taiwan), 🇻🇳 Vietnamese, 🇹🇭 Thai, 🇨🇿 Czech. 
+🇺🇸 English, 🇪🇸 Spanish, 🇫🇷 French 🇷🇺 Russian, 🇵🇱 Polish, 🇳🇱 Dutch, 🇧🇷 Brazilian, 🇹🇷 Turkish, 🇸🇾 Arabic, 🇩🇪 German, 🇮🇹 Italian, 🇯🇵 Japanese, 🇨🇳 Chinese, 🇮🇩 Indonesian, 🇰🇷 Korean, 🇹🇼 Traditional Chinese（Taiwan), 🇻🇳 Vietnamese, 🇹🇭 Thai, 🇨🇿 Czech, 🇮🇷 Farsi. 
 
 If your language is not supported, you can still customize the wordings via the `configuration.wordings` api:
 

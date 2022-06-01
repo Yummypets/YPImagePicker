@@ -92,6 +92,8 @@ final class YPAssetZoomableView: UIScrollView {
             strongSelf.videoView.setPreviewImage(preview)
             
             strongSelf.setAssetFrame(for: strongSelf.videoView, with: preview)
+
+            strongSelf.squaredZoomScale = strongSelf.calculateSquaredZoomScale()
             
             completion()
             
@@ -148,6 +150,8 @@ final class YPAssetZoomableView: UIScrollView {
                 // add update CropInfo after multiple
                 updateCropInfo()
             }
+
+            strongSelf.squaredZoomScale = strongSelf.calculateSquaredZoomScale()
             
             completion(isLowResIntermediaryImage)
         }
