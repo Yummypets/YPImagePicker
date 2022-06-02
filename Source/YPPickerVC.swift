@@ -317,6 +317,11 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     // When pressing "Next"
     @objc
     func done() {
+
+        if(libraryVC?.v.assetViewContainer.isZooming == true) {
+            return
+        }
+
         guard let libraryVC = libraryVC else { ypLog("YPLibraryVC deallocated"); return }
         
         if mode == .library {
