@@ -318,7 +318,7 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     @objc
     func done() {
 
-        if(libraryVC?.v.assetViewContainer.isZooming == true) {
+        if(libraryVC?.v.assetViewContainer.zoomableView.isZooming == true) {
             return
         }
 

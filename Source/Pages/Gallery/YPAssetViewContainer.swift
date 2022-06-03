@@ -14,7 +14,6 @@ import AVFoundation
 /// The container for asset (video or image). It containts the YPGridView and YPAssetZoomableView.
 final class YPAssetViewContainer: UIView {
 
-    public var isZooming = false;
     public var zoomableView: YPAssetZoomableView
     public var itemOverlay: UIView?
     public let curtain = UIView()
@@ -162,7 +161,6 @@ extension YPAssetViewContainer: YPAssetZoomableViewDelegate {
     }
     
     public func ypAssetZoomableViewScrollViewDidZoom() {
-        isZooming = true;
         guard let itemOverlay = itemOverlay else {
             return
         }
@@ -174,7 +172,6 @@ extension YPAssetViewContainer: YPAssetZoomableViewDelegate {
     }
     
     public func ypAssetZoomableViewScrollViewDidEndZooming() {
-        isZooming = false;
         guard let itemOverlay = itemOverlay else {
             return
         }
