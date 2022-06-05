@@ -40,7 +40,7 @@ final class YPAssetZoomableView: UIScrollView {
     /// - Parameters:
     ///   - fit: If true - zoom to show squared. If false - show full.
     public func fitImage(_ fit: Bool, animated isAnimated: Bool = false) {
-        isMediaFiting= true
+        isMediaFiting = true
         squaredZoomScale = calculateSquaredZoomScale()
         
         if isPost {
