@@ -34,7 +34,12 @@ public struct YPImagePickerConfiguration {
     
     /// Include another aspect ratio
     public var isPost = false
-    
+
+    // for unerstanding why ratios has such values, look at the calculateSquaredZoomScale func
+    public var portraitRatio = 0.805 
+    public var photoLandscapeRatio = 0.5263
+    public var videoLandscapeRatio = 0.5625
+
     /// Library configuration
     public var library = YPConfigLibrary()
     

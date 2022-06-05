@@ -25,6 +25,9 @@ final class YPAssetZoomableView: UIScrollView {
     public var squaredZoomScale: CGFloat = 1
     public var minWidthForItem: CGFloat? = YPConfig.library.minWidthForItem
     public var isPost: Bool = YPConfig.isPost
+    public var portraitRatio: Double = YPConfig.portraitRatio
+    public var photoLandscapeRatio: Double = YPConfig.photoLandscapeRatio
+    public var videoLandscapeRatio: Double = YPConfig.videoLandscapeRatio
     public var assetType = 0
     public var isMediaFiting = false
     
@@ -48,9 +51,14 @@ final class YPAssetZoomableView: UIScrollView {
                 setZoomScale(squaredZoomScale, animated: isAnimated)
             }  else {
                 if self.assetType == 0 {
-                    setZoomScale(squaredZoomScale * 0.805, animated: isAnimated)
+                    setZoomScale(squaredZoomScale * portraitRatio, animated: isAnimated)
                 } else if self.assetType == 1 {
-                    setZoomScale(squaredZoomScale * 0.5263, animated: isAnimated)
+                    if(isVideoMode) {
+                        setZoomScale(squaredZoomScale * videoLandscapeRatio, animated: isAnimated)
+                    } else {
+                        setZoomScale(squaredZoomScale * photoLandscapeRatio, animated: isAnimated)
+                    }
+     
                 } else if self.assetType == 2 {
                     setZoomScale(1, animated: isAnimated)
                 }
@@ -306,12 +314,18 @@ extension YPAssetZoomableView: UIScrollViewDelegate {
         
         if isPost {
                  if self.assetType == 0 {
-                         if scale < squaredZoomScale * 0.805 {
+                         if scale < squaredZoomScale * portraitRatio {
                              fitImage(false, animated: true)
                          }
                      } else if self.assetType == 1 {
-                         if scale < squaredZoomScale * 0.5263 {
-                             fitImage(false, animated: true)
+                         if(isVideoMode) {
+                             if scale < squaredZoomScale * videoLandscapeRatio {
+                                 fitImage(false, animated: true)
+                             }
+                         } else {
+                             if scale < squaredZoomScale * photoLandscapeRatio {
+                                 fitImage(false, animated: true)
+                             }
                          }
                      }
              }
