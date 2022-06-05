@@ -26,6 +26,7 @@ final class YPAssetZoomableView: UIScrollView {
     public var minWidthForItem: CGFloat? = YPConfig.library.minWidthForItem
     public var isPost: Bool = YPConfig.isPost
     public var assetType = 0
+    public var isMediaFiting = false
     
     fileprivate var currentAsset: PHAsset?
     
@@ -39,6 +40,7 @@ final class YPAssetZoomableView: UIScrollView {
     /// - Parameters:
     ///   - fit: If true - zoom to show squared. If false - show full.
     public func fitImage(_ fit: Bool, animated isAnimated: Bool = false) {
+        isMediaFiting= true
         squaredZoomScale = calculateSquaredZoomScale()
         
         if isPost {
@@ -60,6 +62,8 @@ final class YPAssetZoomableView: UIScrollView {
                       setZoomScale(1, animated: isAnimated)
                   }
         }
+        
+        isMediaFiting = false
     }
     
     /// Re-apply correct scrollview settings if image has already been adjusted in
