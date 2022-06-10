@@ -161,7 +161,7 @@ open class YPImagePicker: UINavigationController {
     }
     
     private func setupLoadingView() {
-        view.sv(
+        view.subviews(
             loadingView
         )
         loadingView.fillContainer()
