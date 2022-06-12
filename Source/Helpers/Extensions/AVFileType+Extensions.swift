@@ -4,18 +4,27 @@
 //
 //  Created by Nik Kov on 23.04.2018.
 //  Copyright © 2018 Yummypets. All rights reserved.
-//
+//  Updated by isa yeter on 12.06.2022.
 
 import AVFoundation
 import MobileCoreServices
 
 extension AVFileType {
-    /// Fetch and extension for a file from UTI string
     var fileExtension: String {
-        if let ext = UTTypeCopyPreferredTagWithClass(self as CFString,
-													 kUTTagClassFilenameExtension)?.takeRetainedValue() {
-            return ext as String
+        if #available(iOS 14.0, *) {
+            guard let type = UTType(self.rawValue),
+                  let preferredFilenameExtension = type.preferredFilenameExtension
+            else {
+                return "None"
+            }
+            return preferredFilenameExtension
         }
-        return "None"
+        // Fallback on earlier versions
+        else {
+            if let ext = UTTypeCopyPreferredTagWithClass(self as CFString, kUTTagClassFilenameExtension)?.takeRetainedValue() {
+                return ext as String
+            }
+            return "None"
+        }
     }
 }
