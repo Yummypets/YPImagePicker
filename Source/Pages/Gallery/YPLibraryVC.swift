@@ -20,6 +20,25 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
     internal var currentlySelectedIndex: Int = 0
     internal let panGestureHelper = PanGestureHelper()
     internal var isInitialized = false
+    
+    internal var disableMultipleSelectionForVideo = false {
+        didSet {
+            // bail out if the multiple selection for video cannot be enabled
+            guard shouldDisableMultipleSelectionForVideo else { return }
+            // proceed only if the multiple selection disabling capability is on for this controller
+            if disableMultipleSelectionForVideo {
+                isMultipleSelectionEnabled = false
+                v.assetViewContainer.setMultipleSelectionMode(on: false)
+                v.collectionView.reloadData()
+                delegate?.libraryViewDidToggleMultipleSelection(enabled: false)
+            }
+        }
+    }
+    
+    internal var shouldDisableMultipleSelectionForVideo: Bool {
+        // FIXME: this should be controlled with a property in the config object
+        return true
+    }
 
     // MARK: - Init
 
@@ -184,6 +203,8 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
             print("Selected minNumberOfItems greater than one :\(YPConfig.library.minNumberOfItems). Don't deselecting multiple selection.")
             return
         }
+        
+        guard !disableMultipleSelectionForVideo else { return }
 
         isMultipleSelectionEnabled.toggle()
 

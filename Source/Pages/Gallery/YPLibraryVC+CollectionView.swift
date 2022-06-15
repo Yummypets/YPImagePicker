@@ -167,8 +167,8 @@ extension YPLibraryVC: UICollectionViewDelegate {
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let previouslySelectedIndexPath = IndexPath(row: currentlySelectedIndex, section: 0)
         currentlySelectedIndex = indexPath.row
-
-        changeAsset(mediaManager.getAsset(at: indexPath.row))
+        let asset = mediaManager.getAsset(at: indexPath.row)
+        changeAsset(asset)
         panGestureHelper.resetToOriginalState()
         
         // Only scroll cell to top if preview is hidden.
@@ -176,8 +176,24 @@ extension YPLibraryVC: UICollectionViewDelegate {
             collectionView.scrollToItem(at: indexPath, at: .top, animated: true)
         }
         v.refreshImageCurtainAlpha()
+        
+        let singleSelection = { [unowned self] in
+            self.selectedItems.removeAll()
+            self.addToSelection(indexPath: indexPath)
             
-        if isMultipleSelectionEnabled {
+            // Force deseletion of previously selected cell.
+            // In the case where the previous cell was loaded from iCloud, a new image was fetched
+            // which triggered photoLibraryDidChange() and reloadItems() which breaks selection.
+            //
+            if let previousCell = collectionView.cellForItem(at: previouslySelectedIndexPath) as? YPLibraryViewCell {
+                previousCell.isSelected = false
+            }
+        }
+        
+        if let asset = asset, asset.mediaType == .video, shouldDisableMultipleSelectionForVideo {
+            disableMultipleSelectionForVideo = true
+            singleSelection()
+        } else if isMultipleSelectionEnabled && !disableMultipleSelectionForVideo {
             let cellIsInTheSelectionPool = isInSelectionPool(indexPath: indexPath)
             let cellIsCurrentlySelected = previouslySelectedIndexPath.row == currentlySelectedIndex
             if cellIsInTheSelectionPool {
@@ -190,16 +206,8 @@ extension YPLibraryVC: UICollectionViewDelegate {
             collectionView.reloadItems(at: [indexPath])
             collectionView.reloadItems(at: [previouslySelectedIndexPath])
         } else {
-            selectedItems.removeAll()
-            addToSelection(indexPath: indexPath)
-            
-            // Force deseletion of previously selected cell.
-            // In the case where the previous cell was loaded from iCloud, a new image was fetched
-            // which triggered photoLibraryDidChange() and reloadItems() which breaks selection.
-            //
-            if let previousCell = collectionView.cellForItem(at: previouslySelectedIndexPath) as? YPLibraryViewCell {
-                previousCell.isSelected = false
-            }
+            disableMultipleSelectionForVideo = false
+            singleSelection()
         }
     }
     
