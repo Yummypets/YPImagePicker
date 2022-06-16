@@ -36,8 +36,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
     }
     
     internal var shouldDisableMultipleSelectionForVideo: Bool {
-        // FIXME: this should be controlled with a property in the config object
-        return true
+        return YPConfig.library.shouldDisableMultipleSelectionForVideo
     }
 
     // MARK: - Init

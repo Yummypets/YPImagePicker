@@ -205,6 +205,9 @@ public struct YPConfigLibrary {
 
     /// Pre-selects the current item on setting multiple selection
     public var preSelectItemOnMultipleSelection = true
+    
+    /// Whether to disable selecting multiple items when a video item is selected. Defaults to `false`.
+    public var shouldDisableMultipleSelectionForVideo = false
 
     /// Anything superior than 1 will enable the multiple selection feature.
     public var maxNumberOfItems = 1
