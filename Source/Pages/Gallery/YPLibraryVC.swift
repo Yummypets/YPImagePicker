@@ -180,6 +180,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
     @objc
     func multipleSelectionButtonTapped() {
         // If no items, than preventing multiple selection
+        guard !disableMultipleSelectionForVideo else { return }
         guard mediaManager.hasResultItems else {
             if #available(iOS 14, *) {
                 PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: self)
@@ -202,8 +203,6 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
             print("Selected minNumberOfItems greater than one :\(YPConfig.library.minNumberOfItems). Don't deselecting multiple selection.")
             return
         }
-        
-        guard !disableMultipleSelectionForVideo else { return }
 
         isMultipleSelectionEnabled.toggle()
 
