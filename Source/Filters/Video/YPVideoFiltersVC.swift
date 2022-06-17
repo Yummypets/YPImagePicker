@@ -36,9 +36,8 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
     public var didSave: ((YPMediaItem) -> Void)?
     public var didCancel: (() -> Void)?
 
-    // MARK: - Private vars
-    private let mediaManager = LibraryMediaManager() // used to crop and trim video
-    private let progressView = UIProgressView()
+    public let mediaManager = LibraryMediaManager() // used to crop and trim video
+    public let progressView = UIProgressView()
 
     public var vcType: YPVideoFiltersType = .Trimmer
 
@@ -46,11 +45,11 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
     public var imageGenerator: AVAssetImageGenerator?
     public var isFromSelectionVC = false
 
-    private let trimmerContainerView: UIView = {
+    public let trimmerContainerView: UIView = {
         let v = UIView()
         return v
     }()
-    private let trimmerView: TrimmerView = {
+    public let trimmerView: TrimmerView = {
         let v = TrimmerView()
         v.mainColor = YPConfig.colors.trimmerMainColor
         v.handleColor = YPConfig.colors.trimmerHandleColor
@@ -59,29 +58,29 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
         v.minDuration = YPConfig.video.trimmerMinDuration
         return v
     }()
-    private let coverThumbSelectorView: ThumbSelectorView = {
+    public let coverThumbSelectorView: ThumbSelectorView = {
         let v = ThumbSelectorView()
         v.thumbBorderColor = YPConfig.colors.coverSelectorBorderColor
         v.isHidden = true
         return v
     }()
-    private lazy var trimBottomItem: YPMenuItem = {
+    public lazy var trimBottomItem: YPMenuItem = {
         let v = YPMenuItem()
         v.textLabel.text = YPConfig.wordings.trim
         v.button.addTarget(self, action: #selector(selectTrim), for: .touchUpInside)
         return v
     }()
-    private lazy var coverBottomItem: YPMenuItem = {
+    public lazy var coverBottomItem: YPMenuItem = {
         let v = YPMenuItem()
         v.textLabel.text = YPConfig.wordings.cover
         v.button.addTarget(self, action: #selector(selectCover), for: .touchUpInside)
         return v
     }()
-    private let videoView: YPVideoView = {
+    public let videoView: YPVideoView = {
         let v = YPVideoView()
         return v
     }()
-    private let coverImageView: UIImageView = {
+    public let coverImageView: UIImageView = {
         let v = UIImageView()
         v.contentMode = .scaleAspectFit
         v.isHidden = true
