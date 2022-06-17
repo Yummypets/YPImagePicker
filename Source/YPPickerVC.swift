@@ -196,7 +196,12 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     
     open override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        shouldHideStatusBar = false        
+        shouldHideStatusBar = false
+    }
+    
+    deinit {
+        stopAll()
+        ypLog("YPPickerVC deinited ✅")
     }
     
     @objc
@@ -232,7 +237,7 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         }
         
         if YPConfig.library.options != nil {
-            titleView.sv(
+            titleView.subviews(
                 label
             )
             |-(>=8)-label.centerHorizontally()-(>=8)-|
@@ -253,7 +258,7 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
             button.addTarget(self, action: #selector(navBarTapped), for: .touchUpInside)
             button.setBackgroundColor(UIColor.white.withAlphaComponent(0.5), forState: .highlighted)
             
-            titleView.sv(
+            titleView.subviews(
                 label,
                 arrow,
                 button

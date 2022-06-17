@@ -1387,7 +1387,7 @@
 			repositoryURL = "https://github.com/freshOS/Stevia";
 			requirement = {
 				kind = exactVersion;
-				version = 4.8.0;
+				version = 5.1.2;
 			};
 		};
 		EBA37BCE26F75C67005DAAD4 /* XCRemoteSwiftPackageReference "PryntTrimmerView" */ = {

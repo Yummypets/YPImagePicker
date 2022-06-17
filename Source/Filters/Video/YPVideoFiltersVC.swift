@@ -40,19 +40,53 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
     private let mediaManager = LibraryMediaManager() // used to crop and trim video
     private let progressView = UIProgressView()
 
-    public var playbackTimeCheckerTimer: Timer?
-    public var imageGenerator: AVAssetImageGenerator?
-    
-    public var isFromSelectionVC = false
     public var vcType: YPVideoFiltersType = .Trimmer
 
-    public var trimmerContainerView: UIView = UIView()
-    public var trimmerView: TrimmerView = TrimmerView()
-    public var coverThumbSelectorView: ThumbSelectorView = ThumbSelectorView()
-    public var trimBottomItem: YPMenuItem = YPMenuItem()
-    public var coverBottomItem: YPMenuItem = YPMenuItem()
-    public var videoView: YPVideoView = YPVideoView()
-    public var coverImageView: UIImageView = UIImageView()
+    public var playbackTimeCheckerTimer: Timer?
+    public var imageGenerator: AVAssetImageGenerator?
+    public var isFromSelectionVC = false
+
+    private let trimmerContainerView: UIView = {
+        let v = UIView()
+        return v
+    }()
+    private let trimmerView: TrimmerView = {
+        let v = TrimmerView()
+        v.mainColor = YPConfig.colors.trimmerMainColor
+        v.handleColor = YPConfig.colors.trimmerHandleColor
+        v.positionBarColor = YPConfig.colors.positionLineColor
+        v.maxDuration = YPConfig.video.trimmerMaxDuration
+        v.minDuration = YPConfig.video.trimmerMinDuration
+        return v
+    }()
+    private let coverThumbSelectorView: ThumbSelectorView = {
+        let v = ThumbSelectorView()
+        v.thumbBorderColor = YPConfig.colors.coverSelectorBorderColor
+        v.isHidden = true
+        return v
+    }()
+    private lazy var trimBottomItem: YPMenuItem = {
+        let v = YPMenuItem()
+        v.textLabel.text = YPConfig.wordings.trim
+        v.button.addTarget(self, action: #selector(selectTrim), for: .touchUpInside)
+        return v
+    }()
+    private lazy var coverBottomItem: YPMenuItem = {
+        let v = YPMenuItem()
+        v.textLabel.text = YPConfig.wordings.cover
+        v.button.addTarget(self, action: #selector(selectCover), for: .touchUpInside)
+        return v
+    }()
+    private let videoView: YPVideoView = {
+        let v = YPVideoView()
+        return v
+    }()
+    private let coverImageView: UIImageView = {
+        let v = UIImageView()
+        v.contentMode = .scaleAspectFit
+        v.isHidden = true
+        return v
+    }()
 
     // MARK: - Live cycle
     deinit {
@@ -83,7 +117,7 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
             .addObserver(self,
                          selector: #selector(itemDidFinishPlaying(_:)),
                          name: .AVPlayerItemDidPlayToEndTime,
-                         object: nil)
+                         object: videoView.player.currentItem)
 
         videoView.clipsToBounds = true
 
@@ -103,6 +137,23 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
     }
 
     open override func viewDidAppear(_ animated: Bool) {
+        
+        // Set initial video cover
+        imageGenerator = AVAssetImageGenerator(asset: self.inputAsset)
+        imageGenerator?.appliesPreferredTrackTransform = true
+        didChangeThumbPosition(CMTime(seconds: 1, preferredTimescale: 1))
+
+        trimmerView.asset = inputAsset
+        trimmerView.delegate = self
+        
+        coverThumbSelectorView.asset = inputAsset
+        coverThumbSelectorView.delegate = self
+        
+        selectTrim()
+        videoView.loadVideo(inputVideo)
+        videoView.showPlayImage(show: true)
+        startPlaybackTimeChecker()
+
         super.viewDidAppear(animated)
 
         if isMovingToParent {
@@ -188,15 +239,38 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
     }
 
     private func setupLayout() {
-        trimmerView.mainColor = YPConfig.colors.trimmerMainColor
-        trimmerView.handleColor = YPConfig.colors.trimmerHandleColor
-        trimmerView.positionBarColor = YPConfig.colors.positionLineColor
-        trimmerView.maxDuration = YPConfig.video.trimmerMaxDuration
-        trimmerView.minDuration = YPConfig.video.trimmerMinDuration
 
-        coverThumbSelectorView.thumbBorderColor = YPConfig.colors.coverSelectorBorderColor
+        view.sv(
+            trimBottomItem,
+            coverBottomItem,
+            videoView,
+            coverImageView,
+            trimmerContainerView.sv(
+                trimmerView,
+                coverThumbSelectorView
+            )
+        )
 
-        return // layout is handled by subclass
+        trimBottomItem.leading(0).height(40)
+        trimBottomItem.Bottom == view.safeAreaLayoutGuide.Bottom
+        trimBottomItem.Trailing == coverBottomItem.Leading
+        coverBottomItem.Bottom == view.safeAreaLayoutGuide.Bottom
+        coverBottomItem.trailing(0)
+        equal(sizes: trimBottomItem, coverBottomItem)
+
+        videoView.heightEqualsWidth().fillHorizontally().top(0)
+        videoView.Bottom == trimmerContainerView.Top
+
+        coverImageView.followEdges(videoView)
+
+        trimmerContainerView.fillHorizontally()
+        trimmerContainerView.Top == videoView.Bottom
+        trimmerContainerView.Bottom == trimBottomItem.Top
+
+        trimmerView.fillHorizontally(m: 30).centerVertically()
+        trimmerView.Height == trimmerContainerView.Height / 3
+
+        coverThumbSelectorView.followEdges(trimmerView)
     }
 
     // MARK: - Actions
