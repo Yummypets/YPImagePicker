@@ -139,11 +139,6 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         }
     }
 
-    deinit {
-        stopAll()
-        ypLog("YPPickerVC deinited ✅")
-    }
-    
     internal func pagerScrollViewDidScroll(_ scrollView: UIScrollView) { }
     
     func modeFor(vc: UIViewController) -> Mode {
