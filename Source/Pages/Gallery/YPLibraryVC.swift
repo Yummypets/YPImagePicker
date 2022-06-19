@@ -21,7 +21,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
     internal let panGestureHelper = PanGestureHelper()
     internal var isInitialized = false
     
-    internal var disableMultipleSelectionForVideo = false {
+    internal var disableMultipleSelectionForVideo = YPConfig.library.shouldDisableMultipleSelectionForVideo {
         didSet {
             // bail out if the multiple selection for video cannot be enabled
             guard shouldDisableMultipleSelectionForVideo else { return }
