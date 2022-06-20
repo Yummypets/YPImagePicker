@@ -49,7 +49,7 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
         let v = UIView()
         return v
     }()
-    public let trimmerView: TrimmerView = {
+    public var trimmerView: TrimmerView = {
         let v = TrimmerView()
         v.mainColor = YPConfig.colors.trimmerMainColor
         v.handleColor = YPConfig.colors.trimmerHandleColor
@@ -58,7 +58,7 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
         v.minDuration = YPConfig.video.trimmerMinDuration
         return v
     }()
-    public let coverThumbSelectorView: ThumbSelectorView = {
+    public var coverThumbSelectorView: ThumbSelectorView = {
         let v = ThumbSelectorView()
         v.thumbBorderColor = YPConfig.colors.coverSelectorBorderColor
         v.isHidden = true
@@ -76,11 +76,11 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
         v.button.addTarget(self, action: #selector(selectCover), for: .touchUpInside)
         return v
     }()
-    public let videoView: YPVideoView = {
+    public var videoView: YPVideoView = {
         let v = YPVideoView()
         return v
     }()
-    public let coverImageView: UIImageView = {
+    public var coverImageView: UIImageView = {
         let v = UIImageView()
         v.contentMode = .scaleAspectFit
         v.isHidden = true
