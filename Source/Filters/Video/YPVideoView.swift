@@ -79,7 +79,7 @@ public class YPVideoView: UIView {
         // Loop playback
         addReachEndObserver()
 
-        playerView.alpha = 0
+        //playerView.alpha = 0
         playImageView.alpha = 0.8
         previewImageView.contentMode = .scaleAspectFit
         

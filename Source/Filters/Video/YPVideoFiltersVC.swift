@@ -136,23 +136,6 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
     }
 
     open override func viewDidAppear(_ animated: Bool) {
-        
-        // Set initial video cover
-        imageGenerator = AVAssetImageGenerator(asset: self.inputAsset)
-        imageGenerator?.appliesPreferredTrackTransform = true
-        didChangeThumbPosition(CMTime(seconds: 1, preferredTimescale: 1))
-
-        trimmerView.asset = inputAsset
-        trimmerView.delegate = self
-        
-        coverThumbSelectorView.asset = inputAsset
-        coverThumbSelectorView.delegate = self
-        
-        selectTrim()
-        videoView.loadVideo(inputVideo)
-        videoView.showPlayImage(show: true)
-        startPlaybackTimeChecker()
-
         super.viewDidAppear(animated)
 
         if isMovingToParent {
@@ -237,40 +220,18 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
         navigationItem.rightBarButtonItem?.setFont(font: YPConfig.fonts.rightBarButtonFont, forState: .normal)
     }
 
-    private func setupLayout() {
+    public func setupLayout() {
+        trimmerView.mainColor = YPConfig.colors.trimmerMainColor
+        trimmerView.handleColor = YPConfig.colors.trimmerHandleColor
+        trimmerView.positionBarColor = YPConfig.colors.positionLineColor
+        trimmerView.maxDuration = YPConfig.video.trimmerMaxDuration
+        trimmerView.minDuration = YPConfig.video.trimmerMinDuration
 
-        view.sv(
-            trimBottomItem,
-            coverBottomItem,
-            videoView,
-            coverImageView,
-            trimmerContainerView.sv(
-                trimmerView,
-                coverThumbSelectorView
-            )
-        )
+        coverThumbSelectorView.thumbBorderColor = YPConfig.colors.coverSelectorBorderColor
 
-        trimBottomItem.leading(0).height(40)
-        trimBottomItem.Bottom == view.safeAreaLayoutGuide.Bottom
-        trimBottomItem.Trailing == coverBottomItem.Leading
-        coverBottomItem.Bottom == view.safeAreaLayoutGuide.Bottom
-        coverBottomItem.trailing(0)
-        equal(sizes: trimBottomItem, coverBottomItem)
-
-        videoView.heightEqualsWidth().fillHorizontally().top(0)
-        videoView.Bottom == trimmerContainerView.Top
-
-        coverImageView.followEdges(videoView)
-
-        trimmerContainerView.fillHorizontally()
-        trimmerContainerView.Top == videoView.Bottom
-        trimmerContainerView.Bottom == trimBottomItem.Top
-
-        trimmerView.fillHorizontally(padding: 30).centerVertically()
-        trimmerView.Height == trimmerContainerView.Height / 3
-
-        coverThumbSelectorView.followEdges(trimmerView)
+        return // layout is handled by subclass
     }
+
 
     // MARK: - Actions
 
