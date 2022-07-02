@@ -102,6 +102,10 @@ final class YPAssetViewContainer: UIView {
     // MARK: - Square button
 
     @objc public func squareCropButtonTapped() {
+        execPhotoZoom()
+    }
+    
+    public func execPhotoZoom() {
         let z = zoomableView.zoomScale
         shouldCropToSquare = (z >= 1 && z < zoomableView.squaredZoomScale)
         zoomableView.fitImage(shouldCropToSquare, animated: true)

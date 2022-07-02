@@ -295,6 +295,9 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                 self.v.hideLoader()
                 self.delegate?.libraryViewFinishedLoading()
             }
+            if YPConfig.library.autoZoomIn {
+                self.v.assetViewContainer.execPhotoZoom()
+            }
         }
         
         let updateCropInfo = {
