@@ -55,13 +55,13 @@ extension YPLibraryVC {
     // MARK: - Library collection view cell managing
     private func getSelectedIndexPaths(selectedItems: [YPLibrarySelection]) -> [IndexPath] {
         let collectionViewItemsCount = v.collectionView.numberOfItems(inSection: 0)
-        var SelectedIndexPaths = [IndexPath]()
+        var selectedIndexPaths = [IndexPath]()
         for item in selectedItems {
             if item.index < collectionViewItemsCount {
-                SelectedIndexPaths.append(IndexPath(row: item.index, section: 0))
+                selectedIndexPaths.append(IndexPath(row: item.index, section: 0))
             }
         }
-        return Array(Set(SelectedIndexPaths))
+        return Array(Set(selectedIndexPaths))
     }
     
     /// Removes cell from selection
