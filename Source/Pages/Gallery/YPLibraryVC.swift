@@ -54,7 +54,9 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         registerForTapOnPreview()
         refreshMediaRequest()
 
-        v.assetViewContainer.multipleSelectionButton.isHidden = !(YPConfig.library.maxNumberOfItems > 1)
+        
+        v.assetViewContainer.multipleSelectionButton.isHidden = !(YPConfig.library.maxNumberOfItems > 1) || YPConfig.isCarouselAlbumUpdating || YPConfig.library.defaultMultipleSelection
+        
         v.maxNumberWarningLabel.text = String(format: YPConfig.wordings.warningMaxItemsLimit,
 											  YPConfig.library.maxNumberOfItems)
         
@@ -83,9 +85,6 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
             return
         }
 
-        if YPConfig.library.defaultMultipleSelection || selectedItems.count > 1 {
-            toggleMultipleSelection()
-        }
     }
 
     func setAlbum(_ album: YPAlbum) {
@@ -102,7 +101,6 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        
         // When crop area changes in multiple selection mode,
         // we need to update the scrollView values in order to restore
         // them when user selects a previously selected item.
@@ -138,6 +136,13 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         if YPConfig.library.minNumberOfItems > 1 {
             multipleSelectionButtonTapped()
         }
+     
+        if(YPConfig.isCarouselAlbumUpdating && YPConfig.isPost) {
+            if(YPConfig.library.defaultMultipleSelection) {
+                toggleMultipleSelection()
+            }
+        }
+      
     }
     
     public override func viewWillDisappear(_ animated: Bool) {
@@ -180,6 +185,10 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
     
     func toggleMultipleSelection() {
         // Prevent desactivating multiple selection when using `minNumberOfItems`
+        if(self.v.assetViewContainer.zoomableView.isZooming == true || self.v.assetViewContainer.zoomableView.isZoomBouncing == true || self.v.assetViewContainer.zoomableView.isMediaFiting == true) {
+                return
+            }
+        
         if YPConfig.library.minNumberOfItems > 1 && isMultipleSelectionEnabled {
             print("Selected minNumberOfItems greater than one :\(YPConfig.library.minNumberOfItems). Don't deselecting multiple selection.")
             return
@@ -280,6 +289,11 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
     }
     
     func changeAsset(_ asset: PHAsset?) {
+        let hasIndex = self.selectedItems.contains(where: { $0.index == self.currentlySelectedIndex })
+        if(self.isMultipleSelectionEnabled && isLimitExceeded && !hasIndex) {
+            return
+        }
+        
         guard let asset = asset else {
             print("No asset to change.")
             return

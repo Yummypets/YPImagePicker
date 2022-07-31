@@ -31,7 +31,14 @@ final class YPAssetViewContainer: UIView {
     private let spinner = UIActivityIndicatorView(style: .white)
     private var shouldCropToSquare = YPConfig.library.isSquareByDefault
     private var isMultipleSelectionEnabled = false
-
+  
+    // carousel
+    private var currentZoomableViewWidthAnchor: NSLayoutConstraint! = nil
+    private var currentZoomableViewHeightAnchor: NSLayoutConstraint! = nil
+    
+    private var currentViewWidthAnchor: NSLayoutConstraint! = nil
+    private var currentViewHeightAnchor: NSLayoutConstraint! = nil
+    
     public var itemOverlayType = YPConfig.library.itemOverlayType
 
     init(frame: CGRect, zoomableView: YPAssetZoomableView) {
@@ -39,7 +46,6 @@ final class YPAssetViewContainer: UIView {
         super.init(frame: frame)
 
         self.zoomableView.zoomableViewDelegate = self
-
         switch itemOverlayType {
         case .grid:
             itemOverlay = YPGridView()
@@ -51,7 +57,7 @@ final class YPAssetViewContainer: UIView {
             addSubview(itemOverlay)
             itemOverlay.frame = frame
             clipsToBounds = true
-
+        
             itemOverlay.alpha = 0
         }
 
@@ -79,7 +85,7 @@ final class YPAssetViewContainer: UIView {
         curtain.backgroundColor = UIColor.ypLabel.withAlphaComponent(0.7)
         curtain.alpha = 0
 
-        if !onlySquare {
+        if ((!YPConfig.isCarouselAlbumUpdating && !YPConfig.library.defaultMultipleSelection) && !onlySquare) {
             // Crop Button
             squareCropButton.setImage(YPConfig.icons.cropIcon, for: .normal)
             sv(squareCropButton)
@@ -107,9 +113,13 @@ final class YPAssetViewContainer: UIView {
         shouldCropToSquare = (z >= 1 && z < zoomableView.squaredZoomScale)
         zoomableView.fitImage(shouldCropToSquare, animated: true)
     }
-
+    
     /// Update only UI of square crop button.
     public func updateSquareCropButtonState() {
+        if(YPConfig.isCarouselAlbumUpdating || YPConfig.library.defaultMultipleSelection) {
+            squareCropButton.isHidden = true
+        }
+        
         guard !isMultipleSelectionEnabled else {
             // If multiple selection enabled, the squareCropButton is not visible
             squareCropButton.isHidden = true
@@ -138,6 +148,74 @@ final class YPAssetViewContainer: UIView {
         let image = on ? YPConfig.icons.multipleSelectionOnIcon : YPConfig.icons.multipleSelectionOffIcon
         multipleSelectionButton.setImage(image, for: .normal)
         updateSquareCropButtonState()
+        if(!YPConfig.isCarouselAlbumUpdating && !YPConfig.library.defaultMultipleSelection) {
+            changeFrameDimensionsToSelectedMediaAspectRatio()
+        }
+    }
+    
+    
+    public func changeFrameDimensionsToSelectedMediaAspectRatio () {
+        let selectedMedia = self.zoomableView.assetImageView
+        
+        if(isMultipleSelectionEnabled) {
+            self.zoomableView.isMultipleSelectionEnabled = true
+            if(selectedMedia.frame.size.width < YPImagePickerConfiguration.screenWidth) {
+                let carouselAlbumMediaWidth = selectedMedia.frame.size.width
+                let carouselAlbumMediaHeight = YPImagePickerConfiguration.screenWidth
+                self.zoomableView.multipleSelectionAspectRatio = selectedMedia.frame.size.width / YPImagePickerConfiguration.screenWidth
+                self.zoomableView.multipleSelectionAssetType = 0
+                
+                if(self.currentZoomableViewWidthAnchor == nil  && self.currentZoomableViewHeightAnchor  == nil) {
+                    self.currentZoomableViewWidthAnchor = self.zoomableView.widthAnchor.constraint(equalToConstant: carouselAlbumMediaWidth)
+                    self.currentZoomableViewWidthAnchor.isActive = true
+                    self.currentZoomableViewHeightAnchor = self.zoomableView.heightAnchor.constraint(equalToConstant: carouselAlbumMediaHeight)
+                    self.currentZoomableViewHeightAnchor.isActive = true
+                } else {
+                    self.currentZoomableViewWidthAnchor.constant = carouselAlbumMediaWidth
+                    self.currentZoomableViewHeightAnchor.constant = carouselAlbumMediaHeight
+                }
+                
+                self.zoomableView.centerHorizontally()
+                self.zoomableView.assetImageView.frame.origin.x = 0
+                
+            } else if (selectedMedia.frame.size.width > selectedMedia.frame.size.height && selectedMedia.frame.size.height < YPImagePickerConfiguration.screenWidth) {
+                let carouselAlbumMediaWidth = YPImagePickerConfiguration.screenWidth
+                let carouselAlbumMediaHeight = selectedMedia.frame.size.height
+                self.zoomableView.multipleSelectionAspectRatio = carouselAlbumMediaHeight / carouselAlbumMediaWidth
+                self.zoomableView.multipleSelectionAssetType = 1
+                if(self.currentZoomableViewWidthAnchor == nil  && self.currentZoomableViewHeightAnchor  == nil) {
+                    self.currentZoomableViewWidthAnchor = self.zoomableView.widthAnchor.constraint(equalToConstant: carouselAlbumMediaWidth)
+                    self.currentZoomableViewWidthAnchor.isActive = true
+                    self.currentZoomableViewHeightAnchor = self.zoomableView.heightAnchor.constraint(equalToConstant: carouselAlbumMediaHeight)
+                    self.currentZoomableViewHeightAnchor.isActive = true
+                } else {
+                    self.currentZoomableViewWidthAnchor.constant = carouselAlbumMediaWidth
+                    self.currentZoomableViewHeightAnchor.constant = carouselAlbumMediaHeight
+                }
+                if(self.currentViewWidthAnchor == nil  && self.currentViewHeightAnchor == nil) {
+                    self.currentViewWidthAnchor = self.widthAnchor.constraint(equalToConstant: YPImagePickerConfiguration.screenWidth)
+                    self.currentViewWidthAnchor.isActive = true
+                    self.currentViewHeightAnchor = self.heightAnchor.constraint(equalToConstant: YPImagePickerConfiguration.screenWidth)
+                    self.currentViewHeightAnchor.isActive = true
+                } else {
+                    self.currentViewWidthAnchor.constant = YPImagePickerConfiguration.screenWidth
+                    self.currentViewHeightAnchor.constant = YPImagePickerConfiguration.screenWidth
+                }
+                self.zoomableView.assetImageView.frame.origin.y = 0
+                self.zoomableView.centerVertically()
+            } else if (selectedMedia.frame.size.width > YPImagePickerConfiguration.screenWidth) {
+                self.zoomableView.multipleSelectionAspectRatio = 1
+                self.zoomableView.multipleSelectionAssetType = 2
+            }
+        } else {
+            self.zoomableView.isMultipleSelectionEnabled = false
+            if(self.currentZoomableViewWidthAnchor != nil  && self.currentZoomableViewHeightAnchor != nil) {
+                self.currentZoomableViewWidthAnchor.constant = YPImagePickerConfiguration.screenWidth
+                self.currentZoomableViewHeightAnchor.constant = YPImagePickerConfiguration.screenWidth
+                self.zoomableView.centerVertically()
+                self.zoomableView.fitImage(true, animated:true)
+            }
+        }
     }
 }
 

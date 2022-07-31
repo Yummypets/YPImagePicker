@@ -45,6 +45,7 @@ internal final class YPLibraryView: UIView {
     }()
     internal let maxNumberWarningLabel: UILabel = {
         let v = UILabel()
+        v.textColor = YPConfig.colors.tintColor
         v.font = YPConfig.fonts.libaryWarningFont
         return v
     }()
@@ -191,7 +192,7 @@ internal final class YPLibraryView: UIView {
         assetViewContainer.top(0).fillHorizontally().heightEqualsWidth()
         self.assetViewContainerConstraintTop = assetViewContainer.topConstraint
         assetZoomableView.fillContainer().heightEqualsWidth()
-        assetZoomableView.Bottom == collectionView.Top
+        assetViewContainer.Bottom == collectionView.Top
         assetViewContainer.sendSubviewToBack(assetZoomableView)
 
         progressView.height(5).fillHorizontally()
