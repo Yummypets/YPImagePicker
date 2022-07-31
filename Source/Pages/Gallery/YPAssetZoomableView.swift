@@ -50,11 +50,6 @@ final class YPAssetZoomableView: UIScrollView {
     }
     
     public func changeFrameDimensionsToAlbumAspectRatio() {
-        self.assetImageView.layer.borderWidth = 2
-        self.assetImageView.layer.borderColor = UIColor.systemPink.cgColor
-        
-        self.layer.borderWidth = 2
-        self.layer.borderColor = UIColor.green.cgColor
         
         if(YPConfig.carouselAlbumAssetType == 0) {
             let carouselAlbumMediaHeight = YPImagePickerConfiguration.screenWidth
