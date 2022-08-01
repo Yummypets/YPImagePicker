@@ -203,8 +203,7 @@ final class YPAssetViewContainer: UIView {
                 }
                 self.zoomableView.assetImageView.frame.origin.y = 0
                 self.zoomableView.centerVertically()
-            } else if (selectedMedia.frame.size.width > YPImagePickerConfiguration.screenWidth) {
-                self.zoomableView.multipleSelectionAspectRatio = 1
+            }  else if (selectedMedia.frame.size.width >= YPImagePickerConfiguration.screenWidth) {
                 self.zoomableView.multipleSelectionAssetType = 2
             }
         } else {
