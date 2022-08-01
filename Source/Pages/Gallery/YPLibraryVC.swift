@@ -194,6 +194,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
             return
         }
 
+        selectedItems.removeAll()
         isMultipleSelectionEnabled.toggle()
 
         if isMultipleSelectionEnabled {
