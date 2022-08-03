@@ -155,8 +155,8 @@ final class YPAssetViewContainer: UIView {
     
     
     public func changeFrameDimensionsToSelectedMediaAspectRatio () {
-        let selectedMedia = self.zoomableView.assetImageView
-        
+        let selectedMedia = self.zoomableView.isVideoMode ? self.zoomableView.videoView : self.zoomableView.assetImageView
+  
         if(isMultipleSelectionEnabled) {
             self.zoomableView.isMultipleSelectionEnabled = true
             if(selectedMedia.frame.size.width < YPImagePickerConfiguration.screenWidth) {
@@ -176,7 +176,9 @@ final class YPAssetViewContainer: UIView {
                 }
                 
                 self.zoomableView.centerHorizontally()
-                self.zoomableView.assetImageView.frame.origin.x = 0
+                selectedMedia.frame.origin.x = 0
+           
+             
                 
             } else if (selectedMedia.frame.size.width > selectedMedia.frame.size.height && selectedMedia.frame.size.height < YPImagePickerConfiguration.screenWidth) {
                 let carouselAlbumMediaWidth = YPImagePickerConfiguration.screenWidth
@@ -201,11 +203,13 @@ final class YPAssetViewContainer: UIView {
                     self.currentViewWidthAnchor.constant = YPImagePickerConfiguration.screenWidth
                     self.currentViewHeightAnchor.constant = YPImagePickerConfiguration.screenWidth
                 }
-                self.zoomableView.assetImageView.frame.origin.y = 0
+            
+                selectedMedia.frame.origin.y = 0
                 self.zoomableView.centerVertically()
             }  else if (selectedMedia.frame.size.width >= YPImagePickerConfiguration.screenWidth) {
                 self.zoomableView.multipleSelectionAssetType = 2
             }
+            
         } else {
             self.zoomableView.isMultipleSelectionEnabled = false
             if(self.currentZoomableViewWidthAnchor != nil  && self.currentZoomableViewHeightAnchor != nil) {
@@ -215,6 +219,7 @@ final class YPAssetViewContainer: UIView {
                 self.zoomableView.fitImage(true, animated:true)
             }
         }
+          self.zoomableView.layoutIfNeeded()
     }
 }
 

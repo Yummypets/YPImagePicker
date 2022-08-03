@@ -50,6 +50,7 @@ final class YPAssetZoomableView: UIScrollView {
     }
     
     public func changeFrameDimensionsToAlbumAspectRatio() {
+        let selectedMedia = isVideoMode ? videoView : photoImageView
         
         if(YPConfig.carouselAlbumAssetType == 0) {
             let carouselAlbumMediaHeight = YPImagePickerConfiguration.screenWidth
@@ -66,7 +67,9 @@ final class YPAssetZoomableView: UIScrollView {
             }
             
             self.centerHorizontally()
-            self.assetImageView.frame.origin.x = 0
+            selectedMedia.frame.origin.x = 0
+        
+            
         }
         
         if(YPConfig.carouselAlbumAssetType == 1) {
@@ -84,11 +87,10 @@ final class YPAssetZoomableView: UIScrollView {
                 self.currentZoomableViewHeightAnchor.constant = carouselAlbumMediaHeight
             }
             
-            self.assetImageView.frame.origin.y = 0
+            selectedMedia.frame.origin.y = 0
             self.centerVertically()
-            self.layoutIfNeeded()
         }
-        
+        self.layoutIfNeeded()
         isFrameChanged = true
     }
     
@@ -354,31 +356,41 @@ fileprivate extension YPAssetZoomableView {
     
     // Centring the image frame
     func centerAssetView() {
-        let assetView = isVideoMode ? videoView : photoImageView
-        let scrollViewBoundsSize = self.bounds.size
-        var assetFrame = assetView.frame
-        let assetSize = assetView.frame.size
-       
-        let frameAssetType = isCarouselAlbumUpdating ? YPConfig.carouselAlbumAssetType : multipleSelectionAssetType
+        let assetViewZX = isVideoMode ? videoView : photoImageView
+        assetViewZX.layer.borderWidth = 2
+        assetViewZX.layer.borderColor = UIColor.red.cgColor
+        self.layer.borderWidth = 2
+        self.layer.borderColor = UIColor.red.cgColor
         
-        assetFrame.origin.x = (assetSize.width < scrollViewBoundsSize.width) ?
-            (scrollViewBoundsSize.width - assetSize.width) / 2.0 : 0
-        assetFrame.origin.y = (assetSize.height < scrollViewBoundsSize.height) ?
-            (scrollViewBoundsSize.height - assetSize.height) / 2.0 : 0.0
-
-    
-        if(YPConfig.isCarouselAlbumUpdating) {
-            if(isFrameChanged  && YPConfig.isPost && frameAssetType == 1) {
+        if(!YPConfig.isCarouselAlbumUpdating || isFrameChanged || !YPConfig.isPost) {
+            let assetView = isVideoMode ? videoView : photoImageView
+            let scrollViewBoundsSize = self.bounds.size
+            var assetFrame = assetView.frame
+            let assetSize = assetView.frame.size
+           
+            let frameAssetType = isCarouselAlbumUpdating ? YPConfig.carouselAlbumAssetType : multipleSelectionAssetType
+         
+            assetFrame.origin.x = (assetSize.width < scrollViewBoundsSize.width) ?
+                (scrollViewBoundsSize.width - assetSize.width) / 2.0 : 0
+            assetFrame.origin.y = (assetSize.height < scrollViewBoundsSize.height) ?
+                (scrollViewBoundsSize.height - assetSize.height) / 2.0 : 0.0
+            
+            if(YPConfig.isPost && frameAssetType == 1) {
                 assetFrame.origin.y = 0
             }
             
-            if(!isFrameChanged  && YPConfig.isPost) {
-                self.changeFrameDimensionsToAlbumAspectRatio()
-            }
+            assetView.frame = assetFrame
+        } else {
+            self.changeFrameDimensionsToAlbumAspectRatio()
+                
         }
+        
+
+    
+       
     
         
-        assetView.frame = assetFrame
+       
     }
 }
 
