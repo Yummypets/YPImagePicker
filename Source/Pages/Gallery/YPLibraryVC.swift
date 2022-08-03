@@ -197,6 +197,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         if(YPConfig.isCarouselAlbumUpdating) {
             selectedItems.removeAll()
         }
+
         isMultipleSelectionEnabled.toggle()
 
         if isMultipleSelectionEnabled {

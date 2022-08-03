@@ -378,15 +378,7 @@ fileprivate extension YPAssetZoomableView {
             assetView.frame = assetFrame
         } else {
             self.changeFrameDimensionsToAlbumAspectRatio()
-                
         }
-        
-
-    
-       
-    
-        
-       
     }
 }
 

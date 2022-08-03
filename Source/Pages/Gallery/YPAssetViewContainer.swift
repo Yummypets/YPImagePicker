@@ -178,8 +178,6 @@ final class YPAssetViewContainer: UIView {
                 self.zoomableView.centerHorizontally()
                 selectedMedia.frame.origin.x = 0
            
-             
-                
             } else if (selectedMedia.frame.size.width > selectedMedia.frame.size.height && selectedMedia.frame.size.height < YPImagePickerConfiguration.screenWidth) {
                 let carouselAlbumMediaWidth = YPImagePickerConfiguration.screenWidth
                 let carouselAlbumMediaHeight = selectedMedia.frame.size.height
