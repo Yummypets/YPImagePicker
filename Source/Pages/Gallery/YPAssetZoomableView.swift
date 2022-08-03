@@ -356,8 +356,6 @@ fileprivate extension YPAssetZoomableView {
     
     // Centring the image frame
     func centerAssetView() {
-        let assetViewZX = isVideoMode ? videoView : photoImageView
-        
         if(!YPConfig.isCarouselAlbumUpdating || isFrameChanged || !YPConfig.isPost) {
             let assetView = isVideoMode ? videoView : photoImageView
             let scrollViewBoundsSize = self.bounds.size
