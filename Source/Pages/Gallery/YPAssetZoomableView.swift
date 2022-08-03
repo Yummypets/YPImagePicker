@@ -357,10 +357,6 @@ fileprivate extension YPAssetZoomableView {
     // Centring the image frame
     func centerAssetView() {
         let assetViewZX = isVideoMode ? videoView : photoImageView
-        assetViewZX.layer.borderWidth = 2
-        assetViewZX.layer.borderColor = UIColor.red.cgColor
-        self.layer.borderWidth = 2
-        self.layer.borderColor = UIColor.red.cgColor
         
         if(!YPConfig.isCarouselAlbumUpdating || isFrameChanged || !YPConfig.isPost) {
             let assetView = isVideoMode ? videoView : photoImageView
