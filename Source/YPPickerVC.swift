@@ -137,6 +137,15 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         UIView.animate(withDuration: 0.3) {
             self.setNeedsStatusBarAppearanceUpdate()
         }
+
+        var offset = v.header.frame.height
+        if #available(iOS 11.0, *) {
+            offset += v.safeAreaInsets.bottom
+        }
+        
+        v.header.bottomConstraint?.constant = offset
+        v.layoutIfNeeded()
+        updateUI()
     }
     
     internal func pagerScrollViewDidScroll(_ scrollView: UIScrollView) { }
@@ -378,7 +387,7 @@ extension YPPickerVC: YPLibraryViewDelegate {
             offset += v.safeAreaInsets.bottom
         }
         
-        v.header.bottomConstraint?.constant = enabled ? offset : 0
+        v.header.bottomConstraint?.constant = offset
         v.layoutIfNeeded()
         updateUI()
     }
