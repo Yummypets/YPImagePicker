@@ -54,6 +54,8 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable , Requ
         panGestureHelper.registerForPanGesture(on: v)
         registerForTapOnPreview()
         refreshMediaRequest()
+        
+        v.setupLayout(isCanAccess: true)
 
         v.assetViewContainer.multipleSelectionButton.isHidden = !(YPConfig.library.maxNumberOfItems > 1)
         v.maxNumberWarningLabel.text = String(format: YPConfig.wordings.warningMaxItemsLimit,
@@ -91,6 +93,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable , Requ
     
     func setEmtypView() {
         v.requestDeniedView.delegate = self
+        v.setupLayout(isCanAccess: false)
     }
     
     func goToSettingsButtonTaped() {

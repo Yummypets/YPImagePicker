@@ -89,10 +89,10 @@ internal final class YPLibraryView: UIView {
 
     // MARK: - Init
 
-    override init(frame: CGRect) {
+    override init(frame: CGRect,isCanAcess: Bool) {
         super.init(frame: frame)
 
-        setupLayout()
+        setupLayout(isCanAccess: isCanAcess)
         clipsToBounds = true
     }
 
@@ -170,42 +170,45 @@ internal final class YPLibraryView: UIView {
     }
 
     // MARK: - Private Methods
+    
+    func setupLayout(isCanAccess: Bool) {
+        if (isCanAccess) {
+            subviews(
+                collectionContainerView.subviews(
+                    collectionView
+                ),
+                line,
+                assetViewContainer.subviews(
+                    assetZoomableView
+                ),
+                progressView,
+                maxNumberWarningView.subviews(
+                    maxNumberWarningLabel
+                ),
+                requestDeniedView
+            )
+            
+            collectionContainerView.fillContainer()
+            collectionView.fillHorizontally().bottom(0)
 
-    private func setupLayout() {
-        
-        subviews(
-            collectionContainerView.subviews(
-                collectionView
-            ),
-            line,
-            assetViewContainer.subviews(
-                assetZoomableView
-            ),
-            progressView,
-            maxNumberWarningView.subviews(
-                maxNumberWarningLabel
-            ),
-            requestDeniedView
-        )
+            assetViewContainer.Bottom == line.Top
+            line.height(1)
+            line.fillHorizontally()
 
-        collectionContainerView.fillContainer()
-        collectionView.fillHorizontally().bottom(0)
+            assetViewContainer.top(0).fillHorizontally().heightEqualsWidth()
+            self.assetViewContainerConstraintTop = assetViewContainer.topConstraint
+            assetZoomableView.fillContainer().heightEqualsWidth()
+            assetZoomableView.Bottom == collectionView.Top
+            assetViewContainer.sendSubviewToBack(assetZoomableView)
 
-        assetViewContainer.Bottom == line.Top
-        line.height(1)
-        line.fillHorizontally()
+            progressView.height(5).fillHorizontally()
+            progressView.Bottom == line.Top
 
-        assetViewContainer.top(0).fillHorizontally().heightEqualsWidth()
-        self.assetViewContainerConstraintTop = assetViewContainer.topConstraint
-        assetZoomableView.fillContainer().heightEqualsWidth()
-        assetZoomableView.Bottom == collectionView.Top
-        assetViewContainer.sendSubviewToBack(assetZoomableView)
-
-        progressView.height(5).fillHorizontally()
-        progressView.Bottom == line.Top
-
-        |maxNumberWarningView|.bottom(0)
-        maxNumberWarningView.Top == safeAreaLayoutGuide.Bottom - 40
-        maxNumberWarningLabel.centerHorizontally().top(11)
+            |maxNumberWarningView|.bottom(0)
+            maxNumberWarningView.Top == safeAreaLayoutGuide.Bottom - 40
+            maxNumberWarningLabel.centerHorizontally().top(11)
+        } else {
+            requestDeniedView.fillContainer()
+        }
     }
 }
