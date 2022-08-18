@@ -86,7 +86,7 @@
 		EBA37B0B26F73080005DAAD4 /* YPAlbumCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA37B0626F73080005DAAD4 /* YPAlbumCell.swift */; };
 		EBA37B0C26F73080005DAAD4 /* YPAlbumsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA37B0726F73080005DAAD4 /* YPAlbumsManager.swift */; };
 		EBA37B0D26F73080005DAAD4 /* YPAlbumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA37B0826F73080005DAAD4 /* YPAlbumView.swift */; };
-		EBA37B3026F74228005DAAD4 /* (null) in Embed Frameworks */ = {isa = PBXBuildFile; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		EBA37B3026F74228005DAAD4 /* BuildFile in Embed Frameworks */ = {isa = PBXBuildFile; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		EBA37B5226F749C6005DAAD4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA37B5126F749C6005DAAD4 /* AppDelegate.swift */; };
 		EBA37B5B26F749C7005DAAD4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EBA37B5A26F749C7005DAAD4 /* Assets.xcassets */; };
 		EBA37B5E26F749C7005DAAD4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EBA37B5C26F749C7005DAAD4 /* LaunchScreen.storyboard */; };
@@ -192,6 +192,12 @@
 		EBDDF0EB278784A900A372FD /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDDF0EA278784A900A372FD /* Array+Extensions.swift */; };
 		EBDDF0EC278784A900A372FD /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDDF0EA278784A900A372FD /* Array+Extensions.swift */; };
 		EBE6CA48210389ED005B0A6A /* CIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE6CA47210389ED005B0A6A /* CIImage+Extensions.swift */; };
+		EE1E187B28AE576900A55D29 /* RequestDeniedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE1E187A28AE576900A55D29 /* RequestDeniedView.swift */; };
+		EE1E187C28AE576900A55D29 /* RequestDeniedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE1E187A28AE576900A55D29 /* RequestDeniedView.swift */; };
+		EE1E187E28AE582A00A55D29 /* RequestDeniedView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EE1E187D28AE582A00A55D29 /* RequestDeniedView.xib */; };
+		EE1E187F28AE582A00A55D29 /* RequestDeniedView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EE1E187D28AE582A00A55D29 /* RequestDeniedView.xib */; };
+		EE1E188128AE597200A55D29 /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE1E188028AE597200A55D29 /* BaseView.swift */; };
+		EE1E188228AE597200A55D29 /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE1E188028AE597200A55D29 /* BaseView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -201,7 +207,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				EBA37B3026F74228005DAAD4 /* (null) in Embed Frameworks */,
+				EBA37B3026F74228005DAAD4 /* BuildFile in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -338,6 +344,9 @@
 		EBDDF0E62787069E00A372FD /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		EBDDF0EA278784A900A372FD /* Array+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extensions.swift"; sourceTree = "<group>"; };
 		EBE6CA47210389ED005B0A6A /* CIImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CIImage+Extensions.swift"; sourceTree = "<group>"; };
+		EE1E187A28AE576900A55D29 /* RequestDeniedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestDeniedView.swift; sourceTree = "<group>"; };
+		EE1E187D28AE582A00A55D29 /* RequestDeniedView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RequestDeniedView.xib; sourceTree = "<group>"; };
+		EE1E188028AE597200A55D29 /* BaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -490,6 +499,9 @@
 				99C6D6A11F1FB5C100711DB2 /* YPLibraryView.xib */,
 				99C6D6A21F1FB5C100711DB2 /* YPLibraryViewCell.swift */,
 				990FD292201B3D69002A39A1 /* YPLibraryViewDelegate.swift */,
+				EE1E188028AE597200A55D29 /* BaseView.swift */,
+				EE1E187D28AE582A00A55D29 /* RequestDeniedView.xib */,
+				EE1E187A28AE576900A55D29 /* RequestDeniedView.swift */,
 			);
 			path = Gallery;
 			sourceTree = "<group>";
@@ -784,6 +796,7 @@
 				8458057421819B95004F241C /* YPImagePickerLocalizable.strings in Resources */,
 				99C6D6B91F1FB5C100711DB2 /* Assets.xcassets in Resources */,
 				99C6D6BD1F1FB5C100711DB2 /* YPLibraryView.xib in Resources */,
+				EE1E187F28AE582A00A55D29 /* RequestDeniedView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -796,6 +809,7 @@
 				EBA37B5B26F749C7005DAAD4 /* Assets.xcassets in Resources */,
 				EBA37BC726F75151005DAAD4 /* YPImagePickerLocalizable.strings in Resources */,
 				EBA37BC626F75144005DAAD4 /* Assets.xcassets in Resources */,
+				EE1E187E28AE582A00A55D29 /* RequestDeniedView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -919,6 +933,7 @@
 				EBB0FF7A20877A7500C84E25 /* YPVideoView.swift in Sources */,
 				EB473E19208E198E00D16105 /* AVFileType+Extensions.swift in Sources */,
 				EBA37AFF26F7302B005DAAD4 /* YPLog.swift in Sources */,
+				EE1E188228AE597200A55D29 /* BaseView.swift in Sources */,
 				EBD66105208104EA00EA276E /* YPIcons.swift in Sources */,
 				EB473E1F208E1BCC00D16105 /* AVMutableComposition+Extensions.swift in Sources */,
 				99472DED2056E33700419F9E /* YPWordings.swift in Sources */,
@@ -938,6 +953,7 @@
 				99CD962720D179FD009F5084 /* YPSelectionsGalleryView.swift in Sources */,
 				99C6D6BE1F1FB5C100711DB2 /* YPLibraryViewCell.swift in Sources */,
 				EBA37B0D26F73080005DAAD4 /* YPAlbumView.swift in Sources */,
+				EE1E187C28AE576900A55D29 /* RequestDeniedView.swift in Sources */,
 				99C6D6C91F1FB5C100711DB2 /* YPBottomPager.swift in Sources */,
 				EBA37BBC26F74CE0005DAAD4 /* YPPhotoFiltersVC.swift in Sources */,
 				99CF6D2B201CB96700487F77 /* YPVideoCaptureHelper.swift in Sources */,
@@ -987,6 +1003,7 @@
 				EBA37B7F26F74CBA005DAAD4 /* YPPermissionCheckable.swift in Sources */,
 				EBA37B9826F74CBA005DAAD4 /* YPVideoProcessor.swift in Sources */,
 				EBA37B8526F74CBA005DAAD4 /* YPLibraryVC.swift in Sources */,
+				EE1E188128AE597200A55D29 /* BaseView.swift in Sources */,
 				EBA37B9E26F74CBA005DAAD4 /* YPDragDirection.swift in Sources */,
 				EBDDF0EB278784A900A372FD /* Array+Extensions.swift in Sources */,
 				EBA37B5226F749C6005DAAD4 /* AppDelegate.swift in Sources */,
@@ -1004,6 +1021,7 @@
 				EBA37B8926F74CBA005DAAD4 /* YPAlerts.swift in Sources */,
 				EBA37B9526F74CBA005DAAD4 /* AVCaptureDevice+Extensions.swift in Sources */,
 				EBA37B9426F74CBA005DAAD4 /* YPAssetZoomableView.swift in Sources */,
+				EE1E187B28AE576900A55D29 /* RequestDeniedView.swift in Sources */,
 				EBA37BA126F74CBA005DAAD4 /* AVAsset+Extensions.swift in Sources */,
 				EBA37B8626F74CBA005DAAD4 /* YPWordings.swift in Sources */,
 				EBA37BAC26F74CBA005DAAD4 /* YPHelper.swift in Sources */,

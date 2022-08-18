@@ -43,6 +43,11 @@ internal final class YPLibraryView: UIView {
         v.isHidden = true
         return v
     }()
+    internal let requestDeniedView: RequestDeniedView = {
+        let v = RequestDeniedView()
+        v.backgroundColor = .white
+        return v
+    }()
     internal let maxNumberWarningLabel: UILabel = {
         let v = UILabel()
         v.font = YPConfig.fonts.libaryWarningFont
@@ -178,7 +183,8 @@ internal final class YPLibraryView: UIView {
             progressView,
             maxNumberWarningView.subviews(
                 maxNumberWarningLabel
-            )
+            ),
+            requestDeniedView
         )
 
         collectionContainerView.fillContainer()
