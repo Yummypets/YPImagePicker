@@ -24,6 +24,15 @@ class RequestDeniedView: BaseView {
     override func setup() {
         super.setup()
         setupFromNib()
+        emptyViewDescriptionLabel.textColor = .black
+        emptyViewDescriptionLabel.font = UIFont.systemFont(ofSize: 15)
+        emptyViewDescriptionLabel.text = ypLocalized("YPLibraryViewRequestDeniedDescription")
+        
+        goToSettingsButton.setTitle(ypLocalized("YPLibraryViewRequestDeniedButtonText"), for: .normal)
+        goToSettingsButton.tintColor = .blue
+        goToSettingsButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
+        
+        
         
     }
     
