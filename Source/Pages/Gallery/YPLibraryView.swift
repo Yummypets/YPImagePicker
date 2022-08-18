@@ -89,9 +89,9 @@ internal final class YPLibraryView: UIView {
 
     // MARK: - Init
 
-    override init(frame: CGRect,isCanAcess: Bool) {
+    init(frame: CGRect,isCanAcess: Bool) {
         super.init(frame: frame)
-
+        
         setupLayout(isCanAccess: isCanAcess)
         clipsToBounds = true
     }

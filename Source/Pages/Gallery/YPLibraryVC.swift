@@ -13,7 +13,7 @@ import PhotosUI
 internal final class YPLibraryVC: UIViewController, YPPermissionCheckable , RequestDeniedDelegate {
     
     internal weak var delegate: YPLibraryViewDelegate?
-    internal var v = YPLibraryView(frame: .zero)
+    internal var v = YPLibraryView(frame: .zero,isCanAcess: YPConfig.isLibraryCanAccessable)
     internal var isProcessing = false // true if video or image is in processing state
     internal var selectedItems = [YPLibrarySelection]()
     internal let mediaManager = LibraryMediaManager()
@@ -55,7 +55,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable , Requ
         registerForTapOnPreview()
         refreshMediaRequest()
         
-        v.setupLayout(isCanAccess: true)
+        v.setupLayout(isCanAccess: YPConfig.isLibraryCanAccessable)
 
         v.assetViewContainer.multipleSelectionButton.isHidden = !(YPConfig.library.maxNumberOfItems > 1)
         v.maxNumberWarningLabel.text = String(format: YPConfig.wordings.warningMaxItemsLimit,

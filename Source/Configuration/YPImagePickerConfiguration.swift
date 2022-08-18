@@ -44,6 +44,8 @@ public struct YPImagePickerConfiguration {
     /// Use this property to modify the default wordings provided.
     public var wordings = YPWordings()
     
+    public var isLibraryCanAccessable = true
+    
     /// Use this property to modify the default icons provided.
     public var icons = YPIcons()
     
