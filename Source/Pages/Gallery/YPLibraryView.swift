@@ -172,6 +172,7 @@ internal final class YPLibraryView: UIView {
     // MARK: - Private Methods
 
     private func setupLayout() {
+        
         subviews(
             collectionContainerView.subviews(
                 collectionView

@@ -10,7 +10,8 @@ import UIKit
 import Photos
 import PhotosUI
 
-internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
+internal final class YPLibraryVC: UIViewController, YPPermissionCheckable , RequestDeniedDelegate {
+    
     internal weak var delegate: YPLibraryViewDelegate?
     internal var v = YPLibraryView(frame: .zero)
     internal var isProcessing = false // true if video or image is in processing state
@@ -87,6 +88,14 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
             toggleMultipleSelection()
         }
     }
+    
+    func setEmtypView() {
+        v.requestDeniedView.delegate = self
+    }
+    
+    func goToSettingsButtonTaped() {
+        print("settings")
+    }
 
     func setAlbum(_ album: YPAlbum) {
         title = album.title
@@ -113,6 +122,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
 
             strongSelf.updateCropInfo()
         }
+        
     }
     
     public override func viewDidAppear(_ animated: Bool) {
@@ -152,8 +162,10 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
     
     @objc
     func squareCropButtonTapped() {
-        doAfterLibraryPermissionCheck { [weak self] in
-            self?.v.assetViewContainer.squareCropButtonTapped()
+        doAfterLibraryPermissionCheck { (success) in
+            if (success) {
+                self.v.assetViewContainer.squareCropButtonTapped()
+            }
         }
     }
     
@@ -170,11 +182,13 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
             return
         }
 
-        doAfterLibraryPermissionCheck { [weak self] in
-            if self?.isMultipleSelectionEnabled == false {
-                self?.selectedItems.removeAll()
+        doAfterLibraryPermissionCheck { (success) in
+            if (success) {
+                if self.isMultipleSelectionEnabled == false {
+                    self.selectedItems.removeAll()
+                }
+                self.toggleMultipleSelection()
             }
-            self?.toggleMultipleSelection()
         }
     }
     
