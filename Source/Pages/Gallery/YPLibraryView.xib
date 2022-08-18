@@ -14,6 +14,10 @@
             <rect key="frame" x="0.0" y="0.0" width="400" height="550"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="klJ-NQ-F5m">
+                    <rect key="frame" x="0.0" y="0.0" width="400" height="550"/>
+                    <color key="backgroundColor" systemColor="systemPinkColor"/>
+                </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Cu-Zp-X0j">
                     <rect key="frame" x="0.0" y="0.0" width="400" height="550"/>
                     <subviews>
@@ -54,10 +58,6 @@
                         <constraint firstAttribute="width" secondItem="90B-0c-ych" secondAttribute="height" multiplier="1:1" id="coZ-5v-rE3"/>
                         <constraint firstAttribute="trailing" secondItem="Mc5-1c-z7q" secondAttribute="trailing" id="sKD-NK-t20"/>
                     </constraints>
-                </view>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="klJ-NQ-F5m">
-                    <rect key="frame" x="0.0" y="0.0" width="400" height="550"/>
-                    <color key="backgroundColor" systemColor="systemPinkColor"/>
                 </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
