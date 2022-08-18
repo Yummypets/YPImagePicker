@@ -208,6 +208,9 @@ internal final class YPLibraryView: UIView {
             maxNumberWarningView.Top == safeAreaLayoutGuide.Bottom - 40
             maxNumberWarningLabel.centerHorizontally().top(11)
         } else {
+            subviews(
+                requestDeniedView
+            )
             requestDeniedView.fillContainer()
         }
     }
