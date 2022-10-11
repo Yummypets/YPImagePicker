@@ -410,14 +410,32 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
             return
         }
         
-        if YPConfig.video.automaticTrimToTrimmerMaxDuration {
-            fetchVideoAndCropWithDuration(for: asset,
-                                          withCropRect: resultCropRect,
-                                          duration: YPConfig.video.trimmerMaxDuration,
-                                          callback: callback)
-        } else {
-            delegate?.libraryViewDidTapNext()
-            mediaManager.fetchVideoUrlAndCrop(for: asset, cropRect: resultCropRect, callback: callback)
+        DispatchQueue.main.async {
+            let storyBoard = UIStoryboard(name: "YPVideoCompressionVC", bundle: nil)
+            let ypVideoCompressionVC = storyBoard.instantiateViewController(withIdentifier: "YPVideoCompressionVC") as! YPVideoCompressionVC
+            
+            let compressionOtions: [compressionOptions] = [compressionOptions.AVAssetExportPresetLowQuality, compressionOptions.AVAssetExportPreset640x480,compressionOptions.AVAssetExportPreset1920x1080, compressionOptions.AVAssetExportPresetPassthrough]
+            var titleArray = [String]()
+            for compressionOtion in compressionOtions {
+                titleArray.append(compressionOtion.getLabel())
+            }
+            ypVideoCompressionVC.titleArray = titleArray
+            ypVideoCompressionVC.headingTitle = "Choose video quality"
+            ypVideoCompressionVC.modalPresentationStyle = .overFullScreen
+            ypVideoCompressionVC.didDismiss = {(index) in
+                YPImagePickerConfiguration.shared.video.compression = compressionOtions[index].presetID()
+                
+                if YPConfig.video.automaticTrimToTrimmerMaxDuration {
+                    self.fetchVideoAndCropWithDuration(for: asset,
+                                                  withCropRect: resultCropRect,
+                                                  duration: YPConfig.video.trimmerMaxDuration,
+                                                  callback: callback)
+                } else {
+                    self.delegate?.libraryViewDidTapNext()
+                    self.mediaManager.fetchVideoUrlAndCrop(for: asset, cropRect: resultCropRect, callback: callback)
+                }
+            }
+            self.present(ypVideoCompressionVC, animated: true, completion: nil)
         }
     }
     
