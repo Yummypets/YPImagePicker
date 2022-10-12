@@ -9,6 +9,70 @@
 import UIKit
 import Photos
 
+
+public enum compressionOptions: String {
+    case AVAssetExportPresetLowQuality
+    case AVAssetExportPreset640x480
+    case AVAssetExportPresetMediumQuality
+    case AVAssetExportPreset1920x1080
+    case AVAssetExportPreset1280x720
+    case AVAssetExportPresetHighestQuality
+    case AVAssetExportPresetAppleM4A
+    case AVAssetExportPreset3840x2160
+    case AVAssetExportPreset960x540
+    case AVAssetExportPresetPassthrough
+    
+    func presetID() -> String {
+        switch self {
+            case .AVAssetExportPresetLowQuality:
+                return "AVAssetExportPresetLowQuality"
+            case .AVAssetExportPreset640x480:
+                return "AVAssetExportPreset640x480"
+            case .AVAssetExportPresetMediumQuality:
+                return "AVAssetExportPresetMediumQuality"
+            case .AVAssetExportPreset1920x1080:
+                return "AVAssetExportPreset1920x1080"
+            case .AVAssetExportPreset1280x720:
+                return "AVAssetExportPreset1280x720"
+            case .AVAssetExportPresetHighestQuality:
+                return "AVAssetExportPresetHighestQuality"
+            case .AVAssetExportPresetAppleM4A:
+                return "AVAssetExportPresetAppleM4A"
+            case .AVAssetExportPreset3840x2160:
+                return "AVAssetExportPreset3840x2160"
+            case .AVAssetExportPreset960x540:
+                return "AVAssetExportPreset960x540"
+            case .AVAssetExportPresetPassthrough:
+                return "AVAssetExportPresetPassthrough"
+        }
+    }
+    
+    func getLabel() -> String {
+        switch self {
+            case .AVAssetExportPresetLowQuality:
+                return "Low"
+            case .AVAssetExportPreset640x480:
+                return "HD"
+            case .AVAssetExportPresetMediumQuality:
+                return "Medium"
+            case .AVAssetExportPreset1920x1080:
+                return "Full HD"
+            case .AVAssetExportPreset1280x720:
+                return "1280 x 720"
+            case .AVAssetExportPresetHighestQuality:
+                return "Highest"
+            case .AVAssetExportPresetAppleM4A:
+                return "Apple M4A"
+            case .AVAssetExportPreset3840x2160:
+                return "3840 x 2160"
+            case .AVAssetExportPreset960x540:
+                return "960 x 540"
+            case .AVAssetExportPresetPassthrough:
+                return "Original"
+        }
+    }
+}
+
 class LibraryMediaManager {
     
     weak var v: YPLibraryView?
