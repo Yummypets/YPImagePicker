@@ -122,7 +122,10 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         YPHelper.changeBackButtonIcon(self)
         YPHelper.changeBackButtonTitle(self)
         
+       
+        
         albumVC.albums = albumVC.albumsManager.fetchAlbums()
+
         if(!albumVC.albums.isEmpty) {
                     let recentAlbum = albumVC.albums[0]
                     self.libraryVC?.title = recentAlbum.title
