@@ -124,14 +124,16 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         
        
         
-        albumVC.albums = albumVC.albumsManager.fetchAlbums()
-
-        if(!albumVC.albums.isEmpty) {
-                    let recentAlbum = albumVC.albums[0]
-                    self.libraryVC?.title = recentAlbum.title
-                    self.libraryVC?.mediaManager.collection = recentAlbum.collection
-                    self.setTitleViewWithTitle(aTitle: recentAlbum.title)
-                }
+           doAfterLibraryPermissionCheck { [weak self] in
+            self?.albumVC.albums = self?.albumVC.albumsManager.fetchAlbums() ?? []
+            
+            if(self?.albumVC.albums.isEmpty != nil) {
+                let recentAlbum = self?.albumVC.albums[0]
+                        self?.libraryVC?.title = recentAlbum?.title
+                        self?.libraryVC?.mediaManager.collection = recentAlbum?.collection
+                        self?.setTitleViewWithTitle(aTitle: recentAlbum?.title ?? "Library")
+                    }
+        }
     }
     
     open override func viewWillAppear(_ animated: Bool) {
