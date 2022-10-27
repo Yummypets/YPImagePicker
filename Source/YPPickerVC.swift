@@ -124,9 +124,9 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         
        
         
-           doAfterLibraryPermissionCheck { [weak self] in
+           self.libraryVC?.doAfterLibraryPermissionCheck { [weak self] in
             self?.albumVC.albums = self?.albumVC.albumsManager.fetchAlbums() ?? []
-            
+
             if(self?.albumVC.albums.isEmpty != nil) {
                 let recentAlbum = self?.albumVC.albums[0]
                         self?.libraryVC?.title = recentAlbum?.title
