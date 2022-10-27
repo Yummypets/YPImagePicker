@@ -28,14 +28,14 @@ final class YPAssetZoomableView: UIScrollView {
     public var portraitRatio: Double = YPConfig.portraitRatio
     public var photoLandscapeRatio: Double = YPConfig.photoLandscapeRatio
     public var videoLandscapeRatio: Double = YPConfig.videoLandscapeRatio
-    public var assetType = 0
+    public var assetType = 0  // 0: Portrait, 1: Landscape, 2: Square
     public var isMediaFiting = false
     public var isCarouselAlbumUpdating = YPConfig.isCarouselAlbumUpdating
     public var carouselAlbumAspectRatio = YPConfig.carouselAlbumAspectRatio
-    public var carouselAlbumAssetType = YPConfig.carouselAlbumAssetType
+    public var carouselAlbumAssetType = YPConfig.carouselAlbumAssetType  // 0: Portrait, 1: Landscape, 2: Square
     public var isMultipleSelectionEnabled = false
     public var multipleSelectionAspectRatio = 0.805
-    public var multipleSelectionAssetType = 0
+    public var multipleSelectionAssetType = 0  // 0: Portrait, 1: Landscape, 2: Square
     public var isFrameChanged = false
     
     // carousel

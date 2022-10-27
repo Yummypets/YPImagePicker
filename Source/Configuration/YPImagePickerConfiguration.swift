@@ -32,14 +32,13 @@ public struct YPImagePickerConfiguration {
 
     public init() {}
     
-    /// Include another aspect ratio
+    /// Include post aspect ratio
     public var isPost = false
-    
     
     /// for updating carousel album
     public var isCarouselAlbumUpdating = false
     public var carouselAlbumAspectRatio = 0.805
-    public var carouselAlbumAssetType = 0
+    public var carouselAlbumAssetType = 0  // 0: Portrait, 1: Landscape, 2: Square
 
 
     // for unerstanding why ratios has such values, look at the calculateSquaredZoomScale func

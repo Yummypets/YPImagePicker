@@ -30,11 +30,11 @@ extension YPLibraryVC: PHPhotoLibraryChangeObserver {
                 collectionView.performBatchUpdates({
                     if let removedIndexes = collectionChanges.removedIndexes,
                        removedIndexes.count != 0 {
-                        collectionView.deleteItems(at: removedIndexes.aapl_indexPathsFromIndexesWithSection(0))
+                        collectionView.deleteItems(at: removedIndexes.aapl_indexPathsFromIndexesWithSection(0, fetchResult.count))
                     }
 
                     if let insertedIndexes = collectionChanges.insertedIndexes, insertedIndexes.count != 0 {
-                        collectionView.insertItems(at: insertedIndexes.aapl_indexPathsFromIndexesWithSection(0))
+                        collectionView.insertItems(at: insertedIndexes.aapl_indexPathsFromIndexesWithSection(0, (self.mediaManager.fetchResult?.count ?? 1)))
                     }
                 }, completion: { finished in
                     guard finished,
@@ -44,7 +44,7 @@ extension YPLibraryVC: PHPhotoLibraryChangeObserver {
                         return
                     }
 
-                    collectionView.reloadItems(at: changedIndexes.aapl_indexPathsFromIndexesWithSection(0))
+                    collectionView.reloadItems(at: changedIndexes.aapl_indexPathsFromIndexesWithSection(0, (self.mediaManager.fetchResult?.count ?? 1)))
                 })
             }
 

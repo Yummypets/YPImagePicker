@@ -17,7 +17,7 @@ protocol YPPickerVCDelegate: AnyObject {
 
 open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     
-    let albumsManager = YPAlbumsManager()
+    let albumVC = YPAlbumVC(albumsManager:  YPAlbumsManager())
     var shouldHideStatusBar = false
     var initialStatusBarHidden = false
     weak var pickerVCDelegate: YPPickerVCDelegate?
@@ -121,6 +121,14 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         
         YPHelper.changeBackButtonIcon(self)
         YPHelper.changeBackButtonTitle(self)
+        
+        albumVC.albums = albumVC.albumsManager.fetchAlbums()
+        if(!albumVC.albums.isEmpty) {
+                    let recentAlbum = albumVC.albums[0]
+                    self.libraryVC?.title = recentAlbum.title
+                    self.libraryVC?.mediaManager.collection = recentAlbum.collection
+                    self.setTitleViewWithTitle(aTitle: recentAlbum.title)
+                }
     }
     
     open override func viewWillAppear(_ animated: Bool) {

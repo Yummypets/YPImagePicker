@@ -228,6 +228,6 @@ class LibraryMediaManager {
             print("FetchResult not contain this index: \(index)")
             return nil
         }
-        return fetchResult.object(at: index)
+        return fetchResult.object(at: fetchResult.count - index - 1)
     }
 }
