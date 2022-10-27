@@ -274,7 +274,6 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         }
 
         let options = PHFetchOptions()
-        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         options.predicate = YPConfig.library.mediaType.predicate()
         return options
     }

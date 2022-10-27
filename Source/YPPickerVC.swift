@@ -222,11 +222,10 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
             return
         }
         
-        let vc = YPAlbumVC(albumsManager: albumsManager)
-        let navVC = UINavigationController(rootViewController: vc)
+        let navVC = UINavigationController(rootViewController: albumVC)
         navVC.navigationBar.tintColor = .ypLabel
         
-        vc.didSelectAlbum = { [weak self] album in
+        albumVC.didSelectAlbum = { [weak self] album in
             self?.libraryVC?.setAlbum(album)
             self?.setTitleViewWithTitle(aTitle: album.title)
             navVC.dismiss(animated: true, completion: nil)
