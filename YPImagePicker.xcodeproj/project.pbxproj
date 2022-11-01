@@ -287,7 +287,6 @@
 		AA69BCF122E601D100FBB925 /* YPDeviceOrientationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPDeviceOrientationHelper.swift; sourceTree = "<group>"; };
 		BEED427CB4F6E5B8C20B6F13 /* Pods-Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.release.xcconfig"; path = "Target Support Files/Pods-Example/Pods-Example.release.xcconfig"; sourceTree = "<group>"; };
 		C86AD83F28F3D2E500E2EB89 /* YPVideoCompressionVC.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = YPVideoCompressionVC.storyboard; sourceTree = "<group>"; };
-		C8B2F8282910E48900849806 /* YPVideoCompressionVC.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = YPVideoCompressionVC.storyboard; path = Source/Filters/Video/YPVideoCompressionVC.storyboard; sourceTree = "<group>"; };
 		C8F28E7128F34E5800E9290E /* YPVideoCompressionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPVideoCompressionVC.swift; sourceTree = "<group>"; };
 		DC3DAC4526C6FCAA007FD95A /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
 		E3E492BB2169012B002BA807 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
@@ -371,7 +370,6 @@
 		52412A891CA6114A0073C4BE = {
 			isa = PBXGroup;
 			children = (
-				C8B2F8282910E48900849806 /* YPVideoCompressionVC.storyboard */,
 				EB84ADD522F35506003667B5 /* YPImagePicker.podspec */,
 				EBA37B1426F737CE005DAAD4 /* Podfile */,
 				EBDDF0E62787069E00A372FD /* Package.swift */,
@@ -790,9 +788,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C86AD84128F3D2E500E2EB89 /* YPVideoCompressionVC.storyboard in Resources */,
 				8458057421819B95004F241C /* YPImagePickerLocalizable.strings in Resources */,
 				99C6D6B91F1FB5C100711DB2 /* Assets.xcassets in Resources */,
+				C86AD84128F3D2E500E2EB89 /* YPVideoCompressionVC.storyboard in Resources */,
 				99C6D6BD1F1FB5C100711DB2 /* YPLibraryView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
