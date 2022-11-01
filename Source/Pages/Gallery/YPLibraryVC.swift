@@ -411,7 +411,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         }
         
         DispatchQueue.main.async {
-            let storyBoard = UIStoryboard(name: "YPVideoCompressionVC", bundle: nil)
+            let storyBoard = UIStoryboard(name: "YPVideoCompressionVC", bundle: Bundle(for: YPVideoCompressionVC.self))
             let ypVideoCompressionVC = storyBoard.instantiateViewController(withIdentifier: "YPVideoCompressionVC") as! YPVideoCompressionVC
             
             let compressionOtions: [compressionOptions] = [compressionOptions.AVAssetExportPresetLowQuality, compressionOptions.AVAssetExportPreset640x480,compressionOptions.AVAssetExportPreset1920x1080, compressionOptions.AVAssetExportPresetPassthrough]
