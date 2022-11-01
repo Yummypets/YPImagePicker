@@ -395,6 +395,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
     }
     
     private func fetchVideoAndApplySettings(for asset: PHAsset,
+                                            showCompressOptions: Bool,
                                             withCropRect rect: CGRect? = nil,
                                             callback: @escaping (_ videoURL: URL?) -> Void) {
         let normalizedCropRect = rect ?? DispatchQueue.main.sync { v.currentCropRect() }
@@ -410,32 +411,48 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
             return
         }
         
-        DispatchQueue.main.async {
-            let storyBoard = UIStoryboard(name: "YPVideoCompressionVC", bundle: Bundle(for: YPVideoCompressionVC.self))
-            let ypVideoCompressionVC = storyBoard.instantiateViewController(withIdentifier: "YPVideoCompressionVC") as! YPVideoCompressionVC
-            
-            let compressionOtions: [compressionOptions] = [compressionOptions.AVAssetExportPresetLowQuality, compressionOptions.AVAssetExportPreset640x480,compressionOptions.AVAssetExportPreset1920x1080, compressionOptions.AVAssetExportPresetPassthrough]
-            var titleArray = [String]()
-            for compressionOtion in compressionOtions {
-                titleArray.append(compressionOtion.getLabel())
-            }
-            ypVideoCompressionVC.titleArray = titleArray
-            ypVideoCompressionVC.headingTitle = "Choose video quality"
-            ypVideoCompressionVC.modalPresentationStyle = .overFullScreen
-            ypVideoCompressionVC.didDismiss = {(index) in
-                YPImagePickerConfiguration.shared.video.compression = compressionOtions[index].presetID()
+        let compressionOtions: [compressionOptions] = [compressionOptions.AVAssetExportPresetLowQuality, compressionOptions.AVAssetExportPreset640x480,compressionOptions.AVAssetExportPreset1920x1080, compressionOptions.AVAssetExportPresetPassthrough]
+        
+        if showCompressOptions {
+            DispatchQueue.main.async {
+                let storyBoard = UIStoryboard(name: "YPVideoCompressionVC", bundle: Bundle(for: YPVideoCompressionVC.self))
+                let ypVideoCompressionVC = storyBoard.instantiateViewController(withIdentifier: "YPVideoCompressionVC") as! YPVideoCompressionVC
                 
-                if YPConfig.video.automaticTrimToTrimmerMaxDuration {
-                    self.fetchVideoAndCropWithDuration(for: asset,
-                                                  withCropRect: resultCropRect,
-                                                  duration: YPConfig.video.trimmerMaxDuration,
-                                                  callback: callback)
-                } else {
-                    self.delegate?.libraryViewDidTapNext()
-                    self.mediaManager.fetchVideoUrlAndCrop(for: asset, cropRect: resultCropRect, callback: callback)
+                var titleArray = [String]()
+                for compressionOtion in compressionOtions {
+                    titleArray.append(compressionOtion.getLabel())
                 }
+                ypVideoCompressionVC.titleArray = titleArray
+                ypVideoCompressionVC.headingTitle = "Choose video quality"
+                ypVideoCompressionVC.modalPresentationStyle = .overFullScreen
+                ypVideoCompressionVC.didDismiss = {(index) in
+                    YPImagePickerConfiguration.shared.video.compression = compressionOtions[index].presetID()
+                    
+                    if YPConfig.video.automaticTrimToTrimmerMaxDuration {
+                        self.fetchVideoAndCropWithDuration(for: asset,
+                                                           withCropRect: resultCropRect,
+                                                           duration: YPConfig.video.trimmerMaxDuration,
+                                                           callback: callback)
+                    } else {
+                        self.delegate?.libraryViewDidTapNext()
+                        self.mediaManager.fetchVideoUrlAndCrop(for: asset, cropRect: resultCropRect, callback: callback)
+                    }
+                }
+                self.present(ypVideoCompressionVC, animated: true, completion: nil)
             }
-            self.present(ypVideoCompressionVC, animated: true, completion: nil)
+        } else {
+            let index = UserDefaults.standard.integer(forKey: COMPRESSION_OPTION) ?? 0
+            YPImagePickerConfiguration.shared.video.compression =  compressionOtions[index].presetID()
+            
+            if YPConfig.video.automaticTrimToTrimmerMaxDuration {
+                self.fetchVideoAndCropWithDuration(for: asset,
+                                                   withCropRect: resultCropRect,
+                                                   duration: YPConfig.video.trimmerMaxDuration,
+                                                   callback: callback)
+            } else {
+                self.delegate?.libraryViewDidTapNext()
+                self.mediaManager.fetchVideoUrlAndCrop(for: asset, cropRect: resultCropRect, callback: callback)
+            }
         }
     }
     
@@ -484,6 +501,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                     assetDictionary[assetPair.asset] = index
                 }
                 
+                var videoCount = 0
                 for asset in selectedAssets {
                     asyncGroup.enter()
                     
@@ -497,8 +515,8 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                         }
                         
                     case .video:
-                        self.fetchVideoAndApplySettings(for: asset.asset,
-                                                             withCropRect: asset.cropRect) { videoURL in
+                            videoCount += 1
+                            self.fetchVideoAndApplySettings(for: asset.asset, showCompressOptions: videoCount == 1, withCropRect: asset.cropRect) { videoURL in
                             if let videoURL = videoURL {
                                 let videoItem = YPMediaVideo(thumbnail: thumbnailFromVideoPath(videoURL),
                                                              videoURL: videoURL, asset: asset.asset)
@@ -551,7 +569,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                 case .audio, .unknown:
                     return
                 case .video:
-                    self.fetchVideoAndApplySettings(for: asset, callback: { videoURL in
+                        self.fetchVideoAndApplySettings(for: asset, showCompressOptions: true, callback: { videoURL in
                         DispatchQueue.main.async {
                             if let videoURL = videoURL {
                                 self.delegate?.libraryViewFinishedLoading()
