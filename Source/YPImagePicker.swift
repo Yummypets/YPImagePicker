@@ -99,58 +99,59 @@ open class YPImagePicker: UINavigationController {
             }
             
             // One item flow
-            let item = items.first!
-            switch item {
-            case .photo(let photo):
-                let completion = { (photo: YPMediaPhoto) in
-                    let mediaItem = YPMediaItem.photo(p: photo)
-                    // Save new image or existing but modified, to the photo album.
-                    if YPConfig.shouldSaveNewPicturesToAlbum {
-                        let isModified = photo.modifiedImage != nil
-                        if photo.fromCamera || (!photo.fromCamera && isModified) {
-                            YPPhotoSaver.trySaveImage(photo.image, inAlbumNamed: YPConfig.albumName)
+            if let item = items.first {
+                switch item {
+                    case .photo(let photo):
+                        let completion = { (photo: YPMediaPhoto) in
+                            let mediaItem = YPMediaItem.photo(p: photo)
+                            // Save new image or existing but modified, to the photo album.
+                            if YPConfig.shouldSaveNewPicturesToAlbum {
+                                let isModified = photo.modifiedImage != nil
+                                if photo.fromCamera || (!photo.fromCamera && isModified) {
+                                    YPPhotoSaver.trySaveImage(photo.image, inAlbumNamed: YPConfig.albumName)
+                                }
+                            }
+                            self?.didSelect(items: [mediaItem])
                         }
-                    }
-                    self?.didSelect(items: [mediaItem])
-                }
-                
-                func showCropVC(photo: YPMediaPhoto, completion: @escaping (_ aphoto: YPMediaPhoto) -> Void) {
-                    switch YPConfig.showsCrop {
-                    case .rectangle, .circle:
-                        let cropVC = YPCropVC(image: photo.image)
-                        cropVC.didFinishCropping = { croppedImage in
-                            photo.modifiedImage = croppedImage
-                            completion(photo)
+                        
+                        func showCropVC(photo: YPMediaPhoto, completion: @escaping (_ aphoto: YPMediaPhoto) -> Void) {
+                            switch YPConfig.showsCrop {
+                                case .rectangle, .circle:
+                                    let cropVC = YPCropVC(image: photo.image)
+                                    cropVC.didFinishCropping = { croppedImage in
+                                        photo.modifiedImage = croppedImage
+                                        completion(photo)
+                                    }
+                                    self?.pushViewController(cropVC, animated: true)
+                                default:
+                                    completion(photo)
+                            }
                         }
-                        self?.pushViewController(cropVC, animated: true)
-                    default:
-                        completion(photo)
-                    }
-                }
-                
-                if YPConfig.showsPhotoFilters {
-                    let filterVC = YPPhotoFiltersVC(inputPhoto: photo,
-                                                    isFromSelectionVC: false)
-                    // Show filters and then crop
-                    filterVC.didSave = { outputMedia in
-                        if case let YPMediaItem.photo(outputPhoto) = outputMedia {
-                            showCropVC(photo: outputPhoto, completion: completion)
+                        
+                        if YPConfig.showsPhotoFilters {
+                            let filterVC = YPPhotoFiltersVC(inputPhoto: photo,
+                                                            isFromSelectionVC: false)
+                            // Show filters and then crop
+                            filterVC.didSave = { outputMedia in
+                                if case let YPMediaItem.photo(outputPhoto) = outputMedia {
+                                    showCropVC(photo: outputPhoto, completion: completion)
+                                }
+                            }
+                            self?.pushViewController(filterVC, animated: false)
+                        } else {
+                            showCropVC(photo: photo, completion: completion)
                         }
-                    }
-                    self?.pushViewController(filterVC, animated: false)
-                } else {
-                    showCropVC(photo: photo, completion: completion)
-                }
-            case .video(let video):
-                if YPConfig.showsVideoTrimmer {
-                    let videoFiltersVC = YPVideoFiltersVC.initWith(video: video,
-                                                                   isFromSelectionVC: false)
-                    videoFiltersVC.didSave = { [weak self] outputMedia in
-                        self?.didSelect(items: [outputMedia])
-                    }
-                    self?.pushViewController(videoFiltersVC, animated: true)
-                } else {
-                    self?.didSelect(items: [YPMediaItem.video(v: video)])
+                    case .video(let video):
+                        if YPConfig.showsVideoTrimmer {
+                            let videoFiltersVC = YPVideoFiltersVC.initWith(video: video,
+                                                                           isFromSelectionVC: false)
+                            videoFiltersVC.didSave = { [weak self] outputMedia in
+                                self?.didSelect(items: [outputMedia])
+                            }
+                            self?.pushViewController(videoFiltersVC, animated: true)
+                        } else {
+                            self?.didSelect(items: [YPMediaItem.video(v: video)])
+                        }
                 }
             }
         }
