@@ -261,7 +261,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         }
 
         let options = PHFetchOptions()
-        options.sortDescriptors = [NSSortDescriptor(key: "modificationDate", ascending: false)]
+        options.sortDescriptors = [NSSortDescriptor(key: YPConfig.library.sortingOption.rawValue, ascending: false)]
         options.predicate = YPConfig.library.mediaType.predicate()
         return options
     }
@@ -458,21 +458,20 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
             }
             
             if isVideoSelected {
-                let compressionOtions: [compressionOptions] = [compressionOptions.AVAssetExportPresetLowQuality, compressionOptions.AVAssetExportPreset640x480,compressionOptions.AVAssetExportPreset1920x1080, compressionOptions.AVAssetExportPresetPassthrough]
-                
                 DispatchQueue.main.async {
+                    let compressionOptions = YPImagePickerConfiguration.shared.video.compressionOption
                     let storyBoard = UIStoryboard(name: "YPVideoCompressionVC", bundle: Bundle(for: YPVideoCompressionVC.self))
                     let ypVideoCompressionVC = storyBoard.instantiateViewController(withIdentifier: "YPVideoCompressionVC") as! YPVideoCompressionVC
                     
                     var titleArray = [String]()
-                    for compressionOtion in compressionOtions {
+                    for compressionOtion in compressionOptions {
                         titleArray.append(compressionOtion.getLabel())
                     }
                     ypVideoCompressionVC.titleArray = titleArray
                     ypVideoCompressionVC.headingTitle = "Choose video quality"
                     ypVideoCompressionVC.modalPresentationStyle = .overFullScreen
                     ypVideoCompressionVC.didDismiss = {(index) in
-                        YPImagePickerConfiguration.shared.video.compression = compressionOtions[index].presetID()
+                        YPImagePickerConfiguration.shared.video.compression = compressionOptions[index].presetID()
                         asyncCompressionGroup.leave()
                     }
                     self.present(ypVideoCompressionVC, animated: true, completion: nil)

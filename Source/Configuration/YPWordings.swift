@@ -41,4 +41,15 @@ public struct YPWordings {
     public var filter = ypLocalized("YPImagePickerFilter")
     public var crop = ypLocalized("YPImagePickerCrop")
     public var warningMaxItemsLimit = ypLocalized("YPImagePickerWarningItemsLimit")
+    
+    public var textAVAssetExportPresetLowQuality = ypLocalized("Low")
+    public var textAVAssetExportPreset640x480 = ypLocalized("Medium (HD)")
+    public var textAVAssetExportPresetMediumQuality = ypLocalized("Medium")
+    public var textAVAssetExportPreset1920x1080 = ypLocalized("High (Full HD)")
+    public var textAVAssetExportPreset1280x720 = ypLocalized("1280 x 720")
+    public var textAVAssetExportPresetHighestQuality = ypLocalized("Highest")
+    public var textAVAssetExportPresetAppleM4A = ypLocalized("Apple M4A")
+    public var textAVAssetExportPreset3840x2160 = ypLocalized("3840 x 2160")
+    public var textAVAssetExportPreset960x540 = ypLocalized("960 x 540")
+    public var textAVAssetExportPresetPassthrough = ypLocalized("Original")
 }
