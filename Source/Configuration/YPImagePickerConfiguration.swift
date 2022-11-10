@@ -227,6 +227,9 @@ public struct YPConfigLibrary {
     
     /// Set the overlay type shown on top of the selected library item
     public var itemOverlayType: YPItemOverlayType = .grid
+    
+    /// The library items are sorted by time created or modified
+    public var sortingOption: SortingOption = SortingOption.creationDate
 }
 
 /// Encapsulates video specific settings.
@@ -245,6 +248,9 @@ public struct YPConfigVideo {
      - "AVAssetExportPresetPassthrough" // without any compression
      */
     public var compression: String = AVAssetExportPresetHighestQuality
+    
+    /// Choose the different video compression option to be supported
+    public var compressionOption: [compressionOptions] = [compressionOptions.AVAssetExportPresetPassthrough]
     
     /// Choose the result video extension if you trim or compress a video. Defaults to mov.
     public var fileType: AVFileType = .mov
@@ -303,4 +309,72 @@ public enum YPlibraryMediaType {
     case photo
     case video
     case photoAndVideo
+}
+
+public enum SortingOption: String {
+    case modificationDate = "modificationDate"
+    case creationDate = "creationDate"
+}
+
+public enum compressionOptions: String {
+    case AVAssetExportPresetLowQuality
+    case AVAssetExportPreset640x480
+    case AVAssetExportPresetMediumQuality
+    case AVAssetExportPreset1920x1080
+    case AVAssetExportPreset1280x720
+    case AVAssetExportPresetHighestQuality
+    case AVAssetExportPresetAppleM4A
+    case AVAssetExportPreset3840x2160
+    case AVAssetExportPreset960x540
+    case AVAssetExportPresetPassthrough
+    
+    func presetID() -> String {
+        switch self {
+            case .AVAssetExportPresetLowQuality:
+                return "AVAssetExportPresetLowQuality"
+            case .AVAssetExportPreset640x480:
+                return "AVAssetExportPreset640x480"
+            case .AVAssetExportPresetMediumQuality:
+                return "AVAssetExportPresetMediumQuality"
+            case .AVAssetExportPreset1920x1080:
+                return "AVAssetExportPreset1920x1080"
+            case .AVAssetExportPreset1280x720:
+                return "AVAssetExportPreset1280x720"
+            case .AVAssetExportPresetHighestQuality:
+                return "AVAssetExportPresetHighestQuality"
+            case .AVAssetExportPresetAppleM4A:
+                return "AVAssetExportPresetAppleM4A"
+            case .AVAssetExportPreset3840x2160:
+                return "AVAssetExportPreset3840x2160"
+            case .AVAssetExportPreset960x540:
+                return "AVAssetExportPreset960x540"
+            case .AVAssetExportPresetPassthrough:
+                return "AVAssetExportPresetPassthrough"
+        }
+    }
+    
+    func getLabel() -> String {
+        switch self {
+            case .AVAssetExportPresetLowQuality:
+                return YPConfig.wordings.textAVAssetExportPresetLowQuality
+            case .AVAssetExportPreset640x480:
+                return YPConfig.wordings.textAVAssetExportPreset640x480
+            case .AVAssetExportPresetMediumQuality:
+                return YPConfig.wordings.textAVAssetExportPresetMediumQuality
+            case .AVAssetExportPreset1920x1080:
+                return YPConfig.wordings.textAVAssetExportPreset1920x1080
+            case .AVAssetExportPreset1280x720:
+                return YPConfig.wordings.textAVAssetExportPreset1280x720
+            case .AVAssetExportPresetHighestQuality:
+                return YPConfig.wordings.textAVAssetExportPresetHighestQuality
+            case .AVAssetExportPresetAppleM4A:
+                return YPConfig.wordings.textAVAssetExportPresetAppleM4A
+            case .AVAssetExportPreset3840x2160:
+                return YPConfig.wordings.textAVAssetExportPreset3840x2160
+            case .AVAssetExportPreset960x540:
+                return YPConfig.wordings.textAVAssetExportPreset960x540
+            case .AVAssetExportPresetPassthrough:
+                return YPConfig.wordings.textAVAssetExportPresetPassthrough
+        }
+    }
 }
