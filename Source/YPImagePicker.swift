@@ -24,6 +24,7 @@ open class YPImagePicker: UINavigationController {
     public func didFinishPicking(completion: @escaping DidFinishPickingCompletion) {
         _didFinishPicking = completion
     }
+    public func toggleLoading() { loadingView.toggleLoading() }
 
     /// Get a YPImagePicker instance with the default configuration.
     public convenience init() {
@@ -62,7 +63,7 @@ open class YPImagePicker: UINavigationController {
         _didFinishPicking?(items, false)
     }
     
-    public let loadingView = YPLoadingView()
+    private let loadingView = YPLoadingView()
     private let picker: YPPickerVC!
 
     override open func viewDidLoad() {
