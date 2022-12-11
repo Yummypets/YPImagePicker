@@ -24,7 +24,7 @@ extension YPLibraryVC {
     
     /// When tapping on the cell with long press, clear all previously selected cells.
     @objc func handleLongPress(longPressGR: UILongPressGestureRecognizer) {
-        if isMultipleSelectionEnabled || isProcessing || YPConfig.library.maxNumberOfItems <= 1 {
+        if isMultipleSelectionEnabled || isFastPostsSelectionEnabled || isProcessing || YPConfig.library.maxNumberOfItems <= 1 {
             return
         }
         
@@ -101,7 +101,7 @@ extension YPLibraryVC {
     
     /// Checks if there can be selected more items. If no - present warning.
     func checkLimit() {
-        v.maxNumberWarningView.isHidden = !isLimitExceeded || isMultipleSelectionEnabled == false
+        v.maxNumberWarningView.isHidden = !isLimitExceeded || isFastPostsSelectionEnabled == false || isMultipleSelectionEnabled == false
     }
 }
 
@@ -139,7 +139,7 @@ extension YPLibraryVC: UICollectionViewDelegate {
         let isVideo = (asset.mediaType == .video)
         cell.durationLabel.isHidden = !isVideo
         cell.durationLabel.text = isVideo ? YPHelper.formattedStrigFrom(asset.duration) : ""
-        cell.multipleSelectionIndicator.isHidden = !isMultipleSelectionEnabled
+        cell.multipleSelectionIndicator.isHidden = !isMultipleSelectionEnabled || !isFastPostsSelectionEnabled
         cell.isSelected = currentlySelectedIndex == indexPath.row
         
         // Set correct selection number
@@ -177,7 +177,7 @@ extension YPLibraryVC: UICollectionViewDelegate {
         }
         v.refreshImageCurtainAlpha()
             
-        if isMultipleSelectionEnabled {
+        if (isMultipleSelectionEnabled || isMultipleSelectionEnabled) {
             let cellIsInTheSelectionPool = isInSelectionPool(indexPath: indexPath)
             let cellIsCurrentlySelected = previouslySelectedIndexPath.row == currentlySelectedIndex
             if cellIsInTheSelectionPool {
