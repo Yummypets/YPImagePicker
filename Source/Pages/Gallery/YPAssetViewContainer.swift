@@ -107,8 +107,8 @@ final class YPAssetViewContainer: UIView {
         
         // Fast posts selection button
         sv(fastPostsSelectionButton)
-        fastPostsSelectionButton.size(42).trailing(57)
-        multipleSelectionButton.Bottom == self.Bottom - 15
+        fastPostsSelectionButton.size(42).trailing(72)
+        fastPostsSelectionButton.Bottom == self.Bottom - 15
     }
 
     required init?(coder: NSCoder) {
@@ -131,11 +131,19 @@ final class YPAssetViewContainer: UIView {
             squareCropButton.isHidden = true
         }
         
-        guard !isMultipleSelectionEnabled || !isFastPostsSelectionEnabled else {
+        guard !isMultipleSelectionEnabled else {
             // If multiple selection enabled, the squareCropButton is not visible
             squareCropButton.isHidden = true
             return
         }
+        
+        
+        guard !isFastPostsSelectionEnabled else {
+            // If multiple selection enabled, the squareCropButton is not visible
+            squareCropButton.isHidden = true
+            return
+        }
+        
         guard !onlySquare else {
             // If only square enabled, than the squareCropButton is not visible
             squareCropButton.isHidden = true
@@ -156,25 +164,37 @@ final class YPAssetViewContainer: UIView {
     /// Use this to update the multiple selection mode UI state for the YPAssetViewContainer
     public func setMultipleSelectionMode(on: Bool) {
         isMultipleSelectionEnabled = on
-        isFastPostsSelectionEnabled = !on
+        
+        if(isFastPostsSelectionEnabled) {
+            isFastPostsSelectionEnabled = false
+            let fastPostsSelectionImageState = YPConfig.icons.fastPostsSelectionOffIcon
+            fastPostsSelectionButton.setImage(fastPostsSelectionImageState, for: .normal)
+        }
+       
         let multipleSelectionImageState = on ? YPConfig.icons.multipleSelectionOnIcon : YPConfig.icons.multipleSelectionOffIcon
-        let fastPostsSelectionImageState = !on ? YPConfig.icons.fastPostsSelectionOnIcon : YPConfig.icons.fastPostsSelectionOffIcon
+   
         multipleSelectionButton.setImage(multipleSelectionImageState, for: .normal)
-        fastPostsSelectionButton.setImage(fastPostsSelectionImageState, for: .normal)
+ 
         updateSquareCropButtonState()
+        
         if(!YPConfig.isCarouselAlbumUpdating && !YPConfig.library.defaultMultipleSelection) {
             changeFrameDimensionsToSelectedMediaAspectRatio()
         }
     }
     
-    /// Use this to update the multiple selection mode UI state for the YPAssetViewContainer
+    /// Use this to update the fast posts selection mode UI state for the YPAssetViewContainer
     public func setFastPostsSelection(on: Bool) {
         isFastPostsSelectionEnabled = on
-        isMultipleSelectionEnabled = !on
+
+        if(isMultipleSelectionEnabled) {
+            isMultipleSelectionEnabled = false
+            let multipleSelectionImageState = YPConfig.icons.multipleSelectionOffIcon
+            multipleSelectionButton.setImage(multipleSelectionImageState, for: .normal)
+            changeFrameDimensionsToSelectedMediaAspectRatio()
+        }
         let fastPostsSelectionImageState = on ? YPConfig.icons.fastPostsSelectionOnIcon : YPConfig.icons.fastPostsSelectionOffIcon
-        let multipleSelectionImageState = !on ? YPConfig.icons.multipleSelectionOnIcon : YPConfig.icons.multipleSelectionOffIcon
         fastPostsSelectionButton.setImage(fastPostsSelectionImageState, for: .normal)
-        multipleSelectionButton.setImage(multipleSelectionImageState, for: .normal)
+  
         updateSquareCropButtonState()
     }
     

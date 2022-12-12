@@ -92,7 +92,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         title = album.title
         mediaManager.collection = album.collection
         currentlySelectedIndex = 0
-        if !isMultipleSelectionEnabled || !isFastPostsSelectionEnabled {
+        if (!isMultipleSelectionEnabled || !isFastPostsSelectionEnabled) {
             selectedItems.removeAll()
         }
         refreshMediaRequest()
@@ -333,7 +333,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
             v.collectionView.selectItem(at: IndexPath(row: 0, section: 0),
                                         animated: false,
                                         scrollPosition: UICollectionView.ScrollPosition())
-            if !isMultipleSelectionEnabled || !isFastPostsSelectionEnabled {
+            if (!isMultipleSelectionEnabled || !isFastPostsSelectionEnabled) {
                 addToSelection(indexPath: IndexPath(row: 0, section: 0))
             }
         } else {
@@ -369,7 +369,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
     
     func changeAsset(_ asset: PHAsset?) {
         let hasIndex = self.selectedItems.contains(where: { $0.index == self.currentlySelectedIndex })
-        if(self.isMultipleSelectionEnabled && self.isFastPostsSelectionEnabled && isLimitExceeded && !hasIndex) {
+        if((self.isMultipleSelectionEnabled || self.isFastPostsSelectionEnabled) && isLimitExceeded && !hasIndex) {
             return
         }
         
@@ -461,8 +461,8 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
     }
     
     internal func fetchStoredCrop() -> YPLibrarySelection? {
-        if self.isMultipleSelectionEnabled || self.isFastPostsSelectionEnabled,
-            self.selectedItems.contains(where: { $0.index == self.currentlySelectedIndex }) {
+        if ((self.isMultipleSelectionEnabled || self.isFastPostsSelectionEnabled) &&
+            self.selectedItems.contains(where: { $0.index == self.currentlySelectedIndex })) {
             guard let selectedAssetIndex = self.selectedItems
                 .firstIndex(where: { $0.index == self.currentlySelectedIndex }) else {
                 return nil
