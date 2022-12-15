@@ -20,21 +20,18 @@ public class YPMediaPhoto {
     public let exifMeta: [String: Any]?
     public var asset: PHAsset?
     public var url: URL?
-    public var isFastPosts: Bool
     
     public init(image: UIImage,
                 exifMeta: [String: Any]? = nil,
                 fromCamera: Bool = false,
                 asset: PHAsset? = nil,
-                url: URL? = nil,
-                isFastPosts: Bool = false) {
+                url: URL? = nil) {
         self.originalImage = image
         self.modifiedImage = nil
         self.fromCamera = fromCamera
         self.exifMeta = exifMeta
         self.asset = asset
         self.url = url
-        self.isFastPosts = isFastPosts
     }
 }
 
@@ -44,14 +41,12 @@ public class YPMediaVideo {
     public var url: URL
     public let fromCamera: Bool
     public var asset: PHAsset?
-    public var isFastPosts: Bool
 
-    public init(thumbnail: UIImage, videoURL: URL, fromCamera: Bool = false, asset: PHAsset? = nil, isFastPosts: Bool = false) {
+    public init(thumbnail: UIImage, videoURL: URL, fromCamera: Bool = false, asset: PHAsset? = nil) {
         self.thumbnail = thumbnail
         self.url = videoURL
         self.fromCamera = fromCamera
         self.asset = asset
-        self.isFastPosts = isFastPosts
     }
 }
 

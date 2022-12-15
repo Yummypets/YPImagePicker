@@ -566,7 +566,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                     case .image:
                         self.fetchImageAndCrop(for: asset.asset, withCropRect: asset.cropRect) { image, exifMeta in
                             let photo = YPMediaPhoto(image: image.resizedImageIfNeeded(),
-                                                     exifMeta: exifMeta, asset: asset.asset, isFastPosts: self.isFastPostsSelectionEnabled)
+													 exifMeta: exifMeta, asset: asset.asset)
                             resultMediaItems.append(YPMediaItem.photo(p: photo))
                             asyncGroup.leave()
                         }
@@ -576,7 +576,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                                                              withCropRect: asset.cropRect) { videoURL in
                             if let videoURL = videoURL {
                                 let videoItem = YPMediaVideo(thumbnail: thumbnailFromVideoPath(videoURL),
-                                                             videoURL: videoURL, asset: asset.asset, isFastPosts: self.isFastPostsSelectionEnabled)
+                                                             videoURL: videoURL, asset: asset.asset)
                                 resultMediaItems.append(YPMediaItem.video(v: videoItem))
                             } else {
                                 ypLog("Problems with fetching videoURL.")
@@ -631,7 +631,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                             if let videoURL = videoURL {
                                 self.delegate?.libraryViewFinishedLoading()
                                 let video = YPMediaVideo(thumbnail: thumbnailFromVideoPath(videoURL),
-                                                         videoURL: videoURL, asset: asset, isFastPosts: self.isFastPostsSelectionEnabled)
+                                                         videoURL: videoURL, asset: asset)
                                 videoCallback(video)
                             } else {
                                 ypLog("Problems with fetching videoURL.")
@@ -644,7 +644,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                             self.delegate?.libraryViewFinishedLoading()
                             let photo = YPMediaPhoto(image: image.resizedImageIfNeeded(),
                                                      exifMeta: exifMeta,
-                                                     asset: asset, isFastPosts: self.isFastPostsSelectionEnabled)
+                                                     asset: asset)
                             photoCallback(photo)
                         }
                     }
