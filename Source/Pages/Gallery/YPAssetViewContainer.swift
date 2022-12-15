@@ -24,11 +24,6 @@ final class YPAssetViewContainer: UIView {
         v.setImage(YPConfig.icons.multipleSelectionOffIcon, for: .normal)
         return v
     }()
-    public let fastPostsSelectionButton: UIButton = {
-        let v = UIButton()
-        v.setImage(YPConfig.icons.fastPostsSelectionOffIcon, for: .normal)
-        return v
-    }()
     public var onlySquare = YPConfig.library.onlySquare
     public var isShown = true
     public var spinnerIsShown = false
@@ -104,11 +99,6 @@ final class YPAssetViewContainer: UIView {
         sv(multipleSelectionButton)
         multipleSelectionButton.size(42).trailing(15)
         multipleSelectionButton.Bottom == self.Bottom - 15
-        
-        // Fast posts selection button
-        sv(fastPostsSelectionButton)
-        fastPostsSelectionButton.size(42).trailing(72)
-        fastPostsSelectionButton.Bottom == self.Bottom - 15
     }
 
     required init?(coder: NSCoder) {
@@ -168,7 +158,6 @@ final class YPAssetViewContainer: UIView {
         if(isFastPostsSelectionEnabled) {
             isFastPostsSelectionEnabled = false
             let fastPostsSelectionImageState = YPConfig.icons.fastPostsSelectionOffIcon
-            fastPostsSelectionButton.setImage(fastPostsSelectionImageState, for: .normal)
         }
        
         let multipleSelectionImageState = on ? YPConfig.icons.multipleSelectionOnIcon : YPConfig.icons.multipleSelectionOffIcon
@@ -183,20 +172,19 @@ final class YPAssetViewContainer: UIView {
     }
     
     /// Use this to update the fast posts selection mode UI state for the YPAssetViewContainer
-    public func setFastPostsSelection(on: Bool) {
-        isFastPostsSelectionEnabled = on
-
-        if(isMultipleSelectionEnabled) {
-            isMultipleSelectionEnabled = false
-            let multipleSelectionImageState = YPConfig.icons.multipleSelectionOffIcon
-            multipleSelectionButton.setImage(multipleSelectionImageState, for: .normal)
-            changeFrameDimensionsToSelectedMediaAspectRatio()
-        }
-        let fastPostsSelectionImageState = on ? YPConfig.icons.fastPostsSelectionOnIcon : YPConfig.icons.fastPostsSelectionOffIcon
-        fastPostsSelectionButton.setImage(fastPostsSelectionImageState, for: .normal)
-  
-        updateSquareCropButtonState()
-    }
+//    public func setFastPostsSelection(on: Bool) {
+//        isFastPostsSelectionEnabled = on
+//
+//        if(isMultipleSelectionEnabled) {
+//            isMultipleSelectionEnabled = false
+//            let multipleSelectionImageState = YPConfig.icons.multipleSelectionOffIcon
+//            multipleSelectionButton.setImage(multipleSelectionImageState, for: .normal)
+//            changeFrameDimensionsToSelectedMediaAspectRatio()
+//        }
+//        let fastPostsSelectionImageState = on ? YPConfig.icons.fastPostsSelectionOnIcon : YPConfig.icons.fastPostsSelectionOffIcon
+//
+//        updateSquareCropButtonState()
+//    }
     
     
     public func changeFrameDimensionsToSelectedMediaAspectRatio () {

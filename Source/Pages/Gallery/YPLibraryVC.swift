@@ -126,10 +126,6 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                        action: #selector(multipleSelectionButtonTapped),
                        for: .touchUpInside)
         
-        v.assetViewContainer.fastPostsSelectionButton
-            .addTarget(self,
-                       action: #selector(fastPostsSelectionButtonTapped),
-                       for: .touchUpInside)
         
         // Forces assetZoomableView to have a contentSize.
         // otherwise 0 in first selection triggering the bug : "invalid image size 0x0"
@@ -139,8 +135,8 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         }
         
         // Activate multiple selection when using `minNumberOfItems`
-        if YPConfig.library.minNumberOfItems > 1 {
-            multipleSelectionButtonTapped()
+        if (YPConfig.library.minNumberOfItems > 1 && YPConfig.isQuickPosts) {
+            fastPostsSelectionButtonTapped()
         }
      
         if(YPConfig.isCarouselAlbumUpdating && YPConfig.isPost) {
@@ -260,16 +256,22 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
     }
     
     func toggleFastPostsSelection() {
+        
+        self.v.assetViewContainer.multipleSelectionButton.isHidden = true;
+        
         // Prevent desactivating multiple selection when using `minNumberOfItems`
         if(self.v.assetViewContainer.zoomableView.isZooming == true || self.v.assetViewContainer.zoomableView.isZoomBouncing == true || self.v.assetViewContainer.zoomableView.isMediaFiting == true) {
                 return
             }
+        
+        
         
         if YPConfig.library.minNumberOfItems > 1 && isFastPostsSelectionEnabled {
             print("Selected minNumberOfItems greater than one :\(YPConfig.library.minNumberOfItems). Don't deselecting multiple selection.")
             return
         }
 
+        
         isFastPostsSelectionEnabled.toggle()
         
         if(isMultipleSelectionEnabled) {
@@ -296,7 +298,6 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
             addToSelection(indexPath: IndexPath(row: currentlySelectedIndex, section: 0))
         }
         
-        v.assetViewContainer.setFastPostsSelection(on: isFastPostsSelectionEnabled)
         v.collectionView.reloadData()
         checkLimit()
     }
