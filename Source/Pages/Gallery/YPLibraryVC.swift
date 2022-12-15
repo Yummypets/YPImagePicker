@@ -56,7 +56,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         refreshMediaRequest()
 
         
-        v.assetViewContainer.multipleSelectionButton.isHidden = !(YPConfig.library.maxNumberOfItems > 1) || YPConfig.isCarouselAlbumUpdating || YPConfig.library.defaultMultipleSelection
+        v.assetViewContainer.multipleSelectionButton.isHidden = !(YPConfig.library.maxNumberOfItems > 1) || YPConfig.isCarouselAlbumUpdating || YPConfig.library.defaultMultipleSelection || YPConfig.isQuickPosts
         
         v.maxNumberWarningLabel.text = String(format: YPConfig.wordings.warningMaxItemsLimit,
 											  YPConfig.library.maxNumberOfItems)
