@@ -18,6 +18,10 @@ class YPAlbumView: UIView {
         self.init(frame: .zero)
         
         if #available(iOS 13, *) {
+            let spinnerColor = UIColor { trait -> UIColor in
+                return trait.userInterfaceStyle == .dark ? .white : .gray
+            }
+            spinner.color = spinnerColor
             spinner.style = .large
         }
         
