@@ -136,7 +136,9 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         
         // Activate multiple selection when using `minNumberOfItems`
         if (YPConfig.library.minNumberOfItems > 1 && YPConfig.isQuickPosts) {
-            fastPostsSelectionButtonTapped()
+            self.libraryVC?.doAfterLibraryPermissionCheck { [weak self] in
+                self.fastPostsSelectionButtonTapped()
+            }
         }
      
         if(YPConfig.isCarouselAlbumUpdating && YPConfig.isPost) {
@@ -246,13 +248,13 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
             return
         }
 
-        doAfterLibraryPermissionCheck { [weak self] in
+      
             if self?.isFastPostsSelectionEnabled == false {
                 self?.selectedItems.removeAll()
             }
             
             self?.toggleFastPostsSelection()
-        }
+        
     }
     
     func toggleFastPostsSelection() {
