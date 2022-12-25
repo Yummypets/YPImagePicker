@@ -249,12 +249,11 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         }
 
       
-            if self?.isFastPostsSelectionEnabled == false {
-                self?.selectedItems.removeAll()
+            if isFastPostsSelectionEnabled == false {
+                selectedItems.removeAll()
             }
             
-            self?.toggleFastPostsSelection()
-        
+             toggleFastPostsSelection()
     }
     
     func toggleFastPostsSelection() {
