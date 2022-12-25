@@ -136,8 +136,8 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         
         // Activate multiple selection when using `minNumberOfItems`
         if (YPConfig.library.minNumberOfItems > 1 && YPConfig.isQuickPosts) {
-            self.libraryVC?.doAfterLibraryPermissionCheck { [weak self] in
-                self.fastPostsSelectionButtonTapped()
+            doAfterLibraryPermissionCheck { [weak self] in
+                self?.fastPostsSelectionButtonTapped()
             }
         }
      
