@@ -74,7 +74,8 @@ class YPVideoCompressionVC: UIViewController, UITableViewDelegate, UITableViewDa
     @IBAction func overlayViewTapped(_ tapGesture: UITapGestureRecognizer) {
         //ITALogger.log.debug("check mark overview pressed")
         //AnalyticsManager.manager.logNewEvent(category: "check_mark_view", action: "card_settings_sheet_dismiss", label: "card setting sheet dismiss", value: nil)
-        self.didDismiss(self.checkedIndex ?? 0)
+        //keep original as default vide compression option
+        self.didDismiss(self.checkedIndex ?? (titleArray.count - 1))
         self.dismiss(animated: true, completion: nil)
     }
     
@@ -110,7 +111,8 @@ class YPVideoCompressionVC: UIViewController, UITableViewDelegate, UITableViewDa
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.checkedIndex = indexPath.row
         UserDefaults.standard.set(self.checkedIndex, forKey: COMPRESSION_OPTION)
-        self.didDismiss(self.checkedIndex ?? 0)
+        //keep original as default vide compression option
+        self.didDismiss(self.checkedIndex ?? (titleArray.count - 1))
         self.dismiss(animated: true, completion: nil)
     }
     
