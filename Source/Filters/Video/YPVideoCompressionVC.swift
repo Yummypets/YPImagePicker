@@ -18,7 +18,7 @@ class YPVideoCompressionVC: UIViewController, UITableViewDelegate, UITableViewDa
     @IBOutlet weak var tableViewHeightConstraint: NSLayoutConstraint!
     
     var titleArray = [String]()
-    var checkedIndex: Int? = UserDefaults.standard.integer(forKey: COMPRESSION_OPTION)
+    var checkedIndex: Int? = nil
     var headingTitle: String = ""
     
     var didDismiss: (Int) -> Void = { (index: Int) in
@@ -34,6 +34,10 @@ class YPVideoCompressionVC: UIViewController, UITableViewDelegate, UITableViewDa
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //keep original as default vide compression option
+        self.checkedIndex = (UserDefaults.standard.object(forKey: COMPRESSION_OPTION) != nil) ? UserDefaults.standard.integer(forKey: COMPRESSION_OPTION) : (titleArray.count - 1)
+        
         self.bkgOverlayView.alpha = 0.2
         self.presentAnimateTransition()
         self.setTableViewHeight()
