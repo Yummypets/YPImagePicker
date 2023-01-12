@@ -150,6 +150,10 @@ internal final class YPLibraryView: UIView {
         shouldShowLoader = false
         assetViewContainer.spinnerView.alpha = 0
     }
+    
+    func stopSpinner() {
+        assetViewContainer.spinner.stopAnimating()
+    }
 
     func updateProgress(_ progress: Float) {
         progressView.isHidden = progress > 0.99 || progress == 0

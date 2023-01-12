@@ -379,6 +379,7 @@ extension YPPickerVC: YPLibraryViewDelegate {
     
     public func libraryViewHaveNoItems() {
         pickerVCDelegate?.libraryHasNoItems()
+        self.libraryVC?.v.stopSpinner()
     }
     
     public func libraryViewShouldAddToSelection(indexPath: IndexPath, numSelections: Int) -> Bool {
