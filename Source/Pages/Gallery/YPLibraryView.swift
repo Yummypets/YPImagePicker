@@ -48,6 +48,27 @@ internal final class YPLibraryView: UIView {
         v.font = YPConfig.fonts.libaryWarningFont
         return v
     }()
+    internal let selectMoreButton: UIButton = {
+        let v = UIButton()
+        var status: PHAuthorizationStatus
+        if #available(iOS 14, *) {
+            status = PHPhotoLibrary.authorizationStatus(for: .readWrite)
+            if status == .limited {
+                v.isHidden = false
+                v.setTitle("   Select more photos   ", for: .normal)
+                v.frame.size.width = 300.0
+                v.backgroundColor = YPConfig.selectMoreButtonBackgroundColour.withAlphaComponent(0.8)
+                v.layer.cornerRadius = 4
+                v.layer.masksToBounds = true
+                v.tintColor = UIColor.ypLabel
+            } else {
+                v.isHidden = true
+            }
+        } else {
+            v.isHidden = true
+        }
+        return v
+    }()
 
     // MARK: - Private vars
 
@@ -178,7 +199,8 @@ internal final class YPLibraryView: UIView {
             progressView,
             maxNumberWarningView.subviews(
                 maxNumberWarningLabel
-            )
+            ),
+            selectMoreButton
         )
 
         collectionContainerView.fillContainer()
@@ -200,5 +222,9 @@ internal final class YPLibraryView: UIView {
         |maxNumberWarningView|.bottom(0)
         maxNumberWarningView.Top == safeAreaLayoutGuide.Bottom - 40
         maxNumberWarningLabel.centerHorizontally().top(11)
+        
+        selectMoreButton.bottom(0)
+        selectMoreButton.Top == safeAreaLayoutGuide.Bottom - 40
+        selectMoreButton.centerHorizontally()
     }
 }

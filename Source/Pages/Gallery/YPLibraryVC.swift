@@ -126,6 +126,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
             .addTarget(self,
                        action: #selector(multipleSelectionButtonTapped),
                        for: .touchUpInside)
+        v.selectMoreButton.addTarget(self,action: #selector(selectMorePhotosButtonTapped), for: .touchUpInside)
         
         // Forces assetZoomableView to have a contentSize.
         // otherwise 0 in first selection triggering the bug : "invalid image size 0x0"
@@ -154,6 +155,14 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
     func squareCropButtonTapped() {
         doAfterLibraryPermissionCheck { [weak self] in
             self?.v.assetViewContainer.squareCropButtonTapped()
+        }
+    }
+    
+    // MARK: - Select more photos
+    
+    @objc func selectMorePhotosButtonTapped() {
+        if #available(iOS 14, *) {
+            PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: self)
         }
     }
     
