@@ -115,8 +115,11 @@ public struct YPImagePickerConfiguration {
     /// Defines the text colour to be shown when a bottom option is unselected
     public var bottomMenuItemUnSelectedTextColour: UIColor = .ypSecondaryLabel
     
-    /// Defines the text colour to be shown when a bottom option is unselected
+    /// Defines the text colour to be shown for selectMoreButton
     public var selectMoreButtonBackgroundColour: UIColor = .ypSystemBlue
+    
+    /// Defines the text colour to be shown for seeAllPhotoButton
+    public var seeAllPhotosButtonBackgroundColour: UIColor = .ypSystemBlue
     
     /// Defines the max camera zoom factor for camera. Disable camera zoom with 1. Default is 1.
     public var maxCameraZoomFactor: CGFloat = 1.0
