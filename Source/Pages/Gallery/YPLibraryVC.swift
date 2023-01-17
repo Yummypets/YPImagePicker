@@ -127,6 +127,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                        action: #selector(multipleSelectionButtonTapped),
                        for: .touchUpInside)
         v.selectMoreButton.addTarget(self,action: #selector(selectMorePhotosButtonTapped), for: .touchUpInside)
+        v.seeAllButton.addTarget(self,action: #selector(seeAllPhotosButtonTapped), for: .touchUpInside)
         
         // Forces assetZoomableView to have a contentSize.
         // otherwise 0 in first selection triggering the bug : "invalid image size 0x0"
@@ -164,6 +165,17 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         if #available(iOS 14, *) {
             PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: self)
         }
+    }
+    
+    // MARK: - See all photos
+    
+    @objc func seeAllPhotosButtonTapped() {
+        let alertController = UIAlertController(title: "See all photos", message: "On the next screen, please click on “Photos“ and select “All Photos“", preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "Later", style: .default) { _ in })
+        alertController.addAction(UIAlertAction(title: "Continue", style: .default) { _ in
+            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:], completionHandler: nil)
+        })
+        self.present(alertController, animated: true)
     }
     
     // MARK: - Multiple Selection

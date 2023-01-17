@@ -105,8 +105,10 @@ extension YPLibraryVC {
         v.maxNumberWarningView.isHidden = isHidden
         if !isHidden {
             v.selectMoreButton.bottomConstraint?.constant = (v.maxNumberWarningView.bottomConstraint?.constant ?? 0) - 40
+            v.seeAllButton.bottomConstraint?.constant = (v.maxNumberWarningView.bottomConstraint?.constant ?? 0) - 40
         } else {
             v.selectMoreButton.bottomConstraint?.constant = 0
+            v.seeAllButton.bottomConstraint?.constant = 0
         }
     }
 }
