@@ -55,8 +55,7 @@ internal final class YPLibraryView: UIView {
             status = PHPhotoLibrary.authorizationStatus(for: .readWrite)
             if status == .limited {
                 v.isHidden = false
-                v.setTitle("   Select more photos   ", for: .normal)
-                v.frame.size.width = 300.0
+                v.setTitle("   Select more   ", for: .normal)
                 v.backgroundColor = YPConfig.selectMoreButtonBackgroundColour.withAlphaComponent(0.8)
                 v.layer.cornerRadius = 4
                 v.layer.masksToBounds = true
@@ -77,7 +76,6 @@ internal final class YPLibraryView: UIView {
             if status == .limited {
                 v.isHidden = false
                 v.setTitle("   See all photos   ", for: .normal)
-                v.frame.size.width = 300.0
                 v.backgroundColor = YPConfig.seeAllPhotosButtonBackgroundColour.withAlphaComponent(0.8)
                 v.layer.cornerRadius = 4
                 v.layer.masksToBounds = true
@@ -249,12 +247,12 @@ internal final class YPLibraryView: UIView {
         maxNumberWarningView.Top == safeAreaLayoutGuide.Bottom - 40
         maxNumberWarningLabel.centerHorizontally().top(11)
         
-        seeAllButton.bottom(0)
+        seeAllButton.Bottom == safeAreaLayoutGuide.Bottom
         seeAllButton.Top == safeAreaLayoutGuide.Bottom - 40
         seeAllButton.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.50).isActive = true
         seeAllButton.Left == UIScreen.main.bounds.width * 0.05
         
-        selectMoreButton.bottom(0)
+        selectMoreButton.Bottom == safeAreaLayoutGuide.Bottom
         selectMoreButton.Top == safeAreaLayoutGuide.Bottom - 40
         selectMoreButton.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.35).isActive = true
         selectMoreButton.Right == UIScreen.main.bounds.width * 0.05
