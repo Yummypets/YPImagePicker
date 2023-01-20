@@ -85,6 +85,8 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
 
         if YPConfig.library.defaultMultipleSelection || selectedItems.count > 1 {
             toggleMultipleSelection()
+        } else {
+            checkSelectMoreOptions()
         }
     }
 
