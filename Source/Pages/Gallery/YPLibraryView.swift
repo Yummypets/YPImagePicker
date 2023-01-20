@@ -51,41 +51,27 @@ internal final class YPLibraryView: UIView {
     internal let selectMoreButton: UIButton = {
         let v = UIButton()
         var status: PHAuthorizationStatus
-        if #available(iOS 14, *) {
-            status = PHPhotoLibrary.authorizationStatus(for: .readWrite)
-            if status == .limited {
-                v.isHidden = false
-                v.setTitle("   Select more   ", for: .normal)
-                v.backgroundColor = YPConfig.selectMoreButtonBackgroundColour.withAlphaComponent(0.8)
-                v.layer.cornerRadius = 4
-                v.layer.masksToBounds = true
-                v.tintColor = UIColor.ypLabel
-            } else {
-                v.isHidden = true
-            }
-        } else {
-            v.isHidden = true
-        }
+        v.setTitle("   Select more   ", for: .normal)
+        v.backgroundColor = YPConfig.selectMoreButtonBackgroundColour.withAlphaComponent(0.8)
+        v.layer.cornerRadius = 4
+        v.layer.masksToBounds = true
+        v.tintColor = UIColor.ypLabel
+        v.isHidden = true
         return v
     }()
     internal let seeAllButton: UIButton = {
         let v = UIButton()
         var status: PHAuthorizationStatus
-        if #available(iOS 14, *) {
-            status = PHPhotoLibrary.authorizationStatus(for: .readWrite)
-            if status == .limited {
-                v.isHidden = false
-                v.setTitle("   See all photos   ", for: .normal)
-                v.backgroundColor = YPConfig.seeAllPhotosButtonBackgroundColour.withAlphaComponent(0.8)
-                v.layer.cornerRadius = 4
-                v.layer.masksToBounds = true
-                v.tintColor = UIColor.ypLabel
-            } else {
-                v.isHidden = true
-            }
+        if YPConfig.library.mediaType == .video {
+            v.setTitle("   See all videos   ", for: .normal)
         } else {
-            v.isHidden = true
+            v.setTitle("   See all photos   ", for: .normal)
         }
+        v.backgroundColor = YPConfig.seeAllPhotosButtonBackgroundColour.withAlphaComponent(0.8)
+        v.layer.cornerRadius = 4
+        v.layer.masksToBounds = true
+        v.tintColor = UIColor.ypLabel
+        v.isHidden = true
         return v
     }()
 
@@ -247,13 +233,13 @@ internal final class YPLibraryView: UIView {
         maxNumberWarningView.Top == safeAreaLayoutGuide.Bottom - 40
         maxNumberWarningLabel.centerHorizontally().top(11)
         
-        seeAllButton.Bottom == safeAreaLayoutGuide.Bottom
-        seeAllButton.Top == safeAreaLayoutGuide.Bottom - 40
+        seeAllButton.Bottom == safeAreaLayoutGuide.Bottom - 8
+        seeAllButton.Top == safeAreaLayoutGuide.Bottom - 48
         seeAllButton.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.50).isActive = true
         seeAllButton.Left == UIScreen.main.bounds.width * 0.05
         
-        selectMoreButton.Bottom == safeAreaLayoutGuide.Bottom
-        selectMoreButton.Top == safeAreaLayoutGuide.Bottom - 40
+        selectMoreButton.Bottom == safeAreaLayoutGuide.Bottom - 8
+        selectMoreButton.Top == safeAreaLayoutGuide.Bottom - 48
         selectMoreButton.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.35).isActive = true
         selectMoreButton.Right == UIScreen.main.bounds.width * 0.05
     }
