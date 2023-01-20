@@ -80,6 +80,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         }
 
         guard mediaManager.hasResultItems else {
+            checkSelectMoreOptions()
             return
         }
 
