@@ -166,8 +166,12 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         
         // Re-trigger permission check
         if let vc = vc as? YPLibraryVC {
-            vc.doAfterLibraryPermissionCheck { [weak vc] in
-                vc?.initialize()
+            vc.doAfterLibraryPermissionCheck {  hasPermission in
+                if hasPermission {
+                    vc.initialize()
+                } else {
+                    vc.v.stopSpinner()
+                }
             }
         } else if let cameraVC = vc as? YPCameraVC {
             cameraVC.start()
