@@ -232,7 +232,6 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         let options = buildPHFetchOptions()
         var fetchedAssets = PHFetchResult<PHAsset>()
 
->>>>>>> upstream/master
         if let collection = mediaManager.collection {
             fetchedAssets = PHAsset.fetchAssets(in: collection, options: options)
         } else {
