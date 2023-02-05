@@ -12,122 +12,131 @@ import Stevia
 import AVFoundation
 
 /// The container for asset (video or image). It containts the YPGridView and YPAssetZoomableView.
-class YPAssetViewContainer: UIView {
-    public var zoomableView: YPAssetZoomableView?
+final class YPAssetViewContainer: UIView {
+    public var zoomableView: YPAssetZoomableView
     public var itemOverlay: UIView?
     public let curtain = UIView()
     public let spinnerView = UIView()
     public let squareCropButton = UIButton()
-    public let multipleSelectionButton = UIButton()
+    public let multipleSelectionButton: UIButton = {
+        let v = UIButton()
+        v.setImage(YPConfig.icons.multipleSelectionOffIcon, for: .normal)
+        return v
+    }()
     public var onlySquare = YPConfig.library.onlySquare
     public var isShown = true
+    public var spinnerIsShown = false
     
     private let spinner = UIActivityIndicatorView(style: .white)
     private var shouldCropToSquare = YPConfig.library.isSquareByDefault
-    private var isMultipleSelection = false
+    private var isMultipleSelectionEnabled = false
 
     public var itemOverlayType = YPConfig.library.itemOverlayType
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        
+
+    init(frame: CGRect, zoomableView: YPAssetZoomableView) {
+        self.zoomableView = zoomableView
+        super.init(frame: frame)
+
+        self.zoomableView.zoomableViewDelegate = self
+
         switch itemOverlayType {
         case .grid:
             itemOverlay = YPGridView()
         default:
             break
         }
-        
+
         if let itemOverlay = itemOverlay {
             addSubview(itemOverlay)
             itemOverlay.frame = frame
             clipsToBounds = true
-            
+
             itemOverlay.alpha = 0
         }
-        
-        for sv in subviews {
-            if let cv = sv as? YPAssetZoomableView {
-                zoomableView = cv
-                zoomableView?.myDelegate = self
-            }
-        }
-        
+
         let touchDownGR = UILongPressGestureRecognizer(target: self,
                                                        action: #selector(handleTouchDown))
         touchDownGR.minimumPressDuration = 0
         touchDownGR.delegate = self
         addGestureRecognizer(touchDownGR)
-        
+
         // TODO: Add tap gesture to play/pause. Add double tap gesture to square/unsquare
-        
-        sv(
-            spinnerView.sv(
+
+        subviews(
+            spinnerView.subviews(
                 spinner
             ),
             curtain
         )
-        
+
         spinner.centerInContainer()
         spinnerView.fillContainer()
         curtain.fillContainer()
-        
+
         spinner.startAnimating()
         spinnerView.backgroundColor = UIColor.ypLabel.withAlphaComponent(0.3)
         curtain.backgroundColor = UIColor.ypLabel.withAlphaComponent(0.7)
         curtain.alpha = 0
-        
+
         if !onlySquare {
             // Crop Button
             squareCropButton.setImage(YPConfig.icons.cropIcon, for: .normal)
-            sv(squareCropButton)
+            subviews(squareCropButton)
             squareCropButton.size(42)
             |-15-squareCropButton
-            squareCropButton.Bottom == zoomableView!.Bottom - 15
+            squareCropButton.Bottom == self.Bottom - 15
         }
-        
+
         // Multiple selection button
-        sv(multipleSelectionButton)
-        multipleSelectionButton.size(42)
-        multipleSelectionButton-15-|
-        multipleSelectionButton.setImage(YPConfig.icons.multipleSelectionOffIcon, for: .normal)
-        multipleSelectionButton.Bottom == zoomableView!.Bottom - 15
-        
+        subviews(multipleSelectionButton)
+        multipleSelectionButton.size(42).trailing(15)
+        multipleSelectionButton.Bottom == self.Bottom - 15
     }
-    
+
+    required init?(coder: NSCoder) {
+        zoomableView = YPAssetZoomableView()
+        super.init(coder: coder)
+        fatalError("Only code layout.")
+    }
+
     // MARK: - Square button
 
     @objc public func squareCropButtonTapped() {
-        if let zoomableView = zoomableView {
-            let z = zoomableView.zoomScale
-            shouldCropToSquare = (z >= 1 && z < zoomableView.squaredZoomScale)
-        }
-        zoomableView?.fitImage(shouldCropToSquare, animated: true)
+        let z = zoomableView.zoomScale
+        shouldCropToSquare = (z >= 1 && z < zoomableView.squaredZoomScale)
+        zoomableView.fitImage(shouldCropToSquare, animated: true)
     }
-    
-    public func refreshSquareCropButton() {
-        if onlySquare {
+
+    /// Update only UI of square crop button.
+    public func updateSquareCropButtonState() {
+        guard !isMultipleSelectionEnabled else {
+            // If multiple selection enabled, the squareCropButton is not visible
             squareCropButton.isHidden = true
-        } else {
-            if let image = zoomableView?.assetImageView.image {
-                let isImageASquare = image.size.width == image.size.height
-                squareCropButton.isHidden = isImageASquare
-            }
+            return
         }
-        
-        let shouldFit = YPConfig.library.onlySquare ? true : shouldCropToSquare
-        zoomableView?.fitImage(shouldFit)
-        zoomableView?.layoutSubviews()
+        guard !onlySquare else {
+            // If only square enabled, than the squareCropButton is not visible
+            squareCropButton.isHidden = true
+            return
+        }
+        guard let selectedAssetImage = zoomableView.assetImageView.image else {
+            // If no selected asset, than the squareCropButton is not visible
+            squareCropButton.isHidden = true
+            return
+        }
+
+        let isImageASquare = selectedAssetImage.size.width == selectedAssetImage.size.height
+        squareCropButton.isHidden = isImageASquare
     }
     
     // MARK: - Multiple selection
 
     /// Use this to update the multiple selection mode UI state for the YPAssetViewContainer
     public func setMultipleSelectionMode(on: Bool) {
-        isMultipleSelection = on
+        isMultipleSelectionEnabled = on
         let image = on ? YPConfig.icons.multipleSelectionOnIcon : YPConfig.icons.multipleSelectionOffIcon
         multipleSelectionButton.setImage(image, for: .normal)
-        refreshSquareCropButton()
+        updateSquareCropButtonState()
     }
 }
 
@@ -179,7 +188,7 @@ extension YPAssetViewContainer: UIGestureRecognizerDelegate {
     }
     
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-        return !(touch.view is UIButton)
+        return !spinnerIsShown && !(touch.view is UIButton)
     }
     
     @objc

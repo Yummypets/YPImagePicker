@@ -26,19 +26,19 @@ public struct YPImagePickerConfiguration {
 		}
 		return screenWidth
     }
-    
+
+    /// If don't want to have logs from picker, set it to false.
+    public var isDebugLogsEnabled: Bool = true
+
     public init() {}
     
-    /// Scroll to change modes, defaults to true
-    public var isScrollToChangeModesEnabled = true
-    
-    // Library configuration
+    /// Library configuration
     public var library = YPConfigLibrary()
     
-    // Video configuration
+    /// Video configuration
     public var video = YPConfigVideo()
     
-    // Gallery configuration
+    /// Gallery configuration
     public var gallery = YPConfigSelectionsGallery()
     
     /// Use this property to modify the default wordings provided.
@@ -52,7 +52,10 @@ public struct YPImagePickerConfiguration {
 
     /// Use this property to modify the default fonts provided
     public var fonts = YPFonts()
-    
+
+    /// Scroll to change modes, defaults to true
+    public var isScrollToChangeModesEnabled = true
+
     /// Set this to true if you want to force the camera output to be a squared image. Defaults to true
     public var onlySquareImagesFromCamera = true
     
@@ -72,7 +75,7 @@ public struct YPImagePickerConfiguration {
     /// Defines the name of the album when saving pictures in the user's photo library.
     /// In general that would be your App name. Defaults to "DefaultYPImagePickerAlbumName"
     public var albumName = "DefaultYPImagePickerAlbumName"
-    
+
     /// Defines which screen is shown at launch. Video mode will only work if `showsVideo = true`.
     /// Default value is `.photo`
     public var startOnScreen: YPPickerScreen = .photo
@@ -84,6 +87,9 @@ public struct YPImagePickerConfiguration {
     /// Adds a Crop step in the photo taking process, after filters.  Defaults to .none
     public var showsCrop: YPCropType = .none
     
+    /// Controls the visibility of a grid on crop stage. Default it false
+    public var showsCropGridOverlay = false
+    
     /// Ex: cappedTo:1024 will make sure images from the library or the camera will be
     /// resized to fit in a 1024x1024 box. Defaults to original image size.
     public var targetImageSize = YPImageSize.original
@@ -91,8 +97,8 @@ public struct YPImagePickerConfiguration {
     /// Adds a Overlay View to the camera
     public var overlayView: UIView?
 
-	/// Defines if the navigation bar cancel button should be hidden when showing the picker. Default is false
-	public var hidesCancelButton = false
+    /// Defines if the navigation bar cancel button should be hidden when showing the picker. Default is false
+    public var hidesCancelButton = false
     
     /// Defines if the status bar should be hidden when showing the picker. Default is true
     public var hidesStatusBar = true
@@ -119,7 +125,6 @@ public struct YPImagePickerConfiguration {
         YPFilter(name: "Toaster", applier: YPFilter.toasterFilter),
         YPFilter(name: "1977", applier: YPFilter.apply1977Filter),
         YPFilter(name: "Clarendon", applier: YPFilter.clarendonFilter),
-        YPFilter(name: "HazeRemoval", applier: YPFilter.hazeRemovalFilter),
         YPFilter(name: "Chrome", coreImageFilterName: "CIPhotoEffectChrome"),
         YPFilter(name: "Fade", coreImageFilterName: "CIPhotoEffectFade"),
         YPFilter(name: "Instant", coreImageFilterName: "CIPhotoEffectInstant"),
@@ -130,7 +135,8 @@ public struct YPImagePickerConfiguration {
         YPFilter(name: "Transfer", coreImageFilterName: "CIPhotoEffectTransfer"),
         YPFilter(name: "Tone", coreImageFilterName: "CILinearToSRGBToneCurve"),
         YPFilter(name: "Linear", coreImageFilterName: "CISRGBToneCurveToLinear"),
-        YPFilter(name: "Sepia", coreImageFilterName: "CISepiaTone")
+        YPFilter(name: "Sepia", coreImageFilterName: "CISepiaTone"),
+        YPFilter(name: "XRay", coreImageFilterName: "CIXRay")
         ]
     
     /// Migration
@@ -193,7 +199,8 @@ public struct YPConfigLibrary {
 	/// Minimum width, to prevent selectiong too high images. Have sense if onlySquare is true and the image is portrait.
     public var minWidthForItem: CGFloat?
     
-    /// Choose what media types are available in the library. Defaults to `.photo`
+    /// Choose what media types are available in the library. Defaults to `.photo`.
+    /// If you define custom options PHFetchOptions var, than this will not work.
     public var mediaType = YPlibraryMediaType.photo
 
     /// Initial state of multiple selection button.
@@ -206,7 +213,7 @@ public struct YPConfigLibrary {
     public var maxNumberOfItems = 1
     
     /// Anything greater than 1 will desactivate live photo and video modes (library only) and
-    // force users to select at least the number of items defined.
+    /// force users to select at least the number of items defined.
     public var minNumberOfItems = 1
 
     /// Set the number of items per row in collection view. Defaults to 4.
@@ -249,6 +256,16 @@ public struct YPConfigVideo {
     /// Default is 60 seconds.
     public var recordingTimeLimit: TimeInterval = 60.0
     
+    /// Defines the size limit in bytes for recording videos.
+    /// If this property is not nil, then the recording percentage line tracks buy this.
+    /// In bytes. 100000000 is 100 MB.
+    /// AVCaptureMovieFileOutput.maxRecordedFileSize.
+    public var recordingSizeLimit: Int64?
+
+    /// Minimum free space when recording videos.
+    /// AVCaptureMovieFileOutput.minFreeDiskSpaceLimit.
+    public var minFreeDiskSpaceLimit: Int64 = 1024 * 1024
+    
     /// Defines the time limit for videos from the library.
     /// Defaults to 60 seconds.
     public var libraryTimeLimit: TimeInterval = 60.0
@@ -265,11 +282,11 @@ public struct YPConfigVideo {
     /// The handles won't pan further if the minimum duration is attained.
     public var trimmerMinDuration: Double = 3.0
 
-	/// Defines if the user skips the trimer stage,
-	/// the video will be trimmed automatically to the maximum value of trimmerMaxDuration.
-	/// This case occurs when the user already has a video selected and enables a
-	/// multiselection to pick more than one type of media (video or image),
-	/// so, the trimmer step becomes optional.
+    /// Defines if the user skips the trimer stage,
+    /// the video will be trimmed automatically to the maximum value of trimmerMaxDuration.
+    /// This case occurs when the user already has a video selected and enables a
+    /// multiselection to pick more than one type of media (video or image),
+    /// so, the trimmer step becomes optional.
     /// - SeeAlso: [trimmerMaxDuration](x-source-tag://trimmerMaxDuration)
     public var automaticTrimToTrimmerMaxDuration: Bool = false
 }

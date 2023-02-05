@@ -20,11 +20,12 @@ public class YPVideoView: UIView {
     internal var previewImageView = UIImageView()
     
     public var player: AVPlayer {
-        guard playerLayer.player != nil else {
+        guard let player = playerLayer.player else {
             return AVPlayer()
         }
+        
         playImageView.image = YPConfig.icons.playImage
-        return playerLayer.player!
+        return player
     }
     
     public override init(frame: CGRect) {
@@ -43,15 +44,12 @@ public class YPVideoView: UIView {
         singleTapGR.numberOfTapsRequired = 1
         addGestureRecognizer(singleTapGR)
         
-        // Loop playback
-        addReachEndObserver()
-    
         playerView.alpha = 0
         playImageView.alpha = 0.8
         playerLayer.videoGravity = .resizeAspect
         previewImageView.contentMode = .scaleAspectFit
         
-        sv(
+        subviews(
             previewImageView,
             playerView,
             playImageView
@@ -152,13 +150,13 @@ extension YPVideoView {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(playerItemDidReachEnd(_:)),
                                                name: .AVPlayerItemDidPlayToEndTime,
-                                               object: nil)
+                                               object: player.currentItem)
     }
     
     /// Removes the observer for AVPlayerItemDidPlayToEndTime. Could be needed to implement own observer
     public func removeReachEndObserver() {
         NotificationCenter.default.removeObserver(self,
                                                   name: .AVPlayerItemDidPlayToEndTime,
-                                                  object: nil)
+                                                  object: player.currentItem)
     }
 }

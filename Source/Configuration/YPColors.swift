@@ -50,6 +50,12 @@ public struct YPColors {
     /// A color for for bottom buttons not selected text.
     public var bottomMenuItemUnselectedTextColor: UIColor = .ypSecondaryLabel
 
+    /// The color of the crop overlay.
+    public var cropOverlayColor: UIColor = UIColor.ypSystemBackground.withAlphaComponent(0.4)
+
+    /// The default color of all navigation bars except album's.
+    public var defaultNavigationBarColor: UIColor = .offWhiteOrBlack
+
     // MARK: - Trimmer
     
     /// The color of the main border of the view
@@ -70,4 +76,11 @@ public struct YPColors {
     public var progressBarTrackColor: UIColor = .ypSystemBackground
     /// The color of completed track for the progress bar
     public var progressBarCompletedColor: UIColor?
+    
+    /// The color of the Album's NavigationBar background
+    public var albumBarTintColor: UIColor = .ypSystemBackground
+    /// The color of the Album's left and right items color
+    public var albumTintColor: UIColor = .ypLabel
+    /// The color of the Album's title color
+    public var albumTitleColor: UIColor = .ypLabel
 }

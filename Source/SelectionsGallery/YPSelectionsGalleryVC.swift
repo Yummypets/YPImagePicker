@@ -130,6 +130,7 @@ extension YPSelectionsGalleryVC: UICollectionViewDelegate {
         if let mediaFilterVC = mediaFilterVC as? UIViewController {
             let navVC = UINavigationController(rootViewController: mediaFilterVC)
             navVC.navigationBar.isTranslucent = false
+            navVC.navigationBar.backgroundColor = YPConfig.colors.defaultNavigationBarColor
             present(navVC, animated: true, completion: nil)
         }
     }

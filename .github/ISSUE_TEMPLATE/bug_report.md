@@ -21,15 +21,12 @@ A clear and concise description of what you expected to happen.
 If applicable, add screenshots to help explain your problem.
 
 **Environment (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Xcode Version [e.g. 9.4.1]
- - Swift Version [e.g. 4.1]
+ - Device: [e.g. iPhone11ProMax]
+ - OS: [e.g. iOS12.1]
+ - Xcode Version [e.g. 12.3.1]
+ - Swift Version [e.g. 5.3]
 
 **Installation Type**
- - Carthage
+ - SPM
  - Cocoapods
  - Manual
-
-**Additional context**
-Add any other context about the problem here.
