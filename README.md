@@ -9,7 +9,7 @@ YPImagePicker is an instagram-like photo/video picker for iOS written in pure Sw
 [![Language: Swift 5](https://img.shields.io/badge/language-swift%205-f48041.svg?style=flat)](https://developer.apple.com/swift)
 [![Version](https://img.shields.io/cocoapods/v/YPImagePicker.svg?style=flat)](http://cocoapods.org/pods/YPImagePicker)
 [![Platform](https://img.shields.io/cocoapods/p/YPImagePicker.svg?style=flat)](http://cocoapods.org/pods/YPImagePicker)
-[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+[![SPM compatible](https://img.shields.io/badge/SPM-compatible-4BC51D.svg?style=flat)](https://swift.org/package-manager/)
 [![codebeat badge](https://codebeat.co/badges/9710a89d-b1e2-4e55-a4a2-3ae1f98f4c53)](https://codebeat.co/projects/github-com-yummypets-ypimagepicker-master)
 [![License: MIT](http://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat)](https://github.com/Yummypets/YPImagePicker/blob/master/LICENSE)
 [![GitHub tag](https://img.shields.io/github/release/Yummypets/YPImagePicker.svg)]()
@@ -41,16 +41,6 @@ And many more...
 
 ## Installation
 
-## Experimental Swift Package Manager (SPM) Support
-A first version of SPM support is available :
-package `https://github.com/Yummypets/YPImagePicker` branch `spm`.  
-This has a minimum target iOS version of `12.0`.  
-This is an early release so be sure to thoroughly test the integration and report any issues you'd encounter.
-
-Side note:  
-Swift package manager is the future and I would strongly recommend you to migrate as soon as possible.
-Once this integration is stable, the other packager managers will be deprecated.
-
 #### Using [CocoaPods](http://cocoapods.org/)
 
 First be sure to run `pod repo update` to get the latest version available.
@@ -63,13 +53,23 @@ pod 'YPImagePicker'
 use_frameworks!
 ```
 
-#### Using [Carthage](https://github.com/Carthage/Carthage)
+#### Using [Swift Package Manager](https://swift.org/package-manager/)
 
-Add `github "Yummypets/YPImagePicker"` to your `Cartfile` and run `carthage update`. If unfamiliar with Carthage then checkout their [Getting Started section](https://github.com/Carthage/Carthage#getting-started).
+Open SPM dependency manager through `File > Swift Pakcages > Add Package Dependency...`.
 
+and insert repository URL:
+
+``https://github.com/Yummypets/YPImagePicker.git``
+
+To add dependency in your own package, just specify a package in dependencies of your `Package.swift`:
+```swift
+.package(
+name: "YPImagePicker",
+url: "https://github.com/Yummypets/YPImagePicker.git",
+.upToNextMajor(from: "5.0.0")
+)
 ```
-github "Yummypets/YPImagePicker"
-```
+Note: This has a minimum target iOS version of `12.0`.
 
 ## Plist entries
 
@@ -123,7 +123,6 @@ config.bottomMenuItemSelectedColour = UIColor(r: 38, g: 38, b: 38)
 config.bottomMenuItemUnSelectedColour = UIColor(r: 153, g: 153, b: 153)
 config.filters = [DefaultYPFilters...]
 config.maxCameraZoomFactor = 1.0
-config.preSelectItemOnMultipleSelection = true
 config.fonts..
 ```
 
@@ -141,6 +140,7 @@ config.library.numberOfItemsInRow = 4
 config.library.spacingBetweenItems = 1.0
 config.library.skipSelectionsGallery = false
 config.library.preselectedItems = nil
+config.library.preSelectItemOnMultipleSelection = true
 ```
 
 ### Video
@@ -255,7 +255,7 @@ picker.didFinishPicking { [unowned picker] items, cancelled in
 That's it !
 
 ## Languages
-🇺🇸 English, 🇪🇸 Spanish, 🇫🇷 French 🇷🇺 Russian, 🇵🇱 Polish, 🇳🇱 Dutch, 🇧🇷 Brazilian, 🇹🇷 Turkish, 🇸🇾 Arabic, 🇩🇪 German, 🇮🇹 Italian, 🇯🇵 Japanese, 🇨🇳 Chinese, 🇮🇩 Indonesian, 🇰🇷 Korean, 🇹🇼 Traditional Chinese（Taiwan), 🇻🇳 Vietnamese, 🇹🇭 Thai. 
+🇺🇸 English, 🇪🇸 Spanish, 🇫🇷 French 🇷🇺 Russian, 🇵🇱 Polish, 🇳🇱 Dutch, 🇧🇷 Brazilian, 🇹🇷 Turkish, 🇸🇾 Arabic, 🇩🇪 German, 🇮🇹 Italian, 🇯🇵 Japanese, 🇨🇳 Chinese, 🇮🇩 Indonesian, 🇰🇷 Korean, 🇹🇼 Traditional Chinese（Taiwan), 🇻🇳 Vietnamese, 🇹🇭 Thai, 🇨🇿 Czech, 🇮🇷 Farsi. 
 
 If your language is not supported, you can still customize the wordings via the `configuration.wordings` api:
 
@@ -317,6 +317,7 @@ Original Fusuma author is [ytakz](http://ytakzk.me)
 [portellaa](https://github.com/portellaa)
 [Romixery](https://github.com/romixery)
 [shotat](https://github.com/shotat)
+[shalamowww](https://github.com/shalamowww)
 
 Special thanks to [ihtiht](https://github.com/ihtiht) for the cool looking logo!
 
@@ -383,4 +384,4 @@ See [LICENSE](LICENSE) for details.
 releases/tag/3.4.0)
 - Swift 5.0 -> version [**4.0.0**](https://github.com/Yummypets/YPImagePicker/releases/tag/4.0.0)
 - Swift 5.1 -> version [**4.1.2**](https://github.com/Yummypets/YPImagePicker/releases/tag/4.1.2)
-- Swift 5.3 -> version [**4.4.0**](https://github.com/Yummypets/YPImagePicker/releases/tag/4.4.0)
+- Swift 5.3 -> version [**4.5.0**](https://github.com/Yummypets/YPImagePicker/releases/tag/4.5.0)

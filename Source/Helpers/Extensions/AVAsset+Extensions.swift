@@ -46,7 +46,7 @@ extension AVAsset {
                 removeOldFile: Bool = false,
                 completion: @escaping (_ exportSession: AVAssetExportSession) -> Void) -> AVAssetExportSession? {
         guard let exportSession = AVAssetExportSession(asset: self, presetName: YPConfig.video.compression) else {
-            print("YPImagePicker -> AVAsset -> Could not create an export session.")
+            ypLog("AVAsset -> Could not create an export session.")
             return nil
         }
         

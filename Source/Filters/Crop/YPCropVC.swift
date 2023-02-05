@@ -11,6 +11,7 @@ import UIKit
 public enum YPCropType {
     case none
     case rectangle(ratio: Double)
+    case circle
 }
 
 class YPCropVC: UIViewController {
@@ -26,8 +27,8 @@ class YPCropVC: UIViewController {
     private let v: YPCropView
     override func loadView() { view = v }
     
-    required init(image: UIImage, ratio: Double) {
-        v = YPCropView(image: image, ratio: ratio)
+    required init(image: UIImage) {
+        v = YPCropView(image: image)
         originalImage = image
         super.init(nibName: nil, bundle: nil)
         self.title = YPConfig.wordings.crop
@@ -121,7 +122,7 @@ extension YPCropVC: UIGestureRecognizerDelegate {
         case .cancelled, .failed, .possible:
             ()
         @unknown default:
-            fatalError()
+            ypLog("unknown default reached. Check code.")
         }
         // Reset the pinch scale.
         sender.scale = 1.0

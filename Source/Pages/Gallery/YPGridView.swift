@@ -6,19 +6,26 @@
 //  Copyright © 2016 Yummypets. All rights reserved.
 //
 
+import UIKit
 import Stevia
 
-class YPGridView: UIView {
+final class YPGridView: UIView {
     
     let line1 = UIView()
     let line2 = UIView()
     let line3 = UIView()
     let line4 = UIView()
     
+    var isCircle = false {
+        didSet {
+            self.setNeedsDisplay()
+        }
+    }
+    
     convenience init() {
         self.init(frame: .zero)
         isUserInteractionEnabled = false
-        sv(
+        subviews(
             line1,
             line2,
             line3,
@@ -55,5 +62,13 @@ class YPGridView: UIView {
         view.layer.shadowOpacity = 1
         view.layer.shadowRadius = 2
         view.layer.shadowOffset = CGSize(width: 0, height: 0)
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        if isCircle {
+            clipsToBounds = true
+            layer.cornerRadius = min(bounds.width, bounds.height) / 2
+        }
     }
 }

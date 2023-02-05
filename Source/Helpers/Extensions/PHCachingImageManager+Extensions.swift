@@ -91,10 +91,10 @@ extension PHCachingImageManager {
         options.isNetworkAccessAllowed = true
 		// Get 2 results, one low res quickly and the high res one later.
         options.deliveryMode = .opportunistic
-        requestImage(for: asset, targetSize: PHImageManagerMaximumSize,
+        requestImage(for: asset, targetSize: CGSize(width: asset.pixelWidth, height: asset.pixelHeight),
 					 contentMode: .aspectFill, options: options) { result, info in
             guard let image = result else {
-                print("No Result 🛑")
+                ypLog("No Result 🛑")
                 return
             }
             DispatchQueue.main.async {
