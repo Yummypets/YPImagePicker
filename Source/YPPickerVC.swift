@@ -126,15 +126,15 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         
            self.libraryVC?.doAfterLibraryPermissionCheck { [weak self] in
             self?.albumVC.albums = self?.albumVC.albumsManager.fetchAlbums() ?? []
-
-            if(self?.albumVC.albums.isEmpty != nil) {
+            
+               if(!(self?.albumVC.albums.isEmpty ?? true) as Bool) {
                 let recentAlbum = self?.albumVC.albums[0]
                 self?.libraryVC?.title = recentAlbum?.title
                 self?.libraryVC?.mediaManager.collection = recentAlbum?.collection
                 self?.setTitleViewWithTitle(aTitle: recentAlbum?.title ?? "Library")
                 self?.libraryVC?.currentlySelectedIndex = 0
                 self?.libraryVC?.selectedItems.removeAll()
-            }
+               }
         }
     }
     
