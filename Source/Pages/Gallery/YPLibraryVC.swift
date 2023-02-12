@@ -17,6 +17,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
     internal var selectedItems = [YPLibrarySelection]()
     internal let mediaManager = LibraryMediaManager()
     internal var isMultipleSelectionEnabled = false
+    internal var isFastPostsSelectionEnabled = false
     internal var currentlySelectedIndex: Int = 0
     internal let panGestureHelper = PanGestureHelper()
     internal var isInitialized = false
@@ -55,7 +56,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         refreshMediaRequest()
 
         
-        v.assetViewContainer.multipleSelectionButton.isHidden = !(YPConfig.library.maxNumberOfItems > 1) || YPConfig.isCarouselAlbumUpdating || YPConfig.library.defaultMultipleSelection
+        v.assetViewContainer.multipleSelectionButton.isHidden = !(YPConfig.library.maxNumberOfItems > 1) || YPConfig.isCarouselAlbumUpdating || YPConfig.library.defaultMultipleSelection || YPConfig.isQuickPosts
         
         v.maxNumberWarningLabel.text = String(format: YPConfig.wordings.warningMaxItemsLimit,
 											  YPConfig.library.maxNumberOfItems)
@@ -91,7 +92,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         title = album.title
         mediaManager.collection = album.collection
         currentlySelectedIndex = 0
-        if !isMultipleSelectionEnabled {
+        if (!isMultipleSelectionEnabled || !isFastPostsSelectionEnabled) {
             selectedItems.removeAll()
         }
         refreshMediaRequest()
@@ -125,6 +126,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                        action: #selector(multipleSelectionButtonTapped),
                        for: .touchUpInside)
         
+        
         // Forces assetZoomableView to have a contentSize.
         // otherwise 0 in first selection triggering the bug : "invalid image size 0x0"
         // Also fits the first element to the square if the onlySquareFromLibrary = true
@@ -133,8 +135,10 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         }
         
         // Activate multiple selection when using `minNumberOfItems`
-        if YPConfig.library.minNumberOfItems > 1 {
-            multipleSelectionButtonTapped()
+        if (YPConfig.library.minNumberOfItems > 1 && YPConfig.isQuickPosts) {
+            doAfterLibraryPermissionCheck { [weak self] in
+                self?.fastPostsSelectionButtonTapped()
+            }
         }
      
         if(YPConfig.isCarouselAlbumUpdating && YPConfig.isPost) {
@@ -179,6 +183,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
             if self?.isMultipleSelectionEnabled == false {
                 self?.selectedItems.removeAll()
             }
+            
             self?.toggleMultipleSelection()
         }
     }
@@ -199,6 +204,12 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         }
 
         isMultipleSelectionEnabled.toggle()
+        
+        if(isFastPostsSelectionEnabled) {
+            selectedItems.removeAll()
+            isFastPostsSelectionEnabled = false
+        }
+
 
         if isMultipleSelectionEnabled {
             let needPreselectItemsAndNotSelectedAnyYet = selectedItems.isEmpty && YPConfig.library.preSelectItemOnMultipleSelection
@@ -223,6 +234,73 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         v.collectionView.reloadData()
         checkLimit()
         delegate?.libraryViewDidToggleMultipleSelection(enabled: isMultipleSelectionEnabled)
+    }
+    
+    
+    @objc
+    func fastPostsSelectionButtonTapped() {
+        // If no items, than preventing multiple selection
+        guard mediaManager.hasResultItems else {
+            if #available(iOS 14, *) {
+                PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: self)
+            }
+
+            return
+        }
+
+      
+            if isFastPostsSelectionEnabled == false {
+                selectedItems.removeAll()
+            }
+            
+             toggleFastPostsSelection()
+    }
+    
+    func toggleFastPostsSelection() {
+        
+        self.v.assetViewContainer.multipleSelectionButton.isHidden = true;
+        
+        // Prevent desactivating multiple selection when using `minNumberOfItems`
+        if(self.v.assetViewContainer.zoomableView.isZooming == true || self.v.assetViewContainer.zoomableView.isZoomBouncing == true || self.v.assetViewContainer.zoomableView.isMediaFiting == true) {
+                return
+            }
+        
+        
+        
+        if YPConfig.library.minNumberOfItems > 1 && isFastPostsSelectionEnabled {
+            print("Selected minNumberOfItems greater than one :\(YPConfig.library.minNumberOfItems). Don't deselecting multiple selection.")
+            return
+        }
+
+        
+        isFastPostsSelectionEnabled.toggle()
+        
+        if(isMultipleSelectionEnabled) {
+            selectedItems.removeAll()
+            isMultipleSelectionEnabled = false
+        }
+
+        if isFastPostsSelectionEnabled {
+            let needPreselectItemsAndNotSelectedAnyYet = selectedItems.isEmpty && YPConfig.library.preSelectItemOnMultipleSelection
+            let shouldSelectByDelegate = delegate?.libraryViewShouldAddToSelection(indexPath: IndexPath(row: currentlySelectedIndex, section: 0), numSelections: selectedItems.count) ?? true
+            if needPreselectItemsAndNotSelectedAnyYet,
+               shouldSelectByDelegate,
+               let asset = mediaManager.getAsset(at: currentlySelectedIndex) {
+                selectedItems = [
+                    YPLibrarySelection(index: currentlySelectedIndex,
+                                       cropRect: v.currentCropRect(),
+                                       scrollViewContentOffset: v.assetZoomableView.contentOffset,
+                                       scrollViewZoomScale: v.assetZoomableView.zoomScale,
+                                       assetIdentifier: asset.localIdentifier)
+                ]
+            }
+        } else {
+            selectedItems.removeAll()
+            addToSelection(indexPath: IndexPath(row: currentlySelectedIndex, section: 0))
+        }
+        
+        v.collectionView.reloadData()
+        checkLimit()
     }
     
     // MARK: - Tap Preview
@@ -257,7 +335,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
             v.collectionView.selectItem(at: IndexPath(row: 0, section: 0),
                                         animated: false,
                                         scrollPosition: UICollectionView.ScrollPosition())
-            if !isMultipleSelectionEnabled {
+            if (!isMultipleSelectionEnabled || !isFastPostsSelectionEnabled) {
                 addToSelection(indexPath: IndexPath(row: 0, section: 0))
             }
         } else {
@@ -293,7 +371,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
     
     func changeAsset(_ asset: PHAsset?) {
         let hasIndex = self.selectedItems.contains(where: { $0.index == self.currentlySelectedIndex })
-        if(self.isMultipleSelectionEnabled && isLimitExceeded && !hasIndex) {
+        if((self.isMultipleSelectionEnabled || self.isFastPostsSelectionEnabled) && isLimitExceeded && !hasIndex) {
             return
         }
         
@@ -385,8 +463,8 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
     }
     
     internal func fetchStoredCrop() -> YPLibrarySelection? {
-        if self.isMultipleSelectionEnabled,
-            self.selectedItems.contains(where: { $0.index == self.currentlySelectedIndex }) {
+        if ((self.isMultipleSelectionEnabled || self.isFastPostsSelectionEnabled) &&
+            self.selectedItems.contains(where: { $0.index == self.currentlySelectedIndex })) {
             guard let selectedAssetIndex = self.selectedItems
                 .firstIndex(where: { $0.index == self.currentlySelectedIndex }) else {
                 return nil
@@ -465,7 +543,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
             }
             
             // Multiple selection
-            if self.isMultipleSelectionEnabled && self.selectedItems.count > 1 {
+            if ((self.isMultipleSelectionEnabled || self.isFastPostsSelectionEnabled) && self.selectedItems.count > 1) {
                 
                 // Check video length
                 for asset in selectedAssets {

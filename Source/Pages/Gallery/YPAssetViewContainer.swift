@@ -31,7 +31,8 @@ final class YPAssetViewContainer: UIView {
     private let spinner = UIActivityIndicatorView(style: .white)
     private var shouldCropToSquare = YPConfig.library.isSquareByDefault
     private var isMultipleSelectionEnabled = false
-  
+    private var isFastPostsSelectionEnabled = false
+    
     // carousel
     private var currentZoomableViewWidthAnchor: NSLayoutConstraint! = nil
     private var currentZoomableViewHeightAnchor: NSLayoutConstraint! = nil
@@ -125,6 +126,14 @@ final class YPAssetViewContainer: UIView {
             squareCropButton.isHidden = true
             return
         }
+        
+        
+        guard !isFastPostsSelectionEnabled else {
+            // If multiple selection enabled, the squareCropButton is not visible
+            squareCropButton.isHidden = true
+            return
+        }
+        
         guard !onlySquare else {
             // If only square enabled, than the squareCropButton is not visible
             squareCropButton.isHidden = true
@@ -145,13 +154,37 @@ final class YPAssetViewContainer: UIView {
     /// Use this to update the multiple selection mode UI state for the YPAssetViewContainer
     public func setMultipleSelectionMode(on: Bool) {
         isMultipleSelectionEnabled = on
-        let image = on ? YPConfig.icons.multipleSelectionOnIcon : YPConfig.icons.multipleSelectionOffIcon
-        multipleSelectionButton.setImage(image, for: .normal)
+        
+        if(isFastPostsSelectionEnabled) {
+            isFastPostsSelectionEnabled = false
+            let fastPostsSelectionImageState = YPConfig.icons.fastPostsSelectionOffIcon
+        }
+       
+        let multipleSelectionImageState = on ? YPConfig.icons.multipleSelectionOnIcon : YPConfig.icons.multipleSelectionOffIcon
+   
+        multipleSelectionButton.setImage(multipleSelectionImageState, for: .normal)
+ 
         updateSquareCropButtonState()
+        
         if(!YPConfig.isCarouselAlbumUpdating && !YPConfig.library.defaultMultipleSelection) {
             changeFrameDimensionsToSelectedMediaAspectRatio()
         }
     }
+    
+    /// Use this to update the fast posts selection mode UI state for the YPAssetViewContainer
+//    public func setFastPostsSelection(on: Bool) {
+//        isFastPostsSelectionEnabled = on
+//
+//        if(isMultipleSelectionEnabled) {
+//            isMultipleSelectionEnabled = false
+//            let multipleSelectionImageState = YPConfig.icons.multipleSelectionOffIcon
+//            multipleSelectionButton.setImage(multipleSelectionImageState, for: .normal)
+//            changeFrameDimensionsToSelectedMediaAspectRatio()
+//        }
+//        let fastPostsSelectionImageState = on ? YPConfig.icons.fastPostsSelectionOnIcon : YPConfig.icons.fastPostsSelectionOffIcon
+//
+//        updateSquareCropButtonState()
+//    }
     
     
     public func changeFrameDimensionsToSelectedMediaAspectRatio () {

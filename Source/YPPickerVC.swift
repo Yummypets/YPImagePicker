@@ -129,10 +129,12 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
 
             if(self?.albumVC.albums.isEmpty != nil) {
                 let recentAlbum = self?.albumVC.albums[0]
-                        self?.libraryVC?.title = recentAlbum?.title
-                        self?.libraryVC?.mediaManager.collection = recentAlbum?.collection
-                        self?.setTitleViewWithTitle(aTitle: recentAlbum?.title ?? "Library")
-                    }
+                self?.libraryVC?.title = recentAlbum?.title
+                self?.libraryVC?.mediaManager.collection = recentAlbum?.collection
+                self?.setTitleViewWithTitle(aTitle: recentAlbum?.title ?? "Library")
+                self?.libraryVC?.currentlySelectedIndex = 0
+                self?.libraryVC?.selectedItems.removeAll()
+            }
         }
     }
     

@@ -35,6 +35,9 @@ public struct YPImagePickerConfiguration {
     /// Include post aspect ratio
     public var isPost = false
     
+    /// Include post aspect ratio
+    public var isQuickPosts = false
+    
     /// for updating carousel album
     public var isCarouselAlbumUpdating = false
     public var carouselAlbumAspectRatio = 0.805
