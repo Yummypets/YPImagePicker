@@ -187,6 +187,10 @@ public struct YPConfigLibrary {
     
     public var options: PHFetchOptions?
 
+    public var albumFetchOptions: PHFetchOptions?
+
+    public var smartAlbumFetchOptions: PHFetchOptions?
+
     /// Set this to true if you want to force the library output to be a squared image. Defaults to false.
     public var onlySquare = false
     

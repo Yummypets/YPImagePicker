@@ -197,6 +197,11 @@ class ExampleViewController: UIViewController {
 		//config.fonts.navigationBarTitleFont = UIFont.systemFont(ofSize: 22.0, weight: .heavy)
 		//config.fonts.leftBarButtonFont = UIFont.systemFont(ofSize: 22.0, weight: .heavy)
 
+        // Customize order of albums
+        //let albumFetchOptions = PHFetchOptions()
+        //albumFetchOptions.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        //config.library.albumFetchOptions = albumFetchOptions
+
         let picker = YPImagePicker(configuration: config)
 
         picker.imagePickerDelegate = self

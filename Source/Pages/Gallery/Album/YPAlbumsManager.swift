@@ -13,21 +13,22 @@ import UIKit
 class YPAlbumsManager {
     
     private var cachedAlbums: [YPAlbum]?
-    
+
     func fetchAlbums() -> [YPAlbum] {
         if let cachedAlbums = cachedAlbums {
             return cachedAlbums
         }
         
         var albums = [YPAlbum]()
-        let options = PHFetchOptions()
+        let albumFetchOptions = buildPHFetchOptions(YPConfig.library.albumFetchOptions)
+        let smartAlbumFetchOptions = buildPHFetchOptions(YPConfig.library.smartAlbumFetchOptions)
         
         let smartAlbumsResult = PHAssetCollection.fetchAssetCollections(with: .smartAlbum,
                                                                         subtype: .any,
-                                                                        options: options)
+                                                                        options: smartAlbumFetchOptions)
         let albumsResult = PHAssetCollection.fetchAssetCollections(with: .album,
                                                                    subtype: .any,
-                                                                   options: options)
+                                                                   options: albumFetchOptions)
         for result in [smartAlbumsResult, albumsResult] {
             result.enumerateObjects({ assetCollection, _, _ in
                 var album = YPAlbum()
@@ -71,6 +72,13 @@ class YPAlbumsManager {
         options.predicate = YPConfig.library.mediaType.predicate()
         let result = PHAsset.fetchAssets(in: collection, options: options)
         return result.count
+    }
+
+    func buildPHFetchOptions(_ optionOverride: PHFetchOptions?) -> PHFetchOptions {
+        if let userOpt = optionOverride {
+            return userOpt
+        }
+        return PHFetchOptions()
     }
     
 }
