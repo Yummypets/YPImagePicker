@@ -40,4 +40,7 @@ public struct YPFonts {
 
     /// The font used in the UINavigationBar leftBarButtonItem
     public var leftBarButtonFont: UIFont?
+
+    /// The font used for album section header labels (if album sectioning is turned on)
+    public var albumSectionHeaderFont: UIFont?
 }

@@ -202,6 +202,11 @@ class ExampleViewController: UIViewController {
         //albumFetchOptions.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
         //config.library.albumFetchOptions = albumFetchOptions
 
+        // Arrange albums into sections
+        //config.library.useAlbumSections = true
+        //config.library.smartAlbumsSectionTitle = "Media types"
+        //config.library.userAlbumsSectionTitle = "My albums"
+
         let picker = YPImagePicker(configuration: config)
 
         picker.imagePickerDelegate = self

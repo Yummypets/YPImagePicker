@@ -191,6 +191,12 @@ public struct YPConfigLibrary {
 
     public var smartAlbumFetchOptions: PHFetchOptions?
 
+    public var useAlbumSections = false
+
+    public var smartAlbumsSectionTitle: String?
+
+    public var userAlbumsSectionTitle: String?
+
     /// Set this to true if you want to force the library output to be a squared image. Defaults to false.
     public var onlySquare = false
     

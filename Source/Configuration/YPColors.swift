@@ -59,6 +59,9 @@ public struct YPColors {
     /// The default color of all navigation bars except album's.
     public var defaultNavigationBarColor: UIColor = .offWhiteOrBlack
 
+    /// The color for album section header label (if album sections are on)
+    public var albumSectionHeaderTextColor: UIColor?
+
     // MARK: - Trimmer
     
     /// The color of the main border of the view
