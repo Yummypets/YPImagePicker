@@ -150,7 +150,7 @@ public class LibraryMediaManager {
         }
     }
 
-    func fetchVideoUrlAndCrop(for videoAsset: PHAsset, cropRect: CGRect, timeRange:CMTimeRange = CMTimeRange(start: CMTime.zero, end: CMTime.zero), callback: @escaping (_ videoURL: URL?) -> Void) {
+    func fetchVideoUrlAndCrop(for videoAsset: PHAsset, cropRect: CGRect, timeRange: CMTimeRange = CMTimeRange(start: CMTime.zero, end: CMTime.zero), shouldMute: Bool = true, callback: @escaping (_ videoURL: URL?) -> Void) {
         let videosOptions = PHVideoRequestOptions()
         videosOptions.isNetworkAccessAllowed = true
         videosOptions.deliveryMode = .highQualityFormat
@@ -170,7 +170,7 @@ public class LibraryMediaManager {
                           return
 
                       }
-                if let audioTrack = asset.tracks(withMediaType: AVMediaType.audio).first,
+                if !shouldMute, let audioTrack = asset.tracks(withMediaType: AVMediaType.audio).first,
                    let audioCompositionTrack = assetComposition.addMutableTrack(withMediaType: AVMediaType.audio,
                                                                                 preferredTrackID: kCMPersistentTrackID_Invalid) {
                     do {

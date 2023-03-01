@@ -44,6 +44,7 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
     public var playbackTimeCheckerTimer: Timer?
     public var imageGenerator: AVAssetImageGenerator?
     public var isFromSelectionVC = false
+    public var shouldMute = false
 
     public let trimmerContainerView: UIView = {
         let v = UIView()
@@ -302,7 +303,7 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
 
             let rotated = !videoTrack.preferredTransform.isIdentity
 
-            if untrimmed && !cropped && !rotated {
+            if untrimmed && !cropped && !rotated && !shouldMute {
                 // if video remains untrimmed and uncropped, use existing video url to eliminate video transcoding effort
                 // we will be selecting a cover image next, use generic uiimage for now
                 self.completeSave(thumbnail: UIImage(), videoUrl: self.inputVideo.url, asset: self.inputVideo.asset)
@@ -313,7 +314,7 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
             let timeRange = CMTimeRange(start: startTime, end: endTime)
 
             // cropping and trimming simultaneously to reduce total transcoding time
-            mediaManager.fetchVideoUrlAndCrop(for: inputVideo.asset!, cropRect: inputVideo.cropRect!, timeRange: timeRange) { [weak self] (url) in
+            mediaManager.fetchVideoUrlAndCrop(for: inputVideo.asset!, cropRect: inputVideo.cropRect!, timeRange: timeRange, shouldMute: shouldMute) { [weak self] (url) in
                 DispatchQueue.main.async {
                     if let url = url {
                         self?.completeSave(thumbnail:  UIImage(), videoUrl: url, asset: self?.inputVideo.asset)
