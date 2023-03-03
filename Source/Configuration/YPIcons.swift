@@ -14,6 +14,7 @@ public struct YPIcons {
     public var hideBackButtonTitle = true
     
     public var backButtonIcon: UIImage = imageFromBundle("yp_arrow_left")
+    public var cancelButtonIcon: UIImage? = nil
     public var arrowDownIcon: UIImage = imageFromBundle("yp_arrow_down")
     public var cropIcon: UIImage = imageFromBundle("yp_iconCrop")
     public var flashOnIcon: UIImage = imageFromBundle("yp_iconFlash_on")
