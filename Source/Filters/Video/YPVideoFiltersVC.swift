@@ -188,6 +188,9 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
             selectTrim()
             videoView.loadVideo(inputVideo)
             videoView.pause()
+            setupGenerator()
+            coverThumbSelectorView.delegate = self
+            coverThumbSelectorView.asset = inputAsset
         } else {
             if coverThumbSelectorView.asset != nil {
                 return
@@ -260,7 +263,7 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
         progressView.progress = 0
     }
 
-    @objc public func save() {
+    @objc open func save() {
         guard let _ = didSave else { return ypLog("Don't have saveCallback") }
         navigationItem.rightBarButtonItem = YPLoaders.defaultLoader
 
@@ -306,7 +309,7 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
             if untrimmed && !cropped && !rotated && !shouldMute {
                 // if video remains untrimmed and uncropped, use existing video url to eliminate video transcoding effort
                 // we will be selecting a cover image next, use generic uiimage for now
-                self.completeSave(thumbnail: UIImage(), videoUrl: self.inputVideo.url, asset: self.inputVideo.asset)
+                self.completeSave(thumbnail: self.coverImageView.image ?? UIImage(), videoUrl: self.inputVideo.url, asset: self.inputVideo.asset)
 
                 return
             }
@@ -317,7 +320,7 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
             mediaManager.fetchVideoUrlAndCrop(for: inputVideo.asset!, cropRect: inputVideo.cropRect!, timeRange: timeRange, shouldMute: shouldMute) { [weak self] (url) in
                 DispatchQueue.main.async {
                     if let url = url {
-                        self?.completeSave(thumbnail:  UIImage(), videoUrl: url, asset: self?.inputVideo.asset)
+                        self?.completeSave(thumbnail: self?.coverImageView.image ?? UIImage(), videoUrl: url, asset: self?.inputVideo.asset)
                     } else {
                         ypLog("YPVideoFiltersVC -> Invalid asset url.")
                         self?.resetView()
@@ -358,6 +361,8 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
         videoView.isHidden = false
         coverImageView.isHidden = true
         coverThumbSelectorView.isHidden = true
+
+        vcType = .Trimmer
     }
     
     @objc private func selectCover() {
@@ -370,6 +375,18 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
         
         stopPlaybackTimeChecker()
         videoView.stop()
+
+        vcType = .Cover
+    }
+
+    open func setMode(type: YPVideoFiltersType) {
+        switch type {
+        case .Trimmer:
+            selectTrim()
+        case .Cover:
+            selectCover()
+        }
+        prepareThumbnails()
     }
     
     // MARK: - Various Methods
