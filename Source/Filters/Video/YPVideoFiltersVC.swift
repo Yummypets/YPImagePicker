@@ -159,6 +159,8 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
         // reset progress
         progressView.isHidden = true
         progressView.progress = 0
+
+        setupNavigationBar(isFromSelectionVC: self.isFromSelectionVC)
     }
     
     open override func viewWillDisappear(_ animated: Bool) {
@@ -205,11 +207,19 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
 
     private func setupNavigationBar(isFromSelectionVC: Bool) {
         if isFromSelectionVC {
-            navigationItem.leftBarButtonItem = UIBarButtonItem(title: YPConfig.wordings.cancel,
-                                                               style: .plain,
-                                                               target: self,
-                                                               action: #selector(cancel))
+            if let cancelButtonIcon = YPConfig.icons.cancelButtonIcon {
+                navigationItem.leftBarButtonItem = UIBarButtonItem(image: cancelButtonIcon,
+                                                                   style: .plain,
+                                                                   target: self,
+                                                                   action: #selector(cancel))
+            } else {
+                navigationItem.leftBarButtonItem = UIBarButtonItem(title: YPConfig.wordings.cancel,
+                                                                   style: .plain,
+                                                                   target: self,
+                                                                   action: #selector(cancel))
+            }
             navigationItem.leftBarButtonItem?.setFont(font: YPConfig.fonts.leftBarButtonFont, forState: .normal)
+            navigationItem.leftBarButtonItem?.setTitleTextAttributes([.foregroundColor : YPConfig.colors.cancelButtonColor], for: .normal)
         }
         setupRightBarButtonItem()
     }
