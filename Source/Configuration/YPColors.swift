@@ -62,6 +62,9 @@ public struct YPColors {
     /// The color for album section header label (if album sections are on)
     public var albumSectionHeaderTextColor: UIColor?
 
+    /// The color of the button that changes between library and albums _when_ showsLibraryButtonInTitle is false
+    public var libraryScreenAlbumsButtonColor: UIColor = .ypLabel
+
     // MARK: - Trimmer
     
     /// The color of the main border of the view
@@ -82,7 +85,9 @@ public struct YPColors {
     public var progressBarTrackColor: UIColor = .ypSystemBackground
     /// The color of completed track for the progress bar
     public var progressBarCompletedColor: UIColor?
-    
+
+    // MARK: - Albums (unused)
+
     /// The color of the Album's NavigationBar background
     public var albumBarTintColor: UIColor = .ypSystemBackground
     /// The color of the Album's left and right items color

@@ -16,4 +16,5 @@ public protocol YPLibraryViewDelegate: AnyObject {
     func libraryViewDidToggleMultipleSelection(enabled: Bool)
     func libraryViewShouldAddToSelection(indexPath: IndexPath, numSelections: Int) -> Bool
     func libraryViewHaveNoItems()
+    func libraryViewDidTapAlbum()
 }

@@ -113,6 +113,10 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
 
             strongSelf.updateCropInfo()
         }
+
+        v.onAlbumsButtonTap = { [weak self] in
+            self?.delegate?.libraryViewDidTapAlbum()
+        }
     }
     
     public override func viewDidAppear(_ animated: Bool) {

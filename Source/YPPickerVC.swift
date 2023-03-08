@@ -287,7 +287,13 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         }
         switch mode {
         case .library:
-            setTitleViewWithTitle(aTitle: libraryVC?.title ?? "")
+            if YPConfig.showsLibraryButtonInTitle {
+                setTitleViewWithTitle(aTitle: libraryVC?.title ?? "")
+            }
+            else if YPConfig.pickerTitleOverride != nil {
+                navigationItem.title = YPConfig.pickerTitleOverride
+            }
+
             navigationItem.rightBarButtonItem = UIBarButtonItem(title: YPConfig.wordings.next,
                                                                 style: .done,
                                                                 target: self,
@@ -387,5 +393,9 @@ extension YPPickerVC: YPLibraryViewDelegate {
     
     public func libraryViewShouldAddToSelection(indexPath: IndexPath, numSelections: Int) -> Bool {
         return pickerVCDelegate?.shouldAddToSelection(indexPath: indexPath, numSelections: numSelections) ?? true
+    }
+
+    public func libraryViewDidTapAlbum() {
+        navBarTapped()
     }
 }

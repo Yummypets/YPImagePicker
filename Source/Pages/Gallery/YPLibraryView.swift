@@ -49,11 +49,46 @@ internal final class YPLibraryView: UIView {
         return v
     }()
 
+    internal let showAlbumsButton: UIView = {
+        let buttonContainerView = UIView()
+
+        let label = UILabel()
+        label.text = YPConfig.wordings.libraryTitle
+        // Use YPConfig font
+        label.font = YPConfig.fonts.pickerTitleFont
+        label.textColor = YPConfig.colors.libraryScreenAlbumsButtonColor
+
+        let arrow = UIImageView()
+        arrow.image = YPConfig.icons.arrowDownIcon.withRenderingMode(.alwaysTemplate)
+        arrow.tintColor = YPConfig.colors.libraryScreenAlbumsButtonColor
+        arrow.setContentCompressionResistancePriority(.required, for: .horizontal)
+
+        let button = UIButton()
+        button.addTarget(self, action: #selector(albumsButtonTapped), for: .touchUpInside)
+        button.setBackgroundColor(YPConfig.colors.assetViewBackgroundColor.withAlphaComponent(0.4), forState: .highlighted)
+
+        buttonContainerView.subviews(
+            label,
+            arrow,
+            button
+        )
+        button.fillContainer()
+        |-(24)-label.centerHorizontally()-arrow-(>=8)-|
+
+        label.firstBaselineAnchor.constraint(equalTo: buttonContainerView.bottomAnchor, constant: -24).isActive = true
+        arrow.bottomAnchor.constraint(equalTo: label.bottomAnchor, constant: -4).isActive = true
+
+        buttonContainerView.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        return buttonContainerView
+    }()
+
+    var onAlbumsButtonTap: (() -> Void)?
+
     // MARK: - Private vars
 
     private let line: UIView = {
         let v = UIView()
-        v.backgroundColor = .ypSystemBackground
+        v.backgroundColor = YPConfig.colors.libraryScreenBackgroundColor
         return v
     }()
     /// When video is processing this bar appears
@@ -174,6 +209,7 @@ internal final class YPLibraryView: UIView {
             collectionContainerView.subviews(
                 collectionView
             ),
+            YPConfig.showsLibraryButtonInTitle ? UIView() : showAlbumsButton,
             line,
             assetViewContainer.subviews(
                 assetZoomableView
@@ -187,14 +223,23 @@ internal final class YPLibraryView: UIView {
         collectionContainerView.fillContainer()
         collectionView.fillHorizontally().bottom(0)
 
-        assetViewContainer.Bottom == line.Top
+        if !YPConfig.showsLibraryButtonInTitle {
+            assetViewContainer.Bottom == showAlbumsButton.Top
+            showAlbumsButton.Bottom == line.Top
+            showAlbumsButton.height(60)
+            assetZoomableView.Bottom == collectionView.Top - 60
+        } else {
+            assetViewContainer.Bottom == line.Top
+            assetZoomableView.Bottom == collectionView.Top
+        }
+
         line.height(1)
         line.fillHorizontally()
 
         assetViewContainer.top(0).fillHorizontally().heightEqualsWidth()
         self.assetViewContainerConstraintTop = assetViewContainer.topConstraint
         assetZoomableView.fillContainer().heightEqualsWidth()
-        assetZoomableView.Bottom == collectionView.Top
+
         assetViewContainer.sendSubviewToBack(assetZoomableView)
 
         progressView.height(5).fillHorizontally()
@@ -203,5 +248,10 @@ internal final class YPLibraryView: UIView {
         |maxNumberWarningView|.bottom(0)
         maxNumberWarningView.Top == safeAreaLayoutGuide.Bottom - 40
         maxNumberWarningLabel.centerHorizontally().top(11)
+    }
+
+    @objc
+    func albumsButtonTapped() {
+        onAlbumsButtonTap?()
     }
 }
