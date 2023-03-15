@@ -101,8 +101,8 @@ public class LibraryMediaManager {
                     DispatchQueue.main.async {
                         callback(urlAsset.url)
                     }
-                } else { // slow-mo videos assets aren't AVURLAssets so export using passthrough
-                    let presetName = AVAssetExportPresetPassthrough
+                } else { /// Some slow-mo videos break with `AVAssetExportPresetPassthrough` so use `AVAssetExportPresetHighestQuality` instead
+                    let presetName = AVAssetExportPresetHighestQuality
 
                     let fileURL = URL(fileURLWithPath: NSTemporaryDirectory())
                         .appendingUniquePathComponent(pathExtension: YPConfig.video.fileType.fileExtension)
