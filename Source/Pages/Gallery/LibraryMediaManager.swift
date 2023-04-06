@@ -154,6 +154,9 @@ public class LibraryMediaManager {
         let videosOptions = PHVideoRequestOptions()
         videosOptions.isNetworkAccessAllowed = true
         videosOptions.deliveryMode = .highQualityFormat
+
+        let videoIsSlomo = videoAsset.mediaSubtypes.contains(.videoHighFrameRate)
+
         imageManager?.requestAVAsset(forVideo: videoAsset, options: videosOptions) { asset, _, _ in
             do {
                 guard let asset = asset else { ypLog("⚠️ PHCachingImageManager >>> Don't have the asset"); return }
@@ -194,7 +197,7 @@ public class LibraryMediaManager {
 
                 // 5. Configuring export session
                 let videoIsCropped = cropRect.size.width < abs(videoSize.width) || cropRect.size.height < abs(videoSize.height)
-                let presetName = videoIsCropped || videoIsTrimmed || videoIsRotated ? YPConfig.video.compression : AVAssetExportPresetPassthrough
+                let presetName = videoIsCropped || videoIsTrimmed || videoIsRotated || (shouldMute && videoIsSlomo) ? YPConfig.video.compression : AVAssetExportPresetPassthrough
 
                 var videoComposition:AVMutableVideoComposition?
 
