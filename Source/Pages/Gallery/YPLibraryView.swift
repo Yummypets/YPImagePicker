@@ -12,6 +12,8 @@ import Photos
 
 internal final class YPLibraryView: UIView {
 
+    static let ALBUMS_LABEL_TAG = 100
+
     // MARK: - Public vars
 
     internal let assetZoomableViewMinimalVisibleHeight: CGFloat  = 50
@@ -57,6 +59,7 @@ internal final class YPLibraryView: UIView {
         // Use YPConfig font
         label.font = YPConfig.fonts.pickerTitleFont
         label.textColor = YPConfig.colors.libraryScreenAlbumsButtonColor
+        label.tag = ALBUMS_LABEL_TAG
 
         let arrow = UIImageView()
         arrow.image = YPConfig.icons.arrowDownIcon.withRenderingMode(.alwaysTemplate)
@@ -172,6 +175,13 @@ internal final class YPLibraryView: UIView {
         progressView.isHidden = progress > 0.99 || progress == 0
         progressView.progress = progress
         UIView.animate(withDuration: 0.1, animations: progressView.layoutIfNeeded)
+    }
+
+    func setAlbumButtonTitle(aTitle: String) {
+        guard !YPConfig.showsLibraryButtonInTitle else { return }
+        if let label = showAlbumsButton.viewWithTag(YPLibraryView.ALBUMS_LABEL_TAG) as? UILabel {
+            label.text = aTitle
+        }
     }
 
     // MARK: Crop Rect

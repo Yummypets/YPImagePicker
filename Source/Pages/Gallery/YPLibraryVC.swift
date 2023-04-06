@@ -89,7 +89,11 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
     }
 
     func setAlbum(_ album: YPAlbum) {
-        title = album.title
+        if YPConfig.showsLibraryButtonInTitle {
+            title = album.title
+        } else {
+            v.setAlbumButtonTitle(aTitle: album.title)
+        }
         mediaManager.collection = album.collection
         currentlySelectedIndex = 0
         if !isMultipleSelectionEnabled {

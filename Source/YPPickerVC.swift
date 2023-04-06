@@ -211,7 +211,9 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         
         vc.didSelectAlbum = { [weak self] album in
             self?.libraryVC?.setAlbum(album)
-            self?.setTitleViewWithTitle(aTitle: album.title)
+            if YPConfig.showsLibraryButtonInTitle {
+                self?.setTitleViewWithTitle(aTitle: album.title)
+            }
             navVC.dismiss(animated: true, completion: nil)
         }
         present(navVC, animated: true, completion: nil)
