@@ -309,6 +309,10 @@ public struct YPConfigVideo {
     /// so, the trimmer step becomes optional.
     /// - SeeAlso: [trimmerMaxDuration](x-source-tag://trimmerMaxDuration)
     public var automaticTrimToTrimmerMaxDuration: Bool = false
+
+    /// Defines whether the coverThumbSelector automatically reloads a trimmed version of the video asset \
+    /// whenever the trim selection changes
+    public var coverSelectionTrimmed: Bool = false
 }
 
 /// Encapsulates gallery specific settings.

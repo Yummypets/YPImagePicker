@@ -46,6 +46,9 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
     public var isFromSelectionVC = false
     public var shouldMute = false
 
+    var coverImageTime: CMTime?
+    var coverTrimTimes: (startTime: CMTime, endTime: CMTime)?
+
     public let trimmerContainerView: UIView = {
         let v = UIView()
         return v
@@ -171,9 +174,9 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
 
     // MARK: - Setup
 
-    private func setupGenerator() {
+    private func setupGenerator(_ asset: AVAsset) {
         // Set initial video cover
-        imageGenerator = AVAssetImageGenerator(asset: inputAsset)
+        imageGenerator = AVAssetImageGenerator(asset: asset)
         imageGenerator?.appliesPreferredTrackTransform = true
         imageGenerator?.requestedTimeToleranceAfter = CMTime.zero
         imageGenerator?.requestedTimeToleranceBefore = CMTime.zero
@@ -190,17 +193,39 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
             selectTrim()
             videoView.loadVideo(inputVideo)
             videoView.pause()
-            setupGenerator()
+            setupGenerator(inputAsset)
             coverThumbSelectorView.delegate = self
-            coverThumbSelectorView.asset = inputAsset
+            if coverThumbSelectorView.asset == nil {
+                coverThumbSelectorView.asset = inputAsset
+            }
         } else {
-            if coverThumbSelectorView.asset != nil {
-                return
+            if YPConfig.video.coverSelectionTrimmed,
+               let startTime = trimmerView.startTime,
+               let endTime = trimmerView.endTime,
+               startTime != coverTrimTimes?.startTime || endTime != coverTrimTimes?.endTime {
+                let timerange = CMTimeRange(start: startTime, end: endTime)
+                mediaManager.fetchVideoUrlAndCrop(for: inputVideo.asset!, cropRect: inputVideo.cropRect!, timeRange: timerange, shouldMute: false, compressionTypeOverride: AVAssetExportPresetPassthrough) { [weak self] (url) in
+                    DispatchQueue.main.async {
+                        if let url = url {
+                            let trimmedAsset = AVAsset(url: url)
+                            self?.setupGenerator(trimmedAsset)
+                            self?.coverThumbSelectorView.asset = trimmedAsset
+                            if let coverImageTime = self?.coverImageTime, coverImageTime < startTime || coverImageTime > endTime {
+                                self?.generateCoverImageAtTime(startTime)
+                            }
+                            self?.coverTrimTimes = (startTime: startTime, endTime: endTime)
+                        } else {
+                            ypLog("YPVideoFiltersVC -> Invalid asset url.")
+
+                        }
+                    }
+                }
+            } else if coverThumbSelectorView.asset == nil {
+                setupGenerator(inputAsset)
+                coverThumbSelectorView.asset = inputAsset
             }
 
-            setupGenerator()
             coverThumbSelectorView.delegate = self
-            coverThumbSelectorView.asset = inputAsset
             selectCover()
         }
     }
@@ -373,6 +398,11 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
         coverThumbSelectorView.isHidden = true
 
         vcType = .Trimmer
+
+        if let startTime = trimmerView.startTime {
+            videoView.player.seek(to: startTime)
+            startPlaybackTimeChecker()
+        }
     }
     
     @objc private func selectCover() {
@@ -467,6 +497,24 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
             trimmerView.seek(to: startTime)
         }
     }
+
+    private func generateCoverImageAtTime(_ time: CMTime) {
+        imageGenerator?.generateCGImagesAsynchronously(forTimes: [NSValue(time:time)],
+                                                       completionHandler: { (_, image, _, _, _) in
+            guard let image = image else {
+                return
+            }
+
+            // it's safe to create UIImages off the main thread
+            let uiimage = UIImage(cgImage: image)
+
+            DispatchQueue.main.async { [weak self] in
+                self?.imageGenerator?.cancelAllCGImageGeneration()
+                self?.coverImageView.image = uiimage
+                self?.coverImageTime = time
+            }
+        })
+    }
 }
 
 // MARK: - TrimmerViewDelegate
@@ -478,6 +526,13 @@ extension YPVideoFiltersVC: TrimmerViewDelegate {
             videoView.play()
             videoView.removeReachEndObserver() // videoView.play() adds reach end observer so we need to remove it again.
             startPlaybackTimeChecker()
+
+            // if the currently selected cover image does not fit within the trim, select the first frame of the video
+            if YPConfig.video.coverSelectionTrimmed,
+               let coverImageTime = coverImageTime,
+               let endTime = trimmerView.endTime, coverImageTime < startTime || coverImageTime > endTime {
+                generateCoverImageAtTime(startTime)
+            }
         }
     }
 
@@ -491,23 +546,7 @@ extension YPVideoFiltersVC: TrimmerViewDelegate {
 // MARK: - ThumbSelectorViewDelegate
 extension YPVideoFiltersVC: ThumbSelectorViewDelegate {
     public func didChangeThumbPosition(_ imageTime: CMTime) {
-        let generator = imageGenerator
-        let time = imageTime
-
         // fetch new image
-        generator?.generateCGImagesAsynchronously(forTimes: [NSValue(time:time)],
-                                                  completionHandler: { (_, image, _, _, _) in
-            guard let image = image else {
-                return
-            }
-
-            // it's safe to create UIImages off the main thread
-            let uiimage = UIImage(cgImage: image)
-
-            DispatchQueue.main.async { [weak self] in
-                generator?.cancelAllCGImageGeneration()
-                self?.coverImageView.image = uiimage
-            }
-        })
+        generateCoverImageAtTime(imageTime)
     }
 }
