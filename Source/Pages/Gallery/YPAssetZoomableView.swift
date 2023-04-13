@@ -163,10 +163,11 @@ final class YPAssetZoomableView: UIScrollView {
         minimumZoomScale = 1
         showsHorizontalScrollIndicator = false
         showsVerticalScrollIndicator = false
-        delegate = self
-        alwaysBounceHorizontal = true
-        alwaysBounceVertical = true
-        isScrollEnabled = true
+        if YPConfig.library.allowZoomToCrop {
+            delegate = self
+            alwaysBounceHorizontal = true
+            alwaysBounceVertical = true
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {

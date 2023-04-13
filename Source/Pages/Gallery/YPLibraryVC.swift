@@ -515,7 +515,9 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                                     let video = YPMediaVideo(thumbnail: thumbnailFromVideoPath(videoURL),
                                                              videoURL: videoURL, asset: asset)
 
-                                    video.cropRect = self.getCropRect(for: asset)
+                                    if YPConfig.library.allowZoomToCrop {
+                                        video.cropRect = self.getCropRect(for: asset)
+                                    }
                                     videoCallback(video)
                                 } else {
                                     ypLog("YPLibraryVC -> selectedMedia -> Problems with fetching videoURL.")

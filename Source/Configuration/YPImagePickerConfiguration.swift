@@ -247,6 +247,9 @@ public struct YPConfigLibrary {
     
     /// Set the overlay type shown on top of the selected library item
     public var itemOverlayType: YPItemOverlayType = .grid
+
+    /// Set this to true if you want to allow the library video picker to zoom / pan to crop videos
+    public var allowZoomToCrop = true
 }
 
 /// Encapsulates video specific settings.
