@@ -193,34 +193,13 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
             selectTrim()
             videoView.loadVideo(inputVideo)
             videoView.pause()
-            setupGenerator(inputAsset)
             coverThumbSelectorView.delegate = self
             if coverThumbSelectorView.asset == nil {
+                setupGenerator(inputAsset)
                 coverThumbSelectorView.asset = inputAsset
             }
         } else {
-            if YPConfig.video.coverSelectionTrimmed,
-               let startTime = trimmerView.startTime,
-               let endTime = trimmerView.endTime,
-               startTime != coverTrimTimes?.startTime || endTime != coverTrimTimes?.endTime {
-                let timerange = CMTimeRange(start: startTime, end: endTime)
-                mediaManager.fetchVideoUrlAndCrop(for: inputVideo.asset!, cropRect: inputVideo.cropRect!, timeRange: timerange, shouldMute: false, compressionTypeOverride: AVAssetExportPresetPassthrough) { [weak self] (url) in
-                    DispatchQueue.main.async {
-                        if let url = url {
-                            let trimmedAsset = AVAsset(url: url)
-                            self?.setupGenerator(trimmedAsset)
-                            self?.coverThumbSelectorView.asset = trimmedAsset
-                            if let coverImageTime = self?.coverImageTime, coverImageTime < startTime || coverImageTime > endTime {
-                                self?.generateCoverImageAtTime(startTime)
-                            }
-                            self?.coverTrimTimes = (startTime: startTime, endTime: endTime)
-                        } else {
-                            ypLog("YPVideoFiltersVC -> Invalid asset url.")
-
-                        }
-                    }
-                }
-            } else if coverThumbSelectorView.asset == nil {
+            if !resetCoverTrackIfNeeded(), coverThumbSelectorView.asset == nil {
                 setupGenerator(inputAsset)
                 coverThumbSelectorView.asset = inputAsset
             }
@@ -515,6 +494,32 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
             }
         })
     }
+
+    private func resetCoverTrackIfNeeded() -> Bool{
+        if YPConfig.video.coverSelectionTrimmed,
+           let startTime = trimmerView.startTime,
+           let endTime = trimmerView.endTime,
+           startTime != coverTrimTimes?.startTime || endTime != coverTrimTimes?.endTime {
+            let timerange = CMTimeRange(start: startTime, end: endTime)
+            mediaManager.fetchVideoUrlAndCrop(for: inputVideo.asset!, cropRect: inputVideo.cropRect!, timeRange: timerange, shouldMute: false, compressionTypeOverride: AVAssetExportPresetPassthrough) { [weak self] (url) in
+                DispatchQueue.main.async {
+                    if let url = url {
+                        let trimmedAsset = AVAsset(url: url)
+                        self?.setupGenerator(trimmedAsset)
+                        self?.coverThumbSelectorView.asset = trimmedAsset
+                        self?.coverTrimTimes = (startTime: startTime, endTime: endTime)
+                        self?.generateCoverImageAtTime(startTime)
+                    } else {
+                        ypLog("YPVideoFiltersVC -> Invalid asset url.")
+
+                    }
+                }
+            }
+            return true
+        } else {
+            return false
+        }
+    }
 }
 
 // MARK: - TrimmerViewDelegate
@@ -527,12 +532,7 @@ extension YPVideoFiltersVC: TrimmerViewDelegate {
             videoView.removeReachEndObserver() // videoView.play() adds reach end observer so we need to remove it again.
             startPlaybackTimeChecker()
 
-            // if the currently selected cover image does not fit within the trim, select the first frame of the video
-            if YPConfig.video.coverSelectionTrimmed,
-               let coverImageTime = coverImageTime,
-               let endTime = trimmerView.endTime, coverImageTime < startTime || coverImageTime > endTime {
-                generateCoverImageAtTime(startTime)
-            }
+            _ = resetCoverTrackIfNeeded()
         }
     }
 
