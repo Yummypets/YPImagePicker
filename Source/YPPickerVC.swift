@@ -27,6 +27,7 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     }
     
     /// Private callbacks to YPImagePicker
+    public var didTapNext:(() -> Void)?
     public var didClose:(() -> Void)?
     public var didSelectItems: (([YPMediaItem]) -> Void)?
     
@@ -330,6 +331,7 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     @objc
     func done() {
         guard let libraryVC = libraryVC else { ypLog("YPLibraryVC deallocated"); return }
+        didTapNext?()
         
         if mode == .library {
             libraryVC.selectedMedia(photoCallback: { photo in
