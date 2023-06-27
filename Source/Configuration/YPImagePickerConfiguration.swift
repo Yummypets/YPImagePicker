@@ -140,7 +140,9 @@ public struct YPImagePickerConfiguration {
         ]
     
     /// Migration
-    
+    ///   Lawrence Norman: comment out for now so XCode 15 beta 2 compiles:
+    ///     resolves: Stored properties cannot be marked unavailable with '@available' #789
+    /*
     @available(iOS, obsoleted: 3.0.0, renamed: "video.compression")
     public var videoCompression: String = AVAssetExportPresetHighestQuality
     
@@ -179,6 +181,7 @@ public struct YPImagePickerConfiguration {
     
     @available(iOS, obsoleted: 3.0.0, renamed: "library.maxNumberOfItems")
     public var maxNumberOfItems = 1
+     */
     
 }
 
