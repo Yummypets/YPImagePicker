@@ -118,6 +118,7 @@ public struct YPImagePickerConfiguration {
     /// Defines the max camera zoom factor for camera. Disable camera zoom with 1. Default is 1.
     public var maxCameraZoomFactor: CGFloat = 1.0
     
+    /// Controls the camera shutter sound. If set to true, the camera shutter sound will be disabled. Defaults to false.
     public var slientMode = false
     
     /// List of default filters which will be added on the filter screen
