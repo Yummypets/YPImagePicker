@@ -54,7 +54,7 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         registerForTapOnPreview()
         refreshMediaRequest()
 
-        v.assetViewContainer.multipleSelectionButton.isHidden = !(YPConfig.library.maxNumberOfItems > 1)
+        v.multipleSelectionButton.isHidden = !(YPConfig.library.maxNumberOfItems > 1)
         v.maxNumberWarningLabel.text = String(format: YPConfig.wordings.warningMaxItemsLimit,
 											  YPConfig.library.maxNumberOfItems)
         
@@ -76,6 +76,8 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                 return YPLibrarySelection(index: -1, assetIdentifier: asset.localIdentifier)
             }
             v.assetViewContainer.setMultipleSelectionMode(on: isMultipleSelectionEnabled)
+            let image = isMultipleSelectionEnabled ? YPConfig.icons.multipleSelectionOnIcon : YPConfig.icons.multipleSelectionOffIcon
+            v.multipleSelectionButton.setImage(image, for: .normal)
             v.collectionView.reloadData()
         }
 
@@ -130,7 +132,7 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
             .addTarget(self,
                        action: #selector(squareCropButtonTapped),
                        for: .touchUpInside)
-        v.assetViewContainer.multipleSelectionButton
+        v.multipleSelectionButton
             .addTarget(self,
                        action: #selector(multipleSelectionButtonTapped),
                        for: .touchUpInside)
@@ -215,6 +217,8 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         }
         
         v.assetViewContainer.setMultipleSelectionMode(on: isMultipleSelectionEnabled)
+        let image = isMultipleSelectionEnabled ? YPConfig.icons.multipleSelectionOnIcon : YPConfig.icons.multipleSelectionOffIcon
+        v.multipleSelectionButton.setImage(image, for: .normal)
         v.collectionView.reloadData()
         checkLimit()
         delegate?.libraryViewDidToggleMultipleSelection(enabled: isMultipleSelectionEnabled)

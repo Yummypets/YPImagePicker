@@ -18,11 +18,7 @@ final class YPAssetViewContainer: UIView {
     public let curtain = UIView()
     public let spinnerView = UIView()
     public let squareCropButton = UIButton()
-    public let multipleSelectionButton: UIButton = {
-        let v = UIButton()
-        v.setImage(YPConfig.icons.multipleSelectionOffIcon, for: .normal)
-        return v
-    }()
+
     public var onlySquare = YPConfig.library.onlySquare
     public var isShown = true
     public var spinnerIsShown = false
@@ -88,11 +84,6 @@ final class YPAssetViewContainer: UIView {
             |-15-squareCropButton
             squareCropButton.Bottom == self.Bottom - 15
         }
-
-        // Multiple selection button
-        subviews(multipleSelectionButton)
-        multipleSelectionButton.size(42).trailing(15)
-        multipleSelectionButton.Bottom == self.Bottom - 15
     }
 
     required init?(coder: NSCoder) {
@@ -147,8 +138,6 @@ final class YPAssetViewContainer: UIView {
     /// Use this to update the multiple selection mode UI state for the YPAssetViewContainer
     public func setMultipleSelectionMode(on: Bool) {
         isMultipleSelectionEnabled = on
-        let image = on ? YPConfig.icons.multipleSelectionOnIcon : YPConfig.icons.multipleSelectionOffIcon
-        multipleSelectionButton.setImage(image, for: .normal)
         updateSquareCropButtonState()
     }
 }
