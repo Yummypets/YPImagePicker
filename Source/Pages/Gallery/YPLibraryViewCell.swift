@@ -114,7 +114,7 @@ class YPLibraryViewCell: UICollectionViewCell {
             selectionOverlay.backgroundColor = isUserInteractionEnabled ? .white : .black
             if isUserInteractionEnabled {
                 let showOverlay = isSelected || isHighlighted
-                selectionOverlay.alpha = showOverlay ? 0.6 : 0
+                selectionOverlay.alpha = showOverlay ? 0.4 : 0
             } else {
                 selectionOverlay.alpha = 0.4
             }
