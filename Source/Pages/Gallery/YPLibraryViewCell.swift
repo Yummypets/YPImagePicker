@@ -109,6 +109,18 @@ class YPLibraryViewCell: UICollectionViewCell {
         selectionOverlay.alpha = showOverlay ? 0.6 : 0
     }
 
+    override var isUserInteractionEnabled: Bool {
+        didSet {
+            selectionOverlay.backgroundColor = isUserInteractionEnabled ? .white : .black
+            if isUserInteractionEnabled {
+                let showOverlay = isSelected || isHighlighted
+                selectionOverlay.alpha = showOverlay ? 0.6 : 0
+            } else {
+                selectionOverlay.alpha = 0.4
+            }
+        }
+    }
+
     private func setAccessibilityInfo() {
         isAccessibilityElement = true
         self.accessibilityIdentifier = "YPLibraryViewCell"

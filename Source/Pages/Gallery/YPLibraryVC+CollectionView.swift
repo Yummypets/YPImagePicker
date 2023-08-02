@@ -143,6 +143,7 @@ extension YPLibraryVC: UICollectionViewDelegate {
         cell.durationLabel.text = isVideo ? YPHelper.formattedStrigFrom(asset.duration) : ""
         cell.multipleSelectionIndicator.isHidden = !isMultipleSelectionEnabled
         cell.isSelected = currentlySelectedIndex == indexPath.row
+        cell.isUserInteractionEnabled = !(isMultipleSelectionEnabled && isVideo)
         
         // Set correct selection number
         if let index = selectedItems.firstIndex(where: { $0.assetIdentifier == asset.localIdentifier }) {
