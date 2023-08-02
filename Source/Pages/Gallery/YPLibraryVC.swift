@@ -203,12 +203,44 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
             if needPreselectItemsAndNotSelectedAnyYet,
                shouldSelectByDelegate,
                let asset = mediaManager.getAsset(at: currentlySelectedIndex) {
+                let imageAsset: PHAsset
+                let imageIndex: Int
+
+                // Change to first image if video is selected when switching to multiple selection mode
+                if asset.mediaType == .video,
+                   case (let image?, let index?) = mediaManager.getFirstImageAsset()
+                {
+                    imageAsset = image
+                    imageIndex = index
+                    let completion = { (isLowResIntermediaryImage: Bool) in
+                        self.v.hideOverlayView()
+                        self.v.assetViewContainer.updateSquareCropButtonState()
+                        self.updateCropInfo()
+                        if !isLowResIntermediaryImage {
+                            self.v.hideLoader()
+                            self.delegate?.libraryViewFinishedLoading()
+                        }
+                    }
+                    let updateCropInfo = {
+                        self.updateCropInfo()
+                    }
+                    DispatchQueue.global(qos: .userInitiated).async {
+                        self.v.assetZoomableView.setImage(imageAsset,
+                                                          mediaManager: self.mediaManager,
+                                                          storedCropPosition: self.fetchStoredCrop(),
+                                                          completion: completion,
+                                                          updateCropInfo: updateCropInfo)
+                    }
+                } else {
+                    imageAsset = asset
+                    imageIndex = currentlySelectedIndex
+                }
                 selectedItems = [
-                    YPLibrarySelection(index: currentlySelectedIndex,
+                    YPLibrarySelection(index: imageIndex,
                                        cropRect: v.currentCropRect(),
                                        scrollViewContentOffset: v.assetZoomableView.contentOffset,
                                        scrollViewZoomScale: v.assetZoomableView.zoomScale,
-                                       assetIdentifier: asset.localIdentifier)
+                                       assetIdentifier: imageAsset.localIdentifier)
                 ]
             }
         } else {
