@@ -30,6 +30,7 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     public var didTapNext:(() -> Void)?
     public var didClose:(() -> Void)?
     public var didSelectItems: (([YPMediaItem]) -> Void)?
+    public var didTapMultipleSelection: ((Bool) -> Void)?
     
     enum Mode {
         case library
@@ -389,6 +390,7 @@ extension YPPickerVC: YPLibraryViewDelegate {
         v.header.bottomConstraint?.constant = enabled ? offset : 0
         v.layoutIfNeeded()
         updateUI()
+        didTapMultipleSelection?(enabled)
     }
     
     public func libraryViewHaveNoItems() {
