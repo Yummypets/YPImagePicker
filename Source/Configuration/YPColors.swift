@@ -25,7 +25,11 @@ public struct YPColors {
     /// A color for circle for selected items in multiple selection
     /// Default is nil, which takes tintColor.
     public var multipleItemsSelectedCircleColor: UIColor?
-    
+
+    /// A color for circle border for selected items in multiple selection
+    /// Default is nil, which takes clear color.
+    public var multipleItemsSelectedCircleBorderColor: UIColor?
+
     /// The background color of the bottom of photo and video screens.
     public var photoVideoScreenBackgroundColor: UIColor = .offWhiteOrBlack
 
