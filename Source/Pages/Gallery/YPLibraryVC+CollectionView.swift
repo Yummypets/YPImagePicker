@@ -192,6 +192,10 @@ extension YPLibraryVC: UICollectionViewDelegate {
             }
             collectionView.reloadItems(at: [indexPath])
             collectionView.reloadItems(at: [previouslySelectedIndexPath])
+
+            if (cellIsCurrentlySelected && !cellIsInTheSelectionPool) || !cellIsCurrentlySelected {
+                collectionView.cellForItem(at: indexPath)?.isSelected = true
+            }
         } else {
             selectedItems.removeAll()
             addToSelection(indexPath: indexPath)

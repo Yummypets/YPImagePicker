@@ -104,20 +104,17 @@ class YPLibraryViewCell: UICollectionViewCell {
         didSet { refreshSelection() }
     }
     
-    private func refreshSelection() {
-        let showOverlay = isSelected || isHighlighted
-        selectionOverlay.alpha = showOverlay ? 0.4 : 0
+    override var isUserInteractionEnabled: Bool {
+        didSet { refreshSelection() }
     }
 
-    override var isUserInteractionEnabled: Bool {
-        didSet {
-            selectionOverlay.backgroundColor = isUserInteractionEnabled ? .white : .black
-            if isUserInteractionEnabled {
-                let showOverlay = isSelected || isHighlighted
-                selectionOverlay.alpha = showOverlay ? 0.4 : 0
-            } else {
-                selectionOverlay.alpha = 0.4
-            }
+    private func refreshSelection() {
+        selectionOverlay.backgroundColor = isUserInteractionEnabled ? .white : .black
+        if isUserInteractionEnabled {
+            let showOverlay = isSelected || isHighlighted
+            selectionOverlay.alpha = showOverlay ? 0.4 : 0
+        } else {
+            selectionOverlay.alpha = 0.4
         }
     }
 

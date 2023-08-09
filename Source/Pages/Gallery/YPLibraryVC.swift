@@ -212,25 +212,7 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                 {
                     imageAsset = image
                     imageIndex = index
-                    let completion = { (isLowResIntermediaryImage: Bool) in
-                        self.v.hideOverlayView()
-                        self.v.assetViewContainer.updateSquareCropButtonState()
-                        self.updateCropInfo()
-                        if !isLowResIntermediaryImage {
-                            self.v.hideLoader()
-                            self.delegate?.libraryViewFinishedLoading()
-                        }
-                    }
-                    let updateCropInfo = {
-                        self.updateCropInfo()
-                    }
-                    DispatchQueue.global(qos: .userInitiated).async {
-                        self.v.assetZoomableView.setImage(imageAsset,
-                                                          mediaManager: self.mediaManager,
-                                                          storedCropPosition: self.fetchStoredCrop(),
-                                                          completion: completion,
-                                                          updateCropInfo: updateCropInfo)
-                    }
+                    changeAsset(image)
                 } else {
                     imageAsset = asset
                     imageIndex = currentlySelectedIndex
