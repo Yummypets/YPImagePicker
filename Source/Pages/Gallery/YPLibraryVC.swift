@@ -329,10 +329,6 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
             ypLog("No asset to change.")
             return
         }
-        
-        if selectedItems.contains(where: { $0.assetIdentifier == asset.localIdentifier }) {
-            return // ignore if the same asset is selected
-        }
 
         delegate?.libraryViewStartedLoadingImage()
         
