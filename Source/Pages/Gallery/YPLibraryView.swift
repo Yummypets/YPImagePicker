@@ -85,6 +85,12 @@ internal final class YPLibraryView: UIView {
         return buttonContainerView
     }()
 
+    public let multipleSelectionButton: UIButton = {
+        let v = UIButton()
+        v.setImage(YPConfig.icons.multipleSelectionOffIcon, for: .normal)
+        return v
+    }()
+
     var onAlbumsButtonTap: (() -> Void)?
 
     // MARK: - Private vars
@@ -113,7 +119,6 @@ internal final class YPLibraryView: UIView {
         didSet {
             DispatchQueue.main.async {
                 self.assetViewContainer.squareCropButton.isEnabled = !self.shouldShowLoader
-                self.assetViewContainer.multipleSelectionButton.isEnabled = !self.shouldShowLoader
                 self.assetViewContainer.spinnerIsShown = self.shouldShowLoader
                 self.shouldShowLoader ? self.hideOverlayView() : ()
             }
@@ -258,6 +263,10 @@ internal final class YPLibraryView: UIView {
         |maxNumberWarningView|.bottom(0)
         maxNumberWarningView.Top == safeAreaLayoutGuide.Bottom - 40
         maxNumberWarningLabel.centerHorizontally().top(11)
+
+        subviews(multipleSelectionButton)
+        multipleSelectionButton.size(30).trailing(20)
+        alignHorizontally(showAlbumsButton, multipleSelectionButton)
     }
 
     @objc

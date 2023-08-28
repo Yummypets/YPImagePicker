@@ -327,4 +327,19 @@ public class LibraryMediaManager {
         }
         return fetchResult.object(at: index)
     }
+
+    func getFirstImageAsset() -> (asset: PHAsset?, index: Int?) {
+        guard let fetchResult else { return (nil, nil) }
+        var imageAsset: PHAsset?
+        var imageIndex: Int?
+
+        fetchResult.enumerateObjects { (asset: PHAsset, index: Int, stop: UnsafeMutablePointer<ObjCBool>) in
+            if asset.mediaType == .image {
+                imageAsset = asset
+                imageIndex = index
+                stop.pointee = true
+            }
+        }
+        return (imageAsset, imageIndex)
+    }
 }

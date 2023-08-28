@@ -14,6 +14,7 @@ class YPMultipleSelectionIndicator: UIView {
     let circle = UIView()
     let label = UILabel()
     var selectionColor = UIColor.ypSystemBlue
+    var selectionBorderColor = UIColor.clear
 
     convenience init() {
         self.init(frame: .zero)
@@ -41,8 +42,8 @@ class YPMultipleSelectionIndicator: UIView {
         label.isHidden = (number == nil)
         if let number = number {
             circle.backgroundColor = selectionColor
-            circle.layer.borderColor = UIColor.clear.cgColor
-            circle.layer.borderWidth = 0
+            circle.layer.borderColor = selectionBorderColor.cgColor
+            circle.layer.borderWidth = 1
             label.text = "\(number)"
         } else {
             circle.backgroundColor = UIColor.white.withAlphaComponent(0.3)
@@ -103,9 +104,18 @@ class YPLibraryViewCell: UICollectionViewCell {
         didSet { refreshSelection() }
     }
     
+    override var isUserInteractionEnabled: Bool {
+        didSet { refreshSelection() }
+    }
+
     private func refreshSelection() {
-        let showOverlay = isSelected || isHighlighted
-        selectionOverlay.alpha = showOverlay ? 0.6 : 0
+        selectionOverlay.backgroundColor = isUserInteractionEnabled ? .white : .black
+        if isUserInteractionEnabled {
+            let showOverlay = isSelected || isHighlighted
+            selectionOverlay.alpha = showOverlay ? 0.4 : 0
+        } else {
+            selectionOverlay.alpha = 0.4
+        }
     }
 
     private func setAccessibilityInfo() {

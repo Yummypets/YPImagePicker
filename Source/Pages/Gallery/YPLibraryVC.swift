@@ -54,7 +54,7 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         registerForTapOnPreview()
         refreshMediaRequest()
 
-        v.assetViewContainer.multipleSelectionButton.isHidden = !(YPConfig.library.maxNumberOfItems > 1)
+        v.multipleSelectionButton.isHidden = !(YPConfig.library.maxNumberOfItems > 1)
         v.maxNumberWarningLabel.text = String(format: YPConfig.wordings.warningMaxItemsLimit,
 											  YPConfig.library.maxNumberOfItems)
         
@@ -76,6 +76,8 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                 return YPLibrarySelection(index: -1, assetIdentifier: asset.localIdentifier)
             }
             v.assetViewContainer.setMultipleSelectionMode(on: isMultipleSelectionEnabled)
+            let image = isMultipleSelectionEnabled ? YPConfig.icons.multipleSelectionOnIcon : YPConfig.icons.multipleSelectionOffIcon
+            v.multipleSelectionButton.setImage(image, for: .normal)
             v.collectionView.reloadData()
         }
 
@@ -130,7 +132,7 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
             .addTarget(self,
                        action: #selector(squareCropButtonTapped),
                        for: .touchUpInside)
-        v.assetViewContainer.multipleSelectionButton
+        v.multipleSelectionButton
             .addTarget(self,
                        action: #selector(multipleSelectionButtonTapped),
                        for: .touchUpInside)
@@ -201,12 +203,26 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
             if needPreselectItemsAndNotSelectedAnyYet,
                shouldSelectByDelegate,
                let asset = mediaManager.getAsset(at: currentlySelectedIndex) {
+                let imageAsset: PHAsset
+                let imageIndex: Int
+
+                // Change to first image if video is selected when switching to multiple selection mode
+                if asset.mediaType == .video,
+                   case (let image?, let index?) = mediaManager.getFirstImageAsset()
+                {
+                    imageAsset = image
+                    imageIndex = index
+                    changeAsset(image)
+                } else {
+                    imageAsset = asset
+                    imageIndex = currentlySelectedIndex
+                }
                 selectedItems = [
-                    YPLibrarySelection(index: currentlySelectedIndex,
+                    YPLibrarySelection(index: imageIndex,
                                        cropRect: v.currentCropRect(),
                                        scrollViewContentOffset: v.assetZoomableView.contentOffset,
                                        scrollViewZoomScale: v.assetZoomableView.zoomScale,
-                                       assetIdentifier: asset.localIdentifier)
+                                       assetIdentifier: imageAsset.localIdentifier)
                 ]
             }
         } else {
@@ -215,6 +231,8 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         }
         
         v.assetViewContainer.setMultipleSelectionMode(on: isMultipleSelectionEnabled)
+        let image = isMultipleSelectionEnabled ? YPConfig.icons.multipleSelectionOnIcon : YPConfig.icons.multipleSelectionOffIcon
+        v.multipleSelectionButton.setImage(image, for: .normal)
         v.collectionView.reloadData()
         checkLimit()
         delegate?.libraryViewDidToggleMultipleSelection(enabled: isMultipleSelectionEnabled)
@@ -292,10 +310,6 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         guard let asset = asset else {
             ypLog("No asset to change.")
             return
-        }
-        
-        if selectedItems.contains(where: { $0.assetIdentifier == asset.localIdentifier }) {
-            return // ignore if the same asset is selected
         }
 
         delegate?.libraryViewStartedLoadingImage()

@@ -125,6 +125,8 @@ extension YPLibraryVC: UICollectionViewDelegate {
         cell.representedAssetIdentifier = asset.localIdentifier
         cell.multipleSelectionIndicator.selectionColor =
             YPConfig.colors.multipleItemsSelectedCircleColor ?? YPConfig.colors.tintColor
+        cell.multipleSelectionIndicator.selectionBorderColor =
+            YPConfig.colors.multipleItemsSelectedCircleBorderColor ?? .clear
         mediaManager.imageManager?.requestImage(for: asset,
                                    targetSize: v.cellSize(),
                                    contentMode: .aspectFill,
@@ -139,8 +141,9 @@ extension YPLibraryVC: UICollectionViewDelegate {
         let isVideo = (asset.mediaType == .video)
         cell.durationLabel.isHidden = !isVideo
         cell.durationLabel.text = isVideo ? YPHelper.formattedStrigFrom(asset.duration) : ""
-        cell.multipleSelectionIndicator.isHidden = !isMultipleSelectionEnabled
+        cell.multipleSelectionIndicator.isHidden = !isMultipleSelectionEnabled || (isMultipleSelectionEnabled && isVideo)
         cell.isSelected = currentlySelectedIndex == indexPath.row
+        cell.isUserInteractionEnabled = !(isMultipleSelectionEnabled && isVideo)
         
         // Set correct selection number
         if let index = selectedItems.firstIndex(where: { $0.assetIdentifier == asset.localIdentifier }) {
@@ -189,6 +192,10 @@ extension YPLibraryVC: UICollectionViewDelegate {
             }
             collectionView.reloadItems(at: [indexPath])
             collectionView.reloadItems(at: [previouslySelectedIndexPath])
+
+            if (cellIsCurrentlySelected && !cellIsInTheSelectionPool) || !cellIsCurrentlySelected {
+                collectionView.cellForItem(at: indexPath)?.isSelected = true
+            }
         } else {
             selectedItems.removeAll()
             addToSelection(indexPath: indexPath)

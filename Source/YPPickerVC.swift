@@ -30,6 +30,8 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     public var didTapNext:(() -> Void)?
     public var didClose:(() -> Void)?
     public var didSelectItems: (([YPMediaItem]) -> Void)?
+    public var didTapMultipleSelection: ((Bool) -> Void)?
+    public var viewDidAppear: ((AnyObject) -> Void)?
     
     enum Mode {
         case library
@@ -137,6 +139,10 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         initialStatusBarHidden = true
         UIView.animate(withDuration: 0.3) {
             self.setNeedsStatusBarAppearanceUpdate()
+        }
+
+        if let button = libraryVC?.v.multipleSelectionButton {
+            viewDidAppear?(button)
         }
     }
 
@@ -389,6 +395,7 @@ extension YPPickerVC: YPLibraryViewDelegate {
         v.header.bottomConstraint?.constant = enabled ? offset : 0
         v.layoutIfNeeded()
         updateUI()
+        didTapMultipleSelection?(enabled)
     }
     
     public func libraryViewHaveNoItems() {
