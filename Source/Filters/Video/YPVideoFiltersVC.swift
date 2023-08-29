@@ -479,13 +479,19 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
 
     private func generateCoverImageAtTime(_ time: CMTime) {
         imageGenerator?.generateCGImagesAsynchronously(forTimes: [NSValue(time:time)],
-                                                       completionHandler: { (_, image, _, _, _) in
+                                                       completionHandler: { [weak self] (_, image, _, _, _) in
             guard let image = image else {
                 return
             }
 
             // it's safe to create UIImages off the main thread
-            let uiimage = UIImage(cgImage: image)
+
+            var uiimage: UIImage
+            if let cropRect = self?.inputVideo.cropRect, let croppedCGImage = image.cropping(to: cropRect) {
+                uiimage = UIImage(cgImage: croppedCGImage)
+            } else {
+                uiimage = UIImage(cgImage: image)
+            }
 
             DispatchQueue.main.async { [weak self] in
                 self?.imageGenerator?.cancelAllCGImageGeneration()
