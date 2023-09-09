@@ -133,6 +133,7 @@ internal final class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, 
             self?.shoot()
         }
     }
+
     
     func shoot() {
         // Prevent from tapping multiple times in a row
@@ -161,6 +162,8 @@ internal final class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, 
             let noOrietationImage = image.resetOrientation()
             
             DispatchQueue.main.async {
+                self.v.shotButton.isEnabled = true
+                self.start()
                 self.didCapturePhoto?(noOrietationImage.resizedImageIfNeeded())
             }
         }
