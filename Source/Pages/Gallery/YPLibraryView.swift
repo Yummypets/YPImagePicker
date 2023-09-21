@@ -48,6 +48,32 @@ internal final class YPLibraryView: UIView {
         v.font = YPConfig.fonts.libaryWarningFont
         return v
     }()
+    internal let selectMoreButton: UIButton = {
+        let v = UIButton()
+        var status: PHAuthorizationStatus
+        v.setTitle("   Select more   ", for: .normal)
+        v.backgroundColor = YPConfig.selectMoreButtonBackgroundColour.withAlphaComponent(0.8)
+        v.layer.cornerRadius = 4
+        v.layer.masksToBounds = true
+        v.tintColor = UIColor.ypLabel
+        v.isHidden = true
+        return v
+    }()
+    internal let seeAllButton: UIButton = {
+        let v = UIButton()
+        var status: PHAuthorizationStatus
+        if YPConfig.library.mediaType == .video {
+            v.setTitle("   See all videos   ", for: .normal)
+        } else {
+            v.setTitle("   See all photos   ", for: .normal)
+        }
+        v.backgroundColor = YPConfig.seeAllPhotosButtonBackgroundColour.withAlphaComponent(0.8)
+        v.layer.cornerRadius = 4
+        v.layer.masksToBounds = true
+        v.tintColor = UIColor.ypLabel
+        v.isHidden = true
+        return v
+    }()
 
     // MARK: - Private vars
 
@@ -129,6 +155,10 @@ internal final class YPLibraryView: UIView {
         shouldShowLoader = false
         assetViewContainer.spinnerView.alpha = 0
     }
+    
+    func stopSpinner() {
+        assetViewContainer.spinner.stopAnimating()
+    }
 
     func updateProgress(_ progress: Float) {
         progressView.isHidden = progress > 0.99 || progress == 0
@@ -178,7 +208,9 @@ internal final class YPLibraryView: UIView {
             progressView,
             maxNumberWarningView.subviews(
                 maxNumberWarningLabel
-            )
+            ),
+            selectMoreButton,
+            seeAllButton
         )
 
         collectionContainerView.fillContainer()
@@ -200,5 +232,15 @@ internal final class YPLibraryView: UIView {
         |maxNumberWarningView|.bottom(0)
         maxNumberWarningView.Top == safeAreaLayoutGuide.Bottom - 40
         maxNumberWarningLabel.centerHorizontally().top(11)
+        
+        seeAllButton.Bottom == safeAreaLayoutGuide.Bottom - 8
+        seeAllButton.Top == safeAreaLayoutGuide.Bottom - 48
+        seeAllButton.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.50).isActive = true
+        seeAllButton.Left == UIScreen.main.bounds.width * 0.05
+        
+        selectMoreButton.Bottom == safeAreaLayoutGuide.Bottom - 8
+        selectMoreButton.Top == safeAreaLayoutGuide.Bottom - 48
+        selectMoreButton.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.35).isActive = true
+        selectMoreButton.Right == UIScreen.main.bounds.width * 0.05
     }
 }

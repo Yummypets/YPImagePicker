@@ -200,7 +200,7 @@ public final class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
             let destinationURL = URL(fileURLWithPath: NSTemporaryDirectory())
                 .appendingUniquePathComponent(pathExtension: YPConfig.video.fileType.fileExtension)
             
-            _ = trimmedAsset.export(to: destinationURL) { [weak self] session in
+            _ = trimmedAsset.export(to: destinationURL, removeOldFile: true) { [weak self] session in
                 switch session.status {
                 case .completed:
                     DispatchQueue.main.async {

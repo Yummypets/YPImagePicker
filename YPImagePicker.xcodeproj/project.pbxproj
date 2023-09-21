@@ -56,6 +56,10 @@
 		99CF6D2B201CB96700487F77 /* YPVideoCaptureHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CF6D2A201CB96700487F77 /* YPVideoCaptureHelper.swift */; };
 		99D1DC2B1F9788930047F0E0 /* YPImagePickerConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D1DC2A1F9788930047F0E0 /* YPImagePickerConfiguration.swift */; };
 		AA69BCF222E601D100FBB925 /* YPDeviceOrientationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA69BCF122E601D100FBB925 /* YPDeviceOrientationHelper.swift */; };
+		C86AD84028F3D2E500E2EB89 /* YPVideoCompressionVC.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C86AD83F28F3D2E500E2EB89 /* YPVideoCompressionVC.storyboard */; };
+		C86AD84128F3D2E500E2EB89 /* YPVideoCompressionVC.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C86AD83F28F3D2E500E2EB89 /* YPVideoCompressionVC.storyboard */; };
+		C8F28E7228F34E5800E9290E /* YPVideoCompressionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F28E7128F34E5800E9290E /* YPVideoCompressionVC.swift */; };
+		C8F28E7328F34E5800E9290E /* YPVideoCompressionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F28E7128F34E5800E9290E /* YPVideoCompressionVC.swift */; };
 		EB05F6E7214A7191002040AA /* YPVideoProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB05F6E6214A7191002040AA /* YPVideoProcessor.swift */; };
 		EB1AB2EA20AC1DED00BFA79F /* CGFloat+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1AB2E920AC1DED00BFA79F /* CGFloat+Extensions.swift */; };
 		EB473E17208E192800D16105 /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB473E16208E192800D16105 /* URL+Extensions.swift */; };
@@ -282,6 +286,8 @@
 		A7FD716620755C2D0044A8E8 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
 		AA69BCF122E601D100FBB925 /* YPDeviceOrientationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPDeviceOrientationHelper.swift; sourceTree = "<group>"; };
 		BEED427CB4F6E5B8C20B6F13 /* Pods-Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.release.xcconfig"; path = "Target Support Files/Pods-Example/Pods-Example.release.xcconfig"; sourceTree = "<group>"; };
+		C86AD83F28F3D2E500E2EB89 /* YPVideoCompressionVC.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = YPVideoCompressionVC.storyboard; sourceTree = "<group>"; };
+		C8F28E7128F34E5800E9290E /* YPVideoCompressionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPVideoCompressionVC.swift; sourceTree = "<group>"; };
 		DC3DAC4526C6FCAA007FD95A /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
 		E3E492BB2169012B002BA807 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
 		E5287F5820B908720052153D /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
@@ -565,7 +571,9 @@
 			isa = PBXGroup;
 			children = (
 				EB59F450208766B800811B7B /* YPVideoFiltersVC.swift */,
+				C8F28E7128F34E5800E9290E /* YPVideoCompressionVC.swift */,
 				EBB0FF7920877A7500C84E25 /* YPVideoView.swift */,
+				C86AD83F28F3D2E500E2EB89 /* YPVideoCompressionVC.storyboard */,
 			);
 			path = Video;
 			sourceTree = "<group>";
@@ -723,7 +731,6 @@
 					};
 					EBA37B4E26F749C6005DAAD4 = {
 						CreatedOnToolsVersion = 12.5.1;
-						DevelopmentTeam = B3U3XRF8D7;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -783,6 +790,7 @@
 			files = (
 				8458057421819B95004F241C /* YPImagePickerLocalizable.strings in Resources */,
 				99C6D6B91F1FB5C100711DB2 /* Assets.xcassets in Resources */,
+				C86AD84128F3D2E500E2EB89 /* YPVideoCompressionVC.storyboard in Resources */,
 				99C6D6BD1F1FB5C100711DB2 /* YPLibraryView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -795,6 +803,7 @@
 				EBA37BC426F750DE005DAAD4 /* YPLibraryView.xib in Resources */,
 				EBA37B5B26F749C7005DAAD4 /* Assets.xcassets in Resources */,
 				EBA37BC726F75151005DAAD4 /* YPImagePickerLocalizable.strings in Resources */,
+				C86AD84028F3D2E500E2EB89 /* YPVideoCompressionVC.storyboard in Resources */,
 				EBA37BC626F75144005DAAD4 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -879,6 +888,7 @@
 				EBA37BC026F74CE0005DAAD4 /* YPFiltersView.swift in Sources */,
 				99CF6D1B201B6A5C00487F77 /* UICollectionView+Extensions.swift in Sources */,
 				EBA37B0A26F73080005DAAD4 /* YPAlbumVC.swift in Sources */,
+				C8F28E7328F34E5800E9290E /* YPVideoCompressionVC.swift in Sources */,
 				99C6D6C11F1FB5C100711DB2 /* YPAssetViewContainer.swift in Sources */,
 				EB473E17208E192800D16105 /* URL+Extensions.swift in Sources */,
 				EB473E2B208E1ECB00D16105 /* AVCaptureDevice+Extensions.swift in Sources */,
@@ -957,6 +967,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C8F28E7228F34E5800E9290E /* YPVideoCompressionVC.swift in Sources */,
 				EBA37BBB26F74CE0005DAAD4 /* YPPhotoFiltersVC.swift in Sources */,
 				EBA37B8F26F74CBA005DAAD4 /* AVFileType+Extensions.swift in Sources */,
 				EBA37B7026F74CBA005DAAD4 /* YPError.swift in Sources */,
@@ -1241,7 +1252,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.2.1;
+				MARKETING_VERSION = 5.3.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.yummypets.YPImagePicker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1278,7 +1289,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.2.1;
+				MARKETING_VERSION = 5.3.0;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.yummypets.YPImagePicker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1301,7 +1312,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = B3U3XRF8D7;
+				DEVELOPMENT_TEAM = WQTCKL2Y64;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = Example/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -1332,7 +1343,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = B3U3XRF8D7;
+				DEVELOPMENT_TEAM = WQTCKL2Y64;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = Example/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;

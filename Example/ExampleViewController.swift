@@ -89,6 +89,7 @@ class ExampleViewController: UIViewController {
         /* Choose what media types are available in the library. Defaults to `.photo` */
         config.library.mediaType = .photoAndVideo
 		config.library.itemOverlayType = .grid
+        config.library.sortingOption = .creationDate
         /* Enables selecting the front camera by default, useful for avatars. Defaults to false */
         // config.usesFrontCamera = true
 
@@ -133,6 +134,8 @@ class ExampleViewController: UIViewController {
         /* Defines the time limit for videos from the library.
            Defaults to 60 seconds. */
         config.video.libraryTimeLimit = 500.0
+        
+        config.video.compressionOption = [compressionOptions.AVAssetExportPreset640x480,compressionOptions.AVAssetExportPreset1920x1080, compressionOptions.AVAssetExportPresetPassthrough]
 
         /* Adds a Crop step in the photo taking process, after filters. Defaults to .none */
         config.showsCrop = .rectangle(ratio: (16/9))

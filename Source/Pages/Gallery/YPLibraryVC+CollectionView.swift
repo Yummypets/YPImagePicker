@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Photos
 
 extension YPLibraryVC {
     var isLimitExceeded: Bool { return selectedItems.count >= YPConfig.library.maxNumberOfItems }
@@ -101,7 +102,19 @@ extension YPLibraryVC {
     
     /// Checks if there can be selected more items. If no - present warning.
     func checkLimit() {
-        v.maxNumberWarningView.isHidden = !isLimitExceeded || isMultipleSelectionEnabled == false
+            let isHidden = !isLimitExceeded || isMultipleSelectionEnabled == false
+            v.maxNumberWarningView.isHidden = isHidden
+            self.checkSelectMoreOptions(isHidden: isHidden)
+        }
+    
+    func checkSelectMoreOptions(isHidden: Bool = true) {
+        if #available(iOS 14, *) {
+            let status = PHPhotoLibrary.authorizationStatus(for: .readWrite)
+            if status == .limited {
+                v.selectMoreButton.isHidden = !isHidden
+                v.seeAllButton.isHidden = !isHidden
+            }
+        }
     }
 }
 

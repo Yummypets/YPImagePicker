@@ -80,11 +80,14 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         }
 
         guard mediaManager.hasResultItems else {
+            checkSelectMoreOptions()
             return
         }
 
         if YPConfig.library.defaultMultipleSelection || selectedItems.count > 1 {
             toggleMultipleSelection()
+        } else {
+            checkSelectMoreOptions()
         }
     }
 
@@ -126,6 +129,8 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
             .addTarget(self,
                        action: #selector(multipleSelectionButtonTapped),
                        for: .touchUpInside)
+        v.selectMoreButton.addTarget(self,action: #selector(selectMorePhotosButtonTapped), for: .touchUpInside)
+        v.seeAllButton.addTarget(self,action: #selector(seeAllPhotosButtonTapped), for: .touchUpInside)
         
         // Forces assetZoomableView to have a contentSize.
         // otherwise 0 in first selection triggering the bug : "invalid image size 0x0"
@@ -152,9 +157,30 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
     
     @objc
     func squareCropButtonTapped() {
-        doAfterLibraryPermissionCheck { [weak self] in
-            self?.v.assetViewContainer.squareCropButtonTapped()
+        doAfterLibraryPermissionCheck {  hasPermission in
+            if hasPermission {
+                self.v.assetViewContainer.squareCropButtonTapped()
+            }
         }
+    }
+    
+    // MARK: - Select more photos
+    
+    @objc func selectMorePhotosButtonTapped() {
+        if #available(iOS 14, *) {
+            PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: self)
+        }
+    }
+    
+    // MARK: - See all photos
+    
+    @objc func seeAllPhotosButtonTapped() {
+        let alertController = UIAlertController(title: "See all photos", message: "On the next screen, please click on “Photos“ and select “All Photos“", preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "Later", style: .default) { _ in })
+        alertController.addAction(UIAlertAction(title: "Continue", style: .default) { _ in
+            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:], completionHandler: nil)
+        })
+        self.present(alertController, animated: true)
     }
     
     // MARK: - Multiple Selection
@@ -170,11 +196,13 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
             return
         }
 
-        doAfterLibraryPermissionCheck { [weak self] in
-            if self?.isMultipleSelectionEnabled == false {
-                self?.selectedItems.removeAll()
+        doAfterLibraryPermissionCheck { hasPermission in
+            if hasPermission {
+                if self.isMultipleSelectionEnabled == false {
+                    self.selectedItems.removeAll()
+                }
+                self.toggleMultipleSelection()
             }
-            self?.toggleMultipleSelection()
         }
     }
     
@@ -261,7 +289,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         }
 
         let options = PHFetchOptions()
-        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+        options.sortDescriptors = [NSSortDescriptor(key: YPConfig.library.sortingOption.rawValue, ascending: false)]
         options.predicate = YPConfig.library.mediaType.predicate()
         return options
     }
@@ -409,15 +437,14 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         guard fitsVideoLengthLimits(asset: asset) else {
             return
         }
-        
         if YPConfig.video.automaticTrimToTrimmerMaxDuration {
-            fetchVideoAndCropWithDuration(for: asset,
-                                          withCropRect: resultCropRect,
-                                          duration: YPConfig.video.trimmerMaxDuration,
-                                          callback: callback)
+            self.fetchVideoAndCropWithDuration(for: asset,
+                                               withCropRect: resultCropRect,
+                                               duration: YPConfig.video.trimmerMaxDuration,
+                                               callback: callback)
         } else {
-            delegate?.libraryViewDidTapNext()
-            mediaManager.fetchVideoUrlAndCrop(for: asset, cropRect: resultCropRect, callback: callback)
+            self.delegate?.libraryViewDidTapNext()
+            self.mediaManager.fetchVideoUrlAndCrop(for: asset, cropRect: resultCropRect, callback: callback)
         }
     }
     
@@ -447,118 +474,155 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                 return (asset, $0.cropRect)
             }
             
-            // Multiple selection
-            if self.isMultipleSelectionEnabled && self.selectedItems.count > 1 {
-                
-                // Check video length
-                for asset in selectedAssets {
-                    if self.fitsVideoLengthLimits(asset: asset.asset) == false {
+            var isVideoSelected = false
+            let asyncCompressionGroup = DispatchGroup()
+            asyncCompressionGroup.enter()
+            
+            for asset in selectedAssets {
+                if asset.asset.mediaType == .video {
+                    isVideoSelected = true
+                    break
+                }
+            }
+            
+            if isVideoSelected {
+                DispatchQueue.main.async {
+                    let compressionOptions = YPImagePickerConfiguration.shared.video.compressionOption
+                    let storyBoard = UIStoryboard(name: "YPVideoCompressionVC", bundle: Bundle(for: YPVideoCompressionVC.self))
+                    let ypVideoCompressionVC = storyBoard.instantiateViewController(withIdentifier: "YPVideoCompressionVC") as! YPVideoCompressionVC
+                    
+                    var titleArray = [String]()
+                    for compressionOtion in compressionOptions {
+                        titleArray.append(compressionOtion.getLabel())
+                    }
+                    ypVideoCompressionVC.titleArray = titleArray
+                    ypVideoCompressionVC.headingTitle = "Choose video quality"
+                    ypVideoCompressionVC.modalPresentationStyle = .overFullScreen
+                    ypVideoCompressionVC.didDismiss = {(index) in
+                        YPImagePickerConfiguration.shared.video.compression = compressionOptions[index].presetID()
+                        asyncCompressionGroup.leave()
+                    }
+                    self.present(ypVideoCompressionVC, animated: true, completion: nil)
+                }
+            } else {
+                asyncCompressionGroup.leave()
+            }
+            
+            asyncCompressionGroup.notify(queue: .main) {
+                DispatchQueue.global(qos: .userInitiated).async {
+                    // Multiple selection
+                    if self.isMultipleSelectionEnabled && self.selectedItems.count > 1 {
+                        
+                        // Check video length
+                        for asset in selectedAssets {
+                            if self.fitsVideoLengthLimits(asset: asset.asset) == false {
+                                return
+                            }
+                        }
+                        
+                        // Fill result media items array
+                        var resultMediaItems: [YPMediaItem] = []
+                        let asyncGroup = DispatchGroup()
+                        
+                        var assetDictionary: [PHAsset?: Int] = .init()
+                        for (index, assetPair) in selectedAssets.enumerated() {
+                            assetDictionary[assetPair.asset] = index
+                        }
+                        
+                        for asset in selectedAssets {
+                            asyncGroup.enter()
+                            
+                            switch asset.asset.mediaType {
+                                case .image:
+                                    self.fetchImageAndCrop(for: asset.asset, withCropRect: asset.cropRect) { image, exifMeta in
+                                        let photo = YPMediaPhoto(image: image.resizedImageIfNeeded(),
+                                                                 exifMeta: exifMeta, asset: asset.asset)
+                                        resultMediaItems.append(YPMediaItem.photo(p: photo))
+                                        asyncGroup.leave()
+                                    }
+                                    
+                                case .video:
+                                    self.fetchVideoAndApplySettings(for: asset.asset, withCropRect: asset.cropRect) { videoURL in
+                                        if let videoURL = videoURL {
+                                            let videoItem = YPMediaVideo(thumbnail: thumbnailFromVideoPath(videoURL),
+                                                                         videoURL: videoURL, asset: asset.asset)
+                                            resultMediaItems.append(YPMediaItem.video(v: videoItem))
+                                        } else {
+                                            ypLog("Problems with fetching videoURL.")
+                                        }
+                                        asyncGroup.leave()
+                                    }
+                                default:
+                                    break
+                            }
+                        }
+                        
+                        asyncGroup.notify(queue: .main) {
+                            // TODO: sort the array based on the initial order of the assets in selectedAssets
+                            resultMediaItems.sort { (first, second) -> Bool in
+                                var firstAsset: PHAsset?
+                                var secondAsset: PHAsset?
+                                
+                                switch first {
+                                    case .photo(let photo):
+                                        firstAsset = photo.asset
+                                    case .video(let video):
+                                        firstAsset = video.asset
+                                }
+                                guard let firstIndex = assetDictionary[firstAsset] else {
+                                    return false
+                                }
+                                
+                                switch second {
+                                    case .photo(let photo):
+                                        secondAsset = photo.asset
+                                    case .video(let video):
+                                        secondAsset = video.asset
+                                }
+                                
+                                guard let secondIndex = assetDictionary[secondAsset] else {
+                                    return false
+                                }
+                                
+                                return firstIndex < secondIndex
+                            }
+                            multipleItemsCallback(resultMediaItems)
+                            self.delegate?.libraryViewFinishedLoading()
+                        }
+                    } else {
+                        let asset = selectedAssets.first!.asset
+                        switch asset.mediaType {
+                            case .audio, .unknown:
+                                return
+                            case .video:
+                                self.fetchVideoAndApplySettings(for: asset, callback: { videoURL in
+                                    DispatchQueue.main.async {
+                                        if let videoURL = videoURL {
+                                            self.delegate?.libraryViewFinishedLoading()
+                                            let video = YPMediaVideo(thumbnail: thumbnailFromVideoPath(videoURL),
+                                                                     videoURL: videoURL, asset: asset)
+                                            videoCallback(video)
+                                        } else {
+                                            ypLog("Problems with fetching videoURL.")
+                                        }
+                                    }
+                                })
+                            case .image:
+                                self.fetchImageAndCrop(for: asset) { image, exifMeta in
+                                    DispatchQueue.main.async {
+                                        self.delegate?.libraryViewFinishedLoading()
+                                        let photo = YPMediaPhoto(image: image.resizedImageIfNeeded(),
+                                                                 exifMeta: exifMeta,
+                                                                 asset: asset)
+                                        photoCallback(photo)
+                                    }
+                                }
+                            @unknown default:
+                                ypLog("unknown default reached. Check code.")
+                        }
                         return
                     }
                 }
-                
-                // Fill result media items array
-                var resultMediaItems: [YPMediaItem] = []
-                let asyncGroup = DispatchGroup()
-                
-                var assetDictionary: [PHAsset?: Int] = .init()
-                for (index, assetPair) in selectedAssets.enumerated() {
-                    assetDictionary[assetPair.asset] = index
-                }
-                
-                for asset in selectedAssets {
-                    asyncGroup.enter()
-                    
-                    switch asset.asset.mediaType {
-                    case .image:
-                        self.fetchImageAndCrop(for: asset.asset, withCropRect: asset.cropRect) { image, exifMeta in
-                            let photo = YPMediaPhoto(image: image.resizedImageIfNeeded(),
-													 exifMeta: exifMeta, asset: asset.asset)
-                            resultMediaItems.append(YPMediaItem.photo(p: photo))
-                            asyncGroup.leave()
-                        }
-                        
-                    case .video:
-                        self.fetchVideoAndApplySettings(for: asset.asset,
-                                                             withCropRect: asset.cropRect) { videoURL in
-                            if let videoURL = videoURL {
-                                let videoItem = YPMediaVideo(thumbnail: thumbnailFromVideoPath(videoURL),
-                                                             videoURL: videoURL, asset: asset.asset)
-                                resultMediaItems.append(YPMediaItem.video(v: videoItem))
-                            } else {
-                                ypLog("Problems with fetching videoURL.")
-                            }
-                            asyncGroup.leave()
-                        }
-                    default:
-                        break
-                    }
-                }
-                
-                asyncGroup.notify(queue: .main) {
-                    // TODO: sort the array based on the initial order of the assets in selectedAssets
-                    resultMediaItems.sort { (first, second) -> Bool in
-                        var firstAsset: PHAsset?
-                        var secondAsset: PHAsset?
-                        
-                        switch first {
-                        case .photo(let photo):
-                            firstAsset = photo.asset
-                        case .video(let video):
-                            firstAsset = video.asset
-                        }
-                        guard let firstIndex = assetDictionary[firstAsset] else {
-                            return false
-                        }
-                        
-                        switch second {
-                        case .photo(let photo):
-                            secondAsset = photo.asset
-                        case .video(let video):
-                            secondAsset = video.asset
-                        }
-                        
-                        guard let secondIndex = assetDictionary[secondAsset] else {
-                            return false
-                        }
-                        
-                        return firstIndex < secondIndex
-                    }
-                    multipleItemsCallback(resultMediaItems)
-                    self.delegate?.libraryViewFinishedLoading()
-                }
-            } else {
-                let asset = selectedAssets.first!.asset
-                switch asset.mediaType {
-                case .audio, .unknown:
-                    return
-                case .video:
-                    self.fetchVideoAndApplySettings(for: asset, callback: { videoURL in
-                        DispatchQueue.main.async {
-                            if let videoURL = videoURL {
-                                self.delegate?.libraryViewFinishedLoading()
-                                let video = YPMediaVideo(thumbnail: thumbnailFromVideoPath(videoURL),
-                                                         videoURL: videoURL, asset: asset)
-                                videoCallback(video)
-                            } else {
-                                ypLog("Problems with fetching videoURL.")
-                            }
-                        }
-                    })
-                case .image:
-                    self.fetchImageAndCrop(for: asset) { image, exifMeta in
-                        DispatchQueue.main.async {
-                            self.delegate?.libraryViewFinishedLoading()
-                            let photo = YPMediaPhoto(image: image.resizedImageIfNeeded(),
-                                                     exifMeta: exifMeta,
-                                                     asset: asset)
-                            photoCallback(photo)
-                        }
-                    }
-                @unknown default:
-                    ypLog("unknown default reached. Check code.")
-                }
-                return
             }
         }
     }
