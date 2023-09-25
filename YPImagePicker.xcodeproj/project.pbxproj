@@ -1241,7 +1241,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.2.1;
+				MARKETING_VERSION = 5.2.2;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.yummypets.YPImagePicker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1278,7 +1278,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.2.1;
+				MARKETING_VERSION = 5.2.2;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.yummypets.YPImagePicker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
