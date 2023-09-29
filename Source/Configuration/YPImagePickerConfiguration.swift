@@ -228,7 +228,10 @@ public struct YPConfigLibrary {
 
     /// Anything superior than 1 will enable the multiple selection feature.
     public var maxNumberOfItems = 1
-    
+
+    /// Show warning when user has selected `maxNumberOfItems` and multiple selection is enabled.
+    public var showMaxNumberWarning = true
+
     /// Anything greater than 1 will desactivate live photo and video modes (library only) and
     /// force users to select at least the number of items defined.
     public var minNumberOfItems = 1
