@@ -24,6 +24,23 @@ final class YPAssetZoomableView: UIScrollView {
     public var videoView = YPVideoView()
     public var squaredZoomScale: CGFloat = 1
     public var minWidthForItem: CGFloat? = YPConfig.library.minWidthForItem
+    public var isPost: Bool = YPConfig.isPost
+    public var portraitRatio: Double = YPConfig.portraitRatio
+    public var photoLandscapeRatio: Double = YPConfig.photoLandscapeRatio
+    public var videoLandscapeRatio: Double = YPConfig.videoLandscapeRatio
+    public var assetType = 0  // 0: Portrait, 1: Landscape, 2: Square
+    public var isMediaFiting = false
+    public var isCarouselAlbumUpdating = YPConfig.isCarouselAlbumUpdating
+    public var carouselAlbumAspectRatio = YPConfig.carouselAlbumAspectRatio
+    public var carouselAlbumAssetType = YPConfig.carouselAlbumAssetType  // 0: Portrait, 1: Landscape, 2: Square
+    public var isMultipleSelectionEnabled = false
+    public var multipleSelectionAspectRatio = 0.805
+    public var multipleSelectionAssetType = 0  // 0: Portrait, 1: Landscape, 2: Square
+    public var isFrameChanged = false
+    
+    // carousel
+    private var currentZoomableViewWidthAnchor: NSLayoutConstraint! = nil
+    private var currentZoomableViewHeightAnchor: NSLayoutConstraint! = nil
     
     fileprivate var currentAsset: PHAsset?
     
@@ -31,18 +48,110 @@ final class YPAssetZoomableView: UIScrollView {
     public var assetImageView: UIImageView {
         return isVideoMode ? videoView.previewImageView : photoImageView
     }
+    
+    public func changeFrameDimensionsToAlbumAspectRatio() {
+        let selectedMedia = isVideoMode ? videoView : photoImageView
+        
+        if(YPConfig.carouselAlbumAssetType == 0) {
+            let carouselAlbumMediaHeight = YPImagePickerConfiguration.screenWidth
+            let carouselAlbumMediaWidth = carouselAlbumMediaHeight * YPConfig.carouselAlbumAspectRatio
+
+            if(self.currentZoomableViewWidthAnchor == nil  && self.currentZoomableViewHeightAnchor  == nil) {
+                self.currentZoomableViewWidthAnchor = self.widthAnchor.constraint(equalToConstant: carouselAlbumMediaWidth)
+                self.currentZoomableViewWidthAnchor.isActive = true
+                self.currentZoomableViewHeightAnchor = self.heightAnchor.constraint(equalToConstant: carouselAlbumMediaHeight)
+                self.currentZoomableViewHeightAnchor.isActive = true
+            } else {
+                self.currentZoomableViewWidthAnchor.constant = carouselAlbumMediaWidth
+                self.currentZoomableViewHeightAnchor.constant = carouselAlbumMediaHeight
+            }
+            
+            self.centerHorizontally()
+            selectedMedia.frame.origin.x = 0
+        
+            
+        }
+        
+        if(YPConfig.carouselAlbumAssetType == 1) {
+            let carouselAlbumMediaWidth = YPImagePickerConfiguration.screenWidth
+            let carouselAlbumMediaHeight = carouselAlbumMediaWidth * YPConfig.carouselAlbumAspectRatio
+            
+            if(self.currentZoomableViewWidthAnchor == nil  && self.currentZoomableViewHeightAnchor  == nil) {
+                self.currentZoomableViewWidthAnchor = self.widthAnchor.constraint(equalToConstant: carouselAlbumMediaWidth)
+                self.currentZoomableViewWidthAnchor.isActive = true
+                self.currentZoomableViewHeightAnchor = self.heightAnchor.constraint(equalToConstant: carouselAlbumMediaHeight)
+                self.currentZoomableViewHeightAnchor.isActive = true
+               
+            } else {
+                self.currentZoomableViewWidthAnchor.constant = carouselAlbumMediaWidth
+                self.currentZoomableViewHeightAnchor.constant = carouselAlbumMediaHeight
+            }
+            
+            selectedMedia.frame.origin.y = 0
+            self.centerVertically()
+        }
+        self.layoutIfNeeded()
+        isFrameChanged = true
+    }
+    
 
     /// Set zoom scale to fit the image to square or show the full image
     //
     /// - Parameters:
     ///   - fit: If true - zoom to show squared. If false - show full.
     public func fitImage(_ fit: Bool, animated isAnimated: Bool = false) {
+        isMediaFiting = true
         squaredZoomScale = calculateSquaredZoomScale()
-        if fit {
-            setZoomScale(squaredZoomScale, animated: isAnimated)
-        } else {
-            setZoomScale(1, animated: isAnimated)
-        }
+        let correctAspectRatio = isCarouselAlbumUpdating ? carouselAlbumAspectRatio : multipleSelectionAspectRatio
+        let correctAssetType = isCarouselAlbumUpdating ? carouselAlbumAssetType : multipleSelectionAssetType
+         
+            if isPost {
+                if(!isMultipleSelectionEnabled && !isCarouselAlbumUpdating) {
+                if fit {
+                    setZoomScale(squaredZoomScale, animated: isAnimated)
+                }  else {
+                    if self.assetType == 0 {
+                        setZoomScale(squaredZoomScale * portraitRatio, animated: isAnimated)
+                    } else if self.assetType == 1 {
+                        if(isVideoMode) {
+                            setZoomScale(squaredZoomScale * videoLandscapeRatio, animated: isAnimated)
+                        } else {
+                            setZoomScale(squaredZoomScale * photoLandscapeRatio, animated: isAnimated)
+                        }
+         
+                    } else if self.assetType == 2 {
+                        setZoomScale(1, animated: isAnimated)
+                    }
+                }
+                } else {
+                    if(correctAssetType == 0) {
+                        if(self.assetType == 0) {
+                            setZoomScale(squaredZoomScale * correctAspectRatio, animated: isAnimated)
+                        } else {
+                            setZoomScale(squaredZoomScale, animated: isAnimated)
+                        }
+                    }
+                    if(correctAssetType == 1) {
+                        if(self.assetType == 1) {
+                            setZoomScale(squaredZoomScale * correctAspectRatio, animated: isAnimated)
+                        } else {
+                            setZoomScale(squaredZoomScale, animated: isAnimated)
+                        }
+                    }
+                    
+                    if(correctAssetType == 2) {
+                        setZoomScale(squaredZoomScale, animated: isAnimated)
+                    }
+                }
+            } else {
+                if fit {
+                          setZoomScale(squaredZoomScale, animated: isAnimated)
+                      } else {
+                          setZoomScale(1, animated: isAnimated)
+                      }
+            }
+        
+        isMediaFiting = false
     }
     
     /// Re-apply correct scrollview settings if image has already been adjusted in
@@ -149,7 +258,6 @@ final class YPAssetZoomableView: UIScrollView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-
         backgroundColor = YPConfig.colors.assetViewBackgroundColor
         clipsToBounds = true
         photoImageView.frame = CGRect(origin: CGPoint.zero, size: CGSize.zero)
@@ -180,45 +288,52 @@ final class YPAssetZoomableView: UIScrollView {
 fileprivate extension YPAssetZoomableView {
     
     func setAssetFrame(`for` view: UIView, with image: UIImage) {
-        // Reseting the previous scale
-        self.minimumZoomScale = 1
-        self.zoomScale = 1
-        
-        // Calculating and setting the image view frame depending on screenWidth
-        let screenWidth = YPImagePickerConfiguration.screenWidth
-        
-        let w = image.size.width
-        let h = image.size.height
-
-        var aspectRatio: CGFloat = 1
-        var zoomScale: CGFloat = 1
-
-        if w > h { // Landscape
-            aspectRatio = h / w
-            view.frame.size.width = screenWidth
-            view.frame.size.height = screenWidth * aspectRatio
-        } else if h > w { // Portrait
-            aspectRatio = w / h
-            view.frame.size.width = screenWidth * aspectRatio
-            view.frame.size.height = screenWidth
+            // Reseting the previous scale
+            self.minimumZoomScale = 1
+            self.zoomScale = 1
             
-            if let minWidth = minWidthForItem {
-                let k = minWidth / screenWidth
-                zoomScale = (h / w) * k
+            // Calculating and setting the image view frame depending on screenWidth
+            let screenWidth = YPImagePickerConfiguration.screenWidth
+            
+            let w = image.size.width
+            let h = image.size.height
+
+            var aspectRatio: CGFloat = 1
+            var zoomScale: CGFloat = 1
+
+            if w > h { // Landscape
+                aspectRatio = h / w
+                view.frame.size.width = screenWidth
+                view.frame.size.height = screenWidth * aspectRatio
+                self.assetType = 1
+            } else if h > w { // Portrait
+                aspectRatio = w / h
+                view.frame.size.width = screenWidth * aspectRatio
+                view.frame.size.height = screenWidth
+                self.assetType = 0
+                
+                if let minWidth = minWidthForItem {
+                    let k = minWidth / screenWidth
+                    zoomScale = (h / w) * k
+                }
+            } else { // Square
+                view.frame.size.width = screenWidth
+                view.frame.size.height = screenWidth
+                self.assetType = 2
             }
-        } else { // Square
-            view.frame.size.width = screenWidth
-            view.frame.size.height = screenWidth
+            
+            // Centering image view
+            view.center = center
+            centerAssetView()
+            
+            // Setting new scale
+            minimumZoomScale = zoomScale
+            self.zoomScale = zoomScale
+
+            fitImage(false)
         }
-        
-        // Centering image view
-        view.center = center
-        centerAssetView()
-        
-        // Setting new scale
-        minimumZoomScale = zoomScale
-        self.zoomScale = zoomScale
-    }
+    
+    
     
     /// Calculate zoom scale which will fit the image to square
     func calculateSquaredZoomScale() -> CGFloat {
@@ -241,17 +356,27 @@ fileprivate extension YPAssetZoomableView {
     
     // Centring the image frame
     func centerAssetView() {
-        let assetView = isVideoMode ? videoView : photoImageView
-        let scrollViewBoundsSize = self.bounds.size
-        var assetFrame = assetView.frame
-        let assetSize = assetView.frame.size
-        
-        assetFrame.origin.x = (assetSize.width < scrollViewBoundsSize.width) ?
-            (scrollViewBoundsSize.width - assetSize.width) / 2.0 : 0
-        assetFrame.origin.y = (assetSize.height < scrollViewBoundsSize.height) ?
-            (scrollViewBoundsSize.height - assetSize.height) / 2.0 : 0.0
-        
-        assetView.frame = assetFrame
+        if(!YPConfig.isCarouselAlbumUpdating || isFrameChanged || !YPConfig.isPost) {
+            let assetView = isVideoMode ? videoView : photoImageView
+            let scrollViewBoundsSize = self.bounds.size
+            var assetFrame = assetView.frame
+            let assetSize = assetView.frame.size
+           
+            let frameAssetType = isCarouselAlbumUpdating ? YPConfig.carouselAlbumAssetType : multipleSelectionAssetType
+         
+            assetFrame.origin.x = (assetSize.width < scrollViewBoundsSize.width) ?
+                (scrollViewBoundsSize.width - assetSize.width) / 2.0 : 0
+            assetFrame.origin.y = (assetSize.height < scrollViewBoundsSize.height) ?
+                (scrollViewBoundsSize.height - assetSize.height) / 2.0 : 0.0
+            
+            if(YPConfig.isPost && frameAssetType == 1) {
+                assetFrame.origin.y = 0
+            }
+            
+            assetView.frame = assetFrame
+        } else {
+            self.changeFrameDimensionsToAlbumAspectRatio()
+        }
     }
 }
 
@@ -270,9 +395,56 @@ extension YPAssetZoomableView: UIScrollViewDelegate {
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
         guard let view = view, view == photoImageView || view == videoView else { return }
         
+        let correctAspectRatio = isCarouselAlbumUpdating ? carouselAlbumAspectRatio : multipleSelectionAspectRatio
+        let correctAssetType = isCarouselAlbumUpdating ? carouselAlbumAssetType : multipleSelectionAssetType
         // prevent to zoom out
-        if YPConfig.library.onlySquare && scale < squaredZoomScale {
-            self.fitImage(true, animated: true)
+//        if YPConfig.library.onlySquare && scale < squaredZoomScale {
+//            self.fitImage(true, animated: true)
+//        }
+        
+        if(!isMultipleSelectionEnabled && !isCarouselAlbumUpdating) {
+        if isPost {
+                 if self.assetType == 0 {
+                         if scale < squaredZoomScale * portraitRatio {
+                             fitImage(false, animated: true)
+                         }
+                     } else if self.assetType == 1 {
+                         if(isVideoMode) {
+                             if scale < squaredZoomScale * videoLandscapeRatio {
+                                 fitImage(false, animated: true)
+                             }
+                         } else {
+                             if scale < squaredZoomScale * photoLandscapeRatio {
+                                 fitImage(false, animated: true)
+                             }
+                         }
+                     }
+             }
+        } else {
+            if(correctAssetType == 0) {
+                if(self.assetType == 0) {
+                    if(scale < squaredZoomScale * correctAspectRatio) {
+                        fitImage(false, animated: true)
+                    }
+                } else if (scale < squaredZoomScale) {
+                    fitImage(false, animated: true)
+                }
+            }
+            if(correctAssetType == 1) {
+                if(self.assetType == 1) {
+                    if(scale < squaredZoomScale * correctAspectRatio) {
+                        fitImage(false, animated: true)
+                    }
+                } else if (scale < squaredZoomScale) {
+                    fitImage(false, animated: true)
+                }
+            }
+            if(correctAssetType == 2) {
+                    if(scale < squaredZoomScale) {
+                        fitImage(false, animated: true)
+                    }
+               
+            }
         }
         
         zoomableViewDelegate?.ypAssetZoomableViewScrollViewDidEndZooming()

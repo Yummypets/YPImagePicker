@@ -17,7 +17,7 @@ protocol YPPickerVCDelegate: AnyObject {
 
 open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     
-    let albumsManager = YPAlbumsManager()
+    let albumVC = YPAlbumVC(albumsManager:  YPAlbumsManager())
     var shouldHideStatusBar = false
     var initialStatusBarHidden = false
     weak var pickerVCDelegate: YPPickerVCDelegate?
@@ -121,6 +121,21 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         
         YPHelper.changeBackButtonIcon(self)
         YPHelper.changeBackButtonTitle(self)
+        
+       
+        
+           self.libraryVC?.doAfterLibraryPermissionCheck { [weak self] in
+            self?.albumVC.albums = self?.albumVC.albumsManager.fetchAlbums() ?? []
+            
+               if(!(self?.albumVC.albums.isEmpty ?? true) as Bool) {
+                let recentAlbum = self?.albumVC.albums[0]
+                self?.libraryVC?.title = recentAlbum?.title
+                self?.libraryVC?.mediaManager.collection = recentAlbum?.collection
+                self?.setTitleViewWithTitle(aTitle: recentAlbum?.title ?? "Library")
+                self?.libraryVC?.currentlySelectedIndex = 0
+                self?.libraryVC?.selectedItems.removeAll()
+               }
+        }
     }
     
     open override func viewWillAppear(_ animated: Bool) {
@@ -137,6 +152,15 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         UIView.animate(withDuration: 0.3) {
             self.setNeedsStatusBarAppearanceUpdate()
         }
+
+        var offset = v.header.frame.height
+        if #available(iOS 11.0, *) {
+            offset += v.safeAreaInsets.bottom
+        }
+        
+        v.header.bottomConstraint?.constant = offset
+        v.layoutIfNeeded()
+        updateUI()
     }
     
     internal func pagerScrollViewDidScroll(_ scrollView: UIScrollView) { }
@@ -205,11 +229,10 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
             return
         }
         
-        let vc = YPAlbumVC(albumsManager: albumsManager)
-        let navVC = UINavigationController(rootViewController: vc)
+        let navVC = UINavigationController(rootViewController: albumVC)
         navVC.navigationBar.tintColor = .ypLabel
         
-        vc.didSelectAlbum = { [weak self] album in
+        albumVC.didSelectAlbum = { [weak self] album in
             self?.libraryVC?.setAlbum(album)
             self?.setTitleViewWithTitle(aTitle: album.title)
             navVC.dismiss(animated: true, completion: nil)
@@ -300,6 +323,7 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
             navigationItem.rightBarButtonItem = nil
         }
 
+        navigationItem.leftBarButtonItem?.tintColor = YPConfig.colors.tintColor
         navigationItem.rightBarButtonItem?.setFont(font: YPConfig.fonts.rightBarButtonFont, forState: .normal)
         navigationItem.rightBarButtonItem?.setFont(font: YPConfig.fonts.rightBarButtonFont, forState: .disabled)
         navigationItem.leftBarButtonItem?.setFont(font: YPConfig.fonts.leftBarButtonFont, forState: .normal)
@@ -317,6 +341,11 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     // When pressing "Next"
     @objc
     func done() {
+
+        if(libraryVC?.v.assetViewContainer.zoomableView.isZooming == true || libraryVC?.v.assetViewContainer.zoomableView.isZoomBouncing == true || libraryVC?.v.assetViewContainer.zoomableView.isMediaFiting == true) {
+            return
+        }
+
         guard let libraryVC = libraryVC else { ypLog("YPLibraryVC deallocated"); return }
         
         if mode == .library {
@@ -372,7 +401,7 @@ extension YPPickerVC: YPLibraryViewDelegate {
             offset += v.safeAreaInsets.bottom
         }
         
-        v.header.bottomConstraint?.constant = enabled ? offset : 0
+        v.header.bottomConstraint?.constant = offset
         v.layoutIfNeeded()
         updateUI()
     }

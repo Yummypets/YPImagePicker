@@ -9,11 +9,11 @@
 import Foundation
 
 internal extension IndexSet {
-    func aapl_indexPathsFromIndexesWithSection(_ section: Int) -> [IndexPath] {
+    func aapl_indexPathsFromIndexesWithSection(_ section: Int, _ index: Int = 0) -> [IndexPath] {
         var indexPaths: [IndexPath] = []
         indexPaths.reserveCapacity(count)
         (self as NSIndexSet).enumerate({idx, _ in
-            indexPaths.append(IndexPath(item: idx, section: section))
+            indexPaths.append(IndexPath(item: index - idx - 1, section: section))
         })
         return indexPaths
     }

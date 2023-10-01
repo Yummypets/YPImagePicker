@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "yp_multiple.png",
+      "filename" : "yp_fast_posts_colored.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "yp_multiple@2x.png",
+      "filename" : "yp_fast_posts_colored@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "yp_multiple@3x.png",
+      "filename" : "yp_fast_posts_colored@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
