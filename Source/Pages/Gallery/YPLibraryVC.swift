@@ -20,6 +20,24 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
     internal var currentlySelectedIndex: Int = 0
     internal let panGestureHelper = PanGestureHelper()
     internal var isInitialized = false
+    
+    internal var disableMultipleSelectionForVideo = YPConfig.library.shouldDisableMultipleSelectionForVideo {
+        didSet {
+            // bail out if the multiple selection for video cannot be enabled
+            guard shouldDisableMultipleSelectionForVideo else { return }
+            // proceed only if the multiple selection disabling capability is on for this controller
+            if disableMultipleSelectionForVideo {
+                isMultipleSelectionEnabled = false
+                v.assetViewContainer.setMultipleSelectionMode(on: false)
+                v.collectionView.reloadData()
+                delegate?.libraryViewDidToggleMultipleSelection(enabled: false)
+            }
+        }
+    }
+    
+    internal var shouldDisableMultipleSelectionForVideo: Bool {
+        return YPConfig.library.shouldDisableMultipleSelectionForVideo
+    }
 
     // MARK: - Init
 
@@ -162,6 +180,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
     @objc
     func multipleSelectionButtonTapped() {
         // If no items, than preventing multiple selection
+        guard !disableMultipleSelectionForVideo else { return }
         guard mediaManager.hasResultItems else {
             if #available(iOS 14, *) {
                 PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: self)
