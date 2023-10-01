@@ -42,3 +42,31 @@ public struct YPWordings {
     public var crop = ypLocalized("YPImagePickerCrop")
     public var warningMaxItemsLimit = ypLocalized("YPImagePickerWarningItemsLimit")
 }
+
+public enum YPImagePickerStep {
+    case pick
+    case multipleGallary
+    case filter
+    case crop
+}
+
+extension YPWordings {
+    public func computeNavigationRightButtonText(step: YPImagePickerStep) -> String {
+        let config = YPConfig
+        let wordings = config.wordings
+        switch step {
+        case .pick:
+            if (config.showsPhotoFilters) { return wordings.next }
+            if case .none = config.showsCrop { return wordings.done }
+            else { return wordings.next }
+        case .multipleGallary:
+            if case .none = config.showsCrop { return wordings.done }
+            else { return wordings.next }
+        case .filter:
+            if case .none = config.showsCrop { return wordings.done }
+            else { return wordings.next }
+        case .crop:
+            return wordings.done
+        }
+    }
+}
