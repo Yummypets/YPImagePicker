@@ -43,9 +43,9 @@ And many more...
 
 #### Using [CocoaPods](http://cocoapods.org/)
 
-First be sure to run `pod repo update` to get the latest version available.
+First, be sure to run `pod repo update` to get the latest version available.
 
-Add `pod 'YPImagePicker'` to your `Podfile` and run `pod install`. Also add `use_frameworks!` to the `Podfile`.
+Add `pod 'YPImagePicker'` to your `Podfile` and run `pod install`. Also, add `use_frameworks!` to the `Podfile`.
 
 ```
 target 'MyApp'
@@ -55,7 +55,7 @@ use_frameworks!
 
 #### Using [Swift Package Manager](https://swift.org/package-manager/)
 
-Open SPM dependency manager through `File > Swift Pakcages > Add Package Dependency...`.
+Open SPM dependency manager through `File > Swift Packages > Add Package Dependency...`.
 
 and insert repository URL:
 
@@ -74,7 +74,7 @@ Note: This has a minimum target iOS version of `12.0`.
 ## Plist entries
 
 In order for your app to access camera and photo libraries,
-you'll need to ad these `plist entries` :
+you'll need to add these `plist entries` :
 
 - Privacy - Camera Usage Description (photo/videos)
 - Privacy - Photo Library Usage Description (library)
@@ -293,7 +293,7 @@ config.colors.tintColor = .green // Right bar buttons (actions)
 ## Original Project & Author
 
 This project has been first inspired by [Fusuma](https://github.com/ytakzk/Fusuma)
-Considering the big code, design changes and all the additional features added along the way, this moved form a fork to a standalone separate repo, also for discoverability purposes.
+Considering the big code, design changes, and all the additional features added along the way, this moved from a fork to a standalone separate repo, also for discoverability purposes.
 Original Fusuma author is [ytakz](http://ytakzk.me)
 
 ## Core Team
