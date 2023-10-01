@@ -53,6 +53,16 @@ extension YPLibraryVC {
     }
     
     // MARK: - Library collection view cell managing
+    private func getSelectedIndexPaths(selectedItems: [YPLibrarySelection]) -> [IndexPath] {
+        let collectionViewItemsCount = v.collectionView.numberOfItems(inSection: 0)
+        var selectedIndexPaths = [IndexPath]()
+        for item in selectedItems {
+            if item.index < collectionViewItemsCount {
+                selectedIndexPaths.append(IndexPath(row: item.index, section: 0))
+            }
+        }
+        return Array(Set(selectedIndexPaths))
+    }
     
     /// Removes cell from selection
     func deselect(indexPath: IndexPath) {
@@ -62,7 +72,7 @@ extension YPLibraryVC {
             selectedItems.remove(at: positionIndex)
 
             // Refresh the numbers
-            let selectedIndexPaths = selectedItems.map { IndexPath(row: $0.index, section: 0) }
+            let selectedIndexPaths = getSelectedIndexPaths(selectedItems: selectedItems)
             v.collectionView.reloadItems(at: selectedIndexPaths)
 			
             // Replace the current selected image with the previously selected one
