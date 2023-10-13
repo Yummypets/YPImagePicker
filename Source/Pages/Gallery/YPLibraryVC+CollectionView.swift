@@ -128,6 +128,10 @@ extension YPLibraryVC: UICollectionViewDelegate {
             YPConfig.colors.multipleItemsSelectedCircleColor ?? YPConfig.colors.tintColor
         cell.multipleSelectionIndicator.selectionBorderColor =
             YPConfig.colors.multipleItemsSelectedCircleBorderColor ?? .clear
+        cell.multipleSelectionIndicator.unselectedColor =
+            YPConfig.colors.multipleItemsUnselectedCircleColor ?? .white.withAlphaComponent(0.3)
+        cell.multipleSelectionIndicator.unselectedBorderColor =
+            YPConfig.colors.multipleItemsUnselectedCircleBorderColor ?? .white
         mediaManager.imageManager?.requestImage(for: asset,
                                    targetSize: v.cellSize(),
                                    contentMode: .aspectFill,
