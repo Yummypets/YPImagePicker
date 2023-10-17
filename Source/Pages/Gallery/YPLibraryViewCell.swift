@@ -98,14 +98,6 @@ class YPLibraryViewCell: UICollectionViewCell {
         setAccessibilityInfo()
     }
 
-    override var isSelected: Bool {
-        didSet { refreshSelection() }
-    }
-    
-    override var isHighlighted: Bool {
-        didSet { refreshSelection() }
-    }
-    
     override var isUserInteractionEnabled: Bool {
         didSet { refreshSelection() }
     }

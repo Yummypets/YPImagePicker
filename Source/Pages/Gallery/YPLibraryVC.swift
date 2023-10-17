@@ -203,27 +203,15 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
             if needPreselectItemsAndNotSelectedAnyYet,
                shouldSelectByDelegate,
                let asset = mediaManager.getAsset(at: currentlySelectedIndex) {
-                let imageAsset: PHAsset
-                let imageIndex: Int
 
                 // Change to first image if video is selected when switching to multiple selection mode
                 if asset.mediaType == .video,
                    case (let image?, let index?) = mediaManager.getFirstImageAsset()
                 {
-                    imageAsset = image
-                    imageIndex = index
+                    currentlySelectedIndex = index
                     changeAsset(image)
-                } else {
-                    imageAsset = asset
-                    imageIndex = currentlySelectedIndex
                 }
-                selectedItems = [
-                    YPLibrarySelection(index: imageIndex,
-                                       cropRect: v.currentCropRect(),
-                                       scrollViewContentOffset: v.assetZoomableView.contentOffset,
-                                       scrollViewZoomScale: v.assetZoomableView.zoomScale,
-                                       assetIdentifier: imageAsset.localIdentifier)
-                ]
+                addToSelection(indexPath: IndexPath(row: currentlySelectedIndex, section: 0))
             }
         } else {
             selectedItems.removeAll()
