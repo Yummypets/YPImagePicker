@@ -191,13 +191,13 @@ extension YPLibraryVC: UICollectionViewDelegate {
             } else if isLimitExceeded == false {
                 addToSelection(indexPath: indexPath)
             }
-            collectionView.reloadItems(at: [indexPath])
-            collectionView.reloadItems(at: [previouslySelectedIndexPath])
 
             if (cellIsCurrentlySelected && !cellIsInTheSelectionPool) || !cellIsCurrentlySelected {
                 collectionView.cellForItem(at: indexPath)?.isSelected = true
             }
-        } else {
+
+            collectionView.reloadItems(at: [indexPath, previouslySelectedIndexPath])
+        } else if previouslySelectedIndexPath != indexPath {
             selectedItems.removeAll()
             addToSelection(indexPath: indexPath)
             
@@ -208,6 +208,7 @@ extension YPLibraryVC: UICollectionViewDelegate {
             if let previousCell = collectionView.cellForItem(at: previouslySelectedIndexPath) as? YPLibraryViewCell {
                 previousCell.isSelected = false
             }
+            collectionView.reloadItems(at: [indexPath, previouslySelectedIndexPath])
         }
     }
     
