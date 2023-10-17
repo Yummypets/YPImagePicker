@@ -13,6 +13,8 @@ class YPMultipleSelectionIndicator: UIView {
     
     let circle = UIView()
     let label = UILabel()
+    var unselectedColor = UIColor.white.withAlphaComponent(0.3)
+    var unselectedBorderColor = UIColor.white
     var selectionColor = UIColor.ypSystemBlue
     var selectionBorderColor = UIColor.clear
 
@@ -46,8 +48,8 @@ class YPMultipleSelectionIndicator: UIView {
             circle.layer.borderWidth = 1
             label.text = "\(number)"
         } else {
-            circle.backgroundColor = UIColor.white.withAlphaComponent(0.3)
-            circle.layer.borderColor = UIColor.white.cgColor
+            circle.backgroundColor = unselectedColor
+            circle.layer.borderColor = unselectedBorderColor.cgColor
             circle.layer.borderWidth = 1
             label.text = ""
         }
