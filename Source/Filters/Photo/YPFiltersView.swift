@@ -32,7 +32,16 @@ class YPFiltersView: UIView {
             )
         )
         
-        let isIphone4 = UIScreen.main.bounds.height == 480
+        var height: CGFloat = 0
+        
+        if #available(iOS 13.0, *) {
+            let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+            height = windowScene?.screen.bounds.height ?? .zero
+        } else {
+            height = UIScreen.main.bounds.height
+        }
+        
+        let isIphone4 = height == 480
         let sideMargin: CGFloat = isIphone4 ? 20 : 0
         
         |-sideMargin-imageView.top(0)-sideMargin-|
