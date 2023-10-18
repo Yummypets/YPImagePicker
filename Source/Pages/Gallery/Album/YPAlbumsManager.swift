@@ -40,7 +40,7 @@ class YPAlbumsManager {
                         
                         if #available(iOS 13.0, *) {
                             let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
-                            deviceScale = windowScene?.screen.scale ?? .zero
+                            deviceScale = windowScene?.screen.scale ?? 1.0
                         } else {
                             deviceScale = UIScreen.main.scale
                         }

@@ -24,7 +24,7 @@ public struct YPImagePickerConfiguration {
         
         if #available(iOS 13.0, *) {
             let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
-            screenWidth = windowScene?.screen.bounds.width ?? .zero
+            screenWidth = windowScene?.screen.bounds.width ?? 1.0
         } else {
             screenWidth = UIScreen.main.bounds.width
         }
