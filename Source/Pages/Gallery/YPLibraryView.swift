@@ -156,11 +156,21 @@ internal final class YPLibraryView: UIView {
     }
 
     func cellSize() -> CGSize {
-        var screenWidth: CGFloat = UIScreen.main.bounds.width
+        var screenWidth: CGFloat = 0
+        var scale: CGFloat = 0
+        
+        if #available(iOS 13.0, *) {
+            screenWidth = window?.windowScene?.screen.bounds.width ?? 1.0
+            scale = window?.windowScene?.screen.scale ?? 1.0
+        } else {
+            screenWidth = UIScreen.main.bounds.width
+            scale = UIScreen.main.scale
+        }
+        
         if UIDevice.current.userInterfaceIdiom == .pad && YPImagePickerConfiguration.widthOniPad > 0 {
             screenWidth =  YPImagePickerConfiguration.widthOniPad
         }
-        let size = screenWidth / 4 * UIScreen.main.scale
+        let size = screenWidth / 4 * scale
         return CGSize(width: size, height: size)
     }
 
