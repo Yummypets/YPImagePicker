@@ -160,9 +160,8 @@ internal final class YPLibraryView: UIView {
         var scale: CGFloat = 0
         
         if #available(iOS 13.0, *) {
-            let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
-            screenWidth = windowScene?.screen.bounds.width ?? .zero
-            scale = windowScene?.screen.scale ?? .zero
+            screenWidth = window?.windowScene?.screen.bounds.width ?? 1.0
+            scale = window?.windowScene?.screen.scale ?? 1.0
         } else {
             screenWidth = UIScreen.main.bounds.width
             scale = UIScreen.main.scale

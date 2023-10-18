@@ -53,8 +53,7 @@ internal class YPCameraView: UIView, UIGestureRecognizerDelegate {
         var height: CGFloat = 0
         
         if #available(iOS 13.0, *) {
-            let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
-            height = windowScene?.screen.bounds.height ?? .zero
+            height = window?.windowScene?.screen.bounds.height ?? .zero
         } else {
             height = UIScreen.main.bounds.height
         }
