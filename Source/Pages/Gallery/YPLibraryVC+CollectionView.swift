@@ -63,7 +63,6 @@ extension YPLibraryVC {
 
             // Refresh the numbers
             let selectedIndexPaths = selectedItems.map { IndexPath(row: $0.index, section: 0) }
-            v.collectionView.reloadItems(at: selectedIndexPaths)
 			
             // Replace the current selected image with the previously selected one
             if let previouslySelectedIndexPath = selectedIndexPaths.last {
@@ -72,7 +71,7 @@ extension YPLibraryVC {
                 currentlySelectedIndex = previouslySelectedIndexPath.row
                 changeAsset(mediaManager.getAsset(at: previouslySelectedIndexPath.row))
             }
-			
+            v.collectionView.reloadItems(at: selectedIndexPaths)
             checkLimit()
         }
     }
