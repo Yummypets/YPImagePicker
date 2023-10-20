@@ -145,7 +145,7 @@ extension YPLibraryVC: UICollectionViewDelegate {
         cell.durationLabel.isHidden = !isVideo
         cell.durationLabel.text = isVideo ? YPHelper.formattedStrigFrom(asset.duration) : ""
         cell.multipleSelectionIndicator.isHidden = !isMultipleSelectionEnabled || (isMultipleSelectionEnabled && isVideo)
-        cell.isSelected = currentlySelectedIndex == indexPath.row
+        cell.isSelected = !disableAutomaticCellSelection && currentlySelectedIndex == indexPath.row && selectedItems.contains(where: { $0.assetIdentifier == asset.localIdentifier })
         cell.isUserInteractionEnabled = !(isMultipleSelectionEnabled && isVideo)
         
         // Set correct selection number
@@ -187,14 +187,14 @@ extension YPLibraryVC: UICollectionViewDelegate {
             let cellIsInTheSelectionPool = isInSelectionPool(indexPath: indexPath)
             let cellIsCurrentlySelected = previouslySelectedIndexPath.row == currentlySelectedIndex
             if cellIsInTheSelectionPool {
-                if cellIsCurrentlySelected {
+                if cellIsCurrentlySelected && !disableAutomaticCellSelection {
                     deselect(indexPath: indexPath)
                 }
             } else if isLimitExceeded == false {
                 addToSelection(indexPath: indexPath)
             }
-
-            if (cellIsCurrentlySelected && !cellIsInTheSelectionPool) || !cellIsCurrentlySelected {
+            if (cellIsCurrentlySelected && !cellIsInTheSelectionPool) || !cellIsCurrentlySelected || disableAutomaticCellSelection {
+                disableAutomaticCellSelection = false
                 collectionView.cellForItem(at: indexPath)?.isSelected = true
             }
 
@@ -212,6 +212,7 @@ extension YPLibraryVC: UICollectionViewDelegate {
             }
             collectionView.reloadItems(at: [indexPath, previouslySelectedIndexPath])
         }
+        disableAutomaticCellSelection = false
     }
     
     public func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {

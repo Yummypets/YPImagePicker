@@ -20,6 +20,7 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
     public var currentlySelectedIndex: Int = 0
     internal let panGestureHelper = PanGestureHelper()
     internal var isInitialized = false
+    var disableAutomaticCellSelection = false
 
     // MARK: - Init
 
@@ -91,6 +92,7 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
     }
 
     func setAlbum(_ album: YPAlbum) {
+        disableAutomaticCellSelection = isMultipleSelectionEnabled
         if YPConfig.showsLibraryButtonInTitle {
             title = album.title
         } else {
@@ -252,12 +254,10 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         }
         
         if mediaManager.hasResultItems,
-        let firstAsset = mediaManager.getAsset(at: 0) {
+        let firstAsset = mediaManager.getAsset(with: selectedItems.last?.assetIdentifier) ?? mediaManager.getAsset(at: 0) {
             changeAsset(firstAsset)
             v.collectionView.reloadData()
-            v.collectionView.selectItem(at: IndexPath(row: 0, section: 0),
-                                        animated: false,
-                                        scrollPosition: UICollectionView.ScrollPosition())
+
             if !isMultipleSelectionEnabled && YPConfig.library.preSelectItemOnMultipleSelection {
                 addToSelection(indexPath: IndexPath(row: 0, section: 0))
             }
