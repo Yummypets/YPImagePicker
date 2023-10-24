@@ -342,4 +342,23 @@ public class LibraryMediaManager {
         }
         return (imageAsset, imageIndex)
     }
+
+    func getAsset(with id: String?) -> PHAsset? {
+        guard let fetchResult, let id else { return nil }
+        var imageAsset: PHAsset?
+
+        // Try first with current fetchResult, doesn't return asset if not in currently selected album
+        fetchResult.enumerateObjects { (asset: PHAsset, _, stop: UnsafeMutablePointer<ObjCBool>) in
+            if asset.localIdentifier == id {
+                imageAsset = asset
+                stop.pointee = true
+            }
+        }
+
+        if imageAsset == nil {
+            imageAsset = PHAsset.fetchAssets(withLocalIdentifiers: [id], options: PHFetchOptions()).firstObject
+        }
+
+        return imageAsset
+    }
 }
