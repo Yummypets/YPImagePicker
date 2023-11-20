@@ -183,11 +183,11 @@ public class LibraryMediaManager {
                     }
                 }
 
-                do {
-                    try videoCompositionTrack.insertTimeRange(trackTimeRange, of: videoTrack, at: CMTime.zero)
-                } catch {
-                    ypLog("Unexpected error: \(error).")
-                }
+//                do {
+//                    try videoCompositionTrack.insertTimeRange(trackTimeRange, of: videoTrack, at: CMTime.zero)
+//                } catch {
+//                    ypLog("Unexpected error: \(error).")
+//                }
 
                 var transform = videoTrack.preferredTransform
                 let videoSize = videoTrack.naturalSize.applying(transform)
@@ -197,7 +197,7 @@ public class LibraryMediaManager {
 
                 // 5. Configuring export session
                 let videoIsCropped = cropRect.size.width < abs(videoSize.width) || cropRect.size.height < abs(videoSize.height)
-                let presetName = compressionTypeOverride ?? (videoIsCropped || videoIsTrimmed || videoIsRotated || (shouldMute && videoNeedsProcessing) ? YPConfig.video.compression : AVAssetExportPresetPassthrough)
+//                let presetName = compressionTypeOverride ?? (videoIsCropped || videoIsTrimmed || videoIsRotated || (shouldMute && videoNeedsProcessing) ? YPConfig.video.compression : AVAssetExportPresetPassthrough)
 
                 var videoComposition:AVMutableVideoComposition?
 
@@ -225,13 +225,17 @@ public class LibraryMediaManager {
                     videoCompositionTrack.preferredTransform = transform
                 }
 
+
+                let presetName = AVAssetExportPresetHighestQuality
                 let fileURL = URL(fileURLWithPath: NSTemporaryDirectory())
                     .appendingUniquePathComponent(pathExtension: YPConfig.video.fileType.fileExtension)
                 let exportSession = assetComposition
                     .export(to: fileURL,
-                            videoComposition: videoComposition,
-                            removeOldFile: true,
                             presetName: presetName) { [weak self] session in
+//                    .export(to: fileURL,
+//                            videoComposition: videoComposition,
+//                            removeOldFile: true,
+//                            presetName: presetName) { [weak self] session in
                         DispatchQueue.main.async {
                             switch session.status {
                             case .completed:
