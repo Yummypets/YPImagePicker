@@ -74,4 +74,49 @@ internal struct YPPermissionManager {
             ypLog("Bug. Write to developers please.")
         }
     }
+
+    static func checkMicrophonePermissionAndAskIfNeeded(sourceVC: UIViewController,
+                                                        completion: @escaping YPPermissionManagerCompletion) {
+        if #available(iOS 17, *) {
+            let permission = AVAudioApplication.shared.recordPermission
+
+            switch permission {
+            case .granted:
+                completion(true)
+            case .denied:
+                let alert = YPPermissionDeniedPopup.buildGoToSettingsAlert(cancelBlock: {
+                    completion(false)
+                })
+                sourceVC.present(alert, animated: true, completion: nil)
+            case .undetermined:
+                AVAudioApplication.requestRecordPermission { granted in
+                    DispatchQueue.main.async {
+                        completion(granted)
+                    }
+                }
+            @unknown default:
+                ypLog("Bug. Write to developers please.")
+            }
+        } else {
+            let permission = AVAudioSession.sharedInstance().recordPermission
+
+            switch permission {
+            case .granted:
+                completion(true)
+            case .denied:
+                let alert = YPPermissionDeniedPopup.buildGoToSettingsAlert(cancelBlock: {
+                    completion(false)
+                })
+                sourceVC.present(alert, animated: true, completion: nil)
+            case .undetermined:
+                AVAudioSession.sharedInstance().requestRecordPermission { granted in
+                    DispatchQueue.main.async {
+                        completion(granted)
+                    }
+                }
+            @unknown default:
+                ypLog("Bug. Write to developers please.")
+            }
+        }
+    }
 }
