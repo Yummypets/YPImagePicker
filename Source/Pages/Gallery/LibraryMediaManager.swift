@@ -183,11 +183,13 @@ public class LibraryMediaManager {
                     }
                 }
 
-//                do {
-//                    try videoCompositionTrack.insertTimeRange(trackTimeRange, of: videoTrack, at: CMTime.zero)
-//                } catch {
-//                    ypLog("Unexpected error: \(error).")
-//                }
+                if !YPImagePickerConfiguration.shared.allowPhotoAndVideoSelection {
+                    do {
+                        try videoCompositionTrack.insertTimeRange(trackTimeRange, of: videoTrack, at: CMTime.zero)
+                    } catch {
+                        ypLog("Unexpected error: \(error).")
+                    }
+                }
 
                 var transform = videoTrack.preferredTransform
                 let videoSize = videoTrack.naturalSize.applying(transform)
@@ -197,7 +199,13 @@ public class LibraryMediaManager {
 
                 // 5. Configuring export session
                 let videoIsCropped = cropRect.size.width < abs(videoSize.width) || cropRect.size.height < abs(videoSize.height)
-//                let presetName = compressionTypeOverride ?? (videoIsCropped || videoIsTrimmed || videoIsRotated || (shouldMute && videoNeedsProcessing) ? YPConfig.video.compression : AVAssetExportPresetPassthrough)
+
+                var presetName: String = ""
+                if !YPImagePickerConfiguration.shared.allowPhotoAndVideoSelection {
+                    presetName = compressionTypeOverride ?? (videoIsCropped || videoIsTrimmed || videoIsRotated || (shouldMute && videoNeedsProcessing) ? YPConfig.video.compression : AVAssetExportPresetPassthrough)
+                } else {
+                    presetName = AVAssetExportPresetHighestQuality
+                }
 
                 var videoComposition:AVMutableVideoComposition?
 
@@ -226,12 +234,9 @@ public class LibraryMediaManager {
                 }
 
 
-                let presetName = AVAssetExportPresetHighestQuality
                 let fileURL = URL(fileURLWithPath: NSTemporaryDirectory())
                     .appendingUniquePathComponent(pathExtension: YPConfig.video.fileType.fileExtension)
                 let exportSession = assetComposition
-//                    .export(to: fileURL,
-//                            presetName: presetName) { [weak self] session in
                     .export(to: fileURL,
                             videoComposition: videoComposition,
                             removeOldFile: true,

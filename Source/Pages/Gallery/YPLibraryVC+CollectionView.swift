@@ -144,7 +144,16 @@ extension YPLibraryVC: UICollectionViewDelegate {
         let isVideo = (asset.mediaType == .video)
         cell.durationLabel.isHidden = !isVideo
         cell.durationLabel.text = isVideo ? YPHelper.formattedStrigFrom(asset.duration) : ""
-        cell.multipleSelectionIndicator.isHidden = !isMultipleSelectionEnabled
+
+        if !YPImagePickerConfiguration.shared.allowPhotoAndVideoSelection {
+            cell.multipleSelectionIndicator.isHidden = !isMultipleSelectionEnabled || (isMultipleSelectionEnabled && isVideo)
+            cell.isUserInteractionEnabled = !(isMultipleSelectionEnabled && isVideo)
+        } else {
+            cell.multipleSelectionIndicator.isHidden = !isMultipleSelectionEnabled
+            cell.isUserInteractionEnabled = true
+        }
+
+
         cell.isSelected = !disableAutomaticCellSelection && currentlySelectedIndex == indexPath.row && selectedItems.contains(where: { $0.assetIdentifier == asset.localIdentifier })
         cell.isUserInteractionEnabled = true
         
