@@ -145,6 +145,8 @@ extension YPLibraryVC: UICollectionViewDelegate {
         cell.durationLabel.isHidden = !isVideo
         cell.durationLabel.text = isVideo ? YPHelper.formattedStrigFrom(asset.duration) : ""
 
+        cell.isSelected = !disableAutomaticCellSelection && currentlySelectedIndex == indexPath.row && selectedItems.contains(where: { $0.assetIdentifier == asset.localIdentifier })
+
         if !YPImagePickerConfiguration.shared.library.allowPhotoAndVideoSelection {
             cell.multipleSelectionIndicator.isHidden = !isMultipleSelectionEnabled || (isMultipleSelectionEnabled && isVideo)
             cell.isUserInteractionEnabled = !(isMultipleSelectionEnabled && isVideo)
@@ -152,9 +154,6 @@ extension YPLibraryVC: UICollectionViewDelegate {
             cell.multipleSelectionIndicator.isHidden = !isMultipleSelectionEnabled
             cell.isUserInteractionEnabled = true
         }
-
-
-        cell.isSelected = !disableAutomaticCellSelection && currentlySelectedIndex == indexPath.row && selectedItems.contains(where: { $0.assetIdentifier == asset.localIdentifier })
 
         // Set correct selection number
         if let index = selectedItems.firstIndex(where: { $0.assetIdentifier == asset.localIdentifier }) {
