@@ -233,7 +233,6 @@ public class LibraryMediaManager {
                     videoCompositionTrack.preferredTransform = transform
                 }
 
-
                 let fileURL = URL(fileURLWithPath: NSTemporaryDirectory())
                     .appendingUniquePathComponent(pathExtension: YPConfig.video.fileType.fileExtension)
                 let exportSession = assetComposition

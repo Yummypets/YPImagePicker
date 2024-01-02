@@ -155,8 +155,7 @@ extension YPLibraryVC: UICollectionViewDelegate {
 
 
         cell.isSelected = !disableAutomaticCellSelection && currentlySelectedIndex == indexPath.row && selectedItems.contains(where: { $0.assetIdentifier == asset.localIdentifier })
-        cell.isUserInteractionEnabled = true
-        
+
         // Set correct selection number
         if let index = selectedItems.firstIndex(where: { $0.assetIdentifier == asset.localIdentifier }) {
             let currentSelection = selectedItems[index]
