@@ -183,7 +183,7 @@ public class LibraryMediaManager {
                     }
                 }
 
-                if !YPImagePickerConfiguration.shared.allowPhotoAndVideoSelection {
+                if !YPImagePickerConfiguration.shared.library.allowPhotoAndVideoSelection {
                     do {
                         try videoCompositionTrack.insertTimeRange(trackTimeRange, of: videoTrack, at: CMTime.zero)
                     } catch {
@@ -201,7 +201,7 @@ public class LibraryMediaManager {
                 let videoIsCropped = cropRect.size.width < abs(videoSize.width) || cropRect.size.height < abs(videoSize.height)
 
                 var presetName: String = ""
-                if !YPImagePickerConfiguration.shared.allowPhotoAndVideoSelection {
+                if !YPImagePickerConfiguration.shared.library.allowPhotoAndVideoSelection {
                     presetName = compressionTypeOverride ?? (videoIsCropped || videoIsTrimmed || videoIsRotated || (shouldMute && videoNeedsProcessing) ? YPConfig.video.compression : AVAssetExportPresetPassthrough)
                 } else {
                     presetName = AVAssetExportPresetHighestQuality

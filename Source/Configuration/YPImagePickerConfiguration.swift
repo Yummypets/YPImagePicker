@@ -68,9 +68,6 @@ public struct YPImagePickerConfiguration {
     /// Adds a Video Trimmer step in the video taking process.  Defaults to true
     public var showsVideoTrimmer = true
 
-    /// Allows selection of both photo and video from the photo gallery.
-    public var allowPhotoAndVideoSelection : Bool = false
-    
     /// Enables you to opt out from saving new (or old but filtered) images to the
     /// user's photo library. Defaults to true.
     public var shouldSaveNewPicturesToAlbum = true
@@ -256,6 +253,9 @@ public struct YPConfigLibrary {
 
     /// Set this to true if you want to allow the library video picker to zoom / pan to crop videos
     public var allowZoomToCrop = true
+
+    /// Allow selection of both photo and video from the photo gallery.
+    public var allowPhotoAndVideoSelection : Bool = false
 }
 
 /// Encapsulates video specific settings.

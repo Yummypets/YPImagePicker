@@ -145,7 +145,7 @@ extension YPLibraryVC: UICollectionViewDelegate {
         cell.durationLabel.isHidden = !isVideo
         cell.durationLabel.text = isVideo ? YPHelper.formattedStrigFrom(asset.duration) : ""
 
-        if !YPImagePickerConfiguration.shared.allowPhotoAndVideoSelection {
+        if !YPImagePickerConfiguration.shared.library.allowPhotoAndVideoSelection {
             cell.multipleSelectionIndicator.isHidden = !isMultipleSelectionEnabled || (isMultipleSelectionEnabled && isVideo)
             cell.isUserInteractionEnabled = !(isMultipleSelectionEnabled && isVideo)
         } else {

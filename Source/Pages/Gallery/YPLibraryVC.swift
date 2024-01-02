@@ -435,7 +435,7 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                                         y: yCrop,
                                         width: ts.width,
                                         height: ts.height)
-            if !YPImagePickerConfiguration.shared.allowPhotoAndVideoSelection {
+            if !YPImagePickerConfiguration.shared.library.allowPhotoAndVideoSelection {
                 mediaManager.fetchVideoUrlAndCrop(for: asset, cropRect: resultCropRect, callback: callback)
             } else {
                 mediaManager.fetchVideoUrl(for: asset, callback: callback)
