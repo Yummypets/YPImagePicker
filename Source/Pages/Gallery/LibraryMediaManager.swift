@@ -183,12 +183,10 @@ public class LibraryMediaManager {
                     }
                 }
 
-                if !YPImagePickerConfiguration.shared.library.allowPhotoAndVideoSelection {
-                    do {
-                        try videoCompositionTrack.insertTimeRange(trackTimeRange, of: videoTrack, at: CMTime.zero)
-                    } catch {
-                        ypLog("Unexpected error: \(error).")
-                    }
+                do {
+                    try videoCompositionTrack.insertTimeRange(trackTimeRange, of: videoTrack, at: CMTime.zero)
+                } catch {
+                    ypLog("Unexpected error: \(error).")
                 }
 
                 var transform = videoTrack.preferredTransform
@@ -200,13 +198,7 @@ public class LibraryMediaManager {
                 // 5. Configuring export session
                 let videoIsCropped = cropRect.size.width < abs(videoSize.width) || cropRect.size.height < abs(videoSize.height)
 
-                var presetName: String = ""
-                if !YPImagePickerConfiguration.shared.library.allowPhotoAndVideoSelection {
-                    presetName = compressionTypeOverride ?? (videoIsCropped || videoIsTrimmed || videoIsRotated || (shouldMute && videoNeedsProcessing) ? YPConfig.video.compression : AVAssetExportPresetPassthrough)
-                } else {
-                    presetName = AVAssetExportPresetHighestQuality
-                }
-
+                let presetName = compressionTypeOverride ?? (videoIsCropped || videoIsTrimmed || videoIsRotated || (shouldMute && videoNeedsProcessing) ? YPConfig.video.compression : AVAssetExportPresetPassthrough)
                 var videoComposition:AVMutableVideoComposition?
 
                 if videoIsCropped {
