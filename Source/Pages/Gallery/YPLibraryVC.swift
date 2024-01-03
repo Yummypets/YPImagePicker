@@ -206,16 +206,12 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                shouldSelectByDelegate,
                let asset = mediaManager.getAsset(at: currentlySelectedIndex) {
 
-               if  YPImagePickerConfiguration.shared.library.allowPhotoAndVideoSelection {
-                    currentlySelectedIndex = 0
-                } else {
-                    // Change to first image if video is selected when switching to multiple selection mode
-                    if asset.mediaType == .video,
-                       case (let image?, let index?) = mediaManager.getFirstImageAsset()
-                    {
-                        currentlySelectedIndex = index
-                        changeAsset(image)
-                    }
+                if !YPImagePickerConfiguration.shared.library.allowPhotoAndVideoSelection,
+                   asset.mediaType == .video,
+                   case (let image?, let index?) = mediaManager.getFirstImageAsset()
+                {
+                    currentlySelectedIndex = index
+                    changeAsset(image)
                 }
                 addToSelection(indexPath: IndexPath(row: currentlySelectedIndex, section: 0))
             }
