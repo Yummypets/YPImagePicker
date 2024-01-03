@@ -473,17 +473,17 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                     }
 
                     // Fill result media items array
-                    var resultMediaItems: [YPMediaItem] = []
+                    var resultMediaItems: [YPMediaItem?] = Array(repeating: nil, count: selectedAssets.count)
                     let asyncGroup = DispatchGroup()
 
-                    for asset in selectedAssets {
+                    for (index, asset) in selectedAssets.enumerated() {
                         asyncGroup.enter()
 
                         switch asset.asset.mediaType {
                         case .image:
                             self.fetchImageAndCrop(for: asset.asset, withCropRect: asset.cropRect) { image, exifMeta in
                                 let photo = YPMediaPhoto(image: image.resizedImageIfNeeded(), exifMeta: exifMeta, asset: asset.asset)
-                                resultMediaItems.append(YPMediaItem.photo(p: photo))
+                                resultMediaItems[index] = YPMediaItem.photo(p: photo)
                                 asyncGroup.leave()
                             }
 
@@ -492,7 +492,7 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                                 if let videoURL = videoURL {
                                     let videoItem = YPMediaVideo(thumbnail: thumbnailFromVideoPath(videoURL),
                                                                  videoURL: videoURL, asset: asset.asset)
-                                    resultMediaItems.append(YPMediaItem.video(v: videoItem))
+                                    resultMediaItems[index] = YPMediaItem.video(v: videoItem)
                                 } else {
                                     ypLog("YPLibraryVC -> selectedMedia -> Problems with fetching videoURL.")
                                 }
@@ -504,7 +504,7 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                     }
 
                     asyncGroup.notify(queue: .main) {
-                        multipleItemsCallback(resultMediaItems)
+                        multipleItemsCallback(resultMediaItems.compactMap { $0 })
                         self.delegate?.libraryViewFinishedLoading()
                     }
                 } else {
