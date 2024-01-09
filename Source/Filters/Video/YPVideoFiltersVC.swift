@@ -45,6 +45,7 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
     public var imageGenerator: AVAssetImageGenerator?
     public var isFromSelectionVC = false
     public var shouldMute = false
+    public var shouldShowDone = false
 
     var coverImageTime: CMTime?
     var coverTrimTimes: (startTime: CMTime, endTime: CMTime)?
@@ -229,7 +230,7 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
     }
 
     private func setupRightBarButtonItem() {
-        let rightBarButtonTitle = isFromSelectionVC ? YPConfig.wordings.done : YPConfig.wordings.next
+        let rightBarButtonTitle = shouldShowDone || isFromSelectionVC ? YPConfig.wordings.done : YPConfig.wordings.next // Test 3
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: rightBarButtonTitle,
                                                             style: .done,
                                                             target: self,
