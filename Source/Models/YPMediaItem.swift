@@ -37,7 +37,9 @@ public class YPMediaPhoto {
 
 public class YPMediaVideo {
     
-    public var thumbnail: UIImage
+    public var thumbnail: UIImage { return modifiedThumbnail ?? originalThumbnail }
+    public let originalThumbnail: UIImage
+    public var modifiedThumbnail: UIImage?
     public var url: URL
     public let fromCamera: Bool
     public var asset: PHAsset?
@@ -47,7 +49,7 @@ public class YPMediaVideo {
     public var cropRect: CGRect?
 
     public init(thumbnail: UIImage, videoURL: URL, fromCamera: Bool = false, asset: PHAsset? = nil) {
-        self.thumbnail = thumbnail
+        self.originalThumbnail = thumbnail
         self.url = videoURL
         self.fromCamera = fromCamera
         self.asset = asset
