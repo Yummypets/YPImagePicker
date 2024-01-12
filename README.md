@@ -7,8 +7,6 @@
 YPImagePicker is an instagram-like photo/video picker for iOS written in pure Swift. It is feature-rich and highly customizable to match your App's requirements.
 
 [![Language: Swift 5](https://img.shields.io/badge/language-swift%205-f48041.svg?style=flat)](https://developer.apple.com/swift)
-[![Version](https://img.shields.io/cocoapods/v/YPImagePicker.svg?style=flat)](http://cocoapods.org/pods/YPImagePicker)
-[![Platform](https://img.shields.io/cocoapods/p/YPImagePicker.svg?style=flat)](http://cocoapods.org/pods/YPImagePicker)
 [![SPM compatible](https://img.shields.io/badge/SPM-compatible-4BC51D.svg?style=flat)](https://swift.org/package-manager/)
 [![codebeat badge](https://codebeat.co/badges/9710a89d-b1e2-4e55-a4a2-3ae1f98f4c53)](https://codebeat.co/projects/github-com-yummypets-ypimagepicker-master)
 [![License: MIT](http://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat)](https://github.com/Yummypets/YPImagePicker/blob/master/LICENSE)
@@ -16,10 +14,6 @@ YPImagePicker is an instagram-like photo/video picker for iOS written in pure Sw
 
 
 [Installation](#installation) - [Configuration](#configuration) - [Usage](#usage) - [Languages](#languages) - [UI Customization](#ui-customization)
-
-
-Give it a quick try :
-`pod repo update` then `pod try YPImagePicker`
 
 <img src="https://raw.githubusercontent.com/Yummypets/YPImagePicker/master/Images/library.PNG" width="200px" > <img src="https://raw.githubusercontent.com/Yummypets/YPImagePicker/master/Images/photo.PNG" width="200px" > <img src="https://raw.githubusercontent.com/Yummypets/YPImagePicker/master/Images/video.PNG" width="200px" > <img src="https://raw.githubusercontent.com/Yummypets/YPImagePicker/master/Images/filters.PNG" width="200px" >
 
@@ -40,18 +34,6 @@ Those features are available just with a few lines of code!
 And many more...
 
 ## Installation
-
-#### Using [CocoaPods](http://cocoapods.org/)
-
-First be sure to run `pod repo update` to get the latest version available.
-
-Add `pod 'YPImagePicker'` to your `Podfile` and run `pod install`. Also add `use_frameworks!` to the `Podfile`.
-
-```
-target 'MyApp'
-pod 'YPImagePicker'
-use_frameworks!
-```
 
 #### Using [Swift Package Manager](https://swift.org/package-manager/)
 
