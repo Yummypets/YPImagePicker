@@ -6,6 +6,6 @@ target 'Example' do
 
   # Pods for YPImagePickerExample
   pod 'SteviaLayout', '= 5.1.2'
-  pod 'PryntTrimmerView', '= 4.0.2'
+  pod 'PryntTrimmerView', :git => 'https://github.com/rewardStyle/PryntTrimmerView.git'
 
 end
