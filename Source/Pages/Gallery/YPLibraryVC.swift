@@ -492,6 +492,7 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                                 if let videoURL = videoURL {
                                     let videoItem = YPMediaVideo(thumbnail: thumbnailFromVideoPath(videoURL),
                                                                  videoURL: videoURL, asset: asset.asset)
+                                    videoItem.cropRect = self.getCropRect(for: asset.asset)
                                     resultMediaItems[index] = YPMediaItem.video(v: videoItem)
                                 } else {
                                     ypLog("YPLibraryVC -> selectedMedia -> Problems with fetching videoURL.")
