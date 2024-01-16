@@ -55,7 +55,7 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
         return v
     }()
 
-    var timeStampTrimmerView: YPTimeStampTrimmerView = {
+    public var timeStampTrimmerView: YPTimeStampTrimmerView = {
         let view = YPTimeStampTrimmerView()
         view.trimmerView.mainColor = YPConfig.colors.trimmerMainColor
         view.trimmerView.handleColor = YPConfig.colors.trimmerHandleColor

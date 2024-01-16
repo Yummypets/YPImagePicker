@@ -10,7 +10,7 @@ import AVFoundation
 import UIKit
 import PryntTrimmerView
 
-class YPTimeStampTrimmerView: UIView {
+public class YPTimeStampTrimmerView: UIView {
 
     let trimmerView = TrimmerView()
     let timeStampView = UIView()
@@ -40,7 +40,7 @@ class YPTimeStampTrimmerView: UIView {
         timeStampView.backgroundColor = .black
     }
 
-    override func layoutSubviews() {
+    public override func layoutSubviews() {
         if !isLaidOut {
             isLaidOut = true
             constraintTrimView()
@@ -107,27 +107,27 @@ class YPTimeStampTrimmerView: UIView {
 }
 
 extension YPTimeStampTrimmerView: TrimmerViewDelegate {
-    func didDragLeftHandleBar(to updatedConstant: CGFloat) {
+    public func didDragLeftHandleBar(to updatedConstant: CGFloat) {
         self.leftHandleTimeStampConstraint?.constant = updatedConstant
     }
 
-    func didBeginDraggingLeftHandleBar() {
+    public func didBeginDraggingLeftHandleBar() {
         leftHandleTimeStamp.isHidden = false
     }
 
-    func didBeginDraggingRightHandleBar() {
+    public func didBeginDraggingRightHandleBar() {
         rightHandleTimeStamp.isHidden = false
     }
 
-    func didDragRightHandleBar(to updatedConstant: CGFloat) {
+    public func didDragRightHandleBar(to updatedConstant: CGFloat) {
         self.rightHandleTimeStampConstraint?.constant = updatedConstant
     }
 
-    func didChangePositionBar(_ playerTime: CMTime) {
+    public func didChangePositionBar(_ playerTime: CMTime) {
         // Implement if needed
     }
 
-    func positionBarStoppedMoving(_ playerTime: CMTime) {
+    public func positionBarStoppedMoving(_ playerTime: CMTime) {
         // Implement if needed
         rightHandleTimeStamp.isHidden = true
         leftHandleTimeStamp.isHidden = true
