@@ -1328,8 +1328,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/rewardstyle/prynttrimmerview";
 			requirement = {
-				kind = exactVersion;
-				version = 4.0.2;
+				branch = "CC-505-creators-can-view-video-lengths-when-editing-in-storytelling-posts";
+				kind = branch;
 			};
 		};
 		EBA37BCB26F75BCC005DAAD4 /* XCRemoteSwiftPackageReference "Stevia" */ = {

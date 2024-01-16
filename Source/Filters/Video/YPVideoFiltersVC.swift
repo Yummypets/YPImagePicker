@@ -531,6 +531,23 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
 
 // MARK: - TrimmerViewDelegate
 extension YPVideoFiltersVC: TrimmerViewDelegate {
+
+    public func didDragRightHandleBar(to updatedConstant: CGFloat) {
+        // Implement as needed
+    }
+    
+    public func didDragLeftHandleBar(to updatedConstant: CGFloat) {
+        // Implement as needed
+    }
+    
+    public func didBeginDraggingRightHandleBar() {
+        // Implement as needed
+    }
+    
+    public func didBeginDraggingLeftHandleBar() {
+        // Implement as needed
+    }
+    
     public func positionBarStoppedMoving(_ playerTime: CMTime) {
         // user has lifted off trimmer handle so restart the video at trimmer start time
         if let startTime = trimmerView.startTime {
