@@ -10,7 +10,7 @@ import AVFoundation
 import UIKit
 import PryntTrimmerView
 
-class TimeStampTrimmerView: UIView {
+class YPTimeStampTrimmerView: UIView {
 
     let trimmerView = TrimmerView()
     let timeStampView = UIView()
@@ -106,7 +106,7 @@ class TimeStampTrimmerView: UIView {
     }
 }
 
-extension TimeStampTrimmerView: TrimmerViewDelegate {
+extension YPTimeStampTrimmerView: TrimmerViewDelegate {
     func didDragLeftHandleBar(to updatedConstant: CGFloat) {
         self.leftHandleTimeStampConstraint?.constant = updatedConstant
     }
