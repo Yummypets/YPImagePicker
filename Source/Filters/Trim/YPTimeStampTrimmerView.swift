@@ -19,6 +19,14 @@ public class YPTimeStampTrimmerView: UIView {
     private(set) var rightHandleTimeStampConstraint: NSLayoutConstraint?
     private(set) var leftHandleTimeStampConstraint: NSLayoutConstraint?
 
+    public var startTime: CMTime? {
+        trimmerView.startTime
+    }
+
+    public var endTime: CMTime? {
+        trimmerView.endTime
+    }
+
     private(set) var isLaidOut = false
 
     override init(frame: CGRect) {
