@@ -158,8 +158,6 @@ public class YPTimeStampTrimmerView: UIView {
         trimmerView.isHidden = shouldHide
         if style == .trimmerWithTimeStamps {
             timeStampScrollableView.isHidden = shouldHide
-            rightHandleTimeStamp.isHidden = shouldHide
-            leftHandleTimeStamp.isHidden = shouldHide
         }
     }
 
@@ -198,10 +196,12 @@ extension YPTimeStampTrimmerView: TrimmerViewDelegate {
     }
 
     public func didChangePositionBar(_ playerTime: CMTime) {
-        if rightHandleTimeStamp.isHidden {
-            leftHandleTimeStamp.attributedText = constructAttributedString(for: playerTime.durationText)
-        } else if leftHandleTimeStamp.isHidden {
-            rightHandleTimeStamp.attributedText = constructAttributedString(for: playerTime.durationText)
+        if style == .trimmerWithTimeStamps {
+            if rightHandleTimeStamp.isHidden {
+                leftHandleTimeStamp.attributedText = constructAttributedString(for: playerTime.durationText)
+            } else {
+                rightHandleTimeStamp.attributedText = constructAttributedString(for: playerTime.durationText)
+            }
         }
         timeStampTrimmerViewDelegate?.didChangePositionBar(to: playerTime)
     }
