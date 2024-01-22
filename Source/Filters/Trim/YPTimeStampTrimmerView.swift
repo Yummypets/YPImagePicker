@@ -29,8 +29,15 @@ public class YPTimeStampTrimmerView: UIView {
     let leftHandleTimeStamp = UILabel()
     private(set) var rightHandleTimeStampConstraint: NSLayoutConstraint?
     private(set) var leftHandleTimeStampConstraint: NSLayoutConstraint?
+    private(set) var trimViewTopAnchor: NSLayoutConstraint?
     private(set) var isLaidOut = false
+    private(set) var style: TrimmerStyle = .default
     weak var timeStampTrimmerViewDelegate: YPTimeStampTrimmerViewDelegate?
+
+    enum TrimmerStyle {
+        case `default`
+        case trimmerWithTimeStamps
+    }
 
     public var startTime: CMTime? {
         trimmerView.startTime
@@ -113,7 +120,8 @@ public class YPTimeStampTrimmerView: UIView {
     func constraintTrimView() {
         trimmerView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
         trimmerView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
-        trimmerView.topAnchor.constraint(equalTo: topAnchor, constant: 15).isActive = true
+        trimViewTopAnchor = trimmerView.topAnchor.constraint(equalTo: topAnchor, constant: 15)
+        trimViewTopAnchor?.isActive = true
         trimmerView.heightAnchor.constraint(equalToConstant: 60).isActive = true
     }
 
@@ -130,16 +138,29 @@ public class YPTimeStampTrimmerView: UIView {
         return NSMutableAttributedString(string: text, attributes: [NSAttributedString.Key.kern: 0.1, NSAttributedString.Key.paragraphStyle: paragraphStyle])
     }
 
-    func configure(asset: AVAsset, delegate: YPTimeStampTrimmerViewDelegate?) {
+    func updateTrimmerInterface(for style: TrimmerStyle) {
+        if style == .default {
+            leftHandleTimeStamp.isHidden = true
+            rightHandleTimeStamp.isHidden = true
+            timeStampScrollableView.isHidden = true
+            trimViewTopAnchor?.constant = 0
+        }
+    }
+
+    func configure(asset: AVAsset, delegate: YPTimeStampTrimmerViewDelegate?, style: TrimmerStyle) {
         trimmerView.asset = asset
         timeStampTrimmerViewDelegate = delegate
+        self.style = style
+        updateTrimmerInterface(for: style)
     }
 
     func toggleTrimmerVisibility(shouldHide: Bool) {
         trimmerView.isHidden = shouldHide
-        timeStampScrollableView.isHidden = shouldHide
-        rightHandleTimeStamp.isHidden = shouldHide
-        leftHandleTimeStamp.isHidden = shouldHide
+        if style == .trimmerWithTimeStamps {
+            timeStampScrollableView.isHidden = shouldHide
+            rightHandleTimeStamp.isHidden = shouldHide
+            leftHandleTimeStamp.isHidden = shouldHide
+        }
     }
 
     public func seek(to time: CMTime) {
