@@ -85,7 +85,11 @@ public struct YPColors {
     public var trimmerHandleColor: UIColor = .ypSystemBackground
     /// The color of the position indicator
     public var positionLineColor: UIColor = .ypSystemBackground
-    
+    /// The color of the trimmer time stamp
+    public var trimmerTimeStampColor: UIColor = .ypSystemBackground
+    /// The color of the trimmer time bar
+    public var trimmerTimeBarColor: UIColor = .ypSystemBackground
+
     // MARK: - Cover selector
     
     /// The color of the cover selector border

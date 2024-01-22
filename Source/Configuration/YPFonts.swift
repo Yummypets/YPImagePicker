@@ -43,4 +43,8 @@ public struct YPFonts {
 
     /// The font used for album section header labels (if album sectioning is turned on)
     public var albumSectionHeaderFont: UIFont?
+
+    /// The font used for the trimmer timestamps
+    public var trimmerTimeStampFont: UIFont?
+
 }
