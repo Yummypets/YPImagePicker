@@ -155,7 +155,7 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
 
         // should be harmless to start the timer again, just ensure that this gets removed on disappear. we need to start this timer
         // here because the user can tap the video to start playback and this view controller isn't informed when that occurs.
-        if let startTime = timeStampTrimmerView.trimmerView.startTime {
+        if let startTime = timeStampTrimmerView.startTime {
             // seek to start time first
             videoView.player.seek(to: startTime)
         }
@@ -187,7 +187,7 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
 
     private func prepareThumbnails() {
         if vcType == .Trimmer {
-            if timeStampTrimmerView.trimmerView.asset != nil {
+            if timeStampTrimmerView.asset != nil {
                 return
             }
 
@@ -306,8 +306,8 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
 
         do {
             let asset = AVURLAsset(url: inputVideo.url)
-            let startTime = timeStampTrimmerView.trimmerView.startTime ?? CMTime.zero
-            let endTime = timeStampTrimmerView.trimmerView.endTime ?? inputAsset.duration
+            let startTime = timeStampTrimmerView.startTime ?? CMTime.zero
+            let endTime = timeStampTrimmerView.endTime ?? inputAsset.duration
 
             // check if any trimming and cropping is involved - wc
             let untrimmed = CMTimeCompare(startTime, CMTime.zero) == 0 && CMTimeCompare(endTime, inputAsset.duration) == 0
@@ -386,7 +386,7 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
 
         vcType = .Trimmer
 
-        if let startTime = timeStampTrimmerView.trimmerView.startTime {
+        if let startTime = timeStampTrimmerView.startTime {
             videoView.player.seek(to: startTime)
             startPlaybackTimeChecker()
         }
@@ -422,8 +422,8 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
     // TODO: Now the trimmer framework doesn't support an easy way to do this.
     // Need to rethink a flow or search other ways.
     private func updateCoverPickerBounds() {
-        if let startTime = timeStampTrimmerView.trimmerView.startTime,
-           let endTime = timeStampTrimmerView.trimmerView.endTime {
+        if let startTime = timeStampTrimmerView.startTime,
+           let endTime = timeStampTrimmerView.endTime {
             if let selectedCoverTime = coverThumbSelectorView.selectedTime {
                 let range = CMTimeRange(start: startTime, end: endTime)
                 if !range.containsTime(selectedCoverTime) {
@@ -447,7 +447,7 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
             return // ignore notifications that aren't for this player item
         }
 
-        if let startTime = timeStampTrimmerView.trimmerView.startTime {
+        if let startTime = timeStampTrimmerView.startTime {
             videoView.player.actionAtItemEnd = .none
             videoView.player.seek(to: startTime)
             videoView.player.play()
@@ -469,13 +469,13 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
     }
     
     @objc private func onPlaybackTimeChecker() {
-        guard let startTime = timeStampTrimmerView.trimmerView.startTime,
-              let endTime = timeStampTrimmerView.trimmerView.endTime else {
+        guard let startTime = timeStampTrimmerView.startTime,
+              let endTime = timeStampTrimmerView.endTime else {
             return
         }
         
         let playBackTime = videoView.player.currentTime()
-        timeStampTrimmerView.trimmerView.seek(to: playBackTime)
+        timeStampTrimmerView.seek(to: playBackTime)
 
         if playBackTime >= endTime {
             videoView.player.seek(to: startTime,
@@ -511,8 +511,8 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
 
     private func resetCoverTrackIfNeeded() -> Bool{
         if YPConfig.video.coverSelectionTrimmed,
-           let startTime = timeStampTrimmerView.trimmerView.startTime,
-           let endTime = timeStampTrimmerView.trimmerView.endTime,
+           let startTime = timeStampTrimmerView.startTime,
+           let endTime = timeStampTrimmerView.endTime,
            startTime != coverTrimTimes?.startTime || endTime != coverTrimTimes?.endTime {
             let timerange = CMTimeRange(start: startTime, end: endTime)
             mediaManager.fetchVideoUrlAndCrop(for: inputVideo.asset!, cropRect: inputVideo.cropRect!, timeRange: timerange, shouldMute: false, compressionTypeOverride: AVAssetExportPresetPassthrough) { [weak self] (url) in
@@ -539,7 +539,7 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
 extension YPVideoFiltersVC: YPTimeStampTrimmerViewDelegate {
     public func positionBarDidStopMoving(_ playerTime: CMTime) {
         // user has lifted off trimmer handle so restart the video at trimmer start time
-        if let startTime = timeStampTrimmerView.trimmerView.startTime {
+        if let startTime = timeStampTrimmerView.startTime {
             videoView.player.seek(to: startTime)
             videoView.play()
             videoView.removeReachEndObserver() // videoView.play() adds reach end observer so we need to remove it again.

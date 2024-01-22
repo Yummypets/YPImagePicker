@@ -40,6 +40,10 @@ public class YPTimeStampTrimmerView: UIView {
         trimmerView.endTime
     }
 
+    public var asset: AVAsset? {
+        trimmerView.asset
+    }
+
     // MARK: - Init
 
     public override func layoutSubviews() {
@@ -136,6 +140,10 @@ public class YPTimeStampTrimmerView: UIView {
         timeStampScrollableView.isHidden = shouldHide
         rightHandleTimeStamp.isHidden = shouldHide
         leftHandleTimeStamp.isHidden = shouldHide
+    }
+
+    public func seek(to time: CMTime) {
+        trimmerView.seek(to: time)
     }
 }
 
