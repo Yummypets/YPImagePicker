@@ -10,14 +10,27 @@ import AVFoundation
 import UIKit
 import PryntTrimmerView
 
+public protocol YPTimeStampTrimmerViewDelegate: AnyObject {
+    func positionBarDidStopMoving(_ playerTime: CMTime)
+    func didChangePositionBar(to playerTime: CMTime)
+}
+
 public class YPTimeStampTrimmerView: UIView {
 
+    // MARK: - Properties
+
+    var timeBarColor: UIColor?
+    var timeStampFont: UIFont?
+    var timeStampColor: UIColor?
+
     let trimmerView = TrimmerView()
-    let timeStampView = UIView()
+    let timeStampScrollableView = YPTimeStampScrollableView()
     let rightHandleTimeStamp = UILabel()
     let leftHandleTimeStamp = UILabel()
     private(set) var rightHandleTimeStampConstraint: NSLayoutConstraint?
     private(set) var leftHandleTimeStampConstraint: NSLayoutConstraint?
+    private(set) var isLaidOut = false
+    weak var timeStampTrimmerViewDelegate: YPTimeStampTrimmerViewDelegate?
 
     public var startTime: CMTime? {
         trimmerView.startTime
@@ -27,29 +40,11 @@ public class YPTimeStampTrimmerView: UIView {
         trimmerView.endTime
     }
 
-    private(set) var isLaidOut = false
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-       setupSubviews()
-    }
-
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupSubviews()
-    }
-
-    func setupSubviews() {
-        setupTrimmerView()
-        setupTimeStampView()
-        setupRightHandleTimeStamp()
-        setupLeftHandleTimeStamp()
-        backgroundColor = .darkGray
-        timeStampView.backgroundColor = .black
-    }
+    // MARK: - Init
 
     public override func layoutSubviews() {
         if !isLaidOut {
+            setupSubviews()
             isLaidOut = true
             constraintTrimView()
             constraintTimeStampView()
@@ -58,20 +53,39 @@ public class YPTimeStampTrimmerView: UIView {
         }
     }
 
+    // MARK: - UI Configuration
+
+    func setupSubviews() {
+        setupTrimmerView()
+        setupTimeStampView()
+        setupRightHandleTimeStamp()
+        setupLeftHandleTimeStamp()
+    }
+
     func setupLeftHandleTimeStamp() {
         leftHandleTimeStamp.translatesAutoresizingMaskIntoConstraints = false
         leftHandleTimeStamp.isHidden = true
         addSubview(leftHandleTimeStamp)
-        leftHandleTimeStamp.backgroundColor = .gray
-        leftHandleTimeStamp.text = "0:00"
+        leftHandleTimeStamp.text = ""
+        leftHandleTimeStamp.textColor = timeStampColor
+        leftHandleTimeStamp.font = timeStampFont
     }
 
     func setupRightHandleTimeStamp() {
         rightHandleTimeStamp.translatesAutoresizingMaskIntoConstraints = false
         rightHandleTimeStamp.isHidden = true
         addSubview(rightHandleTimeStamp)
-        rightHandleTimeStamp.backgroundColor = .gray
-        rightHandleTimeStamp.text = "0:00"
+        rightHandleTimeStamp.text = ""
+        rightHandleTimeStamp.textColor = timeStampColor
+        rightHandleTimeStamp.font = timeStampFont
+    }
+
+    func setupTimeStampView() {
+        timeStampScrollableView.translatesAutoresizingMaskIntoConstraints = false
+        timeStampScrollableView.timeBarColor = timeBarColor
+        timeStampScrollableView.timeStampFont = timeStampFont
+        timeStampScrollableView.timeStampColor = timeStampColor
+        addSubview(timeStampScrollableView)
     }
 
     func setupTrimmerView() {
@@ -81,16 +95,14 @@ public class YPTimeStampTrimmerView: UIView {
     }
 
     func constraintLeftHandleTimeStamp() {
-        leftHandleTimeStamp.topAnchor.constraint(equalTo: topAnchor).isActive = true
         leftHandleTimeStampConstraint = leftHandleTimeStamp.leftAnchor.constraint(equalTo: trimmerView.leftAnchor)
-        leftHandleTimeStamp.bottomAnchor.constraint(equalTo: trimmerView.topAnchor).isActive = true
+        leftHandleTimeStamp.bottomAnchor.constraint(equalTo: trimmerView.topAnchor, constant: -4.0).isActive = true
         leftHandleTimeStampConstraint?.isActive = true
     }
 
     func constrainRightHandleTimeStamp() {
-        rightHandleTimeStamp.topAnchor.constraint(equalTo: topAnchor).isActive = true
         rightHandleTimeStampConstraint = rightHandleTimeStamp.rightAnchor.constraint(equalTo: trimmerView.rightAnchor)
-        rightHandleTimeStamp.bottomAnchor.constraint(equalTo: trimmerView.topAnchor).isActive = true
+        rightHandleTimeStamp.bottomAnchor.constraint(equalTo: trimmerView.topAnchor, constant: -4.0).isActive = true
         rightHandleTimeStampConstraint?.isActive = true
     }
 
@@ -98,19 +110,33 @@ public class YPTimeStampTrimmerView: UIView {
         trimmerView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
         trimmerView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
         trimmerView.topAnchor.constraint(equalTo: topAnchor, constant: 15).isActive = true
-        trimmerView.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        trimmerView.heightAnchor.constraint(equalToConstant: 60).isActive = true
     }
 
     func constraintTimeStampView() {
-        timeStampView.topAnchor.constraint(equalTo: trimmerView.bottomAnchor, constant: 7).isActive = true
-        timeStampView.leftAnchor.constraint(equalTo: trimmerView.leftAnchor).isActive = true
-        timeStampView.rightAnchor.constraint(equalTo: trimmerView.rightAnchor).isActive = true
-        timeStampView.heightAnchor.constraint(greaterThanOrEqualToConstant: 30).isActive = true
+        timeStampScrollableView.backgroundColor = .blue
+        timeStampScrollableView.topAnchor.constraint(equalTo: trimmerView.bottomAnchor, constant: 7).isActive = true
+        timeStampScrollableView.leftAnchor.constraint(equalTo: trimmerView.leftAnchor).isActive = true
+        timeStampScrollableView.rightAnchor.constraint(equalTo: trimmerView.rightAnchor).isActive = true
+        timeStampScrollableView.heightAnchor.constraint(greaterThanOrEqualToConstant: 23).isActive = true
     }
 
-    func setupTimeStampView() {
-        timeStampView.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(timeStampView)
+    func constructAttributedString(for text: String) -> NSMutableAttributedString {
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineHeightMultiple = 0.97
+        return NSMutableAttributedString(string: text, attributes: [NSAttributedString.Key.kern: 0.1, NSAttributedString.Key.paragraphStyle: paragraphStyle])
+    }
+
+    func configure(asset: AVAsset, delegate: YPTimeStampTrimmerViewDelegate?) {
+        trimmerView.asset = asset
+        timeStampTrimmerViewDelegate = delegate
+    }
+
+    func toggleTrimmerVisibility(shouldHide: Bool) {
+        trimmerView.isHidden = shouldHide
+        timeStampScrollableView.isHidden = shouldHide
+        rightHandleTimeStamp.isHidden = shouldHide
+        leftHandleTimeStamp.isHidden = shouldHide
     }
 }
 
