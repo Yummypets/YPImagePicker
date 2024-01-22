@@ -193,8 +193,7 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
 
             timeStampTrimmerView.configure(
                 asset: inputAsset,
-                delegate: self,
-                style: YPConfig.video.displayTrimmerWithTimeStamps ? .trimmerWithTimeStamps : .default
+                delegate: self
             )
             selectTrim()
             videoView.loadVideo(inputVideo)
