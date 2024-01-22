@@ -191,8 +191,10 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
                 return
             }
 
-            timeStampTrimmerView.trimmerView.asset = inputAsset
-            timeStampTrimmerView.trimmerView.delegate = self
+            timeStampTrimmerView.configure(
+                asset: inputAsset,
+                delegate: self
+            )
             selectTrim()
             videoView.loadVideo(inputVideo)
             videoView.pause()
@@ -242,6 +244,9 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
     }
 
     public func setupLayout() {
+        timeStampTrimmerView.timeBarColor = YPConfig.colors.trimmerTimeBarColor
+        timeStampTrimmerView.timeStampFont = YPConfig.fonts.trimmerTimeStampFont
+        timeStampTrimmerView.timeStampColor = YPConfig.colors.trimmerTimeStampColor
         timeStampTrimmerView.trimmerView.mainColor = YPConfig.colors.trimmerMainColor
         timeStampTrimmerView.trimmerView.handleColor = YPConfig.colors.trimmerHandleColor
         timeStampTrimmerView.trimmerView.positionBarColor = YPConfig.colors.positionLineColor
@@ -374,7 +379,7 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
     @objc private func selectTrim() {
         title = YPConfig.wordings.trim
 
-        timeStampTrimmerView.trimmerView.isHidden = false
+        timeStampTrimmerView.toggleTrimmerVisibility(shouldHide: false)
         videoView.isHidden = false
         coverImageView.isHidden = true
         coverThumbSelectorView.isHidden = true
@@ -390,7 +395,7 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
     @objc private func selectCover() {
         title = YPConfig.wordings.cover
 
-        timeStampTrimmerView.trimmerView.isHidden = true
+        timeStampTrimmerView.toggleTrimmerVisibility(shouldHide: true)
         videoView.isHidden = true
         coverImageView.isHidden = false
         coverThumbSelectorView.isHidden = false
@@ -531,26 +536,8 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
     }
 }
 
-// MARK: - TrimmerViewDelegate
-extension YPVideoFiltersVC: TrimmerViewDelegate {
-
-    public func didDragRightHandleBar(to updatedConstant: CGFloat) {
-        // Implement as needed
-    }
-    
-    public func didDragLeftHandleBar(to updatedConstant: CGFloat) {
-        // Implement as needed
-    }
-    
-    public func didBeginDraggingRightHandleBar() {
-        // Implement as needed
-    }
-    
-    public func didBeginDraggingLeftHandleBar() {
-        // Implement as needed
-    }
-    
-    public func positionBarStoppedMoving(_ playerTime: CMTime) {
+extension YPVideoFiltersVC: YPTimeStampTrimmerViewDelegate {
+    public func positionBarDidStopMoving(_ playerTime: CMTime) {
         // user has lifted off trimmer handle so restart the video at trimmer start time
         if let startTime = timeStampTrimmerView.trimmerView.startTime {
             videoView.player.seek(to: startTime)
@@ -562,7 +549,7 @@ extension YPVideoFiltersVC: TrimmerViewDelegate {
         }
     }
 
-    public func didChangePositionBar(_ playerTime: CMTime) {
+    public func didChangePositionBar(to playerTime: CMTime) {
         stopPlaybackTimeChecker()
         videoView.pause()
         videoView.player.seek(to: playerTime, toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
