@@ -46,7 +46,7 @@ class YPTrimmerTimeStampView: UIView {
         timeStamp.font = timeStampFont
         addSubview(timeStamp)
         timeStamp.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        timeStamp.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 1).isActive = true
+        timeStamp.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0).isActive = true
     }
 
     func renderCircle() {

@@ -36,8 +36,10 @@ class YPTimeStampScrollableView: UIScrollView {
         let startOffset: Int = 0
 
         var viewCount = Int(contentSize.width) / width
-
-        viewCount += 1
+        // The viewCount is adjusted here to account for the sliding trim handle views. These views consume horizontal space on the
+        // left and the right sides of the trimmer view, and the contentSize of the trimmer view does not extend before the left sliding view or extend
+        // beyond the right sliding view.
+        viewCount += 2
 
         for i in 0..<viewCount{
             let contentViewSubView = YPTrimmerTimeStampView(
@@ -45,22 +47,23 @@ class YPTimeStampScrollableView: UIScrollView {
                 timeStampColor: timeStampColor,
                 timeBarColor: timeBarColor
             )
-            if i == 0 || i % 3 == 0 {
-                contentViewSubView.shouldRenderBoldCircle = true
-            }
 
             let xPosition = i * width
+
+            if i == 0, let asset = asset {
+                contentViewSubView.shouldRenderBoldCircle = true
+                contentViewSubView.timeStampText = getTime(from: CGFloat(xPosition), for: asset)?.durationText
+            }
+
+            if i % 3 == 0 {
+                contentViewSubView.shouldRenderBoldCircle = true
+            }
 
             if i % 6 == 0, let asset = asset {
                 contentViewSubView.timeStampText = getTime(from: CGFloat(xPosition), for: asset)?.durationText
             }
 
-//            if let asset = asset {
-//                let xPosition = i * width
-//                print("DEBUG: X POSITION:\(xPosition) TIME FOR POSITION: \(String(describing: getTime(from: CGFloat(xPosition), for: asset)?.durationText)) ASSET LENGTH: \(asset.duration.durationText)")
-//            }
-
-            contentViewSubView.frame = CGRect(x: (i * width) + startOffset, y: 0, width: width, height: 30)
+            contentViewSubView.frame = CGRect(x: (i * width) + startOffset, y: 0, width: width, height: 23)
             addSubview(contentViewSubView)
         }
     }
