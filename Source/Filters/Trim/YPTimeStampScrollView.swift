@@ -55,10 +55,12 @@ class YPTimeStampScrollableView: UIScrollView {
                 contentViewSubView.timeStampText = getTime(from: CGFloat(xPosition), for: asset)?.durationText
             }
 
+            // On every 3rd view we want to draw a bold circle.
             if i % 3 == 0 {
                 contentViewSubView.shouldRenderBoldCircle = true
             }
 
+            // On every 6th view (not counting the starting view) we want to render the video timestamp at that point.
             if i % 6 == 0, let asset = asset {
                 contentViewSubView.timeStampText = getTime(from: CGFloat(xPosition), for: asset)?.durationText
             }
