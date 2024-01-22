@@ -114,9 +114,17 @@ public class YPTimeStampTrimmerView: UIView {
     }
 }
 
+// MARK: - TrimmerViewDelegate Conformance
+
 extension YPTimeStampTrimmerView: TrimmerViewDelegate {
-    public func didDragLeftHandleBar(to updatedConstant: CGFloat) {
-        self.leftHandleTimeStampConstraint?.constant = updatedConstant
+    public func didChangeAsset(asset: AVAsset) {
+        timeStampScrollableView.asset = asset
+        timeStampScrollableView.contentSize = trimmerView.previewContentSize
+        timeStampScrollableView.renderContentViews()
+    }
+    
+    public func didScrollTrimmer(_ scrollView: UIScrollView) {
+        timeStampScrollableView.setContentOffset(scrollView.contentOffset, animated: false)
     }
 
     public func didBeginDraggingLeftHandleBar() {
@@ -127,16 +135,25 @@ extension YPTimeStampTrimmerView: TrimmerViewDelegate {
         rightHandleTimeStamp.isHidden = false
     }
 
+    public func didDragLeftHandleBar(to updatedConstant: CGFloat) {
+        self.leftHandleTimeStampConstraint?.constant = updatedConstant
+    }
+
     public func didDragRightHandleBar(to updatedConstant: CGFloat) {
         self.rightHandleTimeStampConstraint?.constant = updatedConstant
     }
 
     public func didChangePositionBar(_ playerTime: CMTime) {
-        // Implement if needed
+        if rightHandleTimeStamp.isHidden {
+            leftHandleTimeStamp.attributedText = constructAttributedString(for: playerTime.durationText)
+        } else {
+            rightHandleTimeStamp.attributedText = constructAttributedString(for: playerTime.durationText)
+        }
+        timeStampTrimmerViewDelegate?.didChangePositionBar(to: playerTime)
     }
 
     public func positionBarStoppedMoving(_ playerTime: CMTime) {
-        // Implement if needed
+        timeStampTrimmerViewDelegate?.positionBarDidStopMoving(playerTime)
         rightHandleTimeStamp.isHidden = true
         leftHandleTimeStamp.isHidden = true
     }
