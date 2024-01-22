@@ -179,7 +179,7 @@ extension YPTimeStampTrimmerView: TrimmerViewDelegate {
     public func didChangePositionBar(_ playerTime: CMTime) {
         if rightHandleTimeStamp.isHidden {
             leftHandleTimeStamp.attributedText = constructAttributedString(for: playerTime.durationText)
-        } else {
+        } else if leftHandleTimeStamp.isHidden {
             rightHandleTimeStamp.attributedText = constructAttributedString(for: playerTime.durationText)
         }
         timeStampTrimmerViewDelegate?.didChangePositionBar(to: playerTime)
