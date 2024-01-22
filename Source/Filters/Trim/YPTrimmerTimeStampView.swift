@@ -29,7 +29,6 @@ class YPTrimmerTimeStampView: UIView {
     }
 
     override func layoutSubviews() {
-        backgroundColor = .red
         renderCircle()
         if let timeStampText = timeStampText {
             renderTimeStamp(text: timeStampText)

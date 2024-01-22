@@ -114,7 +114,6 @@ public class YPTimeStampTrimmerView: UIView {
     }
 
     func constraintTimeStampView() {
-        timeStampScrollableView.backgroundColor = .blue
         timeStampScrollableView.topAnchor.constraint(equalTo: trimmerView.bottomAnchor, constant: 7).isActive = true
         timeStampScrollableView.leftAnchor.constraint(equalTo: trimmerView.leftAnchor).isActive = true
         timeStampScrollableView.rightAnchor.constraint(equalTo: trimmerView.rightAnchor).isActive = true
