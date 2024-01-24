@@ -47,9 +47,7 @@ class YPTimeStampScrollableView: UIScrollView {
                 timeStampColor: timeStampColor,
                 timeBarColor: timeBarColor
             )
-
             let range = ranges[i]
-
             guard var xPosition = getPosition(from: range.startTime) else { continue }
 
             if range.shouldRenderTimeStamp, let asset = asset {
