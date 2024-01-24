@@ -162,7 +162,7 @@ extension YPTimeStampTrimmerView: TrimmerViewDelegate {
     public func didChangeAsset(asset: AVAsset) {
         timeStampScrollableView.asset = asset
         timeStampScrollableView.contentSize = trimmerView.previewContentSize
-        timeStampScrollableView.renderContentViews()
+        timeStampScrollableView.renderRanges()
     }
     
     public func didScrollTrimmer(_ scrollView: UIScrollView) {

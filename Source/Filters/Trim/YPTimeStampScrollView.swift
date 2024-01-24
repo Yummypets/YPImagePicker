@@ -31,41 +31,37 @@ class YPTimeStampScrollableView: UIScrollView {
         showsHorizontalScrollIndicator = false
     }
 
-    func renderContentViews() {
-        let width: Int = 32
-        let startOffset: Int = 0
+    func buildTime(seconds: Double) -> CMTime {
+        CMTime(seconds: seconds, preferredTimescale: Int32(NSEC_PER_SEC))
+    }
+    func renderRanges() {
+        guard let videoDuration = asset?.duration else { return }
 
-        var viewCount = Int(contentSize.width) / width
-        // The viewCount is adjusted here to account for the sliding trim handle views. These views consume horizontal space on the
-        // left and the right sides of the trimmer view, and the contentSize of the trimmer view does not extend before the left sliding view or extend
-        // beyond the right sliding view.
-        viewCount += 2
+        let ranges = generateTimeRanges(for: videoDuration)
+        let subViewWidth = contentSize.width / CGFloat(ranges.count)
+        let handleBarWidth: CGFloat = 15
 
-        for i in 0..<viewCount{
+        for i in 0..<ranges.count {
             let contentViewSubView = YPTrimmerTimeStampView(
                 timeStampFont: timeStampFont,
                 timeStampColor: timeStampColor,
                 timeBarColor: timeBarColor
             )
 
-            let xPosition = i * width
+            let range = ranges[i]
 
-            if i == 0, let asset = asset {
+            guard var xPosition = getPosition(from: range.startTime) else { continue }
+
+            if range.shouldRenderTimeStamp, let asset = asset {
                 contentViewSubView.shouldRenderBoldCircle = true
-                contentViewSubView.timeStampText = getTime(from: CGFloat(xPosition), for: asset)?.durationText
+                contentViewSubView.timeStampText = range.durationText
             }
-
-            // On every 3rd view we want to draw a bold circle.
-            if i % 3 == 0 {
-                contentViewSubView.shouldRenderBoldCircle = true
-            }
-
-            // On every 6th view (not counting the starting view) we want to render the video timestamp at that point.
-            if i % 6 == 0, let asset = asset {
-                contentViewSubView.timeStampText = getTime(from: CGFloat(xPosition), for: asset)?.durationText
-            }
-
-            contentViewSubView.frame = CGRect(x: (i * width) + startOffset, y: 0, width: width, height: 23)
+            // We want the first 0:00 dot to line up just after the left handle bar. This offset is to account for the handle bar width and
+            // start the first timestamp just to the right of the left handle.
+            let xPositionWithHandleOffset = xPosition + handleBarWidth
+            // We slightly pull back the the x posotion by the subViewWidth / 2 to properly align the timestamp with where the drag handle time should
+            // be. In other words, the center of the draggable handle should reflect the correct timestamp at the very center of the dot.
+            contentViewSubView.frame = CGRect(x: xPositionWithHandleOffset  - (subViewWidth / 2), y: 0, width: subViewWidth, height: 23)
             addSubview(contentViewSubView)
         }
     }
@@ -74,5 +70,14 @@ class YPTimeStampScrollableView: UIScrollView {
         let normalizedRatio = max(min(1, position / contentSize.width), 0)
         let positionTimeValue = Double(normalizedRatio) * Double(asset.duration.value)
         return CMTime(value: Int64(positionTimeValue), timescale: asset.duration.timescale)
+    }
+
+    func getPosition(from time: CMTime) -> CGFloat? {
+        guard let asset = asset else {
+            return nil
+        }
+        let timeRatio = CGFloat(time.value) * CGFloat(asset.duration.timescale) /
+        (CGFloat(time.timescale) * CGFloat(asset.duration.value))
+        return timeRatio * contentSize.width
     }
 }
