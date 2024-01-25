@@ -34,6 +34,76 @@ class YPTimeStampScrollableView: UIScrollView {
     func buildTime(seconds: Double) -> CMTime {
         CMTime(seconds: seconds, preferredTimescale: Int32(NSEC_PER_SEC))
     }
+
+    struct TimeStampViewModel {
+        let shouldRenderTimeStamp: Bool
+        let timeRange: CMTimeRange
+        let startTime: CMTime
+        let endTime: CMTime
+        let durationText: String
+
+        init(shouldRenderTimeStamp: Bool, timeRange: CMTimeRange) {
+            self.shouldRenderTimeStamp = shouldRenderTimeStamp
+            self.timeRange = timeRange
+            self.startTime = timeRange.start
+            self.endTime = timeRange.end
+            self.durationText = timeRange.start.durationText
+        }
+    }
+
+    func generateTimeStampViewModels(timeRangeAmount: Int) -> [TimeStampViewModel] {
+        var timeStamps: [TimeStampViewModel] = []
+        
+        return []
+
+
+    }
+
+    func generateTimeRanges(for assetDuration: CMTime) -> [TimeStampViewModel] {
+        let totalSeconds = CMTimeGetSeconds(assetDuration)
+        var timeStamps: [TimeStampViewModel] = []
+
+        var timeRangeAmount: Double = 0
+        if totalSeconds < 30 {
+            timeRangeAmount = totalSeconds
+            for i in 0...Int(timeRangeAmount) {
+                if i == 0 {
+                    timeStamps.append(TimeStampViewModel(shouldRenderTimeStamp: true, timeRange: CMTimeRange(start: buildTime(seconds: 0), duration: buildTime(seconds: 1))))
+                } else {
+                    let previousTimeStamp = timeStamps[i-1]
+                    timeStamps.append(TimeStampViewModel(shouldRenderTimeStamp: i % 5 == 0, timeRange: CMTimeRange(start: previousTimeStamp.endTime, duration: buildTime(seconds: 1))))
+                }
+            }
+        } else if totalSeconds >= 30, totalSeconds <= 60 {
+            let fiveSecondDivisor: Double = 5.0
+            timeRangeAmount = round(totalSeconds / fiveSecondDivisor)
+
+            for i in 0...Int(timeRangeAmount) {
+                if i == 0 {
+                    timeStamps.append(TimeStampViewModel(shouldRenderTimeStamp: true, timeRange: CMTimeRange(start: buildTime(seconds: 0), duration: buildTime(seconds: 5))))
+                } else {
+                    let previousTimeStamp = timeStamps[i-1]
+                    timeStamps.append(TimeStampViewModel(shouldRenderTimeStamp: i % 3 == 0, timeRange: CMTimeRange(start: previousTimeStamp.endTime, duration: buildTime(seconds: 5))))
+                }
+            }
+        } else {
+            let tenSecondDivisor: Double = 10
+            timeRangeAmount = round(totalSeconds / tenSecondDivisor)
+
+            for i in 0...Int(timeRangeAmount) {
+                if i == 0 {
+                    timeStamps.append(TimeStampViewModel(shouldRenderTimeStamp: true, timeRange: CMTimeRange(start: buildTime(seconds: 0), duration: buildTime(seconds: 10))))
+                } else {
+                    let previousTimeStamp = timeStamps[i-1]
+                    timeStamps.append(TimeStampViewModel(shouldRenderTimeStamp: i % 3 == 0, timeRange: CMTimeRange(start: previousTimeStamp.endTime, duration: buildTime(seconds: 10))))
+                }
+            }
+        }
+
+        return timeStamps
+    }
+
+
     func renderRanges() {
         guard let videoDuration = asset?.duration else { return }
 
