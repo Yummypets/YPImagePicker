@@ -53,24 +53,27 @@ class YPTimeStampScrollableView: UIScrollView {
 
 
 
+    func generateTimeStampViewModels(timeRangeAmount: Int) -> [YPTimeStampViewModel] {
+        var timeStamps: [YPTimeStampViewModel] = []
+
         return []
 
 
     }
 
-    func generateTimeRanges(for assetDuration: CMTime) -> [TimeStampViewModel] {
+    func generateTimeRanges(for assetDuration: CMTime) -> [YPTimeStampViewModel] {
         let totalSeconds = CMTimeGetSeconds(assetDuration)
-        var timeStamps: [TimeStampViewModel] = []
+        var timeStamps: [YPTimeStampViewModel] = []
 
         var timeRangeAmount: Double = 0
         if totalSeconds < 30 {
             timeRangeAmount = totalSeconds
             for i in 0...Int(timeRangeAmount) {
                 if i == 0 {
-                    timeStamps.append(TimeStampViewModel(shouldRenderTimeStamp: true, timeRange: CMTimeRange(start: buildTime(seconds: 0), duration: buildTime(seconds: 1))))
+                    timeStamps.append(YPTimeStampViewModel(shouldRenderTimeStamp: true, timeRange: CMTimeRange(start: buildTime(seconds: 0), duration: buildTime(seconds: 1))))
                 } else {
                     let previousTimeStamp = timeStamps[i-1]
-                    timeStamps.append(TimeStampViewModel(shouldRenderTimeStamp: i % 5 == 0, timeRange: CMTimeRange(start: previousTimeStamp.endTime, duration: buildTime(seconds: 1))))
+                    timeStamps.append(YPTimeStampViewModel(shouldRenderTimeStamp: i % 5 == 0, timeRange: CMTimeRange(start: previousTimeStamp.endTime, duration: buildTime(seconds: 1))))
                 }
             }
         } else if totalSeconds >= 30, totalSeconds <= 60 {
@@ -79,10 +82,10 @@ class YPTimeStampScrollableView: UIScrollView {
 
             for i in 0...Int(timeRangeAmount) {
                 if i == 0 {
-                    timeStamps.append(TimeStampViewModel(shouldRenderTimeStamp: true, timeRange: CMTimeRange(start: buildTime(seconds: 0), duration: buildTime(seconds: 5))))
+                    timeStamps.append(YPTimeStampViewModel(shouldRenderTimeStamp: true, timeRange: CMTimeRange(start: buildTime(seconds: 0), duration: buildTime(seconds: 5))))
                 } else {
                     let previousTimeStamp = timeStamps[i-1]
-                    timeStamps.append(TimeStampViewModel(shouldRenderTimeStamp: i % 3 == 0, timeRange: CMTimeRange(start: previousTimeStamp.endTime, duration: buildTime(seconds: 5))))
+                    timeStamps.append(YPTimeStampViewModel(shouldRenderTimeStamp: i % 3 == 0, timeRange: CMTimeRange(start: previousTimeStamp.endTime, duration: buildTime(seconds: 5))))
                 }
             }
         } else {
@@ -91,10 +94,10 @@ class YPTimeStampScrollableView: UIScrollView {
 
             for i in 0...Int(timeRangeAmount) {
                 if i == 0 {
-                    timeStamps.append(TimeStampViewModel(shouldRenderTimeStamp: true, timeRange: CMTimeRange(start: buildTime(seconds: 0), duration: buildTime(seconds: 10))))
+                    timeStamps.append(YPTimeStampViewModel(shouldRenderTimeStamp: true, timeRange: CMTimeRange(start: buildTime(seconds: 0), duration: buildTime(seconds: 10))))
                 } else {
                     let previousTimeStamp = timeStamps[i-1]
-                    timeStamps.append(TimeStampViewModel(shouldRenderTimeStamp: i % 3 == 0, timeRange: CMTimeRange(start: previousTimeStamp.endTime, duration: buildTime(seconds: 10))))
+                    timeStamps.append(YPTimeStampViewModel(shouldRenderTimeStamp: i % 3 == 0, timeRange: CMTimeRange(start: previousTimeStamp.endTime, duration: buildTime(seconds: 10))))
                 }
             }
         }
