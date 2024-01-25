@@ -76,7 +76,7 @@ class YPTimeStampScrollableView: UIScrollView {
                     timeStamps.append(YPTimeStampViewModel(shouldRenderTimeStamp: i % 5 == 0, timeRange: CMTimeRange(start: previousTimeStamp.endTime, duration: buildTime(seconds: 1))))
                 }
             }
-        } else if totalSeconds >= 30, totalSeconds <= 60 {
+        } else if totalSeconds >= 30, totalSeconds <= 61 {
             let fiveSecondDivisor: Double = 5.0
             timeRangeAmount = round(totalSeconds / fiveSecondDivisor)
 
