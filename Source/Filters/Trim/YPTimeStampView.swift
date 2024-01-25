@@ -1,5 +1,5 @@
 //
-//  YPTrimmerTimeStampView.swift
+//  YPTimeStampView.swift
 //  YPImagePicker
 //
 //  Created by Zeph Cohen on 1/22/24.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class YPTrimmerTimeStampView: UIView {
+class YPTimeStampView: UIView {
 
     var shouldRenderBoldCircle: Bool = false
     var timeStampText: String?

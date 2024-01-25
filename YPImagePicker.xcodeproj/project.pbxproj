@@ -58,10 +58,10 @@
 		B80555382B51E82300AECDD0 /* PryntTrimmerView in Frameworks */ = {isa = PBXBuildFile; productRef = B80555372B51E82300AECDD0 /* PryntTrimmerView */; };
 		B805553A2B51E8F300AECDD0 /* PryntTrimmerView in Frameworks */ = {isa = PBXBuildFile; productRef = B80555392B51E8F300AECDD0 /* PryntTrimmerView */; };
 		B805553C2B51E8F700AECDD0 /* Stevia in Frameworks */ = {isa = PBXBuildFile; productRef = B805553B2B51E8F700AECDD0 /* Stevia */; };
+		B86767CA2B61F72D009D2AEC /* YPTimeStampView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B86767C92B61F72D009D2AEC /* YPTimeStampView.swift */; };
+		B86767CB2B61F72D009D2AEC /* YPTimeStampView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B86767C92B61F72D009D2AEC /* YPTimeStampView.swift */; };
 		B8B70EF62B5EBD4C002CB142 /* CMTime+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B70EF52B5EBD4C002CB142 /* CMTime+Extensions.swift */; };
 		B8B70EF72B5EBD4C002CB142 /* CMTime+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B70EF52B5EBD4C002CB142 /* CMTime+Extensions.swift */; };
-		B8B70EF92B5EBDDA002CB142 /* YPTrimmerTimeStampView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B70EF82B5EBDDA002CB142 /* YPTrimmerTimeStampView.swift */; };
-		B8B70EFA2B5EBDDA002CB142 /* YPTrimmerTimeStampView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B70EF82B5EBDDA002CB142 /* YPTrimmerTimeStampView.swift */; };
 		B8B70EFC2B5EBE04002CB142 /* YPTimeStampScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B70EFB2B5EBE04002CB142 /* YPTimeStampScrollView.swift */; };
 		B8B70EFD2B5EBE04002CB142 /* YPTimeStampScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B70EFB2B5EBE04002CB142 /* YPTimeStampScrollView.swift */; };
 		B8EDD48B2B56D1E7007C8383 /* YPTimeStampTrimmerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8EDD48A2B56D1E7007C8383 /* YPTimeStampTrimmerView.swift */; };
@@ -288,8 +288,8 @@
 		99D1DC2A1F9788930047F0E0 /* YPImagePickerConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPImagePickerConfiguration.swift; sourceTree = "<group>"; };
 		A7FD716620755C2D0044A8E8 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
 		AA69BCF122E601D100FBB925 /* YPDeviceOrientationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPDeviceOrientationHelper.swift; sourceTree = "<group>"; };
+		B86767C92B61F72D009D2AEC /* YPTimeStampView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPTimeStampView.swift; sourceTree = "<group>"; };
 		B8B70EF52B5EBD4C002CB142 /* CMTime+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CMTime+Extensions.swift"; sourceTree = "<group>"; };
-		B8B70EF82B5EBDDA002CB142 /* YPTrimmerTimeStampView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPTrimmerTimeStampView.swift; sourceTree = "<group>"; };
 		B8B70EFB2B5EBE04002CB142 /* YPTimeStampScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPTimeStampScrollView.swift; sourceTree = "<group>"; };
 		B8EDD48A2B56D1E7007C8383 /* YPTimeStampTrimmerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPTimeStampTrimmerView.swift; sourceTree = "<group>"; };
 		DC3DAC4526C6FCAA007FD95A /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
@@ -533,7 +533,7 @@
 			children = (
 				B8B70EFB2B5EBE04002CB142 /* YPTimeStampScrollView.swift */,
 				B8EDD48A2B56D1E7007C8383 /* YPTimeStampTrimmerView.swift */,
-				B8B70EF82B5EBDDA002CB142 /* YPTrimmerTimeStampView.swift */,
+				B86767C92B61F72D009D2AEC /* YPTimeStampView.swift */,
 			);
 			path = Trim;
 			sourceTree = "<group>";
@@ -864,8 +864,8 @@
 				EBA37BCA26F757FF005DAAD4 /* Bundle+Extensions.swift in Sources */,
 				99CF6D1F201B6B9E00487F77 /* CGRect+Extensions.swift in Sources */,
 				B8B70EF72B5EBD4C002CB142 /* CMTime+Extensions.swift in Sources */,
-				B8B70EFA2B5EBDDA002CB142 /* YPTrimmerTimeStampView.swift in Sources */,
 				99CF6D1D201B6ABA00487F77 /* IndexSet+Extensions.swift in Sources */,
+				B86767CB2B61F72D009D2AEC /* YPTimeStampView.swift in Sources */,
 				EB59F452208766B800811B7B /* YPVideoFiltersVC.swift in Sources */,
 				EB473E1D208E1B9E00D16105 /* AVAsset+Extensions.swift in Sources */,
 				9911FA24203C3A31000E9B06 /* UIImage+Extensions.swift in Sources */,
@@ -944,10 +944,10 @@
 				EBA37BA926F74CBA005DAAD4 /* YPLibraryViewDelegate.swift in Sources */,
 				EBA37B8D26F74CBA005DAAD4 /* YPVideoCaptureVC.swift in Sources */,
 				EBA37BC126F74CE0005DAAD4 /* YPFilter.swift in Sources */,
-				B8B70EF92B5EBDDA002CB142 /* YPTrimmerTimeStampView.swift in Sources */,
 				EBA37BAE26F74CBA005DAAD4 /* YPAlbumVC.swift in Sources */,
 				EBA37BA426F74CBA005DAAD4 /* UICollectionView+Extensions.swift in Sources */,
 				EBA37BA726F74CBA005DAAD4 /* YPMenuItem.swift in Sources */,
+				B86767CA2B61F72D009D2AEC /* YPTimeStampView.swift in Sources */,
 				EBA37B6626F74CBA005DAAD4 /* YPLoadingView.swift in Sources */,
 				EBA37BAB26F74CBA005DAAD4 /* YPCropView.swift in Sources */,
 				EBA37BAD26F74CBA005DAAD4 /* YPPermissionManager.swift in Sources */,
