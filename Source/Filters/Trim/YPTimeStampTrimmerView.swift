@@ -19,7 +19,8 @@ public class YPTimeStampTrimmerView: UIView {
 
     // MARK: - Properties
 
-    var timeBarColor: UIColor?
+    var timeBarLargeCircleColor: UIColor?
+    var timeBarSmallCircleColor: UIColor?
     var timeStampFont: UIFont?
     var timeStampColor: UIColor?
 
@@ -97,7 +98,8 @@ public class YPTimeStampTrimmerView: UIView {
 
     func setupTimeStampView() {
         timeStampScrollableView.translatesAutoresizingMaskIntoConstraints = false
-        timeStampScrollableView.timeBarColor = timeBarColor
+        timeStampScrollableView.timeBarLargeCircleColor = timeBarLargeCircleColor
+        timeStampScrollableView.timeBarSmallCircleColor = timeBarSmallCircleColor
         timeStampScrollableView.timeStampFont = timeStampFont
         timeStampScrollableView.timeStampColor = timeStampColor
         timeStampScrollableView.isHidden = true

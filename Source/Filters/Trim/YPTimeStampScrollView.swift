@@ -29,7 +29,8 @@ class YPTimeStampScrollableView: UIScrollView {
 
     var asset: AVAsset?
     var timeStampColor: UIColor?
-    var timeBarColor: UIColor?
+    var timeBarLargeCircleColor: UIColor?
+    var timeBarSmallCircleColor: UIColor?
     var timeStampFont: UIFont?
 
     override init(frame: CGRect) {
@@ -101,12 +102,13 @@ class YPTimeStampScrollableView: UIScrollView {
         let handleBarWidth: CGFloat = 15
 
         for i in 0..<ranges.count {
+            let range = ranges[i]
             let contentViewSubView = YPTimeStampView(
                 timeStampFont: timeStampFont,
                 timeStampColor: timeStampColor,
-                timeBarColor: timeBarColor
+                timeBarColor: range.shouldRenderTimeStamp ? timeBarLargeCircleColor : timeBarSmallCircleColor
             )
-            let range = ranges[i]
+
             guard var xPosition = getPosition(from: range.startTime) else { continue }
 
             if range.shouldRenderTimeStamp, let asset = asset {
