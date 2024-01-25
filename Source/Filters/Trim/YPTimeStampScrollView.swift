@@ -126,6 +126,10 @@ class YPTimeStampScrollableView: UIScrollView {
             }
             // We want the first 0:00 dot to line up just after the left handle bar. This offset is to account for the handle bar width and
             // start the first timestamp just to the right of the left handle.
+            
+            //We also need to move the xPosition forward by the same offset value used to pull the time stamp UI back to the left. This pullback is
+            // done so the time stamp UI appears to "scroll before" the trim UI. This additional offset is to compensate for that adjustment and allow
+            // the trim bar handle calculations to match up with the timestamps below.
             let xPositionWithHandleOffset = xPosition + handleBarWidth + YPTimeStampTrimmerView.Constant.timeStampTrimViewPadding
             // We slightly pull back the the x posotion by the subViewWidth / 2 to properly align the timestamp with where the drag handle time should
             // be. In other words, the center of the draggable handle should reflect the correct timestamp at the very center of the dot.
