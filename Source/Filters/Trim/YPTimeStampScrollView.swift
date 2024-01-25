@@ -50,15 +50,25 @@ class YPTimeStampScrollableView: UIScrollView {
     func buildTime(seconds: Double) -> CMTime {
         CMTime(seconds: seconds, preferredTimescale: Int32(NSEC_PER_SEC))
     }
-
-
-
-    func generateTimeStampViewModels(timeRangeAmount: Int) -> [YPTimeStampViewModel] {
+    /// Generates a collection of time stamp models configured with the duration of the timestamp and the interval frequency at which to render the
+    /// timestamp label. For example, if you provide a value of 5 for `timeStampInterval`, and a `duration` of 1, and an `amount` of 30, this means that 30 models will be generated, and every model will have a
+    /// duration of 1 second, and every 5th model will be flagged to draw a timestamp label in the user interface.
+    /// - Parameters:
+    ///   - amount: The amount of models to generate
+    ///   - timeStampInterval: The interval at which the model should draw a timestamp in the user interface.
+    ///   - duration: The duration of the timestamp
+    /// - Returns: A collection of timestamp view models.
+    func generateTimeStampViewModels(amount: Int, timeStampInterval: Int, duration: Double) -> [YPTimeStampViewModel] {
         var timeStamps: [YPTimeStampViewModel] = []
-
-        return []
-
-
+        for i in 0...Int(amount) {
+            if i == 0 {
+                timeStamps.append(YPTimeStampViewModel(shouldRenderTimeStamp: true, timeRange: CMTimeRange(start: buildTime(seconds: 0), duration: buildTime(seconds: duration))))
+            } else {
+                let previousTimeStamp = timeStamps[i-1]
+                timeStamps.append(YPTimeStampViewModel(shouldRenderTimeStamp: i % timeStampInterval == 0, timeRange: CMTimeRange(start: previousTimeStamp.endTime, duration: buildTime(seconds: duration))))
+            }
+        }
+        return timeStamps
     }
 
     func generateTimeRanges(for assetDuration: CMTime) -> [YPTimeStampViewModel] {
@@ -67,44 +77,21 @@ class YPTimeStampScrollableView: UIScrollView {
 
         var timeRangeAmount: Double = 0
         if totalSeconds < 30 {
-            timeRangeAmount = totalSeconds
-            for i in 0...Int(timeRangeAmount) {
-                if i == 0 {
-                    timeStamps.append(YPTimeStampViewModel(shouldRenderTimeStamp: true, timeRange: CMTimeRange(start: buildTime(seconds: 0), duration: buildTime(seconds: 1))))
-                } else {
-                    let previousTimeStamp = timeStamps[i-1]
-                    timeStamps.append(YPTimeStampViewModel(shouldRenderTimeStamp: i % 5 == 0, timeRange: CMTimeRange(start: previousTimeStamp.endTime, duration: buildTime(seconds: 1))))
-                }
-            }
+            // Clips less then 30 seconds will have a scale of 1 dot = 1 second and every 5th dot will render a timestamp label.
+            timeStamps = generateTimeStampViewModels(amount: Int(totalSeconds), timeStampInterval: 5, duration: 1)
         } else if totalSeconds >= 30, totalSeconds <= 61 {
             let fiveSecondDivisor: Double = 5.0
             timeRangeAmount = round(totalSeconds / fiveSecondDivisor)
-
-            for i in 0...Int(timeRangeAmount) {
-                if i == 0 {
-                    timeStamps.append(YPTimeStampViewModel(shouldRenderTimeStamp: true, timeRange: CMTimeRange(start: buildTime(seconds: 0), duration: buildTime(seconds: 5))))
-                } else {
-                    let previousTimeStamp = timeStamps[i-1]
-                    timeStamps.append(YPTimeStampViewModel(shouldRenderTimeStamp: i % 3 == 0, timeRange: CMTimeRange(start: previousTimeStamp.endTime, duration: buildTime(seconds: 5))))
-                }
-            }
+            // Clips between 30 seconds and 61 seconds will have a scale of 1 dot = 5 seconds and every 3rd dot will render a timestamp label.
+            timeStamps = generateTimeStampViewModels(amount: Int(timeRangeAmount), timeStampInterval: 3, duration: 5)
         } else {
             let tenSecondDivisor: Double = 10
             timeRangeAmount = round(totalSeconds / tenSecondDivisor)
-
-            for i in 0...Int(timeRangeAmount) {
-                if i == 0 {
-                    timeStamps.append(YPTimeStampViewModel(shouldRenderTimeStamp: true, timeRange: CMTimeRange(start: buildTime(seconds: 0), duration: buildTime(seconds: 10))))
-                } else {
-                    let previousTimeStamp = timeStamps[i-1]
-                    timeStamps.append(YPTimeStampViewModel(shouldRenderTimeStamp: i % 3 == 0, timeRange: CMTimeRange(start: previousTimeStamp.endTime, duration: buildTime(seconds: 10))))
-                }
-            }
+            // Clips greater then 61 seconds will have a scale of 1 dot = 10 seconds and every 3rd dot will render a timestmp label.
+            timeStamps = generateTimeStampViewModels(amount: Int(timeRangeAmount), timeStampInterval: 3, duration: 10)
         }
-
         return timeStamps
     }
-
 
     func renderRanges() {
         guard let videoDuration = asset?.duration else { return }
