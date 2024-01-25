@@ -9,6 +9,22 @@
 import AVFoundation
 import UIKit
 
+struct YPTimeStampViewModel {
+    let shouldRenderTimeStamp: Bool
+    let timeRange: CMTimeRange
+    let startTime: CMTime
+    let endTime: CMTime
+    let durationText: String
+
+    init(shouldRenderTimeStamp: Bool, timeRange: CMTimeRange) {
+        self.shouldRenderTimeStamp = shouldRenderTimeStamp
+        self.timeRange = timeRange
+        self.startTime = timeRange.start
+        self.endTime = timeRange.end
+        self.durationText = timeRange.start.durationText
+    }
+}
+
 class YPTimeStampScrollableView: UIScrollView {
 
     var asset: AVAsset?
@@ -35,25 +51,8 @@ class YPTimeStampScrollableView: UIScrollView {
         CMTime(seconds: seconds, preferredTimescale: Int32(NSEC_PER_SEC))
     }
 
-    struct TimeStampViewModel {
-        let shouldRenderTimeStamp: Bool
-        let timeRange: CMTimeRange
-        let startTime: CMTime
-        let endTime: CMTime
-        let durationText: String
 
-        init(shouldRenderTimeStamp: Bool, timeRange: CMTimeRange) {
-            self.shouldRenderTimeStamp = shouldRenderTimeStamp
-            self.timeRange = timeRange
-            self.startTime = timeRange.start
-            self.endTime = timeRange.end
-            self.durationText = timeRange.start.durationText
-        }
-    }
 
-    func generateTimeStampViewModels(timeRangeAmount: Int) -> [TimeStampViewModel] {
-        var timeStamps: [TimeStampViewModel] = []
-        
         return []
 
 
