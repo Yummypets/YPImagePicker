@@ -308,9 +308,6 @@ public struct YPConfigVideo {
     /// The handles won't pan further if the minimum duration is attained.
     public var trimmerMinDuration: Double = 3.0
 
-    /// Defines if the trimmer will display the timestamp user interface.
-    public var displayTrimmerWithTimeStamps: Bool = false
-
     /// Defines if the user skips the trimer stage,
     /// the video will be trimmed automatically to the maximum value of trimmerMaxDuration.
     /// This case occurs when the user already has a video selected and enables a
