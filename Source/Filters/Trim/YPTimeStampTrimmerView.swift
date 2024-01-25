@@ -134,7 +134,6 @@ public class YPTimeStampTrimmerView: UIView {
         timeStampScrollableView.topAnchor.constraint(equalTo: trimmerView.bottomAnchor, constant: 7).isActive = true
         timeStampScrollableView.leftAnchor.constraint(equalTo: leftAnchor, constant: -Constant.timeStampTrimViewPadding).isActive = true
         timeStampScrollableView.rightAnchor.constraint(equalTo: rightAnchor, constant: Constant.timeStampTrimViewPadding).isActive = true
-        timeStampScrollableView.backgroundColor = .red
         timeStampScrollableView.heightAnchor.constraint(greaterThanOrEqualToConstant: 23).isActive = true
     }
 
