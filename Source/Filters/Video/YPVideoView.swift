@@ -13,14 +13,16 @@ import Photos
 
 /// A video view that contains video layer, supports play, pause and other actions.
 /// Supports xib initialization.
-public class YPVideoView: UIView {
+public class YPVideoView: YPAdjustableView {
     public let playImageView = UIImageView(image: nil)
 
     internal var playerView = YPVideoPlayer()
     internal var previewImageView = UIImageView()
 
-    var cropRect:CGRect?
-    var asset:PHAsset?
+    var cropRect: CGRect?
+    public var asset: PHAsset?
+
+    public var targetAspectRatio: CGFloat?
 
     public var player: AVPlayer {
         guard playerView.player != nil else {            
@@ -43,31 +45,11 @@ public class YPVideoView: UIView {
     public override func layoutSubviews() {
         super.layoutSubviews()
 
-        // this allows us to display the video with the crop rect without having to export the asset first
-        if let cropRect = cropRect, let asset = asset {
-            let assetSize = CGSize(width: CGFloat(asset.pixelWidth), height: CGFloat(asset.pixelHeight))
-            let assetRect = CGRect(x: 0, y: 0, width: assetSize.width, height: assetSize.height)
+        updateViewFrameAction = updateViewFrame
 
-            // calculate aspect fit rect
-            let widthScale = bounds.size.width / assetSize.width
-            let heightScale = bounds.size.height / assetSize.height
-            let s = min(widthScale, heightScale)
-            let fit = CGRect(x: 0, y: 0, width: assetSize.width * s, height: assetSize.height * s)
-
-            // calculate the scale
-            let scale = max(assetSize.width / cropRect.size.width, assetSize.height / cropRect.size.height)
-            var targetFrame = fit.applying(CGAffineTransform(scaleX: scale, y: scale))
-
-            // calculate the offset scale relative to the centers of the crop rect and the source video
-            let xOffsetScale = (cropRect.midX - assetRect.midX) / assetSize.width
-            let yOffsetScale = (cropRect.midY - assetRect.midY) / assetSize.height
-
-            // center the scaled frame and then offset by the difference between the centers of the crop rect and the source asset rect
-            targetFrame.origin.x = 0.5 * (bounds.size.width - targetFrame.size.width) - xOffsetScale * targetFrame.size.width
-            targetFrame.origin.y = 0.5 * (bounds.size.height - targetFrame.size.height) - yOffsetScale * targetFrame.size.height
-
-            playerView.layer.frame = targetFrame
-        }
+        // Ensure necessary properties are available
+        guard let cropRect = cropRect, let asset = asset else { return }
+        adjustViewFramesIfNeeded(cropRect: cropRect, asset: asset, targetAspectRatio: targetAspectRatio)
     }
 
     internal func setup() {
@@ -108,6 +90,11 @@ public class YPVideoView: UIView {
             player.seek(to: CMTime.zero)
             player.play()
         }
+    }
+
+    private func updateViewFrame(_ frame: CGRect) {
+        playerView.layer.frame = frame
+        playerView.playerLayer.videoGravity = .resizeAspectFill
     }
 }
 
