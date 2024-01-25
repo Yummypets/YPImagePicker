@@ -34,6 +34,10 @@ public class YPTimeStampTrimmerView: UIView {
     public var style: TrimmerStyle = .default
     weak var timeStampTrimmerViewDelegate: YPTimeStampTrimmerViewDelegate?
 
+    public enum Constant {
+        public static let timeStampTrimViewPadding: CGFloat = 30
+    }
+
     public enum TrimmerStyle {
         case `default`
         case trimmerWithTimeStamps
@@ -128,8 +132,9 @@ public class YPTimeStampTrimmerView: UIView {
 
     func constraintTimeStampView() {
         timeStampScrollableView.topAnchor.constraint(equalTo: trimmerView.bottomAnchor, constant: 7).isActive = true
-        timeStampScrollableView.leftAnchor.constraint(equalTo: trimmerView.leftAnchor).isActive = true
-        timeStampScrollableView.rightAnchor.constraint(equalTo: trimmerView.rightAnchor).isActive = true
+        timeStampScrollableView.leftAnchor.constraint(equalTo: leftAnchor, constant: -Constant.timeStampTrimViewPadding).isActive = true
+        timeStampScrollableView.rightAnchor.constraint(equalTo: rightAnchor, constant: Constant.timeStampTrimViewPadding).isActive = true
+        timeStampScrollableView.backgroundColor = .red
         timeStampScrollableView.heightAnchor.constraint(greaterThanOrEqualToConstant: 23).isActive = true
     }
 

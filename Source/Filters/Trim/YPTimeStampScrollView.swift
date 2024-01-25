@@ -42,7 +42,7 @@ class YPTimeStampScrollableView: UIScrollView {
         let handleBarWidth: CGFloat = 15
 
         for i in 0..<ranges.count {
-            let contentViewSubView = YPTrimmerTimeStampView(
+            let contentViewSubView = YPTimeStampView(
                 timeStampFont: timeStampFont,
                 timeStampColor: timeStampColor,
                 timeBarColor: timeBarColor
@@ -56,10 +56,10 @@ class YPTimeStampScrollableView: UIScrollView {
             }
             // We want the first 0:00 dot to line up just after the left handle bar. This offset is to account for the handle bar width and
             // start the first timestamp just to the right of the left handle.
-            let xPositionWithHandleOffset = xPosition + handleBarWidth
+            let xPositionWithHandleOffset = xPosition + handleBarWidth + YPTimeStampTrimmerView.Constant.timeStampTrimViewPadding
             // We slightly pull back the the x posotion by the subViewWidth / 2 to properly align the timestamp with where the drag handle time should
             // be. In other words, the center of the draggable handle should reflect the correct timestamp at the very center of the dot.
-            contentViewSubView.frame = CGRect(x: xPositionWithHandleOffset  - (subViewWidth / 2), y: 0, width: subViewWidth, height: 23)
+            contentViewSubView.frame = CGRect(x: xPositionWithHandleOffset - (subViewWidth / 2), y: 0, width: subViewWidth, height: 23)
             addSubview(contentViewSubView)
         }
     }
