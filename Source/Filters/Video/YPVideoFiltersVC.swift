@@ -360,12 +360,13 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
 
     @objc
     func onExportProgressUpdate(notification:Notification) {
-        if let info = notification.userInfo as? [String:Float], let progress = info["progress"] {
-            if progress < progressView.progress {
+        if let info = notification.userInfo as? [String: Any], let progress = info["progress"] as? Float {
+            if progress == 1.0 {
+                progressView.progress = 0
                 progressView.isHidden = true // progress has reached the end
+            } else {
+                progressView.progress = progress
             }
-            
-            progressView.progress = progress
         }
     }
     
