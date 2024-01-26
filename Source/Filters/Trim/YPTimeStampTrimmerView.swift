@@ -23,6 +23,7 @@ public class YPTimeStampTrimmerView: UIView {
     var timeBarSmallCircleColor: UIColor?
     var timeStampFont: UIFont?
     var timeStampColor: UIColor?
+    var trimMaskolor: UIColor?
 
     let trimmerView = TrimmerView()
     let timeStampScrollableView = YPTimeStampScrollableView()
@@ -109,6 +110,7 @@ public class YPTimeStampTrimmerView: UIView {
     func setupTrimmerView() {
         trimmerView.translatesAutoresizingMaskIntoConstraints = false
         trimmerView.delegate = self
+        trimmerView.updateTrimMaskColor(to: trimMaskolor)
         addSubview(trimmerView)
     }
 

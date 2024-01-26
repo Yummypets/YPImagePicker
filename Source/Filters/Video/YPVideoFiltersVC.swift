@@ -249,6 +249,7 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
     public func setupLayout() {
         timeStampTrimmerView.timeBarLargeCircleColor = YPConfig.colors.trimmerTimeBarLargeCircle
         timeStampTrimmerView.timeBarSmallCircleColor = YPConfig.colors.trimmerTimeBarSmallCircle
+        timeStampTrimmerView.trimMaskolor = YPConfig.colors.trimmerMaskColor
         timeStampTrimmerView.timeStampFont = YPConfig.fonts.trimmerTimeStampFont
         timeStampTrimmerView.timeStampColor = YPConfig.colors.trimmerTimeStampColor
         timeStampTrimmerView.trimmerView.mainColor = YPConfig.colors.trimmerMainColor
