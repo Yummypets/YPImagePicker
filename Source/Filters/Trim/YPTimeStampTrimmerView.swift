@@ -19,9 +19,11 @@ public class YPTimeStampTrimmerView: UIView {
 
     // MARK: - Properties
 
-    var timeBarColor: UIColor?
+    var timeBarLargeCircleColor: UIColor?
+    var timeBarSmallCircleColor: UIColor?
     var timeStampFont: UIFont?
     var timeStampColor: UIColor?
+    var trimMaskolor: UIColor?
 
     let trimmerView = TrimmerView()
     let timeStampScrollableView = YPTimeStampScrollableView()
@@ -33,6 +35,10 @@ public class YPTimeStampTrimmerView: UIView {
     private(set) var isLaidOut = false
     public var style: TrimmerStyle = .default
     weak var timeStampTrimmerViewDelegate: YPTimeStampTrimmerViewDelegate?
+
+    public enum Constant {
+        public static let timeStampTrimViewPadding: CGFloat = 30
+    }
 
     public enum TrimmerStyle {
         case `default`
@@ -93,7 +99,8 @@ public class YPTimeStampTrimmerView: UIView {
 
     func setupTimeStampView() {
         timeStampScrollableView.translatesAutoresizingMaskIntoConstraints = false
-        timeStampScrollableView.timeBarColor = timeBarColor
+        timeStampScrollableView.timeBarLargeCircleColor = timeBarLargeCircleColor
+        timeStampScrollableView.timeBarSmallCircleColor = timeBarSmallCircleColor
         timeStampScrollableView.timeStampFont = timeStampFont
         timeStampScrollableView.timeStampColor = timeStampColor
         timeStampScrollableView.isHidden = true
@@ -103,6 +110,7 @@ public class YPTimeStampTrimmerView: UIView {
     func setupTrimmerView() {
         trimmerView.translatesAutoresizingMaskIntoConstraints = false
         trimmerView.delegate = self
+        trimmerView.updateTrimMaskColor(to: trimMaskolor)
         addSubview(trimmerView)
     }
 
@@ -128,8 +136,8 @@ public class YPTimeStampTrimmerView: UIView {
 
     func constraintTimeStampView() {
         timeStampScrollableView.topAnchor.constraint(equalTo: trimmerView.bottomAnchor, constant: 7).isActive = true
-        timeStampScrollableView.leftAnchor.constraint(equalTo: trimmerView.leftAnchor).isActive = true
-        timeStampScrollableView.rightAnchor.constraint(equalTo: trimmerView.rightAnchor).isActive = true
+        timeStampScrollableView.leftAnchor.constraint(equalTo: leftAnchor, constant: -Constant.timeStampTrimViewPadding).isActive = true
+        timeStampScrollableView.rightAnchor.constraint(equalTo: rightAnchor, constant: Constant.timeStampTrimViewPadding).isActive = true
         timeStampScrollableView.heightAnchor.constraint(greaterThanOrEqualToConstant: 23).isActive = true
     }
 
@@ -162,7 +170,7 @@ extension YPTimeStampTrimmerView: TrimmerViewDelegate {
     public func didChangeAsset(asset: AVAsset) {
         timeStampScrollableView.asset = asset
         timeStampScrollableView.contentSize = trimmerView.previewContentSize
-        timeStampScrollableView.renderContentViews()
+        timeStampScrollableView.renderRanges()
     }
     
     public func didScrollTrimmer(_ scrollView: UIScrollView) {

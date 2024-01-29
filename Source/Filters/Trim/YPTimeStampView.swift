@@ -1,5 +1,5 @@
 //
-//  YPTrimmerTimeStampView.swift
+//  YPTimeStampView.swift
 //  YPImagePicker
 //
 //  Created by Zeph Cohen on 1/22/24.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class YPTrimmerTimeStampView: UIView {
+class YPTimeStampView: UIView {
 
     var shouldRenderBoldCircle: Bool = false
     var timeStampText: String?
@@ -39,6 +39,7 @@ class YPTrimmerTimeStampView: UIView {
         let timeStamp = UILabel()
         timeStamp.translatesAutoresizingMaskIntoConstraints = false
         timeStamp.textColor = timeStampColor
+        timeStamp.textAlignment = .center
         var paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineHeightMultiple = 0.97
         timeStamp.attributedText = NSMutableAttributedString(string: text, attributes: [NSAttributedString.Key.kern: 0.1, NSAttributedString.Key.paragraphStyle: paragraphStyle])
