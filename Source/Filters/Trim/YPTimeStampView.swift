@@ -40,7 +40,7 @@ class YPTimeStampView: UIView {
         timeStamp.translatesAutoresizingMaskIntoConstraints = false
         timeStamp.textColor = timeStampColor
         timeStamp.textAlignment = .center
-        var paragraphStyle = NSMutableParagraphStyle()
+        let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineHeightMultiple = 0.97
         timeStamp.attributedText = NSMutableAttributedString(string: text, attributes: [NSAttributedString.Key.kern: 0.1, NSAttributedString.Key.paragraphStyle: paragraphStyle])
         timeStamp.font = timeStampFont
