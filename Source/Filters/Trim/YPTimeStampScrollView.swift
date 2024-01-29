@@ -109,12 +109,12 @@ class YPTimeStampScrollableView: UIScrollView {
                 timeBarColor: range.shouldRenderTimeStamp ? timeBarLargeCircleColor : timeBarSmallCircleColor
             )
 
-            guard var xPosition = getPosition(from: range.startTime) else {
+            guard let xPosition = getPosition(from: range.startTime) else {
                 ypLog("Could not find the x coordinate when rendering the time range with start time: \(range.startTime.durationText)")
                 continue
             }
 
-            if range.shouldRenderTimeStamp, let asset = asset {
+            if range.shouldRenderTimeStamp, let _ = asset {
                 contentViewSubView.shouldRenderBoldCircle = true
                 contentViewSubView.timeStampText = range.durationText
             }
