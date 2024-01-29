@@ -309,7 +309,7 @@ public struct YPConfigVideo {
     public var trimmerMinDuration: Double = 3.0
 
     /// Defines if the trimmer will display the timestamp user interface.
-     public var displayTrimmerWithTimeStamps: Bool = false
+    public var displayTrimmerWithTimeStamps: Bool = false
 
     /// Defines if the user skips the trimer stage,
     /// the video will be trimmed automatically to the maximum value of trimmerMaxDuration.
