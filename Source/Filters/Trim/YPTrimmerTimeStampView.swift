@@ -49,7 +49,7 @@ class YPTrimmerTimeStampView: UIView {
     }
 
     func renderCircle() {
-        let circlePath = UIBezierPath(arcCenter: CGPoint(x: bounds.midX, y: 4), radius: CGFloat(shouldRenderBoldCircle ? 3 : 1), startAngle: CGFloat(0), endAngle: CGFloat(Double.pi * 2), clockwise: true)
+        let circlePath = UIBezierPath(arcCenter: CGPoint(x: bounds.midX, y: 4), radius: CGFloat(shouldRenderBoldCircle ? 2 : 1), startAngle: CGFloat(0), endAngle: CGFloat(Double.pi * 2), clockwise: true)
         let shapeLayer = CAShapeLayer()
         shapeLayer.path = circlePath.cgPath
         shapeLayer.fillColor = timeBarColor?.cgColor
