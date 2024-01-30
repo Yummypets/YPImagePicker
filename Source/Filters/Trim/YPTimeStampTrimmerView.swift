@@ -60,6 +60,7 @@ public class YPTimeStampTrimmerView: UIView {
     // MARK: - Init
 
     public override func layoutSubviews() {
+        super.layoutSubviews()
         if !isLaidOut {
             setupSubviews()
             isLaidOut = true
