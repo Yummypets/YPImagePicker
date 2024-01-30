@@ -95,7 +95,7 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
     // MARK: - Live cycle
     deinit {
         ypLog("deinit filters vc")
-        mediaManager.forseCancelExporting()
+        mediaManager.forceCancelExporting()
         NotificationCenter.default.removeObserver(self)
     }
 

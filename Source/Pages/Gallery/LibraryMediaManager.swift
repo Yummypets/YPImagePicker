@@ -16,7 +16,11 @@ extension Notification.Name {
 }
 
 public class LibraryMediaManager {
-    
+    struct ExportData {
+        let localIdentifier: String
+        let session: AVAssetExportSession
+    }
+
     weak var v: YPLibraryView?
     var collection: PHAssetCollection?
     internal var fetchResult: PHFetchResult<PHAsset>?
@@ -24,7 +28,7 @@ public class LibraryMediaManager {
     internal var imageManager: PHCachingImageManager?
     internal var exportTimer: Timer?
     internal var exportTimers: [Timer] = []
-    internal var currentExportSessions: [AVAssetExportSession] = []
+    internal var currentExportSessions: [ExportData] = []
 
     /// If true then library has items to show. If false the user didn't allow any item to show in picker library.
     internal var hasResultItems: Bool {
@@ -116,7 +120,7 @@ public class LibraryMediaManager {
                                 switch session.status {
                                 case .completed:
                                     if let url = session.outputURL {
-                                        if let index = self?.currentExportSessions.firstIndex(of: session) {
+                                        if let index = self?.currentExportSessions.firstIndex(where: { $0.session == session }) {
                                             self?.currentExportSessions.remove(at: index)
                                         }
                                         callback(url)
@@ -144,7 +148,7 @@ public class LibraryMediaManager {
                     }
 
                     if let s = exportSession {
-                        self.currentExportSessions.append(s)
+                        self.currentExportSessions.append(ExportData(localIdentifier: videoAsset.localIdentifier, session: s))
                     }
                 }
             } catch let error {
@@ -154,6 +158,10 @@ public class LibraryMediaManager {
     }
 
     public func fetchVideoUrlAndCrop(for videoAsset: PHAsset, cropRect: CGRect, timeRange: CMTimeRange = CMTimeRange(start: CMTime.zero, end: CMTime.zero), shouldMute: Bool = false, compressionTypeOverride: String? = nil, callback: @escaping (_ videoURL: URL?) -> Void) {
+        if currentExportSessions.contains(where: { $0.localIdentifier == videoAsset.localIdentifier }) {
+            cancelExport(for: videoAsset.localIdentifier)
+        }
+
         let videosOptions = PHVideoRequestOptions()
         videosOptions.isNetworkAccessAllowed = true
         videosOptions.deliveryMode = .highQualityFormat
@@ -239,7 +247,7 @@ public class LibraryMediaManager {
                             switch session.status {
                             case .completed:
                                 if let url = session.outputURL {
-                                    if let index = self?.currentExportSessions.firstIndex(of: session) {
+                                    if let index = self?.currentExportSessions.firstIndex(where: { $0.session == session }) {
                                         self?.currentExportSessions.remove(at: index)
                                     }
                                     callback(url)
@@ -280,7 +288,7 @@ public class LibraryMediaManager {
                 }
 
                 if let s = exportSession {
-                    self.currentExportSessions.append(s)
+                    self.currentExportSessions.append(ExportData(localIdentifier: videoAsset.localIdentifier, session: s))
                 }
             } catch let error {
                 ypLog("⚠️ PHCachingImageManager >>> \(error)")
@@ -340,9 +348,9 @@ public class LibraryMediaManager {
         }
     }
 
-    func forseCancelExporting() {
-        for s in self.currentExportSessions {
-            s.cancelExport()
+    func forceCancelExporting() {
+        currentExportSessions.forEach {
+            $0.session.cancelExport()
         }
     }
 
@@ -390,5 +398,13 @@ public class LibraryMediaManager {
         }
 
         return imageAsset
+    }
+
+    func cancelExport(for localIdentifier: String) {
+        guard let index = currentExportSessions.firstIndex(where: { $0.localIdentifier == localIdentifier }) else { return }
+        let exportData = currentExportSessions[index]
+        stopExportTimer(for: exportData.session)
+        exportData.session.cancelExport()
+        currentExportSessions.remove(at: index)
     }
 }
