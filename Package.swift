@@ -18,7 +18,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/rewardStyle/PryntTrimmerView",
-            .branch("CC-505-creators-can-view-video-lengths-when-editing-in-storytelling-posts")
+            .exact("4.0.3")
         )
 
     ],
