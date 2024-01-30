@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/rewardstyle/prynttrimmerview",
       "state" : {
-        "branch" : "CC-505-creators-can-view-video-lengths-when-editing-in-storytelling-posts",
-        "revision" : "bf4ca34d74c59b77ab0c0ef527f3865bb041f8ef"
+        "revision" : "267a4b08213af5d8803e849c6ba7399928628752",
+        "version" : "4.0.3"
       }
     },
     {
