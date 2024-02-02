@@ -15,7 +15,7 @@ extension Notification.Name {
     public static var LibraryMediaManagerExportProgressUpdate: Notification.Name { return .init(rawValue: "\(namespace).LibraryMediaManagerExportProgressUpdate") }
 }
 
-public class LibraryMediaManager {
+open class LibraryMediaManager {
     struct ExportData {
         let localIdentifier: String
         let session: AVAssetExportSession
@@ -157,7 +157,7 @@ public class LibraryMediaManager {
         }
     }
 
-    public func fetchVideoUrlAndCrop(for videoAsset: PHAsset, cropRect: CGRect, timeRange: CMTimeRange = CMTimeRange(start: CMTime.zero, end: CMTime.zero), shouldMute: Bool = false, compressionTypeOverride: String? = nil, callback: @escaping (_ videoURL: URL?) -> Void) {
+    open func fetchVideoUrlAndCrop(for videoAsset: PHAsset, cropRect: CGRect, timeRange: CMTimeRange = CMTimeRange(start: CMTime.zero, end: CMTime.zero), shouldMute: Bool = false, compressionTypeOverride: String? = nil, callback: @escaping (_ videoURL: URL?) -> Void) {
         if currentExportSessions.contains(where: { $0.localIdentifier == videoAsset.localIdentifier }) {
             cancelExport(for: videoAsset.localIdentifier)
         }
