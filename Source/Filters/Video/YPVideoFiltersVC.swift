@@ -32,7 +32,7 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
     // MARK: - Public vars
 
     public var inputVideo: YPMediaVideo!
-    public var inputAsset: AVAsset { return AVAsset(url: inputVideo.url) }
+    public var inputAsset: AVAsset { return AVAsset(url: inputVideo.originalUrl) }
     public var didSave: ((YPMediaItem) -> Void)?
     public var didCancel: (() -> Void)?
 
