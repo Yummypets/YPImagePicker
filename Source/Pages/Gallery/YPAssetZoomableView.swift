@@ -27,7 +27,8 @@ final class YPAssetZoomableView: UIScrollView {
     public var minWidthForItem: CGFloat? = YPConfig.library.minWidthForItem
     public var maxAspectRatio: CGFloat? = YPConfig.library.maxAspectRatio
     public var minAspectRatio: CGFloat? = YPConfig.library.minAspectRatio
-    
+    public var allowedAspectRatios: [CGFloat]? = YPConfig.library.allowedAspectRatios
+
     fileprivate var currentAsset: PHAsset?
     
     // Image view of the asset for convenience. Can be video preview image view or photo image view.
@@ -187,7 +188,7 @@ final class YPAssetZoomableView: UIScrollView {
 // MARK: - Private
 
 fileprivate extension YPAssetZoomableView {
-    
+
     func setAssetFrame(`for` view: UIView, with size:CGSize) {
         // Reseting the previous scale
         self.minimumZoomScale = 1
@@ -233,7 +234,32 @@ fileprivate extension YPAssetZoomableView {
             view.frame.size.width = screenWidth
             view.frame.size.height = screenWidth
         }
-        
+
+        if let allowedAspectRatios = allowedAspectRatios, !allowedAspectRatios.isEmpty, isVideoMode {
+            var closestAllowedAspectRatio: CGFloat? = nil
+            if h > w { // portrait
+                // in this case, we need to find the next "larger" aspect ratio
+                let ascendingAllowedAspectRatios = allowedAspectRatios.sorted(by: <)
+                closestAllowedAspectRatio = ascendingAllowedAspectRatios.first(where: { $0 >= aspectRatio })
+            } else if w > h { // landscape
+                // in this case, we need to find the next "smaller" aspect ratio
+                let descendingAllowedAspectRatios = allowedAspectRatios.sorted(by: >)
+                closestAllowedAspectRatio = descendingAllowedAspectRatios.first(where: { $0 <= aspectRatio })
+            } else { // square
+                // in this case, we can pick whichever is closest
+                closestAllowedAspectRatio = allowedAspectRatios.enumerated().min( by: { abs($0.1 - aspectRatio) < abs($1.1 - aspectRatio) } )?.element
+            }
+            if let closestAllowedAspectRatio = closestAllowedAspectRatio {
+                if closestAllowedAspectRatio < aspectRatio {
+                    let targetHeight = screenWidth / closestAllowedAspectRatio
+                    zoomScale = targetHeight / view.frame.size.height
+                } else {
+                    let targetWidth = view.frame.size.height * closestAllowedAspectRatio
+                    zoomScale = targetWidth / view.frame.size.width
+                }
+            }
+        }
+
         // Centering image view
         view.center = center
         centerAssetView()
