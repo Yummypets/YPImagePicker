@@ -12,18 +12,23 @@ import Photos
 extension Notification.Name {
     private static var namespace = "YPImagePicker.LibraryMediaManager"
 
-    static var LibraryMediaManagerExportProgressUpdate: Notification.Name { return .init(rawValue: "\(namespace).LibraryMediaManagerExportProgressUpdate") }
+    public static var LibraryMediaManagerExportProgressUpdate: Notification.Name { return .init(rawValue: "\(namespace).LibraryMediaManagerExportProgressUpdate") }
 }
 
-public class LibraryMediaManager {
-    
+open class LibraryMediaManager {
+    struct ExportData {
+        let localIdentifier: String
+        let session: AVAssetExportSession
+    }
+
     weak var v: YPLibraryView?
     var collection: PHAssetCollection?
     internal var fetchResult: PHFetchResult<PHAsset>?
     internal var previousPreheatRect: CGRect = .zero
     internal var imageManager: PHCachingImageManager?
     internal var exportTimer: Timer?
-    internal var currentExportSessions: [AVAssetExportSession] = []
+    internal var exportTimers: [Timer] = []
+    internal var currentExportSessions: [ExportData] = []
 
     /// If true then library has items to show. If false the user didn't allow any item to show in picker library.
     internal var hasResultItems: Bool {
@@ -33,8 +38,10 @@ public class LibraryMediaManager {
             return false
         }
     }
-    
-    func initialize() {
+
+    public init() {}
+
+    public func initialize() {
         imageManager = PHCachingImageManager()
         resetCachedAssets()
     }
@@ -113,7 +120,7 @@ public class LibraryMediaManager {
                                 switch session.status {
                                 case .completed:
                                     if let url = session.outputURL {
-                                        if let index = self?.currentExportSessions.firstIndex(of: session) {
+                                        if let index = self?.currentExportSessions.firstIndex(where: { $0.session == session }) {
                                             self?.currentExportSessions.remove(at: index)
                                         }
                                         callback(url)
@@ -141,7 +148,7 @@ public class LibraryMediaManager {
                     }
 
                     if let s = exportSession {
-                        self.currentExportSessions.append(s)
+                        self.currentExportSessions.append(ExportData(localIdentifier: videoAsset.localIdentifier, session: s))
                     }
                 }
             } catch let error {
@@ -150,7 +157,11 @@ public class LibraryMediaManager {
         }
     }
 
-    func fetchVideoUrlAndCrop(for videoAsset: PHAsset, cropRect: CGRect, timeRange: CMTimeRange = CMTimeRange(start: CMTime.zero, end: CMTime.zero), shouldMute: Bool = false, compressionTypeOverride: String? = nil, callback: @escaping (_ videoURL: URL?) -> Void) {
+    open func fetchVideoUrlAndCrop(for videoAsset: PHAsset, cropRect: CGRect, timeRange: CMTimeRange = CMTimeRange(start: CMTime.zero, end: CMTime.zero), shouldMute: Bool = false, compressionTypeOverride: String? = nil, callback: @escaping (_ videoURL: URL?) -> Void) {
+        if currentExportSessions.contains(where: { $0.localIdentifier == videoAsset.localIdentifier }) {
+            cancelExport(for: videoAsset.localIdentifier)
+        }
+
         let videosOptions = PHVideoRequestOptions()
         videosOptions.isNetworkAccessAllowed = true
         videosOptions.deliveryMode = .highQualityFormat
@@ -236,29 +247,30 @@ public class LibraryMediaManager {
                             switch session.status {
                             case .completed:
                                 if let url = session.outputURL {
-                                    if let index = self?.currentExportSessions.firstIndex(of: session) {
+                                    if let index = self?.currentExportSessions.firstIndex(where: { $0.session == session }) {
                                         self?.currentExportSessions.remove(at: index)
                                     }
                                     callback(url)
                                 } else {
                                     ypLog("LibraryMediaManager -> Don't have URL.")
-                                    self?.stopExportTimer()
+                                    self?.stopExportTimer(for: session)
                                     callback(nil)
                                 }
                             case .failed:
                                 if compressionTypeOverride == nil, let self = self {
                                     let compressionOverride = presetName == AVAssetExportPresetPassthrough ? YPConfig.video.compression : AVAssetExportPresetPassthrough
                                     ypLog("LibraryMediaManager -> Export of the video failed. Reason: \(String(describing: session.error))\n--- Retrying with compression type \(compressionOverride)")
+                                    self.stopExportTimer(for: session)
                                     self.fetchVideoUrlAndCrop(for: videoAsset, cropRect: cropRect, timeRange: timeRange, shouldMute: shouldMute, compressionTypeOverride: compressionOverride, callback: callback)
                                 }
                                 else {
                                     ypLog("LibraryMediaManager -> Export of the video failed. Reason: \(String(describing: session.error))")
-                                    self?.stopExportTimer()
+                                    self?.stopExportTimer(for: session)
                                     callback(nil)
                                 }
                             default:
                                 ypLog("LibraryMediaManager -> Export session completed with \(session.status) status. Not handling.")
-                                self?.stopExportTimer()
+                                self?.stopExportTimer(for: session)
                                 callback(nil)
                             }
                         }
@@ -266,15 +278,17 @@ public class LibraryMediaManager {
 
                 // 6. Exporting
                 DispatchQueue.main.async {
-                    self.exportTimer = Timer.scheduledTimer(timeInterval: 0.1,
-                                                            target: self,
-                                                            selector: #selector(self.onTickExportTimer),
-                                                            userInfo: exportSession,
-                                                            repeats: true)
+                    self.exportTimers.append(
+                        Timer.scheduledTimer(timeInterval: 0.1,
+                                             target: self,
+                                             selector: #selector(self.onTickExportTimer),
+                                             userInfo: exportSession,
+                                             repeats: true)
+                    )
                 }
 
                 if let s = exportSession {
-                    self.currentExportSessions.append(s)
+                    self.currentExportSessions.append(ExportData(localIdentifier: videoAsset.localIdentifier, session: s))
                 }
             } catch let error {
                 ypLog("⚠️ PHCachingImageManager >>> \(error)")
@@ -290,13 +304,19 @@ public class LibraryMediaManager {
                 }
             } else {
                 // dispatch notification
-                let progress = ["progress": exportSession.progress]
+                let progress = [
+                    "session": exportSession,
+                    "progress": exportSession.progress
+                ] as [String : Any]
                 NotificationCenter.default.post(name: .LibraryMediaManagerExportProgressUpdate, object: self, userInfo: progress)
             }
 
             if exportSession.progress > 0.99 {
-                stopExportTimer()
-                let progress = ["progress": Float.zero]
+                stopExportTimer(timer: sender)
+                let progress = [
+                    "session": exportSession,
+                    "progress": 1.0
+                ] as [String : Any]
                 NotificationCenter.default.post(name: .LibraryMediaManagerExportProgressUpdate, object: self, userInfo: progress)
             }
         }
@@ -309,10 +329,28 @@ public class LibraryMediaManager {
         // also reset progress view if one is available
         v?.updateProgress(0)
     }
-    
-    func forseCancelExporting() {
-        for s in self.currentExportSessions {
-            s.cancelExport()
+
+    private func stopExportTimer(timer: Timer) {
+        timer.invalidate()
+        if let index = exportTimers.firstIndex(of: timer) {
+            exportTimers.remove(at: index)
+        }
+        // also reset progress view if one is available
+        v?.updateProgress(0)
+    }
+
+    private func stopExportTimer(for session: AVAssetExportSession) {
+        let timer = exportTimers.first { timer in
+            timer.userInfo as? AVAssetExportSession == session
+        }
+        if let timer {
+            stopExportTimer(timer: timer)
+        }
+    }
+
+    func forceCancelExporting() {
+        currentExportSessions.forEach {
+            $0.session.cancelExport()
         }
     }
 
@@ -360,5 +398,13 @@ public class LibraryMediaManager {
         }
 
         return imageAsset
+    }
+
+    func cancelExport(for localIdentifier: String) {
+        guard let index = currentExportSessions.firstIndex(where: { $0.localIdentifier == localIdentifier }) else { return }
+        let exportData = currentExportSessions[index]
+        stopExportTimer(for: exportData.session)
+        exportData.session.cancelExport()
+        currentExportSessions.remove(at: index)
     }
 }

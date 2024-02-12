@@ -32,7 +32,7 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
     // MARK: - Public vars
 
     public var inputVideo: YPMediaVideo!
-    public var inputAsset: AVAsset { return AVAsset(url: inputVideo.url) }
+    public var inputAsset: AVAsset { return AVAsset(url: inputVideo.originalUrl) }
     public var didSave: ((YPMediaItem) -> Void)?
     public var didCancel: (() -> Void)?
 
@@ -97,7 +97,7 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
     // MARK: - Live cycle
     deinit {
         ypLog("deinit filters vc")
-        mediaManager.forseCancelExporting()
+        mediaManager.forceCancelExporting()
         NotificationCenter.default.removeObserver(self)
     }
 
@@ -369,12 +369,13 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
 
     @objc
     func onExportProgressUpdate(notification:Notification) {
-        if let info = notification.userInfo as? [String:Float], let progress = info["progress"] {
-            if progress < progressView.progress {
+        if let info = notification.userInfo as? [String: Any], let progress = info["progress"] as? Float {
+            if progress == 1.0 {
+                progressView.progress = 0
                 progressView.isHidden = true // progress has reached the end
+            } else {
+                progressView.progress = progress
             }
-            
-            progressView.progress = progress
         }
     }
     

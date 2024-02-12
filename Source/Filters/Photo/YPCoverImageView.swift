@@ -14,7 +14,7 @@ public class YPCoverImageView: YPAdjustableView {
 
     var cropRect: CGRect?
     var asset: PHAsset?
-    var image: UIImage? {
+    public var image: UIImage? {
         get {
             coverImageView.image
         }
