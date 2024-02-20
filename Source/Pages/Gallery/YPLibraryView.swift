@@ -145,9 +145,6 @@ internal final class YPLibraryView: UIView {
 
     func hideOverlayView() {
         assetViewContainer.itemOverlay?.alpha = 0
-
-        // disable grid for images
-        assetViewContainer.itemOverlay?.isHidden = !assetZoomableView.isVideoMode
     }
 
     // MARK: Loader and progress
@@ -242,10 +239,10 @@ internal final class YPLibraryView: UIView {
             assetViewContainer.Bottom == showAlbumsButton.Top
             showAlbumsButton.Bottom == line.Top
             showAlbumsButton.height(60)
-            assetZoomableView.Bottom == collectionView.Top - 60
+            showAlbumsButton.Bottom == collectionView.Top
         } else {
             assetViewContainer.Bottom == line.Top
-            assetZoomableView.Bottom == collectionView.Top
+            line.Bottom == collectionView.Top
         }
 
         line.height(1)
@@ -253,7 +250,9 @@ internal final class YPLibraryView: UIView {
 
         assetViewContainer.top(0).fillHorizontally().heightEqualsWidth()
         self.assetViewContainerConstraintTop = assetViewContainer.topConstraint
-        assetZoomableView.fillContainer().heightEqualsWidth()
+        assetZoomableView.width(0)
+        assetZoomableView.height(0)
+        assetZoomableView.centerInContainer()
 
         assetViewContainer.sendSubviewToBack(assetZoomableView)
 

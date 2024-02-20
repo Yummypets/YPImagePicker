@@ -26,7 +26,6 @@ final class YPAssetViewContainer: UIView {
     private let spinner = UIActivityIndicatorView(style: .white)
     private var shouldCropToSquare = YPConfig.library.isSquareByDefault
 
-    private var isMultipleSelectionEnabled = false
     private var isSquareCropButtonEnabled = false
 
     public var itemOverlayType = YPConfig.library.itemOverlayType
@@ -104,7 +103,7 @@ final class YPAssetViewContainer: UIView {
     public func updateSquareCropButtonState() {
         let currentHiddenState = squareCropButton.isHidden
 
-        guard !isMultipleSelectionEnabled else {
+        guard !zoomableView.isMultipleSelectionEnabled else {
             // If multiple selection enabled, the squareCropButton is not visible
             squareCropButton.isHidden = true
             return
@@ -137,7 +136,8 @@ final class YPAssetViewContainer: UIView {
     
     /// Use this to update the multiple selection mode UI state for the YPAssetViewContainer
     public func setMultipleSelectionMode(on: Bool) {
-        isMultipleSelectionEnabled = on
+        zoomableView.isMultipleSelectionEnabled = on
+        zoomableView.multipleSelectionEnabled()
         updateSquareCropButtonState()
     }
 }
@@ -145,7 +145,7 @@ final class YPAssetViewContainer: UIView {
 // MARK: - ZoomableViewDelegate
 extension YPAssetViewContainer: YPAssetZoomableViewDelegate {
     public func ypAssetZoomableViewDidLayoutSubviews(_ zoomableView: YPAssetZoomableView) {
-        let newFrame = zoomableView.assetImageView.convert(zoomableView.assetImageView.bounds, to: self)
+        let newFrame = zoomableView.convert(zoomableView.bounds, to: self)
         
         if let itemOverlay = itemOverlay {
             // update grid position
@@ -162,7 +162,7 @@ extension YPAssetViewContainer: YPAssetZoomableViewDelegate {
     }
     
     public func ypAssetZoomableViewScrollViewDidZoom() {
-        guard let itemOverlay = itemOverlay else {
+        guard let itemOverlay = itemOverlay, zoomableView.isMultipleSelectionEnabled else {
             return
         }
         if isShown {
@@ -173,7 +173,7 @@ extension YPAssetViewContainer: YPAssetZoomableViewDelegate {
     }
     
     public func ypAssetZoomableViewScrollViewDidEndZooming() {
-        guard let itemOverlay = itemOverlay else {
+        guard let itemOverlay = itemOverlay, zoomableView.isMultipleSelectionEnabled else {
             return
         }
         UIView.animate(withDuration: 0.3) {
@@ -195,7 +195,7 @@ extension YPAssetViewContainer: UIGestureRecognizerDelegate {
     
     @objc
     private func handleTouchDown(sender: UILongPressGestureRecognizer) {
-        guard let itemOverlay = itemOverlay else {
+        guard let itemOverlay = itemOverlay, zoomableView.isMultipleSelectionEnabled else {
             return
         }
         switch sender.state {

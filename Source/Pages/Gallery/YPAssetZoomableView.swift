@@ -9,6 +9,7 @@
 
 import UIKit
 import Photos
+import Stevia
 
 protocol YPAssetZoomableViewDelegate: AnyObject {
     func ypAssetZoomableViewDidLayoutSubviews(_ zoomableView: YPAssetZoomableView)
@@ -23,17 +24,22 @@ final class YPAssetZoomableView: UIScrollView {
     public var photoImageView = UIImageView()
     public var videoView = YPVideoView()
     public var squaredZoomScale: CGFloat = 1
+    public var isMultipleSelectionEnabled = false
 
     public var minWidthForItem: CGFloat? = YPConfig.library.minWidthForItem
     public var maxAspectRatio: CGFloat? = YPConfig.library.maxAspectRatio
     public var minAspectRatio: CGFloat? = YPConfig.library.minAspectRatio
-    public var allowedAspectRatios: [CGFloat]? = YPConfig.library.allowedAspectRatios
-
-    fileprivate var currentAsset: PHAsset?
     
+    fileprivate var currentAsset: PHAsset?
+    private var currentOriginalImageSize: CGSize = .zero
+
     // Image view of the asset for convenience. Can be video preview image view or photo image view.
     public var assetImageView: UIImageView {
         return isVideoMode ? videoView.previewImageView : photoImageView
+    }
+
+    public var assetView: UIView {
+        isVideoMode ? videoView : photoImageView
     }
 
     /// Set zoom scale to fit the image to square or show the full image
@@ -64,27 +70,35 @@ final class YPAssetZoomableView: UIScrollView {
     public func setVideo(_ video: PHAsset,
                          mediaManager: LibraryMediaManager,
                          storedCropPosition: YPLibrarySelection?,
+                         customSize: CGSize? = nil,
                          completion: @escaping () -> Void,
                          updateCropInfo: @escaping () -> Void) {
         mediaManager.imageManager?.fetchPreviewFor(video: video) { [weak self] preview in
             guard let strongSelf = self else { return }
             guard strongSelf.currentAsset != video else { completion() ; return }
-            
+
             if strongSelf.videoView.isDescendant(of: strongSelf) == false {
                 strongSelf.isVideoMode = true
                 strongSelf.photoImageView.removeFromSuperview()
                 strongSelf.addSubview(strongSelf.videoView)
+
+                strongSelf.videoView.Top == strongSelf.Top
+                strongSelf.videoView.Bottom == strongSelf.Bottom
+                strongSelf.videoView.Right == strongSelf.Right
+                strongSelf.videoView.Left == strongSelf.Left
             }
             
             strongSelf.videoView.setPreviewImage(preview)
 
             // calculate size from asset
-            let videoSize = CGSize(width: video.pixelWidth, height: video.pixelHeight)
+            strongSelf.currentOriginalImageSize = CGSize(width: video.pixelWidth, height: video.pixelHeight)
+            let videoSize = customSize ?? strongSelf.currentOriginalImageSize
+
             strongSelf.setAssetFrame(for: strongSelf.videoView, with: videoSize)
             strongSelf.squaredZoomScale = strongSelf.calculateSquaredZoomScale()
-            
+
             completion()
-            
+
             // Stored crop position in multiple selection
             if let scp173 = storedCropPosition {
                 strongSelf.applyStoredCropPosition(scp173)
@@ -106,6 +120,7 @@ final class YPAssetZoomableView: UIScrollView {
     public func setImage(_ photo: PHAsset,
                          mediaManager: LibraryMediaManager,
                          storedCropPosition: YPLibrarySelection?,
+                         customSize: CGSize? = nil,
                          completion: @escaping (Bool) -> Void,
                          updateCropInfo: @escaping () -> Void) {
         guard currentAsset != photo else {
@@ -113,25 +128,32 @@ final class YPAssetZoomableView: UIScrollView {
             return
         }
         currentAsset = photo
-        
+
         mediaManager.imageManager?.fetch(photo: photo) { [weak self] image, isLowResIntermediaryImage in
             guard let strongSelf = self else { return }
-            
+
             if strongSelf.photoImageView.isDescendant(of: strongSelf) == false {
                 strongSelf.isVideoMode = false
                 strongSelf.videoView.removeFromSuperview()
                 strongSelf.videoView.showPlayImage(show: false)
                 strongSelf.videoView.deallocate()
                 strongSelf.addSubview(strongSelf.photoImageView)
-            
+
+                strongSelf.photoImageView.Top == strongSelf.Top
+                strongSelf.photoImageView.Bottom == strongSelf.Bottom
+                strongSelf.photoImageView.Right == strongSelf.Right
+                strongSelf.photoImageView.Left == strongSelf.Left
+
                 strongSelf.photoImageView.contentMode = .scaleAspectFill
-                strongSelf.photoImageView.clipsToBounds = true
             }
-            
+
+            strongSelf.currentOriginalImageSize = image.size
+            let imageSize = customSize ?? strongSelf.currentOriginalImageSize
+
             strongSelf.photoImageView.image = image
-           
-            strongSelf.setAssetFrame(for: strongSelf.photoImageView, with: image.size)
-                
+
+            strongSelf.setAssetFrame(for: strongSelf.photoImageView, with: imageSize)
+
             // Stored crop position in multiple selection
             if let scp173 = storedCropPosition {
                 strongSelf.applyStoredCropPosition(scp173)
@@ -158,20 +180,16 @@ final class YPAssetZoomableView: UIScrollView {
 
         backgroundColor = YPConfig.colors.assetViewBackgroundColor
         clipsToBounds = true
-        photoImageView.frame = CGRect(origin: CGPoint.zero, size: CGSize.zero)
-        videoView.frame = CGRect(origin: CGPoint.zero, size: CGSize.zero)
+
+        photoImageView.translatesAutoresizingMaskIntoConstraints = false
+
+        videoView.translatesAutoresizingMaskIntoConstraints = false
+        videoView.width(0)
+        videoView.height(0)
+
         showsHorizontalScrollIndicator = false
         showsVerticalScrollIndicator = false
-        maximumZoomScale = 3.0
-        minimumZoomScale = 1
         delegate = self
-        if YPConfig.library.allowZoomToCrop {
-            alwaysBounceHorizontal = true
-            alwaysBounceVertical = true
-        } else {
-            maximumZoomScale = 1.0
-            minimumZoomScale = 1.0
-        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -183,41 +201,75 @@ final class YPAssetZoomableView: UIScrollView {
         super.layoutSubviews()
         zoomableViewDelegate?.ypAssetZoomableViewDidLayoutSubviews(self)
     }
+
+    func multipleSelectionEnabled() {
+        setAssetFrame(for: assetView, with: currentOriginalImageSize)
+    }
+
+    private func resizeZoomableView(size: CGSize) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self, let imageSize = self.assetImageView.image?.size else { return }
+
+            let assetView = self.assetView
+
+            self.widthConstraint?.constant = size.width
+            self.heightConstraint?.constant = size.height
+
+            if size.width > size.height {
+                let scaleFactor = size.width / imageSize.width
+                let scaledHeight = scaleFactor * imageSize.height
+                assetView.widthConstraint?.constant = size.width
+                assetView.heightConstraint?.constant = scaledHeight
+            } else {
+                let scaleFactor = size.height / imageSize.height
+                let scaledWidth = scaleFactor * imageSize.width
+                assetView.widthConstraint?.constant = scaledWidth
+                assetView.heightConstraint?.constant = size.height
+            }
+
+            self.layoutIfNeeded()
+
+            self.cropAreaDidChange()
+        }
+    }
 }
 
 // MARK: - Private
 
 fileprivate extension YPAssetZoomableView {
-
+    
     func setAssetFrame(`for` view: UIView, with size:CGSize) {
         // Reseting the previous scale
         self.minimumZoomScale = 1
         self.zoomScale = 1
-        
+
         // Calculating and setting the image view frame depending on screenWidth
         let screenWidth = YPImagePickerConfiguration.screenWidth
-        
+
         let w = size.width
         let h = size.height
+
+        var width: CGFloat = 0.0
+        var height: CGFloat = 0.0
 
         let aspectRatio: CGFloat = w / h
         var zoomScale: CGFloat = 1
 
         if w > h { // Landscape
-            view.frame.size.width = screenWidth
-            view.frame.size.height = screenWidth / aspectRatio
-            
+            width = screenWidth
+            height = screenWidth / aspectRatio
+
             // if the content aspect ratio is wider than minimum, then increase zoom scale so the sides are cropped off to maintain the minimum ar. This only applies to videos.
             if let maxAR = maxAspectRatio {
                 if aspectRatio > maxAR  && isVideoMode {
                     let targetHeight = screenWidth / maxAR
-                    zoomScale = targetHeight / view.frame.size.height
+                    zoomScale = targetHeight / height
                 }
             }
         } else if h > w { // Portrait
-            view.frame.size.width = screenWidth * aspectRatio
-            view.frame.size.height = screenWidth
-            
+            width = screenWidth * aspectRatio
+            height = screenWidth
+
             if let minWidth = minWidthForItem {
                 let k = minWidth / screenWidth
                 zoomScale = (h / w) * k
@@ -226,60 +278,32 @@ fileprivate extension YPAssetZoomableView {
             // if the content aspect ratio is taller than maximum, then increase zoom scale so the top and bottom are cropped off to maintain the maximum ar. This only applies to videos.
             if let minAR = minAspectRatio {
                 if aspectRatio < minAR  && isVideoMode {
-                    let targetWidth = view.frame.size.height * minAR
-                    zoomScale = targetWidth / view.frame.size.width
+                    let targetWidth = height * minAR
+                    zoomScale = targetWidth / width
                 }
             }
         } else { // Square
-            view.frame.size.width = screenWidth
-            view.frame.size.height = screenWidth
+            width = screenWidth
+            height = screenWidth
         }
 
-        if let allowedAspectRatios = allowedAspectRatios, !allowedAspectRatios.isEmpty, isVideoMode {
-            var closestAllowedAspectRatio: CGFloat? = nil
-            if h > w { // portrait
-                // in this case, we need to find the next "larger" aspect ratio
-                let ascendingAllowedAspectRatios = allowedAspectRatios.sorted(by: <)
-                closestAllowedAspectRatio = ascendingAllowedAspectRatios.first(where: { $0 >= aspectRatio })
-            } else if w > h { // landscape
-                // in this case, we need to find the next "smaller" aspect ratio
-                let descendingAllowedAspectRatios = allowedAspectRatios.sorted(by: >)
-                closestAllowedAspectRatio = descendingAllowedAspectRatios.first(where: { $0 <= aspectRatio })
-            } else { // square
-                // in this case, we can pick whichever is closest
-                closestAllowedAspectRatio = allowedAspectRatios.enumerated().min( by: { abs($0.1 - aspectRatio) < abs($1.1 - aspectRatio) } )?.element
-            }
-            if let closestAllowedAspectRatio = closestAllowedAspectRatio {
-                if closestAllowedAspectRatio < aspectRatio {
-                    let targetHeight = screenWidth / closestAllowedAspectRatio
-                    zoomScale = targetHeight / view.frame.size.height
-                } else {
-                    let targetWidth = view.frame.size.height * closestAllowedAspectRatio
-                    zoomScale = targetWidth / view.frame.size.width
-                }
-            }
-        }
+        resizeZoomableView(size: CGSize(width: width, height: height))
 
-        // Centering image view
-        view.center = center
-        centerAssetView()
-        
         // Setting new scale
-        minimumZoomScale = zoomScale
-
-        if isVideoMode {
+        if YPConfig.library.allowZoomToCrop, isMultipleSelectionEnabled {
             isScrollEnabled = true
             maximumZoomScale = 3.0
-            if !YPConfig.library.allowZoomToCrop {
-                maximumZoomScale = zoomScale
-                minimumZoomScale = zoomScale
-            }
         } else {
-            isScrollEnabled = false // can't scroll for images
-            maximumZoomScale = zoomScale
+            isScrollEnabled = false
+            self.maximumZoomScale = zoomScale
         }
 
         self.zoomScale = zoomScale
+        self.minimumZoomScale = zoomScale
+
+        // Centering image view
+        assetView.center = self.center
+        self.centerAssetView()
     }
     
     /// Calculate zoom scale which will fit the image to square
@@ -303,17 +327,22 @@ fileprivate extension YPAssetZoomableView {
     
     // Centring the image frame
     func centerAssetView() {
-        let assetView = isVideoMode ? videoView : photoImageView
-        let scrollViewBoundsSize = self.bounds.size
-        var assetFrame = assetView.frame
-        let assetSize = assetView.frame.size
-        
-        assetFrame.origin.x = (assetSize.width < scrollViewBoundsSize.width) ?
-            (scrollViewBoundsSize.width - assetSize.width) / 2.0 : 0
-        assetFrame.origin.y = (assetSize.height < scrollViewBoundsSize.height) ?
-            (scrollViewBoundsSize.height - assetSize.height) / 2.0 : 0.0
-        
-        assetView.frame = assetFrame
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+
+            let scrollViewBoundsSize = self.bounds.size
+            var assetFrame = self.assetView.frame
+            let assetSize = self.assetView.frame.size
+
+            assetFrame.origin.x = (assetSize.width < scrollViewBoundsSize.width) ?
+                (scrollViewBoundsSize.width - assetSize.width) / 2.0 : 0
+            assetFrame.origin.y = (assetSize.height < scrollViewBoundsSize.height) ?
+                (scrollViewBoundsSize.height - assetSize.height) / 2.0 : 0.0
+
+            self.assetView.frame = assetFrame
+
+            self.layoutIfNeeded()
+        }
     }
 }
 

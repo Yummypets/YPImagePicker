@@ -323,12 +323,14 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                 self.v.assetZoomableView.setImage(asset,
                                                   mediaManager: self.mediaManager,
                                                   storedCropPosition: self.fetchStoredCrop(),
+                                                  customSize: self.getFirstSelectedItemSize(),
                                                   completion: completion,
                                                   updateCropInfo: updateCropInfo)
             case .video:
                 self.v.assetZoomableView.setVideo(asset,
                                                   mediaManager: self.mediaManager,
                                                   storedCropPosition: self.fetchStoredCrop(),
+                                                  customSize: self.getFirstSelectedItemSize(),
                                                   completion: { completion(false) },
                                                   updateCropInfo: updateCropInfo)
             case .audio, .unknown:
@@ -337,6 +339,14 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                 ypLog("Bug. Unknown default.")
             }
         }
+    }
+
+    private func getFirstSelectedItemSize() -> CGSize? {
+        guard let firstSelectedItem = selectedItems.first,
+              let selectedAsset = mediaManager.getAsset(at: firstSelectedItem.index),
+              isMultipleSelectionEnabled else { return nil }
+
+        return CGSize(width: selectedAsset.pixelWidth, height: selectedAsset.pixelHeight)
     }
 
     // MARK: - Verification
@@ -376,7 +386,7 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         selectedAsset.scrollViewContentOffset = v.assetZoomableView.contentOffset
         selectedAsset.scrollViewZoomScale = v.assetZoomableView.zoomScale
         selectedAsset.cropRect = v.currentCropRect()
-        
+
         // Replace
         selectedItems.remove(at: selectedAssetIndex)
         selectedItems.insert(selectedAsset, at: selectedAssetIndex)
@@ -404,13 +414,19 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                                    withCropRect: CGRect? = nil,
                                    callback: @escaping (_ photo: UIImage, _ exif: [String: Any]) -> Void) {
         delegate?.libraryViewDidTapNext()
-        let cropRect = withCropRect ?? DispatchQueue.main.sync { v.currentCropRect() }
+        let cropRect = withCropRect ?? DispatchQueue.main.sync { v.assetZoomableView.photoImageView.frame }
         let ts = targetSize(for: asset, cropRect: cropRect)
         mediaManager.imageManager?.fetchImage(for: asset, cropRect: cropRect, targetSize: ts, callback: callback)
     }
-    
-    private func getCropRect(for asset:PHAsset) -> CGRect {
-        let normalizedCropRect = v.currentCropRect()
+
+    private func fetchImage(for asset: PHAsset,
+                                   callback: @escaping (_ photo: UIImage, _ exif: [String: Any]) -> Void) {
+        delegate?.libraryViewDidTapNext()
+        mediaManager.imageManager?.fetchImage(for: asset, callback: callback)
+    }
+
+    private func getCropRect(for asset:PHAsset, cropRect: CGRect? = nil) -> CGRect {
+        let normalizedCropRect = cropRect ?? v.currentCropRect()
         let ts = targetSize(for: asset, cropRect: normalizedCropRect)
         let xCrop: CGFloat = normalizedCropRect.origin.x * CGFloat(asset.pixelWidth)
         let yCrop: CGFloat = normalizedCropRect.origin.y * CGFloat(asset.pixelHeight)
@@ -481,8 +497,10 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
 
                         switch asset.asset.mediaType {
                         case .image:
-                            self.fetchImageAndCrop(for: asset.asset, withCropRect: asset.cropRect) { image, exifMeta in
+                            self.fetchImage(for: asset.asset) { image, exifMeta in
                                 let photo = YPMediaPhoto(image: image.resizedImageIfNeeded(), exifMeta: exifMeta, asset: asset.asset)
+                                let cropRect = self.selectedItems[index].cropRect
+                                photo.cropRect = self.getCropRect(for: asset.asset, cropRect: cropRect)
                                 resultMediaItems[index] = YPMediaItem.photo(p: photo)
                                 asyncGroup.leave()
                             }
@@ -492,7 +510,7 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                                 if let videoURL = videoURL {
                                     let videoItem = YPMediaVideo(thumbnail: thumbnailFromVideoPath(videoURL),
                                                                  videoURL: videoURL, asset: asset.asset)
-                                    videoItem.cropRect = self.getCropRect(for: asset.asset)
+                                    videoItem.cropRect = self.getCropRect(for: asset.asset, cropRect: self.selectedItems[index].cropRect)
                                     resultMediaItems[index] = YPMediaItem.video(v: videoItem)
                                 } else {
                                     ypLog("YPLibraryVC -> selectedMedia -> Problems with fetching videoURL.")

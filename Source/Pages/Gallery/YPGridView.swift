@@ -55,6 +55,9 @@ final class YPGridView: UIView {
         applyShadow(to: line2)
         applyShadow(to: line3)
         applyShadow(to: line4)
+
+        layer.borderWidth = stroke
+        layer.borderColor = color.cgColor
     }
     
     func applyShadow(to view: UIView) {

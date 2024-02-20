@@ -20,7 +20,8 @@ public class YPMediaPhoto {
     public let exifMeta: [String: Any]?
     public var asset: PHAsset?
     public var url: URL?
-    
+    public var cropRect: CGRect?
+
     public init(image: UIImage,
                 exifMeta: [String: Any]? = nil,
                 fromCamera: Bool = false,
@@ -61,6 +62,43 @@ public class YPMediaVideo {
 public enum YPMediaItem {
     case photo(p: YPMediaPhoto)
     case video(v: YPMediaVideo)
+
+    public var scale: CGFloat? {
+        switch self {
+        case .photo(let photo):
+            guard let pixelWidth = photo.asset?.pixelWidth,
+                  let cropWidth = photo.cropRect?.width
+            else { return nil }
+            return CGFloat(pixelWidth) / cropWidth
+        case .video(let video):
+            guard let pixelWidth = video.asset?.pixelWidth,
+                  let cropWidth = video.cropRect?.width
+            else { return nil }
+            return CGFloat(pixelWidth) / cropWidth
+        }
+    }
+
+    public var size: CGSize? {
+        switch self {
+        case .photo(let photo):
+            guard let pixelWidth = photo.asset?.pixelWidth,
+                  let pixelHeight = photo.asset?.pixelHeight
+            else { return nil }
+            return CGSize(width: pixelWidth, height: pixelHeight)
+        case .video(let video):
+            guard let pixelWidth = video.asset?.pixelWidth,
+                  let pixelHeight = video.asset?.pixelHeight
+            else { return nil }
+            return CGSize(width: pixelWidth, height: pixelHeight)
+        }
+    }
+
+    public var cropRect: CGRect? {
+        switch self {
+        case .photo(let photo): photo.cropRect
+        case .video(let video): video.cropRect
+        }
+    }
 }
 
 // MARK: - Compression
