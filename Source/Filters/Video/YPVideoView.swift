@@ -45,7 +45,10 @@ public class YPVideoView: YPAdjustableView {
     public override func layoutSubviews() {
         super.layoutSubviews()
 
-        updateViewFrameAction = updateViewFrame
+        updateViewFrameAction = { [weak self] frame in
+            self?.playerView.layer.frame = frame
+            self?.playerView.playerLayer.videoGravity = .resizeAspectFill
+        }
 
         // Ensure necessary properties are available
         guard let cropRect = cropRect, let asset = asset else { return }
@@ -90,11 +93,6 @@ public class YPVideoView: YPAdjustableView {
             player.seek(to: CMTime.zero)
             player.play()
         }
-    }
-
-    private func updateViewFrame(_ frame: CGRect) {
-        playerView.layer.frame = frame
-        playerView.playerLayer.videoGravity = .resizeAspectFill
     }
 }
 
