@@ -80,16 +80,11 @@ class YPTimeStampScrollableView: UIScrollView {
         if totalSeconds < 30 {
             // Clips less then 30 seconds will have a scale of 1 dot = 1 second and every 5th dot will render a timestamp label.
             timeStamps = generateTimeStampViewModels(amount: Int(totalSeconds), timeStampInterval: 5, duration: 1)
-        } else if totalSeconds >= 30, totalSeconds <= 61 {
+        } else {
             let fiveSecondDivisor: Double = 5.0
             timeRangeAmount = round(totalSeconds / fiveSecondDivisor)
-            // Clips between 30 seconds and 61 seconds will have a scale of 1 dot = 5 seconds and every 3rd dot will render a timestamp label.
+            // Clips over 30 seconds will have a scale of 1 dot = 5 seconds and every 3rd dot will render a timestamp label.
             timeStamps = generateTimeStampViewModels(amount: Int(timeRangeAmount), timeStampInterval: 3, duration: 5)
-        } else {
-            let tenSecondDivisor: Double = 10
-            timeRangeAmount = round(totalSeconds / tenSecondDivisor)
-            // Clips greater then 61 seconds will have a scale of 1 dot = 10 seconds and every 3rd dot will render a timestmp label.
-            timeStamps = generateTimeStampViewModels(amount: Int(timeRangeAmount), timeStampInterval: 3, duration: 10)
         }
         return timeStamps
     }
