@@ -29,10 +29,14 @@ final class YPAssetZoomableView: UIScrollView {
     public var minWidthForItem: CGFloat? = YPConfig.library.minWidthForItem
     public var maxAspectRatio: CGFloat? = YPConfig.library.maxAspectRatio
     public var minAspectRatio: CGFloat? = YPConfig.library.minAspectRatio
+    public var allowedVideoAspectRatios: [CGFloat]? = YPConfig.library.allowedVideoAspectRatios
+
     public var isAspectRatioOutOfRange = false
 
     fileprivate var currentAsset: PHAsset?
     private var originalAssetSize: CGSize = .zero
+
+    private let minimumTreshold: CGFloat = 0.001
 
     // Image view of the asset for convenience. Can be video preview image view or photo image view.
     public var assetImageView: UIImageView {
@@ -248,29 +252,18 @@ fileprivate extension YPAssetZoomableView {
         var containerWidth: CGFloat = 0.0
         var containerHeight: CGFloat = 0.0
 
-        let aspectRatio: CGFloat = w / h
+        let originalAspectRatio: CGFloat = w / h
         isAspectRatioOutOfRange = false
-
-        if w > h { // Landscape
+        let aspectRatio = findClosestAllowedAspectRatio(for: originalAspectRatio)
+        if abs(aspectRatio - originalAspectRatio) > minimumTreshold {
+            isAspectRatioOutOfRange = true
+        }
+        if aspectRatio > 1.0 { // Landscape
             containerWidth = screenWidth
             containerHeight = screenWidth / aspectRatio
-
-            if let maxAR = maxAspectRatio {
-                if aspectRatio > maxAR  && isVideoMode {
-                    containerHeight = screenWidth / maxAR
-                    isAspectRatioOutOfRange = true
-                }
-            }
-        } else if h > w { // Portrait
+        } else if aspectRatio < 1.0 { // Portrait
             containerWidth = screenWidth * aspectRatio
             containerHeight = screenWidth
-
-            if let minAR = minAspectRatio {
-                if aspectRatio < minAR  && isVideoMode {
-                    containerWidth = screenWidth * minAR
-                    isAspectRatioOutOfRange = true
-                }
-            }
 
             if let minWidth = minWidthForItem {
                 containerWidth = minWidth * aspectRatio
@@ -290,7 +283,7 @@ fileprivate extension YPAssetZoomableView {
         
         zoomScale = 1
         minimumZoomScale = 1
-        maximumZoomScale = isMultipleSelectionEnabled && YPConfig.library.allowZoomToCrop ? 3 : 1
+        maximumZoomScale = (isMultipleSelectionEnabled || isVideoMode) && YPConfig.library.allowZoomToCrop ? 3 : 1
     }
 
     func setAssetFrame(with size:CGSize) {
@@ -306,7 +299,36 @@ fileprivate extension YPAssetZoomableView {
             self?.centerAssetView()
         }
     }
-    
+
+    func findClosestAllowedAspectRatio(for aspectRatio: CGFloat) -> CGFloat {
+        var aspectRatioToReturn = aspectRatio
+        if let maxAR = maxAspectRatio, aspectRatio > maxAR {
+            aspectRatioToReturn = maxAR
+        }
+        if let minAR = minAspectRatio, aspectRatio < minAR {
+            aspectRatioToReturn = minAR
+        }
+        if let allowedAspectRatios = allowedVideoAspectRatios, !allowedAspectRatios.isEmpty, isVideoMode, !isMultipleSelectionEnabled {
+            var closestAllowedAspectRatio: CGFloat?
+            if aspectRatio < 1.0 { // portrait
+                // in this case, we need to find the next "larger" aspect ratio
+                let ascendingAllowedAspectRatios = allowedAspectRatioList.sorted(by: <)
+                closestAllowedAspectRatio = ascendingAllowedAspectRatios.first(where: { $0 >= (aspectRatio - minimumTreshold) })
+            } else if aspectRatio > 1.0 { // landscape
+                // in this case, we need to find the next "smaller" aspect ratio
+                let descendingAllowedAspectRatios = allowedAspectRatioList.sorted(by: >)
+                closestAllowedAspectRatio = descendingAllowedAspectRatios.first(where: { $0 <= (aspectRatio + minimumTreshold) })
+            } else { // square
+                // in this case, we can pick whichever is closest
+                closestAllowedAspectRatio = allowedAspectRatioList.enumerated().min(by: { abs($0.1 - aspectRatio) < abs($1.1 - aspectRatio) })?.element
+            }
+            if let closestAllowedAspectRatio = closestAllowedAspectRatio {
+                aspectRatioToReturn = closestAllowedAspectRatio
+            }
+        }
+        return aspectRatioToReturn
+    }
+
     /// Calculate zoom scale which will fit the image to square
     func calculateSquaredZoomScale() -> CGFloat {
         guard let image = assetImageView.image else {

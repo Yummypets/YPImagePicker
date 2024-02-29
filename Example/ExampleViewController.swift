@@ -126,8 +126,8 @@ class ExampleViewController: UIViewController {
         /* Can forbid the items with very big height with this property */
         //config.library.minWidthForItem = UIScreen.main.bounds.width * 0.8
         
-        config.library.maxAspectRatio = 3 / 2
-        config.library.minAspectRatio = 2 / 3
+        config.library.maxAspectRatio = 16 / 9
+        config.library.minAspectRatio = 9 / 16
 
         /* Defines the time limit for recording videos.
            Default is 30 seconds. */
@@ -160,8 +160,12 @@ class ExampleViewController: UIViewController {
 
         config.maxCameraZoomFactor = 2.0
 
-        config.library.maxNumberOfItems = 5
+        config.library.maxNumberOfItems = 10
         config.gallery.hidesRemoveButton = false
+//        config.library.allowedAspectRatios = [0.5625, 0.8, 1.0, 1.777778]
+        let allowedAspectRatios: [CGFloat] = [9/16, 2/3, 4/5, 1, 3/2]
+        config.library.allowedVideoAspectRatios = allowedAspectRatios
+        config.library.allowPhotoAndVideoSelection = true
 
         /* Disable scroll to change between mode */
         // config.isScrollToChangeModesEnabled = false
