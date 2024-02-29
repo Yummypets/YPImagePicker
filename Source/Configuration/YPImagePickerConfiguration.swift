@@ -216,7 +216,21 @@ public struct YPConfigLibrary {
     
     public var maxAspectRatio: CGFloat?
 
+    /// List of aspect ratios allowed for videos (when selecting a single video)
+    /// The gallery will auto-crop the media to the closest aspect ratio from this list (without letterboxing)
     public var allowedVideoAspectRatios: [CGFloat]?
+
+    /// List of aspect ratios allowed for all media when multi-selecting
+    /// The gallery will auto-crop the media to the closest aspect ratio from this list (without letterboxing)
+    public var allowedMultiSelectionAspectRatios: [CGFloat]?
+
+    /// List of "override" aspect ratios allowed for all media in single video selection mode
+    /// These aspect ratios will not be used as the list of "allowed" aspect ratios but they are still "allowed"
+    public var allowedVideoAspectRatioOverrides: [CGFloat]?
+
+    /// List of "override" aspect ratios allowed for all media in multi-selection mode
+    /// These aspect ratios will not be used as the list of "allowed" aspect ratios but they are still "allowed"
+    public var allowedMultiSelectionAspectRatioOverrides: [CGFloat]?
 
     /// Choose what media types are available in the library. Defaults to `.photo`.
     /// If you define custom options PHFetchOptions var, than this will not work.

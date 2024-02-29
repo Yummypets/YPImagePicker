@@ -30,6 +30,10 @@ final class YPAssetZoomableView: UIScrollView {
     public var maxAspectRatio: CGFloat? = YPConfig.library.maxAspectRatio
     public var minAspectRatio: CGFloat? = YPConfig.library.minAspectRatio
     public var allowedVideoAspectRatios: [CGFloat]? = YPConfig.library.allowedVideoAspectRatios
+    public var allowedMultiSelectionAspectRatios: [CGFloat]? = YPConfig.library.allowedMultiSelectionAspectRatios
+
+    public var allowedVideoAspectRatioOverrides: [CGFloat]? = YPConfig.library.allowedVideoAspectRatioOverrides
+    public var allowedMultiSelectionAspectRatioOverrides: [CGFloat]? = YPConfig.library.allowedMultiSelectionAspectRatioOverrides
 
     public var isAspectRatioOutOfRange = false
 
@@ -308,7 +312,21 @@ fileprivate extension YPAssetZoomableView {
         if let minAR = minAspectRatio, aspectRatio < minAR {
             aspectRatioToReturn = minAR
         }
-        if let allowedAspectRatios = allowedVideoAspectRatios, !allowedAspectRatios.isEmpty, isVideoMode, !isMultipleSelectionEnabled {
+        if isVideoMode, !isMultipleSelectionEnabled, let aspectRatioOverrides = allowedVideoAspectRatioOverrides, aspectRatioOverrides.contains(where: { aspectRatio <= $0 + minimumTreshold && aspectRatio >= $0 - minimumTreshold }) {
+            return aspectRatio
+        }
+
+        if isMultipleSelectionEnabled, let aspectRatioOverrides = allowedMultiSelectionAspectRatioOverrides, aspectRatioOverrides.contains(where: { aspectRatio <= $0 + minimumTreshold && aspectRatio >= $0 - minimumTreshold }) {
+            return aspectRatio
+        }
+
+        var allowedAspectRatioList: [CGFloat]? = nil
+        if isVideoMode, !isMultipleSelectionEnabled, let allowedVideoAspectRatios = allowedVideoAspectRatios, !allowedVideoAspectRatios.isEmpty {
+            allowedAspectRatioList = allowedVideoAspectRatios
+        } else if isMultipleSelectionEnabled, let allowedMultiSelectionAspectRatios = allowedMultiSelectionAspectRatios,  !allowedMultiSelectionAspectRatios.isEmpty {
+            allowedAspectRatioList = allowedMultiSelectionAspectRatios
+        }
+        if let allowedAspectRatioList = allowedAspectRatioList {
             var closestAllowedAspectRatio: CGFloat?
             if aspectRatio < 1.0 { // portrait
                 // in this case, we need to find the next "larger" aspect ratio

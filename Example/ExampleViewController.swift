@@ -162,9 +162,14 @@ class ExampleViewController: UIViewController {
 
         config.library.maxNumberOfItems = 10
         config.gallery.hidesRemoveButton = false
-//        config.library.allowedAspectRatios = [0.5625, 0.8, 1.0, 1.777778]
-        let allowedAspectRatios: [CGFloat] = [9/16, 2/3, 4/5, 1, 3/2]
-        config.library.allowedVideoAspectRatios = allowedAspectRatios
+        
+        let allowedVideoAspectRatios: [CGFloat] = [9/16, 2/3, 4/5, 1, 3/2]
+        config.library.allowedVideoAspectRatios = allowedVideoAspectRatios
+
+        let allowedMultipleSelectionAspectRatios: [CGFloat] = [4/5]
+        config.library.allowedMultiSelectionAspectRatios = allowedMultipleSelectionAspectRatios
+        let overrides: [CGFloat] = [1]
+        config.library.allowedMultiSelectionAspectRatioOverrides = overrides
         config.library.allowPhotoAndVideoSelection = true
 
         /* Disable scroll to change between mode */
