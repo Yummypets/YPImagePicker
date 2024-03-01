@@ -186,6 +186,7 @@ final class YPAssetZoomableView: UIScrollView {
         videoView.translatesAutoresizingMaskIntoConstraints = false
         videoView.width(0)
         videoView.height(0)
+        videoView.playerView.fillContainer()
 
         showsHorizontalScrollIndicator = false
         showsVerticalScrollIndicator = false
@@ -250,9 +251,27 @@ fileprivate extension YPAssetZoomableView {
         if w > h { // Landscape
             containerWidth = screenWidth
             containerHeight = screenWidth / aspectRatio
+
+            if let maxAR = maxAspectRatio {
+                if aspectRatio > maxAR  && isVideoMode {
+                    containerHeight = screenWidth / maxAR
+                }
+            }
         } else if h > w { // Portrait
             containerWidth = screenWidth * aspectRatio
             containerHeight = screenWidth
+
+            if let minAR = minAspectRatio {
+                if aspectRatio < minAR  && isVideoMode {
+                    containerWidth = screenWidth * minAR
+                }
+            }
+
+            if let minWidth = minWidthForItem {
+                containerWidth = minWidth * aspectRatio
+                containerHeight = minWidth
+            }
+
         } else { // Square
             containerWidth = screenWidth
             containerHeight = screenWidth
@@ -267,45 +286,13 @@ fileprivate extension YPAssetZoomableView {
         self.minimumZoomScale = 1
         self.zoomScale = 1
 
-        let w = imageSize.width
-        let h = imageSize.height
-
-        let aspectRatio: CGFloat = w / h
-        var zoomScale: CGFloat = 1
-
-        if w > h { // Landscape
-            // if the content aspect ratio is wider than minimum, then increase zoom scale so the sides are cropped off to maintain the minimum ar. This only applies to videos.
-            if let maxAR = maxAspectRatio {
-                if aspectRatio > maxAR  && isVideoMode {
-                    let newHeight = w / maxAR
-                    zoomScale = newHeight / h
-                }
-            }
-        } else if h > w { // Portrait
-            if let minWidth = minWidthForItem {
-                let k = minWidth / w
-                zoomScale = (h / w) * k
-            }
-
-            // if the content aspect ratio is taller than maximum, then increase zoom scale so the top and bottom are cropped off to maintain the maximum ar. This only applies to videos.
-            if let minAR = minAspectRatio {
-                if aspectRatio < minAR  && isVideoMode {
-                    let newWidth = h * minAR
-                    zoomScale = newWidth / w
-                }
-            }
-        }
-
         if YPConfig.library.allowZoomToCrop, isMultipleSelectionEnabled {
             isScrollEnabled = true
             maximumZoomScale = 3.0
         } else {
             isScrollEnabled = false
-            self.maximumZoomScale = zoomScale
+            maximumZoomScale = 1
         }
-
-        self.zoomScale = zoomScale
-        self.minimumZoomScale = zoomScale
     }
 
     func setAssetFrame(with size:CGSize) {

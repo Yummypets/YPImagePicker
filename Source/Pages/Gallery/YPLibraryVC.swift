@@ -342,11 +342,14 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
     }
 
     private func getFirstSelectedItemSize() -> CGSize? {
-        guard let firstSelectedItem = selectedItems.first,
+        guard selectedItems.count > 0,
+              let firstSelectedItem = selectedItems.first,
               let selectedAsset = mediaManager.getAsset(at: firstSelectedItem.index),
               isMultipleSelectionEnabled else { return nil }
 
-        return CGSize(width: selectedAsset.pixelWidth, height: selectedAsset.pixelHeight)
+        let cropRectSize = getCropRect(for: selectedAsset, cropRect: firstSelectedItem.cropRect)
+
+        return cropRectSize.size
     }
 
     // MARK: - Verification
