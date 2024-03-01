@@ -507,17 +507,9 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
             }
 
             // it's safe to create UIImages off the main thread
-
-            var uiimage: UIImage
-            if let cropRect = self?.inputVideo.cropRect, let croppedCGImage = image.cropping(to: cropRect) {
-                uiimage = UIImage(cgImage: croppedCGImage)
-            } else {
-                uiimage = UIImage(cgImage: image)
-            }
-
             DispatchQueue.main.async { [weak self] in
                 self?.imageGenerator?.cancelAllCGImageGeneration()
-                self?.coverImageView.image = uiimage
+                self?.coverImageView.image = UIImage(cgImage: image)
                 self?.coverImageTime = time
             }
         })

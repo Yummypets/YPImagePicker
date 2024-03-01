@@ -57,8 +57,10 @@ public class YPCoverImageView: YPAdjustableView {
     }
 
     private func updateViewFrame(_ frame: CGRect) {
-        coverImageView.layer.frame = frame
-        coverImageView.contentMode = .scaleAspectFill
-        coverImageView.clipsToBounds = true
+        DispatchQueue.main.async {
+            self.coverImageView.layer.frame = frame
+            self.coverImageView.contentMode = .scaleAspectFill
+            self.coverImageView.clipsToBounds = true
+        }
     }
 }
