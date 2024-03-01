@@ -39,7 +39,11 @@ public class YPCoverImageView: YPAdjustableView {
     public override func layoutSubviews() {
         super.layoutSubviews()
 
-        updateViewFrameAction = updateViewFrame
+        updateViewFrameAction = { [weak self] frame in
+            self?.coverImageView.layer.frame = frame
+            self?.coverImageView.contentMode = .scaleAspectFill
+            self?.coverImageView.clipsToBounds = true
+        }
         // Ensure necessary properties are available
         guard let cropRect = cropRect, let asset = asset else { return }
         adjustViewFramesIfNeeded(cropRect: cropRect, asset: asset, targetAspectRatio: targetAspectRatio)

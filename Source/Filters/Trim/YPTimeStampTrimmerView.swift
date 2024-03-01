@@ -105,6 +105,7 @@ public class YPTimeStampTrimmerView: UIView {
         timeStampScrollableView.timeStampFont = timeStampFont
         timeStampScrollableView.timeStampColor = timeStampColor
         timeStampScrollableView.isHidden = true
+        timeStampScrollableView.trimmerMaxDuration = trimmerView.maxDuration
         addSubview(timeStampScrollableView)
     }
 
