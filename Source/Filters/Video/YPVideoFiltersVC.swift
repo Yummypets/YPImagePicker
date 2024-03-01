@@ -109,6 +109,12 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
         coverImageView.cropRect = inputVideo.cropRect // pass the crop rect over to the video so it can present the video relative to the crop rect
         coverImageView.asset = inputVideo.asset // pass the asset over so we can use it to determine the original video dimensions
 
+        if let cropRect = inputVideo.cropRect {
+            let aspectRatio = cropRect.width / cropRect.height
+            videoView.targetAspectRatio = aspectRatio
+            coverImageView.targetAspectRatio = aspectRatio
+        }
+
         mediaManager.initialize()
         
         trimBottomItem.isHidden = true
