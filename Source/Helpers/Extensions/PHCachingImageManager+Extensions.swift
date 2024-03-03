@@ -25,7 +25,8 @@ extension PHCachingImageManager {
         let options = photoImageRequestOptions()
     
         // Fetch Highiest quality image possible.
-        requestImageData(for: asset, options: options) { data, _, _, _ in
+        requestImageData(for: asset, options: options) { [weak self] data, _, _, _ in
+            guard let self else { return }
             if let data = data, let image = UIImage(data: data)?.resetOrientation() {
 
                 let exifs = self.metadataForImageData(data: data)
@@ -41,7 +42,8 @@ extension PHCachingImageManager {
         let options = photoImageRequestOptions()
 
         // Fetch Highiest quality image possible.
-        requestImageData(for: asset, options: options) { data, _, _, _ in
+        requestImageData(for: asset, options: options) { [weak self] data, _, _, _ in
+            guard let self else { return }
             if let data = data, let image = UIImage(data: data)?.resetOrientation() {
 
                 // Crop the high quality image manually.

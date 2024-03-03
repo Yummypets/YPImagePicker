@@ -137,7 +137,7 @@ final class YPAssetViewContainer: UIView {
     /// Use this to update the multiple selection mode UI state for the YPAssetViewContainer
     public func setMultipleSelectionMode(on: Bool) {
         zoomableView.isMultipleSelectionEnabled = on
-        zoomableView.multipleSelectionEnabled()
+        zoomableView.restoreAssetToOriginalSize()
         updateSquareCropButtonState()
     }
 }

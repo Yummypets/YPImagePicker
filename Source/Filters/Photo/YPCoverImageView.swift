@@ -7,7 +7,6 @@
 
 import UIKit
 import Photos
-import Stevia
 
 public class YPCoverImageView: YPAdjustableView {
 
@@ -58,13 +57,5 @@ public class YPCoverImageView: YPAdjustableView {
 
         assetContainer.fillContainer()
         assetContainer.clipsToBounds = true
-    }
-
-    private func updateViewFrame(_ frame: CGRect) {
-        DispatchQueue.main.async {
-            self.coverImageView.layer.frame = frame
-            self.coverImageView.contentMode = .scaleAspectFill
-            self.coverImageView.clipsToBounds = true
-        }
     }
 }

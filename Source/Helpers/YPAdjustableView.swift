@@ -29,7 +29,9 @@ public class YPAdjustableView: UIView {
         let assetRect = CGRect(origin: .zero, size: assetSize)
         fitAspectAssetContainer(assetSize: assetSize)
         let assetFrame = calculateAssetFrame(cropRect: cropRect, assetSize: assetSize)
-        updateViewFrameAction?(assetFrame)
+        DispatchQueue.main.async { [weak self] in
+            self?.updateViewFrameAction?(assetFrame)
+        }
     }
 
     // Method to adjust the view frame based on a target aspect ratio
@@ -37,7 +39,9 @@ public class YPAdjustableView: UIView {
         let adjustedAssetSize = adjustedSizeForAspectRatio(assetSize, aspectRatio: aspectRatio)
         fitAspectAssetContainer(assetSize: adjustedAssetSize)
         let assetFrame = calculateAssetFrame(cropRect: cropRect, assetSize: assetSize)
-        updateViewFrameAction?(assetFrame)
+        DispatchQueue.main.async { [weak self] in
+            self?.updateViewFrameAction?(assetFrame)
+        }
     }
 
     // Calculate the adjusted size for the asset based on the target aspect ratio
