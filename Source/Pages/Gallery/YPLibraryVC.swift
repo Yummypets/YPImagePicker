@@ -347,9 +347,7 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
               let selectedAsset = mediaManager.getAsset(at: firstSelectedItem.index),
               isMultipleSelectionEnabled else { return nil }
 
-        let cropRectSize = getCropRect(for: selectedAsset, cropRect: firstSelectedItem.cropRect)
-
-        return cropRectSize.size
+        return CGSize(width: selectedAsset.pixelWidth, height: selectedAsset.pixelHeight)
     }
 
     // MARK: - Verification
