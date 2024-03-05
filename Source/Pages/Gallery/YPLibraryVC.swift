@@ -342,12 +342,16 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
     }
 
     private func getFirstSelectedItemSize() -> CGSize? {
-        guard selectedItems.count > 0,
+        guard isMultipleSelectionEnabled,
               let firstSelectedItem = selectedItems.first,
-              let selectedAsset = mediaManager.getAsset(at: firstSelectedItem.index),
-              isMultipleSelectionEnabled else { return nil }
+              let cropRect = firstSelectedItem.cropRect,
+              let selectedAsset = mediaManager.getAsset(at: firstSelectedItem.index)
+        else { return nil }
 
-        return CGSize(width: selectedAsset.pixelWidth, height: selectedAsset.pixelHeight)
+        let width = firstSelectedItem.isAspectRatioOutOfRange ? CGFloat(selectedAsset.pixelWidth) * cropRect.width : CGFloat(selectedAsset.pixelWidth)
+        let height = firstSelectedItem.isAspectRatioOutOfRange ? CGFloat(selectedAsset.pixelHeight) * cropRect.height : CGFloat(selectedAsset.pixelHeight)
+
+        return CGSize(width: width, height: height)
     }
 
     // MARK: - Verification
@@ -387,6 +391,7 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         selectedAsset.scrollViewContentOffset = v.assetZoomableView.contentOffset
         selectedAsset.scrollViewZoomScale = v.assetZoomableView.zoomScale
         selectedAsset.cropRect = v.currentCropRect()
+        selectedAsset.isAspectRatioOutOfRange = v.assetZoomableView.isAspectRatioOutOfRange
 
         // Replace
         selectedItems.remove(at: selectedAssetIndex)

@@ -29,7 +29,8 @@ final class YPAssetZoomableView: UIScrollView {
     public var minWidthForItem: CGFloat? = YPConfig.library.minWidthForItem
     public var maxAspectRatio: CGFloat? = YPConfig.library.maxAspectRatio
     public var minAspectRatio: CGFloat? = YPConfig.library.minAspectRatio
-    
+    public var isAspectRatioOutOfRange = false
+
     fileprivate var currentAsset: PHAsset?
     private var originalAssetSize: CGSize = .zero
 
@@ -247,6 +248,7 @@ fileprivate extension YPAssetZoomableView {
         var containerHeight: CGFloat = 0.0
 
         let aspectRatio: CGFloat = w / h
+        isAspectRatioOutOfRange = false
 
         if w > h { // Landscape
             containerWidth = screenWidth
@@ -255,6 +257,7 @@ fileprivate extension YPAssetZoomableView {
             if let maxAR = maxAspectRatio {
                 if aspectRatio > maxAR  && isVideoMode {
                     containerHeight = screenWidth / maxAR
+                    isAspectRatioOutOfRange = true
                 }
             }
         } else if h > w { // Portrait
@@ -264,6 +267,7 @@ fileprivate extension YPAssetZoomableView {
             if let minAR = minAspectRatio {
                 if aspectRatio < minAR  && isVideoMode {
                     containerWidth = screenWidth * minAR
+                    isAspectRatioOutOfRange = true
                 }
             }
 
