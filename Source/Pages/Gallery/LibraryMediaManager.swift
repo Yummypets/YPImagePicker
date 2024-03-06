@@ -215,11 +215,14 @@ open class LibraryMediaManager {
 
                 if videoIsCropped {
                     // Layer Instructions
+                    let constrainedCropRectSize = self.getConstrainedSize(size: cropRect.size)
+                    let scaleFactor = constrainedCropRectSize.height / cropRect.size.height
                     let layerInstructions = AVMutableVideoCompositionLayerInstruction(assetTrack: videoCompositionTrack)
                     transform.tx = (videoSize.width < 0) ? abs(videoSize.width) : 0.0
                     transform.ty = (videoSize.height < 0) ? abs(videoSize.height) : 0.0
-                    transform.tx -= cropRect.minX
-                    transform.ty -= cropRect.minY
+                    transform.tx -= cropRect.minX * scaleFactor
+                    transform.ty -= cropRect.minY * scaleFactor
+                    transform = transform.scaledBy(x: scaleFactor, y: scaleFactor)
                     layerInstructions.setTransform(transform, at: CMTime.zero)
 
                     // CompositionInstruction
@@ -231,10 +234,19 @@ open class LibraryMediaManager {
                     // Video Composition
                     videoComposition = AVMutableVideoComposition(propertiesOf: asset)
                     videoComposition?.instructions = [mainInstructions]
-                    videoComposition?.renderSize = cropRect.size // needed?
+                    videoComposition?.renderSize = cropRect.size
                 } else {
                     // transfer the transform so the video renders in the correct orientation
                     videoCompositionTrack.preferredTransform = transform
+                    videoComposition?.renderSize = videoSize
+                }
+
+                if let renderSize = videoComposition?.renderSize, YPConfig.video.maxVideoResolution != nil {
+                    let constrainedSize = self.getConstrainedSize(size: renderSize)
+                    // Let's make sure that the video has even numbers in the width and height
+                    let roundedWidth = Int(round(constrainedSize.width / 2.0)) * 2
+                    let roundedHeight = Int(round(constrainedSize.height / 2.0)) * 2
+                    videoComposition?.renderSize = CGSize(width: roundedWidth, height: roundedHeight)
                 }
 
                 let fileURL = URL(fileURLWithPath: NSTemporaryDirectory())
@@ -321,6 +333,16 @@ open class LibraryMediaManager {
                 NotificationCenter.default.post(name: .LibraryMediaManagerExportProgressUpdate, object: self, userInfo: progress)
             }
         }
+    }
+
+    private func getConstrainedSize(size: CGSize) -> CGSize {
+        if let maxVideoResolution = YPConfig.video.maxVideoResolution, size.width * size.height > maxVideoResolution {
+            let maxWidth = maxVideoResolution / size.height
+            let aspectRatio = size.width / size.height
+            let newHeight = maxWidth / aspectRatio
+            return CGSize(width: maxWidth, height: newHeight)
+        }
+        return size
     }
 
     private func stopExportTimer() {
