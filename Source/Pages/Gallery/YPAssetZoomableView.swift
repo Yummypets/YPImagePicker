@@ -152,6 +152,7 @@ final class YPAssetZoomableView: UIScrollView {
             let imageSize = customSize ?? strongSelf.originalAssetSize
 
             strongSelf.photoImageView.image = image
+            strongSelf.layoutIfNeeded()
 
             strongSelf.setAssetFrame(with: imageSize)
 
