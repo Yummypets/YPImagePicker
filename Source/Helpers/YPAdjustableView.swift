@@ -9,6 +9,9 @@ import Photos
 import UIKit
 
 public class YPAdjustableView: UIView {
+    
+    var assetContainer = UIView(frame: .zero)
+
     public var updateViewFrameAction: ((CGRect) -> Void)?
 
     public func adjustViewFramesIfNeeded(cropRect: CGRect, asset: PHAsset, targetAspectRatio: CGFloat?) {
@@ -24,17 +27,21 @@ public class YPAdjustableView: UIView {
     // Method to adjust the view frame considering the asset's original size
     private func adjustViewFrame(cropRect: CGRect, assetSize: CGSize) {
         let assetRect = CGRect(origin: .zero, size: assetSize)
-        let fitFrame = calculateAspectFitFrame(assetSize: assetSize)
-        let targetFrame = calculateTargetFrame(cropRect: cropRect, assetRect: assetRect, fitFrame: fitFrame)
-        updateViewFrameAction?(targetFrame)
+        fitAspectAssetContainer(assetSize: assetSize)
+        let assetFrame = calculateAssetFrame(cropRect: cropRect, assetSize: assetSize)
+        DispatchQueue.main.async { [weak self] in
+            self?.updateViewFrameAction?(assetFrame)
+        }
     }
 
     // Method to adjust the view frame based on a target aspect ratio
     private func adjustViewFrameForAspectRatio(cropRect: CGRect, aspectRatio: CGFloat, assetSize: CGSize) {
         let adjustedAssetSize = adjustedSizeForAspectRatio(assetSize, aspectRatio: aspectRatio)
-        let fitFrame = calculateAspectFitFrame(assetSize: adjustedAssetSize)
-        let targetFrame = calculateTargetFrame(cropRect: cropRect, assetRect: CGRect(origin: .zero, size: adjustedAssetSize), fitFrame: fitFrame, adjustForAspectRatio: true)
-        updateViewFrameAction?(targetFrame)
+        fitAspectAssetContainer(assetSize: adjustedAssetSize)
+        let assetFrame = calculateAssetFrame(cropRect: cropRect, assetSize: assetSize)
+        DispatchQueue.main.async { [weak self] in
+            self?.updateViewFrameAction?(assetFrame)
+        }
     }
 
     // Calculate the adjusted size for the asset based on the target aspect ratio
@@ -48,33 +55,52 @@ public class YPAdjustableView: UIView {
     }
 
     // Calculate the frame for aspect fit scaling of the asset
-    private func calculateAspectFitFrame(assetSize: CGSize) -> CGRect {
+    private func fitAspectAssetContainer(assetSize: CGSize) {
         // Determine the scale factor to fit the asset in the current bounds
         let widthScale = bounds.size.width / assetSize.width
         let heightScale = bounds.size.height / assetSize.height
         let scale = min(widthScale, heightScale)
-        return CGRect(origin: .zero, size: CGSize(width: assetSize.width * scale, height: assetSize.height * scale))
+
+        var origin: CGPoint = .zero
+
+        if assetSize.width > assetSize.height {
+            let yPosition = (bounds.size.height / 2) - (assetSize.height * scale / 2)
+            origin = CGPoint(x: 0, y: yPosition)
+        } else {
+            let xPosition = (bounds.size.width / 2) - (assetSize.width * scale / 2)
+            origin = CGPoint(x:xPosition, y: 0)
+        }
+
+        let frame = CGRect(origin: origin, size: CGSize(width: assetSize.width * scale, height: assetSize.height * scale))
+        
+        assetContainer.frame = frame
     }
 
     // Calculate the target frame based on the crop rectangle and asset size
-    private func calculateTargetFrame(cropRect: CGRect, assetRect: CGRect, fitFrame: CGRect, adjustForAspectRatio: Bool = false) -> CGRect {
+    private func calculateAssetFrame(cropRect: CGRect, assetSize: CGSize) -> CGRect {
         // Determine the scaling factor needed for cropping
-        let scale = max(assetRect.size.width / cropRect.size.width, assetRect.size.height / cropRect.size.height)
-        var targetFrame = fitFrame.applying(CGAffineTransform(scaleX: scale, y: scale))
+        let scale = assetContainer.frame.width / assetSize.width
+        var assetFrame: CGRect = .zero
 
-        // Calculate offset scaling relative to the crop rectangle and asset rectangle centers
-        let xOffsetScale = (cropRect.midX - assetRect.midX) / assetRect.size.width
-        let yOffsetScale = (cropRect.midY - assetRect.midY) / assetRect.size.height
+        if assetContainer.frame.size.width > assetContainer.frame.size.height {
+            let zoomScale = assetSize.width / cropRect.size.width
 
-        // Adjust the target frame origin based on the calculated offsets
-        if adjustForAspectRatio {
-            targetFrame.origin.x = 0.5 * (bounds.size.width - targetFrame.size.width) - xOffsetScale
-            targetFrame.origin.y = 0.5 * (bounds.size.height - targetFrame.size.height) - yOffsetScale
+            let scaleFactor = assetContainer.frame.size.width / assetSize.width
+            let scaledHeight = scaleFactor * assetSize.height * zoomScale
+            assetFrame.size = CGSize(width: assetContainer.frame.size.width * zoomScale, height: scaledHeight)
+
+            assetFrame.origin.x = assetFrame.origin.x - (cropRect.origin.x * scaleFactor * zoomScale)
+            assetFrame.origin.y = assetFrame.origin.y - (cropRect.origin.y * scaleFactor * zoomScale)
         } else {
-            targetFrame.origin.x = 0.5 * (bounds.size.width - targetFrame.size.width) - xOffsetScale * targetFrame.size.width
-            targetFrame.origin.y = 0.5 * (bounds.size.height - targetFrame.size.height) - yOffsetScale * targetFrame.size.height
+            let zoomScale = assetSize.height / cropRect.size.height
+            let scaleFactor = assetContainer.frame.size.height / assetSize.height
+            let scaledWidth = scaleFactor * assetSize.width * zoomScale
+            assetFrame.size = CGSize(width: scaledWidth, height: assetContainer.frame.size.height * zoomScale)
+
+            assetFrame.origin.x = assetFrame.origin.x - (cropRect.origin.x * scaleFactor * zoomScale)
+            assetFrame.origin.y = assetFrame.origin.y - (cropRect.origin.y * scaleFactor * zoomScale)
         }
 
-        return targetFrame
+        return assetFrame
     }
 }
