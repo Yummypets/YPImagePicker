@@ -21,15 +21,31 @@ extension PHCachingImageManager {
     }
     
     func fetchImage(for asset: PHAsset,
-					cropRect: CGRect,
-					targetSize: CGSize,
 					callback: @escaping (UIImage, [String: Any]) -> Void) {
         let options = photoImageRequestOptions()
     
         // Fetch Highiest quality image possible.
-        requestImageData(for: asset, options: options) { data, _, _, _ in
+        requestImageData(for: asset, options: options) { [weak self] data, _, _, _ in
+            guard let self else { return }
             if let data = data, let image = UIImage(data: data)?.resetOrientation() {
-            
+
+                let exifs = self.metadataForImageData(data: data)
+                callback(image, exifs)
+            }
+        }
+    }
+
+    func fetchImage(for asset: PHAsset,
+                    cropRect: CGRect,
+                    targetSize: CGSize,
+                    callback: @escaping (UIImage, [String: Any]) -> Void) {
+        let options = photoImageRequestOptions()
+
+        // Fetch Highiest quality image possible.
+        requestImageData(for: asset, options: options) { [weak self] data, _, _, _ in
+            guard let self else { return }
+            if let data = data, let image = UIImage(data: data)?.resetOrientation() {
+
                 // Crop the high quality image manually.
                 let xCrop: CGFloat = cropRect.origin.x * CGFloat(asset.pixelWidth)
                 let yCrop: CGFloat = cropRect.origin.y * CGFloat(asset.pixelHeight)
@@ -45,7 +61,7 @@ extension PHCachingImageManager {
             }
         }
     }
-    
+
     private func metadataForImageData(data: Data) -> [String: Any] {
         if let imageSource = CGImageSourceCreateWithData(data as CFData, nil),
         let imageProperties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil),

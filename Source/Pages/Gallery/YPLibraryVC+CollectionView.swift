@@ -88,6 +88,7 @@ extension YPLibraryVC {
 
         let newSelection = YPLibrarySelection(index: indexPath.row, assetIdentifier: asset.localIdentifier)
         selectedItems.append(newSelection)
+        changeAsset(mediaManager.getAsset(at: indexPath.row))
         checkLimit()
     }
     

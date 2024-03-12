@@ -67,15 +67,18 @@ public class YPVideoView: YPAdjustableView {
         //playerView.alpha = 0
         playImageView.alpha = 0.8
         previewImageView.contentMode = .scaleAspectFit
-        
+
+        assetContainer.subviews(playerView)
+
         subviews(
             previewImageView,
-            playerView,
+            assetContainer,
             playImageView
         )
 
         previewImageView.fillContainer()
-        playerView.fillContainer()
+        assetContainer.fillContainer()
+        assetContainer.clipsToBounds = true
         playImageView.centerInContainer()
     }
 

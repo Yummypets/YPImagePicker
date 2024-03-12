@@ -49,6 +49,7 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
 
     var coverImageTime: CMTime?
     var coverTrimTimes: (startTime: CMTime, endTime: CMTime)?
+    private var croppedImage: UIImage?
 
     public let trimmerContainerView: UIView = {
         let v = UIView()
@@ -108,6 +109,12 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
         videoView.asset = inputVideo.asset // pass the asset over so we can use it to determine the original video dimensions
         coverImageView.cropRect = inputVideo.cropRect // pass the crop rect over to the video so it can present the video relative to the crop rect
         coverImageView.asset = inputVideo.asset // pass the asset over so we can use it to determine the original video dimensions
+
+        if let cropRect = inputVideo.cropRect {
+            let aspectRatio = cropRect.width / cropRect.height
+            videoView.targetAspectRatio = aspectRatio
+            coverImageView.targetAspectRatio = aspectRatio
+        }
 
         mediaManager.initialize()
         
@@ -304,7 +311,7 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
         let endTime = timeStampTrimmerView.endTime ?? inputAsset.duration
         let timeRange = CMTimeRange(start: startTime, end: endTime)
         if vcType == .Cover {
-            if let coverImage = self.coverImageView.image {
+            if let coverImage = self.croppedImage {
                 self.completeSave(thumbnail: coverImage, videoUrl: self.inputVideo.url, asset: self.inputVideo.asset, timeRange: timeRange)
             } else {
                 ypLog("YPVideoFiltersVC -> Don't have coverImage.")
@@ -339,7 +346,7 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
             if untrimmed && !cropped && !rotated && !shouldMute {
                 // if video remains untrimmed and uncropped, use existing video url to eliminate video transcoding effort
                 // we will be selecting a cover image next, use generic uiimage for now
-                self.completeSave(thumbnail: self.coverImageView.image ?? UIImage(), videoUrl: self.inputVideo.url, asset: self.inputVideo.asset, timeRange: timeRange)
+                self.completeSave(thumbnail: self.croppedImage ?? UIImage(), videoUrl: self.inputVideo.url, asset: self.inputVideo.asset, timeRange: timeRange)
 
                 return
             }
@@ -350,7 +357,7 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
             mediaManager.fetchVideoUrlAndCrop(for: inputVideo.asset!, cropRect: inputVideo.cropRect!, timeRange: timeRange, shouldMute: shouldMute) { [weak self] (url) in
                 DispatchQueue.main.async {
                     if let url = url {
-                        self?.completeSave(thumbnail: self?.coverImageView.image ?? UIImage(), videoUrl: url, asset: self?.inputVideo.asset, timeRange: timeRange)
+                        self?.completeSave(thumbnail: self?.croppedImage ?? UIImage(), videoUrl: url, asset: self?.inputVideo.asset, timeRange: timeRange)
                     } else {
                         ypLog("YPVideoFiltersVC -> Invalid asset url.")
                         self?.resetView()
@@ -500,18 +507,14 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
                 return
             }
 
-            // it's safe to create UIImages off the main thread
-
-            var uiimage: UIImage
             if let cropRect = self?.inputVideo.cropRect, let croppedCGImage = image.cropping(to: cropRect) {
-                uiimage = UIImage(cgImage: croppedCGImage)
-            } else {
-                uiimage = UIImage(cgImage: image)
+                self?.croppedImage = UIImage(cgImage: croppedCGImage)
             }
 
+            // it's safe to create UIImages off the main thread
             DispatchQueue.main.async { [weak self] in
                 self?.imageGenerator?.cancelAllCGImageGeneration()
-                self?.coverImageView.image = uiimage
+                self?.coverImageView.image = UIImage(cgImage: image)
                 self?.coverImageTime = time
             }
         })
