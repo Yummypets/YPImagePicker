@@ -371,15 +371,26 @@ fileprivate extension YPAssetZoomableView {
         let scrollViewBoundsSize = bounds.size
         var assetFrame = assetView.frame
         let assetSize = assetView.frame.size
+        var yOffset = 0
+        var xOffset = 0
 
+        if assetSize.width > scrollViewBoundsSize.width {
+            xOffset = Int((assetSize.width - scrollViewBoundsSize.width) / 2.0)
+        }
+
+        if assetSize.height > scrollViewBoundsSize.height {
+            yOffset = Int((assetSize.height - scrollViewBoundsSize.height) / 2.0)
+        }
         assetFrame.origin.x = (assetSize.width < scrollViewBoundsSize.width) ?
         (scrollViewBoundsSize.width - assetSize.width) / 2.0 : 0
         assetFrame.origin.y = (assetSize.height < scrollViewBoundsSize.height) ?
         (scrollViewBoundsSize.height - assetSize.height) / 2.0 : 0.0
 
         assetView.frame = assetFrame
+        setContentOffset(CGPoint(x: xOffset, y: yOffset), animated: false)
 
         layoutIfNeeded()
+        cropAreaDidChange()
     }
 }
 
@@ -391,10 +402,6 @@ extension YPAssetZoomableView: UIScrollViewDelegate {
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         zoomableViewDelegate?.ypAssetZoomableViewScrollViewDidZoom()
-        
-        DispatchQueue.main.async { [weak self] in
-            self?.centerAssetView()
-        }
     }
     
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
