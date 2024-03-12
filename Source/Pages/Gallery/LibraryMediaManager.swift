@@ -29,6 +29,7 @@ open class LibraryMediaManager {
     internal var exportTimer: Timer?
     internal var exportTimers: [Timer] = []
     internal var currentExportSessions: [ExportData] = []
+    private let currentExportSessionsAccessQueue = DispatchQueue(label: "LibraryMediaManagerExportArrayAccessQueue")
 
     /// If true then library has items to show. If false the user didn't allow any item to show in picker library.
     internal var hasResultItems: Bool {
@@ -121,7 +122,7 @@ open class LibraryMediaManager {
                                 case .completed:
                                     if let url = session.outputURL {
                                         if let index = self?.currentExportSessions.firstIndex(where: { $0.session == session }) {
-                                            self?.currentExportSessions.remove(at: index)
+                                            self?.removeExportData(at: index)
                                         }
                                         callback(url)
                                     } else {
@@ -148,7 +149,7 @@ open class LibraryMediaManager {
                     }
 
                     if let s = exportSession {
-                        self.currentExportSessions.append(ExportData(localIdentifier: videoAsset.localIdentifier, session: s))
+                        self.appendExportData(ExportData(localIdentifier: videoAsset.localIdentifier, session: s))
                     }
                 }
             } catch let error {
@@ -248,7 +249,7 @@ open class LibraryMediaManager {
                             case .completed:
                                 if let url = session.outputURL {
                                     if let index = self?.currentExportSessions.firstIndex(where: { $0.session == session }) {
-                                        self?.currentExportSessions.remove(at: index)
+                                        self?.removeExportData(at: index)
                                     }
                                     callback(url)
                                 } else {
@@ -288,7 +289,7 @@ open class LibraryMediaManager {
                 }
 
                 if let s = exportSession {
-                    self.currentExportSessions.append(ExportData(localIdentifier: videoAsset.localIdentifier, session: s))
+                    self.appendExportData(ExportData(localIdentifier: videoAsset.localIdentifier, session: s))
                 }
             } catch let error {
                 ypLog("⚠️ PHCachingImageManager >>> \(error)")
@@ -352,6 +353,7 @@ open class LibraryMediaManager {
         currentExportSessions.forEach {
             $0.session.cancelExport()
         }
+        currentExportSessions = []
     }
 
     func getAsset(at index: Int) -> PHAsset? {
@@ -400,11 +402,25 @@ open class LibraryMediaManager {
         return imageAsset
     }
 
-    func cancelExport(for localIdentifier: String) {
+    private func cancelExport(for localIdentifier: String) {
         guard let index = currentExportSessions.firstIndex(where: { $0.localIdentifier == localIdentifier }) else { return }
         let exportData = currentExportSessions[index]
         stopExportTimer(for: exportData.session)
         exportData.session.cancelExport()
-        currentExportSessions.remove(at: index)
+        removeExportData(at: index)
+    }
+
+    private func appendExportData(_ exportData: ExportData) {
+        currentExportSessionsAccessQueue.async { [weak self] in
+            guard let self else { return }
+            currentExportSessions.append(exportData)
+        }
+    }
+
+    private func removeExportData(at index: Int) {
+        currentExportSessionsAccessQueue.async { [weak self] in
+            guard let self, currentExportSessions.indices.contains(index) else { return }
+            currentExportSessions.remove(at: index)
+        }
     }
 }
