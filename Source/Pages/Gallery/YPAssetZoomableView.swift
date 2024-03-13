@@ -103,17 +103,17 @@ final class YPAssetZoomableView: UIScrollView {
             strongSelf.originalAssetSize = CGSize(width: video.pixelWidth, height: video.pixelHeight)
             let videoSize = customSize ?? strongSelf.originalAssetSize
 
-            strongSelf.setAssetFrame(with: videoSize)
+            strongSelf.setAssetFrame(with: videoSize, shouldCenter: storedCropPosition?.scrollViewContentOffset == nil)
             strongSelf.squaredZoomScale = strongSelf.calculateSquaredZoomScale()
-
-            completion()
 
             // Stored crop position in multiple selection
             if let scp173 = storedCropPosition {
                 strongSelf.applyStoredCropPosition(scp173)
-                // MARK: add update CropInfo after multiple
                 updateCropInfo()
             }
+
+            completion()
+
         }
         mediaManager.imageManager?.fetchPlayerItem(for: video) { [weak self] playerItem in
             guard let strongSelf = self else { return }
@@ -162,7 +162,7 @@ final class YPAssetZoomableView: UIScrollView {
             strongSelf.photoImageView.image = image
             strongSelf.layoutIfNeeded()
 
-            strongSelf.setAssetFrame(with: imageSize)
+            strongSelf.setAssetFrame(with: imageSize, shouldCenter: storedCropPosition?.scrollViewContentOffset == nil)
 
             // Stored crop position in multiple selection
             if let scp173 = storedCropPosition {
@@ -290,7 +290,7 @@ fileprivate extension YPAssetZoomableView {
         maximumZoomScale = (isMultipleSelectionEnabled || isVideoMode) && YPConfig.library.allowZoomToCrop ? 3 : 1
     }
 
-    func setAssetFrame(with size:CGSize) {
+    func setAssetFrame(with size:CGSize, shouldCenter: Bool = true) {
 
         let containerSize = getContainerSize(from: size)
         resizeZoomableView(size: containerSize)
@@ -298,9 +298,11 @@ fileprivate extension YPAssetZoomableView {
         setScrollView()
 
         // Centering image view
-        assetView.center = self.center
-        DispatchQueue.main.async { [weak self] in
-            self?.centerAssetView()
+        if shouldCenter {
+            assetView.center = self.center
+            DispatchQueue.main.async { [weak self] in
+                self?.centerAssetView()
+            }
         }
     }
 
