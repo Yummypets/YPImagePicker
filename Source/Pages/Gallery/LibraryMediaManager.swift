@@ -364,9 +364,11 @@ open class LibraryMediaManager {
     }
 
     private func stopExportTimer(for session: AVAssetExportSession) {
-        let timer = exportTimers.first { timer in
-            timer.userInfo as? AVAssetExportSession == session
-        }
+        let timer = exportTimers
+            .filter { $0.isValid }
+            .first { timer in
+                timer.userInfo as? AVAssetExportSession == session
+            }
         if let timer {
             stopExportTimer(timer: timer)
         }
