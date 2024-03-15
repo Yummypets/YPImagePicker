@@ -210,7 +210,15 @@ open class LibraryMediaManager {
                 // 5. Configuring export session
                 let videoIsCropped = cropRect.size.width < abs(videoSize.width) || cropRect.size.height < abs(videoSize.height)
 
-                let presetName = compressionTypeOverride ?? (videoIsCropped || videoIsTrimmed || videoIsRotated || (shouldMute && videoNeedsProcessing) ? YPConfig.video.compression : AVAssetExportPresetPassthrough)
+                var presetName = ""
+
+                if YPConfig.video.shouldAlwaysProcessVideo {
+                    presetName = compressionTypeOverride ?? YPConfig.video.compression
+                } else {
+                    presetName = compressionTypeOverride ?? (videoIsCropped || videoIsTrimmed || videoIsRotated || (shouldMute && videoNeedsProcessing) ? YPConfig.video.compression : AVAssetExportPresetPassthrough)
+                }
+
+
                 var videoComposition:AVMutableVideoComposition?
 
                 if videoIsCropped {

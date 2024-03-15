@@ -290,7 +290,11 @@ public struct YPConfigVideo {
      - "AVAssetExportPresetPassthrough" // without any compression
      */
     public var compression: String = AVAssetExportPresetHighestQuality
-    
+
+    /// When `true` the video will always be processed using whatever whatever export preset is defined for `YPConfigVideo.compression. 
+    /// The default value is `false`.`
+    public var shouldAlwaysProcessVideo: Bool = false
+
     /// Choose the result video extension if you trim or compress a video. Defaults to mov.
     public var fileType: AVFileType = .mov
     
