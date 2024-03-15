@@ -210,7 +210,7 @@ open class LibraryMediaManager {
                 // 5. Configuring export session
                 let videoIsCropped = cropRect.size.width < abs(videoSize.width) || cropRect.size.height < abs(videoSize.height)
 
-                var presetName = ""
+                let presetName: String
 
                 if YPConfig.video.shouldAlwaysProcessVideo {
                     presetName = compressionTypeOverride ?? YPConfig.video.compression
