@@ -22,6 +22,10 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
     internal var isInitialized = false
     var disableAutomaticCellSelection = false
 
+    public var isAnimating: Bool {
+        v.assetZoomableView.isAnimating
+    }
+
     // MARK: - Init
 
     public override func loadView() {

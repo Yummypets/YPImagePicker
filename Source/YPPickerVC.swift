@@ -337,6 +337,11 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     @objc
     func done() {
         guard let libraryVC = libraryVC else { ypLog("YPLibraryVC deallocated"); return }
+        if libraryVC.isAnimating {
+            self.navigationItem.rightBarButtonItem = YPLoaders.defaultLoader
+            retryDoneUntilAnimatingStops(retryCount: 0)
+            return
+        }
         didTapNext?()
         
         if mode == .library {
@@ -350,7 +355,19 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
             })
         }
     }
-    
+
+    let maxRetryCount = 6
+    func retryDoneUntilAnimatingStops(retryCount: Int = 0) {
+        guard let libraryVC = libraryVC else { ypLog("YPLibraryVC deallocated"); return }
+        if libraryVC.isAnimating, retryCount < maxRetryCount {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self ] in
+                self?.retryDoneUntilAnimatingStops(retryCount: retryCount + 1)
+            }
+        } else {
+            done()
+        }
+    }
+
     func stopAll() {
         libraryVC?.v.assetZoomableView.videoView.deallocate()
         videoVC?.stopCamera()

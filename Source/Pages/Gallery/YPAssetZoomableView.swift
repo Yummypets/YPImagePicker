@@ -42,6 +42,8 @@ final class YPAssetZoomableView: UIScrollView {
 
     private let minimumTreshold: CGFloat = 0.001
 
+    public var isAnimating: Bool = false
+
     // Image view of the asset for convenience. Can be video preview image view or photo image view.
     public var assetImageView: UIImageView {
         return isVideoMode ? videoView.previewImageView : photoImageView
@@ -401,11 +403,19 @@ extension YPAssetZoomableView: UIScrollViewDelegate {
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return isVideoMode ? videoView : photoImageView
     }
-    
+
+    func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
+        isAnimating = true
+    }
+
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         zoomableViewDelegate?.ypAssetZoomableViewScrollViewDidZoom()
     }
-    
+
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        isAnimating = true
+    }
+
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
         guard let view = view, view == photoImageView || view == videoView else { return }
         
@@ -416,13 +426,16 @@ extension YPAssetZoomableView: UIScrollViewDelegate {
         
         zoomableViewDelegate?.ypAssetZoomableViewScrollViewDidEndZooming()
         cropAreaDidChange()
+        isAnimating = false
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         cropAreaDidChange()
+        isAnimating = decelerate
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         cropAreaDidChange()
+        isAnimating = false
     }
 }
