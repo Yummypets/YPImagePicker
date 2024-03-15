@@ -167,8 +167,6 @@ open class LibraryMediaManager {
         videosOptions.isNetworkAccessAllowed = true
         videosOptions.deliveryMode = .highQualityFormat
 
-        let videoNeedsProcessing = videoAsset.mediaSubtypes.contains(.videoHighFrameRate)
-
         imageManager?.requestAVAsset(forVideo: videoAsset, options: videosOptions) { asset, _, _ in
             do {
                 guard let asset = asset else { ypLog("⚠️ PHCachingImageManager >>> Don't have the asset"); return }
@@ -204,13 +202,10 @@ open class LibraryMediaManager {
                 var transform = videoTrack.preferredTransform
                 let videoSize = videoTrack.naturalSize.applying(transform)
 
-                let videoIsTrimmed = CMTimeCompare(videoTrack.timeRange.duration, timeRange.duration) != 0
-                let videoIsRotated = !transform.isIdentity // transcode the video if source is rotated.
-
                 // 5. Configuring export session
                 let videoIsCropped = cropRect.size.width < abs(videoSize.width) || cropRect.size.height < abs(videoSize.height)
 
-                let presetName = compressionTypeOverride ?? (videoIsCropped || videoIsTrimmed || videoIsRotated || (shouldMute && videoNeedsProcessing) ? YPConfig.video.compression : AVAssetExportPresetPassthrough)
+                let  presetName = compressionTypeOverride ?? YPConfig.video.compression
                 var videoComposition:AVMutableVideoComposition?
 
                 if videoIsCropped {
