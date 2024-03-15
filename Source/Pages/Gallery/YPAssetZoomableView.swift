@@ -42,6 +42,8 @@ final class YPAssetZoomableView: UIScrollView {
 
     private let minimumTreshold: CGFloat = 0.001
 
+    public var isAnimating: Bool = false
+
     // Image view of the asset for convenience. Can be video preview image view or photo image view.
     public var assetImageView: UIImageView {
         return isVideoMode ? videoView.previewImageView : photoImageView
@@ -103,17 +105,17 @@ final class YPAssetZoomableView: UIScrollView {
             strongSelf.originalAssetSize = CGSize(width: video.pixelWidth, height: video.pixelHeight)
             let videoSize = customSize ?? strongSelf.originalAssetSize
 
-            strongSelf.setAssetFrame(with: videoSize)
+            strongSelf.setAssetFrame(with: videoSize, shouldCenter: storedCropPosition?.scrollViewContentOffset == nil)
             strongSelf.squaredZoomScale = strongSelf.calculateSquaredZoomScale()
-
-            completion()
 
             // Stored crop position in multiple selection
             if let scp173 = storedCropPosition {
                 strongSelf.applyStoredCropPosition(scp173)
-                // MARK: add update CropInfo after multiple
                 updateCropInfo()
             }
+
+            completion()
+
         }
         mediaManager.imageManager?.fetchPlayerItem(for: video) { [weak self] playerItem in
             guard let strongSelf = self else { return }
@@ -162,7 +164,7 @@ final class YPAssetZoomableView: UIScrollView {
             strongSelf.photoImageView.image = image
             strongSelf.layoutIfNeeded()
 
-            strongSelf.setAssetFrame(with: imageSize)
+            strongSelf.setAssetFrame(with: imageSize, shouldCenter: storedCropPosition?.scrollViewContentOffset == nil)
 
             // Stored crop position in multiple selection
             if let scp173 = storedCropPosition {
@@ -290,7 +292,7 @@ fileprivate extension YPAssetZoomableView {
         maximumZoomScale = (isMultipleSelectionEnabled || isVideoMode) && YPConfig.library.allowZoomToCrop ? 3 : 1
     }
 
-    func setAssetFrame(with size:CGSize) {
+    func setAssetFrame(with size:CGSize, shouldCenter: Bool = true) {
 
         let containerSize = getContainerSize(from: size)
         resizeZoomableView(size: containerSize)
@@ -298,9 +300,11 @@ fileprivate extension YPAssetZoomableView {
         setScrollView()
 
         // Centering image view
-        assetView.center = self.center
-        DispatchQueue.main.async { [weak self] in
-            self?.centerAssetView()
+        if shouldCenter {
+            assetView.center = self.center
+            DispatchQueue.main.async { [weak self] in
+                self?.centerAssetView()
+            }
         }
     }
 
@@ -371,15 +375,26 @@ fileprivate extension YPAssetZoomableView {
         let scrollViewBoundsSize = bounds.size
         var assetFrame = assetView.frame
         let assetSize = assetView.frame.size
+        var yOffset = 0
+        var xOffset = 0
 
+        if assetSize.width > scrollViewBoundsSize.width {
+            xOffset = Int((assetSize.width - scrollViewBoundsSize.width) / 2.0)
+        }
+
+        if assetSize.height > scrollViewBoundsSize.height {
+            yOffset = Int((assetSize.height - scrollViewBoundsSize.height) / 2.0)
+        }
         assetFrame.origin.x = (assetSize.width < scrollViewBoundsSize.width) ?
         (scrollViewBoundsSize.width - assetSize.width) / 2.0 : 0
         assetFrame.origin.y = (assetSize.height < scrollViewBoundsSize.height) ?
         (scrollViewBoundsSize.height - assetSize.height) / 2.0 : 0.0
 
         assetView.frame = assetFrame
+        setContentOffset(CGPoint(x: xOffset, y: yOffset), animated: false)
 
         layoutIfNeeded()
+        cropAreaDidChange()
     }
 }
 
@@ -388,15 +403,19 @@ extension YPAssetZoomableView: UIScrollViewDelegate {
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return isVideoMode ? videoView : photoImageView
     }
-    
+
+    func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
+        isAnimating = true
+    }
+
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         zoomableViewDelegate?.ypAssetZoomableViewScrollViewDidZoom()
-        
-        DispatchQueue.main.async { [weak self] in
-            self?.centerAssetView()
-        }
     }
-    
+
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        isAnimating = true
+    }
+
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
         guard let view = view, view == photoImageView || view == videoView else { return }
         
@@ -407,13 +426,16 @@ extension YPAssetZoomableView: UIScrollViewDelegate {
         
         zoomableViewDelegate?.ypAssetZoomableViewScrollViewDidEndZooming()
         cropAreaDidChange()
+        isAnimating = false
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         cropAreaDidChange()
+        isAnimating = decelerate
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         cropAreaDidChange()
+        isAnimating = false
     }
 }

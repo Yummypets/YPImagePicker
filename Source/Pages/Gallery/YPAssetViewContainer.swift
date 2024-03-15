@@ -155,7 +155,8 @@ extension YPAssetViewContainer: YPAssetZoomableViewDelegate {
         
         // Update play imageView position - bringing the playImageView from the videoView to assetViewContainer,
         // but the controll for appearing it still in videoView.
-        if zoomableView.videoView.playImageView.isDescendant(of: self) == false {
+        if zoomableView.videoView.playImageView.superview != self {
+            zoomableView.videoView.playImageView.removeFromSuperview()
             self.addSubview(zoomableView.videoView.playImageView)
             zoomableView.videoView.playImageView.centerInContainer()
         }

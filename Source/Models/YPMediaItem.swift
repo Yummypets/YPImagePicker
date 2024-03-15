@@ -40,6 +40,7 @@ public class YPMediaVideo {
     
     public var thumbnail: UIImage { return modifiedThumbnail ?? originalThumbnail }
     public let originalThumbnail: UIImage
+    public var selectedThumbnail: UIImage
     public var modifiedThumbnail: UIImage?
     public var url: URL { return modifiedUrl ?? originalUrl }
     public let originalUrl: URL
@@ -53,6 +54,7 @@ public class YPMediaVideo {
 
     public init(thumbnail: UIImage, videoURL: URL, fromCamera: Bool = false, asset: PHAsset? = nil) {
         self.originalThumbnail = thumbnail
+        self.selectedThumbnail = thumbnail
         self.originalUrl = videoURL
         self.fromCamera = fromCamera
         self.asset = asset

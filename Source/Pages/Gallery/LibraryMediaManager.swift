@@ -243,6 +243,7 @@ open class LibraryMediaManager {
                     videoComposition = AVMutableVideoComposition(propertiesOf: asset)
                     videoComposition?.instructions = [mainInstructions]
                     videoComposition?.renderSize = cropRect.size
+                    videoCompositionTrack.preferredTransform = videoTrack.preferredTransform
                 } else {
                     // transfer the transform so the video renders in the correct orientation
                     videoCompositionTrack.preferredTransform = transform
