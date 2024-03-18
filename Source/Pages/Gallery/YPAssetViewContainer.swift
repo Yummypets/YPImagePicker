@@ -109,11 +109,6 @@ final class YPAssetViewContainer: UIView {
 
     /// Update only UI of square crop button.
     public func updateSquareCropButtonState() {
-        guard !isMultipleSelectionEnabled else {
-            // If multiple selection enabled, the squareCropButton is not visible
-            squareCropButton.isHidden = true
-            return
-        }
         guard !onlySquare else {
             // If only square enabled, than the squareCropButton is not visible
             squareCropButton.isHidden = true
