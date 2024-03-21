@@ -30,7 +30,6 @@ open class LibraryMediaManager {
     internal var exportTimers: [Timer] = []
     internal var currentExportSessions: [ExportData] = []
     private let currentExportSessionsAccessQueue = DispatchQueue(label: "LibraryMediaManagerExportArrayAccessQueue")
-    private(set) var processingRetryCount = 0
 
     /// If true then library has items to show. If false the user didn't allow any item to show in picker library.
     internal var hasResultItems: Bool {
@@ -159,7 +158,7 @@ open class LibraryMediaManager {
         }
     }
 
-    open func fetchVideoUrlAndCrop(for videoAsset: PHAsset, cropRect: CGRect, timeRange: CMTimeRange = CMTimeRange(start: CMTime.zero, end: CMTime.zero), shouldMute: Bool = false, compressionTypeOverride: String? = nil, callback: @escaping (_ videoURL: URL?) -> Void) {
+    open func fetchVideoUrlAndCrop(for videoAsset: PHAsset, cropRect: CGRect, timeRange: CMTimeRange = CMTimeRange(start: CMTime.zero, end: CMTime.zero), shouldMute: Bool = false, compressionTypeOverride: String? = nil, processingFailedRetryCount: Int = 0, callback: @escaping (_ videoURL: URL?) -> Void) {
         if currentExportSessions.contains(where: { $0.localIdentifier == videoAsset.localIdentifier }) {
             cancelExport(for: videoAsset.localIdentifier)
         }
@@ -170,8 +169,7 @@ open class LibraryMediaManager {
 
         let isSlowMoVideo = videoAsset.mediaSubtypes.contains(.videoHighFrameRate)
 
-        imageManager?.requestAVAsset(forVideo: videoAsset, options: videosOptions) { [weak self] asset, _, _ in
-            guard let self = self else { return }
+        imageManager?.requestAVAsset(forVideo: videoAsset, options: videosOptions) { asset, _, _ in
             do {
                 guard let asset = asset else { ypLog("⚠️ PHCachingImageManager >>> Don't have the asset"); return }
 
@@ -262,8 +260,8 @@ open class LibraryMediaManager {
 
                 // If we can detect the video is a Slow mo video or we've had a previous processing failure, apply the frame duration / sourceTrackIDForFrameTiming
                 // which allows Slow Mo video types to be processed with a selected preset without video composition failures.
-                if isSlowMoVideo || self.processingRetryCount == 1 {
-                    videoComposition?.frameDuration = CMTimeMake(value: 1, timescale: Int32(videoTrack.nominalFrameRate))
+                if isSlowMoVideo || processingFailedRetryCount == 1 {
+                    videoComposition?.frameDuration = CMTimeMake(value: 1, timescale: 30)
                     videoComposition?.sourceTrackIDForFrameTiming = kCMPersistentTrackID_Invalid
                 }
 
@@ -277,7 +275,6 @@ open class LibraryMediaManager {
                         DispatchQueue.main.async {
                             switch session.status {
                             case .completed:
-                                self?.processingRetryCount = 0
                                 if let url = session.outputURL {
                                     if let index = self?.currentExportSessions.firstIndex(where: { $0.session == session }) {
                                         self?.removeExportData(at: index)
@@ -290,15 +287,15 @@ open class LibraryMediaManager {
                                 }
                             case .failed:
                                 if let self = self {
-                                    self.processingRetryCount += 1
+                                    var retryCount = processingFailedRetryCount
+                                    retryCount += 1
                                     // Try one more time to process with the export settings on the YPConfig. If this fails again, use pass through as the final fallback.
-                                    let compressionOverride = self.processingRetryCount == 1 ? YPConfig.video.compression : AVAssetExportPresetPassthrough
+                                    let compressionOverride = retryCount == 1 ? YPConfig.video.compression : AVAssetExportPresetPassthrough
                                     ypLog("LibraryMediaManager -> Export of the video failed. Reason: \(String(describing: session.error))\n--- Retrying with compression type \(compressionOverride)")
                                     self.stopExportTimer(for: session)
-                                    self.fetchVideoUrlAndCrop(for: videoAsset, cropRect: cropRect, timeRange: timeRange, shouldMute: shouldMute, compressionTypeOverride: compressionOverride, callback: callback)
+                                    self.fetchVideoUrlAndCrop(for: videoAsset, cropRect: cropRect, timeRange: timeRange, shouldMute: shouldMute, compressionTypeOverride: compressionOverride, processingFailedRetryCount: retryCount , callback: callback)
                                 }
                             default:
-                                self?.processingRetryCount = 0
                                 ypLog("LibraryMediaManager -> Export session completed with \(session.status) status. Not handling.")
                                 self?.stopExportTimer(for: session)
                                 callback(nil)
