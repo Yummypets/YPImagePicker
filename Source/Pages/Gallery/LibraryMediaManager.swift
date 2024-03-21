@@ -292,11 +292,10 @@ open class LibraryMediaManager {
                                     // Try one more time to process with the export settings on the YPConfig.
                                     let compressionOverride = YPConfig.video.compression
                                     ypLog("LibraryMediaManager -> Export of the video failed. Reason: \(String(describing: session.error))\n--- Retrying with compression type \(compressionOverride)")
+                                    self.stopExportTimer(for: session)
                                     if retryCount > 1 {
-                                        self.stopExportTimer(for: session)
                                         callback(nil)
                                     } else {
-                                        self.stopExportTimer(for: session)
                                         self.fetchVideoUrlAndCrop(for: videoAsset, cropRect: cropRect, timeRange: timeRange, shouldMute: shouldMute, compressionTypeOverride: compressionOverride, processingFailedRetryCount: retryCount , callback: callback)
                                     }
                                 } else {
