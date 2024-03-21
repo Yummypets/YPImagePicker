@@ -289,11 +289,18 @@ open class LibraryMediaManager {
                                 if let self = self {
                                     var retryCount = processingFailedRetryCount
                                     retryCount += 1
-                                    // Try one more time to process with the export settings on the YPConfig. If this fails again, use pass through as the final fallback.
-                                    let compressionOverride = retryCount == 1 ? YPConfig.video.compression : AVAssetExportPresetPassthrough
+                                    // Try one more time to process with the export settings on the YPConfig.
+                                    let compressionOverride = YPConfig.video.compression
                                     ypLog("LibraryMediaManager -> Export of the video failed. Reason: \(String(describing: session.error))\n--- Retrying with compression type \(compressionOverride)")
-                                    self.stopExportTimer(for: session)
-                                    self.fetchVideoUrlAndCrop(for: videoAsset, cropRect: cropRect, timeRange: timeRange, shouldMute: shouldMute, compressionTypeOverride: compressionOverride, processingFailedRetryCount: retryCount , callback: callback)
+                                    if retryCount > 1 {
+                                        self.stopExportTimer(for: session)
+                                        callback(nil)
+                                    } else {
+                                        self.stopExportTimer(for: session)
+                                        self.fetchVideoUrlAndCrop(for: videoAsset, cropRect: cropRect, timeRange: timeRange, shouldMute: shouldMute, compressionTypeOverride: compressionOverride, processingFailedRetryCount: retryCount , callback: callback)
+                                    }
+                                } else {
+                                    callback(nil)
                                 }
                             default:
                                 ypLog("LibraryMediaManager -> Export session completed with \(session.status) status. Not handling.")
