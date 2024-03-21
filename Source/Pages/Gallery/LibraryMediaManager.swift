@@ -260,9 +260,13 @@ open class LibraryMediaManager {
                     videoComposition?.renderSize = CGSize(width: roundedWidth, height: roundedHeight)
                 }
 
+                // If we can detect the video is a Slow mo video or we've had a previous processing failure, apply the frame duration / sourceTrackIDForFrameTiming
+                // which allows Slow Mo video types to be processed with a selected preset without video composition failures.
                 if isSlowMoVideo || self.processingRetryCount == 1 {
                     videoComposition?.frameDuration = CMTimeMake(value: 1, timescale: Int32(videoTrack.nominalFrameRate))
                     videoComposition?.sourceTrackIDForFrameTiming = kCMPersistentTrackID_Invalid
+                }
+
                 let fileURL = URL(fileURLWithPath: NSTemporaryDirectory())
                     .appendingUniquePathComponent(pathExtension: YPConfig.video.fileType.fileExtension)
                 let exportSession = assetComposition
@@ -287,6 +291,7 @@ open class LibraryMediaManager {
                             case .failed:
                                 if let self = self {
                                     self.processingRetryCount += 1
+                                    // Try one more time to process with the export settings on the YPConfig. If this fails again, use pass through as the final fallback.
                                     let compressionOverride = self.processingRetryCount == 1 ? YPConfig.video.compression : AVAssetExportPresetPassthrough
                                     ypLog("LibraryMediaManager -> Export of the video failed. Reason: \(String(describing: session.error))\n--- Retrying with compression type \(compressionOverride)")
                                     self.stopExportTimer(for: session)
