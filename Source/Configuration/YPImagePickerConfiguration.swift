@@ -272,6 +272,8 @@ public struct YPConfigLibrary {
 
     /// Allow selection of both photo and video from the photo gallery.
     public var allowPhotoAndVideoSelection : Bool = false
+
+    public var assetPreviewFooterView: UIView?
 }
 
 /// Encapsulates video specific settings.

@@ -76,7 +76,7 @@ internal final class YPLibraryView: UIView {
             button
         )
         button.fillContainer()
-        |-(24)-label.centerHorizontally()-arrow-(>=8)-|
+        |-(16)-label.centerHorizontally()-arrow-(>=8)-|
 
         label.firstBaselineAnchor.constraint(equalTo: buttonContainerView.bottomAnchor, constant: -24).isActive = true
         arrow.bottomAnchor.constraint(equalTo: label.bottomAnchor, constant: -4).isActive = true
@@ -236,7 +236,14 @@ internal final class YPLibraryView: UIView {
         collectionView.fillHorizontally().bottom(0)
 
         if !YPConfig.showsLibraryButtonInTitle {
-            assetViewContainer.Bottom == showAlbumsButton.Top
+            if let footerView = YPConfig.library.assetPreviewFooterView {
+                subviews(footerView)
+                footerView.fillHorizontally()
+                assetViewContainer.Bottom == footerView.Top
+                footerView.Bottom == showAlbumsButton.Top
+            } else {
+                assetViewContainer.Bottom == showAlbumsButton.Top
+            }
             showAlbumsButton.Bottom == line.Top
             showAlbumsButton.height(60)
             showAlbumsButton.Bottom == collectionView.Top
@@ -264,7 +271,7 @@ internal final class YPLibraryView: UIView {
         maxNumberWarningLabel.centerHorizontally().top(11)
 
         subviews(multipleSelectionButton)
-        multipleSelectionButton.size(30).trailing(20)
+        multipleSelectionButton.size(30).trailing(16)
         alignHorizontally(showAlbumsButton, multipleSelectionButton)
     }
 
