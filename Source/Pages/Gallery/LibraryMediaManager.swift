@@ -366,7 +366,9 @@ open class LibraryMediaManager {
     }
 
     private func stopExportTimer() {
-        exportTimer?.invalidate()
+        DispatchQueue.main.async { [weak self] in
+            self?.exportTimer?.invalidate()
+        }
         exportTimer = nil
 
         // also reset progress view if one is available
@@ -374,7 +376,9 @@ open class LibraryMediaManager {
     }
 
     private func stopExportTimer(timer: Timer) {
-        timer.invalidate()
+        DispatchQueue.main.async {
+            timer.invalidate()
+        }
         if let index = exportTimers.firstIndex(of: timer) {
             exportTimers.remove(at: index)
         }
