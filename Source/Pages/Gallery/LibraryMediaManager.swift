@@ -159,9 +159,7 @@ open class LibraryMediaManager {
     }
 
     open func fetchVideoUrlAndCrop(for videoAsset: PHAsset, cropRect: CGRect, timeRange: CMTimeRange = CMTimeRange(start: CMTime.zero, end: CMTime.zero), shouldMute: Bool = false, compressionTypeOverride: String? = nil, processingFailedRetryCount: Int = 0, callback: @escaping (_ videoURL: URL?) -> Void) {
-        if currentExportSessions.contains(where: { $0.localIdentifier == videoAsset.localIdentifier }) {
-            cancelExport(for: videoAsset.localIdentifier)
-        }
+        cancelExport(for: videoAsset.localIdentifier)
 
         let videosOptions = PHVideoRequestOptions()
         videosOptions.isNetworkAccessAllowed = true
@@ -451,11 +449,17 @@ open class LibraryMediaManager {
     }
 
     private func cancelExport(for localIdentifier: String) {
-        guard let index = currentExportSessions.firstIndex(where: { $0.localIdentifier == localIdentifier }) else { return }
-        let exportData = currentExportSessions[index]
-        stopExportTimer(for: exportData.session)
-        exportData.session.cancelExport()
-        removeExportData(at: index)
+        currentExportSessionsAccessQueue.async { [weak self] in
+            guard let self, let index = currentExportSessions.firstIndex(where: { $0.localIdentifier == localIdentifier }) else { return }
+            let exportData = currentExportSessions[index]
+            exportData.session.cancelExport()
+            let progress = [
+                "session": exportData.session,
+                "progress": 1.0
+            ] as [String : Any]
+            NotificationCenter.default.post(name: .LibraryMediaManagerExportProgressUpdate, object: self, userInfo: progress)
+            currentExportSessions.remove(at: index)
+        }
     }
 
     private func appendExportData(_ exportData: ExportData) {
