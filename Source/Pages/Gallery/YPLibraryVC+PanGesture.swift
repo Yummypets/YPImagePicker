@@ -148,8 +148,8 @@ public class PanGestureHelper: NSObject, UIGestureRecognizerDelegate {
             if sender.state == UIGestureRecognizer.State.ended && dragDirection == .stop {
                 return
             }
-            
-            if overYLimitToStartMovingUp && isImageShown == false {
+            let velocity = sender.velocity(in: v)
+            if (overYLimitToStartMovingUp && isImageShown == false) || (isImageShown == false && velocity.y < 0) {
                 // The largest movement
                 topHeight =
                     v.assetZoomableViewMinimalVisibleHeight - containerHeight
