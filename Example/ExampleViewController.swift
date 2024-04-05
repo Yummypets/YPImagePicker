@@ -217,7 +217,7 @@ class ExampleViewController: UIViewController {
         //config.library.userAlbumsSectionTitle = "My albums"
 
         // Override title text
-        //config.showsLibraryButtonInTitle = false
+        config.showsLibraryButtonInTitle = false
         //config.pickerTitleOverride = "Test"
 
         let picker = YPImagePicker(configuration: config)

@@ -9,159 +9,233 @@
 import UIKit
 
 public class PanGestureHelper: NSObject, UIGestureRecognizerDelegate {
-    
-    var v: YPLibraryView!
+
+    var v: YPLibraryViewPanning!
+    var targetView: UIView!
     private let assetViewContainerOriginalConstraintTop: CGFloat = 0
     private var dragDirection = YPDragDirection.up
     private var imaginaryCollectionViewOffsetStartPosY: CGFloat = 0.0
+    private var originalCollectionViewOffsetY: CGFloat = 0.0
     private var cropBottomY: CGFloat  = 0.0
     private var dragStartPos: CGPoint = .zero
-    private let dragDiff: CGFloat = 0
+    private var dragDiff: CGFloat = 0
     private var _isImageShown = true
-    
+
     // The height constraint of the view with main selected image
     var topHeight: CGFloat {
         get {
-            return v.assetViewContainerConstraintTop?.constant ?? 0
+            return v.imageContainerConstraintTop?.constant ?? 0
         }
         set {
-            if newValue >= v.assetZoomableViewMinimalVisibleHeight - v.assetViewContainer.frame.height {
-                v.assetViewContainerConstraintTop?.constant = newValue
+            if newValue >= v.imageScrollViewMinimalVisibleHeight - v.imageContainerFrame.size.height {
+                v.imageContainerConstraintTop?.constant = newValue
             }
         }
     }
-    
+
     // Is the main image shown
     var isImageShown: Bool {
         get { return self._isImageShown }
         set {
             if newValue != isImageShown {
                 self._isImageShown = newValue
-                v.assetViewContainer.isShown = newValue
+                v.assetViewContainerIsShown = newValue
                 // Update imageCropContainer
-                v.assetZoomableView.isScrollEnabled = isImageShown
+                v.imageScrollViewScrollEnabled = isImageShown
             }
         }
     }
-    
-    func registerForPanGesture(on view: YPLibraryView) {
+
+    public func registerForPanGesture(on view: YPLibraryViewPanning) {
         v = view
+        targetView = view.targetView
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(panned(_:)))
         panGesture.delegate = self
-        view.addGestureRecognizer(panGesture)
+        view.targetView.addGestureRecognizer(panGesture)
         topHeight = 0
     }
-    
+
     public func resetToOriginalState() {
         topHeight = assetViewContainerOriginalConstraintTop
         animateView()
         dragDirection = .up
     }
-    
+
+    public func animateUp() {
+        topHeight = v.imageScrollViewMinimalVisibleHeight - v.imageContainerFrame.size.height
+        animateView()
+        dragDirection = .down
+    }
+
     fileprivate func animateView() {
         UIView.animate(withDuration: 0.2,
                        delay: 0.0,
                        options: [.curveEaseInOut, .beginFromCurrentState],
                        animations: {
-                        self.v.refreshImageCurtainAlpha()
-                        self.v.layoutIfNeeded()
-        }
-            ,
+                           self.v.updateImageContainerLayout()
+                           self.v.targetView.layoutIfNeeded()
+                       },
                        completion: nil)
     }
-    
+
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith
         otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
-    
+
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        let p = gestureRecognizer.location(ofTouch: 0, in: v)
+        let p = gestureRecognizer.location(ofTouch: 0, in: targetView)
         // Desactivate pan on image when it is shown.
         if isImageShown {
-            if p.y < v.assetZoomableView.frame.height {
+            if p.y < v.imageContainerFrame.height {
                 return false
             }
         }
         return true
     }
-    
+
     @objc
     func panned(_ sender: UIPanGestureRecognizer) {
-        
-        let containerHeight = v.assetViewContainer.frame.height
-        let currentPos = sender.location(in: v)
-        let overYLimitToStartMovingUp = currentPos.y * 1.4 < cropBottomY - dragDiff
-        
+
+        let containerHeight = v.imageContainerFrame.size.height + (v.collectionViewFrame.minY - v.imageContainerFrame.maxY)
+        let currentPos = sender.location(in: targetView)
+        let overYLimitToStartMovingUp = currentPos.y * 1.4 < cropBottomY
         switch sender.state {
         case .began:
             let view    = sender.view
             let loc     = sender.location(in: view)
             let subview = view?.hitTest(loc, with: nil)
-            
-            if subview == v.assetZoomableView
+
+            if subview == v.imageContainerView
                 && topHeight == assetViewContainerOriginalConstraintTop {
                 return
             }
-            
-            dragStartPos = sender.location(in: v)
-            cropBottomY = v.assetViewContainer.frame.origin.y + containerHeight
-            
+
+            dragStartPos = sender.location(in: view)
+            cropBottomY = v.collectionViewFrame.minY
+
             // Move
             if dragDirection == .stop {
                 dragDirection = (topHeight == assetViewContainerOriginalConstraintTop)
                     ? .up
                     : .down
             }
-            
+
             // Scroll event of CollectionView is preferred.
-            if (dragDirection == .up && dragStartPos.y < cropBottomY + dragDiff) ||
-                (dragDirection == .down && dragStartPos.y > cropBottomY) {
+            if dragDirection == .down && dragStartPos.y > cropBottomY {
                 dragDirection = .stop
             }
+            if (dragDirection == .up || dragDirection == .down) && currentPos.y < v.collectionViewFrame.minY {
+                dragDiff = currentPos.y - v.collectionViewFrame.minY
+            }
+
         case .changed:
             switch dragDirection {
             case .up:
-                if currentPos.y < cropBottomY - dragDiff {
+                let diff = v.collectionViewFrame.minY - currentPos.y
+                if diff > 0 {
                     topHeight =
-                        max(v.assetZoomableViewMinimalVisibleHeight - containerHeight,
-                            currentPos.y + dragDiff - containerHeight)
+                        min(assetViewContainerOriginalConstraintTop,
+                            max(v.imageScrollViewMinimalVisibleHeight - containerHeight,
+                                (currentPos.y - dragDiff) - containerHeight))
                 }
             case .down:
-                if currentPos.y > cropBottomY {
-                    topHeight =
-                        min(assetViewContainerOriginalConstraintTop, currentPos.y - containerHeight)
-                }
+                topHeight = min(assetViewContainerOriginalConstraintTop, currentPos.y - dragDiff - containerHeight)
             case .scroll:
-                topHeight =
-                    v.assetZoomableViewMinimalVisibleHeight - containerHeight
-                    + currentPos.y - imaginaryCollectionViewOffsetStartPosY
+                let newTopHeightValue = v.imageScrollViewMinimalVisibleHeight - v.imageContainerFrame.size.height
+                + (currentPos.y - v.collectionViewContentOffset.y) - imaginaryCollectionViewOffsetStartPosY
+                topHeight = newTopHeightValue
             case .stop:
-                if v.collectionView.contentOffset.y < 0 {
+                if topHeight != assetViewContainerOriginalConstraintTop && v.collectionViewContentOffset.y < 0 {
                     dragDirection = .scroll
                     imaginaryCollectionViewOffsetStartPosY = currentPos.y
                 }
             }
-            
+
         default:
             imaginaryCollectionViewOffsetStartPosY = 0.0
+            dragDiff = 0.0
             if sender.state == UIGestureRecognizer.State.ended && dragDirection == .stop {
                 return
             }
-            let velocity = sender.velocity(in: v)
+            let velocity = sender.velocity(in: targetView)
             if (overYLimitToStartMovingUp && isImageShown == false) || (isImageShown == false && velocity.y < 0) {
                 // The largest movement
-                topHeight =
-                    v.assetZoomableViewMinimalVisibleHeight - containerHeight
-                animateView()
-                dragDirection = .down
+                animateUp()
             } else {
                 // Get back to the original position
                 resetToOriginalState()
             }
         }
-        
+
         // Update isImageShown
         isImageShown = topHeight == assetViewContainerOriginalConstraintTop
+    }
+}
+
+
+public protocol YPLibraryViewPanning {
+    var imageScrollViewMinimalVisibleHeight: CGFloat { get }
+    var imageContainerConstraintTop: NSLayoutConstraint? { get }
+    var imageContainerFrame: CGRect { get }
+    var collectionViewFrame: CGRect { get }
+    var imageContainerView: UIView { get }
+    var imageScrollViewScrollEnabled: Bool { get set }
+    var collectionViewContentOffset: CGPoint { get }
+    var assetViewContainerIsShown: Bool { get set }
+    var targetView: UIView { get }
+
+    func updateImageContainerLayout()
+}
+
+extension YPLibraryView: YPLibraryViewPanning {
+    public var imageContainerView: UIView {
+        assetZoomableView
+    }
+
+    public var imageScrollViewScrollEnabled: Bool {
+        get {
+            assetZoomableView.isScrollEnabled
+        }
+        set {
+            assetZoomableView.isScrollEnabled = newValue
+        }
+    }
+
+    public var imageContainerConstraintTop: NSLayoutConstraint? {
+        assetViewContainerConstraintTop
+    }
+
+    public var imageContainerFrame: CGRect {
+        assetViewContainer.frame
+    }
+
+    public var imageScrollViewMinimalVisibleHeight: CGFloat {
+        assetZoomableViewMinimalVisibleHeight
+    }
+
+    public var collectionViewContentOffset: CGPoint {
+        collectionView.contentOffset
+    }
+
+    public var collectionViewFrame: CGRect {
+        collectionView.frame
+    }
+
+    public var assetViewContainerIsShown: Bool {
+        get {
+            assetViewContainer.isShown
+        }
+        set {
+            assetViewContainer.isShown = newValue
+        }
+    }
+
+    public var targetView: UIView {
+        return self
+    }
+
+    public func updateImageContainerLayout() {
+        refreshImageCurtainAlpha()
     }
 }
