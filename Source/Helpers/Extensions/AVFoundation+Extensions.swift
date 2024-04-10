@@ -21,13 +21,11 @@ internal func flippedDeviceInputForInput(_ input: AVCaptureDeviceInput) -> AVCap
     return try? AVCaptureDeviceInput(device: aDevice)
 }
 
-internal func thumbnailFromVideoPath(_ path: URL, maxSize: CGSize? = nil) -> UIImage {
+internal func thumbnailFromVideoPath(_ path: URL) -> UIImage {
     let asset = AVURLAsset(url: path, options: nil)
     let gen = AVAssetImageGenerator(asset: asset)
     gen.appliesPreferredTrackTransform = true
-    if let maxSize {
-        gen.maximumSize = maxSize
-    }
+    gen.maximumSize = CGSize(width: 2048, height: 2048)
     let time = CMTimeMakeWithSeconds(0.0, preferredTimescale: 600)
     var actualTime = CMTimeMake(value: 0, timescale: 0)
     let image: CGImage
