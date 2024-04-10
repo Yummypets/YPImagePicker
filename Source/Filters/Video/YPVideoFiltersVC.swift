@@ -109,6 +109,7 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
         videoView.asset = inputVideo.asset // pass the asset over so we can use it to determine the original video dimensions
         coverImageView.cropRect = inputVideo.cropRect // pass the crop rect over to the video so it can present the video relative to the crop rect
         coverImageView.asset = inputVideo.asset // pass the asset over so we can use it to determine the original video dimensions
+        coverImageView.videoUrl = inputVideo.url // pass the asset over so we can use it to determine the original video dimensions
 
         if let cropRect = inputVideo.cropRect {
             let aspectRatio = cropRect.width / cropRect.height
@@ -354,7 +355,8 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
             let timeRange = CMTimeRange(start: startTime, end: endTime)
 
             // cropping and trimming simultaneously to reduce total transcoding time
-            mediaManager.fetchVideoUrlAndCrop(for: inputVideo.asset!, cropRect: inputVideo.cropRect!, timeRange: timeRange, shouldMute: shouldMute) { [weak self] (url) in
+
+            let callback: (_ videoURL: URL?) -> Void = { [weak self] (url) in
                 DispatchQueue.main.async {
                     if let url = url {
                         self?.completeSave(thumbnail: self?.croppedImage ?? UIImage(), videoUrl: url, asset: self?.inputVideo.asset, timeRange: timeRange)
@@ -363,6 +365,12 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
                         self?.resetView()
                     }
                 }
+            }
+
+            if let videoAsset = inputVideo.asset {
+                mediaManager.fetchVideoUrlAndCrop(for: videoAsset, cropRect: inputVideo.cropRect!, timeRange: timeRange, shouldMute: shouldMute, callback: callback)
+            } else {
+                mediaManager.fetchVideoUrlAndCrop(for: inputVideo.url, cropRect: inputVideo.cropRect!, timeRange: timeRange, shouldMute: shouldMute, callback: callback)
             }
 
             // set up notification listener
@@ -526,7 +534,8 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
            let endTime = timeStampTrimmerView.endTime,
            startTime != coverTrimTimes?.startTime || endTime != coverTrimTimes?.endTime {
             let timerange = CMTimeRange(start: startTime, end: endTime)
-            mediaManager.fetchVideoUrlAndCrop(for: inputVideo.asset!, cropRect: inputVideo.cropRect!, timeRange: timerange, shouldMute: false, compressionTypeOverride: AVAssetExportPresetPassthrough) { [weak self] (url) in
+
+            let callback: (_ videoURL: URL?) -> Void = { [weak self] (url) in
                 DispatchQueue.main.async {
                     if let url = url {
                         let trimmedAsset = AVAsset(url: url)
@@ -539,6 +548,11 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
 
                     }
                 }
+            }
+            if let videoAsset = inputVideo.asset {
+                mediaManager.fetchVideoUrlAndCrop(for: videoAsset, cropRect: inputVideo.cropRect!, timeRange: timerange, shouldMute: false, compressionTypeOverride: AVAssetExportPresetPassthrough, callback: callback)
+            } else {
+                mediaManager.fetchVideoUrlAndCrop(for: inputVideo.url, cropRect: inputVideo.cropRect!, timeRange: timerange, shouldMute: false, compressionTypeOverride: AVAssetExportPresetPassthrough, callback: callback)
             }
             return true
         } else {

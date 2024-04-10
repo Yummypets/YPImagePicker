@@ -191,149 +191,153 @@ open class LibraryMediaManager {
         let videosOptions = PHVideoRequestOptions()
         videosOptions.isNetworkAccessAllowed = true
         videosOptions.deliveryMode = .highQualityFormat
-
         let isSlowMoVideo = videoAsset.mediaSubtypes.contains(.videoHighFrameRate)
-
         imageManager?.requestAVAsset(forVideo: videoAsset, options: videosOptions) { asset, _, _ in
+                self.fetchVideoUrlAndCrop(for: asset, assetIdentifier: videoAsset.localIdentifier, cropRect: cropRect, timeRange: timeRange, shouldMute: shouldMute, compressionTypeOverride: compressionTypeOverride, processingFailedRetryCount: processingFailedRetryCount, isSlowMoVideo: isSlowMoVideo, callback: callback)
+        }
+    }
+
+    open func fetchVideoUrlAndCrop(for videoUrl: URL, cropRect: CGRect, timeRange: CMTimeRange = CMTimeRange(start: CMTime.zero, end: CMTime.zero), shouldMute: Bool = false, compressionTypeOverride: String? = nil, processingFailedRetryCount: Int = 0, callback: @escaping (_ videoURL: URL?) -> Void) {
+        let asset = AVAsset(url: videoUrl)
+        self.fetchVideoUrlAndCrop(for: asset, assetIdentifier: videoUrl.absoluteString, cropRect: cropRect, timeRange: timeRange, shouldMute: shouldMute, compressionTypeOverride: compressionTypeOverride, processingFailedRetryCount: processingFailedRetryCount, isSlowMoVideo: false, callback: callback)
+    }
+
+    private func fetchVideoUrlAndCrop(for videoAsset: AVAsset?, assetIdentifier: String, cropRect: CGRect, timeRange: CMTimeRange = CMTimeRange(start: CMTime.zero, end: CMTime.zero), shouldMute: Bool = false, compressionTypeOverride: String? = nil, processingFailedRetryCount: Int = 0, isSlowMoVideo: Bool = false, callback: @escaping (_ videoURL: URL?) -> Void) {
+
+        guard let asset = videoAsset else { ypLog("⚠️ PHCachingImageManager >>> Don't have the asset"); return }
+
+        let assetComposition = AVMutableComposition()
+        let trackTimeRange = timeRange
+
+        // 1. Inserting audio and video tracks in composition
+
+        guard let videoTrack = asset.tracks(withMediaType: AVMediaType.video).first,
+              let videoCompositionTrack = assetComposition.addMutableTrack(withMediaType: .video,
+                                                                           preferredTrackID: kCMPersistentTrackID_Invalid) else {
+            ypLog("⚠️ PHCachingImageManager >>> Problems with video track")
+            return
+
+        }
+        if !shouldMute, let audioTrack = asset.tracks(withMediaType: AVMediaType.audio).first,
+           let audioCompositionTrack = assetComposition.addMutableTrack(withMediaType: AVMediaType.audio,
+                                                                        preferredTrackID: kCMPersistentTrackID_Invalid) {
             do {
-                guard let asset = asset else { ypLog("⚠️ PHCachingImageManager >>> Don't have the asset"); return }
-
-                let assetComposition = AVMutableComposition()
-                let trackTimeRange = timeRange
-
-                // 1. Inserting audio and video tracks in composition
-
-                guard let videoTrack = asset.tracks(withMediaType: AVMediaType.video).first,
-                      let videoCompositionTrack = assetComposition.addMutableTrack(withMediaType: .video,
-                                                                                   preferredTrackID: kCMPersistentTrackID_Invalid) else {
-                          ypLog("⚠️ PHCachingImageManager >>> Problems with video track")
-                          return
-
-                      }
-                if !shouldMute, let audioTrack = asset.tracks(withMediaType: AVMediaType.audio).first,
-                   let audioCompositionTrack = assetComposition.addMutableTrack(withMediaType: AVMediaType.audio,
-                                                                                preferredTrackID: kCMPersistentTrackID_Invalid) {
-                    do {
-                        try audioCompositionTrack.insertTimeRange(trackTimeRange, of: audioTrack, at: CMTime.zero)
-                    } catch {
-                        ypLog("Unexpected error: \(error).")
-                    }
-                }
-
-                do {
-                    try videoCompositionTrack.insertTimeRange(trackTimeRange, of: videoTrack, at: CMTime.zero)
-                } catch {
-                    ypLog("Unexpected error: \(error).")
-                }
-
-                var transform = videoTrack.preferredTransform
-                let videoSize = videoTrack.naturalSize.applying(transform)
-
-                let videoIsTrimmed = CMTimeCompare(videoTrack.timeRange.duration, timeRange.duration) != 0
-                let videoIsRotated = !transform.isIdentity // transcode the video if source is rotated.
-
-                // 5. Configuring export session
-                let videoIsCropped = cropRect.size.width < abs(videoSize.width) || cropRect.size.height < abs(videoSize.height)
-
-                let presetName: String
-
-                if YPConfig.video.shouldAlwaysProcessVideo {
-                    presetName = compressionTypeOverride ?? YPConfig.video.compression
-                } else {
-                    presetName = compressionTypeOverride ?? (videoIsCropped || videoIsTrimmed || videoIsRotated || (shouldMute && isSlowMoVideo) ? YPConfig.video.compression : AVAssetExportPresetPassthrough)
-                }
-
-
-                var videoComposition:AVMutableVideoComposition?
-
-                if videoIsCropped {
-                    // Layer Instructions
-                    let constrainedCropRectSize = self.getConstrainedSize(size: cropRect.size)
-                    let scaleFactor = constrainedCropRectSize.height / cropRect.size.height
-                    let layerInstructions = AVMutableVideoCompositionLayerInstruction(assetTrack: videoCompositionTrack)
-                    transform.tx = (videoSize.width < 0) ? abs(videoSize.width) : 0.0
-                    transform.ty = (videoSize.height < 0) ? abs(videoSize.height) : 0.0
-                    transform.tx -= cropRect.minX * scaleFactor
-                    transform.ty -= cropRect.minY * scaleFactor
-                    transform = transform.scaledBy(x: scaleFactor, y: scaleFactor)
-                    layerInstructions.setTransform(transform, at: CMTime.zero)
-
-                    // CompositionInstruction
-                    let mainInstructions = AVMutableVideoCompositionInstruction()
-                    // time range is different from value passed in. Main instructions time range must start at zero.
-                    mainInstructions.timeRange = CMTimeRangeMake(start: CMTime.zero, duration: timeRange.duration)
-                    mainInstructions.layerInstructions = [layerInstructions]
-
-                    // Video Composition
-                    videoComposition = AVMutableVideoComposition(propertiesOf: asset)
-                    videoComposition?.instructions = [mainInstructions]
-                    videoComposition?.renderSize = cropRect.size
-                    videoCompositionTrack.preferredTransform = videoTrack.preferredTransform
-                } else {
-                    // transfer the transform so the video renders in the correct orientation
-                    videoCompositionTrack.preferredTransform = transform
-                    videoComposition?.renderSize = videoSize
-                }
-
-                if let renderSize = videoComposition?.renderSize, YPConfig.video.maxVideoResolution != nil {
-                    let constrainedSize = self.getConstrainedSize(size: renderSize)
-                    // Let's make sure that the video has even numbers in the width and height
-                    let roundedWidth = Int(round(constrainedSize.width / 2.0)) * 2
-                    let roundedHeight = Int(round(constrainedSize.height / 2.0)) * 2
-                    videoComposition?.renderSize = CGSize(width: roundedWidth, height: roundedHeight)
-                }
-
-                // If we can detect the video is a Slow mo video or we've had a previous processing failure, apply the frame duration / sourceTrackIDForFrameTiming
-                // which allows Slow Mo video types to be processed with a selected preset without video composition failures.
-                if isSlowMoVideo || processingFailedRetryCount == 1 {
-                    videoComposition?.frameDuration = CMTimeMake(value: 1, timescale: 30)
-                    videoComposition?.sourceTrackIDForFrameTiming = kCMPersistentTrackID_Invalid
-                }
-
-                let fileURL = URL(fileURLWithPath: NSTemporaryDirectory())
-                    .appendingUniquePathComponent(pathExtension: YPConfig.video.fileType.fileExtension)
-                let exportSession = assetComposition
-                    .export(to: fileURL,
-                            videoComposition: videoComposition,
-                            removeOldFile: true,
-                            presetName: presetName) { [weak self] session in
-                        DispatchQueue.main.async {
-                            switch session.status {
-                            case .completed:
-                                if let url = session.outputURL {
-                                    callback(url)
-                                } else {
-                                    ypLog("LibraryMediaManager -> Don't have URL.")
-                                    callback(nil)
-                                }
-                            case .failed:
-                                if let self = self {
-                                    var retryCount = processingFailedRetryCount
-                                    retryCount += 1
-                                    // Try one more time to process with the export settings on the YPConfig.
-                                    let compressionOverride = YPConfig.video.compression
-                                    ypLog("LibraryMediaManager -> Export of the video failed. Reason: \(String(describing: session.error))\n--- Retrying with compression type \(compressionOverride)")
-                                    if retryCount > 1 {
-                                        callback(nil)
-                                    } else {
-                                        self.fetchVideoUrlAndCrop(for: videoAsset, cropRect: cropRect, timeRange: timeRange, shouldMute: shouldMute, compressionTypeOverride: compressionOverride, processingFailedRetryCount: retryCount , callback: callback)
-                                    }
-                                } else {
-                                    callback(nil)
-                                }
-                            default:
-                                ypLog("LibraryMediaManager -> Export session completed with \(session.status) status. Not handling.")
-                                callback(nil)
-                            }
-                        }
-                    }
-
-                if let s = exportSession {
-                    self.appendExportData(ExportData(localIdentifier: videoAsset.localIdentifier, session: s))
-                }
-            } catch let error {
-                ypLog("⚠️ PHCachingImageManager >>> \(error)")
+                try audioCompositionTrack.insertTimeRange(trackTimeRange, of: audioTrack, at: CMTime.zero)
+            } catch {
+                ypLog("Unexpected error: \(error).")
             }
+        }
+
+        do {
+            try videoCompositionTrack.insertTimeRange(trackTimeRange, of: videoTrack, at: CMTime.zero)
+        } catch {
+            ypLog("Unexpected error: \(error).")
+        }
+
+        var transform = videoTrack.preferredTransform
+        let videoSize = videoTrack.naturalSize.applying(transform)
+
+        let videoIsTrimmed = CMTimeCompare(videoTrack.timeRange.duration, timeRange.duration) != 0
+        let videoIsRotated = !transform.isIdentity // transcode the video if source is rotated.
+
+        // 5. Configuring export session
+        let videoIsCropped = cropRect.size.width < abs(videoSize.width) || cropRect.size.height < abs(videoSize.height)
+
+        let presetName: String
+
+        if YPConfig.video.shouldAlwaysProcessVideo {
+            presetName = compressionTypeOverride ?? YPConfig.video.compression
+        } else {
+            presetName = compressionTypeOverride ?? (videoIsCropped || videoIsTrimmed || videoIsRotated || (shouldMute && isSlowMoVideo) ? YPConfig.video.compression : AVAssetExportPresetPassthrough)
+        }
+
+
+        var videoComposition:AVMutableVideoComposition?
+
+        if videoIsCropped {
+            // Layer Instructions
+            let constrainedCropRectSize = self.getConstrainedSize(size: cropRect.size)
+            let scaleFactor = constrainedCropRectSize.height / cropRect.size.height
+            let layerInstructions = AVMutableVideoCompositionLayerInstruction(assetTrack: videoCompositionTrack)
+            transform.tx = (videoSize.width < 0) ? abs(videoSize.width) : 0.0
+            transform.ty = (videoSize.height < 0) ? abs(videoSize.height) : 0.0
+            transform.tx -= cropRect.minX * scaleFactor
+            transform.ty -= cropRect.minY * scaleFactor
+            transform = transform.scaledBy(x: scaleFactor, y: scaleFactor)
+            layerInstructions.setTransform(transform, at: CMTime.zero)
+
+            // CompositionInstruction
+            let mainInstructions = AVMutableVideoCompositionInstruction()
+            // time range is different from value passed in. Main instructions time range must start at zero.
+            mainInstructions.timeRange = CMTimeRangeMake(start: CMTime.zero, duration: timeRange.duration)
+            mainInstructions.layerInstructions = [layerInstructions]
+
+            // Video Composition
+            videoComposition = AVMutableVideoComposition(propertiesOf: asset)
+            videoComposition?.instructions = [mainInstructions]
+            videoComposition?.renderSize = cropRect.size
+            videoCompositionTrack.preferredTransform = videoTrack.preferredTransform
+        } else {
+            // transfer the transform so the video renders in the correct orientation
+            videoCompositionTrack.preferredTransform = transform
+            videoComposition?.renderSize = videoSize
+        }
+
+        if let renderSize = videoComposition?.renderSize, YPConfig.video.maxVideoResolution != nil {
+            let constrainedSize = self.getConstrainedSize(size: renderSize)
+            // Let's make sure that the video has even numbers in the width and height
+            let roundedWidth = Int(round(constrainedSize.width / 2.0)) * 2
+            let roundedHeight = Int(round(constrainedSize.height / 2.0)) * 2
+            videoComposition?.renderSize = CGSize(width: roundedWidth, height: roundedHeight)
+        }
+
+        // If we can detect the video is a Slow mo video or we've had a previous processing failure, apply the frame duration / sourceTrackIDForFrameTiming
+        // which allows Slow Mo video types to be processed with a selected preset without video composition failures.
+        if isSlowMoVideo || processingFailedRetryCount == 1 {
+            videoComposition?.frameDuration = CMTimeMake(value: 1, timescale: 30)
+            videoComposition?.sourceTrackIDForFrameTiming = kCMPersistentTrackID_Invalid
+        }
+
+        let fileURL = URL(fileURLWithPath: NSTemporaryDirectory())
+            .appendingUniquePathComponent(pathExtension: YPConfig.video.fileType.fileExtension)
+        let exportSession = assetComposition
+            .export(to: fileURL,
+                    videoComposition: videoComposition,
+                    removeOldFile: true,
+                    presetName: presetName) { [weak self] session in
+                DispatchQueue.main.async {
+                    switch session.status {
+                    case .completed:
+                        if let url = session.outputURL {
+                            callback(url)
+                        } else {
+                            ypLog("LibraryMediaManager -> Don't have URL.")
+                            callback(nil)
+                        }
+                    case .failed:
+                        if let self = self {
+                            var retryCount = processingFailedRetryCount
+                            retryCount += 1
+                            // Try one more time to process with the export settings on the YPConfig.
+                            let compressionOverride = YPConfig.video.compression
+                            ypLog("LibraryMediaManager -> Export of the video failed. Reason: \(String(describing: session.error))\n--- Retrying with compression type \(compressionOverride)")
+                            if retryCount > 1 {
+                                callback(nil)
+                            } else {
+                                self.fetchVideoUrlAndCrop(for: asset, assetIdentifier: assetIdentifier, cropRect: cropRect, timeRange: timeRange, shouldMute: shouldMute, compressionTypeOverride: compressionOverride, processingFailedRetryCount: retryCount, isSlowMoVideo: isSlowMoVideo, callback: callback)
+                            }
+                        } else {
+                            callback(nil)
+                        }
+                    default:
+                        ypLog("LibraryMediaManager -> Export session completed with \(session.status) status. Not handling.")
+                        callback(nil)
+                    }
+                }
+            }
+
+        if let s = exportSession {
+            self.appendExportData(ExportData(localIdentifier: assetIdentifier, session: s))
         }
     }
 

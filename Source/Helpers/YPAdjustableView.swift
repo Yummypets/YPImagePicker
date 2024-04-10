@@ -24,6 +24,14 @@ public class YPAdjustableView: UIView {
         }
     }
 
+    public func adjustViewFramesIfNeeded(cropRect: CGRect, assetSize: CGSize, targetAspectRatio: CGFloat?) {
+        if let aspectRatio = targetAspectRatio, aspectRatio != assetSize.width / assetSize.height {
+            adjustViewFrameForAspectRatio(cropRect: cropRect, aspectRatio: aspectRatio, assetSize: assetSize)
+        } else {
+            adjustViewFrame(cropRect: cropRect, assetSize: assetSize)
+        }
+    }
+
     // Method to adjust the view frame considering the asset's original size
     private func adjustViewFrame(cropRect: CGRect, assetSize: CGSize) {
         let assetRect = CGRect(origin: .zero, size: assetSize)

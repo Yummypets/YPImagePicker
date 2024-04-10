@@ -21,6 +21,7 @@ public class YPVideoView: YPAdjustableView {
 
     var cropRect: CGRect?
     public var asset: PHAsset?
+    private var videoUrl: URL?
 
     public var targetAspectRatio: CGFloat?
 
@@ -52,8 +53,15 @@ public class YPVideoView: YPAdjustableView {
         }
 
         // Ensure necessary properties are available
-        guard let cropRect = cropRect, let asset = asset else { return }
-        adjustViewFramesIfNeeded(cropRect: cropRect, asset: asset, targetAspectRatio: targetAspectRatio)
+        guard let cropRect = cropRect else { return }
+        if let asset = asset {
+            adjustViewFramesIfNeeded(cropRect: cropRect, asset: asset, targetAspectRatio: targetAspectRatio)
+        } else if let videoUrl = videoUrl {
+            let videoAsset = AVAsset(url: videoUrl)
+            guard let track = videoAsset.tracks(withMediaType: AVMediaType.video).first else { return }
+            let size = track.naturalSize.applying(track.preferredTransform)
+            adjustViewFramesIfNeeded(cropRect: cropRect, assetSize: size, targetAspectRatio: targetAspectRatio)
+        }
     }
 
     internal func setup() {
@@ -113,8 +121,10 @@ extension YPVideoView {
 
         switch item.self {
         case let video as YPMediaVideo:
+            videoUrl = video.originalUrl
             player = AVPlayer(url: video.originalUrl)
         case let url as URL:
+            videoUrl = url
             player = AVPlayer(url: url)
         case let playerItem as AVPlayerItem:
             player = AVPlayer(playerItem: playerItem)

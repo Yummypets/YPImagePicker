@@ -14,6 +14,8 @@ public class YPCoverImageView: YPAdjustableView {
 
     var cropRect: CGRect?
     var asset: PHAsset?
+    var videoUrl: URL?
+
     public var image: UIImage? {
         get {
             coverImageView.image
@@ -44,8 +46,15 @@ public class YPCoverImageView: YPAdjustableView {
             self?.coverImageView.clipsToBounds = true
         }
         // Ensure necessary properties are available
-        guard let cropRect = cropRect, let asset = asset else { return }
-        adjustViewFramesIfNeeded(cropRect: cropRect, asset: asset, targetAspectRatio: targetAspectRatio)
+        guard let cropRect = cropRect else { return }
+        if let asset = asset {
+            adjustViewFramesIfNeeded(cropRect: cropRect, asset: asset, targetAspectRatio: targetAspectRatio)
+        } else if let videoUrl = videoUrl {
+            let videoAsset = AVAsset(url: videoUrl)
+            guard let track = videoAsset.tracks(withMediaType: AVMediaType.video).first else { return }
+            let size = track.naturalSize.applying(track.preferredTransform)
+            adjustViewFramesIfNeeded(cropRect: cropRect, assetSize: size, targetAspectRatio: targetAspectRatio)
+        }
     }
 
     internal func setup() {
