@@ -195,7 +195,11 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
             videoVC?.stopCamera()
         }
     }
-    
+
+    public func pausePlayer() {
+        libraryVC?.pausePlayer()
+    }
+
     open override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         shouldHideStatusBar = false
@@ -335,7 +339,7 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     
     // When pressing "Next"
     @objc
-    func done() {
+    open func done() {
         guard let libraryVC = libraryVC else { ypLog("YPLibraryVC deallocated"); return }
         if libraryVC.isAnimating {
             self.navigationItem.rightBarButtonItem = YPLoaders.defaultLoader

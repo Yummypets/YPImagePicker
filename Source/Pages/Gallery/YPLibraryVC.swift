@@ -240,7 +240,7 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
     }
     
     @objc
-    func tappedImage() {
+    public func tappedImage() {
         if !panGestureHelper.isImageShown {
             panGestureHelper.resetToOriginalState()
             // no dragup? needed? dragDirection = .up
