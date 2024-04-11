@@ -347,6 +347,9 @@ public struct YPConfigVideo {
     /// The video's pixel size will be automatically restricted to fit within this amount (keeping the aspect ratio).
     /// NOTE: Additionally, if this value is set, the resulting resolution values will be rounded down to the nearest even numbers.
     public var maxVideoResolution: Double?
+
+    /// The maximum size of video thumbnail
+    public var maxVideoThumbnailSize: CGSize?
 }
 
 /// Encapsulates gallery specific settings.

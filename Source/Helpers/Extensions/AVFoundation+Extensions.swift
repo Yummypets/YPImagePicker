@@ -25,7 +25,9 @@ internal func thumbnailFromVideoPath(_ path: URL) -> UIImage {
     let asset = AVURLAsset(url: path, options: nil)
     let gen = AVAssetImageGenerator(asset: asset)
     gen.appliesPreferredTrackTransform = true
-    gen.maximumSize = CGSize(width: 2048, height: 2048)
+    if let maximumSize = YPConfig.video.maxVideoThumbnailSize {
+        gen.maximumSize = maximumSize
+    }
     let time = CMTimeMakeWithSeconds(0.0, preferredTimescale: 600)
     var actualTime = CMTimeMake(value: 0, timescale: 0)
     let image: CGImage
