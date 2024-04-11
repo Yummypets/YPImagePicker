@@ -47,6 +47,7 @@ public class YPVideoView: YPAdjustableView {
 
         updateViewFrameAction = { [weak self] frame in
             self?.playerView.layer.frame = frame
+            self?.playerView.playerLayer.speed = 999 // disable the "zoom in" animation
             self?.playerView.playerLayer.videoGravity = .resizeAspectFill
         }
 
