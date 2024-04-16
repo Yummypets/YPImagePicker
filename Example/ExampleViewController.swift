@@ -172,6 +172,9 @@ class ExampleViewController: UIViewController {
         config.library.allowedMultiSelectionAspectRatioOverrides = overrides
         config.library.allowPhotoAndVideoSelection = true
 
+        /* Set a max height for the asset preview */
+        // config.library.assetPreviewMaxHeight = 280.0
+
         /* Disable scroll to change between mode */
         // config.isScrollToChangeModesEnabled = false
         // config.library.minNumberOfItems = 2

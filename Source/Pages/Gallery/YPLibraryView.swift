@@ -255,7 +255,22 @@ internal final class YPLibraryView: UIView {
         line.height(1)
         line.fillHorizontally()
 
-        assetViewContainer.top(0).fillHorizontally().heightEqualsWidth()
+        assetViewContainer.top(0).fillHorizontally()
+        if let assetPreviewMaxHeight = YPConfig.library.assetPreviewMaxHeight {
+            let heightConstraint = NSLayoutConstraint(item: assetViewContainer, attribute: .height, relatedBy: .lessThanOrEqual, toItem: assetViewContainer, attribute: .width, multiplier: 1, constant: 0)
+            heightConstraint.priority = .defaultHigh
+            heightConstraint.isActive = true
+            assetViewContainer.addConstraint(heightConstraint)
+
+            let heightEqualsWidthConstraint = NSLayoutConstraint(item: assetViewContainer, attribute: .height, relatedBy: .equal, toItem: assetViewContainer, attribute: .width, multiplier: 1, constant: 0)
+            heightEqualsWidthConstraint.priority = .defaultLow
+            heightEqualsWidthConstraint.isActive = true
+            assetViewContainer.addConstraint(heightEqualsWidthConstraint)
+            (assetViewContainer.Height <= assetPreviewMaxHeight).priority = .required
+        } else {
+            assetViewContainer.heightEqualsWidth()
+        }
+
         self.assetViewContainerConstraintTop = assetViewContainer.topConstraint
         assetZoomableView.width(0)
         assetZoomableView.height(0)

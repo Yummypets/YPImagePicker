@@ -251,6 +251,7 @@ fileprivate extension YPAssetZoomableView {
 
     func getContainerSize(from size: CGSize) -> CGSize {
         let screenWidth = YPImagePickerConfiguration.screenWidth
+        let superviewFrameSize = self.superview?.frame.size ?? CGSize(width: screenWidth, height: screenWidth)
 
         let w = size.width
         let h = size.height
@@ -265,11 +266,13 @@ fileprivate extension YPAssetZoomableView {
             isAspectRatioOutOfRange = true
         }
         if aspectRatio > 1.0 { // Landscape
-            containerWidth = screenWidth
-            containerHeight = screenWidth / aspectRatio
+            let targetDimension = max(superviewFrameSize.width, superviewFrameSize.height)
+            containerWidth = targetDimension
+            containerHeight = targetDimension / aspectRatio
         } else if aspectRatio < 1.0 { // Portrait
-            containerWidth = screenWidth * aspectRatio
-            containerHeight = screenWidth
+            let targetDimension = min(superviewFrameSize.height, superviewFrameSize.width)
+            containerWidth = targetDimension * aspectRatio
+            containerHeight = targetDimension
 
             if let minWidth = minWidthForItem {
                 containerWidth = minWidth * aspectRatio
@@ -277,8 +280,9 @@ fileprivate extension YPAssetZoomableView {
             }
 
         } else { // Square
-            containerWidth = screenWidth
-            containerHeight = screenWidth
+            let targetDimension = min(superviewFrameSize.height, superviewFrameSize.width)
+            containerWidth = targetDimension
+            containerHeight = targetDimension
         }
 
         return CGSize(width: containerWidth, height: containerHeight)

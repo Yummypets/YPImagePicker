@@ -274,8 +274,12 @@ public struct YPConfigLibrary {
     public var allowPhotoAndVideoSelection : Bool = false
 
     /// A view you set here will be shown underneath the asset preview view in the library screen.
-    /// The view will be automatically laid out to fill the screen horizontally, but it should determine its own height. 
+    /// The view will be automatically laid out to fill the screen horizontally, but it should determine its own height.
     public var assetPreviewFooterView: UIView?
+
+    /// Set this value if you want to restrict the maximum height of the asset preview view
+    /// If not set, the asset preview will be a square.
+    public var assetPreviewMaxHeight: CGFloat?
 }
 
 /// Encapsulates video specific settings.
