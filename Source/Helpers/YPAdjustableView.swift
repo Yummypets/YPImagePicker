@@ -14,7 +14,7 @@ public class YPAdjustableView: UIView {
 
     public var updateViewFrameAction: ((CGRect) -> Void)?
 
-    public func adjustViewFramesIfNeeded(cropRect: CGRect, asset: PHAsset, targetAspectRatio: CGFloat?) {
+    public func adjustViewFrameIfNeeded(cropRect: CGRect, asset: PHAsset, targetAspectRatio: CGFloat?) {
         let assetSize = CGSize(width: CGFloat(asset.pixelWidth), height: CGFloat(asset.pixelHeight))
 
         if let aspectRatio = targetAspectRatio, aspectRatio != assetSize.width / assetSize.height {
@@ -24,7 +24,7 @@ public class YPAdjustableView: UIView {
         }
     }
 
-    public func adjustViewFramesIfNeeded(cropRect: CGRect, assetSize: CGSize, targetAspectRatio: CGFloat?) {
+    public func adjustViewFrameIfNeeded(cropRect: CGRect, assetSize: CGSize, targetAspectRatio: CGFloat?) {
         if let aspectRatio = targetAspectRatio, aspectRatio != assetSize.width / assetSize.height {
             adjustViewFrameForAspectRatio(cropRect: cropRect, aspectRatio: aspectRatio, assetSize: assetSize)
         } else {

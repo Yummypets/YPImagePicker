@@ -10,7 +10,7 @@ import UIKit
 
 public class PanGestureHelper: NSObject, UIGestureRecognizerDelegate {
 
-    var v: YPLibraryViewPanning!
+    var pannedView: YPLibraryViewPanning!
     var targetView: UIView!
     private let assetViewContainerOriginalConstraintTop: CGFloat = 0
     private var dragDirection = YPDragDirection.up
@@ -24,11 +24,11 @@ public class PanGestureHelper: NSObject, UIGestureRecognizerDelegate {
     // The height constraint of the view with main selected image
     var topHeight: CGFloat {
         get {
-            return v.imageContainerConstraintTop?.constant ?? 0
+            return pannedView.imageContainerConstraintTop?.constant ?? 0
         }
         set {
-            if newValue >= v.imageScrollViewMinimalVisibleHeight - v.imageContainerFrame.size.height {
-                v.imageContainerConstraintTop?.constant = newValue
+            if newValue >= pannedView.imageScrollViewMinimalVisibleHeight - pannedView.imageContainerFrame.size.height {
+                pannedView.imageContainerConstraintTop?.constant = newValue
             }
         }
     }
@@ -39,15 +39,15 @@ public class PanGestureHelper: NSObject, UIGestureRecognizerDelegate {
         set {
             if newValue != isImageShown {
                 self._isImageShown = newValue
-                v.assetViewContainerIsShown = newValue
+                pannedView.assetViewContainerIsShown = newValue
                 // Update imageCropContainer
-                v.imageScrollViewScrollEnabled = isImageShown
+                pannedView.imageScrollViewScrollEnabled = isImageShown
             }
         }
     }
 
     public func registerForPanGesture(on view: YPLibraryViewPanning) {
-        v = view
+        pannedView = view
         targetView = view.targetView
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(panned(_:)))
         panGesture.delegate = self
@@ -62,7 +62,7 @@ public class PanGestureHelper: NSObject, UIGestureRecognizerDelegate {
     }
 
     public func animateUp() {
-        topHeight = v.imageScrollViewMinimalVisibleHeight - v.imageContainerFrame.size.height
+        topHeight = pannedView.imageScrollViewMinimalVisibleHeight - pannedView.imageContainerFrame.size.height
         animateView()
         dragDirection = .down
     }
@@ -72,8 +72,8 @@ public class PanGestureHelper: NSObject, UIGestureRecognizerDelegate {
                        delay: 0.0,
                        options: [.curveEaseInOut, .beginFromCurrentState],
                        animations: {
-                           self.v.updateImageContainerLayout()
-                           self.v.targetView.layoutIfNeeded()
+                           self.pannedView.updateImageContainerLayout()
+                           self.pannedView.targetView.layoutIfNeeded()
                        },
                        completion: nil)
     }
@@ -87,7 +87,7 @@ public class PanGestureHelper: NSObject, UIGestureRecognizerDelegate {
         let p = gestureRecognizer.location(ofTouch: 0, in: targetView)
         // Desactivate pan on image when it is shown.
         if isImageShown {
-            if p.y < v.imageContainerFrame.height {
+            if p.y < pannedView.imageContainerFrame.height {
                 return false
             }
         }
@@ -97,7 +97,7 @@ public class PanGestureHelper: NSObject, UIGestureRecognizerDelegate {
     @objc
     func panned(_ sender: UIPanGestureRecognizer) {
 
-        let containerHeight = v.imageContainerFrame.size.height + (v.collectionViewFrame.minY - v.imageContainerFrame.maxY)
+        let containerHeight = pannedView.imageContainerFrame.size.height + (pannedView.collectionViewFrame.minY - pannedView.imageContainerFrame.maxY)
         let currentPos = sender.location(in: targetView)
         let overYLimitToStartMovingUp = currentPos.y * 1.4 < cropBottomY
         switch sender.state {
@@ -106,13 +106,13 @@ public class PanGestureHelper: NSObject, UIGestureRecognizerDelegate {
             let loc     = sender.location(in: view)
             let subview = view?.hitTest(loc, with: nil)
 
-            if subview == v.imageContainerView
+            if subview == pannedView.imageContainerView
                 && topHeight == assetViewContainerOriginalConstraintTop {
                 return
             }
 
             dragStartPos = sender.location(in: view)
-            cropBottomY = v.collectionViewFrame.minY
+            cropBottomY = pannedView.collectionViewFrame.minY
 
             // Move
             if dragDirection == .stop {
@@ -125,28 +125,28 @@ public class PanGestureHelper: NSObject, UIGestureRecognizerDelegate {
             if dragDirection == .down && dragStartPos.y > cropBottomY {
                 dragDirection = .stop
             }
-            if (dragDirection == .up || dragDirection == .down) && currentPos.y < v.collectionViewFrame.minY {
-                dragDiff = currentPos.y - v.collectionViewFrame.minY
+            if (dragDirection == .up || dragDirection == .down) && currentPos.y < pannedView.collectionViewFrame.minY {
+                dragDiff = currentPos.y - pannedView.collectionViewFrame.minY
             }
 
         case .changed:
             switch dragDirection {
             case .up:
-                let diff = v.collectionViewFrame.minY - currentPos.y
+                let diff = pannedView.collectionViewFrame.minY - currentPos.y
                 if diff > 0 {
                     topHeight =
                         min(assetViewContainerOriginalConstraintTop,
-                            max(v.imageScrollViewMinimalVisibleHeight - containerHeight,
+                            max(pannedView.imageScrollViewMinimalVisibleHeight - containerHeight,
                                 (currentPos.y - dragDiff) - containerHeight))
                 }
             case .down:
                 topHeight = min(assetViewContainerOriginalConstraintTop, currentPos.y - dragDiff - containerHeight)
             case .scroll:
-                let newTopHeightValue = v.imageScrollViewMinimalVisibleHeight - v.imageContainerFrame.size.height
-                + (currentPos.y - v.collectionViewContentOffset.y) - imaginaryCollectionViewOffsetStartPosY
+                let newTopHeightValue = pannedView.imageScrollViewMinimalVisibleHeight - pannedView.imageContainerFrame.size.height
+                + (currentPos.y - pannedView.collectionViewContentOffset.y) - imaginaryCollectionViewOffsetStartPosY
                 topHeight = newTopHeightValue
             case .stop:
-                if topHeight != assetViewContainerOriginalConstraintTop && v.collectionViewContentOffset.y < 0 {
+                if topHeight != assetViewContainerOriginalConstraintTop && pannedView.collectionViewContentOffset.y < 0 {
                     dragDirection = .scroll
                     imaginaryCollectionViewOffsetStartPosY = currentPos.y
                 }

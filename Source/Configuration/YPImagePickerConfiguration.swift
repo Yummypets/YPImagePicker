@@ -273,6 +273,8 @@ public struct YPConfigLibrary {
     /// Allow selection of both photo and video from the photo gallery.
     public var allowPhotoAndVideoSelection : Bool = false
 
+    /// A view you set here will be shown underneath the asset preview view in the library screen.
+    /// The view will be automatically laid out to fill the screen horizontally, but it should determine its own height. 
     public var assetPreviewFooterView: UIView?
 }
 

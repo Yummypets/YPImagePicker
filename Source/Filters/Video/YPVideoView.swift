@@ -48,19 +48,19 @@ public class YPVideoView: YPAdjustableView {
 
         updateViewFrameAction = { [weak self] frame in
             self?.playerView.layer.frame = frame
-            self?.playerView.playerLayer.speed = 999 // disable the "zoom in" animation
+            self?.playerView.playerLayer.speed = 999 // disable the "zoom in" animation by making the animation speed "fast enough"
             self?.playerView.playerLayer.videoGravity = .resizeAspectFill
         }
 
         // Ensure necessary properties are available
         guard let cropRect = cropRect else { return }
         if let asset = asset {
-            adjustViewFramesIfNeeded(cropRect: cropRect, asset: asset, targetAspectRatio: targetAspectRatio)
+            adjustViewFrameIfNeeded(cropRect: cropRect, asset: asset, targetAspectRatio: targetAspectRatio)
         } else if let videoUrl = videoUrl {
             let videoAsset = AVAsset(url: videoUrl)
             guard let track = videoAsset.tracks(withMediaType: AVMediaType.video).first else { return }
             let size = track.naturalSize.applying(track.preferredTransform)
-            adjustViewFramesIfNeeded(cropRect: cropRect, assetSize: size, targetAspectRatio: targetAspectRatio)
+            adjustViewFrameIfNeeded(cropRect: cropRect, assetSize: size, targetAspectRatio: targetAspectRatio)
         }
     }
 
@@ -127,6 +127,7 @@ extension YPVideoView {
             videoUrl = url
             player = AVPlayer(url: url)
         case let playerItem as AVPlayerItem:
+            videoUrl = (playerItem.asset as? AVURLAsset)?.url
             player = AVPlayer(playerItem: playerItem)
         default:
             return
