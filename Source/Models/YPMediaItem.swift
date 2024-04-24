@@ -22,17 +22,21 @@ public class YPMediaPhoto {
     public var url: URL?
     public var cropRect: CGRect?
 
+    public var customData: [String: Any]?
+
     public init(image: UIImage,
                 exifMeta: [String: Any]? = nil,
                 fromCamera: Bool = false,
                 asset: PHAsset? = nil,
-                url: URL? = nil) {
+                url: URL? = nil,
+                customData: [String: Any]? = nil) {
         self.originalImage = image
         self.modifiedImage = nil
         self.fromCamera = fromCamera
         self.exifMeta = exifMeta
         self.asset = asset
         self.url = url
+        self.customData = customData
     }
 }
 
@@ -52,12 +56,16 @@ public class YPMediaVideo {
     public var timeRange: CMTimeRange?
     public var cropRect: CGRect?
 
-    public init(thumbnail: UIImage, videoURL: URL, fromCamera: Bool = false, asset: PHAsset? = nil) {
+
+    public var customData: [String: Any]?
+
+    public init(thumbnail: UIImage, videoURL: URL, fromCamera: Bool = false, asset: PHAsset? = nil, customData: [String: Any]? = nil) {
         self.originalThumbnail = thumbnail
         self.selectedThumbnail = thumbnail
         self.originalUrl = videoURL
         self.fromCamera = fromCamera
         self.asset = asset
+        self.customData = customData
     }
 }
 
@@ -99,6 +107,13 @@ public enum YPMediaItem {
         switch self {
         case .photo(let photo): photo.cropRect
         case .video(let video): video.cropRect
+        }
+    }
+
+    public var customData: [String: Any]? {
+        switch self {
+        case .photo(let photo): photo.customData
+        case .video(let video): video.customData
         }
     }
 }

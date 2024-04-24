@@ -280,6 +280,7 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
         let resultVideo = YPMediaVideo(thumbnail: thumbnail, videoURL: videoUrl, asset: asset)
         resultVideo.cropRect = inputVideo.cropRect
         resultVideo.timeRange = timeRange
+        resultVideo.customData = inputVideo.customData
         didSave(YPMediaItem.video(v: resultVideo))
         setupRightBarButtonItem()
 
