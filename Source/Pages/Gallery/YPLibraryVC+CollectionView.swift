@@ -182,7 +182,7 @@ extension YPLibraryVC: UICollectionViewDelegate {
         let previouslySelectedIndexPath = IndexPath(row: currentlySelectedIndex, section: 0)
         currentlySelectedIndex = indexPath.row
 
-        changeAsset(mediaManager.getAsset(at: indexPath.row))
+        var shouldChangeAsset = true
         panGestureHelper.resetToOriginalState()
         
         // Only scroll cell to top if preview is hidden.
@@ -196,9 +196,11 @@ extension YPLibraryVC: UICollectionViewDelegate {
             let cellIsCurrentlySelected = previouslySelectedIndexPath.row == currentlySelectedIndex
             if cellIsInTheSelectionPool {
                 if cellIsCurrentlySelected && !disableAutomaticCellSelection {
+                    shouldChangeAsset = false
                     deselect(indexPath: indexPath)
                 }
             } else if isLimitExceeded == false {
+                shouldChangeAsset = false
                 addToSelection(indexPath: indexPath)
             }
             if (cellIsCurrentlySelected && !cellIsInTheSelectionPool) || !cellIsCurrentlySelected || disableAutomaticCellSelection {
@@ -210,7 +212,8 @@ extension YPLibraryVC: UICollectionViewDelegate {
         } else if previouslySelectedIndexPath != indexPath {
             selectedItems.removeAll()
             addToSelection(indexPath: indexPath)
-            
+            shouldChangeAsset = false
+
             // Force deseletion of previously selected cell.
             // In the case where the previous cell was loaded from iCloud, a new image was fetched
             // which triggered photoLibraryDidChange() and reloadItems() which breaks selection.
@@ -219,6 +222,9 @@ extension YPLibraryVC: UICollectionViewDelegate {
                 previousCell.isSelected = false
             }
             collectionView.reloadItems(at: [indexPath, previouslySelectedIndexPath])
+        }
+        if shouldChangeAsset {
+            changeAsset(mediaManager.getAsset(at: indexPath.row))
         }
         disableAutomaticCellSelection = false
     }
