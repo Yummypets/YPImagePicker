@@ -15,6 +15,60 @@ extension Notification.Name {
     public static var LibraryMediaManagerExportProgressUpdate: Notification.Name { return .init(rawValue: "\(namespace).LibraryMediaManagerExportProgressUpdate") }
 }
 
+extension AVAsset {
+    var totalSeconds: TimeInterval {
+        TimeInterval(floatLiteral: CMTimeGetSeconds(duration))
+    }
+}
+
+public struct ProcessedVideo {
+    public let assetIdentifier: String
+    public let videoUrl: URL
+    public let originalWidth: Int
+    public let originalHeight: Int
+    public let totalVideoDuration: TimeInterval
+
+    public init(assetIdentifier: String, videoUrl: URL, originalWidth: Int, originalHeight: Int, totalVideoDuration: TimeInterval) {
+        self.assetIdentifier = assetIdentifier
+        self.videoUrl = videoUrl
+        self.originalWidth = abs(originalWidth)
+        self.originalHeight = abs(originalHeight)
+        self.totalVideoDuration = totalVideoDuration.rounded()
+    }
+}
+
+public typealias ProcessingResult = (Result<ProcessedVideo, LibraryMediaManagerError>) -> Void
+
+public enum LibraryMediaManagerError: Error {
+    case processingFailed(message: String, assetId: String)
+    case retryLimitReached(message: String, assetId: String)
+    case unknown(message: String, assetId: String)
+    case processingCancelled(message: String, assetId: String)
+    case assetNotFound(message: String, assetId: String)
+
+    public var message: String {
+        switch self {
+        case .unknown(message: let message, assetId: _), 
+             .assetNotFound(message: let message, assetId: _),
+             .processingFailed(message: let message, assetId: _),
+             .retryLimitReached(message: let message, assetId: _),
+             .processingCancelled(message: let message, assetId: _):
+            return message
+        }
+    }
+
+    public var assetId: String {
+        switch self {
+        case .unknown(message: _, assetId: let assetId),
+             .assetNotFound(message: _, assetId: let assetId),
+             .processingFailed(message: _, assetId: let assetId),
+             .retryLimitReached(message: _, assetId: let assetId),
+             .processingCancelled(message: _, assetId: let assetId):
+            return assetId
+        }
+    }
+}
+
 open class LibraryMediaManager {
     struct ExportData {
         let localIdentifier: String
@@ -136,19 +190,23 @@ open class LibraryMediaManager {
     /// Fetch video asset url from PHAsset.
     /// - Parameters:
     ///   - videoAsset: PHAsset which url is requested
-    ///   - callback: Returns the AVAsset url for the PHAsset
-    func fetchVideoUrl(for videoAsset: PHAsset, callback: @escaping (_ videoURL: URL?) -> Void) {
+    ///   - result: Returns the video metadata
+    func fetchVideoUrl(for videoAsset: PHAsset, result: @escaping ProcessingResult) {
         let videosOptions = PHVideoRequestOptions()
         videosOptions.isNetworkAccessAllowed = true
         videosOptions.deliveryMode = .highQualityFormat
         imageManager?.requestAVAsset(forVideo: videoAsset, options: videosOptions) { asset, _, _ in
             do {
-                guard let asset = asset else { ypLog("⚠️ PHCachingImageManager >>> Don't have the asset"); return }
+                guard let asset = asset else {
+                    ypLog("⚠️ PHCachingImageManager >>> Don't have the asset")
+                    result(.failure(.assetNotFound(message: "The asset could not be retrieved from the photos library.", assetId: videoAsset.localIdentifier)))
+                    return
+                }
 
                 // pass the asset url through, no need to export
                 if let urlAsset = asset as? AVURLAsset {
                     DispatchQueue.main.async {
-                        callback(urlAsset.url)
+                        result(.success(ProcessedVideo(assetIdentifier: videoAsset.localIdentifier, videoUrl: urlAsset.url, originalWidth: videoAsset.pixelWidth, originalHeight: videoAsset.pixelHeight, totalVideoDuration: videoAsset.duration)))
                     }
                 } else { /// Some slow-mo videos break with `AVAssetExportPresetPassthrough` so use `AVAssetExportPresetHighestQuality` instead
                     let presetName = AVAssetExportPresetHighestQuality
@@ -162,17 +220,21 @@ open class LibraryMediaManager {
                                 switch session.status {
                                 case .completed:
                                     if let url = session.outputURL {
-                                        callback(url)
+                                        result(.success(ProcessedVideo(assetIdentifier: videoAsset.localIdentifier, videoUrl: url, originalWidth: videoAsset.pixelWidth, originalHeight: videoAsset.pixelHeight, totalVideoDuration: videoAsset.duration)))
                                     } else {
                                         ypLog("LibraryMediaManager -> Don't have URL.")
-                                        callback(nil)
+                                        result(.failure(.processingFailed(message: "The session output URL is missing.", assetId: videoAsset.localIdentifier)))
                                     }
                                 case .failed:
                                     ypLog("LibraryMediaManager -> Export of the video failed. Reason: \(String(describing: session.error))")
-                                    callback(nil)
+                                    result(.failure(.processingFailed(message: "Video export failed with error: \(String(describing:session.error))", assetId: videoAsset.localIdentifier)))
                                 default:
                                     ypLog("LibraryMediaManager -> Export session completed with \(session.status) status. Not handling.")
-                                    callback(nil)
+                                    if session.status == .cancelled {
+                                        result(.failure(.processingCancelled(message: "Export session has been cancelled with session status: \(session.status)", assetId: videoAsset.localIdentifier)))
+                                    } else {
+                                        result(.failure(.unknown(message: "Encountered unexpected failure in processing: \(session.status)", assetId: videoAsset.localIdentifier)))
+                                    }
                                 }
                             }
                         }
@@ -183,42 +245,47 @@ open class LibraryMediaManager {
                 }
             } catch let error {
                 ypLog("⚠️ PHCachingImageManager >>> \(error)")
+                result(.failure(.processingFailed(message: "Exception thrown when requesting AV Asset: \(String(describing:error))", assetId: videoAsset.localIdentifier)))
             }
         }
     }
 
-    open func fetchVideoUrlAndCrop(for videoAsset: PHAsset, cropRect: CGRect, timeRange: CMTimeRange = CMTimeRange(start: CMTime.zero, end: CMTime.zero), shouldMute: Bool = false, compressionTypeOverride: String? = nil, processingFailedRetryCount: Int = 0, callback: @escaping (_ videoURL: URL?) -> Void) {
+    open func fetchVideoUrlAndCrop(for videoAsset: PHAsset, cropRect: CGRect, timeRange: CMTimeRange = CMTimeRange(start: CMTime.zero, end: CMTime.zero), shouldMute: Bool = false, compressionTypeOverride: String? = nil, processingFailedRetryCount: Int = 0, result: @escaping ProcessingResult) {
         let videosOptions = PHVideoRequestOptions()
         videosOptions.isNetworkAccessAllowed = true
         videosOptions.deliveryMode = .highQualityFormat
         let isSlowMoVideo = videoAsset.mediaSubtypes.contains(.videoHighFrameRate)
         imageManager?.requestAVAsset(forVideo: videoAsset, options: videosOptions) { asset, _, _ in
-                self.fetchVideoUrlAndCrop(for: asset, assetIdentifier: videoAsset.localIdentifier, cropRect: cropRect, timeRange: timeRange, shouldMute: shouldMute, compressionTypeOverride: compressionTypeOverride, processingFailedRetryCount: processingFailedRetryCount, isSlowMoVideo: isSlowMoVideo, callback: callback)
+            guard let asset = asset else {
+                ypLog("⚠️ PHCachingImageManager >>> Don't have the asset")
+                result(.failure(.assetNotFound(message: "The asset could not be retrieved from the photos library.", assetId: videoAsset.localIdentifier)))
+                return
+            }
+            self.fetchVideoUrlAndCrop(for: asset, assetIdentifier: videoAsset.localIdentifier, cropRect: cropRect, timeRange: timeRange, shouldMute: shouldMute, compressionTypeOverride: compressionTypeOverride, processingFailedRetryCount: processingFailedRetryCount, isSlowMoVideo: isSlowMoVideo, result: result)
         }
     }
 
-    open func fetchVideoUrlAndCrop(for videoUrl: URL, cropRect: CGRect, timeRange: CMTimeRange = CMTimeRange(start: CMTime.zero, end: CMTime.zero), shouldMute: Bool = false, compressionTypeOverride: String? = nil, processingFailedRetryCount: Int = 0, callback: @escaping (_ videoURL: URL?) -> Void) {
+    open func fetchVideoUrlAndCrop(for videoUrl: URL, cropRect: CGRect, timeRange: CMTimeRange = CMTimeRange(start: CMTime.zero, end: CMTime.zero), shouldMute: Bool = false, compressionTypeOverride: String? = nil, processingFailedRetryCount: Int = 0, result: @escaping ProcessingResult) {
         let asset = AVAsset(url: videoUrl)
-        self.fetchVideoUrlAndCrop(for: asset, assetIdentifier: videoUrl.absoluteString, cropRect: cropRect, timeRange: timeRange, shouldMute: shouldMute, compressionTypeOverride: compressionTypeOverride, processingFailedRetryCount: processingFailedRetryCount, isSlowMoVideo: false, callback: callback)
+        self.fetchVideoUrlAndCrop(for: asset, assetIdentifier: videoUrl.absoluteString, cropRect: cropRect, timeRange: timeRange, shouldMute: shouldMute, compressionTypeOverride: compressionTypeOverride, processingFailedRetryCount: processingFailedRetryCount, isSlowMoVideo: false, result: result)
     }
 
-    private func fetchVideoUrlAndCrop(for videoAsset: AVAsset?, assetIdentifier: String, cropRect: CGRect, timeRange: CMTimeRange = CMTimeRange(start: CMTime.zero, end: CMTime.zero), shouldMute: Bool = false, compressionTypeOverride: String? = nil, processingFailedRetryCount: Int = 0, isSlowMoVideo: Bool = false, callback: @escaping (_ videoURL: URL?) -> Void) {
-
-        guard let asset = videoAsset else { ypLog("⚠️ PHCachingImageManager >>> Don't have the asset"); return }
+    private func fetchVideoUrlAndCrop(for videoAsset: AVAsset, assetIdentifier: String, cropRect: CGRect, timeRange: CMTimeRange = CMTimeRange(start: CMTime.zero, end: CMTime.zero), shouldMute: Bool = false, compressionTypeOverride: String? = nil, processingFailedRetryCount: Int = 0, isSlowMoVideo: Bool = false, result: @escaping ProcessingResult) {
 
         let assetComposition = AVMutableComposition()
         let trackTimeRange = timeRange
 
         // 1. Inserting audio and video tracks in composition
 
-        guard let videoTrack = asset.tracks(withMediaType: AVMediaType.video).first,
+        guard let videoTrack = videoAsset.tracks(withMediaType: AVMediaType.video).first,
               let videoCompositionTrack = assetComposition.addMutableTrack(withMediaType: .video,
                                                                            preferredTrackID: kCMPersistentTrackID_Invalid) else {
             ypLog("⚠️ PHCachingImageManager >>> Problems with video track")
+            result(.failure(.processingFailed(message: "The video track could not be found or added to the asset composition.", assetId: assetIdentifier)))
             return
 
         }
-        if !shouldMute, let audioTrack = asset.tracks(withMediaType: AVMediaType.audio).first,
+        if !shouldMute, let audioTrack = videoAsset.tracks(withMediaType: AVMediaType.audio).first,
            let audioCompositionTrack = assetComposition.addMutableTrack(withMediaType: AVMediaType.audio,
                                                                         preferredTrackID: kCMPersistentTrackID_Invalid) {
             do {
@@ -273,7 +340,7 @@ open class LibraryMediaManager {
             mainInstructions.layerInstructions = [layerInstructions]
 
             // Video Composition
-            videoComposition = AVMutableVideoComposition(propertiesOf: asset)
+            videoComposition = AVMutableVideoComposition(propertiesOf: videoAsset)
             videoComposition?.instructions = [mainInstructions]
             videoComposition?.renderSize = cropRect.size
             videoCompositionTrack.preferredTransform = videoTrack.preferredTransform
@@ -309,10 +376,10 @@ open class LibraryMediaManager {
                     switch session.status {
                     case .completed:
                         if let url = session.outputURL {
-                            callback(url)
+                            result(.success(ProcessedVideo(assetIdentifier: assetIdentifier, videoUrl: url, originalWidth: Int(videoSize.width), originalHeight: Int(videoSize.height), totalVideoDuration: videoAsset.totalSeconds)))
                         } else {
                             ypLog("LibraryMediaManager -> Don't have URL.")
-                            callback(nil)
+                            result(.failure(.processingFailed(message: "The session output URL is missing.", assetId: assetIdentifier)))
                         }
                     case .failed:
                         if let self = self {
@@ -322,16 +389,20 @@ open class LibraryMediaManager {
                             let compressionOverride = YPConfig.video.compression
                             ypLog("LibraryMediaManager -> Export of the video failed. Reason: \(String(describing: session.error))\n--- Retrying with compression type \(compressionOverride)")
                             if retryCount > 1 {
-                                callback(nil)
+                                result(.failure(.retryLimitReached(message: "Video processing failed exceeing retry limit.", assetId: assetIdentifier)))
                             } else {
-                                self.fetchVideoUrlAndCrop(for: asset, assetIdentifier: assetIdentifier, cropRect: cropRect, timeRange: timeRange, shouldMute: shouldMute, compressionTypeOverride: compressionOverride, processingFailedRetryCount: retryCount, isSlowMoVideo: isSlowMoVideo, callback: callback)
+                                self.fetchVideoUrlAndCrop(for: videoAsset, assetIdentifier: assetIdentifier, cropRect: cropRect, timeRange: timeRange, shouldMute: shouldMute, compressionTypeOverride: compressionOverride, processingFailedRetryCount: retryCount, isSlowMoVideo: isSlowMoVideo, result: result)
                             }
                         } else {
-                            callback(nil)
+                            result(.failure(.unknown(message: "Could not strongly reference self.", assetId: assetIdentifier)))
                         }
                     default:
                         ypLog("LibraryMediaManager -> Export session completed with \(session.status) status. Not handling.")
-                        callback(nil)
+                        if session.status == .cancelled {
+                            result(.failure(.processingCancelled(message: "Export session has been cancelled with session status: \(session.status)", assetId: assetIdentifier)))
+                        } else {
+                            result(.failure(.unknown(message: "Encountered unexpected failure in processing: \(session.status)", assetId: assetIdentifier)))
+                        }
                     }
                 }
             }

@@ -450,7 +450,7 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
 
     private func checkVideoLengthAndCrop(for asset: PHAsset,
                                          withCropRect: CGRect? = nil,
-                                         callback: @escaping (_ videoURL: URL?) -> Void) {
+                                         result: @escaping (Result<ProcessedVideo, LibraryMediaManagerError>) -> Void) {
         if fitsVideoLengthLimits(asset: asset) == true {
             delegate?.libraryViewDidTapNext()
             let normalizedCropRect = withCropRect ?? DispatchQueue.main.sync { v.currentCropRect() }
@@ -462,18 +462,18 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                                         width: ts.width,
                                         height: ts.height)
             if !YPImagePickerConfiguration.shared.library.allowPhotoAndVideoSelection {
-                mediaManager.fetchVideoUrlAndCrop(for: asset, cropRect: resultCropRect, callback: callback)
+                mediaManager.fetchVideoUrlAndCrop(for: asset, cropRect: resultCropRect, result: result)
             } else {
-                mediaManager.fetchVideoUrl(for: asset, callback: callback)
+                mediaManager.fetchVideoUrl(for: asset, result: result)
             }
         }
     }
 
     private func checkVideoLengthAndFetch(for asset: PHAsset,
-                                          callback: @escaping (_ videoURL: URL?) -> Void) {
+                                          result: @escaping (Result<ProcessedVideo, LibraryMediaManagerError>) -> Void) {
         if fitsVideoLengthLimits(asset: asset) == true {
             delegate?.libraryViewDidTapNext()
-            mediaManager.fetchVideoUrl(for: asset, callback: callback)
+            mediaManager.fetchVideoUrl(for: asset, result: result)
         }
     }
     
@@ -516,13 +516,14 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                             }
 
                         case .video:
-                            self.checkVideoLengthAndCrop(for: asset.asset, withCropRect: asset.cropRect) { videoURL in
-                                if let videoURL = videoURL {
-                                    let videoItem = YPMediaVideo(thumbnail: thumbnailFromVideoPath(videoURL),
-                                                                 videoURL: videoURL, asset: asset.asset)
+                            self.checkVideoLengthAndCrop(for: asset.asset, withCropRect: asset.cropRect) { result in
+                                switch result {
+                                case let .success(video):
+                                    let videoItem = YPMediaVideo(thumbnail: thumbnailFromVideoPath(video.videoUrl),
+                                                                 videoURL: video.videoUrl, asset: asset.asset)
                                     videoItem.cropRect = self.getCropRect(for: asset.asset, cropRect: self.selectedItems[index].cropRect)
                                     resultMediaItems[index] = YPMediaItem.video(v: videoItem)
-                                } else {
+                                case let .failure(error):
                                     ypLog("YPLibraryVC -> selectedMedia -> Problems with fetching videoURL.")
                                 }
                                 asyncGroup.leave()
@@ -542,21 +543,20 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                     case .audio, .unknown:
                         return
                     case .video:
-                        self.checkVideoLengthAndFetch(for: asset, callback: { videoURL in
+                        self.checkVideoLengthAndFetch(for: asset) { result in
                             DispatchQueue.main.async {
                                 self.delegate?.libraryViewFinishedLoading() // reset UI regardless if a video url is returned
-
-                                if let videoURL = videoURL {
-                                    let video = YPMediaVideo(thumbnail: thumbnailFromVideoPath(videoURL),
-                                                             videoURL: videoURL, asset: asset)
-
+                                switch result {
+                                case let .success(video):
+                                    let video = YPMediaVideo(thumbnail: thumbnailFromVideoPath(video.videoUrl),
+                                                             videoURL: video.videoUrl, asset: asset)
                                     video.cropRect = self.getCropRect(for: asset)
                                     videoCallback(video)
-                                } else {
+                                case let .failure(error):
                                     ypLog("YPLibraryVC -> selectedMedia -> Problems with fetching videoURL.")
                                 }
                             }
-                        })
+                        }
 
 
                     case .image:
