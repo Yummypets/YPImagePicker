@@ -115,8 +115,11 @@ open class LibraryMediaManager {
                     v.updateProgress(progress)
                 }
 
-                if !self.currentExportSessions.isEmpty, self.currentExportSessions.map({ $0.session }).allSatisfy( { $0.status == .completed || $0.status == .cancelled }) {
-                    self.clearExportSessions()
+                currentExportSessionsAccessQueue.async { [weak self] in
+                    guard let self else { return }
+                    if !self.currentExportSessions.isEmpty, self.currentExportSessions.map({ $0.session }).allSatisfy( { $0.status == .completed || $0.status == .cancelled }) {
+                        self.clearExportSessions()
+                    }
                 }
             })
         }
