@@ -16,7 +16,7 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
     public var isProcessing = false // true if video or image is in processing state
     public var selectedItems = [YPLibrarySelection]()
     public let mediaManager = LibraryMediaManager()
-    public var isMultipleSelectionEnabled = false
+    public var isMultipleSelectionEnabled = YPConfig.library.isBulkUploading
     public var currentlySelectedIndex: Int = 0
     internal let panGestureHelper = PanGestureHelper()
     internal var isInitialized = false
@@ -59,7 +59,7 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         registerForTapOnPreview()
         refreshMediaRequest()
 
-        v.multipleSelectionButton.isHidden = !(YPConfig.library.maxNumberOfItems > 1)
+        v.multipleSelectionButton.isHidden = YPConfig.library.isBulkUploading || !(YPConfig.library.maxNumberOfItems > 1)
         v.maxNumberWarningLabel.text = String(format: YPConfig.wordings.warningMaxItemsLimit,
 											  YPConfig.library.maxNumberOfItems)
         
@@ -142,7 +142,11 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
             .addTarget(self,
                        action: #selector(multipleSelectionButtonTapped),
                        for: .touchUpInside)
-        
+
+        v.bulkUploadRemoveAllButton.addTarget(self,
+                                              action: #selector(bulkUploadRemoveAllButtonTapped),
+                                              for: .touchUpInside)
+
         // Forces assetZoomableView to have a contentSize.
         // otherwise 0 in first selection triggering the bug : "invalid image size 0x0"
         // Also fits the first element to the square if the onlySquareFromLibrary = true
@@ -172,7 +176,17 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
             self?.v.assetViewContainer.squareCropButtonTapped()
         }
     }
-    
+
+    // MARK: - Bulk Upload Selection
+
+    @objc
+    func bulkUploadRemoveAllButtonTapped() {
+        self.selectedItems.removeAll()
+        v.collectionView.reloadData()
+        updateBulkUploadRemoveAllButton()
+        delegate?.libraryViewFinishedLoading()
+    }
+
     // MARK: - Multiple Selection
 
     @objc
@@ -196,7 +210,7 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
     
     func toggleMultipleSelection() {
         // Prevent desactivating multiple selection when using `minNumberOfItems`
-        if YPConfig.library.minNumberOfItems > 1 && isMultipleSelectionEnabled {
+        if (YPConfig.library.minNumberOfItems > 1 && isMultipleSelectionEnabled) {
             ypLog("Selected minNumberOfItems greater than one :\(YPConfig.library.minNumberOfItems). Don't deselecting multiple selection.")
             return
         }
