@@ -60,16 +60,16 @@
 		B805553C2B51E8F700AECDD0 /* Stevia in Frameworks */ = {isa = PBXBuildFile; productRef = B805553B2B51E8F700AECDD0 /* Stevia */; };
 		B86767CA2B61F72D009D2AEC /* YPTimeStampView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B86767C92B61F72D009D2AEC /* YPTimeStampView.swift */; };
 		B86767CB2B61F72D009D2AEC /* YPTimeStampView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B86767C92B61F72D009D2AEC /* YPTimeStampView.swift */; };
+		B89F14F82B62A298000EAF16 /* YPAdjustableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B89F14F72B62A298000EAF16 /* YPAdjustableView.swift */; };
+		B89F14F92B62A298000EAF16 /* YPAdjustableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B89F14F72B62A298000EAF16 /* YPAdjustableView.swift */; };
+		B89F14FB2B62A2B0000EAF16 /* YPCoverImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B89F14FA2B62A2AF000EAF16 /* YPCoverImageView.swift */; };
+		B89F14FC2B62A2B0000EAF16 /* YPCoverImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B89F14FA2B62A2AF000EAF16 /* YPCoverImageView.swift */; };
 		B8B70EF62B5EBD4C002CB142 /* CMTime+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B70EF52B5EBD4C002CB142 /* CMTime+Extensions.swift */; };
 		B8B70EF72B5EBD4C002CB142 /* CMTime+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B70EF52B5EBD4C002CB142 /* CMTime+Extensions.swift */; };
 		B8B70EFC2B5EBE04002CB142 /* YPTimeStampScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B70EFB2B5EBE04002CB142 /* YPTimeStampScrollView.swift */; };
 		B8B70EFD2B5EBE04002CB142 /* YPTimeStampScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B70EFB2B5EBE04002CB142 /* YPTimeStampScrollView.swift */; };
 		B8EDD48B2B56D1E7007C8383 /* YPTimeStampTrimmerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8EDD48A2B56D1E7007C8383 /* YPTimeStampTrimmerView.swift */; };
 		B8EDD48C2B56D1E7007C8383 /* YPTimeStampTrimmerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8EDD48A2B56D1E7007C8383 /* YPTimeStampTrimmerView.swift */; };
-		B89F14F82B62A298000EAF16 /* YPAdjustableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B89F14F72B62A298000EAF16 /* YPAdjustableView.swift */; };
-		B89F14F92B62A298000EAF16 /* YPAdjustableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B89F14F72B62A298000EAF16 /* YPAdjustableView.swift */; };
-		B89F14FB2B62A2B0000EAF16 /* YPCoverImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B89F14FA2B62A2AF000EAF16 /* YPCoverImageView.swift */; };
-		B89F14FC2B62A2B0000EAF16 /* YPCoverImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B89F14FA2B62A2AF000EAF16 /* YPCoverImageView.swift */; };
 		EB05F6E7214A7191002040AA /* YPVideoProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB05F6E6214A7191002040AA /* YPVideoProcessor.swift */; };
 		EB1AB2EA20AC1DED00BFA79F /* CGFloat+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1AB2E920AC1DED00BFA79F /* CGFloat+Extensions.swift */; };
 		EB473E17208E192800D16105 /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB473E16208E192800D16105 /* URL+Extensions.swift */; };
@@ -293,11 +293,11 @@
 		A7FD716620755C2D0044A8E8 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
 		AA69BCF122E601D100FBB925 /* YPDeviceOrientationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPDeviceOrientationHelper.swift; sourceTree = "<group>"; };
 		B86767C92B61F72D009D2AEC /* YPTimeStampView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPTimeStampView.swift; sourceTree = "<group>"; };
+		B89F14F72B62A298000EAF16 /* YPAdjustableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPAdjustableView.swift; sourceTree = "<group>"; };
+		B89F14FA2B62A2AF000EAF16 /* YPCoverImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPCoverImageView.swift; sourceTree = "<group>"; };
 		B8B70EF52B5EBD4C002CB142 /* CMTime+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CMTime+Extensions.swift"; sourceTree = "<group>"; };
 		B8B70EFB2B5EBE04002CB142 /* YPTimeStampScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPTimeStampScrollView.swift; sourceTree = "<group>"; };
 		B8EDD48A2B56D1E7007C8383 /* YPTimeStampTrimmerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPTimeStampTrimmerView.swift; sourceTree = "<group>"; };
-		B89F14F72B62A298000EAF16 /* YPAdjustableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPAdjustableView.swift; sourceTree = "<group>"; };
-		B89F14FA2B62A2AF000EAF16 /* YPCoverImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YPCoverImageView.swift; sourceTree = "<group>"; };
 		DC3DAC4526C6FCAA007FD95A /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
 		E3E492BB2169012B002BA807 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
 		E5287F5820B908720052153D /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
@@ -1291,7 +1291,7 @@
 				DEVELOPMENT_TEAM = B3U3XRF8D7;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = Example/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1321,7 +1321,7 @@
 				DEVELOPMENT_TEAM = B3U3XRF8D7;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = Example/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

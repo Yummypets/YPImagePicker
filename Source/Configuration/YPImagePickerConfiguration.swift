@@ -280,6 +280,9 @@ public struct YPConfigLibrary {
     /// Set this value if you want to restrict the maximum height of the asset preview view
     /// If not set, the asset preview will be a square.
     public var assetPreviewMaxHeight: CGFloat?
+
+    /// Customize UI for bulk uploads flow.
+    public var isBulkUploading: Bool = false
 }
 
 /// Encapsulates video specific settings.

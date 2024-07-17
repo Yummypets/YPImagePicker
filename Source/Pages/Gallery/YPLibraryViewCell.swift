@@ -13,6 +13,7 @@ class YPMultipleSelectionIndicator: UIView {
     
     let circle = UIView()
     let label = UILabel()
+    let imageView = UIImageView()
     var unselectedColor = UIColor.white.withAlphaComponent(0.3)
     var unselectedBorderColor = UIColor.white
     var selectionColor = UIColor.ypSystemBlue
@@ -20,22 +21,36 @@ class YPMultipleSelectionIndicator: UIView {
 
     convenience init() {
         self.init(frame: .zero)
-        
+
         let size: CGFloat = 20
-        
-        subviews(
-            circle,
-            label
-        )
-        
-        circle.fillContainer()
-        circle.size(size)
-        label.fillContainer()
-        
+
+        if YPConfig.library.isBulkUploading {
+            subviews(
+                circle,
+                imageView
+            )
+            circle.fillContainer()
+            circle.size(size)
+            imageView.fillContainer(padding: 3)
+            imageView.size(size)
+            imageView.image = YPConfig.icons.checkIcon
+            imageView.contentMode = .scaleAspectFit
+            imageView.clipsToBounds = true
+        } else {
+            subviews(
+                circle,
+                label
+            )
+            circle.fillContainer()
+            circle.size(size)
+            label.fillContainer()
+            label.textAlignment = .center
+            label.textColor = .white
+            label.font = YPConfig.fonts.multipleSelectionIndicatorFont
+        }
+
         circle.layer.cornerRadius = size / 2.0
-        label.textAlignment = .center
-        label.textColor = .white
-        label.font = YPConfig.fonts.multipleSelectionIndicatorFont
+
         
         set(number: nil)
     }

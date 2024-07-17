@@ -16,6 +16,9 @@ public struct YPFonts {
     /// The font used in the warning label of the LibraryView
     public var libaryWarningFont: UIFont = UIFont(name: "Helvetica Neue", size: 14)!
 
+    /// The font used in the warning label of the LibraryView
+    public var bulkUploadCountFont: UIFont = UIFont(name: "Helvetica Neue", size: 8)!
+
     /// The font used to show the duration in the LibraryViewCell
     public var durationFont: UIFont = .systemFont(ofSize: 12)
 

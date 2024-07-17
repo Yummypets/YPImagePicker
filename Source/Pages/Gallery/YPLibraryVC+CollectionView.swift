@@ -72,6 +72,7 @@ extension YPLibraryVC {
             }
             v.collectionView.reloadItems(at: selectedIndexPaths)
             checkLimit()
+            updateBulkUploadRemoveAllButton()
         }
     }
     
@@ -90,8 +91,17 @@ extension YPLibraryVC {
         selectedItems.append(newSelection)
         changeAsset(mediaManager.getAsset(at: indexPath.row))
         checkLimit()
+        updateBulkUploadRemoveAllButton()
     }
-    
+
+    func updateBulkUploadRemoveAllButton() {
+        guard YPConfig.library.isBulkUploading else {
+            return
+        }
+        v.bulkUploadRemoveAllButton.isHidden = selectedItems.isEmpty
+        v.bulkUploadRemoveAllButton.setTitle("\(selectedItems.count)", for: .normal)
+    }
+
     func isInSelectionPool(indexPath: IndexPath) -> Bool {
         return selectedItems.contains(where: {
             $0.assetIdentifier == mediaManager.getAsset(at: indexPath.row)?.localIdentifier

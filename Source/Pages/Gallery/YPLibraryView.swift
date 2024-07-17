@@ -91,6 +91,23 @@ internal final class YPLibraryView: UIView {
         return v
     }()
 
+    public let bulkUploadRemoveAllButton: UIButton = {
+        var container = AttributeContainer()
+        container.font = YPConfig.fonts.bulkUploadCountFont
+        container.foregroundColor = UIColor.ypLabel
+        var configuration = UIButton.Configuration.plain()
+        configuration.attributedTitle = AttributedString("", attributes: container)
+        configuration.image = YPConfig.icons.closeIcon
+        configuration.imagePadding = 8
+        configuration.imagePlacement = .trailing
+
+        let v = UIButton(configuration: configuration)
+        v.isHidden = true
+        v.backgroundColor = UIColor.ypSystemBackground
+        v.accessibilityLabel = "Bulk Uploads Remove All Button"
+        return v
+    }()
+
     var onAlbumsButtonTap: (() -> Void)?
 
     // MARK: - Private vars
@@ -256,7 +273,11 @@ internal final class YPLibraryView: UIView {
         line.fillHorizontally()
 
         assetViewContainer.top(0).fillHorizontally()
-        if let assetPreviewMaxHeight = YPConfig.library.assetPreviewMaxHeight {
+
+        if YPConfig.library.isBulkUploading {
+            // Hide Asset Preview during bulk uploads
+            (assetViewContainer.Height <= 0).priority = .required
+        } else if let assetPreviewMaxHeight = YPConfig.library.assetPreviewMaxHeight {
             let heightConstraint = NSLayoutConstraint(item: assetViewContainer, attribute: .height, relatedBy: .lessThanOrEqual, toItem: assetViewContainer, attribute: .width, multiplier: 1, constant: 0)
             heightConstraint.priority = .defaultHigh
             heightConstraint.isActive = true
@@ -285,9 +306,16 @@ internal final class YPLibraryView: UIView {
         maxNumberWarningView.Top == safeAreaLayoutGuide.Bottom - 40
         maxNumberWarningLabel.centerHorizontally().top(11)
 
-        subviews(multipleSelectionButton)
-        multipleSelectionButton.size(30).trailing(16)
-        alignHorizontally(showAlbumsButton, multipleSelectionButton)
+        if (YPConfig.library.isBulkUploading) {
+            subviews(bulkUploadRemoveAllButton)
+            bulkUploadRemoveAllButton.height(25).trailing(16)
+            bulkUploadRemoveAllButton.layer.cornerRadius = 12.5
+            align(horizontally: showAlbumsButton, bulkUploadRemoveAllButton)
+        } else {
+            subviews(multipleSelectionButton)
+            multipleSelectionButton.size(30).trailing(16)
+            align(horizontally: showAlbumsButton, multipleSelectionButton)
+        }
     }
 
     @objc
