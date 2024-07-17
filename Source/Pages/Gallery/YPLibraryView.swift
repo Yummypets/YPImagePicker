@@ -104,6 +104,7 @@ internal final class YPLibraryView: UIView {
         let v = UIButton(configuration: configuration)
         v.isHidden = true
         v.backgroundColor = UIColor.ypSystemBackground
+        v.accessibilityLabel = "Bulk Uploads Remove All Button"
         return v
     }()
 
