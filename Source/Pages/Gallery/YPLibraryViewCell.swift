@@ -98,8 +98,8 @@ class YPLibraryViewCell: UICollectionViewCell {
         )
         
         layout(
-            3,
-            multipleSelectionIndicator-3-|
+            1,
+            multipleSelectionIndicator-1-|
         )
         
         imageView.contentMode = .scaleAspectFill
