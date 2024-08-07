@@ -124,7 +124,7 @@ final class YPAssetZoomableView: UIScrollView {
             strongSelf.currentAsset = video
 
             strongSelf.videoView.loadVideo(playerItem)
-            strongSelf.videoView.player.isMuted = isVideoMuted
+            strongSelf.videoView.player.isMuted = strongSelf.isVideoMuted
             strongSelf.videoView.play()
             strongSelf.zoomableViewDelegate?.ypAssetZoomableViewDidLayoutSubviews(strongSelf)
         }
