@@ -35,6 +35,7 @@ internal final class YPLibraryView: UIView {
     }()
     internal let assetZoomableView: YPAssetZoomableView = {
         let v = YPAssetZoomableView(frame: .zero)
+        v.isVideoMuted = YPConfig.library.isBulkUploading
         v.accessibilityIdentifier = "assetZoomableView"
         return v
     }()
