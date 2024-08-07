@@ -57,7 +57,9 @@ class YPMultipleSelectionIndicator: UIView {
     
     func set(number: Int?) {
         label.isHidden = (number == nil)
-        circle.isHidden = YPConfig.library.isBulkUploading && number == nil
+        let isHiddenDuringBulkUploads = YPConfig.library.isBulkUploading && number == nil
+        circle.isHidden = isHiddenDuringBulkUploads
+        imageView.isHidden = isHiddenDuringBulkUploads
         if let number = number {
             circle.backgroundColor = selectionColor
             circle.layer.borderColor = selectionBorderColor.cgColor
