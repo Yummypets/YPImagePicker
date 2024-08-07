@@ -234,20 +234,34 @@ internal final class YPLibraryView: UIView {
     // MARK: - Private Methods
 
     private func setupLayout() {
-        subviews(
-            collectionContainerView.subviews(
-                collectionView
-            ),
-            YPConfig.showsLibraryButtonInTitle ? UIView() : showAlbumsButton,
-            line,
-            assetViewContainer.subviews(
-                assetZoomableView
-            ),
-            progressView,
-            maxNumberWarningView.subviews(
-                maxNumberWarningLabel
+        if YPConfig.library.isBulkUploading {
+            subviews(
+                collectionContainerView.subviews(
+                    collectionView
+                ),
+                YPConfig.showsLibraryButtonInTitle ? UIView() : showAlbumsButton,
+                line,
+                progressView,
+                maxNumberWarningView.subviews(
+                    maxNumberWarningLabel
+                )
             )
-        )
+        } else {
+            subviews(
+                collectionContainerView.subviews(
+                    collectionView
+                ),
+                YPConfig.showsLibraryButtonInTitle ? UIView() : showAlbumsButton,
+                line,
+                assetViewContainer.subviews(
+                    assetZoomableView
+                ),
+                progressView,
+                maxNumberWarningView.subviews(
+                    maxNumberWarningLabel
+                )
+            )
+        }
 
         collectionContainerView.fillContainer()
         collectionView.fillHorizontally().bottom(0)
