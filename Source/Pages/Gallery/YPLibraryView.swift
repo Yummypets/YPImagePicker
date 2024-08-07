@@ -242,7 +242,7 @@ internal final class YPLibraryView: UIView {
             YPConfig.showsLibraryButtonInTitle ? UIView() : showAlbumsButton,
             line,
             assetViewContainer.subviews(
-                YPConfig.library.isBulkUploading ? UIView() : assetZoomableView
+                assetZoomableView
             ),
             progressView,
             maxNumberWarningView.subviews(
