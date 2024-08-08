@@ -21,6 +21,7 @@ final class YPAssetZoomableView: UIScrollView {
     public weak var zoomableViewDelegate: YPAssetZoomableViewDelegate?
     public var cropAreaDidChange = {}
     public var isVideoMode = false
+    public var isVideoMuted = false
     public var photoImageView = UIImageView()
     public var videoView = YPVideoView()
     public var squaredZoomScale: CGFloat = 1
@@ -123,6 +124,7 @@ final class YPAssetZoomableView: UIScrollView {
             strongSelf.currentAsset = video
 
             strongSelf.videoView.loadVideo(playerItem)
+            strongSelf.videoView.player.isMuted = strongSelf.isVideoMuted
             strongSelf.videoView.play()
             strongSelf.zoomableViewDelegate?.ypAssetZoomableViewDidLayoutSubviews(strongSelf)
         }

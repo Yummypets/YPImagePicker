@@ -57,6 +57,9 @@ class YPMultipleSelectionIndicator: UIView {
     
     func set(number: Int?) {
         label.isHidden = (number == nil)
+        let isHiddenDuringBulkUploads = YPConfig.library.isBulkUploading && number == nil
+        circle.isHidden = isHiddenDuringBulkUploads
+        imageView.isHidden = isHiddenDuringBulkUploads
         if let number = number {
             circle.backgroundColor = selectionColor
             circle.layer.borderColor = selectionBorderColor.cgColor
@@ -99,7 +102,7 @@ class YPLibraryViewCell: UICollectionViewCell {
         
         layout(
             3,
-            multipleSelectionIndicator-3-|
+            YPConfig.library.isBulkUploading ? |-3-multipleSelectionIndicator : multipleSelectionIndicator-3-|
         )
         
         imageView.contentMode = .scaleAspectFill
