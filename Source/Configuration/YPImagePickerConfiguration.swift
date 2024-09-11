@@ -207,6 +207,19 @@ public struct YPConfigVideo {
     /// Choose the result video extension if you trim or compress a video. Defaults to mov.
     public var fileType: AVFileType = .mov
     
+    /// Set this value for the `AVAssetExportSession` property `fileLengthLimit`
+    /// May be usefull for exporting video with original format `mp4`
+    ///
+    /// Sometimes `AVAssetExportSession` increase mp4 video bitrate
+    /// so result file might be quite bigger than original from user gallery
+    ///
+    /// Usage example - setting `fileLengthLimit` to `10 MB`:
+    /// ``` swift
+    /// config.video.fileLengthLimit = 1048576 * 10
+    /// ```
+    /// For more information check [this thread](https://stackoverflow.com/questions/50560922/reducing-the-size-of-a-video-exported-with-avassetexportsession-ios-swift)
+    public var fileLengthLimit: Int64?
+    
     /// Defines the time limit for recording videos.
     /// Default is 60 seconds.
     public var recordingTimeLimit: TimeInterval = 60.0
