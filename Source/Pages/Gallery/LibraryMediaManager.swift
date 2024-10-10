@@ -451,6 +451,11 @@ open class LibraryMediaManager {
         }
     }
 
+    func isSelectedCollectionRecentsAlbum() -> Bool {
+        guard let collection else { return false }
+        return collection.assetCollectionType == .smartAlbum && collection.assetCollectionSubtype == .smartAlbumUserLibrary
+    }
+
     func getFirstImageAsset() -> (asset: PHAsset?, index: Int?) {
         guard let fetchResult else { return (nil, nil) }
         var imageAsset: PHAsset?
