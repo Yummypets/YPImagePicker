@@ -444,8 +444,12 @@ open class LibraryMediaManager {
 
         // If pre-selecting the recents album the sorting is applied in reverse. This closely matches the 'Recents' album in Photos. This
         // should only apply if the user has not manually selected a collection.
-        if YPConfig.library.shouldPreselectRecentsAlbum, collection == nil {
-            return fetchResult[fetchResult.count - index - 1]
+        if YPConfig.library.shouldPreselectRecentsAlbum {
+            if collection == nil || isSelectedCollectionRecentsAlbum() {
+                return fetchResult[fetchResult.count - index - 1]
+            }  else {
+                return fetchResult.object(at: index)
+            }
         } else {
             return fetchResult.object(at: index)
         }
