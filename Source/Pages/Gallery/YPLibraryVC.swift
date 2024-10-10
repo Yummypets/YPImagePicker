@@ -265,7 +265,12 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
     func refreshMediaRequest() {
         let options = buildPHFetchOptions()
 
-        if let collection = mediaManager.collection {
+        if  YPConfig.library.shouldPreselectRecentsAlbum,
+            mediaManager.collection == nil,
+            let allMediaAlbum = fetchAllMedia()
+        {
+            mediaManager.fetchResult = PHAsset.fetchAssets(in: allMediaAlbum, options: nil)
+        } else if let collection = mediaManager.collection {
             mediaManager.fetchResult = PHAsset.fetchAssets(in: collection, options: options)
         } else {
             mediaManager.fetchResult = PHAsset.fetchAssets(with: options)
@@ -433,7 +438,17 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
     }
     
     // MARK: - Fetching Media
-    
+
+    func fetchAllMedia() -> PHAssetCollection? {
+        let fetchOptions = PHFetchOptions()
+        let collections = PHAssetCollection.fetchAssetCollections(
+            with: .smartAlbum,
+            subtype: .any,
+            options: nil
+        )
+        return collections.firstObject
+    }
+
     private func fetchImageAndCrop(for asset: PHAsset,
                                    withCropRect: CGRect? = nil,
                                    callback: @escaping (_ photo: UIImage, _ exif: [String: Any]) -> Void) {

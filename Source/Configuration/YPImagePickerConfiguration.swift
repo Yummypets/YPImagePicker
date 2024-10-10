@@ -216,6 +216,10 @@ public struct YPConfigLibrary {
     
     public var maxAspectRatio: CGFloat?
 
+    /// Pre-selects all of the media and sorts it in a way to closely
+    /// resemble the 'Recents' album.
+    public var shouldPreselectRecentsAlbum: Bool = false
+
     /// List of aspect ratios allowed for videos (when selecting a single video)
     /// The gallery will auto-crop the media to the closest aspect ratio from this list (without letterboxing)
     public var allowedVideoAspectRatios: [CGFloat]?
