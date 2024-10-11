@@ -265,12 +265,27 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
     func refreshMediaRequest() {
         let options = buildPHFetchOptions()
 
-        if let collection = mediaManager.collection {
-            mediaManager.fetchResult = PHAsset.fetchAssets(in: collection, options: options)
+        if
+            YPConfig.library.shouldPreselectRecentsAlbum,
+            let allMediaAlbum = fetchAllMedia() {
+
+            if mediaManager.collection == nil {
+                mediaManager.fetchResult = PHAsset.fetchAssets(in: allMediaAlbum, options: nil)
+            } else if let _ = mediaManager.collection, mediaManager.isSelectedCollectionRecentsAlbum() {
+                mediaManager.fetchResult = PHAsset.fetchAssets(in: allMediaAlbum, options: nil)
+            } else if let collection = mediaManager.collection {
+                // In this path the selected collection could be any album that is not "Recents" Therefore just fetch the media
+                // in those albums.
+                mediaManager.fetchResult = PHAsset.fetchAssets(in: collection, options: options)
+            }
         } else {
-            mediaManager.fetchResult = PHAsset.fetchAssets(with: options)
+            if let collection = mediaManager.collection {
+                mediaManager.fetchResult = PHAsset.fetchAssets(in: collection, options: options)
+            } else {
+                mediaManager.fetchResult = PHAsset.fetchAssets(with: options)
+            }
         }
-        
+
         if mediaManager.hasResultItems,
         let firstAsset = mediaManager.getAsset(with: selectedItems.last?.assetIdentifier) ?? mediaManager.getAsset(at: 0) {
             changeAsset(firstAsset)
@@ -433,7 +448,16 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
     }
     
     // MARK: - Fetching Media
-    
+
+    func fetchAllMedia() -> PHAssetCollection? {
+        let collections = PHAssetCollection.fetchAssetCollections(
+            with: .smartAlbum,
+            subtype: .any,
+            options: nil
+        )
+        return collections.firstObject
+    }
+
     private func fetchImageAndCrop(for asset: PHAsset,
                                    withCropRect: CGRect? = nil,
                                    callback: @escaping (_ photo: UIImage, _ exif: [String: Any]) -> Void) {

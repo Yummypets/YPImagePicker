@@ -441,7 +441,23 @@ open class LibraryMediaManager {
             ypLog("FetchResult not contain this index: \(index)")
             return nil
         }
-        return fetchResult.object(at: index)
+
+        // If pre-selecting the recents album the sorting is applied in reverse. This closely matches the 'Recents' album in Photos. This
+        // should only apply if the user has not manually selected a collection.
+        if YPConfig.library.shouldPreselectRecentsAlbum {
+            if collection == nil || isSelectedCollectionRecentsAlbum() {
+                return fetchResult[fetchResult.count - index - 1]
+            }  else {
+                return fetchResult.object(at: index)
+            }
+        } else {
+            return fetchResult.object(at: index)
+        }
+    }
+
+    func isSelectedCollectionRecentsAlbum() -> Bool {
+        guard let collection else { return false }
+        return collection.assetCollectionType == .smartAlbum && collection.assetCollectionSubtype == .smartAlbumUserLibrary
     }
 
     func getFirstImageAsset() -> (asset: PHAsset?, index: Int?) {
