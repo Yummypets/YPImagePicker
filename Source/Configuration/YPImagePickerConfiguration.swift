@@ -216,8 +216,10 @@ public struct YPConfigLibrary {
     
     public var maxAspectRatio: CGFloat?
 
-    /// Pre-selects all of the media and sorts it in a way to closely
-    /// resemble the 'Recents' album.
+    /// Pre-selects all of the smart album media when entering the media picker
+    /// and renders the media in reverse order. This configuration option will
+    /// override any fetch options supplied from `YPConfig.library.options` and
+    /// will override the default fetch options which orders media by `creationDate`
     public var shouldPreselectRecentsAlbum: Bool = false
 
     /// List of aspect ratios allowed for videos (when selecting a single video)
