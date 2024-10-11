@@ -450,7 +450,6 @@ public final class YPLibraryVC: UIViewController, YPPermissionCheckable {
     // MARK: - Fetching Media
 
     func fetchAllMedia() -> PHAssetCollection? {
-        let fetchOptions = PHFetchOptions()
         let collections = PHAssetCollection.fetchAssetCollections(
             with: .smartAlbum,
             subtype: .any,
