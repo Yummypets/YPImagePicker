@@ -53,7 +53,8 @@ public class YPCoverImageView: YPAdjustableView {
             let videoAsset = AVAsset(url: videoUrl)
             guard let track = videoAsset.tracks(withMediaType: AVMediaType.video).first else { return }
             let size = track.naturalSize.applying(track.preferredTransform)
-            adjustViewFrameIfNeeded(cropRect: cropRect, assetSize: size, targetAspectRatio: targetAspectRatio)
+            let fixedSize = CGSize(width: abs(size.width), height: abs(size.height))
+            adjustViewFrameIfNeeded(cropRect: cropRect, assetSize: fixedSize, targetAspectRatio: targetAspectRatio)
         }
     }
 
