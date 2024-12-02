@@ -578,6 +578,15 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
     }
 }
 
+// MARK: - Cover Image Update Support
+
+public extension YPVideoFiltersVC {
+    func updateCoverImage(to coverImage: UIImage) {
+        croppedImage = coverImage
+        coverImageView.image = coverImage
+    }
+}
+
 extension YPVideoFiltersVC: YPTimeStampTrimmerViewDelegate {
     public func positionBarDidStopMoving(_ playerTime: CMTime) {
         // user has lifted off trimmer handle so restart the video at trimmer start time
