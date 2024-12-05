@@ -449,9 +449,13 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
         case .Cover:
             selectCover()
         }
+    }
+
+    open func setModeAndPrepareThumbnails(type: YPVideoFiltersType) {
+        setMode(type: type)
         prepareThumbnails()
     }
-    
+
     // MARK: - Various Methods
 
     // Updates the bounds of the cover picker if the video is trimmed
