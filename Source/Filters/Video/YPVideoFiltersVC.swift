@@ -53,6 +53,7 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
     public var shouldMute = false
     public var shouldShowDone = false
     public weak var videoProcessingDelegate: YPVideoProcessingDelegate?
+    public var isUsingCustomCoverImage = false
 
     var coverImageTime: CMTime?
     var coverTrimTimes: (startTime: CMTime, endTime: CMTime)?
@@ -195,7 +196,7 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
 
     // MARK: - Setup
 
-    private func setupGenerator(_ asset: AVAsset) {
+    public func setupGenerator(_ asset: AVAsset) {
         // Set initial video cover
         imageGenerator = AVAssetImageGenerator(asset: asset)
         imageGenerator?.appliesPreferredTrackTransform = true
@@ -449,9 +450,13 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
         case .Cover:
             selectCover()
         }
+    }
+
+    open func setModeAndPrepareThumbnails(type: YPVideoFiltersType) {
+        setMode(type: type)
         prepareThumbnails()
     }
-    
+
     // MARK: - Various Methods
 
     // Updates the bounds of the cover picker if the video is trimmed
@@ -521,7 +526,7 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
         }
     }
 
-    private func generateCoverImageAtTime(_ time: CMTime) {
+    public func generateCoverImageAtTime(_ time: CMTime) {
         imageGenerator?.generateCGImagesAsynchronously(forTimes: [NSValue(time:time)],
                                                        completionHandler: { [weak self] (_, image, _, _, _) in
             guard let image = image else {
@@ -557,7 +562,9 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
                         self?.setupGenerator(trimmedAsset)
                         self?.coverThumbSelectorView.asset = trimmedAsset
                         self?.coverTrimTimes = (startTime: startTime, endTime: endTime)
-                        self?.generateCoverImageAtTime(startTime)
+                        if !(self?.isUsingCustomCoverImage ?? false) {
+                            self?.generateCoverImageAtTime(startTime)
+                        }
                     case let .failure(error):
                         self?.videoProcessingDelegate?.didFailVideoProcessing(error: error)
                         ypLog("YPVideoFiltersVC -> Invalid asset url.")
@@ -575,6 +582,16 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
         } else {
             return false
         }
+    }
+}
+
+// MARK: - Cover Image Update Support
+
+public extension YPVideoFiltersVC {
+    func updateCoverImage(to coverImage: UIImage) {
+        isUsingCustomCoverImage = true
+        croppedImage = coverImage
+        coverImageView.image = coverImage
     }
 }
 
@@ -602,6 +619,8 @@ extension YPVideoFiltersVC: YPTimeStampTrimmerViewDelegate {
 extension YPVideoFiltersVC: ThumbSelectorViewDelegate {
     public func didChangeThumbPosition(_ imageTime: CMTime) {
         // fetch new image
-        generateCoverImageAtTime(imageTime)
+        if !isUsingCustomCoverImage || vcType == .Cover {
+            generateCoverImageAtTime(imageTime)
+        }
     }
 }
