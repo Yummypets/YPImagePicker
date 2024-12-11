@@ -142,6 +142,15 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
                          selector: #selector(itemDidFinishPlaying(_:)),
                          name: .AVPlayerItemDidPlayToEndTime,
                          object: videoView.player.currentItem)
+        NotificationCenter.default
+            .addObserver(
+            forName: UIApplication.willEnterForegroundNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            guard let self = self else { return }
+            self.setupGenerator(inputAsset)
+        }
 
         videoView.clipsToBounds = true
         coverImageView.clipsToBounds = true
