@@ -54,6 +54,7 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
     public var shouldShowDone = false
     public weak var videoProcessingDelegate: YPVideoProcessingDelegate?
     public var isUsingCustomCoverImage = false
+    public var customCoverImageReplacedHandler: (() -> Void)?
 
     var coverImageTime: CMTime?
     var coverTrimTimes: (startTime: CMTime, endTime: CMTime)?
@@ -551,6 +552,8 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
                 self?.imageGenerator?.cancelAllCGImageGeneration()
                 self?.coverImageView.image = UIImage(cgImage: image)
                 self?.coverImageTime = time
+                self?.isUsingCustomCoverImage = false
+                self?.customCoverImageReplacedHandler?()
             }
         })
     }
@@ -627,6 +630,7 @@ extension YPVideoFiltersVC: YPTimeStampTrimmerViewDelegate {
 // MARK: - ThumbSelectorViewDelegate
 extension YPVideoFiltersVC: ThumbSelectorViewDelegate {
     public func didChangeThumbPosition(_ imageTime: CMTime) {
+        coverThumbSelectorView.resetThumbViewBorderColor()
         // fetch new image
         if !isUsingCustomCoverImage || vcType == .Cover {
             generateCoverImageAtTime(imageTime)
