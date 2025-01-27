@@ -9,7 +9,7 @@
 import UIKit
 
 protocol IsMediaFilterVC: AnyObject {
-    var didSave: ((YPMediaItem) -> Void)? { get set }
+    var didSave: ((YPMediaItem, Bool) -> Void)? { get set }
     var didCancel: (() -> Void)? { get set }
 }
 
@@ -25,7 +25,7 @@ open class YPPhotoFiltersVC: UIViewController, IsMediaFilterVC, UIGestureRecogni
     public var inputPhoto: YPMediaPhoto!
     public var isFromSelectionVC = false
 
-    public var didSave: ((YPMediaItem) -> Void)?
+    public var didSave: ((YPMediaItem, Bool) -> Void)?
     public var didCancel: (() -> Void)?
 
     fileprivate let filters: [YPFilter] = YPConfig.filters
@@ -162,7 +162,7 @@ open class YPPhotoFiltersVC: UIViewController, IsMediaFilterVC, UIGestureRecogni
                 self.inputPhoto.modifiedImage = nil
             }
             DispatchQueue.main.async {
-                didSave(YPMediaItem.photo(p: self.inputPhoto))
+                didSave(YPMediaItem.photo(p: self.inputPhoto), false)
                 self.setupRightBarButton()
             }
         }

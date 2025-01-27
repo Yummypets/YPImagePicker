@@ -119,7 +119,7 @@ extension YPSelectionsGalleryVC: UICollectionViewDelegate {
             }
         }
         
-        mediaFilterVC?.didSave = { outputMedia in
+        mediaFilterVC?.didSave = { outputMedia, _ in
             self.items[indexPath.row] = outputMedia
             collectionView.reloadData()
             self.dismiss(animated: true, completion: nil)
