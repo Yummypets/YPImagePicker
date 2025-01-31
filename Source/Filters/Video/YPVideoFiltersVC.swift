@@ -39,7 +39,7 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
 
     public var inputVideo: YPMediaVideo!
     public var inputAsset: AVAsset { return AVAsset(url: inputVideo.originalUrl) }
-    public var didSave: ((YPMediaItem) -> Void)?
+    public var didSave: ((YPMediaItem, Bool) -> Void)?
     public var didCancel: (() -> Void)?
 
     public let mediaManager = LibraryMediaManager() // used to crop and trim video
@@ -54,6 +54,8 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
     public var shouldShowDone = false
     public weak var videoProcessingDelegate: YPVideoProcessingDelegate?
     public var isUsingCustomCoverImage = false
+    public var isInCoverPhotoOnlySelectionMode: Bool = false
+    public var isInTrimOnlySelectionMode: Bool = false
     public var customCoverImageReplacedHandler: (() -> Void)?
 
     var coverImageTime: CMTime?
@@ -292,14 +294,21 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
 
     // MARK: - Actions
 
-    private func completeSave(thumbnail: UIImage, videoUrl: URL, asset: PHAsset?, timeRange: CMTimeRange?) {
+    private func completeSave(thumbnail: UIImage, isInCoverPhotoOnlySelectionMode: Bool, videoUrl: URL, asset: PHAsset?, timeRange: CMTimeRange?) {
         guard let didSave = didSave else { return ypLog("Don't have saveCallback") }
 
         let resultVideo = YPMediaVideo(thumbnail: thumbnail, videoURL: videoUrl, asset: asset)
         resultVideo.cropRect = inputVideo.cropRect
         resultVideo.timeRange = timeRange
         resultVideo.customData = inputVideo.customData
-        didSave(YPMediaItem.video(v: resultVideo))
+
+        if isInCoverPhotoOnlySelectionMode {
+            // When in cover photo only selection mode for a video, this implies that the user is only allowed to update the cover photo and is
+            // unable to trim the video. Saving the changes will distinguish when a user is limited to only changing the cover photo.
+            didSave(YPMediaItem.video(v: resultVideo), true)
+        } else {
+            didSave(YPMediaItem.video(v: resultVideo), false)
+        }
         setupRightBarButtonItem()
 
         // reset user interaction
@@ -332,7 +341,7 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
         let timeRange = CMTimeRange(start: startTime, end: endTime)
         if vcType == .Cover {
             if let coverImage = self.croppedImage {
-                self.completeSave(thumbnail: coverImage, videoUrl: self.inputVideo.url, asset: self.inputVideo.asset, timeRange: timeRange)
+                self.completeSave(thumbnail: coverImage, isInCoverPhotoOnlySelectionMode: isInCoverPhotoOnlySelectionMode, videoUrl: self.inputVideo.url, asset: self.inputVideo.asset, timeRange: timeRange)
             } else {
                 ypLog("YPVideoFiltersVC -> Don't have coverImage.")
                 self.resetView()
@@ -366,7 +375,7 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
             if untrimmed && !cropped && !rotated && !shouldMute {
                 // if video remains untrimmed and uncropped, use existing video url to eliminate video transcoding effort
                 // we will be selecting a cover image next, use generic uiimage for now
-                self.completeSave(thumbnail: self.croppedImage ?? UIImage(), videoUrl: self.inputVideo.url, asset: self.inputVideo.asset, timeRange: timeRange)
+                self.completeSave(thumbnail: self.croppedImage ?? UIImage(), isInCoverPhotoOnlySelectionMode: false, videoUrl: self.inputVideo.url, asset: self.inputVideo.asset, timeRange: timeRange)
 
                 return
             }
@@ -380,7 +389,7 @@ open class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
                     switch result {
                     case let .success(video):
                         self?.videoProcessingDelegate?.didCompleteVideoProcessing(processedVideo: video)
-                        self?.completeSave(thumbnail: self?.croppedImage ?? UIImage(), videoUrl: video.videoUrl, asset: self?.inputVideo.asset, timeRange: timeRange)
+                        self?.completeSave(thumbnail: self?.croppedImage ?? UIImage(), isInCoverPhotoOnlySelectionMode: false, videoUrl: video.videoUrl, asset: self?.inputVideo.asset, timeRange: timeRange)
                     case let .failure(error):
                         self?.videoProcessingDelegate?.didFailVideoProcessing(error: error)
                         ypLog("YPVideoFiltersVC -> Invalid asset url.")

@@ -132,7 +132,7 @@ open class YPImagePicker: UINavigationController {
                     let filterVC = YPPhotoFiltersVC(inputPhoto: photo,
                                                     isFromSelectionVC: false)
                     // Show filters and then crop
-                    filterVC.didSave = { outputMedia in
+                    filterVC.didSave = { outputMedia, _ in
                         if case let YPMediaItem.photo(outputPhoto) = outputMedia {
                             showCropVC(photo: outputPhoto, completion: completion)
                         }
@@ -146,7 +146,7 @@ open class YPImagePicker: UINavigationController {
                     let videoFiltersVC = YPVideoFiltersVC.initWith(video: video,
                                                                    isFromSelectionVC: false,
                                                                    type:.Trimmer)
-                    videoFiltersVC.didSave = { [weak self] outputMedia in
+                    videoFiltersVC.didSave = { [weak self] outputMedia, _ in
                         let media = [outputMedia]
                         
                         if let video = media.singleVideo {                            
@@ -154,7 +154,7 @@ open class YPImagePicker: UINavigationController {
                             let videoFiltersVC = YPVideoFiltersVC.initWith(video: video,
                                                                            isFromSelectionVC: false,
                                                                            type: .Cover)
-                            videoFiltersVC.didSave = { [weak self] outputMedia in
+                            videoFiltersVC.didSave = { [weak self] outputMedia, _ in
                                 self?.didSelect(items: [outputMedia])
                             }
                             self?.pushViewController(videoFiltersVC, animated: true)
