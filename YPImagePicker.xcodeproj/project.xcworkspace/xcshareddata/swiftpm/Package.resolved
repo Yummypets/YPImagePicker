@@ -1,12 +1,13 @@
 {
+  "originHash" : "8912ab1292b9d3d31c7f530c0914a7736836ad6e84281ee7d65d0d49d6fe85e9",
   "pins" : [
     {
       "identity" : "prynttrimmerview",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/rewardstyle/prynttrimmerview",
       "state" : {
-        "revision" : "59379933130df86e35b6f6a60aefa7262368854a",
-        "version" : "4.0.4"
+        "branch" : "CC-2396-cover-photo-aspect-ratio",
+        "revision" : "5b9d108dad2fc626526f4b583b1e4910573df606"
       }
     },
     {
@@ -19,5 +20,5 @@
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }

@@ -1372,8 +1372,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/rewardstyle/prynttrimmerview";
 			requirement = {
-				kind = exactVersion;
-				version = 4.0.4;
+				branch = "CC-2396-cover-photo-aspect-ratio";
+				kind = branch;
 			};
 		};
 		EBA37BCB26F75BCC005DAAD4 /* XCRemoteSwiftPackageReference "Stevia" */ = {
