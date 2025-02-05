@@ -18,7 +18,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/rewardStyle/PryntTrimmerView",
-            .exact("4.0.4")
+            .exact("4.0.5")
         )
 
     ],
