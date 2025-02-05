@@ -18,7 +18,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/rewardStyle/PryntTrimmerView",
-            .branch("CC-2396-cover-photo-aspect-ratio")
+            .exact("4.0.5")
         )
 
     ],

@@ -6,8 +6,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/rewardstyle/prynttrimmerview",
       "state" : {
-        "branch" : "CC-2396-cover-photo-aspect-ratio",
-        "revision" : "5b9d108dad2fc626526f4b583b1e4910573df606"
+        "revision" : "7fd5aa8c4fe74c7e09e50b601fced68d1f3b10b9",
+        "version" : "4.0.5"
       }
     },
     {
