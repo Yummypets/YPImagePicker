@@ -281,8 +281,9 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         titleView.heightAnchor.constraint(equalToConstant: 40).isActive = true
         navigationItem.titleView = titleView
     }
-    
-    func updateUI() {
+
+    @objc
+    open func updateUI() {
         if !YPConfig.hidesCancelButton {
             // Update Nav Bar state.
             if let cancelButtonIcon = YPConfig.icons.cancelButtonIcon {
