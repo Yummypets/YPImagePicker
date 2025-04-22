@@ -72,8 +72,7 @@ open class YPImagePicker: UINavigationController {
         }
         viewControllers = [picker]
         setupLoadingView()
-        navigationBar.isTranslucent = false
-        navigationBar.tintColor = YPImagePickerConfiguration.shared.colors.tintColor
+        navigationBar.configureNavigationBar(isTransculent: false, tintColor: YPImagePickerConfiguration.shared.colors.tintColor)
         navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : YPImagePickerConfiguration.shared.colors.tintColor]
         view.backgroundColor = YPImagePickerConfiguration.shared.colors.safeAreaBackgroundColor
 
