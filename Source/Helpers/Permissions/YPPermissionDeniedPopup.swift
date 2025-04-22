@@ -24,11 +24,7 @@ internal struct YPPermissionDeniedPopup {
             UIAlertAction(title: YPConfig.wordings.permissionPopup.grantPermission,
                           style: .default,
                           handler: { _ in
-                            if #available(iOS 10.0, *) {
-                                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
-                            } else {
-                                UIApplication.shared.openURL(URL(string: UIApplication.openSettingsURLString)!)
-                            }
+                              UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
                           }))
         return alert
     }

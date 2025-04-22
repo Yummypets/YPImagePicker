@@ -22,12 +22,8 @@ class YPSelectionsGalleryView: UIView {
         
         // Layout collectionView
         collectionView.heightEqualsWidth()
-        if #available(iOS 11.0, *) {
-            collectionView.Right == safeAreaLayoutGuide.Right
-            collectionView.Left == safeAreaLayoutGuide.Left
-        } else {
-            |collectionView|
-        }
+        collectionView.Right == safeAreaLayoutGuide.Right
+        collectionView.Left == safeAreaLayoutGuide.Left
         collectionView.CenterY == CenterY - 30
         
         // Apply style

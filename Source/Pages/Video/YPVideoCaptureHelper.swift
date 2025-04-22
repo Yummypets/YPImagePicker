@@ -133,15 +133,8 @@ class YPVideoCaptureHelper: NSObject {
             try device.lockForConfiguration()
             defer { device.unlockForConfiguration() }
 
-            var minAvailableVideoZoomFactor: CGFloat = 1.0
-            if #available(iOS 11.0, *) {
-                minAvailableVideoZoomFactor = device.minAvailableVideoZoomFactor
-            }
-            var maxAvailableVideoZoomFactor: CGFloat = device.activeFormat.videoMaxZoomFactor
-            if #available(iOS 11.0, *) {
-                maxAvailableVideoZoomFactor = device.maxAvailableVideoZoomFactor
-            }
-            maxAvailableVideoZoomFactor = min(maxAvailableVideoZoomFactor, YPConfig.maxCameraZoomFactor)
+            let minAvailableVideoZoomFactor = device.minAvailableVideoZoomFactor
+            let maxAvailableVideoZoomFactor = min(device.maxAvailableVideoZoomFactor, YPConfig.maxCameraZoomFactor)
 
             let desiredZoomFactor = initVideoZoomFactor * scale
             device.videoZoomFactor = max(minAvailableVideoZoomFactor,

@@ -106,11 +106,7 @@ final class YPCropView: UIView {
             0
         )
     
-        if #available(iOS 11.0, *) {
-            toolbar.Bottom == safeAreaLayoutGuide.Bottom
-        } else {
-            toolbar.bottom(0)
-        }
+        toolbar.Bottom == safeAreaLayoutGuide.Bottom
                 
         let complementRatio: CGFloat = CGFloat(1.0 / ratio)
         cropArea.Height == cropArea.Width * complementRatio

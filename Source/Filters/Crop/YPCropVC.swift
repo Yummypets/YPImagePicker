@@ -157,10 +157,8 @@ extension YPCropVC: UIGestureRecognizerDelegate {
     }
     
     func generateHapticFeedback() {
-        if #available(iOS 10.0, *) {
-            let generator = UIImpactFeedbackGenerator(style: .light)
-            generator.impactOccurred()
-        }
+        let generator = UIImpactFeedbackGenerator(style: .light)
+        generator.impactOccurred()
     }
     
     // MARK: - Pan Gesture
