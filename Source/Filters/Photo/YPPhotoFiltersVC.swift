@@ -126,7 +126,15 @@ open class YPPhotoFiltersVC: UIViewController, IsMediaFilterVC, UIGestureRecogni
     
     fileprivate func thumbFromImage(_ img: UIImage) -> CIImage {
         let k = img.size.width / img.size.height
-        let scale = UIScreen.main.scale
+        
+        var scale: CGFloat = 0
+        
+        if #available(iOS 13.0, *) {
+            scale = window?.windowScene?.screen.scale ?? 1.0
+        } else {
+            scale = UIScreen.main.scale
+        }
+        
         let thumbnailHeight: CGFloat = 300 * scale
         let thumbnailWidth = thumbnailHeight * k
         let thumbnailSize = CGSize(width: thumbnailWidth, height: thumbnailHeight)

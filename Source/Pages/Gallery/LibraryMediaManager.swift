@@ -40,7 +40,17 @@ class LibraryMediaManager {
     
     func updateCachedAssets(in collectionView: UICollectionView) {
         let screenWidth = YPImagePickerConfiguration.screenWidth
-        let size = screenWidth / 4 * UIScreen.main.scale
+        
+        var scale: CGFloat = 0
+        
+        if #available(iOS 13.0, *) {
+            let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+            scale = windowScene?.screen.scale ?? 1.0
+        } else {
+            scale = UIScreen.main.scale
+        }
+        
+        let size = screenWidth / 4 * scale
         let cellSize = CGSize(width: size, height: size)
         
         var preheatRect = collectionView.bounds
