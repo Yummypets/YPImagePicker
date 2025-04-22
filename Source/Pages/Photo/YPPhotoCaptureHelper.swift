@@ -113,6 +113,19 @@ extension YPPhotoCaptureHelper {
 }
 
 extension YPPhotoCaptureHelper: AVCapturePhotoCaptureDelegate {
+    
+    func photoOutput(_ output: AVCapturePhotoOutput, willCapturePhotoFor resolvedSettings: AVCaptureResolvedPhotoSettings) {
+        if YPConfig.silentMode {
+            AudioServicesDisposeSystemSoundID(1108)
+        }
+    }
+    
+    func photoOutput(_ output: AVCapturePhotoOutput, didCapturePhotoFor resolvedSettings: AVCaptureResolvedPhotoSettings) {
+        if YPConfig.silentMode {
+            AudioServicesDisposeSystemSoundID(1108)
+        }
+    }
+    
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
         guard let data = photo.fileDataRepresentation() else { return }
         block?(data)
