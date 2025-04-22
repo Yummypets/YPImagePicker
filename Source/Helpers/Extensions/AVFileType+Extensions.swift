@@ -10,9 +10,8 @@ import AVFoundation
 import MobileCoreServices
 
 extension AVFileType {
-    /// Fetch and extension for a file from UTI string
     var fileExtension: String {
-        if let type = UTType(self.rawValue as String),  // Используем rawValue
+        if let type = UTType(self.rawValue),
            let ext = type.preferredFilenameExtension {
             return ext
         } else {
