@@ -168,7 +168,6 @@ extension YPLibraryVC: UICollectionViewDelegate {
         let previouslySelectedIndexPath = IndexPath(row: currentlySelectedIndex, section: 0)
         currentlySelectedIndex = indexPath.row
 
-        changeAsset(mediaManager.getAsset(at: indexPath.row))
         panGestureHelper.resetToOriginalState()
         
         // Only scroll cell to top if preview is hidden.
@@ -183,13 +182,17 @@ extension YPLibraryVC: UICollectionViewDelegate {
             if cellIsInTheSelectionPool {
                 if cellIsCurrentlySelected {
                     deselect(indexPath: indexPath)
+                } else {
+                    changeAsset(mediaManager.getAsset(at: indexPath.row))
                 }
             } else if isLimitExceeded == false {
                 addToSelection(indexPath: indexPath)
+                changeAsset(mediaManager.getAsset(at: indexPath.row))
             }
             collectionView.reloadItems(at: [indexPath])
             collectionView.reloadItems(at: [previouslySelectedIndexPath])
         } else {
+            changeAsset(mediaManager.getAsset(at: indexPath.row))
             selectedItems.removeAll()
             addToSelection(indexPath: indexPath)
             
