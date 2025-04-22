@@ -17,6 +17,12 @@ class YPAlbumView: UIView {
     convenience init() {
         self.init(frame: .zero)
         
+        let spinnerColor = UIColor { trait -> UIColor in
+            return trait.userInterfaceStyle == .dark ? .white : .gray
+        }
+        spinner.color = spinnerColor
+        spinner.style = .large
+
         subviews(
             tableView,
             spinner
