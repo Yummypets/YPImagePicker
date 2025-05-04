@@ -99,6 +99,9 @@ class YPCropVC: UIViewController {
             let imageRef = cgImage.cropping(to: scaledCropRect) {
             let croppedImage = UIImage(cgImage: imageRef)
             didFinishCropping?(croppedImage)
+            if YPConfig.library.maxNumberOfItems > 1 {
+                navigationController?.popViewController(animated: true)
+            }
         }
     }
 }
