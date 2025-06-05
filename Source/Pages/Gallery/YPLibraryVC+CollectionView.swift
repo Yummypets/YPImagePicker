@@ -191,6 +191,7 @@ extension YPLibraryVC: UICollectionViewDelegate {
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let previouslySelectedIndexPath = IndexPath(row: currentlySelectedIndex, section: 0)
         currentlySelectedIndex = indexPath.row
+        let previouslySelectedItemIdentifier = selectedItems.first(where: { $0.index == currentlySelectedIndex })?.assetIdentifier
 
         var shouldChangeAsset = true
         panGestureHelper.resetToOriginalState()
@@ -232,6 +233,12 @@ extension YPLibraryVC: UICollectionViewDelegate {
                 previousCell.isSelected = false
             }
             collectionView.reloadItems(at: [indexPath, previouslySelectedIndexPath])
+        } else if previouslySelectedIndexPath == indexPath, let currentItemIdentifier = mediaManager.getAsset(at: indexPath.row)?.localIdentifier, currentItemIdentifier != previouslySelectedItemIdentifier {
+            // If we clicked on the cell index that was already selected, but the identifier is different, let's re-select the cell
+            selectedItems.removeAll()
+            addToSelection(indexPath: indexPath)
+            shouldChangeAsset = true
+            collectionView.reloadItems(at: [indexPath])
         }
         if shouldChangeAsset {
             changeAsset(mediaManager.getAsset(at: indexPath.row))
