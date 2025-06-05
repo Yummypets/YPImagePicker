@@ -81,6 +81,18 @@ extension YPLibraryVC: PHPhotoLibraryChangeObserver {
             }
         }
 
+        // If we had selected items before, we might need to update the currently selected index
+        if mediaManager.hasResultItems, !updatedItems.isEmpty, !isMultipleSelectionEnabled {
+            // Find the selected item that used to be at currently selected index and fix the index if it changed
+            let currentlySelectedAssetIdentifier = selectedItems[currentlySelectedIndex].assetIdentifier
+            if let currentlySelectedElement = mediaManager.getAsset(with: currentlySelectedAssetIdentifier),
+               let newIndex = mediaManager.fetchResult?.index(of: currentlySelectedElement),
+               newIndex != currentlySelectedIndex {
+                currentlySelectedIndex = newIndex
+            }
+        }
+
+
         // If user decided to forbid all photos with limited permission
         // while using the lib we need to remove asset from assets view.
         if selectedItems.isEmpty == false,
