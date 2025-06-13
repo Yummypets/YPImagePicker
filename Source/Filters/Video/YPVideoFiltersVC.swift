@@ -639,7 +639,7 @@ extension YPVideoFiltersVC: YPTimeStampTrimmerViewDelegate {
 // MARK: - ThumbSelectorViewDelegate
 extension YPVideoFiltersVC: ThumbSelectorViewDelegate {
     public func didChangeThumbPosition(_ imageTime: CMTime) {
-        coverThumbSelectorView.resetThumbViewBorderColor()
+        coverThumbSelectorView.resetThumbViewBorderColor(to: YPConfig.colors.coverSelectorBorderColor)
         // fetch new image
         if !isUsingCustomCoverImage || vcType == .Cover {
             generateCoverImageAtTime(imageTime)
