@@ -37,10 +37,11 @@ extension YPLibraryVC: PHPhotoLibraryChangeObserver {
                         collectionView.insertItems(at: insertedIndexes.aapl_indexPathsFromIndexesWithSection(0))
                     }
                 }, completion: { finished in
-                    guard finished,
-                          let changedIndexes = collectionChanges.changedIndexes,
+                    guard finished else { return }
+                    guard let changedIndexes = collectionChanges.changedIndexes,
                           changedIndexes.count != 0 else {
-                        ypLog("Some problems there.")
+                        ypLog("No changes detected")
+                        collectionView.reloadData() // If we failed to detect changes, we'll reload everything just in case
                         return
                     }
 
@@ -84,11 +85,13 @@ extension YPLibraryVC: PHPhotoLibraryChangeObserver {
         // If we had selected items before, we might need to update the currently selected index
         if mediaManager.hasResultItems, !updatedItems.isEmpty, !isMultipleSelectionEnabled {
             // Find the selected item that used to be at currently selected index and fix the index if it changed
-            let currentlySelectedAssetIdentifier = selectedItems[currentlySelectedIndex].assetIdentifier
-            if let currentlySelectedElement = mediaManager.getAsset(with: currentlySelectedAssetIdentifier),
-               let newIndex = mediaManager.fetchResult?.index(of: currentlySelectedElement),
-               newIndex != currentlySelectedIndex {
-                currentlySelectedIndex = newIndex
+            if currentlySelectedIndex >= 0 && currentlySelectedIndex < selectedItems.count {
+                let currentlySelectedAssetIdentifier = selectedItems[currentlySelectedIndex].assetIdentifier
+                if let currentlySelectedElement = mediaManager.getAsset(with: currentlySelectedAssetIdentifier),
+                   let newIndex = mediaManager.fetchResult?.index(of: currentlySelectedElement),
+                   newIndex != currentlySelectedIndex {
+                    currentlySelectedIndex = newIndex
+                }
             }
         }
 
