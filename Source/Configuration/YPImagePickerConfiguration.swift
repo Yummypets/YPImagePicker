@@ -22,8 +22,8 @@ public struct YPImagePickerConfiguration {
     public static var screenWidth: CGFloat {
         var screenWidth: CGFloat = 0
         
-        let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
-            screenWidth = windowScene?.screen.bounds.width ?? 1.0
+        let windowScene = UIApplication.safeFirstWindowScene
+        screenWidth = windowScene?.screen.bounds.width ?? 1.0
 		if UIDevice.current.userInterfaceIdiom == .pad && YPImagePickerConfiguration.widthOniPad > 0 {
 			screenWidth =  YPImagePickerConfiguration.widthOniPad
 		}
