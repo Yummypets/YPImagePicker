@@ -36,7 +36,7 @@ class YPAlbumsManager {
                 if album.numberOfItems > 0 {
                     let r = PHAsset.fetchKeyAssets(in: assetCollection, options: nil)
                     if let first = r?.firstObject {
-                        let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+                        let windowScene = UIApplication.safeFirstWindowScene
                         let deviceScale = windowScene?.screen.scale ?? 1.0
                         let targetSize = CGSize(width: 78 * deviceScale, height: 78 * deviceScale)
                         let options = PHImageRequestOptions()
