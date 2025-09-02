@@ -12,6 +12,8 @@
 		327D7B69240CEF2F00B9C368 /* UIBarButtonItem+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 327D7B68240CEF2F00B9C368 /* UIBarButtonItem+Extensions.swift */; };
 		4500082B3B62CA66D64563BC /* Pods_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8856E5E414FCD9DBEA165EA9 /* Pods_Example.framework */; };
 		8458057421819B95004F241C /* YPImagePickerLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 99C6D6991F1FB5C100711DB2 /* YPImagePickerLocalizable.strings */; };
+		96F0DF8C2E66E5D500E9CA2D /* UIApplication+ThreadSafe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F14AC72E66E49A0000F298 /* UIApplication+ThreadSafe.swift */; };
+		96F14AC92E66E49A0000F298 /* UIApplication+ThreadSafe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F14AC72E66E49A0000F298 /* UIApplication+ThreadSafe.swift */; };
 		99019E4C2018CCD6007325C2 /* YPBottomPagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99019E4B2018CCD6007325C2 /* YPBottomPagerView.swift */; };
 		99019E4E2018CD31007325C2 /* YPPagerMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99019E4D2018CD31007325C2 /* YPPagerMenu.swift */; };
 		99019E512018CDED007325C2 /* YPImageSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99019E502018CDED007325C2 /* YPImageSize.swift */; };
@@ -229,6 +231,7 @@
 		7222273C254C031100CAB087 /* fa */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fa; path = fa.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
 		78B58D3524C5DB5200B83153 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/YPImagePickerLocalizable.strings; sourceTree = "<group>"; };
 		8856E5E414FCD9DBEA165EA9 /* Pods_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		96F14AC72E66E49A0000F298 /* UIApplication+ThreadSafe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+ThreadSafe.swift"; sourceTree = "<group>"; };
 		99019E4B2018CCD6007325C2 /* YPBottomPagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPBottomPagerView.swift; sourceTree = "<group>"; };
 		99019E4D2018CD31007325C2 /* YPPagerMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPPagerMenu.swift; sourceTree = "<group>"; };
 		99019E502018CDED007325C2 /* YPImageSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YPImageSize.swift; sourceTree = "<group>"; };
@@ -548,6 +551,7 @@
 				EB473E1A208E1B7400D16105 /* NSFileManager+Extensions.swift */,
 				990FD296201B4A5F002A39A1 /* PHCachingImageManager+Extensions.swift */,
 				990FD298201B67FE002A39A1 /* PHFetchResult+Extensions.swift */,
+				96F14AC72E66E49A0000F298 /* UIApplication+ThreadSafe.swift */,
 				327D7B68240CEF2F00B9C368 /* UIBarButtonItem+Extensions.swift */,
 				EB5B07C3209146F00099C1FA /* UIButton+Extensions.swift */,
 				99CF6D1A201B6A5C00487F77 /* UICollectionView+Extensions.swift */,
@@ -933,6 +937,7 @@
 				99C6D6CF1F1FB5C100711DB2 /* YPPickerVC.swift in Sources */,
 				EBA37BBE26F74CE0005DAAD4 /* YPFilterCollectionViewCell.swift in Sources */,
 				EB94F28E208E3A140049F523 /* YPLoaders.swift in Sources */,
+				96F14AC92E66E49A0000F298 /* UIApplication+ThreadSafe.swift in Sources */,
 				99CF6D29201B900400487F77 /* LibraryMediaManager.swift in Sources */,
 				99CD962720D179FD009F5084 /* YPSelectionsGalleryView.swift in Sources */,
 				99C6D6BE1F1FB5C100711DB2 /* YPLibraryViewCell.swift in Sources */,
@@ -956,6 +961,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				96F0DF8C2E66E5D500E9CA2D /* UIApplication+ThreadSafe.swift in Sources */,
 				EBA37BBB26F74CE0005DAAD4 /* YPPhotoFiltersVC.swift in Sources */,
 				EBA37B8F26F74CBA005DAAD4 /* AVFileType+Extensions.swift in Sources */,
 				EBA37B7026F74CBA005DAAD4 /* YPError.swift in Sources */,
