@@ -52,7 +52,16 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         registerForLibraryChanges()
         panGestureHelper.registerForPanGesture(on: v)
         registerForTapOnPreview()
-        refreshMediaRequest()
+        refreshMediaRequest { [weak self] in
+            guard let self else { return }
+            guard mediaManager.hasResultItems else {
+                return
+            }
+
+            if YPConfig.library.defaultMultipleSelection || selectedItems.count > 1 {
+                toggleMultipleSelection()
+            }
+        }
 
         v.assetViewContainer.multipleSelectionButton.isHidden = !(YPConfig.library.maxNumberOfItems > 1)
         v.maxNumberWarningLabel.text = String(format: YPConfig.wordings.warningMaxItemsLimit,
@@ -78,14 +87,6 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
             v.assetViewContainer.setMultipleSelectionMode(on: isMultipleSelectionEnabled)
             v.collectionView.reloadData()
         }
-
-        guard mediaManager.hasResultItems else {
-            return
-        }
-
-        if YPConfig.library.defaultMultipleSelection || selectedItems.count > 1 {
-            toggleMultipleSelection()
-        }
     }
 
     func setAlbum(_ album: YPAlbum) {
@@ -95,7 +96,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         if !isMultipleSelectionEnabled {
             selectedItems.removeAll()
         }
-        refreshMediaRequest()
+        refreshMediaRequest {}
     }
 
     // MARK: - View Lifecycle
@@ -225,7 +226,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         }
     }
     
-    private func refreshMediaRequest() {
+    private func refreshMediaRequest(completion: @escaping (() -> Void)) {
         
         // calls to fetchAssets can take a while for large libraries and we don't want to block the main thread
         DispatchQueue.global().async {
@@ -239,6 +240,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
             
             DispatchQueue.main.async {
                 self.refreshMediaRequestAfterFetch()
+                completion()
             }
         }
     }
