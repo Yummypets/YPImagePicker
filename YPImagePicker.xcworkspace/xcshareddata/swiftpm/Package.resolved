@@ -1,4 +1,5 @@
 {
+  "originHash" : "5893ad229e65ee9df1b5f5ec326334c0377a99a8a84b3bd7d08f981451d962de",
   "pins" : [
     {
       "identity" : "prynttrimmerview",
@@ -14,10 +15,10 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/freshOS/Stevia",
       "state" : {
-        "revision" : "cfb1a1d2159277bb553c3dc46f3f742c0275566d",
-        "version" : "5.1.2"
+        "revision" : "a925d9b0087536c4ece110109c7815c988516135",
+        "version" : "6.2.0"
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }

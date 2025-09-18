@@ -3,7 +3,7 @@ use_frameworks!
 
 target 'Example' do
 
-  pod 'SteviaLayout', '= 5.1.2'
+  pod 'SteviaLayout', :git => 'https://github.com/freshOS/Stevia.git', :tag => '6.2.0'
   pod 'PryntTrimmerView', '= 4.0.2'
 
 end
