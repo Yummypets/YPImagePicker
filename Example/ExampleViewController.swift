@@ -29,7 +29,12 @@ class ExampleViewController: UIViewController {
                                             width: 100,
                                             height: 100))
         button.setTitle("Pick", for: .normal)
-        button.setTitleColor(.black, for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
+        button.setBackgroundColor(.orange, forState: .normal)
+        button.setBackgroundColor(.orange.withAlphaComponent(0.3), forState: .highlighted)
+        button.layer.cornerRadius = 10
+        button.layer.masksToBounds = true
         button.addTarget(self, action: #selector(showPicker), for: .touchUpInside)
         return button
     }()
@@ -41,7 +46,13 @@ class ExampleViewController: UIViewController {
                                             height: 100))
         button.setTitle("Show selected", for: .normal)
         button.setTitleColor(.black, for: .normal)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
+        button.setBackgroundColor(.systemBrown, forState: .normal)
+        button.setBackgroundColor(.systemBrown.withAlphaComponent(0.3), forState: .highlighted)
+        button.layer.cornerRadius = 20
+        button.layer.masksToBounds = true
         button.addTarget(self, action: #selector(showResults), for: .touchUpInside)
+        button.isHidden = true
         return button
     }()
 
@@ -212,6 +223,7 @@ class ExampleViewController: UIViewController {
             _ = items.map { print("🧀 \($0)") }
 
             self.selectedItems = items
+            self.resultsButton.isHidden = items.isEmpty
             if let firstItem = items.first {
                 switch firstItem {
                 case .photo(let photo):

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24127" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24063"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -16,25 +16,25 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Launching YPImagePickerExample.." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nGt-qI-SwA">
-                                <rect key="frame" x="56.5" y="264" width="301.5" height="21.5"/>
-                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
-                                <color key="textColor" red="0.96862745100000003" green="0.79215686269999996" blue="0.2470588235" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Launching  YPImagePickerExample" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nGt-qI-SwA">
+                                <rect key="frame" x="101" y="226" width="212.5" height="43"/>
+                                <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="18"/>
+                                <color key="textColor" red="0.67058825489999996" green="0.21568629149999999" blue="0.58039218189999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Launch_image" translatesAutoresizingMaskIntoConstraints="NO" id="6me-FB-95E">
-                                <rect key="frame" x="50" y="344.5" width="314" height="315.5"/>
+                                <rect key="frame" x="50" y="328" width="314" height="315.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="6me-FB-95E" secondAttribute="height" multiplier="215:216" id="1sY-JY-qZH"/>
                                 </constraints>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="6me-FB-95E" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="7px-1y-xNw"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="6me-FB-95E" secondAttribute="trailing" constant="50" id="eQ0-by-PNt"/>
-                            <constraint firstItem="nGt-qI-SwA" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="220" id="oMG-cB-XNA"/>
+                            <constraint firstItem="nGt-qI-SwA" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="130" id="oMG-cB-XNA"/>
                             <constraint firstItem="nGt-qI-SwA" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="oys-pV-fAv"/>
                             <constraint firstItem="6me-FB-95E" firstAttribute="top" secondItem="nGt-qI-SwA" secondAttribute="bottom" constant="59" id="rJf-gH-gRJ"/>
                         </constraints>
