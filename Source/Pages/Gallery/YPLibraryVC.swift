@@ -86,6 +86,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
             }
             v.assetViewContainer.setMultipleSelectionMode(on: isMultipleSelectionEnabled)
             v.collectionView.reloadData()
+            self.delegate?.updateCount()
         }
     }
 
@@ -95,6 +96,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         currentlySelectedIndex = 0
         if !isMultipleSelectionEnabled {
             selectedItems.removeAll()
+            delegate?.updateCount()
         }
         refreshMediaRequest {}
     }
@@ -128,14 +130,14 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                        action: #selector(multipleSelectionButtonTapped),
                        for: .touchUpInside)
         
-        // Forces assetZoomableView to have a contentSize.
-        // otherwise 0 in first selection triggering the bug : "invalid image size 0x0"
-        // Also fits the first element to the square if the onlySquareFromLibrary = true
+//         Forces assetZoomableView to have a contentSize.
+//         otherwise 0 in first selection triggering the bug : "invalid image size 0x0"
+//         Also fits the first element to the square if the onlySquareFromLibrary = true
         if !YPConfig.library.onlySquare && v.assetZoomableView.contentSize == CGSize(width: 0, height: 0) {
             v.assetZoomableView.setZoomScale(1, animated: false)
         }
         
-        // Activate multiple selection when using `minNumberOfItems`
+//         Activate multiple selection when using `minNumberOfItems`
         if YPConfig.library.minNumberOfItems > 1 {
             multipleSelectionButtonTapped()
         }
@@ -171,6 +173,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         doAfterLibraryPermissionCheck { [weak self] in
             if self?.isMultipleSelectionEnabled == false {
                 self?.selectedItems.removeAll()
+                self?.delegate?.updateCount()
             }
             self?.toggleMultipleSelection()
         }
@@ -201,11 +204,13 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
             }
         } else {
             selectedItems.removeAll()
+            self.delegate?.updateCount()
             addToSelection(indexPath: IndexPath(row: currentlySelectedIndex, section: 0))
         }
         
         v.assetViewContainer.setMultipleSelectionMode(on: isMultipleSelectionEnabled)
         v.collectionView.reloadData()
+        self.delegate?.updateCount()
         checkLimit()
         delegate?.libraryViewDidToggleMultipleSelection(enabled: isMultipleSelectionEnabled)
     }
@@ -250,6 +255,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         let firstAsset = mediaManager.getAsset(at: 0) {
             changeAsset(firstAsset)
             v.collectionView.reloadData()
+            self.delegate?.updateCount()
             v.collectionView.selectItem(at: IndexPath(row: 0, section: 0),
                                         animated: false,
                                         scrollPosition: UICollectionView.ScrollPosition())
@@ -374,6 +380,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         // Replace
         selectedItems.remove(at: selectedAssetIndex)
         selectedItems.insert(selectedAsset, at: selectedAssetIndex)
+        self.delegate?.updateCount()
     }
     
     internal func fetchStoredCrop() -> YPLibrarySelection? {
