@@ -86,8 +86,16 @@ open class YPImagePicker: UINavigationController {
             
             // Multiple items flow
             if items.count > 1 {
-                self?.didSelect(items: items)
-                return
+                if YPConfig.library.skipSelectionsGallery {
+                    self?.didSelect(items: items)
+                    return
+                } else {
+                    let selectionsGalleryVC = YPSelectionsGalleryVC(items: items) { _, items in
+                        self?.didSelect(items: items)
+                    }
+                    self?.pushViewController(selectionsGalleryVC, animated: true)
+                    return
+                }
             }
             
             // One item flow

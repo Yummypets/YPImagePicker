@@ -178,14 +178,14 @@ internal final class YPLibraryView: UIView {
         collectionContainerView.fillContainer()
         collectionView.fillHorizontally().bottom(0)
 
-        assetViewContainer.Bottom == line.Top - 20
+        assetViewContainer.Bottom == line.Top
         line.height(1)
         line.fillHorizontally()
 
-        assetViewContainer.top(20).fillHorizontally().heightEqualsWidth()
+        assetViewContainer.top(0).fillHorizontally().heightEqualsWidth()
         self.assetViewContainerConstraintTop = assetViewContainer.topConstraint
         assetZoomableView.fillContainer().heightEqualsWidth()
-        assetZoomableView.Bottom == collectionView.Top - 20
+        assetZoomableView.Bottom == collectionView.Top
         assetViewContainer.sendSubviewToBack(assetZoomableView)
 
         progressView.height(5).fillHorizontally()

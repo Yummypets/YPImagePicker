@@ -74,7 +74,6 @@ extension YPLibraryVC {
             // Refresh the numbers
             let selectedIndexPaths = getSelectedIndexPaths(selectedItems: selectedItems)
             v.collectionView.reloadItems(at: selectedIndexPaths)
-            self.delegate?.updateCount()
 			
             // Replace the current selected image with the previously selected one
             if let previouslySelectedIndexPath = selectedIndexPaths.last {
@@ -101,7 +100,6 @@ extension YPLibraryVC {
 
         let newSelection = YPLibrarySelection(index: indexPath.row, assetIdentifier: asset.localIdentifier)
         selectedItems.append(newSelection)
-        self.delegate?.updateCount()
         checkLimit()
     }
     
@@ -135,6 +133,8 @@ extension YPLibraryVC: UICollectionViewDelegate {
         }
 
         cell.representedAssetIdentifier = asset.localIdentifier
+        cell.multipleSelectionIndicator.selectionColor =
+            YPConfig.colors.multipleItemsSelectedCircleColor ?? YPConfig.colors.tintColor
         mediaManager.imageManager?.requestImage(for: asset,
                                    targetSize: v.cellSize(),
                                    contentMode: .aspectFill,
@@ -199,14 +199,12 @@ extension YPLibraryVC: UICollectionViewDelegate {
                 addToSelection(indexPath: indexPath)
                 changeAsset(mediaManager.getAsset(at: indexPath.row))
             }
-            self.delegate?.updateCount()
             collectionView.reloadItems(at: [indexPath])
             collectionView.reloadItems(at: [previouslySelectedIndexPath])
         } else {
             changeAsset(mediaManager.getAsset(at: indexPath.row))
             selectedItems.removeAll()
             addToSelection(indexPath: indexPath)
-            self.delegate?.updateCount()
             
             // Force deseletion of previously selected cell.
             // In the case where the previous cell was loaded from iCloud, a new image was fetched

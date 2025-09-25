@@ -41,7 +41,6 @@ public struct YPWordings {
     public var filter = ypLocalized("YPImagePickerFilter")
     public var crop = ypLocalized("YPImagePickerCrop")
     public var warningMaxItemsLimit = ypLocalized("YPImagePickerWarningItemsLimit")
-    public var deselectAll = ypLocalized("Deselect All")
 }
 
 public enum YPImagePickerStep {
@@ -49,7 +48,6 @@ public enum YPImagePickerStep {
     case multipleGallary
     case filter
     case crop
-    case deselectAll
 }
 
 extension YPWordings {
@@ -69,8 +67,6 @@ extension YPWordings {
             else { return wordings.next }
         case .crop:
             return wordings.done
-        case .deselectAll:
-            return wordings.deselectAll
         }
     }
 }
