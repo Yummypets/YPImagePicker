@@ -13,7 +13,6 @@ class YPMultipleSelectionIndicator: UIView {
     
     let circle = UIView()
     let label = UILabel()
-    var selectionColor = UIColor.ypSystemBlue
 
     convenience init() {
         self.init(frame: .zero)
@@ -40,7 +39,7 @@ class YPMultipleSelectionIndicator: UIView {
     func set(number: Int?) {
         label.isHidden = (number == nil)
         if let number = number {
-            circle.backgroundColor = selectionColor
+            circle.backgroundColor =  UIColor(named: "AppThemeBlue")
             circle.layer.borderColor = UIColor.clear.cgColor
             circle.layer.borderWidth = 0
             label.text = "\(number)"

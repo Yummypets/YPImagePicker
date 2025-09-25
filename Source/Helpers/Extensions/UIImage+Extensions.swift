@@ -115,4 +115,17 @@ internal extension UIImage {
     func toCIImage() -> CIImage? {
         return self.ciImage ?? CIImage(cgImage: self.cgImage!)
     }
+    func withInsets(_ insets: UIEdgeInsets, color: UIColor = .clear) -> UIImage? {
+            let size = CGSize(
+                width: 24 + insets.left + insets.right,
+                height: 17 + insets.top + insets.bottom
+            )
+            UIGraphicsBeginImageContextWithOptions(size, false, self.scale)
+            color.setFill()
+            UIRectFill(CGRect(origin: .zero, size: size))
+            self.draw(at: CGPoint(x: insets.left, y: insets.top))
+            let newImage = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            return newImage
+        }
 }

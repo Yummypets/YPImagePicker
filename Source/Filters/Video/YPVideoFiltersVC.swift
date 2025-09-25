@@ -98,8 +98,6 @@ public final class YPVideoFiltersVC: UIViewController, IsMediaFilterVC {
         // Set initial video cover
         imageGenerator = AVAssetImageGenerator(asset: self.inputAsset)
         imageGenerator?.appliesPreferredTrackTransform = true
-        imageGenerator?.requestedTimeToleranceAfter = CMTime.zero
-        imageGenerator?.requestedTimeToleranceBefore = CMTime.zero
         didChangeThumbPosition(CMTime(seconds: 1, preferredTimescale: 1))
     }
 
