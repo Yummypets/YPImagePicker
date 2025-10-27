@@ -20,6 +20,7 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     let albumsManager = YPAlbumsManager()
     var shouldHideStatusBar = false
     var initialStatusBarHidden = false
+    var isLoading = false
     weak var pickerVCDelegate: YPPickerVCDelegate?
     
     override open var prefersStatusBarHidden: Bool {
@@ -210,6 +211,7 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         nextBtn.layer.cornerRadius = 23
         nextBtn.clipsToBounds = true
         nextBtn.addTarget(self, action: #selector(done), for: .touchUpInside)
+        nextBtn.isEnabled = !isLoading
         view.addSubview(nextBtn)
         nextBtn.translatesAutoresizingMaskIntoConstraints = false
         
@@ -273,6 +275,7 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
             
             let button = UIButton()
             button.addTarget(self, action: #selector(navBarTapped), for: .touchUpInside)
+            button.isEnabled = !isLoading
             button.setBackgroundColor(UIColor.white.withAlphaComponent(0.5), forState: .highlighted)
             
             titleView.subviews(
@@ -411,6 +414,7 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
 
         // Add action
         button.addTarget(self, action: #selector(deselectAll), for: .touchUpInside)
+        button.isEnabled = !isLoading
         return button
     }
     
@@ -428,15 +432,18 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     func done() {
         guard let libraryVC = libraryVC else { ypLog("YPLibraryVC deallocated"); return }
         
-        if mode == .library {
-            libraryVC.selectedMedia(photoCallback: { photo in
-                self.didSelectItems?([YPMediaItem.photo(p: photo)])
-            }, videoCallback: { video in
-                self.didSelectItems?([YPMediaItem
-                                        .video(v: video)])
-            }, multipleItemsCallback: { items in
-                self.didSelectItems?(items)
-            })
+        isLoading = true
+        if libraryVC.selectedItems.count > 0 {
+            if mode == .library {
+                libraryVC.selectedMedia(photoCallback: { photo in
+                    self.didSelectItems?([YPMediaItem.photo(p: photo)])
+                }, videoCallback: { video in
+                    self.didSelectItems?([YPMediaItem
+                        .video(v: video)])
+                }, multipleItemsCallback: { items in
+                    self.didSelectItems?(items)
+                })
+            }
         }
     }
     
@@ -444,9 +451,13 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     @objc
     func deselectAll() {
         libraryVC?.selectedItems.removeAll()
+        libraryVC?.selectedImages.removeAll()
+        libraryVC?.selectedVideos.removeAll()
         updateUI()
         libraryVC?.v.collectionView.reloadData()
         libraryVC?.checkLimit()
+        libraryVC?.checkImageLimit()
+        libraryVC?.checkVideoLimit()
     }
     
     func stopAll() {

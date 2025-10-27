@@ -10,6 +10,8 @@ import UIKit
 
 extension YPLibraryVC {
     var isLimitExceeded: Bool { return selectedItems.count >= YPConfig.library.maxNumberOfItems }
+    var isImageLimitExceeded: Bool { return selectedImages.count >= YPConfig.library.maxNumberOfImages }
+    var isVideoLimitExceeded: Bool { return selectedVideos.count >= YPConfig.library.maxNumberOfVideos }
     
     func setupCollectionView() {
         v.collectionView.dataSource = self
@@ -66,6 +68,18 @@ extension YPLibraryVC {
     
     /// Removes cell from selection
     func deselect(indexPath: IndexPath) {
+        if let positionIndex = selectedImages.firstIndex(where: {
+            $0 == mediaManager.getAsset(at: indexPath.row)
+        }) {
+            selectedImages.remove(at: positionIndex)
+        }
+        
+        if let positionIndex = selectedVideos.firstIndex(where: {
+            $0 == mediaManager.getAsset(at: indexPath.row)
+        }) {
+            selectedVideos.remove(at: positionIndex)
+        }
+        
         if let positionIndex = selectedItems.firstIndex(where: {
             $0.assetIdentifier == mediaManager.getAsset(at: indexPath.row)?.localIdentifier
 		}) {
@@ -85,6 +99,8 @@ extension YPLibraryVC {
             }
 			
             checkLimit()
+            checkImageLimit()
+            checkVideoLimit()
         }
     }
     
@@ -100,9 +116,17 @@ extension YPLibraryVC {
         }
 
         let newSelection = YPLibrarySelection(index: indexPath.row, assetIdentifier: asset.localIdentifier)
+        
+        if asset.mediaType == .video && !isVideoLimitExceeded {
+            selectedVideos.append(asset)
+        } else if asset.mediaType == .image && !isImageLimitExceeded {
+            selectedImages.append(asset)
+        }
         selectedItems.append(newSelection)
         self.delegate?.updateCount()
         checkLimit()
+        checkImageLimit()
+        checkVideoLimit()
     }
     
     func isInSelectionPool(indexPath: IndexPath) -> Bool {
@@ -114,6 +138,14 @@ extension YPLibraryVC {
     /// Checks if there can be selected more items. If no - present warning.
     func checkLimit() {
         v.maxNumberWarningView.isHidden = !isLimitExceeded || isMultipleSelectionEnabled == false
+    }
+    
+    func checkImageLimit() {
+        v.maxImageNumberWarningView.isHidden = !isImageLimitExceeded || isMultipleSelectionEnabled == false
+    }
+    
+    func checkVideoLimit() {
+        v.maxVideoNumberWarningView.isHidden = !isVideoLimitExceeded || isMultipleSelectionEnabled == false
     }
 }
 
@@ -205,6 +237,8 @@ extension YPLibraryVC: UICollectionViewDelegate {
         } else {
             changeAsset(mediaManager.getAsset(at: indexPath.row))
             selectedItems.removeAll()
+            selectedImages.removeAll()
+            selectedVideos.removeAll()
             addToSelection(indexPath: indexPath)
             self.delegate?.updateCount()
             

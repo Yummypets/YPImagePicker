@@ -69,6 +69,8 @@ extension YPLibraryVC: PHPhotoLibraryChangeObserver {
            self.mediaManager.hasResultItems == false {
             self.v.assetZoomableView.clearAsset()
             self.selectedItems.removeAll()
+            self.selectedImages.removeAll()
+            self.selectedVideos.removeAll()
             self.delegate?.updateCount()
             self.delegate?.libraryViewFinishedLoading()
         }

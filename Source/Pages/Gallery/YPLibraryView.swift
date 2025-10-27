@@ -43,7 +43,29 @@ internal final class YPLibraryView: UIView {
         v.isHidden = true
         return v
     }()
+    internal let maxImageNumberWarningView: UIView = {
+        let v = UIView()
+        v.backgroundColor = .ypSecondarySystemBackground
+        v.isHidden = true
+        return v
+    }()
+    internal let maxVideoNumberWarningView: UIView = {
+        let v = UIView()
+        v.backgroundColor = .ypSecondarySystemBackground
+        v.isHidden = true
+        return v
+    }()
     internal let maxNumberWarningLabel: UILabel = {
+        let v = UILabel()
+        v.font = YPConfig.fonts.libaryWarningFont
+        return v
+    }()
+    internal let maxImageNumberWarningLabel: UILabel = {
+        let v = UILabel()
+        v.font = YPConfig.fonts.libaryWarningFont
+        return v
+    }()
+    internal let maxVideoNumberWarningLabel: UILabel = {
         let v = UILabel()
         v.font = YPConfig.fonts.libaryWarningFont
         return v
@@ -170,6 +192,12 @@ internal final class YPLibraryView: UIView {
                 assetZoomableView
             ),
             progressView,
+            maxImageNumberWarningView.subviews(
+                maxImageNumberWarningLabel
+            ),
+            maxVideoNumberWarningView.subviews(
+                maxVideoNumberWarningLabel
+            ),
             maxNumberWarningView.subviews(
                 maxNumberWarningLabel
             )
@@ -178,14 +206,14 @@ internal final class YPLibraryView: UIView {
         collectionContainerView.fillContainer()
         collectionView.fillHorizontally().bottom(0)
 
-        assetViewContainer.Bottom == line.Top - 20
+        assetViewContainer.Bottom == line.Top
         line.height(1)
         line.fillHorizontally()
 
-        assetViewContainer.top(20).fillHorizontally().heightEqualsWidth()
+        assetViewContainer.top(0).fillHorizontally().heightEqualsWidth()
         self.assetViewContainerConstraintTop = assetViewContainer.topConstraint
         assetZoomableView.fillContainer().heightEqualsWidth()
-        assetZoomableView.Bottom == collectionView.Top - 20
+        assetZoomableView.Bottom == collectionView.Top
         assetViewContainer.sendSubviewToBack(assetZoomableView)
 
         progressView.height(5).fillHorizontally()
@@ -193,6 +221,12 @@ internal final class YPLibraryView: UIView {
 
         |maxNumberWarningView|.bottom(0)
         maxNumberWarningView.Top == safeAreaLayoutGuide.Bottom - 40
+        |maxImageNumberWarningView|.bottom(0)
+        maxImageNumberWarningView.Top == safeAreaLayoutGuide.Bottom - 40
+        |maxVideoNumberWarningView|.bottom(0)
+        maxVideoNumberWarningView.Top == safeAreaLayoutGuide.Bottom - 40
         maxNumberWarningLabel.centerHorizontally().top(11)
+        maxImageNumberWarningLabel.centerHorizontally().top(11)
+        maxVideoNumberWarningLabel.centerHorizontally().top(11)
     }
 }
