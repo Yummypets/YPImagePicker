@@ -119,10 +119,12 @@ extension YPLibraryVC {
         
         if asset.mediaType == .video && !isVideoLimitExceeded {
             selectedVideos.append(asset)
+            selectedItems.append(newSelection)
         } else if asset.mediaType == .image && !isImageLimitExceeded {
             selectedImages.append(asset)
+            selectedItems.append(newSelection)
         }
-        selectedItems.append(newSelection)
+        
         self.delegate?.updateCount()
         checkLimit()
         checkImageLimit()
