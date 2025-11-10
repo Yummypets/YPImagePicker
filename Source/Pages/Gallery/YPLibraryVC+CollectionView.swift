@@ -10,8 +10,6 @@ import UIKit
 
 extension YPLibraryVC {
     var isLimitExceeded: Bool { return selectedItems.count >= YPConfig.library.maxNumberOfItems }
-    var isImageLimitExceeded: Bool { return selectedImages.count >= YPConfig.library.maxNumberOfImages }
-    var isVideoLimitExceeded: Bool { return selectedVideos.count >= YPConfig.library.maxNumberOfVideos }
     
     func setupCollectionView() {
         v.collectionView.dataSource = self
@@ -82,14 +80,14 @@ extension YPLibraryVC {
         
         if let positionIndex = selectedItems.firstIndex(where: {
             $0.assetIdentifier == mediaManager.getAsset(at: indexPath.row)?.localIdentifier
-		}) {
+        }) {
             selectedItems.remove(at: positionIndex)
 
             // Refresh the numbers
             let selectedIndexPaths = getSelectedIndexPaths(selectedItems: selectedItems)
             v.collectionView.reloadItems(at: selectedIndexPaths)
             self.delegate?.updateCount()
-			
+            
             // Replace the current selected image with the previously selected one
             if let previouslySelectedIndexPath = selectedIndexPaths.last {
                 v.collectionView.deselectItem(at: indexPath, animated: false)
@@ -97,10 +95,8 @@ extension YPLibraryVC {
                 currentlySelectedIndex = previouslySelectedIndexPath.row
                 changeAsset(mediaManager.getAsset(at: previouslySelectedIndexPath.row))
             }
-			
+            
             checkLimit()
-            checkImageLimit()
-            checkVideoLimit()
         }
     }
     
@@ -117,37 +113,24 @@ extension YPLibraryVC {
 
         let newSelection = YPLibrarySelection(index: indexPath.row, assetIdentifier: asset.localIdentifier)
         
-        if asset.mediaType == .video && !isVideoLimitExceeded {
+        if !isLimitExceeded {
             selectedVideos.append(asset)
-            selectedItems.append(newSelection)
-        } else if asset.mediaType == .image && !isImageLimitExceeded {
-            selectedImages.append(asset)
             selectedItems.append(newSelection)
         }
         
         self.delegate?.updateCount()
         checkLimit()
-        checkImageLimit()
-        checkVideoLimit()
     }
     
     func isInSelectionPool(indexPath: IndexPath) -> Bool {
         return selectedItems.contains(where: {
             $0.assetIdentifier == mediaManager.getAsset(at: indexPath.row)?.localIdentifier
-		})
+        })
     }
     
     /// Checks if there can be selected more items. If no - present warning.
     func checkLimit() {
         v.maxNumberWarningView.isHidden = !isLimitExceeded || isMultipleSelectionEnabled == false
-    }
-    
-    func checkImageLimit() {
-        v.maxImageNumberWarningView.isHidden = !isImageLimitExceeded || isMultipleSelectionEnabled == false
-    }
-    
-    func checkVideoLimit() {
-        v.maxVideoNumberWarningView.isHidden = !isVideoLimitExceeded || isMultipleSelectionEnabled == false
     }
 }
 
@@ -273,14 +256,14 @@ extension YPLibraryVC: UICollectionViewDelegateFlowLayout {
     }
 
     public func collectionView(_ collectionView: UICollectionView,
-							   layout collectionViewLayout: UICollectionViewLayout,
-							   minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+                               layout collectionViewLayout: UICollectionViewLayout,
+                               minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return YPConfig.library.spacingBetweenItems
     }
 
     public func collectionView(_ collectionView: UICollectionView,
-							   layout collectionViewLayout: UICollectionViewLayout,
-							   minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+                               layout collectionViewLayout: UICollectionViewLayout,
+                               minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return YPConfig.library.spacingBetweenItems
     }
 }

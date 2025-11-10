@@ -458,8 +458,6 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         updateUI()
         libraryVC?.v.collectionView.reloadData()
         libraryVC?.checkLimit()
-        libraryVC?.checkImageLimit()
-        libraryVC?.checkVideoLimit()
     }
     
     func stopAll() {

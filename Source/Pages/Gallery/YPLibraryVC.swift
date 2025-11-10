@@ -67,9 +67,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
 
         v.assetViewContainer.multipleSelectionButton.isHidden = !(YPConfig.library.maxNumberOfItems > 1)
         v.maxNumberWarningLabel.text = String(format: YPConfig.wordings.warningMaxItemsLimit,
-											  YPConfig.library.maxNumberOfItems)
-        v.maxImageNumberWarningLabel.text = YPConfig.wordings.warningMaxImagesLimit
-        v.maxVideoNumberWarningLabel.text = YPConfig.wordings.warningMaxVideosLimit
+                                              YPConfig.library.maxNumberOfItems)
                                        
         if let preselectedItems = YPConfig.library.preselectedItems,
            !preselectedItems.isEmpty {
@@ -222,8 +220,6 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         v.collectionView.reloadData()
         self.delegate?.updateCount()
         checkLimit()
-        checkImageLimit()
-        checkVideoLimit()
         delegate?.libraryViewDidToggleMultipleSelection(enabled: isMultipleSelectionEnabled)
     }
     
@@ -327,7 +323,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         let updateCropInfo = {
             self.updateCropInfo()
         }
-		
+        
         // MARK: add a func(updateCropInfo) after crop multiple
         DispatchQueue.global(qos: .userInitiated).async {
             switch asset.mediaType {
@@ -588,7 +584,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                     case .image:
                         self.fetchImageAndCrop(for: asset.asset, withCropRect: asset.cropRect) { image, exifMeta in
                             let photo = YPMediaPhoto(image: image.resizedImageIfNeeded(),
-													 exifMeta: exifMeta, asset: asset.asset)
+                                                     exifMeta: exifMeta, asset: asset.asset)
                             resultMediaItems.append(YPMediaItem.photo(p: photo))
                             asyncGroup.leave()
                         }
