@@ -24,10 +24,10 @@ public struct YPImagePickerConfiguration {
         
         let windowScene = UIApplication.safeFirstWindowScene
         screenWidth = windowScene?.screen.bounds.width ?? 1.0
-		if UIDevice.current.userInterfaceIdiom == .pad && YPImagePickerConfiguration.widthOniPad > 0 {
-			screenWidth =  YPImagePickerConfiguration.widthOniPad
-		}
-		return screenWidth
+        if UIDevice.current.userInterfaceIdiom == .pad && YPImagePickerConfiguration.widthOniPad > 0 {
+            screenWidth =  YPImagePickerConfiguration.widthOniPad
+        }
+        return screenWidth
     }
 
     /// If don't want to have logs from picker, set it to false.
@@ -157,7 +157,7 @@ public struct YPConfigLibrary {
     /// Sets the cropping style to square or not. Ignored if `onlySquare` is true. Defaults to true.
     public var isSquareByDefault = true
     
-	/// Minimum width, to prevent selectiong too high images. Have sense if onlySquare is true and the image is portrait.
+    /// Minimum width, to prevent selectiong too high images. Have sense if onlySquare is true and the image is portrait.
     public var minWidthForItem: CGFloat?
     
     /// Choose what media types are available in the library. Defaults to `.photo`.
@@ -178,10 +178,10 @@ public struct YPConfigLibrary {
     public var minNumberOfItems = 1
 
     /// Set the number of items per row in collection view. Defaults to 4.
-    public var numberOfItemsInRow: Int = 4
+    public var numberOfItemsInRow: Int = 3
 
     /// Set the spacing between items in collection view. Defaults to 1.0.
-    public var spacingBetweenItems: CGFloat = 1.0
+    public var spacingBetweenItems: CGFloat = 2.0
 
     /// Allow to skip the selections gallery when selecting the multiple media items. Defaults to false.
     public var skipSelectionsGallery = false

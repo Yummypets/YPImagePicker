@@ -66,15 +66,28 @@ extension YPLibraryVC {
     
     /// Removes cell from selection
     func deselect(indexPath: IndexPath) {
+        if let positionIndex = selectedImages.firstIndex(where: {
+            $0 == mediaManager.getAsset(at: indexPath.row)
+        }) {
+            selectedImages.remove(at: positionIndex)
+        }
+        
+        if let positionIndex = selectedVideos.firstIndex(where: {
+            $0 == mediaManager.getAsset(at: indexPath.row)
+        }) {
+            selectedVideos.remove(at: positionIndex)
+        }
+        
         if let positionIndex = selectedItems.firstIndex(where: {
             $0.assetIdentifier == mediaManager.getAsset(at: indexPath.row)?.localIdentifier
-		}) {
+        }) {
             selectedItems.remove(at: positionIndex)
 
             // Refresh the numbers
             let selectedIndexPaths = getSelectedIndexPaths(selectedItems: selectedItems)
             v.collectionView.reloadItems(at: selectedIndexPaths)
-			
+            self.delegate?.updateCount()
+            
             // Replace the current selected image with the previously selected one
             if let previouslySelectedIndexPath = selectedIndexPaths.last {
                 v.collectionView.deselectItem(at: indexPath, animated: false)
@@ -82,7 +95,7 @@ extension YPLibraryVC {
                 currentlySelectedIndex = previouslySelectedIndexPath.row
                 changeAsset(mediaManager.getAsset(at: previouslySelectedIndexPath.row))
             }
-			
+            
             checkLimit()
         }
     }
@@ -99,14 +112,20 @@ extension YPLibraryVC {
         }
 
         let newSelection = YPLibrarySelection(index: indexPath.row, assetIdentifier: asset.localIdentifier)
-        selectedItems.append(newSelection)
+        
+        if !isLimitExceeded {
+            selectedVideos.append(asset)
+            selectedItems.append(newSelection)
+        }
+        
+        self.delegate?.updateCount()
         checkLimit()
     }
     
     func isInSelectionPool(indexPath: IndexPath) -> Bool {
         return selectedItems.contains(where: {
             $0.assetIdentifier == mediaManager.getAsset(at: indexPath.row)?.localIdentifier
-		})
+        })
     }
     
     /// Checks if there can be selected more items. If no - present warning.
@@ -133,8 +152,6 @@ extension YPLibraryVC: UICollectionViewDelegate {
         }
 
         cell.representedAssetIdentifier = asset.localIdentifier
-        cell.multipleSelectionIndicator.selectionColor =
-            YPConfig.colors.multipleItemsSelectedCircleColor ?? YPConfig.colors.tintColor
         mediaManager.imageManager?.requestImage(for: asset,
                                    targetSize: v.cellSize(),
                                    contentMode: .aspectFill,
@@ -199,12 +216,16 @@ extension YPLibraryVC: UICollectionViewDelegate {
                 addToSelection(indexPath: indexPath)
                 changeAsset(mediaManager.getAsset(at: indexPath.row))
             }
+            self.delegate?.updateCount()
             collectionView.reloadItems(at: [indexPath])
             collectionView.reloadItems(at: [previouslySelectedIndexPath])
         } else {
             changeAsset(mediaManager.getAsset(at: indexPath.row))
             selectedItems.removeAll()
+            selectedImages.removeAll()
+            selectedVideos.removeAll()
             addToSelection(indexPath: indexPath)
+            self.delegate?.updateCount()
             
             // Force deseletion of previously selected cell.
             // In the case where the previous cell was loaded from iCloud, a new image was fetched
@@ -235,14 +256,14 @@ extension YPLibraryVC: UICollectionViewDelegateFlowLayout {
     }
 
     public func collectionView(_ collectionView: UICollectionView,
-							   layout collectionViewLayout: UICollectionViewLayout,
-							   minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+                               layout collectionViewLayout: UICollectionViewLayout,
+                               minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return YPConfig.library.spacingBetweenItems
     }
 
     public func collectionView(_ collectionView: UICollectionView,
-							   layout collectionViewLayout: UICollectionViewLayout,
-							   minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+                               layout collectionViewLayout: UICollectionViewLayout,
+                               minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return YPConfig.library.spacingBetweenItems
     }
 }

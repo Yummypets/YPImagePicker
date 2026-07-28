@@ -71,7 +71,6 @@ final class YPAssetZoomableView: UIScrollView {
                 strongSelf.photoImageView.removeFromSuperview()
                 strongSelf.addSubview(strongSelf.videoView)
             }
-            
             strongSelf.videoView.setPreviewImage(preview)
             
             strongSelf.setAssetFrame(for: strongSelf.videoView, with: preview)
@@ -122,11 +121,10 @@ final class YPAssetZoomableView: UIScrollView {
                 strongSelf.videoView.showPlayImage(show: false)
                 strongSelf.videoView.deallocate()
                 strongSelf.addSubview(strongSelf.photoImageView)
-            
+                
                 strongSelf.photoImageView.contentMode = .scaleAspectFill
                 strongSelf.photoImageView.clipsToBounds = true
             }
-            
             strongSelf.photoImageView.image = image
            
             strongSelf.setAssetFrame(for: strongSelf.photoImageView, with: image)
@@ -158,7 +156,7 @@ final class YPAssetZoomableView: UIScrollView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        backgroundColor = YPConfig.colors.assetViewBackgroundColor
+        backgroundColor = .white//YPConfig.colors.assetViewBackgroundColor
         clipsToBounds = true
         photoImageView.frame = CGRect(origin: CGPoint.zero, size: CGSize.zero)
         videoView.frame = CGRect(origin: CGPoint.zero, size: CGSize.zero)
@@ -193,7 +191,7 @@ fileprivate extension YPAssetZoomableView {
         self.zoomScale = 1
         
         // Calculating and setting the image view frame depending on screenWidth
-        let screenWidth = YPImagePickerConfiguration.screenWidth
+        let screenWidth = YPImagePickerConfiguration.screenWidth 
         
         let w = image.size.width
         let h = image.size.height

@@ -15,6 +15,8 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
     internal var v = YPLibraryView(frame: .zero)
     internal var isProcessing = false // true if video or image is in processing state
     internal var selectedItems = [YPLibrarySelection]()
+    internal var selectedImages = [PHAsset]()
+    internal var selectedVideos = [PHAsset]()
     internal let mediaManager = LibraryMediaManager()
     internal var isMultipleSelectionEnabled = false
     internal var currentlySelectedIndex: Int = 0
@@ -65,8 +67,8 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
 
         v.assetViewContainer.multipleSelectionButton.isHidden = !(YPConfig.library.maxNumberOfItems > 1)
         v.maxNumberWarningLabel.text = String(format: YPConfig.wordings.warningMaxItemsLimit,
-											  YPConfig.library.maxNumberOfItems)
-        
+                                              YPConfig.library.maxNumberOfItems)
+                                       
         if let preselectedItems = YPConfig.library.preselectedItems,
            !preselectedItems.isEmpty {
             selectedItems = preselectedItems.compactMap { item -> YPLibrarySelection? in
@@ -74,8 +76,10 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                 switch item {
                 case .photo(let photo):
                     itemAsset = photo.asset
+                    selectedImages.append(itemAsset ?? PHAsset())
                 case .video(let video):
                     itemAsset = video.asset
+                    selectedVideos.append(itemAsset ?? PHAsset())
                 }
                 guard let asset = itemAsset else {
                     return nil
@@ -86,6 +90,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
             }
             v.assetViewContainer.setMultipleSelectionMode(on: isMultipleSelectionEnabled)
             v.collectionView.reloadData()
+            self.delegate?.updateCount()
         }
     }
 
@@ -95,6 +100,9 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         currentlySelectedIndex = 0
         if !isMultipleSelectionEnabled {
             selectedItems.removeAll()
+            selectedImages.removeAll()
+            selectedVideos.removeAll()
+            delegate?.updateCount()
         }
         refreshMediaRequest {}
     }
@@ -128,14 +136,14 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                        action: #selector(multipleSelectionButtonTapped),
                        for: .touchUpInside)
         
-        // Forces assetZoomableView to have a contentSize.
-        // otherwise 0 in first selection triggering the bug : "invalid image size 0x0"
-        // Also fits the first element to the square if the onlySquareFromLibrary = true
+//         Forces assetZoomableView to have a contentSize.
+//         otherwise 0 in first selection triggering the bug : "invalid image size 0x0"
+//         Also fits the first element to the square if the onlySquareFromLibrary = true
         if !YPConfig.library.onlySquare && v.assetZoomableView.contentSize == CGSize(width: 0, height: 0) {
             v.assetZoomableView.setZoomScale(1, animated: false)
         }
         
-        // Activate multiple selection when using `minNumberOfItems`
+//         Activate multiple selection when using `minNumberOfItems`
         if YPConfig.library.minNumberOfItems > 1 {
             multipleSelectionButtonTapped()
         }
@@ -171,6 +179,9 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         doAfterLibraryPermissionCheck { [weak self] in
             if self?.isMultipleSelectionEnabled == false {
                 self?.selectedItems.removeAll()
+                self?.selectedImages.removeAll()
+                self?.selectedVideos.removeAll()
+                self?.delegate?.updateCount()
             }
             self?.toggleMultipleSelection()
         }
@@ -201,11 +212,13 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
             }
         } else {
             selectedItems.removeAll()
+            self.delegate?.updateCount()
             addToSelection(indexPath: IndexPath(row: currentlySelectedIndex, section: 0))
         }
         
         v.assetViewContainer.setMultipleSelectionMode(on: isMultipleSelectionEnabled)
         v.collectionView.reloadData()
+        self.delegate?.updateCount()
         checkLimit()
         delegate?.libraryViewDidToggleMultipleSelection(enabled: isMultipleSelectionEnabled)
     }
@@ -250,6 +263,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         let firstAsset = mediaManager.getAsset(at: 0) {
             changeAsset(firstAsset)
             v.collectionView.reloadData()
+            self.delegate?.updateCount()
             v.collectionView.selectItem(at: IndexPath(row: 0, section: 0),
                                         animated: false,
                                         scrollPosition: UICollectionView.ScrollPosition())
@@ -309,7 +323,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         let updateCropInfo = {
             self.updateCropInfo()
         }
-		
+        
         // MARK: add a func(updateCropInfo) after crop multiple
         DispatchQueue.global(qos: .userInitiated).async {
             switch asset.mediaType {
@@ -354,6 +368,93 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         return true
     }
     
+    private func fitsSizeLimit(asset: PHAsset, maxSizeMB: Double = 10) -> Bool {
+        guard asset.mediaType == .video else {
+            return false
+        }
+
+        let maxBytes = maxSizeMB * 1024 * 1024 // 10 MB
+        let options = PHVideoRequestOptions()
+        options.version = .current
+
+        var isWithinLimit = true
+
+        let semaphore = DispatchSemaphore(value: 0)
+
+        PHImageManager.default().requestAVAsset(forVideo: asset, options: options) { avAsset, _, _ in
+            defer { semaphore.signal() }
+
+            guard let urlAsset = avAsset as? AVURLAsset else {
+                isWithinLimit = false
+                return
+            }
+
+            let videoURL = urlAsset.url
+
+            do {
+                let resourceValues = try videoURL.resourceValues(forKeys: [.fileSizeKey])
+                if let fileSize = resourceValues.fileSize {
+                    if Double(fileSize) > maxBytes {
+                        DispatchQueue.main.async {
+                            let alert = UIAlertController(
+                                title: "Video Too Large",
+                                message: "Please select a video smaller than \(Int(maxSizeMB)) MB.",
+                                preferredStyle: .alert
+                            )
+                            alert.addAction(UIAlertAction(title: "OK", style: .default))
+                            self.present(alert, animated: true)
+                        }
+                        isWithinLimit = false
+                    }
+                }
+            } catch {
+                print("Error getting video size:", error)
+                isWithinLimit = false
+            }
+        }
+
+        // Wait until the async request finishes
+        semaphore.wait()
+        return isWithinLimit
+    }
+
+    private func fitsImageSizeLimit(asset: PHAsset, maxSizeMB: Double = 5) -> Bool {
+        guard asset.mediaType == .image else {
+            return true
+        }
+
+        let maxBytes = maxSizeMB * 1024 * 1024
+        let options = PHImageRequestOptions()
+        options.version = .current
+        options.isSynchronous = true // So we can wait for result here
+        options.deliveryMode = .highQualityFormat
+
+        var isWithinLimit = true
+
+        PHImageManager.default().requestImageDataAndOrientation(for: asset, options: options) { data, _, _, _ in
+            guard let data = data else {
+                isWithinLimit = false
+                return
+            }
+
+            if data.count > Int(maxBytes) {
+                DispatchQueue.main.async {
+                    let alert = UIAlertController(
+                        title: "Image Too Large",
+                        message: "Please select an image smaller than \(Int(maxSizeMB)) MB.",
+                        preferredStyle: .alert
+                    )
+                    alert.addAction(UIAlertAction(title: "OK", style: .default))
+                    self.present(alert, animated: true)
+                }
+                isWithinLimit = false
+            }
+        }
+
+        return isWithinLimit
+    }
+
+    
     // MARK: - Stored Crop Position
     
     internal func updateCropInfo(shouldUpdateOnlyIfNil: Bool = false) {
@@ -374,6 +475,8 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
         // Replace
         selectedItems.remove(at: selectedAssetIndex)
         selectedItems.insert(selectedAsset, at: selectedAssetIndex)
+        
+        self.delegate?.updateCount()
     }
     
     internal func fetchStoredCrop() -> YPLibrarySelection? {
@@ -397,6 +500,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
     private func fetchImageAndCrop(for asset: PHAsset,
                                    withCropRect: CGRect? = nil,
                                    callback: @escaping (_ photo: UIImage, _ exif: [String: Any]) -> Void) {
+        
         delegate?.libraryViewDidTapNext()
         let cropRect = withCropRect ?? DispatchQueue.main.sync { v.currentCropRect() }
         let ts = targetSize(for: asset, cropRect: cropRect)
@@ -415,9 +519,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                                     width: ts.width,
                                     height: ts.height)
         
-        guard fitsVideoLengthLimits(asset: asset) else {
-            return
-        }
+        guard fitsSizeLimit(asset: asset, maxSizeMB: 10) else { return }
         
         if YPConfig.video.automaticTrimToTrimmerMaxDuration {
             fetchVideoAndCropWithDuration(for: asset,
@@ -461,8 +563,8 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                 
                 // Check video length
                 for asset in selectedAssets {
-                    if self.fitsVideoLengthLimits(asset: asset.asset) == false {
-                        return
+                    if asset.asset.mediaType == .video {
+                        if self.fitsSizeLimit(asset: asset.asset, maxSizeMB: 10) == false { return }
                     }
                 }
                 
@@ -482,7 +584,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                     case .image:
                         self.fetchImageAndCrop(for: asset.asset, withCropRect: asset.cropRect) { image, exifMeta in
                             let photo = YPMediaPhoto(image: image.resizedImageIfNeeded(),
-													 exifMeta: exifMeta, asset: asset.asset)
+                                                     exifMeta: exifMeta, asset: asset.asset)
                             resultMediaItems.append(YPMediaItem.photo(p: photo))
                             asyncGroup.leave()
                         }
@@ -547,6 +649,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                     return
                 case .video:
                     self.fetchVideoAndApplySettings(for: asset, callback: { videoURL in
+                        if self.fitsSizeLimit(asset: asset, maxSizeMB: 10) == false { return }
                         DispatchQueue.main.async {
                             if let videoURL = videoURL {
                                 self.delegate?.libraryViewFinishedLoading()

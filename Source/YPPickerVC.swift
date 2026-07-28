@@ -20,6 +20,7 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     let albumsManager = YPAlbumsManager()
     var shouldHideStatusBar = false
     var initialStatusBarHidden = false
+    var isLoading = false
     weak var pickerVCDelegate: YPPickerVCDelegate?
     
     override open var prefersStatusBarHidden: Bool {
@@ -121,6 +122,7 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         
         YPHelper.changeBackButtonIcon(self)
         YPHelper.changeBackButtonTitle(self)
+        setNextButton()
     }
     
     open override func viewWillAppear(_ animated: Bool) {
@@ -199,6 +201,28 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         ypLog("YPPickerVC deinited ✅")
     }
     
+    
+    func setNextButton() {
+        let nextBtn = UIButton()
+        nextBtn.backgroundColor = UIColor(named: "AppThemeBlue")
+        nextBtn.setTitle("Next", for: .normal)
+        nextBtn.setTitleColor(.white, for: .normal)
+        nextBtn.titleLabel?.font = YPConfig.fonts.nextButtonFont
+        nextBtn.layer.cornerRadius = 23
+        nextBtn.clipsToBounds = true
+        nextBtn.addTarget(self, action: #selector(done), for: .touchUpInside)
+        nextBtn.isEnabled = !isLoading
+        view.addSubview(nextBtn)
+        nextBtn.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            nextBtn.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            nextBtn.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -30),
+            nextBtn.widthAnchor.constraint(equalToConstant: 160),
+            nextBtn.heightAnchor.constraint(equalToConstant: 46),
+        ])
+    }
+    
     @objc
     func navBarTapped() {
         guard !(libraryVC?.isProcessing ?? false) else {
@@ -251,6 +275,7 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
             
             let button = UIButton()
             button.addTarget(self, action: #selector(navBarTapped), for: .touchUpInside)
+            button.isEnabled = !isLoading
             button.setBackgroundColor(UIColor.white.withAlphaComponent(0.5), forState: .highlighted)
             
             titleView.subviews(
@@ -271,8 +296,7 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     
     func updateUI() {
         if !YPConfig.hidesCancelButton {
-            // Update Nav Bar state.
-            navigationItem.leftBarButtonItem = UIBarButtonItem(title: YPConfig.wordings.cancel,
+            navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "ic_cancel"),
                                                                style: .plain,
                                                                target: self,
                                                                action: #selector(close))
@@ -280,17 +304,31 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         switch mode {
         case .library:
             setTitleViewWithTitle(aTitle: libraryVC?.title ?? "")
-            let title = YPWordings().computeNavigationRightButtonText(step: .pick)
-            navigationItem.rightBarButtonItem = UIBarButtonItem(title: title,
-                                                                style: .done,
-                                                                target: self,
-                                                                action: #selector(done))
-            navigationItem.rightBarButtonItem?.tintColor = YPConfig.colors.tintColor
+            let title = YPWordings().computeNavigationRightButtonText(step: .deselectAll)
+            let deselectBtn = UIBarButtonItem(title: title,
+                                              style: .plain,
+                                              target: self,
+                                              action: #selector(deselectAll))
+            
+            deselectBtn.setTitleTextAttributes([
+                .font: YPConfig.fonts.rightBarButtonFont,
+                .foregroundColor: UIColor.black,
+                .kern: -0.5
+            ], for: .normal)
 
-            // Disable Next Button until minNumberOfItems is reached.
-            navigationItem.rightBarButtonItem?.isEnabled =
-                libraryVC!.selectedItems.count >= YPConfig.library.minNumberOfItems
-
+            deselectBtn.setTitleTextAttributes([
+                .font: YPConfig.fonts.rightBarButtonFont,
+                .foregroundColor: UIColor.gray,
+                .kern: -0.5
+            ], for: .disabled)
+            deselectBtn.tintColor = .black
+            
+            if libraryVC!.selectedItems.count >= YPConfig.library.minNumberOfItems {
+                navigationItem.rightBarButtonItem = UIBarButtonItem(customView: setDeselectAllBtn())
+            } else {
+                navigationItem.rightBarButtonItem = nil
+            }
+            
         case .camera:
             navigationItem.titleView = nil
             title = cameraVC?.title
@@ -303,7 +341,83 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
 
         navigationItem.rightBarButtonItem?.setFont(font: YPConfig.fonts.rightBarButtonFont, forState: .normal)
         navigationItem.rightBarButtonItem?.setFont(font: YPConfig.fonts.rightBarButtonFont, forState: .disabled)
-        navigationItem.leftBarButtonItem?.setFont(font: YPConfig.fonts.leftBarButtonFont, forState: .normal)
+    }
+    
+    func setSelectMultipleView() -> UIView {
+        let containerView = UIView()
+        
+        // Create image view
+        let imageView = UIImageView(image: UIImage(named: "ic_select_multiple"))
+        imageView.backgroundColor = .white
+        imageView.contentMode = .scaleAspectFill
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.layer.shadowColor = UIColor.black.cgColor
+        imageView.layer.shadowOpacity = 0.1
+        imageView.layer.shadowOffset = CGSize(width: 2, height: 4)
+        imageView.layer.shadowRadius = 1.5
+        containerView.addSubview(imageView)
+        
+        // Create label
+        let label = UILabel()
+        label.font = YPConfig.fonts.selectMultipleLabelFont
+        
+        let text = "Select Multiple"
+        let attributedString = NSAttributedString(
+            string: text,
+            attributes: [
+                .kern: -0.5
+            ]
+        )
+        label.attributedText = attributedString
+        label.textColor = .black
+        label.translatesAutoresizingMaskIntoConstraints = false
+        containerView.addSubview(label)
+        
+        // Layout constraints
+        NSLayoutConstraint.activate([
+            imageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            imageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            imageView.widthAnchor.constraint(equalToConstant: 26),
+            imageView.heightAnchor.constraint(equalToConstant: 26),
+            
+            label.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 8),
+            label.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            label.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+        ])
+        
+        // Set container size
+        containerView.frame = CGRect(x: 0, y: 0, width: 120, height: 40)
+        
+        return containerView
+    }
+    
+    func setDeselectAllBtn() -> UIButton {
+        let button = UIButton(type: .system)
+
+        let title = NSAttributedString(
+            string: "Deselect All",
+            attributes: [
+                .font: YPConfig.fonts.rightBarButtonFont,
+                .foregroundColor: UIColor.black,
+                .kern: -0.5
+            ]
+        )
+        
+        // Use configuration
+        var config = UIButton.Configuration.plain()
+        config.attributedTitle = AttributedString(title)
+        config.image = UIImage(named: "ic_check_box")
+
+        // Adjust spacing between image and text
+        config.imagePadding = 6
+        config.imagePlacement = .leading
+
+        button.configuration = config
+
+        // Add action
+        button.addTarget(self, action: #selector(deselectAll), for: .touchUpInside)
+        button.isEnabled = !isLoading
+        return button
     }
     
     @objc
@@ -320,16 +434,30 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     func done() {
         guard let libraryVC = libraryVC else { ypLog("YPLibraryVC deallocated"); return }
         
-        if mode == .library {
-            libraryVC.selectedMedia(photoCallback: { photo in
-                self.didSelectItems?([YPMediaItem.photo(p: photo)])
-            }, videoCallback: { video in
-                self.didSelectItems?([YPMediaItem
-                                        .video(v: video)])
-            }, multipleItemsCallback: { items in
-                self.didSelectItems?(items)
-            })
+        isLoading = true
+        if libraryVC.selectedItems.count > 0 {
+            if mode == .library {
+                libraryVC.selectedMedia(photoCallback: { photo in
+                    self.didSelectItems?([YPMediaItem.photo(p: photo)])
+                }, videoCallback: { video in
+                    self.didSelectItems?([YPMediaItem
+                        .video(v: video)])
+                }, multipleItemsCallback: { items in
+                    self.didSelectItems?(items)
+                })
+            }
         }
+    }
+    
+    //When pressing deleselect all
+    @objc
+    func deselectAll() {
+        libraryVC?.selectedItems.removeAll()
+        libraryVC?.selectedImages.removeAll()
+        libraryVC?.selectedVideos.removeAll()
+        updateUI()
+        libraryVC?.v.collectionView.reloadData()
+        libraryVC?.checkLimit()
     }
     
     func stopAll() {
@@ -371,6 +499,10 @@ extension YPPickerVC: YPLibraryViewDelegate {
         let offset = v.header.frame.height + v.safeAreaInsets.bottom
         v.header.bottomConstraint?.constant = enabled ? offset : 0
         v.layoutIfNeeded()
+        updateUI()
+    }
+    
+    public func updateCount() {
         updateUI()
     }
     

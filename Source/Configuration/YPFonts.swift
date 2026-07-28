@@ -8,6 +8,15 @@
 
 import UIKit
 
+enum CustomFonts: String {
+    case karlaLight = "Karla-Light"
+    case karlaRegular = "Karla-Regular"
+    case karlaMedium = "Karla-Medium"
+    case karlaSemiBold = "Karla-SemiBold"
+    case karlaBold = "Karla-Bold"
+    case karlaExtraBold = "Karla-ExtraBold"
+}
+
 public struct YPFonts {
 
     /// The font used in the picker title
@@ -36,8 +45,14 @@ public struct YPFonts {
     public var navigationBarTitleFont: UIFont = .boldSystemFont(ofSize: 17)
 
     /// The font used in the UINavigationBar rightBarButtonItem
-    public var rightBarButtonFont: UIFont?
+    public var rightBarButtonFont: UIFont = .init(name: CustomFonts.karlaMedium.rawValue, size: 15) ?? .systemFont(ofSize: 14, weight: .medium)
 
     /// The font used in the UINavigationBar leftBarButtonItem
-    public var leftBarButtonFont: UIFont?
+    public var leftBarButtonFont: UIFont = .init(name: CustomFonts.karlaMedium.rawValue, size: 14) ?? .systemFont(ofSize: 14, weight: .medium)
+    
+    public var editButtonFont: UIFont = .init(name: CustomFonts.karlaMedium.rawValue, size: 17) ?? UIFont.systemFont(ofSize: 17, weight: .medium)
+    
+    public var selectMultipleLabelFont: UIFont = .init(name: CustomFonts.karlaMedium.rawValue, size: 14) ?? UIFont.systemFont(ofSize: 14, weight: .medium)
+    
+    public var nextButtonFont: UIFont = .init(name: CustomFonts.karlaMedium.rawValue, size: 24) ?? .systemFont(ofSize: 24, weight: .medium)
 }
