@@ -416,6 +416,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                                     height: ts.height)
         
         guard fitsVideoLengthLimits(asset: asset) else {
+            callback(nil)
             return
         }
         
@@ -505,7 +506,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                             asyncGroup.leave()
                         }
                     default:
-                        break
+                        asyncGroup.leave()
                     }
                 }
                 

@@ -95,7 +95,11 @@ class LibraryMediaManager {
         videosOptions.deliveryMode = .highQualityFormat
         imageManager?.requestAVAsset(forVideo: videoAsset, options: videosOptions) { asset, _, _ in
             do {
-                guard let asset = asset else { ypLog("Don't have the asset"); return }
+                guard let asset = asset else {
+                    ypLog("Don't have the asset")
+                    DispatchQueue.main.async { callback(nil) }
+                    return
+                }
                 
                 let assetComposition = AVMutableComposition()
                 let assetMaxDuration = self.getMaxVideoDuration(between: duration, andAssetDuration: asset.duration)
@@ -108,6 +112,7 @@ class LibraryMediaManager {
                         .addMutableTrack(withMediaType: .video,
                                          preferredTrackID: kCMPersistentTrackID_Invalid) else {
                     ypLog("Problems with video track")
+                    DispatchQueue.main.async { callback(nil) }
                     return
 
                 }
@@ -182,9 +187,12 @@ class LibraryMediaManager {
 
                 if let s = exportSession {
                     self.currentExportSessions.append(s)
+                } else {
+                    DispatchQueue.main.async { callback(nil) }
                 }
             } catch let error {
                 ypLog("Error: \(error)")
+                DispatchQueue.main.async { callback(nil) }
             }
         }
     }
