@@ -60,6 +60,7 @@ open class YPImagePicker: UINavigationController {
     // Multiple selection becomes available as an opt-in.
     private func didSelect(items: [YPMediaItem]) {
         _didFinishPicking?(items, false)
+        _didFinishPicking = nil // Avoid retaining the picker via a strongly-captured closure.
     }
     
     private let loadingView = YPLoadingView()
@@ -69,6 +70,7 @@ open class YPImagePicker: UINavigationController {
         super.viewDidLoad()
         picker.didClose = { [weak self] in
             self?._didFinishPicking?([], true)
+            self?._didFinishPicking = nil
         }
         viewControllers = [picker]
         setupLoadingView()
