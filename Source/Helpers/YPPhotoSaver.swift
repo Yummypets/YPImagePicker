@@ -10,26 +10,44 @@ import UIKit
 import Photos
 
 public class YPPhotoSaver {
-    class func trySaveImage(_ image: UIImage, inAlbumNamed: String) {
-        if PHPhotoLibrary.authorizationStatus() == .authorized {
-            if let album = album(named: inAlbumNamed) {
-                saveImage(image, toAlbum: album)
-            } else {
-                createAlbum(withName: inAlbumNamed) {
-                    if let album = album(named: inAlbumNamed) {
-                        saveImage(image, toAlbum: album)
-                    }
+    class func trySaveImage(_ image: UIImage,
+                            inAlbumNamed: String,
+                            completion: ((PHAsset?) -> Void)? = nil) {
+        guard PHPhotoLibrary.authorizationStatus() == .authorized else {
+            completion?(nil)
+            return
+        }
+        if let album = album(named: inAlbumNamed) {
+            saveImage(image, toAlbum: album, completion: completion)
+        } else {
+            createAlbum(withName: inAlbumNamed) {
+                if let album = album(named: inAlbumNamed) {
+                    saveImage(image, toAlbum: album, completion: completion)
+                } else {
+                    DispatchQueue.main.async { completion?(nil) }
                 }
             }
         }
     }
-    
-    fileprivate class func saveImage(_ image: UIImage, toAlbum album: PHAssetCollection) {
+
+    fileprivate class func saveImage(_ image: UIImage,
+                                     toAlbum album: PHAssetCollection,
+                                     completion: ((PHAsset?) -> Void)? = nil) {
+        var placeholder: PHObjectPlaceholder?
         PHPhotoLibrary.shared().performChanges({
             let changeRequest = PHAssetChangeRequest.creationRequestForAsset(from: image)
             let albumChangeRequest = PHAssetCollectionChangeRequest(for: album)
-            let enumeration: NSArray = [changeRequest.placeholderForCreatedAsset!]
-            albumChangeRequest?.addAssets(enumeration)
+            if let createdPlaceholder = changeRequest.placeholderForCreatedAsset {
+                placeholder = createdPlaceholder
+                albumChangeRequest?.addAssets([createdPlaceholder] as NSArray)
+            }
+        }, completionHandler: { success, _ in
+            guard success, let localIdentifier = placeholder?.localIdentifier else {
+                DispatchQueue.main.async { completion?(nil) }
+                return
+            }
+            let asset = PHAsset.fetchAssets(withLocalIdentifiers: [localIdentifier], options: nil).firstObject
+            DispatchQueue.main.async { completion?(asset) }
         })
     }
     

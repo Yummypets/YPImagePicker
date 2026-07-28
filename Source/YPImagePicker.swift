@@ -110,7 +110,14 @@ open class YPImagePicker: UINavigationController {
                     if YPConfig.shouldSaveNewPicturesToAlbum {
                         let isModified = photo.modifiedImage != nil
                         if photo.fromCamera || (!photo.fromCamera && isModified) {
-                            YPPhotoSaver.trySaveImage(photo.image, inAlbumNamed: YPConfig.albumName)
+                            YPPhotoSaver.trySaveImage(photo.image, inAlbumNamed: YPConfig.albumName) { asset in
+                                // Camera photos have no PHAsset yet; attach the one just saved.
+                                if photo.asset == nil {
+                                    photo.asset = asset
+                                }
+                                self?.didSelect(items: [mediaItem])
+                            }
+                            return
                         }
                     }
                     self?.didSelect(items: [mediaItem])
