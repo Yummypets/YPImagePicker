@@ -188,6 +188,15 @@ internal final class YPCameraVC: UIViewController, UIGestureRecognizerDelegate, 
     
     // Used when image is taken from the front camera.
     func flipImage(image: UIImage!) -> UIImage! {
+        // In landscape the rotate + aspect-swapping scale below distorts the photo;
+        // a plain horizontal mirror is the correct front-camera flip there.
+        switch YPDeviceOrientationHelper.shared.currentDeviceOrientation {
+        case .landscapeLeft, .landscapeRight:
+            return image.withHorizontallyFlippedOrientation()
+        default:
+            break
+        }
+
         let imageSize: CGSize = image.size
         UIGraphicsBeginImageContextWithOptions(imageSize, true, 1.0)
         let ctx = UIGraphicsGetCurrentContext()!
