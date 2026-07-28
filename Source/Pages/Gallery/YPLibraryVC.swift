@@ -468,6 +468,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                 
                 // Fill result media items array
                 var resultMediaItems: [YPMediaItem] = []
+                let resultMediaItemsLock = NSLock()
                 let asyncGroup = DispatchGroup()
                 
                 var assetDictionary: [PHAsset?: Int] = .init()
@@ -483,7 +484,9 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                         self.fetchImageAndCrop(for: asset.asset, withCropRect: asset.cropRect) { image, exifMeta in
                             let photo = YPMediaPhoto(image: image.resizedImageIfNeeded(),
 													 exifMeta: exifMeta, asset: asset.asset)
+                            resultMediaItemsLock.lock()
                             resultMediaItems.append(YPMediaItem.photo(p: photo))
+                            resultMediaItemsLock.unlock()
                             asyncGroup.leave()
                         }
                         
@@ -493,7 +496,9 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                             if let videoURL = videoURL {
                                 let videoItem = YPMediaVideo(thumbnail: thumbnailFromVideoPath(videoURL),
                                                              videoURL: videoURL, asset: asset.asset)
+                                resultMediaItemsLock.lock()
                                 resultMediaItems.append(YPMediaItem.video(v: videoItem))
+                                resultMediaItemsLock.unlock()
                             } else {
                                 ypLog("Problems with fetching videoURL.")
                             }
