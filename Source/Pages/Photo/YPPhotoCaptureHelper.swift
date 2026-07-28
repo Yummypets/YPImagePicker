@@ -42,7 +42,15 @@ extension YPPhotoCaptureHelper {
         
         // Set current device orientation
         setCurrentOrienation()
-        
+
+        // Avoid a fatal "No active and enabled video connection" exception when
+        // the capture session has no usable video connection (e.g. corrupted camera).
+        guard let connection = photoOutput.connection(with: .video),
+              connection.isActive, connection.isEnabled else {
+            ypLog("Cannot capture photo: no active and enabled video connection.")
+            return
+        }
+
         let settings = photoCaptureSettings()
         photoOutput.capturePhoto(with: settings, delegate: self)
     }
