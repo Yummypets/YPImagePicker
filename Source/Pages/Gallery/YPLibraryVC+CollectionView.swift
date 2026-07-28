@@ -93,6 +93,9 @@ extension YPLibraryVC {
                                                        numSelections: selectedItems.count) ?? true) {
             return
         }
+        guard !isInSelectionPool(indexPath: indexPath) else {
+            return
+        }
         guard let asset = mediaManager.getAsset(at: indexPath.item) else {
             print("No asset to add to selection.")
             return
