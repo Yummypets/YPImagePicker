@@ -14,6 +14,7 @@ Pod::Spec.new do |s|
   s.dependency 'SteviaLayout', '= 6.2.2'
   s.dependency 'PryntTrimmerView', '= 4.0.2'
   s.resources    = ['Source/Resources/*', 'Source/**/*.xib']
+  s.resource_bundles = { 'YPImagePicker' => ['Source/PrivacyInfo.xcprivacy'] }
   s.description  = "Instagram-like image picker & filters for iOS supporting videos and albums"
   s.swift_versions = ['5.5']
 end
