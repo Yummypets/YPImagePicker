@@ -34,24 +34,10 @@ class YPAlbumsManager {
                 album.title = assetCollection.localizedTitle ?? ""
                 album.numberOfItems = self.mediaCountFor(collection: assetCollection)
                 if album.numberOfItems > 0 {
-                    let r = PHAsset.fetchKeyAssets(in: assetCollection, options: nil)
-                    if let first = r?.firstObject {
-                        let windowScene = UIApplication.safeFirstWindowScene
-                        let deviceScale = windowScene?.screen.scale ?? 1.0
-                        let targetSize = CGSize(width: 78 * deviceScale, height: 78 * deviceScale)
-                        let options = PHImageRequestOptions()
-                        options.isSynchronous = true
-                        options.deliveryMode = .opportunistic
-                        PHImageManager.default().requestImage(for: first,
-                                                              targetSize: targetSize,
-                                                              contentMode: .aspectFill,
-                                                              options: options,
-                                                              resultHandler: { image, _ in
-                                                                album.thumbnail = image
-                        })
-                    }
+                    // Thumbnails are loaded lazily per visible cell (fetchThumbnail) to keep
+                    // fetchAlbums fast regardless of the number of albums.
                     album.collection = assetCollection
-                    
+
                     if YPConfig.library.mediaType == .photo {
                         if !(assetCollection.assetCollectionSubtype == .smartAlbumSlomoVideos
                             || assetCollection.assetCollectionSubtype == .smartAlbumVideos) {
@@ -66,7 +52,32 @@ class YPAlbumsManager {
         cachedAlbums = albums
         return albums
     }
-    
+
+    /// Loads an album's thumbnail asynchronously. Called lazily for visible cells so the
+    /// albums list appears immediately instead of blocking on every album's thumbnail.
+    func fetchThumbnail(for album: YPAlbum, targetSize: CGSize, completion: @escaping (UIImage?) -> Void) {
+        guard let collection = album.collection else {
+            completion(nil)
+            return
+        }
+        DispatchQueue.global(qos: .userInitiated).async {
+            guard let first = PHAsset.fetchKeyAssets(in: collection, options: nil)?.firstObject else {
+                DispatchQueue.main.async { completion(nil) }
+                return
+            }
+            let options = PHImageRequestOptions()
+            options.isNetworkAccessAllowed = true
+            options.deliveryMode = .opportunistic
+            PHImageManager.default().requestImage(for: first,
+                                                  targetSize: targetSize,
+                                                  contentMode: .aspectFill,
+                                                  options: options,
+                                                  resultHandler: { image, _ in
+                DispatchQueue.main.async { completion(image) }
+            })
+        }
+    }
+
     func mediaCountFor(collection: PHAssetCollection) -> Int {
         let options = PHFetchOptions()
         options.predicate = YPConfig.library.mediaType.predicate()

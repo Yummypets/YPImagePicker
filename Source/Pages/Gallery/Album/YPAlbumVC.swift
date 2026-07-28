@@ -84,14 +84,30 @@ extension YPAlbumVC: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let album = albums[indexPath.row]
-        if let cell = tableView.dequeueReusableCell(withIdentifier: "AlbumCell", for: indexPath) as? YPAlbumCell {
-            cell.thumbnail.backgroundColor = .ypSystemGray
-            cell.thumbnail.image = album.thumbnail
-            cell.title.text = album.title
-            cell.numberOfItems.text = "\(album.numberOfItems)"
-            return cell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "AlbumCell", for: indexPath) as? YPAlbumCell else {
+            return UITableViewCell()
         }
-        return UITableViewCell()
+        cell.thumbnail.backgroundColor = .ypSystemGray
+        cell.title.text = album.title
+        cell.numberOfItems.text = "\(album.numberOfItems)"
+
+        if let thumbnail = album.thumbnail {
+            cell.thumbnail.image = thumbnail
+        } else {
+            cell.thumbnail.image = nil
+            let scale = UIApplication.safeFirstWindowScene?.screen.scale ?? 1.0
+            let targetSize = CGSize(width: 78 * scale, height: 78 * scale)
+            albumsManager.fetchThumbnail(for: album, targetSize: targetSize) { [weak self, weak tableView] image in
+                guard let self = self, let image = image else { return }
+                if indexPath.row < self.albums.count {
+                    self.albums[indexPath.row].thumbnail = image
+                }
+                if let cell = tableView?.cellForRow(at: indexPath) as? YPAlbumCell {
+                    cell.thumbnail.image = image
+                }
+            }
+        }
+        return cell
     }
 }
 
