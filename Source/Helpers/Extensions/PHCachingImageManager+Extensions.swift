@@ -94,7 +94,7 @@ extension PHCachingImageManager {
     
     /// This method return two images in the callback. First is with low resolution, second with high.
     /// So the callback fires twice.
-    func fetch(photo asset: PHAsset, callback: @escaping (UIImage, Bool) -> Void) {
+    func fetch(photo asset: PHAsset, callback: @escaping (UIImage?, Bool) -> Void) {
         let options = PHImageRequestOptions()
 		// Enables gettings iCloud photos over the network, this means PHImageResultIsInCloudKey will never be true.
         options.isNetworkAccessAllowed = true
@@ -102,14 +102,23 @@ extension PHCachingImageManager {
         options.deliveryMode = .opportunistic
         requestImage(for: asset, targetSize: CGSize(width: asset.pixelWidth, height: asset.pixelHeight),
 					 contentMode: .aspectFill, options: options) { result, info in
-            guard let image = result else {
-                ypLog("No Result 🛑")
+            if let image = result {
+                DispatchQueue.main.async {
+                    let isLowRes = (info?[PHImageResultIsDegradedKey] as? Bool) ?? false
+                    callback(image, isLowRes)
+                }
                 return
             }
-            DispatchQueue.main.async {
-                let isLowRes = (info?[PHImageResultIsDegradedKey] as? Bool) ?? false
-                callback(image, isLowRes)
+            // No image. Ignore transient degraded/cancelled passes; only report a
+            // terminal failure so callers stop their loading state instead of hanging.
+            let isDegraded = (info?[PHImageResultIsDegradedKey] as? Bool) ?? false
+            let isCancelled = (info?[PHImageCancelledKey] as? Bool) ?? false
+            guard !isDegraded, !isCancelled else {
+                ypLog("fetch(photo:) transient nil result, ignoring.")
+                return
             }
+            ypLog("fetch(photo:) terminal nil result 🛑")
+            DispatchQueue.main.async { callback(nil, false) }
         }
     }
 }
