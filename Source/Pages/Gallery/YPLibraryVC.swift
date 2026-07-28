@@ -396,7 +396,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
     
     private func fetchImageAndCrop(for asset: PHAsset,
                                    withCropRect: CGRect? = nil,
-                                   callback: @escaping (_ photo: UIImage, _ exif: [String: Any]) -> Void) {
+                                   callback: @escaping (_ photo: UIImage?, _ exif: [String: Any]) -> Void) {
         delegate?.libraryViewDidTapNext()
         let cropRect = withCropRect ?? DispatchQueue.main.sync { v.currentCropRect() }
         let ts = targetSize(for: asset, cropRect: cropRect)
@@ -485,6 +485,11 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                     switch asset.asset.mediaType {
                     case .image:
                         self.fetchImageAndCrop(for: asset.asset, withCropRect: asset.cropRect) { image, exifMeta in
+                            guard let image = image else {
+                                ypLog("Problems with fetching image.")
+                                asyncGroup.leave()
+                                return
+                            }
                             let photo = YPMediaPhoto(image: image.resizedImageIfNeeded(),
 													 exifMeta: exifMeta, asset: asset.asset)
                             resultMediaItemsLock.lock()
@@ -572,6 +577,10 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                     self.fetchImageAndCrop(for: asset) { image, exifMeta in
                         DispatchQueue.main.async {
                             self.delegate?.libraryViewFinishedLoading()
+                            guard let image = image else {
+                                ypLog("Problems with fetching image.")
+                                return
+                            }
                             let photo = YPMediaPhoto(image: image.resizedImageIfNeeded(),
                                                      exifMeta: exifMeta,
                                                      asset: asset)

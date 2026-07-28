@@ -23,26 +23,31 @@ extension PHCachingImageManager {
     func fetchImage(for asset: PHAsset,
 					cropRect: CGRect,
 					targetSize: CGSize,
-					callback: @escaping (UIImage, [String: Any]) -> Void) {
+					callback: @escaping (UIImage?, [String: Any]) -> Void) {
         let options = photoImageRequestOptions()
-    
+
         // Fetch Highiest quality image possible.
         requestImageData(for: asset, options: options) { data, _, _, _ in
-            if let data = data, let image = UIImage(data: data)?.resetOrientation() {
-            
-                // Crop the high quality image manually.
-                let xCrop: CGFloat = cropRect.origin.x * CGFloat(asset.pixelWidth)
-                let yCrop: CGFloat = cropRect.origin.y * CGFloat(asset.pixelHeight)
-                let scaledCropRect = CGRect(x: xCrop,
-                                            y: yCrop,
-                                            width: targetSize.width,
-                                            height: targetSize.height)
-                if let imageRef = image.cgImage?.cropping(to: scaledCropRect) {
-                    let croppedImage = UIImage(cgImage: imageRef)
-                    let exifs = self.exifDataForImageData(data: data)
-                    callback(croppedImage, exifs)
-                }
+            guard let data = data, let image = UIImage(data: data)?.resetOrientation() else {
+                ypLog("fetchImage: could not decode image data (unsupported format?).")
+                callback(nil, [:])
+                return
             }
+            // Crop the high quality image manually.
+            let xCrop: CGFloat = cropRect.origin.x * CGFloat(asset.pixelWidth)
+            let yCrop: CGFloat = cropRect.origin.y * CGFloat(asset.pixelHeight)
+            let scaledCropRect = CGRect(x: xCrop,
+                                        y: yCrop,
+                                        width: targetSize.width,
+                                        height: targetSize.height)
+            guard let imageRef = image.cgImage?.cropping(to: scaledCropRect) else {
+                ypLog("fetchImage: could not crop image.")
+                callback(nil, [:])
+                return
+            }
+            let croppedImage = UIImage(cgImage: imageRef)
+            let exifs = self.exifDataForImageData(data: data)
+            callback(croppedImage, exifs)
         }
     }
     
