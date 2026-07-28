@@ -470,6 +470,8 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                 // Fill result media items array
                 var resultMediaItems: [YPMediaItem] = []
                 let resultMediaItemsLock = NSLock()
+                // Run heavy video exports one at a time to keep peak memory bounded.
+                let videoExportSemaphore = DispatchSemaphore(value: 1)
                 let asyncGroup = DispatchGroup()
                 
                 var assetDictionary: [PHAsset?: Int] = .init()
@@ -492,6 +494,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                         }
                         
                     case .video:
+                        videoExportSemaphore.wait()
                         self.fetchVideoAndApplySettings(for: asset.asset,
                                                              withCropRect: asset.cropRect) { videoURL in
                             if let videoURL = videoURL {
@@ -503,6 +506,7 @@ internal final class YPLibraryVC: UIViewController, YPPermissionCheckable {
                             } else {
                                 ypLog("Problems with fetching videoURL.")
                             }
+                            videoExportSemaphore.signal()
                             asyncGroup.leave()
                         }
                     default:
