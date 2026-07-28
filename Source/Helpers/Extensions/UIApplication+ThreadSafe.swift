@@ -24,4 +24,13 @@ extension UIApplication {
     static var safeFirstWindowScene: UIWindowScene? {
         return safeConnectedScenes.first as? UIWindowScene
     }
+
+    /// Thread-safe access to the first window scene's screen width.
+    /// `-[UIWindowScene screen]` must be read on the main thread.
+    static var safeFirstWindowScreenWidth: CGFloat? {
+        let read: () -> CGFloat? = {
+            (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.screen.bounds.width
+        }
+        return Thread.isMainThread ? read() : DispatchQueue.main.sync(execute: read)
+    }
 }
