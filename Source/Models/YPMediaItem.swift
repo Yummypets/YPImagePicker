@@ -58,11 +58,9 @@ public enum YPMediaItem {
 // MARK: - Compression
 
 public extension YPMediaVideo {
-    /// Fetches a video data with selected compression in YPImagePickerConfiguration
+    /// Fetches the video data from the (already compressed) output file at `url`.
     func fetchData(completion: (_ videoData: Data) -> Void) {
-        // TODO: place here a compression code. Use YPConfig.videoCompression
-        // and YPConfig.videoExtension
-        completion(Data())
+        completion((try? Data(contentsOf: url)) ?? Data())
     }
 }
 
