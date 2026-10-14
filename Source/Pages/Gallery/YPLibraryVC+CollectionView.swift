@@ -57,7 +57,8 @@ extension YPLibraryVC {
         let collectionViewItemsCount = v.collectionView.numberOfItems(inSection: 0)
         var selectedIndexPaths = [IndexPath]()
         for item in selectedItems {
-            if item.index < collectionViewItemsCount {
+            // Preselected items keep index -1 until their cell is displayed.
+            if item.index >= 0 && item.index < collectionViewItemsCount {
                 selectedIndexPaths.append(IndexPath(row: item.index, section: 0))
             }
         }

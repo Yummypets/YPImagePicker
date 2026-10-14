@@ -101,7 +101,11 @@ open class YPImagePicker: UINavigationController {
             }
             
             // One item flow
-            let item = items.first!
+            // Empty when every selected asset failed to load (e.g. an undownloaded iCloud asset).
+            guard let item = items.first else {
+                ypLog("No media could be loaded from the selection.")
+                return
+            }
             switch item {
             case .photo(let photo):
                 let completion = { (photo: YPMediaPhoto) in

@@ -234,7 +234,7 @@ class LibraryMediaManager {
             print("FetchResult not contain this index: \(index)")
             return nil
         }
-        guard fetchResult.count > index else {
+        guard index >= 0, fetchResult.count > index else {
             print("FetchResult not contain this index: \(index)")
             return nil
         }
